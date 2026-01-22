@@ -5,7 +5,7 @@ export default function NavBar() {
   }
 
   return (
-    <nav className="fixed top-0 left-0 w-full bg-sky-950 border-b border-sky-900/60 shadow-sm z-50">
+    <nav className="block mb-6 top-0 left-0 w-full bg-sky-950 border-b border-sky-900/60 shadow-sm z-50">
       <div className="max-w-6xl mx-auto flex items-center justify-between px-4 py-3">
         <a
           href="/"
@@ -32,7 +32,7 @@ export default function NavBar() {
           >
             All Conversion Tools
           </a>
-          <a
+          {/* <a
             href="#countries"
             onClick={(e) => scrollToId(e, "countries")}
             className="hover:text-sky-300 transition-colors"
@@ -45,7 +45,7 @@ export default function NavBar() {
             className="hover:text-sky-300 transition-colors"
           >
             Rental Checklists
-          </a>
+          </a> */}
           <a
             href="#faq"
             onClick={(e) => scrollToId(e, "faq")}

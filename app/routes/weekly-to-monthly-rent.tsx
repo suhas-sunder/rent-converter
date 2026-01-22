@@ -266,7 +266,7 @@ export default function WeeklyToMonthlyRent() {
 
   return (
     <main className="bg-white text-slate-700 scroll-smooth">
-      <section className="pb-4 pt-6">
+      <section className="pb-4 ">
         <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-500">
           <a href="/" className="hover:underline">
             Home

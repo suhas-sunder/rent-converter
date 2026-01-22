@@ -256,7 +256,7 @@ export default function RentPaidEvery4Weeks() {
   return (
     <main className="bg-white text-slate-700 scroll-smooth">
       {/* Breadcrumbs */}
-      <section className="pt-6 pb-4">
+      <section className=" pb-4">
         <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-500">
           <a href="/" className="hover:underline">
             Home

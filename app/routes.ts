@@ -30,4 +30,17 @@ export default [
   route("true-cost-of-rent-per-day", "routes/true-cost-of-rent-per-day.tsx"),
   route("true-cost-of-rent-per-week", "routes/true-cost-of-rent-per-week.tsx"),
   route("rent-per-day-calculator", "routes/rent-per-day-calculator.tsx"),
+  route("rent-per-week-calculator", "routes/rent-per-week-calculator.tsx"),
+  route("rent-as-percentage-of-income", "routes/rent-as-percentage-of-income.tsx"),
+  route("how-much-rent-can-i-afford", "routes/how-much-rent-can-i-afford.tsx"),
+  route("rent-after-tax-income", "routes/rent-after-tax-income.tsx"),
+  route("rent-vs-take-home-pay", "routes/rent-vs-take-home-pay.tsx"),
+  route("rent-increase-calculator", "routes/rent-increase-calculator.tsx"),
+  route("rent-increase-percentage-calculator", "routes/rent-increase-percentage-calculator.tsx"),
+  route("rent-after-increase-calculator", "routes/rent-after-increase-calculator.tsx"),
+  route("rent-per-person-calculator", "routes/rent-per-person-calculator.tsx"),
+  route("rent-vs-buy-calculator", "routes/rent-vs-buy-calculator.tsx"),
+  route("rent-converter", "routes/rent-converter.tsx"),
+  route("rent-calculator", "routes/rent-calculator.tsx"),
+
 ] satisfies RouteConfig;

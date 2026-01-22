@@ -188,7 +188,7 @@ export default function OtherUsefulTools() {
   ];
 
   return (
-    <section id="links" className="max-w-6xl mx-auto px-6 pt-6">
+    <section id="links" className="max-w-6xl mx-auto px-6 pt-6 mb-6">
       <h2 className="text-3xl font-bold text-center text-slate-800">
         Rent calculators & tools
       </h2>

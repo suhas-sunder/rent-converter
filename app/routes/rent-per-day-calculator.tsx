@@ -311,15 +311,6 @@ export default function RentPerDayCalculator() {
             <h2 className="text-xl sm:text-2xl font-bold">
               Daily rent equivalent
             </h2>
-            <label className="flex items-center gap-2 text-sm text-slate-600">
-              <input
-                type="checkbox"
-                checked={includeRounding}
-                onChange={(e) => setIncludeRounding(e.target.checked)}
-                className="h-4 w-4"
-              />
-              Round to cents
-            </label>
           </div>
 
           <div className="grid gap-5 md:grid-cols-12">
