@@ -1,0 +1,33 @@
+import { route, index, type RouteConfig } from "@react-router/dev/routes";
+
+export default [
+  // Home page
+  index("routes/home.tsx"),
+  route("monthly-to-weekly-rent", "routes/monthly-to-weekly-rent.tsx"),
+  route("weekly-to-monthly-rent", "routes/weekly-to-monthly-rent.tsx"),
+  route("biweekly-to-monthly-rent", "routes/biweekly-to-monthly-rent.tsx"),
+  route("monthly-to-annual-rent", "routes/monthly-to-annual-rent.tsx"),
+  route("annual-to-monthly-rent", "routes/annual-to-monthly-rent.tsx"),
+  route("monthly-to-daily-rent", "routes/monthly-to-daily-rent.tsx"),
+  route("daily-to-monthly-rent", "routes/daily-to-monthly-rent.tsx"),
+  route("weekly-to-annual-rent", "routes/weekly-to-annual-rent.tsx"),
+  route("annual-to-weekly-rent", "routes/annual-to-weekly-rent.tsx"),
+  route("hourly-to-monthly-rent", "routes/hourly-to-monthly-rent.tsx"),
+  route("monthly-to-hourly-rent", "routes/monthly-to-hourly-rent.tsx"),
+  route("hourly-to-annual-rent", "routes/hourly-to-annual-rent.tsx"),
+  route("annual-to-hourly-rent", "routes/annual-to-hourly-rent.tsx"),
+  route("biweekly-to-weekly-rent", "routes/biweekly-to-weekly-rent.tsx"),
+  route("weekly-to-biweekly-rent", "routes/weekly-to-biweekly-rent.tsx"),
+  route("monthly-to-biweekly-rent", "routes/monthly-to-biweekly-rent.tsx"),
+  route("annual-to-biweekly-rent", "routes/annual-to-biweekly-rent.tsx"),
+  route("biweekly-to-annual-rent", "routes/biweekly-to-annual-rent.tsx"),
+  route("rent-paid-every-4-weeks", "routes/rent-paid-every-4-weeks.tsx"),
+  route("rent-paid-every-2-weeks", "routes/rent-paid-every-2-weeks.tsx"),
+  route("rent-billed-every-28-days", "routes/rent-billed-every-28-days.tsx"),
+  route("rent-per-paycheck", "routes/rent-per-paycheck.tsx"),
+  route("rent-per-pay-period", "routes/rent-per-pay-period.tsx"),
+  route("rent-due-date-calculator", "routes/rent-due-date-calculator.tsx"),
+  route("true-cost-of-rent-per-day", "routes/true-cost-of-rent-per-day.tsx"),
+  route("true-cost-of-rent-per-week", "routes/true-cost-of-rent-per-week.tsx"),
+  route("rent-per-day-calculator", "routes/rent-per-day-calculator.tsx"),
+] satisfies RouteConfig;
