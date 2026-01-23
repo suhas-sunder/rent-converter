@@ -26,7 +26,7 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:description", content: description },
     {
       property: "og:url",
-      content: "https://rentconverter.com/monthly-to-daily-rent",
+      content: "https://rentconverter.com/monthly-to-daily-rent-converter",
     },
     { property: "og:site_name", content: "RentConverter.com" },
     { property: "og:image", content: "https://rentconverter.com/og-image.jpg" },
@@ -41,7 +41,7 @@ export const meta: Route.MetaFunction = () => {
 
     {
       rel: "canonical",
-      href: "https://rentconverter.com/monthly-to-daily-rent",
+      href: "https://rentconverter.com/monthly-to-daily-rent-converter",
     },
   ];
 };
@@ -68,10 +68,60 @@ const PERIOD_LABEL: Record<Period, string> = {
 // Keep conservative and aligned with your known route set.
 // Add routes here only if they are confirmed to exist.
 const ROUTE_WHITELIST = new Set<string>([
+  // Home
   "/",
+
+  // Rent converter hub
   "/rent-converter",
-  "/rent-affordability-calculator",
-  "/monthly-to-daily-rent",
+
+  // Frequency converters
+  "/monthly-to-weekly-rent-converter",
+  "/weekly-to-monthly-rent-converter",
+  "/weekly-to-annual-rent-converter",
+  "/weekly-to-biweekly-rent-converter",
+
+  "/biweekly-to-weekly-rent-converter",
+  "/biweekly-to-monthly-rent-converter",
+  "/biweekly-to-annual-rent-converter",
+
+  "/monthly-to-annual-rent-converter",
+  "/annual-to-monthly-rent-converter",
+
+  "/monthly-to-daily-rent-converter",
+  "/daily-to-monthly-rent-converter",
+
+  "/monthly-to-hourly-rent-converter",
+  "/hourly-to-monthly-rent-converter",
+
+  "/hourly-to-annual-rent-converter",
+  "/annual-to-hourly-rent-converter",
+
+  "/annual-to-weekly-rent-converter",
+  "/annual-to-biweekly-rent-converter",
+  "/monthly-to-biweekly-rent-converter",
+
+  // Rent calculators
+  "/rent-calculator",
+  "/rent-per-day-calculator",
+  "/rent-per-week-calculator",
+  "/rent-paid-every-4-weeks-calculator",
+  "/rent-per-paycheck-calculator",
+  "/rent-split-calculator",
+  "/rent-due-date-calculator",
+
+  // Affordability and income
+  "/rent-as-percentage-of-income-calculator",
+  "/how-much-rent-can-i-afford-calculator",
+  "/rent-after-tax-income-calculator",
+  "/rent-vs-take-home-pay-calculator",
+
+  // Rent increases
+  "/rent-increase-calculator",
+  "/rent-increase-percentage-calculator",
+  "/rent-after-increase-calculator",
+
+  // Rent vs buy
+  "/rent-vs-buy-calculator",
 ]);
 
 function safeHref(path: string): string {
@@ -127,18 +177,28 @@ function toNumberSafe(scaled: bigint): number {
   return Number(scaled) / Number(SCALE);
 }
 
+/**
+ * Formatting rules:
+ * - preserve decimals end-to-end
+ * - rounding is display-only and clearly labeled
+ * - if rounding enabled: show exactly `displayDecimals` decimals (including trailing zeros)
+ * - if rounding disabled: show up to 12 decimals (no forced trailing zeros)
+ */
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
-  displayDecimals: number,
+  maximumDecimals: number,
+  minimumDecimals: number,
 ): string {
   const n = toNumberSafe(scaled);
   if (!Number.isFinite(n)) return "—";
+  const max = Math.max(0, Math.min(12, maximumDecimals));
+  const min = Math.max(0, Math.min(max, minimumDecimals));
   return new Intl.NumberFormat(undefined, {
     style: "currency",
     currency,
-    maximumFractionDigits: Math.max(0, Math.min(12, displayDecimals)),
-    minimumFractionDigits: 0,
+    maximumFractionDigits: max,
+    minimumFractionDigits: min,
   }).format(n);
 }
 
@@ -390,9 +450,10 @@ export default function MonthlyToDailyRent() {
     }
   }, [amount, currency, roundDisplay, displayDecimals]);
 
-  const effectiveDisplayDecimals = roundDisplay ? displayDecimals : 12;
+  const maxDecimals = roundDisplay ? displayDecimals : 12;
+  const minDecimals = roundDisplay ? displayDecimals : 0;
   const fmt = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, effectiveDisplayDecimals);
+    formatCurrencyFromScaled(scaled, currency, maxDecimals, minDecimals);
 
   const breakdown = useMemo(() => {
     if (!parsedAmount.ok) return null;
@@ -528,7 +589,7 @@ export default function MonthlyToDailyRent() {
     );
 
     downloadTextFile(
-      "monthly-to-daily-rent.csv",
+      "monthly-to-daily-rent-converter.csv",
       rows.join("\n"),
       "text/csv;charset=utf-8",
     );
@@ -590,7 +651,7 @@ export default function MonthlyToDailyRent() {
         "@type": "ListItem",
         position: 2,
         name: "Monthly to Daily Rent Converter",
-        item: "https://rentconverter.com/monthly-to-daily-rent",
+        item: "https://rentconverter.com/monthly-to-daily-rent-converter",
       },
     ],
   };
@@ -608,7 +669,7 @@ export default function MonthlyToDailyRent() {
     name: "Monthly to Daily Rent Converter",
     description:
       "Convert a monthly rent price into a daily equivalent using annual equivalence (365-day year). Includes breakdowns across billing periods and a 4-week (28-day) comparison.",
-    url: "https://rentconverter.com/monthly-to-daily-rent",
+    url: "https://rentconverter.com/monthly-to-daily-rent-converter",
   };
 
   return (
@@ -641,24 +702,9 @@ export default function MonthlyToDailyRent() {
         </h1>
         <p className="text-slate-600 max-w-2xl mx-auto text-lg">
           Enter your monthly rent and get a daily equivalent using annual
-          equivalence. This format helps compare listings and budgets when rent
-          is advertised using different billing periods.
+          equivalence. This helps compare listings and budgets when rent is
+          advertised using different billing periods.
         </p>
-
-        <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3 text-sm">
-          <a
-            href={safeHref("/rent-converter")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Rent converter
-          </a>
-          <a
-            href={safeHref("/rent-affordability-calculator")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Affordability
-          </a>
-        </div>
       </section>
 
       <section id="converter" className="mx-auto max-w-6xl px-6 pb-6">
@@ -669,19 +715,6 @@ export default function MonthlyToDailyRent() {
             </h2>
 
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
-              <button
-                type="button"
-                onClick={handleExportCsv}
-                disabled={!canShowResults}
-                className={`rounded-xl border px-4 py-2 text-sm font-semibold transition ${
-                  canShowResults
-                    ? "border-slate-200 bg-white text-slate-800 hover:bg-sky-50 hover:border-sky-200"
-                    : "border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed"
-                }`}
-                aria-disabled={!canShowResults}
-              >
-                Export CSV
-              </button>
               <button
                 type="button"
                 onClick={handlePrint}
@@ -808,7 +841,8 @@ export default function MonthlyToDailyRent() {
 
                 <p className="mt-2 text-xs text-slate-500">
                   Calculations preserve decimals internally (up to 12). If
-                  rounding is enabled, only the displayed values are rounded.
+                  rounding is enabled, displayed values keep exactly the
+                  selected decimals.
                 </p>
               </div>
             </div>
@@ -976,7 +1010,7 @@ export default function MonthlyToDailyRent() {
             <li>
               <strong>You enter a monthly rent amount.</strong> The parser
               supports commas, currency symbols, and formats like .5 and 12.,
-              and it avoids showing misleading zero results on invalid input.
+              and it avoids showing misleading results on invalid input.
             </li>
             <li>
               <strong>The converter uses annual equivalence.</strong> Monthly
@@ -1061,7 +1095,7 @@ export default function MonthlyToDailyRent() {
           </a>{" "}
           and{" "}
           <a
-            href={safeHref("/rent-affordability-calculator")}
+            href={safeHref("/how-much-rent-can-i-afford-calculator")}
             className="text-sky-700 hover:underline"
           >
             rent affordability calculator
@@ -1091,18 +1125,18 @@ export default function MonthlyToDailyRent() {
           <p className="text-xs text-slate-600 leading-relaxed">
             <strong>Disclaimer:</strong>
             <br />
-            Tools on this site are for informational, budgeting, and comparison
-            use. Calculations rely on standard time-period assumptions
-            (including a 365-day year and an average month length) and
-            simplified models. Outputs are estimates intended to illustrate
-            equivalents, not to predict exact lease billing outcomes.
+            Tools on this site are provided for informational, budgeting, and
+            comparison purposes only. Calculations are based on standard
+            time-period assumptions (including a 365-day year and average month
+            length) and simplified models. Results are estimates, not
+            guarantees.
             <br />
             <br />
-            This website does not provide financial, legal, or tax advice. Rent,
-            payment schedules, fees, and obligations vary by location, landlord,
-            and lease terms. Always review your rental agreement and consider
-            qualified guidance for decisions that depend on your specific
-            situation.
+            This website does not provide financial, legal, or tax advice.
+            Rental costs, affordability, payment schedules, and obligations vary
+            by location, landlord, lease terms, and individual circumstances.
+            Always review your lease agreement and consult qualified
+            professionals before making financial decisions.
           </p>
         </div>
       </section>
@@ -1114,9 +1148,9 @@ export default function MonthlyToDailyRent() {
       <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
         <p className="text-xs text-slate-500 text-center leading-relaxed">
           <em>
-            These tools support budgeting comparisons. Time-period assumptions
-            include a 365-day year and an average month length. Confirm your
-            exact payment dates and terms in your lease agreement.
+            These tools support budgeting and comparison. Calculations use a
+            365-day year and average month length. Confirm your payment dates
+            and lease terms in your rental agreement.
           </em>
         </p>
       </section>

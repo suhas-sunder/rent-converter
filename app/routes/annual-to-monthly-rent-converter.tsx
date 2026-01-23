@@ -4,16 +4,6 @@ import OtherUsefulTools from "~/client/components/navigation/OtherUsefulTools";
 import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountry";
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
-/**
- * SEO Uniqueness Checklist (internal, not user-visible)
- * - Intent: Convert an ANNUAL rent total into a MONTHLY equivalent (12-month budgeting view).
- * - Unique angle: explicitly contrasts "monthly (12)" vs "every 4 weeks (13)" and shows the annualized difference,
- *   plus a clear note that "monthly here is annual ÷ 12 (average-month equivalent), not calendar-date proration."
- * - Unique examples: monthly vs 4-week budgeting scenarios and how listings mix "monthly" wording with 28-day cycles.
- * - Unique outputs: headline monthly result + always-visible breakdown + a dedicated annualization panel (monthly×12 vs 4-week×13)
- *   + CSV export + print-to-PDF workflow.
- */
-
 export const meta: Route.MetaFunction = () => {
   const title = "Annual to Monthly Rent Converter (Annual ÷ 12)";
   const description =
@@ -36,7 +26,7 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:description", content: description },
     {
       property: "og:url",
-      content: "https://rentconverter.com/annual-to-monthly-rent",
+      content: "https://rentconverter.com/annual-to-monthly-rent-converter",
     },
     { property: "og:site_name", content: "RentConverter.com" },
     { property: "og:image", content: "https://rentconverter.com/og-image.jpg" },
@@ -51,7 +41,7 @@ export const meta: Route.MetaFunction = () => {
 
     {
       rel: "canonical",
-      href: "https://rentconverter.com/annual-to-monthly-rent",
+      href: "https://rentconverter.com/annual-to-monthly-rent-converter",
     },
   ];
 };
@@ -80,52 +70,79 @@ const PERIOD_LABEL: Record<Period, string> = {
 // Use this everywhere you create internal links.
 // If a link is not in ROUTE_WHITELIST, it must not appear anywhere in the UI.
 const ROUTE_WHITELIST = new Set<string>([
+  // Home
   "/",
-  "/monthly-to-weekly-rent",
-  "/weekly-to-monthly-rent",
-  "/biweekly-to-monthly-rent",
-  "/monthly-to-annual-rent",
-  "/annual-to-monthly-rent",
-  "/monthly-to-daily-rent",
-  "/daily-to-monthly-rent",
-  "/weekly-to-annual-rent",
-  "/annual-to-weekly-rent",
-  "/hourly-to-monthly-rent",
-  "/monthly-to-hourly-rent",
-  "/hourly-to-annual-rent",
-  "/annual-to-hourly-rent",
-  "/biweekly-to-weekly-rent",
-  "/weekly-to-biweekly-rent",
-  "/monthly-to-biweekly-rent",
-  "/annual-to-biweekly-rent",
-  "/annual-to-monthly-rent",
-  "/annual-to-biweekly-rent",
-  "/biweekly-to-annual-rent",
-  "/rent-paid-every-4-weeks",
-  "/rent-paid-every-2-weeks",
-  "/rent-billed-every-28-days",
-  "/rent-per-paycheck",
-  "/rent-per-pay-period",
-  "/rent-due-date-calculator",
-  "/true-cost-of-rent-per-day",
-  "/true-cost-of-rent-per-week",
+
+  // Rent converter hub
+  "/rent-converter",
+
+  // Frequency converters
+  "/monthly-to-weekly-rent-converter",
+  "/weekly-to-monthly-rent-converter",
+  "/weekly-to-annual-rent-converter",
+  "/weekly-to-biweekly-rent-converter",
+
+  "/biweekly-to-weekly-rent-converter",
+  "/biweekly-to-monthly-rent-converter",
+  "/biweekly-to-annual-rent-converter",
+
+  "/monthly-to-annual-rent-converter",
+  "/annual-to-monthly-rent-converter",
+
+  "/monthly-to-daily-rent-converter",
+  "/daily-to-monthly-rent-converter",
+
+  "/monthly-to-hourly-rent-converter",
+  "/hourly-to-monthly-rent-converter",
+
+  "/hourly-to-annual-rent-converter",
+  "/annual-to-hourly-rent-converter",
+
+  "/annual-to-weekly-rent-converter",
+  "/annual-to-biweekly-rent-converter",
+  "/monthly-to-biweekly-rent-converter",
+
+  // Rent calculators
+  "/rent-calculator",
   "/rent-per-day-calculator",
   "/rent-per-week-calculator",
-  "/rent-as-percentage-of-income",
-  "/how-much-rent-can-i-afford",
-  "/rent-after-tax-income",
-  "/rent-vs-take-home-pay",
+  "/rent-paid-every-4-weeks-calculator",
+  "/rent-per-paycheck-calculator",
+  "/rent-split-calculator",
+  "/rent-due-date-calculator",
+
+  // Affordability and income
+  "/rent-as-percentage-of-income-calculator",
+  "/how-much-rent-can-i-afford-calculator",
+  "/rent-after-tax-income-calculator",
+  "/rent-vs-take-home-pay-calculator",
+
+  // Rent increases
   "/rent-increase-calculator",
   "/rent-increase-percentage-calculator",
   "/rent-after-increase-calculator",
-  "/rent-per-person-calculator",
+
+  // Rent vs buy
   "/rent-vs-buy-calculator",
-  "/rent-converter",
-  "/rent-calculator",
 ]);
 
-function safeHref(path: string): string {
-  return ROUTE_WHITELIST.has(path) ? path : "/";
+function SafeLink({
+  href,
+  className,
+  children,
+  id,
+}: {
+  href: string;
+  className?: string;
+  children: React.ReactNode;
+  id?: string;
+}) {
+  if (!ROUTE_WHITELIST.has(href)) return null;
+  return (
+    <a id={id} href={href} className={className}>
+      {children}
+    </a>
+  );
 }
 
 const SUPPORTED_CURRENCIES = [
@@ -178,6 +195,25 @@ function clampScaled(v: bigint, min: bigint, max: bigint): bigint {
   return v;
 }
 
+function absBigInt(x: bigint) {
+  return x < 0n ? -x : x;
+}
+
+function roundScaledToDigits(scaled: bigint, digits: number): bigint {
+  const d = Math.max(0, Math.min(12, Math.trunc(digits)));
+  const drop = 12 - d;
+  const factor = 10n ** BigInt(drop);
+  if (factor === 1n) return scaled;
+
+  const half = factor / 2n;
+  const neg = scaled < 0n;
+  const x = absBigInt(scaled);
+
+  const rounded = (x + half) / factor;
+  const back = rounded * factor;
+  return neg ? -back : back;
+}
+
 function toNumberSafe(scaled: bigint): number {
   return Number(scaled) / Number(SCALE);
 }
@@ -185,15 +221,25 @@ function toNumberSafe(scaled: bigint): number {
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
-  displayDecimals: number,
+  opts: { mode: "fixed"; digits: number } | { mode: "max"; maxDigits: number },
 ): string {
-  const n = toNumberSafe(scaled);
+  const digits =
+    opts.mode === "fixed"
+      ? Math.max(0, Math.min(12, Math.trunc(opts.digits)))
+      : Math.max(0, Math.min(12, Math.trunc(opts.maxDigits)));
+
+  const roundedScaled =
+    opts.mode === "fixed" ? roundScaledToDigits(scaled, digits) : scaled;
+
+  const n = toNumberSafe(roundedScaled);
   if (!Number.isFinite(n)) return "—";
+
   return new Intl.NumberFormat(undefined, {
     style: "currency",
     currency,
-    maximumFractionDigits: Math.max(0, Math.min(12, displayDecimals)),
-    minimumFractionDigits: 0,
+    maximumFractionDigits: digits,
+    // If user enables display rounding, keep money formatting consistent by showing exactly that many decimals.
+    minimumFractionDigits: opts.mode === "fixed" ? digits : 0,
   }).format(n);
 }
 
@@ -456,7 +502,7 @@ export default function AnnualToMonthlyRent() {
     const monthly = annualToPeriodScaled(annualScaled, "monthly");
     const annual = annualScaled;
 
-    // Dedicated 12 vs 13 payment schedule context (unique angle for this route)
+    // 12 vs 13 payment schedule context
     const annualFromMonthly12 = monthly * 12n;
     const annualFrom4w13 = every4w * 13n;
     const annualFromWeekly52 = weekly * 52n;
@@ -492,9 +538,16 @@ export default function AnnualToMonthlyRent() {
     };
   }, [parsedAnnual.ok, annualScaled]);
 
-  const effectiveDisplayDecimals = roundDisplay ? displayDecimals : 12;
   const fmt = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, effectiveDisplayDecimals);
+    roundDisplay
+      ? formatCurrencyFromScaled(scaled, currency, {
+          mode: "fixed",
+          digits: displayDecimals,
+        })
+      : formatCurrencyFromScaled(scaled, currency, {
+          mode: "max",
+          maxDigits: 12,
+        });
 
   const monthlyHeadlineScaled = breakdownScaled?.monthly ?? 0n;
 
@@ -592,7 +645,7 @@ export default function AnnualToMonthlyRent() {
     );
 
     downloadTextFile(
-      "annual-to-monthly-rent.csv",
+      "annual-to-monthly-rent-converter.csv",
       rows.join("\n"),
       "text/csv;charset=utf-8",
     );
@@ -654,7 +707,7 @@ export default function AnnualToMonthlyRent() {
         "@type": "ListItem",
         position: 2,
         name: "Annual to Monthly Rent Converter",
-        item: "https://rentconverter.com/annual-to-monthly-rent",
+        item: "https://rentconverter.com/annual-to-monthly-rent-converter",
       },
     ],
   };
@@ -674,11 +727,11 @@ export default function AnnualToMonthlyRent() {
         }}
       />
 
-      <section className="pt-6 pb-4 rc-no-print">
+      <section className=" pb-4 rc-no-print">
         <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-500">
-          <a href={safeHref("/")} className="hover:underline">
+          <SafeLink href="/" className="hover:underline">
             Home
-          </a>{" "}
+          </SafeLink>{" "}
           / Annual to Monthly Rent Converter
         </nav>
       </section>
@@ -690,36 +743,9 @@ export default function AnnualToMonthlyRent() {
         <p className="text-slate-600 max-w-3xl mx-auto text-lg">
           Convert an annual rent total into a monthly budgeting equivalent. This
           page defines monthly as <strong>annual ÷ 12</strong> and shows how
-          that differs from 28-day (every-4-weeks) billing that often implies 13
+          that differs from 28-day (every 4 weeks) billing that often implies 13
           payments per year.
         </p>
-
-        <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3 text-sm">
-          <a
-            href={safeHref("/rent-converter")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Rent converter hub
-          </a>
-          <a
-            href={safeHref("/monthly-to-annual-rent")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Monthly to annual
-          </a>
-          <a
-            href={safeHref("/rent-paid-every-4-weeks")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Paid every 4 weeks
-          </a>
-          <a
-            href={safeHref("/how-much-rent-can-i-afford")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            How much rent can I afford
-          </a>
-        </div>
       </section>
 
       <section id="converter" className="mx-auto max-w-6xl px-6 pb-6">
@@ -730,19 +756,6 @@ export default function AnnualToMonthlyRent() {
             </h2>
 
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
-              <button
-                type="button"
-                onClick={handleExportCsv}
-                disabled={!canShowResults}
-                className={`rounded-xl border px-4 py-2 text-sm font-semibold transition ${
-                  canShowResults
-                    ? "border-slate-200 bg-white text-slate-800 hover:bg-sky-50 hover:border-sky-200"
-                    : "border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed"
-                }`}
-                aria-disabled={!canShowResults}
-              >
-                Export CSV
-              </button>
               <button
                 type="button"
                 onClick={handlePrint}
@@ -938,7 +951,9 @@ export default function AnnualToMonthlyRent() {
                       onClick={() =>
                         handleCopy(
                           "summary",
-                          `Annual: ${fmt(annualScaled)} | Monthly (annual ÷ 12): ${fmt(monthlyHeadlineScaled)} | Assumptions: 365-day year, monthly=annual/12`,
+                          `Annual: ${fmt(annualScaled)} | Monthly (annual ÷ 12): ${fmt(
+                            monthlyHeadlineScaled,
+                          )} | Assumptions: 365-day year, monthly=annual/12`,
                         )
                       }
                       className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
@@ -1136,26 +1151,12 @@ export default function AnnualToMonthlyRent() {
 
         <p className="text-slate-700 mb-4">
           Related tools:{" "}
-          <a
-            href={safeHref("/monthly-to-annual-rent")}
-            className="text-sky-700 hover:underline"
-          >
-            monthly to annual rent
-          </a>
-          ,{" "}
-          <a
-            href={safeHref("/rent-paid-every-4-weeks")}
-            className="text-sky-700 hover:underline"
-          >
-            rent paid every 4 weeks
-          </a>
-          ,{" "}
-          <a
-            href={safeHref("/rent-converter")}
+          <SafeLink
+            href="/rent-converter"
             className="text-sky-700 hover:underline"
           >
             rent converter
-          </a>
+          </SafeLink>
           .
         </p>
       </section>

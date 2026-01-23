@@ -108,18 +108,62 @@ function isCurrency(x: string): x is Currency {
  * If you do not have a whitelist, remove safeHref and use plain hrefs.
  */
 const ROUTE_WHITELIST = new Set<string>([
+  // Home
   "/",
-  "/rent-due-date-calculator",
-  "/rent-paid-weekly-vs-monthly",
+
+  // Rent converter hub
   "/rent-converter",
-  "/rent-affordability-calculator",
-  "/rent-billed-every-28-days",
-  "/rent-paid-every-4-weeks",
-  "/true-cost-of-rent-per-day",
-  "/rent-as-percentage-of-income",
-  "/rent-paid-every-2-weeks",
-  "/rent-billed-every-28-days",
+
+  // Frequency converters
+  "/monthly-to-weekly-rent-converter",
+  "/weekly-to-monthly-rent-converter",
+  "/weekly-to-annual-rent-converter",
+  "/weekly-to-biweekly-rent-converter",
+
+  "/biweekly-to-weekly-rent-converter",
+  "/biweekly-to-monthly-rent-converter",
+  "/biweekly-to-annual-rent-converter",
+
+  "/monthly-to-annual-rent-converter",
+  "/annual-to-monthly-rent-converter",
+
+  "/monthly-to-daily-rent-converter",
+  "/daily-to-monthly-rent-converter",
+
+  "/monthly-to-hourly-rent-converter",
+  "/hourly-to-monthly-rent-converter",
+
+  "/hourly-to-annual-rent-converter",
+  "/annual-to-hourly-rent-converter",
+
+  "/annual-to-weekly-rent-converter",
+  "/annual-to-biweekly-rent-converter",
+  "/monthly-to-biweekly-rent-converter",
+
+  // Rent calculators
+  "/rent-calculator",
+  "/rent-per-day-calculator",
+  "/rent-per-week-calculator",
+  "/rent-paid-every-4-weeks-calculator",
+  "/rent-per-paycheck-calculator",
+  "/rent-split-calculator",
+  "/rent-due-date-calculator",
+
+  // Affordability and income
+  "/rent-as-percentage-of-income-calculator",
+  "/how-much-rent-can-i-afford-calculator",
+  "/rent-after-tax-income-calculator",
+  "/rent-vs-take-home-pay-calculator",
+
+  // Rent increases
+  "/rent-increase-calculator",
+  "/rent-increase-percentage-calculator",
+  "/rent-after-increase-calculator",
+
+  // Rent vs buy
+  "/rent-vs-buy-calculator",
 ]);
+
 function safeHref(path: string): string {
   return ROUTE_WHITELIST.has(path) ? path : "/";
 }
@@ -746,15 +790,25 @@ export default function RentDueDateCalculator() {
     };
   }, [parsedAmount, computedEnd, parsedAsOf, cycle, schedule]);
 
+  // FIX: only whitelisted routes here
   const relatedLinks = [
-    { href: "/rent-paid-weekly-vs-monthly", text: "Weekly vs monthly rent" },
     { href: "/rent-converter", text: "Rent converter hub" },
     {
-      href: "/rent-affordability-calculator",
-      text: "Rent affordability calculator",
+      href: "/weekly-to-monthly-rent-converter",
+      text: "Weekly to monthly rent converter",
     },
-    { href: "/rent-billed-every-28-days", text: "Rent billed every 28 days" },
-    { href: "/rent-paid-every-4-weeks", text: "Rent paid every 4 weeks" },
+    {
+      href: "/monthly-to-weekly-rent-converter",
+      text: "Monthly to weekly rent converter",
+    },
+    {
+      href: "/rent-paid-every-4-weeks-calculator",
+      text: "Rent paid every 4 weeks calculator",
+    },
+    {
+      href: "/rent-per-paycheck-calculator",
+      text: "Rent per paycheck calculator",
+    },
   ];
 
   const faqData = [
@@ -826,8 +880,21 @@ export default function RentDueDateCalculator() {
     rows.push(buildCsvRow(["Cycle", BILLING_LABEL[cycle]]));
     rows.push(buildCsvRow(["As-of date", formatDate(parsedAsOf)]));
     rows.push(buildCsvRow(["End date", formatDate(computedEnd)]));
-    rows.push(buildCsvRow(["Monthly due day", String(dueDay)]));
-    rows.push(buildCsvRow(["Anchor date", formatDate(parsedAnchor)]));
+
+    // FIX: avoid misleading values based on cycle
+    rows.push(
+      buildCsvRow([
+        "Monthly due day",
+        cycle === "monthly" ? String(dueDay) : "—",
+      ]),
+    );
+    rows.push(
+      buildCsvRow([
+        "Anchor date",
+        cycle === "monthly" ? "—" : formatDate(parsedAnchor),
+      ]),
+    );
+
     rows.push(
       buildCsvRow([
         "Display",
@@ -950,7 +1017,7 @@ export default function RentDueDateCalculator() {
         }}
       />
 
-      <section className="max-w-6xl mx-auto px-6 pt-8">
+      <section className="max-w-6xl mx-auto px-6">
         <nav className="text-sm text-slate-500 mb-4 rc-no-print">
           <a href={safeHref("/")} className="hover:underline text-slate-600">
             Home
@@ -975,19 +1042,6 @@ export default function RentDueDateCalculator() {
             </h2>
 
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
-              <button
-                type="button"
-                onClick={handleExportCsv}
-                disabled={!computed.ok}
-                className={`rounded-xl border px-4 py-2 text-sm font-semibold transition ${
-                  computed.ok
-                    ? "border-slate-200 bg-white text-slate-800 hover:bg-sky-50 hover:border-sky-200"
-                    : "border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed"
-                }`}
-                aria-disabled={!computed.ok}
-              >
-                Export CSV
-              </button>
               <button
                 type="button"
                 onClick={handlePrint}

@@ -26,7 +26,7 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:description", content: description },
     {
       property: "og:url",
-      content: "https://rentconverter.com/hourly-to-monthly-rent",
+      content: "https://rentconverter.com/hourly-to-monthly-rent-converter",
     },
     { property: "og:site_name", content: "RentConverter.com" },
     { property: "og:image", content: "https://rentconverter.com/og-image.jpg" },
@@ -41,7 +41,7 @@ export const meta: Route.MetaFunction = () => {
 
     {
       rel: "canonical",
-      href: "https://rentconverter.com/hourly-to-monthly-rent",
+      href: "https://rentconverter.com/hourly-to-monthly-rent-converter",
     },
   ];
 };
@@ -65,14 +65,62 @@ const PERIOD_LABEL: Record<Period, string> = {
   annual: "Annual",
 };
 
-// Keep conservative and aligned with your known route set
+// Internal link whitelist (keep conservative)
 const ROUTE_WHITELIST = new Set<string>([
+  // Home
   "/",
+
+  // Rent converter hub
   "/rent-converter",
-  "/rent-affordability-calculator",
-  "/daily-to-monthly-rent",
-  "/hourly-to-monthly-rent",
-  "/rent-paid-every-4-weeks",
+
+  // Frequency converters
+  "/monthly-to-weekly-rent-converter",
+  "/weekly-to-monthly-rent-converter",
+  "/weekly-to-annual-rent-converter",
+  "/weekly-to-biweekly-rent-converter",
+
+  "/biweekly-to-weekly-rent-converter",
+  "/biweekly-to-monthly-rent-converter",
+  "/biweekly-to-annual-rent-converter",
+
+  "/monthly-to-annual-rent-converter",
+  "/annual-to-monthly-rent-converter",
+
+  "/monthly-to-daily-rent-converter",
+  "/daily-to-monthly-rent-converter",
+
+  "/monthly-to-hourly-rent-converter",
+  "/hourly-to-monthly-rent-converter",
+
+  "/hourly-to-annual-rent-converter",
+  "/annual-to-hourly-rent-converter",
+
+  "/annual-to-weekly-rent-converter",
+  "/annual-to-biweekly-rent-converter",
+  "/monthly-to-biweekly-rent-converter",
+
+  // Rent calculators
+  "/rent-calculator",
+  "/rent-per-day-calculator",
+  "/rent-per-week-calculator",
+  "/rent-paid-every-4-weeks-calculator",
+  "/rent-per-paycheck-calculator",
+  "/rent-split-calculator",
+  "/rent-due-date-calculator",
+
+  // Affordability and income
+  "/rent-as-percentage-of-income-calculator",
+  "/how-much-rent-can-i-afford-calculator",
+  "/rent-after-tax-income-calculator",
+  "/rent-vs-take-home-pay-calculator",
+
+  // Rent increases
+  "/rent-increase-calculator",
+  "/rent-increase-percentage-calculator",
+  "/rent-after-increase-calculator",
+
+  // Rent vs buy
+  "/rent-vs-buy-calculator",
 ]);
 
 function safeHref(path: string): string {
@@ -131,15 +179,18 @@ function toNumberSafe(scaled: bigint): number {
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
-  displayDecimals: number,
+  maxDecimals: number,
+  minDecimals: number,
 ): string {
   const n = toNumberSafe(scaled);
   if (!Number.isFinite(n)) return "—";
+  const max = Math.max(0, Math.min(12, maxDecimals));
+  const min = Math.max(0, Math.min(max, minDecimals));
   return new Intl.NumberFormat(undefined, {
     style: "currency",
     currency,
-    maximumFractionDigits: Math.max(0, Math.min(12, displayDecimals)),
-    minimumFractionDigits: 0,
+    maximumFractionDigits: max,
+    minimumFractionDigits: min,
   }).format(n);
 }
 
@@ -346,15 +397,6 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   }
 }
 
-function safeParseEnum<T extends string>(
-  raw: string | null,
-  allowed: readonly T[],
-  fallback: T,
-): T {
-  if (!raw) return fallback;
-  return (allowed as readonly string[]).includes(raw) ? (raw as T) : fallback;
-}
-
 export default function HourlyToMonthlyRent() {
   const [amount, setAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "2.5";
@@ -457,9 +499,10 @@ export default function HourlyToMonthlyRent() {
 
   const canShowResults = parsedHourly.ok && !!breakdownScaled;
 
-  const effectiveDisplayDecimals = roundDisplay ? displayDecimals : 12;
+  const maxDecimals = roundDisplay ? displayDecimals : 12;
+  const minDecimals = roundDisplay ? displayDecimals : 0;
   const fmt = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, effectiveDisplayDecimals);
+    formatCurrencyFromScaled(scaled, currency, maxDecimals, minDecimals);
 
   const handleCopy = async (key: string, text: string) => {
     try {
@@ -565,7 +608,7 @@ export default function HourlyToMonthlyRent() {
     );
 
     downloadTextFile(
-      "hourly-to-monthly-rent.csv",
+      "hourly-to-monthly-rent-converter.csv",
       rows.join("\n"),
       "text/csv;charset=utf-8",
     );
@@ -631,7 +674,7 @@ export default function HourlyToMonthlyRent() {
         "@type": "ListItem",
         position: 2,
         name: "Hourly to Monthly Rent Converter",
-        item: "https://rentconverter.com/hourly-to-monthly-rent",
+        item: "https://rentconverter.com/hourly-to-monthly-rent-converter",
       },
     ],
   };
@@ -649,7 +692,7 @@ export default function HourlyToMonthlyRent() {
     name: "Hourly to Monthly Rent Converter",
     description:
       "Convert hourly rent to a monthly equivalent using annual equivalence (365-day year). Includes a full period breakdown and a month-length comparison, plus CSV export and print-to-PDF.",
-    url: "https://rentconverter.com/hourly-to-monthly-rent",
+    url: "https://rentconverter.com/hourly-to-monthly-rent-converter",
   };
 
   return (
@@ -668,8 +711,11 @@ export default function HourlyToMonthlyRent() {
       />
 
       <section className="pb-4 rc-no-print">
-        <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-500">
-          <a href={safeHref("/")} className="hover:underline">
+        <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-600">
+          <a
+            href={safeHref("/")}
+            className="hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
+          >
             Home
           </a>{" "}
           / Hourly to Monthly Rent Converter
@@ -677,77 +723,37 @@ export default function HourlyToMonthlyRent() {
       </section>
 
       <section className="pb-8 text-center bg-white rc-no-print">
-        <h1 className="text-4xl font-bold text-slate-800 mb-4">
+        <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-4 tracking-tight">
           Hourly to Monthly Rent Converter
         </h1>
-        <p className="text-slate-600 max-w-3xl mx-auto text-lg">
+        <p className="text-slate-700 max-w-3xl mx-auto text-lg leading-relaxed">
           Convert an hourly rent amount into a monthly equivalent using annual
           equivalence as the source of truth. This helps compare hourly pricing
           to monthly rent using consistent time-period assumptions.
         </p>
-
-        <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3 text-sm">
-          <a
-            href={safeHref("/rent-converter")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Rent converter
-          </a>
-          <a
-            href={safeHref("/daily-to-monthly-rent")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Daily → Monthly
-          </a>
-          <a
-            href={safeHref("/rent-paid-every-4-weeks")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Every 4 weeks
-          </a>
-          <a
-            href={safeHref("/rent-affordability-calculator")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Affordability
-          </a>
-        </div>
       </section>
 
       <section id="converter" className="mx-auto max-w-6xl px-6 pb-6">
         <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:p-8 rc-print-block">
           <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <h2 className="text-xl sm:text-2xl font-bold">
+            <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
               Instant hourly to monthly conversion
             </h2>
 
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
               <button
                 type="button"
-                onClick={handleExportCsv}
-                disabled={!canShowResults}
-                className={`rounded-xl border px-4 py-2 text-sm font-semibold transition ${
-                  canShowResults
-                    ? "border-slate-200 bg-white text-slate-800 hover:bg-sky-50 hover:border-sky-200"
-                    : "border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed"
-                }`}
-                aria-disabled={!canShowResults}
-              >
-                Export CSV
-              </button>
-              <button
-                type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
               >
                 Print / Save as PDF
               </button>
             </div>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-12">
+          <div className="grid gap-6 md:grid-cols-12">
             <div className="md:col-span-6">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label className="block text-sm font-semibold text-slate-800 mb-2">
                 Hourly rent amount
               </label>
               <div className="flex gap-2">
@@ -756,7 +762,7 @@ export default function HourlyToMonthlyRent() {
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                   placeholder="e.g. 2.5 or 2.50"
-                  className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="w-full rounded-xl border border-slate-300 px-4 py-3.5 text-base text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus:border-sky-500"
                   aria-invalid={!parsedHourly.ok}
                   aria-describedby="rc-hourly-help rc-hourly-error"
                 />
@@ -769,7 +775,7 @@ export default function HourlyToMonthlyRent() {
                         : "CAD",
                     )
                   }
-                  className="rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="rounded-xl border border-slate-300 bg-white px-3 py-3.5 text-sm font-semibold text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus:border-sky-500"
                   aria-label="Currency"
                 >
                   {SUPPORTED_CURRENCIES.map((c) => (
@@ -780,7 +786,10 @@ export default function HourlyToMonthlyRent() {
                 </select>
               </div>
 
-              <p id="rc-hourly-help" className="mt-2 text-xs text-slate-500">
+              <p
+                id="rc-hourly-help"
+                className="mt-2 text-sm text-slate-600 leading-relaxed"
+              >
                 Accepted inputs: $2.50, 2.5, 2.50, .5, 12., 1250,50 (comma
                 decimal). If an input is ambiguous, the page shows a warning or
                 error instead of a misleading result.
@@ -790,11 +799,17 @@ export default function HourlyToMonthlyRent() {
                 <p
                   id="rc-hourly-error"
                   className="mt-2 text-sm font-semibold text-rose-700"
+                  role="alert"
+                  aria-live="assertive"
                 >
                   {parsedHourly.error}
                 </p>
               ) : parsedHourly.warnings.length ? (
-                <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                <div
+                  className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900"
+                  role="status"
+                  aria-live="polite"
+                >
                   <div className="font-semibold">Input interpretation note</div>
                   <ul className="mt-1 list-disc pl-5 space-y-1">
                     {parsedHourly.warnings.map((w, i) => (
@@ -806,20 +821,20 @@ export default function HourlyToMonthlyRent() {
             </div>
 
             <div className="md:col-span-6">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label className="block text-sm font-semibold text-slate-800 mb-2">
                 Display settings
               </label>
 
               <div className="grid gap-3 sm:grid-cols-2">
                 <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
-                  <div className="text-xs text-slate-500">From</div>
-                  <div className="mt-1 text-base font-bold text-slate-800">
+                  <div className="text-xs text-slate-600">From</div>
+                  <div className="mt-1 text-base font-bold text-slate-900">
                     {PERIOD_LABEL.hourly}
                   </div>
                 </div>
                 <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
-                  <div className="text-xs text-slate-500">To</div>
-                  <div className="mt-1 text-base font-bold text-slate-800">
+                  <div className="text-xs text-slate-600">To</div>
+                  <div className="mt-1 text-base font-bold text-slate-900">
                     {PERIOD_LABEL.monthly}
                   </div>
                 </div>
@@ -828,26 +843,26 @@ export default function HourlyToMonthlyRent() {
               <div className="mt-3 rounded-xl border border-slate-200 bg-white p-4">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                   <div>
-                    <div className="text-xs text-slate-500">
+                    <div className="text-xs text-slate-600">
                       Rounding (display only)
                     </div>
-                    <label className="mt-1 flex items-center gap-2 text-sm text-slate-700">
+                    <label className="mt-1 flex items-center gap-2 text-sm text-slate-800">
                       <input
                         type="checkbox"
                         checked={roundDisplay}
                         onChange={(e) => setRoundDisplay(e.target.checked)}
-                        className="h-4 w-4"
+                        className="h-4 w-4 accent-sky-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
                       />
                       Round displayed values
                     </label>
-                    <p className="mt-1 text-xs text-slate-500">
+                    <p className="mt-1 text-sm text-slate-600 leading-relaxed">
                       Calculations use up to 12 decimals internally. If enabled,
                       displayed values are rounded to your chosen decimals.
                     </p>
                   </div>
 
                   <div className="sm:text-right">
-                    <div className="text-xs text-slate-500">
+                    <div className="text-xs text-slate-600">
                       Displayed decimals
                     </div>
                     <select
@@ -863,7 +878,7 @@ export default function HourlyToMonthlyRent() {
                           ),
                         )
                       }
-                      className="mt-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                      className="mt-1 rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm font-semibold text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus:border-sky-500"
                       aria-label="Displayed decimals"
                     >
                       <option value={0}>0</option>
@@ -874,9 +889,9 @@ export default function HourlyToMonthlyRent() {
                   </div>
                 </div>
 
-                <div className="mt-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+                <div className="mt-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-800">
                   <div className="font-semibold">Math basis</div>
-                  <p className="mt-1 text-xs text-slate-600">
+                  <p className="mt-1 text-sm text-slate-700 leading-relaxed">
                     Monthly = (hourly × 24 × 365) ÷ 12 using a 365-day year and
                     an average month length.
                   </p>
@@ -885,32 +900,56 @@ export default function HourlyToMonthlyRent() {
             </div>
           </div>
 
-          <div className="mt-6 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
-            <div className="text-sm text-slate-600">Monthly equivalent</div>
+          <div
+            className="mt-6 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block border-l-4 border-l-sky-200"
+            aria-live="polite"
+            role="region"
+            aria-label="Monthly equivalent results"
+          >
+            <div className="flex items-center gap-2">
+              <div
+                className="h-2 w-2 rounded-full bg-sky-600"
+                aria-hidden="true"
+              />
+              <div className="text-sm font-semibold text-slate-800">
+                Monthly equivalent
+              </div>
+            </div>
 
             {!canShowResults ? (
-              <div className="mt-2 rounded-xl border border-slate-200 bg-white px-4 py-4 text-slate-700">
+              <div className="mt-3 rounded-xl border border-slate-200 bg-white px-4 py-4 text-slate-800">
                 <div className="font-semibold">No result to show yet</div>
-                <p className="mt-1 text-sm text-slate-600">
+                <p className="mt-1 text-sm text-slate-700 leading-relaxed">
                   Enter a valid hourly amount to see the monthly equivalent and
                   breakdown.
                 </p>
               </div>
             ) : (
               <>
-                <div className="mt-2 flex flex-col gap-2">
-                  <div className="text-4xl sm:text-5xl font-extrabold text-sky-800">
-                    {fmt(breakdownScaled!.monthly)}
+                <div className="mt-3 flex flex-col gap-2">
+                  <div className="min-h-[3.5rem] sm:min-h-[4rem]">
+                    <div className="text-4xl sm:text-5xl font-extrabold text-sky-900 tabular-nums whitespace-nowrap">
+                      {fmt(breakdownScaled!.monthly)}
+                    </div>
                   </div>
-                  <div className="text-sm text-slate-600">
-                    {fmt(breakdownScaled!.hourly)} hourly ≈{" "}
-                    <strong>{fmt(breakdownScaled!.monthly)}</strong> monthly
-                    (average month, 365 ÷ 12)
+
+                  <div className="text-sm text-slate-700 leading-relaxed">
+                    <span className="tabular-nums whitespace-nowrap">
+                      {fmt(breakdownScaled!.hourly)}
+                    </span>{" "}
+                    hourly ≈{" "}
+                    <strong className="text-slate-900 tabular-nums whitespace-nowrap">
+                      {fmt(breakdownScaled!.monthly)}
+                    </strong>{" "}
+                    monthly (average month, 365 ÷ 12)
                   </div>
-                  <div className="text-sm text-slate-600">
+
+                  <div className="text-sm text-slate-700 leading-relaxed">
                     Implied annual equivalent:{" "}
-                    <strong>{fmt(breakdownScaled!.annual)}</strong> annual
-                    (365-day basis)
+                    <strong className="text-slate-900 tabular-nums whitespace-nowrap">
+                      {fmt(breakdownScaled!.annual)}
+                    </strong>{" "}
+                    annual (365-day basis)
                   </div>
 
                   <div className="rc-no-print mt-2 flex flex-wrap gap-2">
@@ -919,7 +958,7 @@ export default function HourlyToMonthlyRent() {
                       onClick={() =>
                         handleCopy("monthly", fmt(breakdownScaled!.monthly))
                       }
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                      className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
                     >
                       {copiedKey === "monthly"
                         ? "Copied"
@@ -933,7 +972,7 @@ export default function HourlyToMonthlyRent() {
                           `Hourly: ${fmt(breakdownScaled!.hourly)} | Monthly: ${fmt(breakdownScaled!.monthly)} | Annual: ${fmt(breakdownScaled!.annual)}`,
                         )
                       }
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                      className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
                     >
                       {copiedKey === "summary" ? "Copied" : "Copy summary"}
                     </button>
@@ -944,7 +983,7 @@ export default function HourlyToMonthlyRent() {
                     ) : null}
                   </div>
 
-                  <div className="mt-1 text-xs text-slate-500">
+                  <div className="mt-1 text-sm text-slate-600 leading-relaxed">
                     {roundDisplay ? (
                       <>
                         Displayed values rounded to {displayDecimals} decimals.
@@ -989,82 +1028,100 @@ export default function HourlyToMonthlyRent() {
                   ).map(([label, val, key]) => (
                     <div
                       key={key}
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-3"
+                      className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm"
                     >
-                      <div className="text-xs text-slate-500">{label}</div>
-                      <div className="mt-1 text-lg font-bold text-slate-800">
+                      <div className="text-xs font-medium text-slate-600">
+                        {label}
+                      </div>
+                      <div className="mt-1 text-lg font-bold text-slate-900 tabular-nums whitespace-nowrap">
                         {fmt(val)}
                       </div>
                     </div>
                   ))}
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
-                    <div className="text-xs text-slate-500">
-                      Month length comparison (average month vs 30-day month)
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+                    <div className="flex items-center gap-2">
+                      <div
+                        className="h-2 w-2 rounded-full bg-sky-600"
+                        aria-hidden="true"
+                      />
+                      <div className="text-xs font-medium text-slate-600">
+                        Month length comparison (average month vs 30-day month)
+                      </div>
                     </div>
 
-                    <div className="mt-2 grid gap-2 sm:grid-cols-3">
+                    <div className="mt-3 grid gap-2 sm:grid-cols-3">
                       <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
-                        <div className="text-xs text-slate-500">
+                        <div className="text-xs font-medium text-slate-600">
                           30-day month estimate
                         </div>
-                        <div className="mt-1 text-sm font-bold text-slate-800">
+                        <div className="mt-1 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
                           {fmt(breakdownScaled!.monthly30Day)}
                         </div>
-                        <div className="mt-1 text-xs text-slate-500">
+                        <div className="mt-1 text-xs text-slate-600">
                           Computed as hourly × 24 × 30
                         </div>
                       </div>
 
                       <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
-                        <div className="text-xs text-slate-500">
+                        <div className="text-xs font-medium text-slate-600">
                           Average-month equivalence
                         </div>
-                        <div className="mt-1 text-sm font-bold text-slate-800">
+                        <div className="mt-1 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
                           {fmt(breakdownScaled!.monthlyAvg)}
                         </div>
-                        <div className="mt-1 text-xs text-slate-500">
+                        <div className="mt-1 text-xs text-slate-600">
                           Uses 365 ÷ 12 days per month
                         </div>
                       </div>
 
                       <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
-                        <div className="text-xs text-slate-500">Difference</div>
-                        <div className="mt-1 text-sm font-bold text-slate-800">
+                        <div className="text-xs font-medium text-slate-600">
+                          Difference
+                        </div>
+                        <div className="mt-1 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
                           {fmt(breakdownScaled!.monthDelta)}
                         </div>
-                        <div className="mt-1 text-xs text-slate-500">
+                        <div className="mt-1 text-xs text-slate-600 tabular-nums whitespace-nowrap">
                           ≈ {formatPercent(breakdownScaled!.monthDeltaPct, 2)}
                         </div>
                       </div>
                     </div>
 
-                    <p className="mt-3 text-xs text-slate-500">
+                    <p className="mt-3 text-sm text-slate-600 leading-relaxed">
                       This page uses the average-month approach so the monthly
                       amount aligns with annual equivalence. A fixed 30-day
                       month is shorter than an average month and can drift.
                     </p>
                   </div>
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
-                    <div className="text-xs text-slate-500">
-                      4-week vs monthly context
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+                    <div className="flex items-center gap-2">
+                      <div
+                        className="h-2 w-2 rounded-full bg-sky-600"
+                        aria-hidden="true"
+                      />
+                      <div className="text-xs font-medium text-slate-600">
+                        4-week vs monthly context
+                      </div>
                     </div>
+
                     <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                      <div className="text-sm text-slate-700">
+                      <div className="text-sm text-slate-800 leading-relaxed">
                         Monthly minus 4-week:{" "}
-                        <strong className="text-slate-900">
+                        <strong className="text-slate-900 tabular-nums whitespace-nowrap">
                           {fmt(breakdownScaled!.monthlyMinus4w)}
                         </strong>
                       </div>
-                      <div className="text-sm text-slate-700">
+                      <div className="text-sm text-slate-800 leading-relaxed">
                         Difference:{" "}
-                        <strong className="text-slate-900">
+                        <strong className="text-slate-900 tabular-nums whitespace-nowrap">
                           {formatPercent(breakdownScaled!.monthlyMinus4wPct, 2)}
                         </strong>
                       </div>
                     </div>
-                    <p className="mt-2 text-xs text-slate-500">
+
+                    <p className="mt-2 text-sm text-slate-600 leading-relaxed">
                       A 4-week period is 28 days. An average month is about
                       30.42 days (365 ÷ 12). These are different periods, so
                       their equivalents can diverge.
@@ -1075,7 +1132,7 @@ export default function HourlyToMonthlyRent() {
             )}
           </div>
 
-          <p className="mt-6 text-sm text-slate-500">
+          <p className="mt-6 text-sm text-slate-600 leading-relaxed">
             Assumptions: year = 365 days, day = 24 hours, week = 7 days,
             biweekly = 14 days, 4-week = 28 days, month = 365 ÷ 12 days
             (average). Actual billing depends on the agreement.
@@ -1093,7 +1150,7 @@ export default function HourlyToMonthlyRent() {
         </h2>
 
         <div className="rounded-2xl border border-slate-200 bg-white p-6">
-          <ol className="list-decimal pl-5 space-y-3 text-slate-700">
+          <ol className="list-decimal pl-5 space-y-3 text-slate-800 leading-relaxed">
             <li>
               <strong>You enter an hourly amount.</strong> The page parses the
               input in a decimal-safe way (up to 12 decimals) and flags
@@ -1120,25 +1177,25 @@ export default function HourlyToMonthlyRent() {
           </ol>
         </div>
 
-        <p className="mt-4 text-slate-700">
+        <p className="mt-4 text-slate-800 leading-relaxed">
           Related pages:{" "}
           <a
             href={safeHref("/rent-converter")}
-            className="text-sky-700 hover:underline"
+            className="text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
           >
             rent converter
           </a>
           ,{" "}
           <a
-            href={safeHref("/daily-to-monthly-rent")}
-            className="text-sky-700 hover:underline"
+            href={safeHref("/daily-to-monthly-rent-converter")}
+            className="text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
           >
             daily to monthly rent
           </a>
           , and{" "}
           <a
-            href={safeHref("/rent-affordability-calculator")}
-            className="text-sky-700 hover:underline"
+            href={safeHref("/how-much-rent-can-i-afford-calculator")}
+            className="text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
           >
             rent affordability calculator
           </a>
@@ -1147,16 +1204,16 @@ export default function HourlyToMonthlyRent() {
       </section>
 
       <section id="faq" className="max-w-5xl mx-auto py-20 px-6 rc-no-print">
-        <h2 className="text-3xl font-bold text-center mb-8 text-slate-800">
+        <h2 className="text-3xl font-bold text-center mb-8 text-slate-900">
           Frequently Asked Questions
         </h2>
         <div className="space-y-8">
           {faqData.map((f, i) => (
             <div key={i}>
-              <h3 className="font-semibold text-lg text-slate-800 mb-1">
+              <h3 className="font-semibold text-lg text-slate-900 mb-1">
                 {f.q}
               </h3>
-              <p className="text-slate-600">{f.a}</p>
+              <p className="text-slate-700 leading-relaxed">{f.a}</p>
             </div>
           ))}
         </div>
@@ -1164,7 +1221,7 @@ export default function HourlyToMonthlyRent() {
 
       <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
         <div className="rounded-2xl border border-slate-200 bg-white p-6">
-          <p className="text-xs text-slate-600 leading-relaxed">
+          <p className="text-xs text-slate-700 leading-relaxed">
             <strong>Disclaimer:</strong>
             <br />
             Tools on this site are for informational, budgeting, and comparison
@@ -1187,7 +1244,7 @@ export default function HourlyToMonthlyRent() {
       <RentToolsByCountry />
 
       <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
-        <p className="text-xs text-slate-500 text-center leading-relaxed">
+        <p className="text-xs text-slate-600 text-center leading-relaxed">
           <em>
             Use these calculators for comparisons and budgeting. Confirm your
             real payment schedule, due dates, and fees in your agreement.

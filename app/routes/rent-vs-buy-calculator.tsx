@@ -4,20 +4,6 @@ import OtherUsefulTools from "~/client/components/navigation/OtherUsefulTools";
 import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountry";
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
-/**
- * RentConverter.com refactor rules applied:
- * - Preserve decimals end-to-end (fixed-point BigInt).
- * - Avoid misleading "0" results on invalid input (show errors instead).
- * - Rounding is display-only (toggle + decimals selector).
- * - Fix money formatting (do not drop decimals for values >= 10).
- * - Robust number parsing (commas/currency symbols/.5/12./comma-decimal).
- * - Validate currency from localStorage.
- * - Export CSV + Print-to-PDF (window.print).
- * - Expand currency list (USD,CAD,EUR,GBP,AUD,NZD,JPY,CNY,HKD,SGD,INR,KRW,CHF,SEK,NOK,DKK,MXN,BRL).
- * - Include "How it works" section above FAQ.
- * - Internal link whitelist constraint (only known routes).
- */
-
 export const meta: Route.MetaFunction = () => [
   { title: "Rent vs Buy Calculator" },
   {
@@ -89,23 +75,61 @@ function isCurrency(x: string): x is Currency {
   return (SUPPORTED_CURRENCIES as readonly string[]).includes(x);
 }
 
-/**
- * Route whitelist. Only include routes you know exist in your app.
- * Add routes only when confirmed.
- */
 const ROUTE_WHITELIST = new Set<string>([
   "/",
   "/rent-converter",
+
+  "/monthly-to-weekly-rent-converter",
+  "/weekly-to-monthly-rent-converter",
+  "/weekly-to-annual-rent-converter",
+  "/weekly-to-biweekly-rent-converter",
+
+  "/biweekly-to-weekly-rent-converter",
+  "/biweekly-to-monthly-rent-converter",
+  "/biweekly-to-annual-rent-converter",
+
+  "/monthly-to-annual-rent-converter",
+  "/annual-to-monthly-rent-converter",
+
+  "/monthly-to-daily-rent-converter",
+  "/daily-to-monthly-rent-converter",
+
+  "/monthly-to-hourly-rent-converter",
+  "/hourly-to-monthly-rent-converter",
+
+  "/hourly-to-annual-rent-converter",
+  "/annual-to-hourly-rent-converter",
+
+  "/annual-to-weekly-rent-converter",
+  "/annual-to-biweekly-rent-converter",
+  "/monthly-to-biweekly-rent-converter",
+
+  "/rent-calculator",
+  "/rent-per-day-calculator",
+  "/rent-per-week-calculator",
+  "/rent-paid-every-4-weeks-calculator",
+  "/rent-per-paycheck-calculator",
+  "/rent-split-calculator",
+  "/rent-due-date-calculator",
+
+  "/rent-as-percentage-of-income-calculator",
+  "/how-much-rent-can-i-afford-calculator",
+  "/rent-after-tax-income-calculator",
+  "/rent-vs-take-home-pay-calculator",
+
+  "/rent-increase-calculator",
+  "/rent-increase-percentage-calculator",
+  "/rent-after-increase-calculator",
+
+  "/rent-vs-buy-calculator",
   "/rent-affordability-calculator",
   "/rent-paid-weekly-vs-monthly",
-  "/rent-vs-buy-calculator",
 ]);
 
 function safeHref(path: string): string {
   return ROUTE_WHITELIST.has(path) ? path : "/";
 }
 
-/** Fixed-point decimals preserved end-to-end (up to 12 decimals). */
 const MAX_DECIMALS = 12n;
 const SCALE = 10n ** MAX_DECIMALS;
 
@@ -132,7 +156,7 @@ function formatCurrencyFromScaled(
   displayDecimals: number,
 ): string {
   const n = toNumberSafe(scaled);
-  if (!Number.isFinite(n)) return "—";
+  if (!Number.isFinite(n)) return "N/A";
   const digits = Math.max(0, Math.min(12, displayDecimals));
   return new Intl.NumberFormat(undefined, {
     style: "currency",
@@ -143,14 +167,10 @@ function formatCurrencyFromScaled(
 }
 
 function formatPercent(pct: number, decimals = 2): string {
-  if (!Number.isFinite(pct)) return "—";
+  if (!Number.isFinite(pct)) return "N/A";
   return `${pct.toFixed(decimals)}%`;
 }
 
-/**
- * Accepts: $650, 650, 650.00, .5, 12., 650,50 (comma decimal).
- * Rejects ambiguous formats like "1,2,3".
- */
 function parseMoneyInputToScaled(raw: string, label = "value"): ParsedScaled {
   const warnings: string[] = [];
   const s0 = (raw ?? "").trim();
@@ -265,10 +285,8 @@ function parsePercentInput(raw: string, label: string): ParsedPercent {
   if (cleaned.includes("-"))
     return { ok: false, error: `${label} must be 0 or greater.` };
 
-  // Allow comma decimal if no dot present.
   let s = cleaned;
   if (s.includes(",") && !s.includes(".")) s = s.replace(",", ".");
-  // Remove thousands separators if both exist.
   if (s.includes(",") && s.includes(".")) s = s.replace(/,/g, "");
 
   const n = Number.parseFloat(s);
@@ -357,18 +375,14 @@ function monthlyPayment(principal: number, annualRate: number, months: number) {
 
 type YearRow = {
   year: number;
-
   rentAnnual: bigint;
   rentCumulative: bigint;
-
   homeValue: bigint;
   mortgageBalanceEnd: bigint;
   principalPaidThisYear: bigint;
   interestPaidThisYear: bigint;
-
   ownershipAnnualOutflow: bigint;
   ownershipCumulativeOutflow: bigint;
-
   equityEnd: bigint;
 };
 
@@ -377,11 +391,26 @@ function roundToScaled(n: number): bigint {
   return BigInt(Math.round(n * Number(SCALE)));
 }
 
-function scaledMulRate(scaled: bigint, rate: number): bigint {
-  // scaled * rate -> scaled
+function divRound(n: bigint, d: bigint): bigint {
+  if (d === 0n) return 0n;
+  return (n + d / 2n) / d;
+}
+
+function mulDivRound(a: bigint, b: bigint, d: bigint): bigint {
+  return divRound(a * b, d);
+}
+
+function rateToScaled(rate: number): bigint {
   if (!Number.isFinite(rate) || rate <= 0) return 0n;
-  const n = toNumberSafe(scaled) * rate;
-  return roundToScaled(n);
+  const v = Math.round(rate * Number(SCALE));
+  if (!Number.isFinite(v) || v <= 0) return 0n;
+  return BigInt(v);
+}
+
+function scaledMulRate(scaled: bigint, rate: number): bigint {
+  const rScaled = rateToScaled(rate);
+  if (rScaled <= 0n) return 0n;
+  return mulDivRound(scaled, rScaled, SCALE);
 }
 
 function scaledAdd(a: bigint, b: bigint): bigint {
@@ -406,7 +435,6 @@ export default function RentVsBuyCalculator() {
     return isCurrency(saved) ? saved : "USD";
   });
 
-  // Renting
   const [monthlyRent, setMonthlyRent] = useState<string>(() => {
     if (typeof window === "undefined") return "2200";
     return localStorage.getItem("rc_rvb_rent") ?? "2200";
@@ -416,7 +444,6 @@ export default function RentVsBuyCalculator() {
     return localStorage.getItem("rc_rvb_rent_increase") ?? "3";
   });
 
-  // Buying
   const [homePrice, setHomePrice] = useState<string>(() => {
     if (typeof window === "undefined") return "550000";
     return localStorage.getItem("rc_rvb_price") ?? "550000";
@@ -465,13 +492,11 @@ export default function RentVsBuyCalculator() {
     return localStorage.getItem("rc_rvb_app") ?? "3";
   });
 
-  // Horizon
   const [horizonYears, setHorizonYears] = useState<string>(() => {
     if (typeof window === "undefined") return "7";
     return localStorage.getItem("rc_rvb_years") ?? "7";
   });
 
-  // Display-only rounding controls
   const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
     if (typeof window === "undefined") return true;
     return safeParseBoolean(localStorage.getItem("rc_rvb_round_display"), true);
@@ -671,7 +696,6 @@ export default function RentVsBuyCalculator() {
     const sellRate = pctToRate(parsed.sellPct.value as number);
     const appRate = pctToRate(parsed.appPct.value as number);
 
-    // Use number domain for amortization formula, then convert back to scaled.
     const priceNum = toNumberSafe(priceScaled);
     const downPaymentNum = priceNum * downRate;
     const loanPrincipalNum = Math.max(0, priceNum - downPaymentNum);
@@ -692,23 +716,20 @@ export default function RentVsBuyCalculator() {
     let rentCumScaled = 0n;
 
     let homeValueScaled = priceScaled;
-    let balanceNum = loanPrincipalNum; // track mortgage balance in number for amortization
+    let balanceNum = loanPrincipalNum;
     let ownCumOutflowScaled = 0n;
 
     const rows: YearRow[] = [];
 
     for (let y = 1; y <= horizon; y++) {
-      // Rent side
       const rentAnnualScaled = rentMonthlyThisYearScaled * 12n;
       rentCumScaled = scaledAdd(rentCumScaled, rentAnnualScaled);
 
-      // Home value update at start of year 2+
       if (y > 1) {
         const hv = toNumberSafe(homeValueScaled) * (1 + appRate);
         homeValueScaled = roundToScaled(hv);
       }
 
-      // Mortgage amortization for 12 months (numbers), then convert paid amounts back to scaled.
       let interestThisYearNum = 0;
       let principalThisYearNum = 0;
 
@@ -725,7 +746,6 @@ export default function RentVsBuyCalculator() {
       const principalThisYearScaled = roundToScaled(principalThisYearNum);
       const mortgageBalanceEndScaled = roundToScaled(balanceNum);
 
-      // Ownership annual outflow (cash leaving pocket)
       const propertyTaxAnnualScaled = scaledMulRate(
         homeValueScaled,
         propTaxRate,
@@ -767,7 +787,6 @@ export default function RentVsBuyCalculator() {
         equityEnd: equityEndScaled,
       });
 
-      // Next year's rent
       const nextRentNum =
         toNumberSafe(rentMonthlyThisYearScaled) * (1 + rentIncreaseRate);
       rentMonthlyThisYearScaled = roundToScaled(nextRentNum);
@@ -793,18 +812,15 @@ export default function RentVsBuyCalculator() {
 
     const totalRentCostScaled = rentCumScaled;
 
-    // Ownership outflow includes annual outflows + upfront cash at purchase
     const totalOwnershipOutflowScaled = scaledAdd(
       scaledAdd(ownCumOutflowScaled, buyCloseScaled),
       downPaymentScaled,
     );
 
-    // Ownership net cost = outflow - estimated net sale proceeds
     const ownershipNetCostScaled = scaledMax0(
       scaledSub(totalOwnershipOutflowScaled, estimatedNetSaleProceedsScaled),
     );
 
-    // Break-even year: compare (cumulative outflow + upfront) - equity versus rent cumulative
     let breakEvenYear: number | null = null;
     for (const r of rows) {
       const ownApproxNetToDateScaled = scaledMax0(
@@ -1100,27 +1116,6 @@ export default function RentVsBuyCalculator() {
           horizon. The model shows cash outflow, estimated equity, and an
           end-of-horizon sale estimate.
         </p>
-
-        <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3 text-sm">
-          <a
-            href={safeHref("/rent-converter")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Rent converter hub
-          </a>
-          <a
-            href={safeHref("/rent-affordability-calculator")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Rent affordability calculator
-          </a>
-          <a
-            href={safeHref("/rent-paid-weekly-vs-monthly")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Weekly vs monthly rent
-          </a>
-        </div>
       </section>
 
       <section id="calculator" className="mx-auto max-w-6xl px-6 pb-6">
@@ -1139,19 +1134,6 @@ export default function RentVsBuyCalculator() {
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
               <button
                 type="button"
-                onClick={handleExportCsv}
-                disabled={!computed.ok}
-                className={`rounded-xl border px-4 py-2 text-sm font-semibold transition ${
-                  computed.ok
-                    ? "border-slate-200 bg-white text-slate-800 hover:bg-sky-50 hover:border-sky-200"
-                    : "border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed"
-                }`}
-                aria-disabled={!computed.ok}
-              >
-                Export CSV
-              </button>
-              <button
-                type="button"
                 onClick={handlePrint}
                 className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
               >
@@ -1160,7 +1142,6 @@ export default function RentVsBuyCalculator() {
             </div>
           </div>
 
-          {/* Display controls */}
           <div className="mb-6 rounded-2xl border border-slate-200 bg-white p-5 rc-no-print">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <label className="flex items-center gap-2 text-sm text-slate-700">
@@ -1203,7 +1184,6 @@ export default function RentVsBuyCalculator() {
             </p>
           </div>
 
-          {/* Inputs */}
           <div className="grid gap-6 lg:grid-cols-12">
             <div className="lg:col-span-4 rounded-2xl border border-slate-200 bg-white p-5">
               <h3 className="text-base font-bold text-slate-900 mb-3">
@@ -1487,7 +1467,6 @@ export default function RentVsBuyCalculator() {
             </div>
           </div>
 
-          {/* Errors/warnings */}
           {!parsed.ok ? (
             <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6">
               <div className="font-semibold text-slate-900">
@@ -1523,7 +1502,6 @@ export default function RentVsBuyCalculator() {
 
               {computed.ok ? (
                 <>
-                  {/* Headline results */}
                   <div className="mt-6 grid gap-4 lg:grid-cols-3 rc-print-block">
                     <div className="rounded-2xl border border-slate-200 bg-white p-5">
                       <div className="text-sm font-semibold text-slate-700">
@@ -1558,7 +1536,7 @@ export default function RentVsBuyCalculator() {
                       </div>
                       <div className="mt-2 text-3xl font-extrabold text-slate-900">
                         {computed.breakEvenYear === null
-                          ? "—"
+                          ? "N/A"
                           : computed.breakEvenYear}
                       </div>
                       <p className="mt-2 text-xs text-slate-500">
@@ -1597,7 +1575,6 @@ export default function RentVsBuyCalculator() {
                     ) : null}
                   </div>
 
-                  {/* Detail cards */}
                   <div className="mt-5 rounded-2xl border border-slate-200 bg-white p-5 rc-print-block">
                     <h3 className="text-lg font-bold text-slate-900 mb-2">
                       What the comparison is doing
@@ -1645,7 +1622,6 @@ export default function RentVsBuyCalculator() {
                     </p>
                   </div>
 
-                  {/* Year-by-year table */}
                   <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 rc-print-block">
                     <h3 className="text-lg font-bold text-slate-900 mb-3">
                       Year-by-year comparison
@@ -1732,7 +1708,6 @@ export default function RentVsBuyCalculator() {
             </>
           )}
 
-          {/* Disclaimer */}
           <section className="mt-10 rounded-2xl border border-slate-200 bg-white p-6 rc-print-block">
             <h3 className="text-xl font-bold text-slate-900 mb-3">
               Disclaimer
@@ -1756,7 +1731,6 @@ export default function RentVsBuyCalculator() {
         </div>
       </section>
 
-      {/* Required explanation section above FAQ */}
       <section className="max-w-5xl mx-auto px-6 pt-16 rc-no-print">
         <h2 className="text-3xl font-bold mb-6 text-center text-slate-900">
           How this tool works and what you can expect

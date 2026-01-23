@@ -36,7 +36,7 @@ export const meta: Route.MetaFunction = () => [
   },
   {
     property: "og:url",
-    content: "https://rentconverter.com/rent-per-paycheck",
+    content: "https://rentconverter.com/rent-per-paycheck-calculator",
   },
   { property: "og:site_name", content: "RentConverter.com" },
   { property: "og:image", content: "https://rentconverter.com/og-image.jpg" },
@@ -53,7 +53,10 @@ export const meta: Route.MetaFunction = () => [
   },
   { name: "twitter:image", content: "https://rentconverter.com/og-image.jpg" },
 
-  { rel: "canonical", href: "https://rentconverter.com/rent-per-paycheck" },
+  {
+    rel: "canonical",
+    href: "https://rentconverter.com/rent-per-paycheck-calculator",
+  },
 ];
 
 type RentPeriod =
@@ -143,10 +146,38 @@ function isPayFrequency(x: string): x is PayFrequency {
 const ROUTE_WHITELIST = new Set<string>([
   "/",
   "/rent-converter",
-  "/rent-affordability-calculator",
-  "/rent-paid-weekly-vs-monthly",
-  "/rent-billed-every-28-days",
-  "/rent-per-paycheck",
+  "/monthly-to-weekly-rent-converter",
+  "/weekly-to-monthly-rent-converter",
+  "/weekly-to-annual-rent-converter",
+  "/weekly-to-biweekly-rent-converter",
+  "/biweekly-to-weekly-rent-converter",
+  "/biweekly-to-monthly-rent-converter",
+  "/biweekly-to-annual-rent-converter",
+  "/monthly-to-annual-rent-converter",
+  "/annual-to-monthly-rent-converter",
+  "/monthly-to-daily-rent-converter",
+  "/daily-to-monthly-rent-converter",
+  "/monthly-to-hourly-rent-converter",
+  "/hourly-to-monthly-rent-converter",
+  "/hourly-to-annual-rent-converter",
+  "/annual-to-hourly-rent-converter",
+  "/annual-to-weekly-rent-converter",
+  "/annual-to-biweekly-rent-converter",
+  "/monthly-to-biweekly-rent-converter",
+  "/rent-calculator",
+  "/rent-per-day-calculator",
+  "/rent-per-week-calculator",
+  "/rent-paid-every-4-weeks-calculator",
+  "/rent-per-paycheck-calculator",
+  "/rent-split-calculator",
+  "/rent-due-date-calculator",
+  "/rent-as-percentage-of-income-calculator",
+  "/how-much-rent-can-i-afford-calculator",
+  "/rent-after-tax-income-calculator",
+  "/rent-vs-take-home-pay-calculator",
+  "/rent-increase-calculator",
+  "/rent-increase-percentage-calculator",
+  "/rent-after-increase-calculator",
 ]);
 
 function safeHref(path: string): string {
@@ -394,7 +425,7 @@ function safeParseInt(
 
 export default function RentPerPaycheck() {
   const pageName = "Rent Per Paycheck Calculator";
-  const canonicalUrl = "https://rentconverter.com/rent-per-paycheck";
+  const canonicalUrl = "https://rentconverter.com/rent-per-paycheck-calculator";
 
   const [amount, setAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "2000";
@@ -419,7 +450,6 @@ export default function RentPerPaycheck() {
     return isCurrency(saved) ? saved : "CAD";
   });
 
-  // Display-only rounding controls (do not affect computation)
   const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
     if (typeof window === "undefined") return true;
     return safeParseBoolean(localStorage.getItem("rpc_round_display"), true);
@@ -629,7 +659,7 @@ export default function RentPerPaycheck() {
     );
 
     downloadTextFile(
-      "rent-per-paycheck.csv",
+      "rent-per-paycheck-calculator.csv",
       rows.join("\n"),
       "text/csv;charset=utf-8",
     );
@@ -728,8 +758,16 @@ export default function RentPerPaycheck() {
     url: canonicalUrl,
   };
 
+  const amountInputId = "rpc_amount_input";
+  const amountHelpId = "rpc_amount_help";
+  const amountErrorId = "rpc_amount_error";
+  const rentPeriodSelectId = "rpc_rent_period";
+  const payFreqSelectId = "rpc_pay_freq";
+  const roundCheckboxId = "rpc_round_display";
+  const decimalsSelectId = "rpc_display_decimals";
+
   return (
-    <main className="bg-white text-slate-700 scroll-smooth">
+    <main className="bg-white text-slate-700 scroll-smooth antialiased">
       <style
         dangerouslySetInnerHTML={{
           __html: `
@@ -743,16 +781,19 @@ export default function RentPerPaycheck() {
         }}
       />
 
-      <section className="max-w-6xl mx-auto px-6 pt-8 rc-no-print">
-        <nav className="text-sm text-slate-500 mb-4">
-          <a href={safeHref("/")} className="hover:underline text-slate-600">
+      <section className="max-w-6xl mx-auto px-6  rc-no-print">
+        <nav className="text-sm text-slate-600 mb-4" aria-label="Breadcrumb">
+          <a
+            href={safeHref("/")}
+            className="inline-flex items-center gap-2 rounded-md text-slate-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
+          >
             Home
           </a>{" "}
-          / <span className="text-slate-700">{pageName}</span>
+          / <span className="text-slate-800">{pageName}</span>
         </nav>
 
-        <h1 className="text-4xl font-bold text-slate-800 mb-4">{pageName}</h1>
-        <p className="text-slate-600 max-w-3xl text-lg">
+        <h1 className="text-4xl font-bold text-slate-900 mb-4">{pageName}</h1>
+        <p className="text-slate-700 max-w-3xl text-lg leading-relaxed">
           Estimate how much rent to set aside from each paycheck when rent and
           pay cycles do not match. This calculator converts the rent amount to
           an annual total first (365-day basis), then divides by your pay
@@ -760,14 +801,14 @@ export default function RentPerPaycheck() {
         </p>
       </section>
 
-      <section id="calculator" className="mx-auto max-w-6xl px-6 pb-6 pt-8">
+      <section id="calculator" className="mx-auto max-w-6xl px-6 pb-6">
         <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:p-8 rc-print-block">
           <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
-              <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-950">
                 Rent allocation per paycheck
               </h2>
-              <p className="mt-1 text-sm text-slate-600">
+              <p className="mt-1 text-sm text-slate-700 leading-relaxed">
                 Invalid input hides results, so you do not get misleading zeros.
               </p>
             </div>
@@ -775,21 +816,8 @@ export default function RentPerPaycheck() {
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
               <button
                 type="button"
-                onClick={handleExportCsv}
-                disabled={!computed.ok}
-                className={`rounded-xl border px-4 py-2 text-sm font-semibold transition ${
-                  computed.ok
-                    ? "border-slate-200 bg-white text-slate-800 hover:bg-sky-50 hover:border-sky-200"
-                    : "border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed"
-                }`}
-                aria-disabled={!computed.ok}
-              >
-                Export CSV
-              </button>
-              <button
-                type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
               >
                 Print / Save as PDF
               </button>
@@ -798,17 +826,22 @@ export default function RentPerPaycheck() {
 
           <div className="grid gap-5 md:grid-cols-12">
             <div className="md:col-span-5">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label
+                htmlFor={amountInputId}
+                className="block text-sm font-semibold text-slate-800 mb-2"
+              >
                 Rent amount
               </label>
               <div className="flex gap-2">
                 <input
+                  id={amountInputId}
                   inputMode="decimal"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                   placeholder="e.g. 2000 or 2000.00"
-                  className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="w-full min-w-0 rounded-xl border border-slate-300 px-4 py-3 text-base text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
                   aria-invalid={!parsedAmount.ok}
+                  aria-describedby={`${amountHelpId}${!parsedAmount.ok ? ` ${amountErrorId}` : ""}`}
                 />
                 <select
                   value={currency}
@@ -817,7 +850,7 @@ export default function RentPerPaycheck() {
                       isCurrency(e.target.value) ? e.target.value : "CAD",
                     )
                   }
-                  className="rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
                   aria-label="Currency"
                 >
                   {SUPPORTED_CURRENCIES.map((c) => (
@@ -827,29 +860,40 @@ export default function RentPerPaycheck() {
                   ))}
                 </select>
               </div>
-              <p className="mt-2 text-xs text-slate-500">
+              <p
+                id={amountHelpId}
+                className="mt-2 text-xs text-slate-600 leading-relaxed"
+              >
                 Accepted inputs: $2,000, 2000.00, .5, 12., 2000,50 (comma
                 decimal). Ambiguous formats are rejected.
               </p>
               {!parsedAmount.ok ? (
-                <p className="mt-2 text-sm font-semibold text-rose-700">
+                <p
+                  id={amountErrorId}
+                  className="mt-2 text-sm font-semibold text-rose-700"
+                  role="alert"
+                >
                   {parsedAmount.error}
                 </p>
               ) : null}
             </div>
 
             <div className="md:col-span-3">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label
+                htmlFor={rentPeriodSelectId}
+                className="block text-sm font-semibold text-slate-800 mb-2"
+              >
                 Rent is listed as
               </label>
               <select
+                id={rentPeriodSelectId}
                 value={rentPeriod}
                 onChange={(e) =>
                   setRentPeriod(
                     isRentPeriod(e.target.value) ? e.target.value : "monthly",
                   )
                 }
-                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
               >
                 {(Object.keys(RENT_PERIOD_LABEL) as RentPeriod[]).map((p) => (
                   <option key={p} value={p}>
@@ -860,10 +904,14 @@ export default function RentPerPaycheck() {
             </div>
 
             <div className="md:col-span-4">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label
+                htmlFor={payFreqSelectId}
+                className="block text-sm font-semibold text-slate-800 mb-2"
+              >
                 Pay frequency
               </label>
               <select
+                id={payFreqSelectId}
                 value={payFreq}
                 onChange={(e) =>
                   setPayFreq(
@@ -872,7 +920,7 @@ export default function RentPerPaycheck() {
                       : "biweekly",
                   )
                 }
-                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
               >
                 {(Object.keys(PAY_LABEL) as PayFrequency[]).map((p) => (
                   <option key={p} value={p}>
@@ -883,26 +931,31 @@ export default function RentPerPaycheck() {
             </div>
 
             <div className="md:col-span-12">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label className="block text-sm font-semibold text-slate-800 mb-2">
                 Display
               </label>
               <div className="rounded-xl border border-slate-200 bg-white p-4">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                  <label className="flex items-center gap-2 text-sm text-slate-700">
+                  <label
+                    htmlFor={roundCheckboxId}
+                    className="flex items-center gap-2 text-sm text-slate-800"
+                  >
                     <input
+                      id={roundCheckboxId}
                       type="checkbox"
                       checked={roundDisplay}
                       onChange={(e) => setRoundDisplay(e.target.checked)}
-                      className="h-4 w-4"
+                      className="h-5 w-5 accent-sky-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2 rounded"
                     />
                     Round displayed values (display only)
                   </label>
 
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-slate-500">
+                    <span className="text-xs text-slate-600">
                       Displayed decimals
                     </span>
                     <select
+                      id={decimalsSelectId}
                       value={displayDecimals}
                       onChange={(e) =>
                         setDisplayDecimals(
@@ -915,7 +968,7 @@ export default function RentPerPaycheck() {
                           ),
                         )
                       }
-                      className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
+                      className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
                     >
                       <option value={0}>0</option>
                       <option value={2}>2</option>
@@ -925,7 +978,7 @@ export default function RentPerPaycheck() {
                   </div>
                 </div>
 
-                <p className="mt-2 text-xs text-slate-500">
+                <p className="mt-2 text-xs text-slate-600 leading-relaxed">
                   Calculations preserve decimals internally (up to 12). Only
                   display rounding changes.
                 </p>
@@ -933,13 +986,19 @@ export default function RentPerPaycheck() {
             </div>
           </div>
 
-          <div className="mt-6 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
+          <div
+            className="mt-6 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block"
+            role="region"
+            aria-label="Results"
+            aria-live="polite"
+            aria-atomic="true"
+          >
             {!computed.ok ? (
-              <div className="rounded-xl border border-slate-200 bg-white p-4">
-                <div className="font-semibold text-slate-800">
+              <div className="rounded-xl border border-slate-200 bg-[#f7fbff] p-4">
+                <div className="font-semibold text-slate-900">
                   No results to show
                 </div>
-                <p className="mt-1 text-sm text-slate-600">
+                <p className="mt-1 text-sm text-slate-700 leading-relaxed">
                   Fix the input to calculate rent per paycheck.
                 </p>
                 <ul className="mt-3 list-disc pl-5 space-y-1 text-sm text-rose-700">
@@ -950,20 +1009,27 @@ export default function RentPerPaycheck() {
               </div>
             ) : (
               <>
-                <div className="text-sm text-slate-600">
+                <div className="text-sm text-slate-700">
                   Estimated rent to set aside per paycheck
                 </div>
 
                 <div className="mt-2 flex flex-col gap-2">
-                  <div className="text-4xl sm:text-5xl font-extrabold text-sky-800">
+                  <div className="text-4xl sm:text-5xl font-extrabold text-sky-800 tabular-nums break-words">
                     {fmtMoney(computed.perPaycheckScaled)}
                   </div>
-                  <div className="text-sm text-slate-600">
-                    {fmtMoney(computed.amountScaled)} per{" "}
-                    {RENT_PERIOD_LABEL[rentPeriod].toLowerCase()} converts to{" "}
-                    <strong>{fmtMoney(computed.annualRentScaled)}</strong> per
-                    year, then divides by{" "}
-                    <strong>{String(PAY_PERIODS_PER_YEAR[payFreq])}</strong>{" "}
+                  <div className="text-sm text-slate-700 leading-relaxed">
+                    <span className="tabular-nums whitespace-nowrap">
+                      {fmtMoney(computed.amountScaled)}
+                    </span>{" "}
+                    per {RENT_PERIOD_LABEL[rentPeriod].toLowerCase()} converts
+                    to{" "}
+                    <strong className="tabular-nums whitespace-nowrap">
+                      {fmtMoney(computed.annualRentScaled)}
+                    </strong>{" "}
+                    per year, then divides by{" "}
+                    <strong className="tabular-nums whitespace-nowrap">
+                      {String(PAY_PERIODS_PER_YEAR[payFreq])}
+                    </strong>{" "}
                     paychecks per year.
                   </div>
                 </div>
@@ -979,12 +1045,15 @@ export default function RentPerPaycheck() {
                         )} (365-day basis)`,
                       )
                     }
-                    className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                    className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
                   >
                     {copiedKey === "summary" ? "Copied" : "Copy summary"}
                   </button>
                   {copiedKey === "copy_failed" ? (
-                    <span className="self-center text-sm font-semibold text-rose-700">
+                    <span
+                      className="self-center text-sm font-semibold text-rose-700"
+                      role="alert"
+                    >
                       Copy failed
                     </span>
                   ) : null}
@@ -1017,10 +1086,10 @@ export default function RentPerPaycheck() {
                   ).map(([label, val, key]) => (
                     <div
                       key={key}
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-3"
+                      className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm"
                     >
-                      <div className="text-xs text-slate-500">{label}</div>
-                      <div className="mt-1 text-lg font-bold text-slate-800">
+                      <div className="text-xs text-slate-600">{label}</div>
+                      <div className="mt-1 text-lg font-bold text-slate-900 tabular-nums whitespace-nowrap">
                         {fmtMoney(val)}
                       </div>
                     </div>
@@ -1028,34 +1097,34 @@ export default function RentPerPaycheck() {
                 </div>
 
                 <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
-                    <div className="text-xs text-slate-500">
+                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+                    <div className="text-xs text-slate-600">
                       Equivalent monthly cost
                     </div>
-                    <div className="mt-1 text-lg font-bold text-slate-800">
+                    <div className="mt-1 text-lg font-bold text-slate-900 tabular-nums whitespace-nowrap">
                       {fmtMoney(computed.annualRentScaled / 12n)}
                     </div>
-                    <div className="mt-1 text-xs text-slate-500">
+                    <div className="mt-1 text-xs text-slate-600 leading-relaxed">
                       Annual total divided by 12 months.
                     </div>
                   </div>
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
-                    <div className="text-xs text-slate-500">
+                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+                    <div className="text-xs text-slate-600">
                       Equivalent 4-week cost
                     </div>
-                    <div className="mt-1 text-lg font-bold text-slate-800">
+                    <div className="mt-1 text-lg font-bold text-slate-900 tabular-nums whitespace-nowrap">
                       {fmtMoney(computed.annualRentScaled / 13n)}
                     </div>
-                    <div className="mt-1 text-xs text-slate-500">
+                    <div className="mt-1 text-xs text-slate-600 leading-relaxed">
                       Annual total divided by 13 four-week periods.
                     </div>
                   </div>
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
-                    <div className="text-xs text-slate-500">Annual total</div>
-                    <div className="mt-1 text-lg font-bold text-slate-800">
+                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+                    <div className="text-xs text-slate-600">Annual total</div>
+                    <div className="mt-1 text-lg font-bold text-slate-900 tabular-nums whitespace-nowrap">
                       {fmtMoney(computed.annualRentScaled)}
                     </div>
-                    <div className="mt-1 text-xs text-slate-500">
+                    <div className="mt-1 text-xs text-slate-600 leading-relaxed">
                       Source of truth for all comparisons.
                     </div>
                   </div>
@@ -1065,17 +1134,17 @@ export default function RentPerPaycheck() {
           </div>
 
           <section className="mt-10 rc-print-block">
-            <h3 className="text-2xl font-semibold mb-4 text-slate-900">
+            <h3 className="text-2xl font-semibold mb-4 text-slate-950">
               Annual payment counts
             </h3>
-            <p className="text-slate-700 mb-4">
+            <p className="text-slate-700 mb-4 leading-relaxed">
               Rent listings and pay schedules often use different cycles. This
               table shows the standard counts per year used for comparison.
             </p>
 
             <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden">
               <table className="w-full text-sm">
-                <thead className="bg-slate-50 text-slate-700">
+                <thead className="bg-slate-50 text-slate-800">
                   <tr>
                     <th className="text-left px-4 py-3 font-semibold">Type</th>
                     <th className="text-left px-4 py-3 font-semibold">Cycle</th>
@@ -1085,74 +1154,74 @@ export default function RentPerPaycheck() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200">
-                  <tr>
-                    <td className="px-4 py-3 text-slate-700">Rent</td>
-                    <td className="px-4 py-3 text-slate-700">Monthly</td>
-                    <td className="px-4 py-3 text-right font-semibold text-slate-800">
+                  <tr className="odd:bg-white even:bg-slate-50/50">
+                    <td className="px-4 py-3 text-slate-800">Rent</td>
+                    <td className="px-4 py-3 text-slate-800">Monthly</td>
+                    <td className="px-4 py-3 text-right font-semibold text-slate-900 tabular-nums whitespace-nowrap">
                       {computed.ok
                         ? computed.annualCounts.rentPayments.monthly
                         : 12}
                     </td>
                   </tr>
-                  <tr>
-                    <td className="px-4 py-3 text-slate-700">Rent</td>
-                    <td className="px-4 py-3 text-slate-700">
+                  <tr className="odd:bg-white even:bg-slate-50/50">
+                    <td className="px-4 py-3 text-slate-800">Rent</td>
+                    <td className="px-4 py-3 text-slate-800">
                       Every 4 weeks (28 days)
                     </td>
-                    <td className="px-4 py-3 text-right font-semibold text-slate-800">
+                    <td className="px-4 py-3 text-right font-semibold text-slate-900 tabular-nums whitespace-nowrap">
                       {computed.ok
                         ? computed.annualCounts.rentPayments.every_4_weeks
                         : 13}
                     </td>
                   </tr>
-                  <tr>
-                    <td className="px-4 py-3 text-slate-700">Rent</td>
-                    <td className="px-4 py-3 text-slate-700">Weekly</td>
-                    <td className="px-4 py-3 text-right font-semibold text-slate-800">
+                  <tr className="odd:bg-white even:bg-slate-50/50">
+                    <td className="px-4 py-3 text-slate-800">Rent</td>
+                    <td className="px-4 py-3 text-slate-800">Weekly</td>
+                    <td className="px-4 py-3 text-right font-semibold text-slate-900 tabular-nums whitespace-nowrap">
                       {computed.ok
                         ? computed.annualCounts.rentPayments.weekly
                         : 52}
                     </td>
                   </tr>
-                  <tr>
-                    <td className="px-4 py-3 text-slate-700">Pay</td>
-                    <td className="px-4 py-3 text-slate-700">
+                  <tr className="odd:bg-white even:bg-slate-50/50">
+                    <td className="px-4 py-3 text-slate-800">Pay</td>
+                    <td className="px-4 py-3 text-slate-800">
                       Weekly paycheck
                     </td>
-                    <td className="px-4 py-3 text-right font-semibold text-slate-800">
+                    <td className="px-4 py-3 text-right font-semibold text-slate-900 tabular-nums whitespace-nowrap">
                       {computed.ok
                         ? computed.annualCounts.paychecks.weekly
                         : 52}
                     </td>
                   </tr>
-                  <tr>
-                    <td className="px-4 py-3 text-slate-700">Pay</td>
-                    <td className="px-4 py-3 text-slate-700">
+                  <tr className="odd:bg-white even:bg-slate-50/50">
+                    <td className="px-4 py-3 text-slate-800">Pay</td>
+                    <td className="px-4 py-3 text-slate-800">
                       Biweekly paycheck
                     </td>
-                    <td className="px-4 py-3 text-right font-semibold text-slate-800">
+                    <td className="px-4 py-3 text-right font-semibold text-slate-900 tabular-nums whitespace-nowrap">
                       {computed.ok
                         ? computed.annualCounts.paychecks.biweekly
                         : 26}
                     </td>
                   </tr>
-                  <tr>
-                    <td className="px-4 py-3 text-slate-700">Pay</td>
-                    <td className="px-4 py-3 text-slate-700">
+                  <tr className="odd:bg-white even:bg-slate-50/50">
+                    <td className="px-4 py-3 text-slate-800">Pay</td>
+                    <td className="px-4 py-3 text-slate-800">
                       Semimonthly paycheck
                     </td>
-                    <td className="px-4 py-3 text-right font-semibold text-slate-800">
+                    <td className="px-4 py-3 text-right font-semibold text-slate-900 tabular-nums whitespace-nowrap">
                       {computed.ok
                         ? computed.annualCounts.paychecks.semimonthly
                         : 24}
                     </td>
                   </tr>
-                  <tr>
-                    <td className="px-4 py-3 text-slate-700">Pay</td>
-                    <td className="px-4 py-3 text-slate-700">
+                  <tr className="odd:bg-white even:bg-slate-50/50">
+                    <td className="px-4 py-3 text-slate-800">Pay</td>
+                    <td className="px-4 py-3 text-slate-800">
                       Monthly paycheck
                     </td>
-                    <td className="px-4 py-3 text-right font-semibold text-slate-800">
+                    <td className="px-4 py-3 text-right font-semibold text-slate-900 tabular-nums whitespace-nowrap">
                       {computed.ok
                         ? computed.annualCounts.paychecks.monthly
                         : 12}
@@ -1165,10 +1234,10 @@ export default function RentPerPaycheck() {
 
           {computed.ok ? (
             <section className="mt-10 rc-print-block">
-              <h3 className="text-2xl font-semibold mb-4 text-slate-900">
+              <h3 className="text-2xl font-semibold mb-4 text-slate-950">
                 Rent period breakdown for the entered amount
               </h3>
-              <p className="text-slate-700 mb-4">
+              <p className="text-slate-700 mb-4 leading-relaxed">
                 This breakdown expresses the entered rent in other time periods
                 using the same annual equivalence and standard assumptions.
               </p>
@@ -1199,10 +1268,10 @@ export default function RentPerPaycheck() {
                 ).map(([label, val, key]) => (
                   <div
                     key={key}
-                    className="rounded-xl border border-slate-200 bg-white px-4 py-3"
+                    className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm"
                   >
-                    <div className="text-xs text-slate-500">{label}</div>
-                    <div className="mt-1 text-lg font-bold text-slate-800">
+                    <div className="text-xs text-slate-600">{label}</div>
+                    <div className="mt-1 text-lg font-bold text-slate-900 tabular-nums whitespace-nowrap">
                       {fmtMoney(val)}
                     </div>
                   </div>
@@ -1212,39 +1281,55 @@ export default function RentPerPaycheck() {
           ) : null}
 
           <section className="mt-10 rc-no-print">
-            <h3 className="text-2xl font-semibold mb-4 text-slate-900">
+            <h3 className="text-2xl font-semibold mb-4 text-slate-950">
               Links to related tools
             </h3>
-            <ul className="list-disc ml-6 text-slate-700">
+            <ul className="list-disc ml-6 text-slate-800">
               <li>
                 <a
                   href={safeHref("/rent-paid-weekly-vs-monthly")}
-                  className="text-sky-700 hover:underline"
+                  className="inline-flex items-center gap-2 text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
                 >
+                  <span
+                    aria-hidden="true"
+                    className="inline-block h-1.5 w-1.5 rounded-full bg-sky-500"
+                  />
                   Weekly vs monthly rent
                 </a>
               </li>
               <li>
                 <a
                   href={safeHref("/rent-converter")}
-                  className="text-sky-700 hover:underline"
+                  className="inline-flex items-center gap-2 text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
                 >
+                  <span
+                    aria-hidden="true"
+                    className="inline-block h-1.5 w-1.5 rounded-full bg-sky-500"
+                  />
                   Rent converter hub
                 </a>
               </li>
               <li>
                 <a
                   href={safeHref("/rent-affordability-calculator")}
-                  className="text-sky-700 hover:underline"
+                  className="inline-flex items-center gap-2 text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
                 >
+                  <span
+                    aria-hidden="true"
+                    className="inline-block h-1.5 w-1.5 rounded-full bg-sky-500"
+                  />
                   Rent affordability calculator
                 </a>
               </li>
               <li>
                 <a
                   href={safeHref("/rent-billed-every-28-days")}
-                  className="text-sky-700 hover:underline"
+                  className="inline-flex items-center gap-2 text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
                 >
+                  <span
+                    aria-hidden="true"
+                    className="inline-block h-1.5 w-1.5 rounded-full bg-sky-500"
+                  />
                   Rent billed every 28 days
                 </a>
               </li>
@@ -1252,10 +1337,10 @@ export default function RentPerPaycheck() {
           </section>
 
           <section className="mt-10 rounded-2xl border border-slate-200 bg-white p-6 rc-print-block">
-            <h3 className="text-xl font-bold text-slate-900 mb-3">
+            <h3 className="text-xl font-bold text-slate-950 mb-3">
               Disclaimer
             </h3>
-            <p className="text-sm text-slate-700 leading-relaxed">
+            <p className="text-sm text-slate-800 leading-relaxed">
               <strong>Disclaimer:</strong>
               <br />
               Tools on this site are provided for informational, budgeting, and
@@ -1273,7 +1358,7 @@ export default function RentPerPaycheck() {
             </p>
           </section>
 
-          <p className="mt-6 text-sm text-slate-500">
+          <p className="mt-6 text-sm text-slate-600 leading-relaxed">
             Assumptions: 1 year = 365 days, 1 week = 7 days, biweekly = 14 days,
             4-week rent = 28 days, month = 365 ÷ 12 days (average). Paycheck
             counts use standard definitions (weekly = 52, biweekly = 26,
@@ -1283,17 +1368,16 @@ export default function RentPerPaycheck() {
         </div>
       </section>
 
-      {/* Required explanation section above FAQ */}
       <section
         id="how-it-works"
         className="max-w-5xl mx-auto px-6 pt-16 rc-no-print"
       >
-        <h2 className="text-3xl font-bold mb-6 text-center text-slate-900">
+        <h2 className="text-3xl font-bold mb-6 text-center text-slate-950">
           How this tool works and what to expect
         </h2>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-6">
-          <p className="text-slate-700 mb-4">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <p className="text-slate-800 mb-4 leading-relaxed">
             This calculator is a budgeting allocator. It estimates how much rent
             to set aside from each paycheck by converting your rent into an
             annual total on a consistent 365-day basis, then dividing that
@@ -1301,26 +1385,30 @@ export default function RentPerPaycheck() {
             frequency you select.
           </p>
 
-          <p className="text-slate-700 mb-4">
+          <p className="text-slate-800 mb-4 leading-relaxed">
             The output does not change your lease due dates. If rent is due
             monthly and you are paid biweekly or semimonthly, this number helps
             you spread the same yearly rent across paychecks in a consistent
             way.
           </p>
 
-          <p className="text-slate-700 mb-4">
+          <p className="text-slate-800 mb-4 leading-relaxed">
             Expect small differences versus simple month math (like dividing by
             30) when rent is billed every 4 weeks or when payroll schedules do
             not line up with calendar months. Use the annual total shown in the
             calculator as the source of truth.
           </p>
 
-          <p className="text-slate-700 mt-6">
+          <p className="text-slate-800 mt-6 leading-relaxed">
             Related tool:{" "}
             <a
               href={safeHref("/rent-converter")}
-              className="text-sky-700 hover:underline"
+              className="inline-flex items-center gap-2 text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
             >
+              <span
+                aria-hidden="true"
+                className="inline-block h-1.5 w-1.5 rounded-full bg-sky-500"
+              />
               rent converter
             </a>
             .
@@ -1329,16 +1417,16 @@ export default function RentPerPaycheck() {
       </section>
 
       <section id="faq" className="max-w-5xl mx-auto py-16 px-6 rc-no-print">
-        <h2 className="text-3xl font-bold text-center mb-8 text-slate-800">
+        <h2 className="text-3xl font-bold text-center mb-8 text-slate-900">
           Frequently Asked Questions
         </h2>
         <div className="space-y-8">
           {faqData.map((f, i) => (
             <div key={i}>
-              <h3 className="font-semibold text-lg text-slate-800 mb-1">
+              <h3 className="font-semibold text-lg text-slate-900 mb-1">
                 {f.q}
               </h3>
-              <p className="text-slate-600">{f.a}</p>
+              <p className="text-slate-700 leading-relaxed">{f.a}</p>
             </div>
           ))}
         </div>
@@ -1349,7 +1437,7 @@ export default function RentPerPaycheck() {
       <RentToolsByCountry />
 
       <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
-        <p className="text-xs text-slate-500 text-center leading-relaxed">
+        <p className="text-xs text-slate-600 text-center leading-relaxed">
           <em>
             Tools on this site are for budgeting and comparison. Calculations
             use standard time-period assumptions, including a 365-day year and

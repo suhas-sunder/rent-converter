@@ -26,7 +26,7 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:description", content: description },
     {
       property: "og:url",
-      content: "https://rentconverter.com/rent-after-tax-income",
+      content: "https://rentconverter.com/rent-after-tax-income-calculator",
     },
     { property: "og:site_name", content: "RentConverter.com" },
     { property: "og:image", content: "https://rentconverter.com/og-image.jpg" },
@@ -41,7 +41,7 @@ export const meta: Route.MetaFunction = () => {
 
     {
       rel: "canonical",
-      href: "https://rentconverter.com/rent-after-tax-income",
+      href: "https://rentconverter.com/rent-after-tax-income-calculator",
     },
   ];
 };
@@ -68,11 +68,60 @@ const PERIOD_LABEL: Record<Period, string> = {
 // Only include routes you are certain exist in your app.
 // Unknown links should resolve to "/" to avoid linking to non-existent routes.
 const ROUTE_WHITELIST = new Set<string>([
+  // Home
   "/",
-  "/rent-after-tax-income",
-  "/rent-affordability-calculator",
-  "/rent-paid-every-4-weeks",
-  "/rent-paid-weekly-vs-monthly",
+
+  // Rent converter hub
+  "/rent-converter",
+
+  // Frequency converters
+  "/monthly-to-weekly-rent-converter",
+  "/weekly-to-monthly-rent-converter",
+  "/weekly-to-annual-rent-converter",
+  "/weekly-to-biweekly-rent-converter",
+
+  "/biweekly-to-weekly-rent-converter",
+  "/biweekly-to-monthly-rent-converter",
+  "/biweekly-to-annual-rent-converter",
+
+  "/monthly-to-annual-rent-converter",
+  "/annual-to-monthly-rent-converter",
+
+  "/monthly-to-daily-rent-converter",
+  "/daily-to-monthly-rent-converter",
+
+  "/monthly-to-hourly-rent-converter",
+  "/hourly-to-monthly-rent-converter",
+
+  "/hourly-to-annual-rent-converter",
+  "/annual-to-hourly-rent-converter",
+
+  "/annual-to-weekly-rent-converter",
+  "/annual-to-biweekly-rent-converter",
+  "/monthly-to-biweekly-rent-converter",
+
+  // Rent calculators
+  "/rent-calculator",
+  "/rent-per-day-calculator",
+  "/rent-per-week-calculator",
+  "/rent-paid-every-4-weeks-calculator",
+  "/rent-per-paycheck-calculator",
+  "/rent-split-calculator",
+  "/rent-due-date-calculator",
+
+  // Affordability and income
+  "/rent-as-percentage-of-income-calculator",
+  "/how-much-rent-can-i-afford-calculator",
+  "/rent-after-tax-income-calculator",
+  "/rent-vs-take-home-pay-calculator",
+
+  // Rent increases
+  "/rent-increase-calculator",
+  "/rent-increase-percentage-calculator",
+  "/rent-after-increase-calculator",
+
+  // Rent vs buy
+  "/rent-vs-buy-calculator",
 ]);
 
 function safeHref(path: string): string {
@@ -144,14 +193,23 @@ function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
   displayDecimals: number,
+  roundDisplay: boolean,
 ): string {
   const n = toNumberSafe(scaled);
   if (!Number.isFinite(n)) return "—";
+
+  const maxFrac = Math.max(0, Math.min(12, displayDecimals));
+
+  // If rounding is enabled, lock to the chosen decimals for consistent display.
+  // If rounding is disabled, allow up to 12 decimals, but do not drop cents.
+  const maximumFractionDigits = roundDisplay ? maxFrac : 12;
+  const minimumFractionDigits = roundDisplay ? maxFrac : 2;
+
   return new Intl.NumberFormat(undefined, {
     style: "currency",
     currency,
-    maximumFractionDigits: Math.max(0, Math.min(12, displayDecimals)),
-    minimumFractionDigits: 0,
+    maximumFractionDigits,
+    minimumFractionDigits,
   }).format(n);
 }
 
@@ -408,6 +466,19 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   }
 }
 
+function percentFromRatio(num: bigint, den: bigint, decimals: number): number {
+  if (den <= 0n) return 0;
+  const d = Math.max(0, Math.min(6, Math.trunc(decimals)));
+  const factor = 10n ** BigInt(d);
+  // percentScaled = (num/den) * 100 * 10^d
+  const percentScaled = (num * 100n * factor) / den;
+
+  // Keep it safely convertible to number.
+  const limit = 9_000_000_000_000_000n; // ~9e15
+  const safe = percentScaled > limit ? limit : percentScaled;
+  return Number(safe) / Number(factor);
+}
+
 export default function RentAfterTaxIncome() {
   const [grossIncome, setGrossIncome] = useState<string>(() => {
     if (typeof window === "undefined") return "60000";
@@ -507,7 +578,12 @@ export default function RentAfterTaxIncome() {
 
   const effectiveDisplayDecimals = roundDisplay ? displayDecimals : 12;
   const fmtMoney = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, effectiveDisplayDecimals);
+    formatCurrencyFromScaled(
+      scaled,
+      currency,
+      effectiveDisplayDecimals,
+      roundDisplay,
+    );
 
   const computed = useMemo(() => {
     const errors: string[] = [];
@@ -547,7 +623,7 @@ export default function RentAfterTaxIncome() {
     const annualNetAfterRent = annualNet - annualRent;
 
     const rentShareNetPct =
-      annualNet > 0n ? (Number(annualRent) / Number(annualNet)) * 100 : 0;
+      annualNet > 0n ? percentFromRatio(annualRent, annualNet, 4) : 0;
 
     const periods: Period[] = [
       "hourly",
@@ -681,7 +757,7 @@ export default function RentAfterTaxIncome() {
     });
 
     downloadTextFile(
-      "rent-after-tax-income.csv",
+      "rent-after-tax-income-calculator.csv",
       rows.join("\n"),
       "text/csv;charset=utf-8",
     );
@@ -773,7 +849,7 @@ export default function RentAfterTaxIncome() {
         "@type": "ListItem",
         position: 2,
         name: "Rent After-Tax Income Calculator",
-        item: "https://rentconverter.com/rent-after-tax-income",
+        item: "https://rentconverter.com/rent-after-tax-income-calculator",
       },
     ],
   };
@@ -791,7 +867,7 @@ export default function RentAfterTaxIncome() {
     name: "Rent After-Tax Income Calculator",
     description:
       "Estimate take-home income from pre-tax income and an effective tax rate, then compare rent to after-tax income using annual equivalence (365-day year).",
-    url: "https://rentconverter.com/rent-after-tax-income",
+    url: "https://rentconverter.com/rent-after-tax-income-calculator",
   };
 
   return (
@@ -827,27 +903,6 @@ export default function RentAfterTaxIncome() {
           estimates after-tax income and shows rent as a share of that take-home
           amount using a consistent annual basis.
         </p>
-
-        <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3 text-sm">
-          <a
-            href={safeHref("/rent-affordability-calculator")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Rent affordability calculator
-          </a>
-          <a
-            href={safeHref("/rent-paid-every-4-weeks")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Rent paid every 4 weeks
-          </a>
-          <a
-            href={safeHref("/rent-paid-weekly-vs-monthly")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Weekly vs monthly
-          </a>
-        </div>
       </section>
 
       <section id="calculator" className="mx-auto max-w-6xl px-6 pb-6">
@@ -866,19 +921,6 @@ export default function RentAfterTaxIncome() {
             </div>
 
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
-              <button
-                type="button"
-                onClick={handleExportCsv}
-                disabled={!canShowResults}
-                className={`rounded-xl border px-4 py-2 text-sm font-semibold transition ${
-                  canShowResults
-                    ? "border-slate-200 bg-white text-slate-800 hover:bg-sky-50 hover:border-sky-200"
-                    : "border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed"
-                }`}
-                aria-disabled={!canShowResults}
-              >
-                Export CSV
-              </button>
               <button
                 type="button"
                 onClick={handlePrint}
@@ -1136,7 +1178,15 @@ export default function RentAfterTaxIncome() {
                       onClick={() =>
                         handleCopy(
                           "summary",
-                          `After-tax income (annual): ${fmtMoney(computed.annualNet)} | Rent (annual): ${fmtMoney(computed.annualRent)} | Rent share: ${computed.rentShareNetPct.toFixed(2)}% | Net after rent (annual): ${fmtMoney(computed.annualNetAfterRent)}`,
+                          `After-tax income (annual): ${fmtMoney(
+                            computed.annualNet,
+                          )} | Rent (annual): ${fmtMoney(
+                            computed.annualRent,
+                          )} | Rent share: ${computed.rentShareNetPct.toFixed(
+                            2,
+                          )}% | Net after rent (annual): ${fmtMoney(
+                            computed.annualNetAfterRent,
+                          )}`,
                         )
                       }
                       className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
@@ -1389,14 +1439,14 @@ export default function RentAfterTaxIncome() {
           <p className="text-slate-700 mt-6">
             Related pages:{" "}
             <a
-              href={safeHref("/rent-affordability-calculator")}
+              href={safeHref("/how-much-rent-can-i-afford-calculator")}
               className="text-sky-700 hover:underline"
             >
               rent affordability calculator
             </a>
             ,{" "}
             <a
-              href={safeHref("/rent-paid-every-4-weeks")}
+              href={safeHref("/rent-paid-every-4-weeks-calculator")}
               className="text-sky-700 hover:underline"
             >
               rent paid every 4 weeks

@@ -146,7 +146,7 @@ const ROUTE_WHITELIST = new Set<string>([
   "/rent-increase-calculator",
   "/rent-increase-percentage-calculator",
   "/rent-after-increase-calculator",
-  "/rent-per-person-calculator",
+  "/rent-split-calculator",
   "/rent-vs-buy-calculator",
   "/rent-converter",
   "/rent-calculator",
@@ -333,9 +333,7 @@ function parseMoneyToScaled(input: string): {
   const noParens = sanitized.replace(/[()]/g, "");
 
   // Strip currency symbols and spaces
-  const s0 = noParens
-    .replace(/[$€£¥₹₩₽₫₴₱₦₲₵₡₺₸]/g, "")
-    .replace(/\s+/g, "");
+  const s0 = noParens.replace(/[$€£¥₹₩₽₫₴₱₦₲₵₡₺₸]/g, "").replace(/\s+/g, "");
 
   if (!s0) return { ok: false, error: "Enter a rent amount." };
 
@@ -408,8 +406,7 @@ function parseMoneyToScaled(input: string): {
     if ((s.match(/\./g) ?? []).length > 1) {
       return {
         ok: false,
-        error:
-          "That number format looks unclear. Try 1250.50 or 1,250.50.",
+        error: "That number format looks unclear. Try 1250.50 or 1,250.50.",
       };
     }
     // Remove any commas (should not exist in this branch, but safe)
@@ -490,23 +487,7 @@ function downloadTextFile(filename: string, content: string, mime: string) {
   URL.revokeObjectURL(url);
 }
 
-/**
- * Conversion model (first principles, budget comparison):
- * - Treat entered rent as a rate per chosen period.
- * - Convert via a per-day rate using:
- *   Year = 365 days
- *   Month = 365/12 days (average month)
- *   Week = 7 days
- *   Biweekly = 14 days
- *   4-week = 28 days
- *   Hour = 1/24 day
- *
- * This is not calendar-precise proration for specific dates; it is a consistent comparison model.
- */
-const DAYS_PER_PERIOD: Record<
-  Exclude<Period, "hourly">,
-  Rational
-> = {
+const DAYS_PER_PERIOD: Record<Exclude<Period, "hourly">, Rational> = {
   daily: { n: 1n, d: 1n },
   weekly: { n: 7n, d: 1n },
   biweekly: { n: 14n, d: 1n },
@@ -560,20 +541,6 @@ function safeEnvIsDev(): boolean {
 }
 
 export default function Home() {
-  // ---------------------------
-  // Route intent verification
-  // ---------------------------
-  // Route: "/"
-  // Intent: The site-wide hub that converts rent across multiple time periods and provides a full breakdown + exports.
-  // SEO uniqueness checklist (internal, not user-visible):
-  // - Unique angle: multi-period rent conversion hub (hourly/daily/weekly/biweekly/4-week/monthly/annual) with breakdown + CSV + print-to-PDF
-  // - Distinct content: explicitly explains the day-rate model (365-day year, average month 365/12), plus 4-week vs monthly gap
-  // - Distinct navigation: links to dedicated conversion and budgeting routes (whitelist-only) and country/tool components
-  // - Avoids duplicating single-conversion routes by staying hub-level and offering “compare everything” workflow
-
-  // ---------------------------
-  // State (localStorage)
-  // ---------------------------
   const [amount, setAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "500";
     return localStorage.getItem("rc_amount") ?? "500";
@@ -620,8 +587,13 @@ export default function Home() {
   }, [amount]);
 
   const validation = useMemo(() => {
-    if (!hasInput) return { ok: false, message: "Enter a rent amount." as string };
-    if (!parsed.ok) return { ok: false, message: parsed.error ?? "Enter a valid rent amount." };
+    if (!hasInput)
+      return { ok: false, message: "Enter a rent amount." as string };
+    if (!parsed.ok)
+      return {
+        ok: false,
+        message: parsed.error ?? "Enter a valid rent amount.",
+      };
     if (parsed.scaled === 0n) {
       return {
         ok: true,
@@ -634,7 +606,8 @@ export default function Home() {
 
   // Parsed amount as rational currency units
   const amountR: Rational | null = useMemo(() => {
-    if (!validation.ok || !parsed.ok || parsed.scaled === undefined) return null;
+    if (!validation.ok || !parsed.ok || parsed.scaled === undefined)
+      return null;
     return fromScaledUnits(parsed.scaled);
   }, [validation.ok, parsed.ok, parsed.scaled]);
 
@@ -672,7 +645,9 @@ export default function Home() {
   const parsedDisplay = useMemo(() => {
     if (!parsed.ok || parsed.scaled === undefined) return "—";
     // Show the user's parsed value (up to 6 decimals) to avoid false certainty.
-    const dec = scaledToDecimalString(parsed.scaled, 6, { trimTrailingZeros: true });
+    const dec = scaledToDecimalString(parsed.scaled, 6, {
+      trimTrailingZeros: true,
+    });
     return formatMoneyFromDecimalString(dec, currency, {
       minimumFractionDigits: 0,
       maximumFractionDigits: 6,
@@ -770,10 +745,14 @@ export default function Home() {
       ? roundScaledToDigits(outputScaled, 2)
       : outputScaled;
 
-    const outputDec = scaledToDecimalString(outputScaledRounded, roundForDisplay ? 2 : 6, {
-      fixed: roundForDisplay,
-      trimTrailingZeros: !roundForDisplay,
-    });
+    const outputDec = scaledToDecimalString(
+      outputScaledRounded,
+      roundForDisplay ? 2 : 6,
+      {
+        fixed: roundForDisplay,
+        trimTrailingZeros: !roundForDisplay,
+      },
+    );
 
     rows.push(
       toCsvRow([
@@ -809,10 +788,14 @@ export default function Home() {
       const roundedScaled = roundForDisplay
         ? roundScaledToDigits(scaled, 2)
         : scaled;
-      const dec = scaledToDecimalString(roundedScaled, roundForDisplay ? 2 : 6, {
-        fixed: roundForDisplay,
-        trimTrailingZeros: !roundForDisplay,
-      });
+      const dec = scaledToDecimalString(
+        roundedScaled,
+        roundForDisplay ? 2 : 6,
+        {
+          fixed: roundForDisplay,
+          trimTrailingZeros: !roundForDisplay,
+        },
+      );
       rows.push(toCsvRow([label, dec]));
     }
 
@@ -845,10 +828,14 @@ export default function Home() {
       ? roundScaledToDigits(outputScaled, 2)
       : outputScaled;
 
-    const outputDec = scaledToDecimalString(outputScaledRounded, roundForDisplay ? 2 : 6, {
-      fixed: roundForDisplay,
-      trimTrailingZeros: !roundForDisplay,
-    });
+    const outputDec = scaledToDecimalString(
+      outputScaledRounded,
+      roundForDisplay ? 2 : 6,
+      {
+        fixed: roundForDisplay,
+        trimTrailingZeros: !roundForDisplay,
+      },
+    );
 
     const header = toCsvRow([
       "Input Amount",
@@ -901,7 +888,11 @@ export default function Home() {
     if (a.ok && b.ok && a.scaled !== undefined && b.scaled !== undefined) {
       const sum = a.scaled + b.scaled;
       const expected = parseMoneyToScaled("0.3");
-      if (expected.ok && expected.scaled !== undefined && sum !== expected.scaled) {
+      if (
+        expected.ok &&
+        expected.scaled !== undefined &&
+        sum !== expected.scaled
+      ) {
         // eslint-disable-next-line no-console
         console.error("[DEV] Decimal drift detected in scaled math.");
       }
@@ -964,7 +955,12 @@ export default function Home() {
   // Page
   // ---------------------------
   const convertSummaryLine = useMemo(() => {
-    if (!validation.ok || !parsed.ok || parsed.scaled === undefined || !rawResultR)
+    if (
+      !validation.ok ||
+      !parsed.ok ||
+      parsed.scaled === undefined ||
+      !rawResultR
+    )
       return "Enter a valid amount to see results.";
 
     const inputDec = scaledToDecimalString(parsed.scaled, 6, {
@@ -976,10 +972,14 @@ export default function Home() {
       ? roundScaledToDigits(outputScaled, 2)
       : outputScaled;
 
-    const outputDec = scaledToDecimalString(outputRounded, roundForDisplay ? 2 : 6, {
-      fixed: roundForDisplay,
-      trimTrailingZeros: !roundForDisplay,
-    });
+    const outputDec = scaledToDecimalString(
+      outputRounded,
+      roundForDisplay ? 2 : 6,
+      {
+        fixed: roundForDisplay,
+        trimTrailingZeros: !roundForDisplay,
+      },
+    );
 
     const inputFormatted = formatMoneyFromDecimalString(inputDec, currency, {
       minimumFractionDigits: 0,
@@ -992,15 +992,28 @@ export default function Home() {
     });
 
     return `${inputFormatted} ${PERIOD_LABEL[from].toLowerCase()} ≈ ${outputFormatted} ${PERIOD_LABEL[to].toLowerCase()}.`;
-  }, [validation.ok, parsed.ok, parsed.scaled, rawResultR, roundForDisplay, currency, from, to]);
+  }, [
+    validation.ok,
+    parsed.ok,
+    parsed.scaled,
+    rawResultR,
+    roundForDisplay,
+    currency,
+    from,
+    to,
+  ]);
 
   const monthlyMinus4wPctDisplay = useMemo(() => {
     if (!validation.ok || !breakdown.monthlyMinus4wPct) return "—";
     return percentStringFromRatio(breakdown.monthlyMinus4wPct, 2);
   }, [validation.ok, breakdown.monthlyMinus4wPct]);
 
+  const amountHelpId = "rent-amount-help";
+  const amountStatusId = "rent-amount-status";
+  const resultRegionId = "converted-rent-region";
+
   return (
-    <main className="bg-white text-slate-700 scroll-smooth">
+    <main className="bg-white text-slate-700 scroll-smooth antialiased">
       {/* Print styles for PDF workflow */}
       <style
         dangerouslySetInnerHTML={{
@@ -1017,62 +1030,33 @@ export default function Home() {
       />
 
       {/* Hero */}
-      <section className="pb-10 text-center bg-white">
-        <h1 className="text-4xl font-bold text-slate-800 mb-4">
+      <section className="pb-8 text-center bg-white">
+        <h1 className="text-4xl sm:text-5xl font-bold text-slate-800 mb-4 tracking-tight">
           Rent Converter
         </h1>
-        <p className="text-slate-600 max-w-2xl mx-auto text-lg">
-          Convert rent between weekly, monthly, every 4 weeks (28 days), biweekly,
-          daily, hourly, and annual amounts. This is a comparison tool: it uses
-          consistent time-length assumptions so you can compare listings fairly.
+        <p className="text-slate-700 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed">
+          Convert rent between weekly, monthly, every 4 weeks (28 days),
+          biweekly, daily, hourly, and annual amounts. This is a comparison
+          tool: it uses consistent time-length assumptions so you can compare
+          listings fairly.
         </p>
-
-        <div
-          id="top-links"
-          className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3 text-sm"
-        >
-          <SafeLink
-            href="/weekly-to-monthly-rent"
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Weekly → Monthly
-          </SafeLink>
-          <SafeLink
-            href="/monthly-to-weekly-rent"
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Monthly → Weekly
-          </SafeLink>
-          <SafeLink
-            href="/rent-paid-every-4-weeks"
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Every 4 weeks
-          </SafeLink>
-          <SafeLink
-            href="/how-much-rent-can-i-afford"
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Affordability
-          </SafeLink>
-        </div>
       </section>
 
       {/* Converter */}
-      <section id="converter" className="mx-auto max-w-6xl px-6 pb-6">
+      <section id="converter" className="mx-auto max-w-6xl px-6 pb-8">
         <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:p-8">
           <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <h2 className="text-xl sm:text-2xl font-bold">
+            <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
               Instant rent conversion
             </h2>
 
             <div className="flex items-center gap-3">
-              <label className="inline-flex items-center gap-2 text-sm text-slate-700 select-none">
+              <label className="inline-flex items-center gap-2 text-sm font-medium text-slate-700 select-none">
                 <input
                   type="checkbox"
                   checked={roundForDisplay}
                   onChange={(e) => setRoundForDisplay(e.target.checked)}
-                  className="h-4 w-4"
+                  className="h-4 w-4 rounded border-slate-300 text-sky-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                 />
                 Round results for display
               </label>
@@ -1082,7 +1066,7 @@ export default function Home() {
           <div className="grid gap-5 md:grid-cols-12">
             {/* Amount */}
             <div className="md:col-span-5">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label className="block text-sm font-semibold text-slate-800 mb-2">
                 Rent amount
               </label>
               <div className="flex gap-2">
@@ -1091,13 +1075,14 @@ export default function Home() {
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                   placeholder="e.g. 500 or 1250.50"
-                  className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="w-full min-w-0 rounded-xl border border-slate-300 px-4 py-3 text-base text-slate-900 placeholder:text-slate-400 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-sky-400"
                   aria-invalid={!validation.ok}
+                  aria-describedby={`${amountHelpId} ${amountStatusId}`}
                 />
                 <select
                   value={currency}
                   onChange={(e) => setCurrency(e.target.value)}
-                  className="rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold text-slate-900 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-sky-400"
                   aria-label="Currency"
                 >
                   {CURRENCY_OPTIONS.map((c) => (
@@ -1109,25 +1094,44 @@ export default function Home() {
               </div>
 
               {!validation.ok ? (
-                <p className="mt-2 text-xs text-rose-600">{validation.message}</p>
+                <p
+                  id={amountStatusId}
+                  className="mt-2 text-sm text-rose-700"
+                  role="alert"
+                  aria-live="polite"
+                >
+                  {validation.message}
+                </p>
               ) : validation.message ? (
-                <p className="mt-2 text-xs text-slate-500">{validation.message}</p>
+                <p
+                  id={amountStatusId}
+                  className="mt-2 text-sm text-slate-600"
+                  aria-live="polite"
+                >
+                  {validation.message}
+                </p>
               ) : (
-                <p className="mt-2 text-xs text-slate-500">
-                  Accepted examples:{" "}
-                  <span className="font-semibold">$650</span>,{" "}
-                  <span className="font-semibold">650.00</span>,{" "}
+                <p
+                  id={amountHelpId}
+                  className="mt-2 text-xs text-slate-600 leading-relaxed"
+                >
+                  Accepted examples: <span className="font-semibold">$650</span>
+                  , <span className="font-semibold">650.00</span>,{" "}
                   <span className="font-semibold">1,250.50</span>,{" "}
                   <span className="font-semibold">.5</span>,{" "}
                   <span className="font-semibold">12.</span>, or{" "}
                   <span className="font-semibold">1250,50</span> (comma-decimal
-                  with 2 digits). Ambiguous inputs are rejected to avoid false results.
+                  with 2 digits). Ambiguous inputs are rejected to avoid false
+                  results.
                 </p>
               )}
 
               {validation.ok && parsed.ok && parsed.scaled !== undefined ? (
-                <p className="mt-2 text-xs text-slate-500">
-                  Parsed as: <span className="font-semibold">{parsedDisplay}</span>{" "}
+                <p className="mt-2 text-sm text-slate-600" aria-live="polite">
+                  Parsed as:{" "}
+                  <span className="font-semibold tabular-nums">
+                    {parsedDisplay}
+                  </span>{" "}
                   ({currency})
                 </p>
               ) : null}
@@ -1135,13 +1139,14 @@ export default function Home() {
 
             {/* From */}
             <div className="md:col-span-3">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label className="block text-sm font-semibold text-slate-800 mb-2">
                 From
               </label>
               <select
                 value={from}
                 onChange={(e) => setFrom(e.target.value as Period)}
-                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base font-medium text-slate-900 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-sky-400"
+                aria-label="From period"
               >
                 {PERIOD_ORDER.map((p) => (
                   <option key={p} value={p}>
@@ -1153,13 +1158,14 @@ export default function Home() {
 
             {/* To */}
             <div className="md:col-span-3">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label className="block text-sm font-semibold text-slate-800 mb-2">
                 To
               </label>
               <select
                 value={to}
                 onChange={(e) => setTo(e.target.value as Period)}
-                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base font-medium text-slate-900 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-sky-400"
+                aria-label="To period"
               >
                 {PERIOD_ORDER.map((p) => (
                   <option key={p} value={p}>
@@ -1177,7 +1183,7 @@ export default function Home() {
                   setFrom(to);
                   setTo(from);
                 }}
-                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold hover:bg-sky-50 hover:border-sky-200 transition"
+                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                 aria-label="Swap from and to"
               >
                 ⇄
@@ -1186,19 +1192,29 @@ export default function Home() {
           </div>
 
           {/* Result */}
-          <div className="mt-6 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6">
-            <div className="text-sm text-slate-600">Converted rent</div>
+          <div
+            id={resultRegionId}
+            className="mt-6 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 shadow-sm relative"
+            role="region"
+            aria-label="Converted rent"
+            aria-live="polite"
+          >
+            <div className="absolute inset-x-0 top-0 h-0.5 bg-sky-200 rounded-t-2xl" />
+
+            <div className="text-sm font-medium text-slate-700">
+              Converted rent
+            </div>
 
             <div className="mt-2 flex flex-col gap-2">
-              <div className="text-4xl sm:text-5xl font-extrabold text-sky-800">
+              <div className="text-4xl sm:text-5xl font-extrabold text-sky-800 tabular-nums leading-none min-h-[3.25rem] sm:min-h-[4rem]">
                 {validation.ok ? displayMoney : "—"}
               </div>
 
-              <div className="text-sm text-slate-600">
+              <div className="text-sm text-slate-700 leading-relaxed">
                 {validation.ok ? (
                   <>
                     {convertSummaryLine}{" "}
-                    <span className="ml-2 text-xs text-slate-500">
+                    <span className="ml-2 text-xs text-slate-600">
                       ({roundingNote})
                     </span>
                   </>
@@ -1207,15 +1223,17 @@ export default function Home() {
                 )}
               </div>
 
-              <div className="mt-2 text-xs text-slate-500">
-                Assumptions used here: year = 365 days; average month = 365 ÷ 12 days;
-                week = 7 days; biweekly = 14 days; 4-week = 28 days; hourly = 1/24 day.
-                This is for budgeting comparisons, not calendar-exact lease proration.
+              <div className="mt-2 text-xs text-slate-600 leading-relaxed">
+                Assumptions used here: year = 365 days; average month = 365 ÷ 12
+                days; week = 7 days; biweekly = 14 days; 4-week = 28 days;
+                hourly = 1/24 day. This is for budgeting comparisons, not
+                calendar-exact lease proration.
               </div>
 
-              <div className="mt-2 text-xs text-slate-500">
-                What is included: rent only. Utilities, parking, fees, taxes, and deposits
-                are not added unless you include them in your input.
+              <div className="mt-2 text-xs text-slate-600 leading-relaxed">
+                What is included: rent only. Utilities, parking, fees, taxes,
+                and deposits are not added unless you include them in your
+                input.
               </div>
             </div>
 
@@ -1227,45 +1245,57 @@ export default function Home() {
                   ["Daily", breakdown.daily, "daily"],
                   ["Weekly", breakdown.weekly, "weekly"],
                   ["Every 2 weeks", breakdown.biweekly, "biweekly"],
-                  ["Every 4 weeks (28 days)", breakdown.every_4_weeks, "every_4_weeks"],
+                  [
+                    "Every 4 weeks (28 days)",
+                    breakdown.every_4_weeks,
+                    "every_4_weeks",
+                  ],
                   ["Monthly", breakdown.monthly, "monthly"],
                   ["Annual", breakdown.annual, "annual"],
                 ] as const
               ).map(([label, val, key]) => (
                 <div
                   key={key}
-                  className="rounded-xl border border-slate-200 bg-white px-4 py-3"
+                  className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm"
                 >
-                  <div className="text-xs text-slate-500">{label}</div>
-                  <div className="mt-1 text-lg font-bold text-slate-800">
-                    {validation.ok ? formatRationalMoney(val, roundForDisplay) : "—"}
+                  <div className="text-xs font-medium text-slate-600">
+                    {label}
+                  </div>
+                  <div className="mt-1 text-lg font-bold text-slate-900 tabular-nums whitespace-nowrap overflow-hidden text-ellipsis">
+                    {validation.ok
+                      ? formatRationalMoney(val, roundForDisplay)
+                      : "—"}
                   </div>
                 </div>
               ))}
 
-              <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
-                <div className="text-xs text-slate-500">
+              <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+                <div className="text-xs font-medium text-slate-600">
                   4-week vs monthly comparison (time-length model)
                 </div>
                 <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                  <div className="text-sm text-slate-700">
+                  <div className="text-sm text-slate-800 leading-relaxed">
                     Monthly minus 4-week ={" "}
-                    <strong className="text-slate-900">
+                    <strong className="text-slate-900 tabular-nums whitespace-nowrap">
                       {validation.ok
-                        ? formatRationalMoney(breakdown.monthlyMinus4w, roundForDisplay)
+                        ? formatRationalMoney(
+                            breakdown.monthlyMinus4w,
+                            roundForDisplay,
+                          )
                         : "—"}
                     </strong>
                   </div>
-                  <div className="text-sm text-slate-700">
+                  <div className="text-sm text-slate-800 leading-relaxed">
                     Difference ≈{" "}
-                    <strong className="text-slate-900">
+                    <strong className="text-slate-900 tabular-nums whitespace-nowrap">
                       {validation.ok ? monthlyMinus4wPctDisplay : "—"}
                     </strong>
                   </div>
                 </div>
-                <p className="mt-2 text-xs text-slate-500">
-                  Because an average month (365 ÷ 12 days) is longer than 28 days,
-                  the monthly-equivalent value is usually higher than the 4-week value.
+                <p className="mt-2 text-xs text-slate-600 leading-relaxed">
+                  Because an average month (365 ÷ 12 days) is longer than 28
+                  days, the monthly-equivalent value is usually higher than the
+                  4-week value.
                 </p>
               </div>
             </div>
@@ -1275,30 +1305,19 @@ export default function Home() {
               id="export-controls"
               className="mt-6 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
             >
-              <div className="text-xs text-slate-500">
-                Export: download CSV, copy a one-row CSV, or print to save as PDF.
-              </div>
               <div className="flex flex-wrap gap-2">
-                <button
-                  type="button"
-                  onClick={exportCsv}
-                  disabled={!validation.ok}
-                  className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold hover:bg-sky-50 hover:border-sky-200 transition disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Download CSV
-                </button>
                 <button
                   type="button"
                   onClick={copyOneRowCsv}
                   disabled={!validation.ok}
-                  className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold hover:bg-sky-50 hover:border-sky-200 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fbff]"
                 >
                   Copy 1-row CSV
                 </button>
                 <button
                   type="button"
                   onClick={printToPdf}
-                  className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold hover:bg-sky-50 hover:border-sky-200 transition"
+                  className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fbff]"
                 >
                   Print / Save PDF
                 </button>
@@ -1306,16 +1325,16 @@ export default function Home() {
             </div>
           </div>
 
-          <p className="mt-6 text-sm text-slate-500">
-            Disclaimer: this tool is for budgeting and comparison. Always confirm payment
-            schedules and lease terms in your agreement.
+          <p className="mt-6 text-sm text-slate-600 leading-relaxed">
+            Disclaimer: this tool is for budgeting and comparison. Always
+            confirm payment schedules and lease terms in your agreement.
           </p>
         </div>
       </section>
 
       {/* SEO-rich home content */}
       <section id="overview" className="max-w-5xl mx-auto px-6 pt-16">
-        <h2 className="text-3xl font-bold mb-6 text-center text-slate-900">
+        <h2 className="text-3xl font-bold mb-6 text-center text-slate-900 tracking-tight">
           What this tool helps you do
         </h2>
 
@@ -1324,14 +1343,15 @@ export default function Home() {
             <h3 className="text-lg font-semibold text-slate-900">
               Compare listings fairly
             </h3>
-            <p className="mt-2 text-slate-700 text-sm">
+            <p className="mt-2 text-slate-700 text-sm leading-relaxed">
               Weekly, monthly, and 4-week pricing can hide the real time-length
-              equivalent. Convert everything to the same period before you decide.
+              equivalent. Convert everything to the same period before you
+              decide.
             </p>
             <div className="mt-3 text-sm">
               <SafeLink
                 href="/weekly-to-monthly-rent"
-                className="text-sky-700 hover:underline font-semibold"
+                className="text-sky-700 hover:underline font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
               >
                 Weekly to monthly →
               </SafeLink>
@@ -1342,14 +1362,15 @@ export default function Home() {
             <h3 className="text-lg font-semibold text-slate-900">
               Understand 4-week and 28-day rent
             </h3>
-            <p className="mt-2 text-slate-700 text-sm">
-              A 4-week period is exactly 28 days. An average month is about 30.42 days.
-              That difference matters when you compare “how much time” your rent covers.
+            <p className="mt-2 text-slate-700 text-sm leading-relaxed">
+              A 4-week period is exactly 28 days. An average month is about
+              30.42 days. That difference matters when you compare “how much
+              time” your rent covers.
             </p>
             <div className="mt-3 text-sm">
               <SafeLink
                 href="/rent-billed-every-28-days"
-                className="text-sky-700 hover:underline font-semibold"
+                className="text-sky-700 hover:underline font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
               >
                 Rent billed every 28 days →
               </SafeLink>
@@ -1360,14 +1381,14 @@ export default function Home() {
             <h3 className="text-lg font-semibold text-slate-900">
               Move from conversion to budget fit
             </h3>
-            <p className="mt-2 text-slate-700 text-sm">
-              Conversions help you compare listings. The next step is checking whether
-              rent fits your income and take-home pay.
+            <p className="mt-2 text-slate-700 text-sm leading-relaxed">
+              Conversions help you compare listings. The next step is checking
+              whether rent fits your income and take-home pay.
             </p>
             <div className="mt-3 text-sm">
               <SafeLink
                 href="/rent-as-percentage-of-income"
-                className="text-sky-700 hover:underline font-semibold"
+                className="text-sky-700 hover:underline font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
               >
                 Rent as % of income →
               </SafeLink>
@@ -1378,23 +1399,24 @@ export default function Home() {
 
       {/* Learn */}
       <section id="learn" className="max-w-5xl mx-auto px-6 pt-16">
-        <h2 className="text-3xl font-bold mb-6 text-center text-slate-900">
+        <h2 className="text-3xl font-bold mb-6 text-center text-slate-900 tracking-tight">
           How rent conversion works
         </h2>
 
-        <p className="text-slate-700 mb-4">
-          This page uses a consistent comparison model. We treat your input as a rate per
-          time period, convert it to a per-day rate, then convert it to the target period.
-          This keeps assumptions explicit and avoids “close enough” math.
+        <p className="text-slate-700 mb-4 leading-relaxed">
+          This page uses a consistent comparison model. We treat your input as a
+          rate per time period, convert it to a per-day rate, then convert it to
+          the target period. This keeps assumptions explicit and avoids “close
+          enough” math.
         </p>
 
-        <h3 className="text-2xl font-semibold mt-10 mb-4 text-slate-900">
+        <h3 className="text-2xl font-semibold mt-10 mb-4 text-slate-900 tracking-tight">
           Weekly vs monthly vs every 4 weeks (28 days)
         </h3>
-        <p className="text-slate-700 mb-4">
+        <p className="text-slate-700 mb-4 leading-relaxed">
           Under this model, the length of each period is what matters:
         </p>
-        <ul className="list-disc ml-6 text-slate-700 mb-4">
+        <ul className="list-disc ml-6 text-slate-700 mb-4 space-y-1 leading-relaxed">
           <li>
             <strong>Week</strong>: 7 days
           </li>
@@ -1405,81 +1427,63 @@ export default function Home() {
             <strong>Average month</strong>: 365 ÷ 12 ≈ 30.42 days
           </li>
         </ul>
-        <p className="text-slate-700 mb-4">
-          If your lease collects payments on specific calendar dates, your real cash-flow
-          can differ across months. For due-date planning, use{" "}
+        <p className="text-slate-700 mb-4 leading-relaxed">
+          If your lease collects payments on specific calendar dates, your real
+          cash-flow can differ across months. For due-date planning, use{" "}
           <SafeLink
             href="/rent-due-date-calculator"
-            className="text-sky-700 hover:underline"
+            className="text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
           >
             rent due date calculator
           </SafeLink>
           .
         </p>
-
-        <h3 className="text-2xl font-semibold mt-10 mb-4 text-slate-900">
-          True cost per day and per week
-        </h3>
-        <p className="text-slate-700 mb-4">
-          Converting everything to daily or weekly equivalents removes ambiguity when
-          comparing listings.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-3 text-sm">
-          <SafeLink
-            href="/true-cost-of-rent-per-day"
-            className="text-sky-700 hover:underline font-semibold"
-          >
-            True cost per day →
-          </SafeLink>
-          <SafeLink
-            href="/true-cost-of-rent-per-week"
-            className="text-sky-700 hover:underline font-semibold"
-          >
-            True cost per week →
-          </SafeLink>
-        </div>
       </section>
 
       {/* How it works (required above FAQ for RentConverter.com) */}
       <section id="how-it-works" className="max-w-5xl mx-auto px-6 pt-16">
-        <h2 className="text-3xl font-bold mb-6 text-center text-slate-900">
+        <h2 className="text-3xl font-bold mb-6 text-center text-slate-900 tracking-tight">
           How it works on RentConverter.com
         </h2>
 
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <ol className="list-decimal ml-6 text-slate-700 space-y-2">
+          <ol className="list-decimal ml-6 text-slate-700 space-y-2 leading-relaxed">
             <li>
-              Enter the rent amount exactly as written (decimals are kept, up to 6 places).
+              Enter the rent amount exactly as written (decimals are kept, up to
+              6 places).
             </li>
             <li>
-              Choose the period the amount applies to (weekly, monthly, 4-week, biweekly,
-              daily, hourly, or annual).
+              Choose the period the amount applies to (weekly, monthly, 4-week,
+              biweekly, daily, hourly, or annual).
             </li>
             <li>
-              We convert through a per-day rate using explicit assumptions (365-day year,
-              average month = 365 ÷ 12 days).
+              We convert through a per-day rate using explicit assumptions
+              (365-day year, average month = 365 ÷ 12 days).
             </li>
             <li>
-              You get a headline conversion plus a full breakdown across all periods.
+              You get a headline conversion plus a full breakdown across all
+              periods.
             </li>
             <li>
-              Export as CSV, or print the page to save as a PDF from your browser.
+              Export as CSV, or print the page to save as a PDF from your
+              browser.
             </li>
           </ol>
-
         </div>
       </section>
 
       {/* FAQ */}
       <section id="faq" className="max-w-5xl mx-auto py-20 px-6">
-        <h2 className="text-3xl font-bold text-center mb-8 text-slate-800">
+        <h2 className="text-3xl font-bold text-center mb-8 text-slate-800 tracking-tight">
           Frequently Asked Questions
         </h2>
         <div className="space-y-8">
           {faqData.map((f, i) => (
             <div key={i}>
-              <h3 className="font-semibold text-lg text-slate-800 mb-1">{f.q}</h3>
-              <p className="text-slate-600">{f.a}</p>
+              <h3 className="font-semibold text-lg text-slate-800 mb-1">
+                {f.q}
+              </h3>
+              <p className="text-slate-700 leading-relaxed">{f.a}</p>
             </div>
           ))}
         </div>
@@ -1494,11 +1498,12 @@ export default function Home() {
 
       {/* Disclaimer */}
       <section className="max-w-6xl mx-auto px-6 pb-8">
-        <p className="text-xs text-slate-500 text-center leading-relaxed">
+        <p className="text-xs text-slate-600 text-center leading-relaxed">
           <em>
-            Tools on this site are for budgeting and comparison. They use standard
-            time-length assumptions (365-day year and average month length). Always
-            confirm payment schedules and lease terms in your agreement.
+            Tools on this site are for budgeting and comparison. They use
+            standard time-length assumptions (365-day year and average month
+            length). Always confirm payment schedules and lease terms in your
+            agreement.
           </em>
         </p>
       </section>

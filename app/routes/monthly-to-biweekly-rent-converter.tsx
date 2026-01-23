@@ -26,7 +26,7 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:description", content: description },
     {
       property: "og:url",
-      content: "https://rentconverter.com/monthly-to-biweekly-rent",
+      content: "https://rentconverter.com/monthly-to-biweekly-rent-converter",
     },
     { property: "og:site_name", content: "RentConverter.com" },
     { property: "og:image", content: "https://rentconverter.com/og-image.jpg" },
@@ -41,7 +41,7 @@ export const meta: Route.MetaFunction = () => {
 
     {
       rel: "canonical",
-      href: "https://rentconverter.com/monthly-to-biweekly-rent",
+      href: "https://rentconverter.com/monthly-to-biweekly-rent-converter",
     },
   ];
 };
@@ -67,11 +67,60 @@ const PERIOD_LABEL: Record<Period, string> = {
 
 // Keep conservative and aligned with your known route set
 const ROUTE_WHITELIST = new Set<string>([
+  // Home
   "/",
+
+  // Rent converter hub
   "/rent-converter",
-  "/rent-paid-weekly-vs-monthly",
-  "/rent-affordability-calculator",
-  "/monthly-to-biweekly-rent",
+
+  // Frequency converters
+  "/monthly-to-weekly-rent-converter",
+  "/weekly-to-monthly-rent-converter",
+  "/weekly-to-annual-rent-converter",
+  "/weekly-to-biweekly-rent-converter",
+
+  "/biweekly-to-weekly-rent-converter",
+  "/biweekly-to-monthly-rent-converter",
+  "/biweekly-to-annual-rent-converter",
+
+  "/monthly-to-annual-rent-converter",
+  "/annual-to-monthly-rent-converter",
+
+  "/monthly-to-daily-rent-converter",
+  "/daily-to-monthly-rent-converter",
+
+  "/monthly-to-hourly-rent-converter",
+  "/hourly-to-monthly-rent-converter",
+
+  "/hourly-to-annual-rent-converter",
+  "/annual-to-hourly-rent-converter",
+
+  "/annual-to-weekly-rent-converter",
+  "/annual-to-biweekly-rent-converter",
+  "/monthly-to-biweekly-rent-converter",
+
+  // Rent calculators
+  "/rent-calculator",
+  "/rent-per-day-calculator",
+  "/rent-per-week-calculator",
+  "/rent-paid-every-4-weeks-calculator",
+  "/rent-per-paycheck-calculator",
+  "/rent-split-calculator",
+  "/rent-due-date-calculator",
+
+  // Affordability and income
+  "/rent-as-percentage-of-income-calculator",
+  "/how-much-rent-can-i-afford-calculator",
+  "/rent-after-tax-income-calculator",
+  "/rent-vs-take-home-pay-calculator",
+
+  // Rent increases
+  "/rent-increase-calculator",
+  "/rent-increase-percentage-calculator",
+  "/rent-after-increase-calculator",
+
+  // Rent vs buy
+  "/rent-vs-buy-calculator",
 ]);
 
 function safeHref(path: string): string {
@@ -127,18 +176,28 @@ function toNumberSafe(scaled: bigint): number {
   return Number(scaled) / Number(SCALE);
 }
 
+/**
+ * Formatting rules:
+ * - preserve decimals end-to-end
+ * - rounding is display-only
+ * - if rounding enabled: show exactly `displayDecimals` decimals (including trailing zeros)
+ * - if rounding disabled: show up to 12 decimals, no forced trailing zeros
+ */
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
-  displayDecimals: number,
+  maxDecimals: number,
+  minDecimals: number,
 ): string {
   const n = toNumberSafe(scaled);
   if (!Number.isFinite(n)) return "—";
+  const max = Math.max(0, Math.min(12, maxDecimals));
+  const min = Math.max(0, Math.min(max, minDecimals));
   return new Intl.NumberFormat(undefined, {
     style: "currency",
     currency,
-    maximumFractionDigits: Math.max(0, Math.min(12, displayDecimals)),
-    minimumFractionDigits: 0,
+    maximumFractionDigits: max,
+    minimumFractionDigits: min,
   }).format(n);
 }
 
@@ -355,7 +414,7 @@ export default function MonthlyToBiweeklyRent() {
     return saved && isCurrency(saved) ? saved : "CAD";
   });
 
-  // Replaces includeRounding: rounding is display-only and labeled
+  // Rounding is display-only and labeled
   const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
     if (typeof window === "undefined") return true;
     return safeParseBoolean(
@@ -402,9 +461,10 @@ export default function MonthlyToBiweeklyRent() {
   const parsedAmount = useMemo(() => parseMoneyInputToScaled(amount), [amount]);
   const monthlyScaled = parsedAmount.ok ? (parsedAmount.scaled as bigint) : 0n;
 
-  const effectiveDisplayDecimals = roundDisplay ? displayDecimals : 12;
+  const maxDecimals = roundDisplay ? displayDecimals : 12;
+  const minDecimals = roundDisplay ? displayDecimals : 0;
   const fmt = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, effectiveDisplayDecimals);
+    formatCurrencyFromScaled(scaled, currency, maxDecimals, minDecimals);
 
   const breakdown = useMemo(() => {
     if (!parsedAmount.ok) return null;
@@ -428,7 +488,7 @@ export default function MonthlyToBiweeklyRent() {
     const annualFromBiweekly26 = mulDivInt(biweekly, 26n, 1n);
     const annualFrom4w13 = mulDivInt(every4w, 13n, 1n);
 
-    // Common confusion: biweekly vs twice-monthly
+    // Common confusion: biweekly vs twice-monthly (half-month)
     const monthlyDiv2 = mulDivInt(monthly, 1n, 2n);
 
     return {
@@ -551,7 +611,7 @@ export default function MonthlyToBiweeklyRent() {
     );
 
     downloadTextFile(
-      "monthly-to-biweekly-rent.csv",
+      "monthly-to-biweekly-rent-converter.csv",
       rows.join("\n"),
       "text/csv;charset=utf-8",
     );
@@ -621,7 +681,7 @@ export default function MonthlyToBiweeklyRent() {
         "@type": "ListItem",
         position: 2,
         name: "Monthly to Biweekly Rent Converter",
-        item: "https://rentconverter.com/monthly-to-biweekly-rent",
+        item: "https://rentconverter.com/monthly-to-biweekly-rent-converter",
       },
     ],
   };
@@ -638,8 +698,8 @@ export default function MonthlyToBiweeklyRent() {
     "@type": "WebPage",
     name: "Monthly to Biweekly Rent Converter",
     description:
-      "Convert monthly rent to biweekly rent using annual equivalence. Includes an always-visible breakdown and monthly vs 4-week context.",
-    url: "https://rentconverter.com/monthly-to-biweekly-rent",
+      "Convert monthly rent to biweekly rent using annual equivalence. Includes an always-visible breakdown and clear notes on biweekly vs twice-monthly timing.",
+    url: "https://rentconverter.com/monthly-to-biweekly-rent-converter",
   };
 
   return (
@@ -675,27 +735,6 @@ export default function MonthlyToBiweeklyRent() {
           equivalence as the basis. This helps compare a monthly quote with rent
           expressed every two weeks, including pay-cycle style listings.
         </p>
-
-        <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3 text-sm">
-          <a
-            href={safeHref("/rent-converter")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Rent converter
-          </a>
-          <a
-            href={safeHref("/rent-paid-weekly-vs-monthly")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Weekly vs Monthly
-          </a>
-          <a
-            href={safeHref("/rent-affordability-calculator")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Affordability
-          </a>
-        </div>
       </section>
 
       <section id="converter" className="mx-auto max-w-6xl px-6 pb-6">
@@ -706,19 +745,6 @@ export default function MonthlyToBiweeklyRent() {
             </h2>
 
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
-              <button
-                type="button"
-                onClick={handleExportCsv}
-                disabled={!canShowResults}
-                className={`rounded-xl border px-4 py-2 text-sm font-semibold transition ${
-                  canShowResults
-                    ? "border-slate-200 bg-white text-slate-800 hover:bg-sky-50 hover:border-sky-200"
-                    : "border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed"
-                }`}
-                aria-disabled={!canShowResults}
-              >
-                Export CSV
-              </button>
               <button
                 type="button"
                 onClick={handlePrint}
@@ -791,36 +817,12 @@ export default function MonthlyToBiweeklyRent() {
 
             <div className="md:col-span-6">
               <label className="block text-sm font-semibold text-slate-700 mb-2">
-                Conversion
+                Display
               </label>
-
-              <div className="grid gap-3 sm:grid-cols-2">
-                <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
-                  <div className="text-xs text-slate-500">From</div>
-                  <div className="mt-1 text-base font-bold text-slate-800">
-                    {PERIOD_LABEL.monthly}
-                  </div>
+              <div className="rounded-xl border border-slate-200 bg-white p-4">
+                <div className="text-xs text-slate-500">
+                  Rounding (display only)
                 </div>
-                <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
-                  <div className="text-xs text-slate-500">To</div>
-                  <div className="mt-1 text-base font-bold text-slate-800">
-                    {PERIOD_LABEL.biweekly}
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4">
-                <div className="text-xs text-slate-500">Key distinction</div>
-                <p className="mt-1 text-sm text-slate-700">
-                  Biweekly means every 14 days. Twice per month is a monthly
-                  schedule. This page converts a monthly amount to a biweekly
-                  equivalent for comparison, using the same annual basis as the
-                  full breakdown.
-                </p>
-              </div>
-
-              <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4">
-                <div className="text-xs text-slate-500">Display</div>
                 <label className="mt-1 flex items-center gap-2 text-sm text-slate-700">
                   <input
                     type="checkbox"
@@ -828,7 +830,7 @@ export default function MonthlyToBiweeklyRent() {
                     onChange={(e) => setRoundDisplay(e.target.checked)}
                     className="h-4 w-4"
                   />
-                  Round displayed values (display only)
+                  Round displayed values
                 </label>
 
                 <div className="mt-3 flex items-center justify-between gap-3">
@@ -856,7 +858,17 @@ export default function MonthlyToBiweeklyRent() {
 
                 <p className="mt-2 text-xs text-slate-500">
                   Calculations preserve decimals internally (up to 12). If
-                  rounding is enabled, only the displayed values are rounded.
+                  rounding is enabled, displayed values keep exactly the
+                  selected decimals.
+                </p>
+              </div>
+
+              <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4">
+                <div className="text-xs text-slate-500">Key distinction</div>
+                <p className="mt-1 text-sm text-slate-700">
+                  Biweekly means every 14 days. Twice per month is a monthly
+                  schedule. This page converts a monthly amount to a 14-day
+                  equivalent using the same annual basis as the full breakdown.
                 </p>
               </div>
             </div>
@@ -887,7 +899,8 @@ export default function MonthlyToBiweeklyRent() {
                     {fmt(breakdown.monthly)}{" "}
                     {PERIOD_LABEL.monthly.toLowerCase()} ≈{" "}
                     <strong>{fmt(breakdown.biweekly)}</strong>{" "}
-                    {PERIOD_LABEL.biweekly.toLowerCase()}
+                    {PERIOD_LABEL.biweekly.toLowerCase()} using annual
+                    equivalence
                   </div>
 
                   <div className="rc-no-print mt-2 flex flex-wrap gap-2">
@@ -905,7 +918,7 @@ export default function MonthlyToBiweeklyRent() {
                       onClick={() =>
                         handleCopy(
                           "summary",
-                          `Monthly: ${fmt(breakdown.monthly)} | Biweekly: ${fmt(breakdown.biweekly)} | Annual equiv: ${fmt(breakdown.annualEquiv)}`,
+                          `Monthly: ${fmt(breakdown.monthly)} | Biweekly: ${fmt(breakdown.biweekly)} | Annual equiv: ${fmt(breakdown.annualEquiv)} | Monthly×12: ${fmt(breakdown.annualFromMonthly12)}`,
                         )
                       }
                       className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
@@ -953,7 +966,7 @@ export default function MonthlyToBiweeklyRent() {
 
                   <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3 rc-print-block">
                     <div className="text-xs text-slate-500">
-                      Monthly vs 4-week comparison
+                      Monthly vs 4-week context
                     </div>
                     <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                       <div className="text-sm text-slate-700">
@@ -971,8 +984,8 @@ export default function MonthlyToBiweeklyRent() {
                     </div>
                     <p className="mt-2 text-xs text-slate-500">
                       A 4-week period is 28 days. An average month is about
-                      30.42 days (365 ÷ 12). Because the periods are different
-                      lengths, the equivalents differ on an annual basis.
+                      30.42 days (365 ÷ 12). These are different periods, so
+                      their equivalents can diverge.
                     </p>
                   </div>
 
@@ -1021,8 +1034,8 @@ export default function MonthlyToBiweeklyRent() {
 
                     <p className="mt-3 text-xs text-slate-500">
                       These are schedule-style multiplications shown for
-                      context. The conversion breakdown itself uses day-based
-                      annual equivalence (365-day year, average month length).
+                      context. The breakdown uses day-based annual equivalence
+                      (365-day year, average month length).
                     </p>
                   </div>
 
@@ -1032,13 +1045,12 @@ export default function MonthlyToBiweeklyRent() {
                     </div>
                     <p className="mt-2 text-sm text-slate-700">
                       Monthly ÷ 2 produces a half-month number, not a 14-day
-                      number. This page shows both monthly ÷ 2 and the biweekly
-                      equivalent so the difference is visible.
+                      number. This page shows both so the difference is visible.
                     </p>
                     <div className="mt-2 grid gap-2 sm:grid-cols-2">
                       <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
                         <div className="text-xs text-slate-500">
-                          Monthly ÷ 2
+                          Monthly ÷ 2 (half-month)
                         </div>
                         <div className="mt-1 text-sm font-bold text-slate-800">
                           {fmt(breakdown.monthlyDiv2)}
@@ -1046,7 +1058,7 @@ export default function MonthlyToBiweeklyRent() {
                       </div>
                       <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
                         <div className="text-xs text-slate-500">
-                          Biweekly equivalent
+                          Biweekly equivalent (14 days)
                         </div>
                         <div className="mt-1 text-sm font-bold text-slate-800">
                           {fmt(breakdown.biweekly)}
@@ -1081,7 +1093,8 @@ export default function MonthlyToBiweeklyRent() {
             <li>
               <strong>You enter a monthly rent amount.</strong> The parser
               supports commas, currency symbols, and formats like .5 and 12.,
-              and it avoids showing misleading zero results on invalid input.
+              and it avoids showing misleading results on invalid or ambiguous
+              input.
             </li>
             <li>
               <strong>The converter uses annual equivalence.</strong> Monthly
@@ -1092,8 +1105,7 @@ export default function MonthlyToBiweeklyRent() {
             <li>
               <strong>All breakdown values share the same assumptions.</strong>{" "}
               Hourly, daily, weekly, biweekly, 4-week, monthly, and annual are
-              derived from the same annual basis to avoid mixing period
-              assumptions.
+              derived from the same annual basis so comparisons stay consistent.
             </li>
             <li>
               <strong>Schedule-style totals are shown separately.</strong>{" "}
@@ -1107,98 +1119,17 @@ export default function MonthlyToBiweeklyRent() {
           </ol>
 
           <div className="mt-4 rounded-xl border border-slate-100 bg-slate-50 p-4 text-sm text-slate-700">
-            <div className="font-semibold">What you can do</div>
+            <div className="font-semibold">What you can expect</div>
             <ul className="mt-2 list-disc pl-5 space-y-1 text-slate-600">
+              <li>Biweekly equivalent for a monthly listing (14-day basis)</li>
+              <li>Always-visible breakdown across common billing periods</li>
               <li>
-                Compare a monthly listing to biweekly pricing without treating
-                “twice monthly” as “biweekly”
+                A clear “biweekly vs twice-monthly” comparison (monthly ÷ 2)
               </li>
-              <li>
-                Use the always-visible breakdown to sanity-check what a rate
-                implies across a year
-              </li>
-              <li>Export results for budgeting, sharing, or record-keeping</li>
+              <li>Export to CSV and print to save as PDF</li>
             </ul>
           </div>
         </div>
-      </section>
-
-      <section id="learn" className="max-w-5xl mx-auto px-6 pt-16">
-        <h2 className="text-3xl font-bold mb-6 text-center text-slate-900">
-          Monthly to biweekly conversion: what it represents
-        </h2>
-
-        <p className="text-slate-700 mb-4">
-          A monthly rent figure is usually tied to a calendar month in a lease,
-          while a biweekly figure is tied to a 14-day cycle. Converting monthly
-          to biweekly is a way to express the same overall cost in a different
-          time unit so comparisons are easier.
-        </p>
-
-        <h3 className="text-2xl font-semibold mt-10 mb-4 text-slate-900">
-          Why month length matters when converting to biweekly
-        </h3>
-        <p className="text-slate-700 mb-4">
-          The main source of confusion is that a month does not map cleanly to a
-          whole number of weeks. Some months have 28, 29, 30, or 31 days. This
-          converter uses an average month length (365 ÷ 12 days) so the result
-          aligns with the same annual basis used for all other periods in the
-          breakdown.
-        </p>
-
-        <h3 className="text-2xl font-semibold mt-10 mb-4 text-slate-900">
-          Biweekly vs twice-monthly: a timing mismatch
-        </h3>
-        <p className="text-slate-700 mb-4">
-          Biweekly is every 14 days, which often produces 26 cycles in a year.
-          Twice-monthly is a monthly schedule that stays inside calendar months.
-          These can be close in a short comparison window, but they can drift
-          over longer periods because the cycles do not align the same way
-          across a year.
-        </p>
-
-        <h3 className="text-2xl font-semibold mt-10 mb-4 text-slate-900">
-          When this comparison is most useful
-        </h3>
-        <ul className="list-disc ml-6 text-slate-700 mb-4">
-          <li>
-            A listing is advertised monthly, but a budget or pay cycle tracks
-            costs every two weeks.
-          </li>
-          <li>
-            Two rental options use different rent periods and need a common
-            comparison view.
-          </li>
-          <li>
-            A rent quote is monthly, but a separate cost breakdown (utilities,
-            parking, fees) is tracked biweekly.
-          </li>
-        </ul>
-
-        <p className="text-slate-700 mb-4">
-          Related pages:{" "}
-          <a
-            href={safeHref("/rent-paid-weekly-vs-monthly")}
-            className="text-sky-700 hover:underline"
-          >
-            weekly vs monthly rent
-          </a>
-          ,{" "}
-          <a
-            href={safeHref("/rent-converter")}
-            className="text-sky-700 hover:underline"
-          >
-            rent converter
-          </a>
-          , and{" "}
-          <a
-            href={safeHref("/rent-affordability-calculator")}
-            className="text-sky-700 hover:underline"
-          >
-            rent affordability calculator
-          </a>
-          .
-        </p>
       </section>
 
       <section id="faq" className="max-w-5xl mx-auto py-20 px-6 rc-no-print">
@@ -1222,18 +1153,17 @@ export default function MonthlyToBiweeklyRent() {
           <p className="text-xs text-slate-600 leading-relaxed">
             <strong>Disclaimer:</strong>
             <br />
-            Tools on this site are provided for informational, budgeting, and
-            comparison purposes only. Calculations are based on standard
-            time-period assumptions (including a 365-day year and average month
-            length) and simplified models. Results are estimates, not
-            guarantees.
+            Tools on this site are for informational, budgeting, and comparison
+            use. Calculations rely on standard time-period assumptions
+            (including a 365-day year and an average month length) and
+            simplified models. Outputs are estimates intended to illustrate
+            equivalents, not to predict exact lease billing outcomes.
             <br />
             <br />
-            This website does not provide financial, legal, or tax advice.
-            Rental costs, affordability, payment schedules, and obligations vary
-            by location, landlord, lease terms, and individual circumstances.
-            Always review your lease agreement and consult qualified
-            professionals before making financial decisions.
+            This website does not provide financial, legal, or tax advice. Rent,
+            payment schedules, proration, fees, and obligations vary by
+            location, landlord, and lease terms. Review your rental agreement
+            for the rules that apply to you.
           </p>
         </div>
       </section>
@@ -1245,10 +1175,9 @@ export default function MonthlyToBiweeklyRent() {
       <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
         <p className="text-xs text-slate-500 text-center leading-relaxed">
           <em>
-            Tools on this site are for budgeting and comparison. Calculations
-            use standard time-period assumptions, including a 365-day year and
-            average month length. Always confirm payment schedules and lease
-            terms in your rental agreement.
+            Use these calculators for comparisons and budgeting. Confirm your
+            actual payment schedule, due dates, and proration rules in your
+            lease.
           </em>
         </p>
       </section>

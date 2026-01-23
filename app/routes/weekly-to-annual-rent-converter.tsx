@@ -4,19 +4,6 @@ import OtherUsefulTools from "~/client/components/navigation/OtherUsefulTools";
 import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountry";
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
-/**
- * RentConverter.com refactor rules applied:
- * - Preserve decimals end-to-end (fixed-point BigInt).
- * - Avoid misleading “0” results on invalid input (show errors; hide results).
- * - Rounding is display-only and clearly labeled.
- * - Fix money formatting (do not drop decimals for values >= 10).
- * - Robust number parsing for commas/currency symbols/.5/12. and comma-decimals.
- * - Validate Period/currency from localStorage.
- * - Export CSV + Print-to-PDF (window.print) because outputs/breakdowns exist.
- * - Expand currency list.
- * - Include “How it works” explanation above FAQs.
- */
-
 export const meta: Route.MetaFunction = () => [
   { title: "Weekly to Annual Rent Converter" },
   {
@@ -42,7 +29,7 @@ export const meta: Route.MetaFunction = () => [
   },
   {
     property: "og:url",
-    content: "https://rentconverter.com/weekly-to-annual-rent",
+    content: "https://rentconverter.com/weekly-to-annual-rent-converter",
   },
   { property: "og:site_name", content: "RentConverter.com" },
   { property: "og:image", content: "https://rentconverter.com/og-image.jpg" },
@@ -58,7 +45,7 @@ export const meta: Route.MetaFunction = () => [
 
   {
     rel: "canonical",
-    href: "https://rentconverter.com/weekly-to-annual-rent",
+    href: "https://rentconverter.com/weekly-to-annual-rent-converter",
   },
 ];
 
@@ -109,16 +96,68 @@ function isCurrency(x: string): x is Currency {
 }
 
 /**
- * Internal link whitelist (only routes observed in your code snippets).
- * Add more only when you are sure they exist.
+ * Internal link whitelist (only routes you know exist).
+ * IMPORTANT: Keep route slugs consistent everywhere (canonical/og/url/schema/whitelist/links).
  */
 const ROUTE_WHITELIST = new Set<string>([
+  // Home
   "/",
+
+  // Rent converter hub
   "/rent-converter",
-  "/rent-paid-weekly-vs-monthly",
-  "/monthly-to-annual-rent",
+
+  // Frequency converters
+  "/monthly-to-weekly-rent-converter",
+  "/weekly-to-monthly-rent-converter",
+  "/weekly-to-annual-rent-converter",
+  "/weekly-to-biweekly-rent-converter",
+
+  "/biweekly-to-weekly-rent-converter",
+  "/biweekly-to-monthly-rent-converter",
+  "/biweekly-to-annual-rent-converter",
+
+  "/monthly-to-annual-rent-converter",
+  "/annual-to-monthly-rent-converter",
+
+  "/monthly-to-daily-rent-converter",
+  "/daily-to-monthly-rent-converter",
+
+  "/monthly-to-hourly-rent-converter",
+  "/hourly-to-monthly-rent-converter",
+
+  "/hourly-to-annual-rent-converter",
+  "/annual-to-hourly-rent-converter",
+
+  "/annual-to-weekly-rent-converter",
+  "/annual-to-biweekly-rent-converter",
+  "/monthly-to-biweekly-rent-converter",
+
+  // Rent calculators
+  "/rent-calculator",
+  "/rent-per-day-calculator",
+  "/rent-per-week-calculator",
+  "/rent-paid-every-4-weeks-calculator",
+  "/rent-per-paycheck-calculator",
+  "/rent-split-calculator",
+  "/rent-due-date-calculator",
+
+  // Affordability and income
   "/rent-affordability-calculator",
-  "/weekly-to-annual-rent",
+  "/rent-as-percentage-of-income-calculator",
+  "/how-much-rent-can-i-afford-calculator",
+  "/rent-after-tax-income-calculator",
+  "/rent-vs-take-home-pay-calculator",
+
+  // Rent increases
+  "/rent-increase-calculator",
+  "/rent-increase-percentage-calculator",
+  "/rent-after-increase-calculator",
+
+  // Rent vs buy
+  "/rent-vs-buy-calculator",
+
+  // Context pages
+  "/rent-paid-weekly-vs-monthly",
 ]);
 
 function safeHref(path: string): string {
@@ -375,7 +414,8 @@ function downloadTextFile(
 
 export default function WeeklyToAnnualRent() {
   const pageName = "Weekly to Annual Rent Converter";
-  const canonicalUrl = "https://rentconverter.com/weekly-to-annual-rent";
+  const canonicalUrl =
+    "https://rentconverter.com/weekly-to-annual-rent-converter";
 
   const [amount, setAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "550";
@@ -388,7 +428,6 @@ export default function WeeklyToAnnualRent() {
     return isCurrency(saved) ? saved : "CAD";
   });
 
-  // New: display-only rounding controls (keeps old key rc_wta_rounding as fallback)
   const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
     if (typeof window === "undefined") return true;
 
@@ -462,22 +501,24 @@ export default function WeeklyToAnnualRent() {
     const pct52 =
       annualIf52Payments !== 0n
         ? toNumberSafe(delta52) / toNumberSafe(annualIf52Payments)
-        : 0;
+        : Number.NaN;
 
     const delta53 = annual - annualIf53Payments;
     const pct53 =
       annualIf53Payments !== 0n
         ? toNumberSafe(delta53) / toNumberSafe(annualIf53Payments)
-        : 0;
+        : Number.NaN;
 
     const monthlyMinus4w = monthly - fourWeeks;
     const monthlyMinus4wPct =
       fourWeeks !== 0n
         ? toNumberSafe(monthlyMinus4w) / toNumberSafe(fourWeeks)
-        : 0;
+        : Number.NaN;
 
     const impliedWeeksPerYear =
-      toNumberSafe(annual) / (toNumberSafe(weekly) || 1);
+      toNumberSafe(weekly) > 0
+        ? toNumberSafe(annual) / toNumberSafe(weekly)
+        : Number.NaN;
 
     return {
       ok: true as const,
@@ -530,7 +571,9 @@ export default function WeeklyToAnnualRent() {
     rows.push(
       buildCsvRow([
         "Implied weeks per 365-day year",
-        computed.impliedWeeksPerYear.toFixed(6),
+        Number.isFinite(computed.impliedWeeksPerYear)
+          ? computed.impliedWeeksPerYear.toFixed(6)
+          : "",
       ]),
     );
 
@@ -562,7 +605,12 @@ export default function WeeklyToAnnualRent() {
       ]),
     );
     rows.push(
-      buildCsvRow(["Difference vs 52 (%)", (computed.pct52 * 100).toFixed(6)]),
+      buildCsvRow([
+        "Difference vs 52 (%)",
+        Number.isFinite(computed.pct52)
+          ? (computed.pct52 * 100).toFixed(6)
+          : "",
+      ]),
     );
 
     rows.push(
@@ -578,7 +626,12 @@ export default function WeeklyToAnnualRent() {
       ]),
     );
     rows.push(
-      buildCsvRow(["Difference vs 53 (%)", (computed.pct53 * 100).toFixed(6)]),
+      buildCsvRow([
+        "Difference vs 53 (%)",
+        Number.isFinite(computed.pct53)
+          ? (computed.pct53 * 100).toFixed(6)
+          : "",
+      ]),
     );
 
     rows.push(buildCsvRow([""]));
@@ -589,7 +642,9 @@ export default function WeeklyToAnnualRent() {
     rows.push(
       buildCsvRow([
         "Monthly minus 4-week (% of 4-week)",
-        (computed.monthlyMinus4wPct * 100).toFixed(6),
+        Number.isFinite(computed.monthlyMinus4wPct)
+          ? (computed.monthlyMinus4wPct * 100).toFixed(6)
+          : "",
       ]),
     );
 
@@ -706,33 +761,6 @@ export default function WeeklyToAnnualRent() {
           the source of truth (365-day year). This keeps the breakdown
           consistent across monthly, 4-week, and daily equivalents.
         </p>
-
-        <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3 text-sm">
-          <a
-            href={safeHref("/rent-converter")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Rent converter
-          </a>
-          <a
-            href={safeHref("/rent-paid-weekly-vs-monthly")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Weekly vs Monthly
-          </a>
-          <a
-            href={safeHref("/monthly-to-annual-rent")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Monthly → Annual
-          </a>
-          <a
-            href={safeHref("/rent-affordability-calculator")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Affordability
-          </a>
-        </div>
       </section>
 
       <section id="converter" className="mx-auto max-w-6xl px-6 pb-6">
@@ -751,19 +779,6 @@ export default function WeeklyToAnnualRent() {
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
               <button
                 type="button"
-                onClick={handleExportCsv}
-                disabled={!computed.ok}
-                className={`rounded-xl border px-4 py-2 text-sm font-semibold transition ${
-                  computed.ok
-                    ? "border-slate-200 bg-white text-slate-800 hover:bg-sky-50 hover:border-sky-200"
-                    : "border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed"
-                }`}
-                aria-disabled={!computed.ok}
-              >
-                Export CSV
-              </button>
-              <button
-                type="button"
                 onClick={handlePrint}
                 className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
               >
@@ -772,7 +787,6 @@ export default function WeeklyToAnnualRent() {
             </div>
           </div>
 
-          {/* Display controls */}
           <div className="mb-6 rounded-2xl border border-slate-200 bg-white p-5 rc-no-print">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <label className="flex items-center gap-2 text-sm text-slate-700">
@@ -832,9 +846,7 @@ export default function WeeklyToAnnualRent() {
                   value={currency}
                   onChange={(e) =>
                     setCurrency(
-                      isCurrency(e.target.value)
-                        ? (e.target.value as Currency)
-                        : "CAD",
+                      isCurrency(e.target.value) ? e.target.value : "CAD",
                     )
                   }
                   className="rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
@@ -921,7 +933,9 @@ export default function WeeklyToAnnualRent() {
                   <div className="text-xs text-slate-500">
                     Implied weeks per 365-day year:{" "}
                     <strong className="text-slate-800">
-                      {computed.impliedWeeksPerYear.toFixed(4)}
+                      {Number.isFinite(computed.impliedWeeksPerYear)
+                        ? computed.impliedWeeksPerYear.toFixed(4)
+                        : "—"}
                     </strong>
                   </div>
                 </div>
@@ -932,7 +946,9 @@ export default function WeeklyToAnnualRent() {
                     onClick={() =>
                       handleCopy(
                         "headline",
-                        `Weekly rent: ${money(computed.weekly)} (${currency}) ≈ Annual: ${money(computed.annual)} (365-day annual equivalence).`,
+                        `Weekly rent: ${money(computed.weekly)} (${currency}) ≈ Annual: ${money(
+                          computed.annual,
+                        )} (365-day annual equivalence).`,
                       )
                     }
                     className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
@@ -991,7 +1007,11 @@ export default function WeeklyToAnnualRent() {
                           <span className="font-semibold text-slate-800">
                             {money(computed.delta52)}
                           </span>{" "}
-                          ({(computed.pct52 * 100).toFixed(2)}%)
+                          (
+                          {Number.isFinite(computed.pct52)
+                            ? (computed.pct52 * 100).toFixed(2)
+                            : "—"}
+                          %)
                         </div>
                       </div>
 
@@ -1007,7 +1027,11 @@ export default function WeeklyToAnnualRent() {
                           <span className="font-semibold text-slate-800">
                             {money(computed.delta53)}
                           </span>{" "}
-                          ({(computed.pct53 * 100).toFixed(2)}%)
+                          (
+                          {Number.isFinite(computed.pct53)
+                            ? (computed.pct53 * 100).toFixed(2)
+                            : "—"}
+                          %)
                         </div>
                       </div>
 
@@ -1047,7 +1071,10 @@ export default function WeeklyToAnnualRent() {
                       <div className="text-sm text-slate-700">
                         Difference ≈{" "}
                         <strong className="text-slate-900">
-                          {(computed.monthlyMinus4wPct * 100).toFixed(2)}%
+                          {Number.isFinite(computed.monthlyMinus4wPct)
+                            ? (computed.monthlyMinus4wPct * 100).toFixed(2)
+                            : "—"}
+                          %
                         </strong>
                       </div>
                     </div>
@@ -1196,7 +1223,7 @@ export default function WeeklyToAnnualRent() {
             </a>
             ,{" "}
             <a
-              href={safeHref("/monthly-to-annual-rent")}
+              href={safeHref("/monthly-to-annual-rent-converter")}
               className="text-sky-700 hover:underline"
             >
               monthly to annual rent

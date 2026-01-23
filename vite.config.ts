@@ -6,10 +6,8 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import netlifyPlugin from "@netlify/vite-plugin-react-router";
 
 export default defineConfig({
-  plugins: [
-    reactRouter(),
-    tsconfigPaths(),
-    tailwindcss(),
-    netlifyPlugin(), // generates the Netlify serverless function for SSR
-  ],
+  plugins: [reactRouter(), tsconfigPaths(), tailwindcss(), netlifyPlugin()],
+  ssr: {
+    noExternal: ["posthog-js", "posthog-js/react"],
+  },
 });

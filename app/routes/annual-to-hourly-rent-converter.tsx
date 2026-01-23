@@ -4,14 +4,6 @@ import OtherUsefulTools from "~/client/components/navigation/OtherUsefulTools";
 import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountry";
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
-/**
- * SEO Uniqueness Checklist (internal, not user-visible)
- * - Intent: Convert an ANNUAL rent total into an HOURLY equivalent, primarily as a time-based 8,760-hours-per-year equivalence.
- * - Unique angle: explicitly explains "8,760-hour equivalence" vs "paid-hours" scenario (hours/week × 52) and shows how assumptions change the implied hourly.
- * - Unique examples: hourly-focused misunderstandings + paid-hours scenario examples and constraints (0–168 hrs/week).
- * - Unique outputs: headline time-based hourly + optional paid-hours hourly comparison panel + exportable breakdown rows + print-to-PDF workflow.
- */
-
 export const meta: Route.MetaFunction = () => {
   const title = "Annual to Hourly Rent Converter (8,760-Hour Equivalent)";
   const description =
@@ -34,7 +26,7 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:description", content: description },
     {
       property: "og:url",
-      content: "https://rentconverter.com/annual-to-hourly-rent",
+      content: "https://rentconverter.com/annual-to-hourly-rent-converter",
     },
     { property: "og:site_name", content: "RentConverter.com" },
     { property: "og:image", content: "https://rentconverter.com/og-image.jpg" },
@@ -49,7 +41,7 @@ export const meta: Route.MetaFunction = () => {
 
     {
       rel: "canonical",
-      href: "https://rentconverter.com/annual-to-hourly-rent",
+      href: "https://rentconverter.com/annual-to-hourly-rent-converter",
     },
   ];
 };
@@ -78,50 +70,79 @@ const PERIOD_LABEL: Record<Period, string> = {
 // Use this everywhere you create internal links.
 // If a link is not in ROUTE_WHITELIST, it must not appear anywhere in the UI.
 const ROUTE_WHITELIST = new Set<string>([
+  // Home
   "/",
-  "/monthly-to-weekly-rent",
-  "/weekly-to-monthly-rent",
-  "/biweekly-to-monthly-rent",
-  "/monthly-to-annual-rent",
-  "/annual-to-monthly-rent",
-  "/monthly-to-daily-rent",
-  "/daily-to-monthly-rent",
-  "/weekly-to-annual-rent",
-  "/annual-to-weekly-rent",
-  "/hourly-to-monthly-rent",
-  "/monthly-to-hourly-rent",
-  "/hourly-to-annual-rent",
-  "/annual-to-hourly-rent",
-  "/biweekly-to-weekly-rent",
-  "/weekly-to-biweekly-rent",
-  "/monthly-to-biweekly-rent",
-  "/annual-to-biweekly-rent",
-  "/biweekly-to-annual-rent",
-  "/rent-paid-every-4-weeks",
-  "/rent-paid-every-2-weeks",
-  "/rent-billed-every-28-days",
-  "/rent-per-paycheck",
-  "/rent-per-pay-period",
-  "/rent-due-date-calculator",
-  "/true-cost-of-rent-per-day",
-  "/true-cost-of-rent-per-week",
+
+  // Rent converter hub
+  "/rent-converter",
+
+  // Frequency converters
+  "/monthly-to-weekly-rent-converter",
+  "/weekly-to-monthly-rent-converter",
+  "/weekly-to-annual-rent-converter",
+  "/weekly-to-biweekly-rent-converter",
+
+  "/biweekly-to-weekly-rent-converter",
+  "/biweekly-to-monthly-rent-converter",
+  "/biweekly-to-annual-rent-converter",
+
+  "/monthly-to-annual-rent-converter",
+  "/annual-to-monthly-rent-converter",
+
+  "/monthly-to-daily-rent-converter",
+  "/daily-to-monthly-rent-converter",
+
+  "/monthly-to-hourly-rent-converter",
+  "/hourly-to-monthly-rent-converter",
+
+  "/hourly-to-annual-rent-converter",
+  "/annual-to-hourly-rent-converter",
+
+  "/annual-to-weekly-rent-converter",
+  "/annual-to-biweekly-rent-converter",
+  "/monthly-to-biweekly-rent-converter",
+
+  // Rent calculators
+  "/rent-calculator",
   "/rent-per-day-calculator",
   "/rent-per-week-calculator",
-  "/rent-as-percentage-of-income",
-  "/how-much-rent-can-i-afford",
-  "/rent-after-tax-income",
-  "/rent-vs-take-home-pay",
+  "/rent-paid-every-4-weeks-calculator",
+  "/rent-per-paycheck-calculator",
+  "/rent-split-calculator",
+  "/rent-due-date-calculator",
+
+  // Affordability and income
+  "/rent-as-percentage-of-income-calculator",
+  "/how-much-rent-can-i-afford-calculator",
+  "/rent-after-tax-income-calculator",
+  "/rent-vs-take-home-pay-calculator",
+
+  // Rent increases
   "/rent-increase-calculator",
   "/rent-increase-percentage-calculator",
   "/rent-after-increase-calculator",
-  "/rent-per-person-calculator",
+
+  // Rent vs buy
   "/rent-vs-buy-calculator",
-  "/rent-converter",
-  "/rent-calculator",
 ]);
 
-function safeHref(path: string): string {
-  return ROUTE_WHITELIST.has(path) ? path : "/";
+function SafeLink({
+  href,
+  className,
+  children,
+  id,
+}: {
+  href: string;
+  className?: string;
+  children: React.ReactNode;
+  id?: string;
+}) {
+  if (!ROUTE_WHITELIST.has(href)) return null;
+  return (
+    <a id={id} href={href} className={className}>
+      {children}
+    </a>
+  );
 }
 
 const SUPPORTED_CURRENCIES = [
@@ -152,7 +173,7 @@ function isCurrency(x: string): x is Currency {
 }
 
 /**
- * Decimal-safe fixed-point representation (same pattern as other refactors).
+ * Decimal-safe fixed-point representation:
  * - Money inputs are parsed into scaled integers (BigInt) using SCALE.
  * - Math is performed on scaled integers (no float rounding during computation).
  * - Display rounding is explicit and user-controlled.
@@ -174,6 +195,26 @@ function clampScaled(v: bigint, min: bigint, max: bigint): bigint {
   return v;
 }
 
+function absBigInt(x: bigint) {
+  return x < 0n ? -x : x;
+}
+
+function roundScaledToDigits(scaled: bigint, digits: number): bigint {
+  // SCALE is 10^12, so we can round by dropping (12 - digits) places.
+  const d = Math.max(0, Math.min(12, Math.trunc(digits)));
+  const drop = 12 - d;
+  const factor = 10n ** BigInt(drop);
+  if (factor === 1n) return scaled;
+
+  const half = factor / 2n;
+  const neg = scaled < 0n;
+  const x = absBigInt(scaled);
+
+  const rounded = (x + half) / factor;
+  const back = rounded * factor;
+  return neg ? -back : back;
+}
+
 function toNumberSafe(scaled: bigint): number {
   return Number(scaled) / Number(SCALE);
 }
@@ -181,15 +222,26 @@ function toNumberSafe(scaled: bigint): number {
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
-  displayDecimals: number,
+  opts: { mode: "fixed"; digits: number } | { mode: "max"; maxDigits: number },
 ): string {
-  const n = toNumberSafe(scaled);
+  const digits =
+    opts.mode === "fixed"
+      ? Math.max(0, Math.min(12, Math.trunc(opts.digits)))
+      : Math.max(0, Math.min(12, Math.trunc(opts.maxDigits)));
+
+  const roundedScaled =
+    opts.mode === "fixed" ? roundScaledToDigits(scaled, digits) : scaled;
+
+  const n = toNumberSafe(roundedScaled);
   if (!Number.isFinite(n)) return "—";
+
   return new Intl.NumberFormat(undefined, {
     style: "currency",
     currency,
-    maximumFractionDigits: Math.max(0, Math.min(12, displayDecimals)),
-    minimumFractionDigits: 0,
+    maximumFractionDigits: digits,
+    // If user chose rounding, keep money formatting consistent by showing exactly that many decimals.
+    // If not rounding, allow variable decimals up to maxDigits.
+    minimumFractionDigits: opts.mode === "fixed" ? digits : 0,
   }).format(n);
 }
 
@@ -198,23 +250,37 @@ function formatPercent(n: number, displayDecimals: number): string {
   return `${(n * 100).toFixed(Math.max(0, Math.min(6, displayDecimals)))}%`;
 }
 
+/**
+ * Robust parser for money-like inputs.
+ * Accepts:
+ * - "$30,000.50", "30 000.50", "30000", "30000.00", ".5", "12."
+ * - "1250,50" (comma as decimal)
+ *
+ * Avoids false info by:
+ * - rejecting empty/invalid
+ * - rejecting negative
+ * - warning when interpreting single comma patterns like "1,234" as thousands grouping
+ */
 function parseMoneyInputToScaled(raw: string): ParsedAmount {
   const warnings: string[] = [];
   const s0 = (raw ?? "").trim();
 
-  if (!s0)
+  if (!s0) {
     return { ok: false, error: "Enter an annual rent amount.", warnings };
+  }
 
   let s = s0.replace(/\s+/g, "");
   s = s.replace(/[^\d.,\-]/g, "");
 
-  if (!s)
+  if (!s) {
     return {
       ok: false,
       error: "Enter a valid number (example: 30000 or 30000.50).",
       warnings,
     };
+  }
 
+  // Negative handling
   if (s.includes("-")) {
     if (!s.startsWith("-") || s.slice(1).includes("-")) {
       return {
@@ -226,8 +292,10 @@ function parseMoneyInputToScaled(raw: string): ParsedAmount {
     return { ok: false, error: "Annual rent must be 0 or greater.", warnings };
   }
 
+  // Determine decimal separator
   const lastDot = s.lastIndexOf(".");
   const lastComma = s.lastIndexOf(",");
+
   let decimalSep: "." | "," | null = null;
 
   if (lastDot !== -1 && lastComma !== -1) {
@@ -239,6 +307,7 @@ function parseMoneyInputToScaled(raw: string): ParsedAmount {
     if (parts.length === 2) {
       const before = parts[0] ?? "";
       const after = parts[1] ?? "";
+
       if (/^\d{1,2}$/.test(after)) {
         decimalSep = ",";
       } else if (/^\d{3}$/.test(after) && /^\d{1,3}$/.test(before)) {
@@ -264,35 +333,40 @@ function parseMoneyInputToScaled(raw: string): ParsedAmount {
 
   if (decimalSep) {
     const split = s.split(decimalSep);
-    if (split.length > 2)
+    if (split.length > 2) {
       return {
         ok: false,
         error: "Enter a valid number (too many decimal separators).",
         warnings,
       };
+    }
     intPart = split[0] ?? "";
     fracPart = split[1] ?? "";
   }
 
+  // Remove grouping separators from intPart
   if (decimalSep === ".") intPart = intPart.replace(/,/g, "");
   else if (decimalSep === ",") intPart = intPart.replace(/\./g, "");
   else intPart = intPart.replace(/[.,]/g, "");
 
   if (intPart === "") intPart = "0";
+
   intPart = intPart.replace(/^0+(?=\d)/, "");
 
-  if (!/^\d+$/.test(intPart))
+  if (!/^\d+$/.test(intPart)) {
     return {
       ok: false,
       error: "Enter a valid number (invalid digits).",
       warnings,
     };
-  if (fracPart && !/^\d+$/.test(fracPart))
+  }
+  if (fracPart && !/^\d+$/.test(fracPart)) {
     return {
       ok: false,
       error: "Enter a valid number (invalid decimals).",
       warnings,
     };
+  }
 
   const maxDec = Number(MAX_DECIMALS);
   const fracRaw = fracPart ?? "";
@@ -306,8 +380,9 @@ function parseMoneyInputToScaled(raw: string): ParsedAmount {
   const maxAnnual = 1_000_000_000n * SCALE;
   const clamped = clampScaled(scaled, 0n, maxAnnual);
 
-  if (clamped !== scaled)
+  if (clamped !== scaled) {
     warnings.push("Value was clamped to the supported maximum for safety.");
+  }
 
   const normalized = fracRaw.length ? `${intPart}.${fracCapped}` : `${intPart}`;
 
@@ -316,7 +391,7 @@ function parseMoneyInputToScaled(raw: string): ParsedAmount {
 
 function parseHoursInput(raw: string): {
   ok: boolean;
-  hoursPerWeek?: bigint;
+  hoursPerWeek?: bigint; // scaled by SCALE
   error?: string;
   warnings: string[];
 } {
@@ -327,12 +402,13 @@ function parseHoursInput(raw: string): {
   let s = s0.replace(/\s+/g, "");
   s = s.replace(/[^\d.,\-]/g, "");
 
-  if (!s)
+  if (!s) {
     return {
       ok: false,
       error: "Enter a valid number of hours (example: 40).",
       warnings,
     };
+  }
 
   if (s.includes("-")) {
     if (!s.startsWith("-") || s.slice(1).includes("-")) {
@@ -349,7 +425,7 @@ function parseHoursInput(raw: string): {
     };
   }
 
-  // Hours can be decimal (e.g., 37.5). Use same parsing strategy but clamp to [0, 168].
+  // Hours can be decimal (e.g., 37.5). Reuse money parser for robust decimal parsing.
   const parsed = parseMoneyInputToScaled(s);
   if (!parsed.ok || parsed.scaled === undefined) {
     return {
@@ -359,11 +435,12 @@ function parseHoursInput(raw: string): {
     };
   }
 
-  // Convert scaled money-style to scaled hours; we keep same SCALE for simplicity.
   const maxHoursScaled = 168n * SCALE;
   const clamped = clampScaled(parsed.scaled, 0n, maxHoursScaled);
-  if (clamped !== parsed.scaled)
+
+  if (clamped !== parsed.scaled) {
     warnings.push("Hours per week was clamped to 168 (max hours in a week).");
+  }
 
   return { ok: true, hoursPerWeek: clamped, warnings };
 }
@@ -392,7 +469,7 @@ function annualToPeriodScaled(annualScaled: bigint, period: Period): bigint {
     case "daily":
       return mulDivScaled(annualScaled, 1n, 365n);
     case "hourly":
-      return mulDivScaled(annualScaled, 1n, 365n * 24n); // annual ÷ 8760
+      return mulDivScaled(annualScaled, 1n, 365n * 24n); // annual ÷ 8,760
     default:
       return annualScaled;
   }
@@ -542,6 +619,22 @@ export default function AnnualToHourlyRent() {
     ? (parsedHours.hoursPerWeek as bigint)
     : 0n;
 
+  const fmt = (scaled: bigint) =>
+    roundDisplay
+      ? formatCurrencyFromScaled(scaled, currency, {
+          mode: "fixed",
+          digits: displayDecimals,
+        })
+      : formatCurrencyFromScaled(scaled, currency, {
+          mode: "max",
+          maxDigits: 12,
+        });
+
+  const annualInterpreted = useMemo(() => {
+    if (!parsedAnnual.ok) return null;
+    return fmt(annualScaled);
+  }, [parsedAnnual.ok, annualScaled, currency, roundDisplay, displayDecimals]);
+
   const canShowAnnualResults = parsedAnnual.ok;
 
   const breakdownScaled = useMemo(() => {
@@ -571,14 +664,10 @@ export default function AnnualToHourlyRent() {
         paidMinusClockPct = null;
         paidHoursPerYearLabel = null;
       } else {
-        // hours/year = (hours/week) × 52
-        // hoursPerWeekScaled is in scaled units, so hours/year in scaled units:
-        const hoursPerYearScaled = hoursPerWeekScaled * 52n;
+        const hoursPerYearScaled = hoursPerWeekScaled * 52n; // still scaled
         paidHoursPerYearLabel = `${toNumberSafe(
           hoursPerYearScaled,
-        ).toLocaleString(undefined, {
-          maximumFractionDigits: 4,
-        })} hours/year`;
+        ).toLocaleString(undefined, { maximumFractionDigits: 4 })} hours/year`;
 
         paidHourly = annualToPaidHoursHourlyScaled(
           annualScaled,
@@ -613,16 +702,6 @@ export default function AnnualToHourlyRent() {
     parsedHours?.ok,
     hoursPerWeekScaled,
   ]);
-
-  const effectiveDisplayDecimals = roundDisplay ? displayDecimals : 12;
-
-  const fmt = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, effectiveDisplayDecimals);
-
-  const annualInterpreted = useMemo(() => {
-    if (!parsedAnnual.ok) return null;
-    return fmt(annualScaled);
-  }, [parsedAnnual.ok, annualScaled, currency, effectiveDisplayDecimals]);
 
   const headlineHourlyScaled = breakdownScaled?.hourly ?? 0n;
 
@@ -718,6 +797,7 @@ export default function AnnualToHourlyRent() {
         showPaidHoursScenario ? "Yes" : "No",
       ]),
     );
+
     if (showPaidHoursScenario) {
       if (
         parsedHours?.ok &&
@@ -764,7 +844,7 @@ export default function AnnualToHourlyRent() {
 
     const csv = rows.join("\n");
     downloadTextFile(
-      "annual-to-hourly-rent.csv",
+      "annual-to-hourly-rent-converter.csv",
       csv,
       "text/csv;charset=utf-8",
     );
@@ -830,7 +910,7 @@ export default function AnnualToHourlyRent() {
         "@type": "ListItem",
         position: 2,
         name: "Annual to Hourly Rent Converter",
-        item: "https://rentconverter.com/annual-to-hourly-rent",
+        item: "https://rentconverter.com/annual-to-hourly-rent-converter",
       },
     ],
   };
@@ -850,11 +930,11 @@ export default function AnnualToHourlyRent() {
         }}
       />
 
-      <section className="pt-6 pb-4 rc-no-print">
+      <section className=" pb-4 rc-no-print">
         <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-500">
-          <a href={safeHref("/")} className="hover:underline">
+          <SafeLink href="/" className="hover:underline">
             Home
-          </a>{" "}
+          </SafeLink>{" "}
           / Annual to Hourly Rent Converter
         </nav>
       </section>
@@ -869,33 +949,6 @@ export default function AnnualToHourlyRent() {
           Optionally, compare against a paid-hours assumption to see how the
           implied hourly changes.
         </p>
-
-        <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3 text-sm">
-          <a
-            href={safeHref("/rent-converter")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Rent converter hub
-          </a>
-          <a
-            href={safeHref("/hourly-to-annual-rent")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Hourly to annual
-          </a>
-          <a
-            href={safeHref("/monthly-to-hourly-rent")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Monthly to hourly
-          </a>
-          <a
-            href={safeHref("/how-much-rent-can-i-afford")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            How much rent can I afford
-          </a>
-        </div>
       </section>
 
       <section id="converter" className="mx-auto max-w-6xl px-6 pb-6">
@@ -906,19 +959,6 @@ export default function AnnualToHourlyRent() {
             </h2>
 
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
-              <button
-                type="button"
-                onClick={handleExportCsv}
-                disabled={!canShowAnnualResults}
-                className={`rounded-xl border px-4 py-2 text-sm font-semibold transition ${
-                  canShowAnnualResults
-                    ? "border-slate-200 bg-white text-slate-800 hover:bg-sky-50 hover:border-sky-200"
-                    : "border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed"
-                }`}
-                aria-disabled={!canShowAnnualResults}
-              >
-                Export CSV
-              </button>
               <button
                 type="button"
                 onClick={handlePrint}
@@ -1195,7 +1235,9 @@ export default function AnnualToHourlyRent() {
                       onClick={() =>
                         handleCopy(
                           "summary",
-                          `Annual: ${fmt(annualScaled)} | Hourly (time-based): ${fmt(headlineHourlyScaled)} | Assumptions: 365-day year, 24 hours/day`,
+                          `Annual: ${fmt(annualScaled)} | Hourly (time-based): ${fmt(
+                            headlineHourlyScaled,
+                          )} | Assumptions: 365-day year, 24 hours/day`,
                         )
                       }
                       className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
@@ -1297,9 +1339,9 @@ export default function AnnualToHourlyRent() {
                               {fmt(breakdownScaled!.paidHourly as bigint)}
                             </div>
                             <div className="mt-1 text-xs text-slate-500">
-                              Annual ÷ (hours/week × 52){" "}
+                              Annual ÷ (hours/week × 52)
                               {breakdownScaled!.paidHoursPerYearLabel
-                                ? `≈ ${breakdownScaled!.paidHoursPerYearLabel}`
+                                ? ` ≈ ${breakdownScaled!.paidHoursPerYearLabel}`
                                 : ""}
                             </div>
                           </div>
@@ -1392,10 +1434,10 @@ export default function AnnualToHourlyRent() {
         </h2>
 
         <p className="text-slate-700 mb-4">
-          This page is specifically about translating a yearly rent total into
-          an hourly equivalence so you can compare the same annual cost across
-          short time windows. The headline result spreads the annual total
-          across every hour in a 365-day year (8,760 hours).
+          This page translates a yearly rent total into an hourly equivalence so
+          you can compare the same annual cost across short time windows. The
+          headline result spreads the annual total across every hour in a
+          365-day year (8,760 hours).
         </p>
 
         <h3 className="text-2xl font-semibold mt-10 mb-4 text-slate-900">
@@ -1440,26 +1482,12 @@ export default function AnnualToHourlyRent() {
 
         <p className="text-slate-700 mb-4">
           Related tools:{" "}
-          <a
-            href={safeHref("/hourly-to-annual-rent")}
-            className="text-sky-700 hover:underline"
-          >
-            hourly to annual rent
-          </a>
-          ,{" "}
-          <a
-            href={safeHref("/rent-converter")}
+          <SafeLink
+            href="/rent-converter"
             className="text-sky-700 hover:underline"
           >
             rent converter
-          </a>
-          ,{" "}
-          <a
-            href={safeHref("/monthly-to-hourly-rent")}
-            className="text-sky-700 hover:underline"
-          >
-            monthly to hourly rent
-          </a>
+          </SafeLink>
           .
         </p>
       </section>

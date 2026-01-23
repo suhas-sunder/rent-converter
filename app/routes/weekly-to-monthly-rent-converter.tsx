@@ -4,20 +4,6 @@ import OtherUsefulTools from "~/client/components/navigation/OtherUsefulTools";
 import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountry";
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
-/**
- * RentConverter.com refactor rules applied:
- * - Preserve decimals end-to-end (fixed-point BigInt).
- * - Avoid misleading “0” results on invalid input (show errors; hide results).
- * - Rounding is display-only and clearly labeled.
- * - Fix money formatting (do not drop decimals for values >=10).
- * - Robust number parsing for commas/currency symbols/.5/12. and comma-decimals.
- * - Validate currency from localStorage.
- * - Export CSV + Print-to-PDF where outputs/breakdowns exist.
- * - Expand currency list.
- * - Include “How it works” explanation above FAQs.
- * - Internal link whitelist enforced (unknown routes fall back to "/").
- */
-
 export const meta: Route.MetaFunction = () => [
   { title: "Weekly to Monthly Rent Converter" },
   {
@@ -43,7 +29,7 @@ export const meta: Route.MetaFunction = () => [
   },
   {
     property: "og:url",
-    content: "https://rentconverter.com/weekly-to-monthly-rent",
+    content: "https://rentconverter.com/weekly-to-monthly-rent-converter",
   },
   { property: "og:site_name", content: "RentConverter.com" },
   { property: "og:image", content: "https://rentconverter.com/og-image.jpg" },
@@ -59,7 +45,7 @@ export const meta: Route.MetaFunction = () => [
 
   {
     rel: "canonical",
-    href: "https://rentconverter.com/weekly-to-monthly-rent",
+    href: "https://rentconverter.com/weekly-to-monthly-rent-converter",
   },
 ];
 
@@ -115,11 +101,64 @@ function isCurrency(x: string): x is Currency {
  * Unknown routes are forced to "/".
  */
 const ROUTE_WHITELIST = new Set<string>([
+  // Home
   "/",
+
+  // Rent converter hub
   "/rent-converter",
-  "/rent-paid-weekly-vs-monthly",
+
+  // Frequency converters
+  "/monthly-to-weekly-rent-converter",
+  "/weekly-to-monthly-rent-converter",
+  "/weekly-to-annual-rent-converter",
+  "/weekly-to-biweekly-rent-converter",
+
+  "/biweekly-to-weekly-rent-converter",
+  "/biweekly-to-monthly-rent-converter",
+  "/biweekly-to-annual-rent-converter",
+
+  "/monthly-to-annual-rent-converter",
+  "/annual-to-monthly-rent-converter",
+
+  "/monthly-to-daily-rent-converter",
+  "/daily-to-monthly-rent-converter",
+
+  "/monthly-to-hourly-rent-converter",
+  "/hourly-to-monthly-rent-converter",
+
+  "/hourly-to-annual-rent-converter",
+  "/annual-to-hourly-rent-converter",
+
+  "/annual-to-weekly-rent-converter",
+  "/annual-to-biweekly-rent-converter",
+  "/monthly-to-biweekly-rent-converter",
+
+  // Rent calculators
+  "/rent-calculator",
+  "/rent-per-day-calculator",
+  "/rent-per-week-calculator",
+  "/rent-paid-every-4-weeks-calculator",
+  "/rent-per-paycheck-calculator",
+  "/rent-split-calculator",
+  "/rent-due-date-calculator",
+
+  // Affordability and income
   "/rent-affordability-calculator",
-  "/weekly-to-monthly-rent",
+  "/rent-as-percentage-of-income-calculator",
+  "/how-much-rent-can-i-afford-calculator",
+  "/rent-after-tax-income-calculator",
+  "/rent-vs-take-home-pay-calculator",
+
+  // Rent increases
+  "/rent-increase-calculator",
+  "/rent-increase-percentage-calculator",
+  "/rent-after-increase-calculator",
+
+  // Rent vs buy
+  "/rent-vs-buy-calculator",
+
+  // Context pages
+  "/rent-paid-weekly-vs-monthly",
 ]);
 
 function safeHref(path: string): string {
@@ -153,7 +192,7 @@ function formatCurrencyFromScaled(
   displayDecimals: number,
 ): string {
   const n = toNumberSafe(scaled);
-  if (!Number.isFinite(n)) return "—";
+  if (!Number.isFinite(n)) return "N/A";
   const digits = Math.max(0, Math.min(12, displayDecimals));
   return new Intl.NumberFormat(undefined, {
     style: "currency",
@@ -380,7 +419,8 @@ function downloadTextFile(
 
 export default function WeeklyToMonthlyRent() {
   const pageName = "Weekly to Monthly Rent Converter";
-  const canonicalUrl = "https://rentconverter.com/weekly-to-monthly-rent";
+  const canonicalUrl =
+    "https://rentconverter.com/weekly-to-monthly-rent-converter";
 
   const [amount, setAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "500";
@@ -464,11 +504,13 @@ export default function WeeklyToMonthlyRent() {
     const monthlyMinus4wPct =
       fourWeeks !== 0n
         ? toNumberSafe(monthlyMinus4w) / toNumberSafe(fourWeeks)
-        : 0;
+        : Number.NaN;
 
     // Payment-count shortcuts (illustrative)
     const annualFromWeekly52 = weekly * 52n;
     const annualFromMonthly12 = monthly * 12n;
+
+    // 4-week comparison
     const weeklyTimes4 = weekly * 4n;
     const weeklyTimes4Delta = monthly - weeklyTimes4;
 
@@ -521,11 +563,11 @@ export default function WeeklyToMonthlyRent() {
       ]),
     );
     rows.push(
-      buildCsvRow(["Weekly × 4 (28 days)", money(computed.weeklyTimes4)]),
+      buildCsvRow(["Weekly x 4 (28 days)", money(computed.weeklyTimes4)]),
     );
     rows.push(
       buildCsvRow([
-        "Delta (monthly - weekly×4)",
+        "Delta (monthly - weekly x 4)",
         money(computed.weeklyTimes4Delta),
       ]),
     );
@@ -551,15 +593,17 @@ export default function WeeklyToMonthlyRent() {
     rows.push(
       buildCsvRow([
         "Monthly minus 4-week (% of 4-week)",
-        (computed.monthlyMinus4wPct * 100).toFixed(6),
+        Number.isFinite(computed.monthlyMinus4wPct)
+          ? (computed.monthlyMinus4wPct * 100).toFixed(6)
+          : "",
       ]),
     );
 
     rows.push(buildCsvRow([""]));
     rows.push(buildCsvRow(["Calendar payment-count illustrations"]));
-    rows.push(buildCsvRow(["Weekly × 52", money(computed.annualFromWeekly52)]));
+    rows.push(buildCsvRow(["Weekly x 52", money(computed.annualFromWeekly52)]));
     rows.push(
-      buildCsvRow(["Monthly × 12", money(computed.annualFromMonthly12)]),
+      buildCsvRow(["Monthly x 12", money(computed.annualFromMonthly12)]),
     );
 
     downloadTextFile(
@@ -597,8 +641,8 @@ export default function WeeklyToMonthlyRent() {
       a: "This page converts through annual equivalence: weekly is treated as a 7-day amount, converted to an annual total using a 365-day year, then divided by 12 to produce a monthly equivalent.",
     },
     {
-      q: "Why does weekly × 4 not match the monthly result?",
-      a: "Four weeks is 28 days. An average month is about 30.42 days (365 ÷ 12). Weekly × 4 is closer to a 28-day cycle, not a calendar month average.",
+      q: "Why does weekly x 4 not match the monthly result?",
+      a: "Four weeks is 28 days. An average month is about 30.42 days (365 ÷ 12). Weekly x 4 is closer to a 28-day cycle, not a calendar month average.",
     },
     {
       q: "How is every-4-weeks rent different from monthly rent?",
@@ -691,27 +735,6 @@ export default function WeeklyToMonthlyRent() {
           (365-day year). This helps compare weekly listings and monthly
           listings using the same annual basis.
         </p>
-
-        <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3 text-sm">
-          <a
-            href={safeHref("/rent-converter")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Rent converter
-          </a>
-          <a
-            href={safeHref("/rent-paid-weekly-vs-monthly")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Weekly vs Monthly
-          </a>
-          <a
-            href={safeHref("/rent-affordability-calculator")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Affordability
-          </a>
-        </div>
       </section>
 
       <section id="converter" className="mx-auto max-w-6xl px-6 pb-6">
@@ -722,7 +745,7 @@ export default function WeeklyToMonthlyRent() {
                 Instant weekly to monthly conversion
               </h2>
               <p className="text-sm text-slate-600 mt-2">
-                Invalid input hides results to avoid misleading “0” outputs.
+                Invalid input hides results to avoid misleading 0 outputs.
                 Calculations preserve decimals; rounding is display-only.
               </p>
             </div>
@@ -855,8 +878,9 @@ export default function WeeklyToMonthlyRent() {
                   Interpretation note
                 </div>
                 <p className="mt-1 text-sm text-slate-700">
-                  Monthly is derived from a 365-day annual total (then ÷ 12).
-                  That is why weekly × 4 (28 days) is not the same as monthly.
+                  Monthly is derived from a 365-day annual total (then divided
+                  by 12). That is why weekly x 4 (28 days) is not the same as
+                  monthly.
                 </p>
               </div>
             </div>
@@ -907,7 +931,7 @@ export default function WeeklyToMonthlyRent() {
                     <strong>{money(computed.monthly)}</strong> monthly
                   </div>
                   <div className="text-xs text-slate-500">
-                    Weekly × 4 (28 days):{" "}
+                    Weekly x 4 (28 days):{" "}
                     <strong className="text-slate-800">
                       {money(computed.weeklyTimes4)}
                     </strong>{" "}
@@ -980,7 +1004,10 @@ export default function WeeklyToMonthlyRent() {
                       <div className="text-sm text-slate-700">
                         Difference ≈{" "}
                         <strong className="text-slate-900">
-                          {(computed.monthlyMinus4wPct * 100).toFixed(2)}%
+                          {Number.isFinite(computed.monthlyMinus4wPct)
+                            ? (computed.monthlyMinus4wPct * 100).toFixed(2)
+                            : "N/A"}
+                          %
                         </strong>
                       </div>
                     </div>
@@ -997,7 +1024,7 @@ export default function WeeklyToMonthlyRent() {
                     <div className="mt-2 grid gap-2 sm:grid-cols-3">
                       <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
                         <div className="text-xs text-slate-500">
-                          Weekly × 52
+                          Weekly x 52
                         </div>
                         <div className="mt-1 text-sm font-bold text-slate-800">
                           {money(computed.annualFromWeekly52)}
@@ -1008,7 +1035,7 @@ export default function WeeklyToMonthlyRent() {
                       </div>
                       <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
                         <div className="text-xs text-slate-500">
-                          Monthly × 12
+                          Monthly x 12
                         </div>
                         <div className="mt-1 text-sm font-bold text-slate-800">
                           {money(computed.annualFromMonthly12)}

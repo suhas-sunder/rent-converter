@@ -26,7 +26,7 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:description", content: description },
     {
       property: "og:url",
-      content: "https://rentconverter.com/monthly-to-annual-rent",
+      content: "https://rentconverter.com/monthly-to-annual-rent-converter",
     },
     { property: "og:site_name", content: "RentConverter.com" },
     { property: "og:image", content: "https://rentconverter.com/og-image.jpg" },
@@ -41,7 +41,7 @@ export const meta: Route.MetaFunction = () => {
 
     {
       rel: "canonical",
-      href: "https://rentconverter.com/monthly-to-annual-rent",
+      href: "https://rentconverter.com/monthly-to-annual-rent-converter",
     },
   ];
 };
@@ -67,12 +67,60 @@ const PERIOD_LABEL: Record<Period, string> = {
 
 // Keep conservative and aligned with your known route set
 const ROUTE_WHITELIST = new Set<string>([
+  // Home
   "/",
+
+  // Rent converter hub
   "/rent-converter",
-  "/monthly-to-weekly-rent",
-  "/rent-paid-weekly-vs-monthly",
-  "/rent-affordability-calculator",
-  "/monthly-to-annual-rent",
+
+  // Frequency converters
+  "/monthly-to-weekly-rent-converter",
+  "/weekly-to-monthly-rent-converter",
+  "/weekly-to-annual-rent-converter",
+  "/weekly-to-biweekly-rent-converter",
+
+  "/biweekly-to-weekly-rent-converter",
+  "/biweekly-to-monthly-rent-converter",
+  "/biweekly-to-annual-rent-converter",
+
+  "/monthly-to-annual-rent-converter",
+  "/annual-to-monthly-rent-converter",
+
+  "/monthly-to-daily-rent-converter",
+  "/daily-to-monthly-rent-converter",
+
+  "/monthly-to-hourly-rent-converter",
+  "/hourly-to-monthly-rent-converter",
+
+  "/hourly-to-annual-rent-converter",
+  "/annual-to-hourly-rent-converter",
+
+  "/annual-to-weekly-rent-converter",
+  "/annual-to-biweekly-rent-converter",
+  "/monthly-to-biweekly-rent-converter",
+
+  // Rent calculators
+  "/rent-calculator",
+  "/rent-per-day-calculator",
+  "/rent-per-week-calculator",
+  "/rent-paid-every-4-weeks-calculator",
+  "/rent-per-paycheck-calculator",
+  "/rent-split-calculator",
+  "/rent-due-date-calculator",
+
+  // Affordability and income
+  "/rent-as-percentage-of-income-calculator",
+  "/how-much-rent-can-i-afford-calculator",
+  "/rent-after-tax-income-calculator",
+  "/rent-vs-take-home-pay-calculator",
+
+  // Rent increases
+  "/rent-increase-calculator",
+  "/rent-increase-percentage-calculator",
+  "/rent-after-increase-calculator",
+
+  // Rent vs buy
+  "/rent-vs-buy-calculator",
 ]);
 
 function safeHref(path: string): string {
@@ -128,18 +176,27 @@ function toNumberSafe(scaled: bigint): number {
   return Number(scaled) / Number(SCALE);
 }
 
+/**
+ * Format currency:
+ * - preserve decimals end-to-end
+ * - if display rounding is enabled, keep exactly the selected decimal count
+ * - if rounding is disabled, show up to 12 decimals (no forced trailing zeros)
+ */
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
-  displayDecimals: number,
+  maxDecimals: number,
+  minDecimals: number,
 ): string {
   const n = toNumberSafe(scaled);
   if (!Number.isFinite(n)) return "—";
+  const max = Math.max(0, Math.min(12, maxDecimals));
+  const min = Math.max(0, Math.min(max, minDecimals));
   return new Intl.NumberFormat(undefined, {
     style: "currency",
     currency,
-    maximumFractionDigits: Math.max(0, Math.min(12, displayDecimals)),
-    minimumFractionDigits: 0,
+    maximumFractionDigits: max,
+    minimumFractionDigits: min,
   }).format(n);
 }
 
@@ -402,9 +459,10 @@ export default function MonthlyToAnnualRent() {
   const parsedAmount = useMemo(() => parseMoneyInputToScaled(amount), [amount]);
   const monthlyScaled = parsedAmount.ok ? (parsedAmount.scaled as bigint) : 0n;
 
-  const effectiveDisplayDecimals = roundDisplay ? displayDecimals : 12;
+  const maxDecimals = roundDisplay ? displayDecimals : 12;
+  const minDecimals = roundDisplay ? displayDecimals : 0;
   const fmt = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, effectiveDisplayDecimals);
+    formatCurrencyFromScaled(scaled, currency, maxDecimals, minDecimals);
 
   const breakdown = useMemo(() => {
     if (!parsedAmount.ok) return null;
@@ -547,7 +605,7 @@ export default function MonthlyToAnnualRent() {
     );
 
     downloadTextFile(
-      "monthly-to-annual-rent.csv",
+      "monthly-to-annual-rent-converter.csv",
       rows.join("\n"),
       "text/csv;charset=utf-8",
     );
@@ -609,7 +667,7 @@ export default function MonthlyToAnnualRent() {
         "@type": "ListItem",
         position: 2,
         name: "Monthly to Annual Rent Converter",
-        item: "https://rentconverter.com/monthly-to-annual-rent",
+        item: "https://rentconverter.com/monthly-to-annual-rent-converter",
       },
     ],
   };
@@ -627,7 +685,7 @@ export default function MonthlyToAnnualRent() {
     name: "Monthly to Annual Rent Converter",
     description:
       "Convert monthly rent into an annual rent total using annual equivalence. Includes a full period breakdown and a 4-week (28-day) schedule comparison.",
-    url: "https://rentconverter.com/monthly-to-annual-rent",
+    url: "https://rentconverter.com/monthly-to-annual-rent-converter",
   };
 
   return (
@@ -658,61 +716,21 @@ export default function MonthlyToAnnualRent() {
         <h1 className="text-4xl font-bold text-slate-800 mb-4">
           Monthly to Annual Rent Converter
         </h1>
-        <p className="text-slate-600 max-w-2xl mx-auto text-lg">
-          See what a monthly rent price implies over a full year. This page
-          estimates an annual total using annual equivalence so you can compare
-          listings priced on different schedules.
+        <p className="text-slate-600 max-w-3xl mx-auto text-lg">
+          See what a monthly rent price implies over a year. This page converts
+          monthly rent using annual equivalence (365-day year) and includes a
+          full breakdown across billing periods.
         </p>
-
-        <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3 text-sm">
-          <a
-            href={safeHref("/rent-converter")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Rent converter
-          </a>
-          <a
-            href={safeHref("/monthly-to-weekly-rent")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Monthly → Weekly
-          </a>
-          <a
-            href={safeHref("/rent-paid-weekly-vs-monthly")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Weekly vs Monthly
-          </a>
-          <a
-            href={safeHref("/rent-affordability-calculator")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Affordability
-          </a>
-        </div>
       </section>
 
       <section id="converter" className="mx-auto max-w-6xl px-6 pb-6">
         <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:p-8 rc-print-block">
           <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <h2 className="text-xl sm:text-2xl font-bold">
-              Convert monthly rent to a yearly total
+              Convert monthly rent to an annual total
             </h2>
 
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
-              <button
-                type="button"
-                onClick={handleExportCsv}
-                disabled={!canShowResults}
-                className={`rounded-xl border px-4 py-2 text-sm font-semibold transition ${
-                  canShowResults
-                    ? "border-slate-200 bg-white text-slate-800 hover:bg-sky-50 hover:border-sky-200"
-                    : "border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed"
-                }`}
-                aria-disabled={!canShowResults}
-              >
-                Export CSV
-              </button>
               <button
                 type="button"
                 onClick={handlePrint}
@@ -826,7 +844,8 @@ export default function MonthlyToAnnualRent() {
 
                 <p className="mt-2 text-xs text-slate-500">
                   Calculations preserve decimals internally (up to 12). If
-                  rounding is enabled, only the displayed values are rounded.
+                  rounding is enabled, displayed values keep exactly the
+                  selected decimals.
                 </p>
               </div>
             </div>
@@ -854,10 +873,9 @@ export default function MonthlyToAnnualRent() {
                     {fmt(breakdown.annualEquiv)}
                   </div>
                   <div className="text-sm text-slate-600">
-                    {fmt(breakdown.monthly)}{" "}
-                    {PERIOD_LABEL.monthly.toLowerCase()} ≈{" "}
-                    <strong>{fmt(breakdown.annualEquiv)}</strong>{" "}
-                    {PERIOD_LABEL.annual.toLowerCase()} using annual equivalence
+                    {fmt(breakdown.monthly)} monthly ≈{" "}
+                    <strong>{fmt(breakdown.annualEquiv)}</strong> annually using
+                    annual equivalence (365-day year)
                   </div>
 
                   <div className="rc-no-print mt-2 flex flex-wrap gap-2">
@@ -966,7 +984,7 @@ export default function MonthlyToAnnualRent() {
                       <div className="text-sm text-slate-700">
                         Annual equiv minus (monthly × 12):{" "}
                         <strong className="text-slate-900">
-                          {fmt(BigInt(breakdown.deltaVsMonthly12.diff))}
+                          {fmt(breakdown.deltaVsMonthly12.diff)}
                         </strong>
                       </div>
                       <div className="text-sm text-slate-700">
@@ -981,7 +999,7 @@ export default function MonthlyToAnnualRent() {
                       <div className="text-sm text-slate-700">
                         4-week × 13 minus (monthly × 12):{" "}
                         <strong className="text-slate-900">
-                          {fmt(BigInt(breakdown.delta4w13VsMonthly12.diff))}
+                          {fmt(breakdown.delta4w13VsMonthly12.diff)}
                         </strong>
                       </div>
                       <div className="text-sm text-slate-700">
@@ -998,8 +1016,7 @@ export default function MonthlyToAnnualRent() {
                     <p className="mt-2 text-xs text-slate-500">
                       Annual equivalence is the conversion basis used for the
                       breakdown (365-day year, average month length). The
-                      payment schedule totals are included as comparison
-                      scenarios.
+                      payment schedule totals are separate comparison scenarios.
                     </p>
                   </div>
 
@@ -1054,7 +1071,8 @@ export default function MonthlyToAnnualRent() {
             <li>
               <strong>You enter a monthly rent amount.</strong> The input parser
               supports commas, currency symbols, and formats like .5 and 12.,
-              and it avoids showing misleading zero results on invalid input.
+              and it avoids showing misleading results on invalid or ambiguous
+              input.
             </li>
             <li>
               <strong>
@@ -1069,7 +1087,7 @@ export default function MonthlyToAnnualRent() {
                 All other periods come from the same annual basis.
               </strong>{" "}
               Weekly, biweekly, and every-4-weeks equivalents are derived
-              consistently, so you are not mixing assumptions across the
+              consistently, so comparisons do not mix assumptions across the
               breakdown.
             </li>
             <li>
@@ -1078,28 +1096,52 @@ export default function MonthlyToAnnualRent() {
               not the equivalence basis.
             </li>
             <li>
-              <strong>You can export and print.</strong> Results can be exported
-              to CSV, and printing supports save-as-PDF in the browser.
+              <strong>Export and printing.</strong> Results can be exported to
+              CSV, and printing supports saving as a PDF in the browser.
             </li>
           </ol>
 
           <div className="mt-4 rounded-xl border border-slate-100 bg-slate-50 p-4 text-sm text-slate-700">
-            <div className="font-semibold">What you can expect</div>
+            <div className="font-semibold">What you can do here</div>
             <ul className="mt-2 list-disc pl-5 space-y-1 text-slate-600">
+              <li>Get an annual equivalent for consistent comparisons</li>
               <li>
-                Annual equivalent for consistent comparisons across periods
+                See a full breakdown across hourly, daily, weekly, biweekly,
+                4-week, monthly, and annual
               </li>
               <li>
-                Full breakdown across hourly, daily, weekly, biweekly, 4-week,
-                monthly, and annual
+                Compare with payment schedule scenarios (monthly × 12, 4-week ×
+                13) for context
               </li>
-              <li>
-                Separate payment schedule scenarios (monthly × 12, 4-week × 13)
-                for context
-              </li>
+              <li>Export results to CSV or print to save as a PDF</li>
             </ul>
           </div>
         </div>
+
+        <p className="mt-4 text-slate-700">
+          Related pages:{" "}
+          <a
+            href={safeHref("/monthly-to-weekly-rent-converter")}
+            className="text-sky-700 hover:underline"
+          >
+            monthly to weekly rent
+          </a>
+          ,{" "}
+          <a
+            href={safeHref("/weekly-to-annual-rent-converter")}
+            className="text-sky-700 hover:underline"
+          >
+            weekly to annual rent
+          </a>
+          , and{" "}
+          <a
+            href={safeHref("/annual-to-monthly-rent-converter")}
+            className="text-sky-700 hover:underline"
+          >
+            annual to monthly rent
+          </a>
+          .
+        </p>
       </section>
 
       <section id="faq" className="max-w-5xl mx-auto py-20 px-6 rc-no-print">
@@ -1141,16 +1183,6 @@ export default function MonthlyToAnnualRent() {
       <OtherUsefulTools />
       <RenterChecklists />
       <RentToolsByCountry />
-
-      <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
-        <p className="text-xs text-slate-500 text-center leading-relaxed">
-          <em>
-            Use these calculators for comparisons and budgeting. Confirm your
-            actual payment schedule, due dates, and proration rules in your
-            lease.
-          </em>
-        </p>
-      </section>
 
       <script
         type="application/ld+json"

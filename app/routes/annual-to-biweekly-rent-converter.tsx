@@ -4,14 +4,6 @@ import OtherUsefulTools from "~/client/components/navigation/OtherUsefulTools";
 import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountry";
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
-/**
- * SEO Uniqueness Checklist (internal, not user-visible)
- * - Intent: Convert an ANNUAL rent total into a BIWEEKLY (14-day) equivalent for paycheque-style budgeting.
- * - Unique angle: "14-day equivalent" framing + payment-count context + monthly vs 4-week comparison on the same annual basis.
- * - Unique examples: annual-focused examples and “interpretation” warnings for comma formats.
- * - Unique outputs: biweekly headline result + full breakdown + exportable rows + print-to-PDF workflow.
- */
-
 export const meta: Route.MetaFunction = () => {
   const title = "Annual to Biweekly Rent Converter (14-Day Equivalent)";
   const description =
@@ -34,7 +26,7 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:description", content: description },
     {
       property: "og:url",
-      content: "https://rentconverter.com/annual-to-biweekly-rent",
+      content: "https://rentconverter.com/annual-to-biweekly-rent-converter",
     },
     { property: "og:site_name", content: "RentConverter.com" },
     { property: "og:image", content: "https://rentconverter.com/og-image.jpg" },
@@ -49,7 +41,7 @@ export const meta: Route.MetaFunction = () => {
 
     {
       rel: "canonical",
-      href: "https://rentconverter.com/annual-to-biweekly-rent",
+      href: "https://rentconverter.com/annual-to-biweekly-rent-converter",
     },
   ];
 };
@@ -78,50 +70,79 @@ const PERIOD_LABEL: Record<Period, string> = {
 // Use this everywhere you create internal links.
 // If a link is not in ROUTE_WHITELIST, it must not appear anywhere in the UI.
 const ROUTE_WHITELIST = new Set<string>([
+  // Home
   "/",
-  "/monthly-to-weekly-rent",
-  "/weekly-to-monthly-rent",
-  "/biweekly-to-monthly-rent",
-  "/monthly-to-annual-rent",
-  "/annual-to-monthly-rent",
-  "/monthly-to-daily-rent",
-  "/daily-to-monthly-rent",
-  "/weekly-to-annual-rent",
-  "/annual-to-weekly-rent",
-  "/hourly-to-monthly-rent",
-  "/monthly-to-hourly-rent",
-  "/hourly-to-annual-rent",
-  "/annual-to-hourly-rent",
-  "/biweekly-to-weekly-rent",
-  "/weekly-to-biweekly-rent",
-  "/monthly-to-biweekly-rent",
-  "/annual-to-biweekly-rent",
-  "/biweekly-to-annual-rent",
-  "/rent-paid-every-4-weeks",
-  "/rent-paid-every-2-weeks",
-  "/rent-billed-every-28-days",
-  "/rent-per-paycheck",
-  "/rent-per-pay-period",
-  "/rent-due-date-calculator",
-  "/true-cost-of-rent-per-day",
-  "/true-cost-of-rent-per-week",
+
+  // Rent converter hub
+  "/rent-converter",
+
+  // Frequency converters
+  "/monthly-to-weekly-rent-converter",
+  "/weekly-to-monthly-rent-converter",
+  "/weekly-to-annual-rent-converter",
+  "/weekly-to-biweekly-rent-converter",
+
+  "/biweekly-to-weekly-rent-converter",
+  "/biweekly-to-monthly-rent-converter",
+  "/biweekly-to-annual-rent-converter",
+
+  "/monthly-to-annual-rent-converter",
+  "/annual-to-monthly-rent-converter",
+
+  "/monthly-to-daily-rent-converter",
+  "/daily-to-monthly-rent-converter",
+
+  "/monthly-to-hourly-rent-converter",
+  "/hourly-to-monthly-rent-converter",
+
+  "/hourly-to-annual-rent-converter",
+  "/annual-to-hourly-rent-converter",
+
+  "/annual-to-weekly-rent-converter",
+  "/annual-to-biweekly-rent-converter",
+  "/monthly-to-biweekly-rent-converter",
+
+  // Rent calculators
+  "/rent-calculator",
   "/rent-per-day-calculator",
   "/rent-per-week-calculator",
-  "/rent-as-percentage-of-income",
-  "/how-much-rent-can-i-afford",
-  "/rent-after-tax-income",
-  "/rent-vs-take-home-pay",
+  "/rent-paid-every-4-weeks-calculator",
+  "/rent-per-paycheck-calculator",
+  "/rent-split-calculator",
+  "/rent-due-date-calculator",
+
+  // Affordability and income
+  "/rent-as-percentage-of-income-calculator",
+  "/how-much-rent-can-i-afford-calculator",
+  "/rent-after-tax-income-calculator",
+  "/rent-vs-take-home-pay-calculator",
+
+  // Rent increases
   "/rent-increase-calculator",
   "/rent-increase-percentage-calculator",
   "/rent-after-increase-calculator",
-  "/rent-per-person-calculator",
+
+  // Rent vs buy
   "/rent-vs-buy-calculator",
-  "/rent-converter",
-  "/rent-calculator",
 ]);
 
-function safeHref(path: string): string {
-  return ROUTE_WHITELIST.has(path) ? path : "/";
+function SafeLink({
+  href,
+  className,
+  children,
+  id,
+}: {
+  href: string;
+  className?: string;
+  children: React.ReactNode;
+  id?: string;
+}) {
+  if (!ROUTE_WHITELIST.has(href)) return null;
+  return (
+    <a id={id} href={href} className={className}>
+      {children}
+    </a>
+  );
 }
 
 const SUPPORTED_CURRENCIES = [
@@ -174,6 +195,27 @@ function clampScaled(v: bigint, min: bigint, max: bigint): bigint {
   return v;
 }
 
+function absBigInt(x: bigint) {
+  return x < 0n ? -x : x;
+}
+
+function roundScaledToDigits(scaled: bigint, digits: number): bigint {
+  // scaled uses SCALE = 10^12.
+  // digits must be in [0..12]
+  const d = Math.max(0, Math.min(12, Math.trunc(digits)));
+  const drop = 12 - d;
+  const factor = 10n ** BigInt(drop);
+  if (factor === 1n) return scaled;
+
+  const half = factor / 2n;
+  const neg = scaled < 0n;
+  const x = absBigInt(scaled);
+
+  const rounded = (x + half) / factor;
+  const back = rounded * factor;
+  return neg ? -back : back;
+}
+
 function toNumberSafe(scaled: bigint): number {
   // This route clamps inputs so Number conversion stays safe for Intl formatting.
   return Number(scaled) / Number(SCALE);
@@ -182,16 +224,24 @@ function toNumberSafe(scaled: bigint): number {
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
-  displayDecimals: number,
+  opts: { mode: "fixed"; digits: number } | { mode: "max"; maxDigits: number },
 ): string {
-  const n = toNumberSafe(scaled);
+  const digits =
+    opts.mode === "fixed"
+      ? Math.max(0, Math.min(12, Math.trunc(opts.digits)))
+      : Math.max(0, Math.min(12, Math.trunc(opts.maxDigits)));
+
+  const roundedScaled =
+    opts.mode === "fixed" ? roundScaledToDigits(scaled, digits) : scaled;
+
+  const n = toNumberSafe(roundedScaled);
   if (!Number.isFinite(n)) return "—";
 
   return new Intl.NumberFormat(undefined, {
     style: "currency",
     currency,
-    maximumFractionDigits: Math.max(0, Math.min(12, displayDecimals)),
-    minimumFractionDigits: 0,
+    maximumFractionDigits: digits,
+    minimumFractionDigits: opts.mode === "fixed" ? digits : 0,
   }).format(n);
 }
 
@@ -253,7 +303,7 @@ function parseMoneyInputToScaled(raw: string): ParsedAmount {
     // Both present: last separator is decimal, the other(s) are grouping.
     decimalSep = lastDot > lastComma ? "." : ",";
   } else if (lastDot !== -1) {
-    // Only dot: if multiple dots, treat as grouping except the last one if it looks like decimals.
+    // Only dot: treat as decimal.
     decimalSep = ".";
   } else if (lastComma !== -1) {
     // Only comma: decide decimal vs grouping.
@@ -262,18 +312,16 @@ function parseMoneyInputToScaled(raw: string): ParsedAmount {
       const after = parts[1] ?? "";
       const before = parts[0] ?? "";
 
-      // If 1-2 digits after comma, treat as decimal (common "1250,50" or "1,2").
+      // If 1-2 digits after comma, treat as decimal.
       if (/^\d{1,2}$/.test(after)) {
         decimalSep = ",";
       } else if (/^\d{3}$/.test(after) && /^\d{1,3}$/.test(before)) {
-        // Looks like thousands "1,234". Interpret as grouping but warn because some locales use comma decimals.
+        // Looks like thousands "1,234". Interpret as grouping but warn.
         decimalSep = null;
         warnings.push(
           `Interpreted "${s0}" as thousands grouping (1234). If you meant a decimal, use a dot like "1.234".`,
         );
       } else {
-        // Could be multi-comma grouping or ambiguous patterns.
-        // If multiple commas, assume grouping. If single comma with unusual digits, reject.
         return {
           ok: false,
           error:
@@ -294,7 +342,6 @@ function parseMoneyInputToScaled(raw: string): ParsedAmount {
   if (decimalSep) {
     const split = s.split(decimalSep);
     if (split.length > 2) {
-      // Multiple decimals of same kind. Treat as invalid.
       return {
         ok: false,
         error: "Enter a valid number (too many decimal separators).",
@@ -306,8 +353,6 @@ function parseMoneyInputToScaled(raw: string): ParsedAmount {
   }
 
   // Remove grouping separators from intPart
-  // If decimalSep is ".", commas are grouping; if decimalSep is ",", dots are grouping.
-  // If no decimalSep, both '.' and ',' are treated as grouping.
   if (decimalSep === ".") intPart = intPart.replace(/,/g, "");
   else if (decimalSep === ",") intPart = intPart.replace(/\./g, "");
   else intPart = intPart.replace(/[.,]/g, "");
@@ -334,9 +379,6 @@ function parseMoneyInputToScaled(raw: string): ParsedAmount {
     };
   }
 
-  // Cap fractional digits to MAX_DECIMALS (truncate for internal precision cap).
-  // This is not display rounding; it is an internal precision cap to avoid unbounded decimals.
-  // We keep MAX_DECIMALS high (12) so normal money inputs are preserved comfortably.
   const maxDec = Number(MAX_DECIMALS);
   const fracRaw = fracPart ?? "";
   const fracCapped =
@@ -355,7 +397,7 @@ function parseMoneyInputToScaled(raw: string): ParsedAmount {
   }
 
   // Normalized string for display in “interpreted as”
-  const normalized = fracRaw.length ? `${intPart}.${fracCapped}` : `${intPart}`; // preserve "12." as "12" in normalized form
+  const normalized = fracRaw.length ? `${intPart}.${fracCapped}` : `${intPart}`;
 
   return { ok: true, scaled: clamped, normalized, warnings };
 }
@@ -394,7 +436,6 @@ function annualToPeriodScaled(annualScaled: bigint, period: Period): bigint {
 }
 
 function buildCsvRow(cols: string[]): string {
-  // RFC4180-ish minimal CSV escaping
   return cols
     .map((c) => {
       const s = String(c ?? "");
@@ -491,6 +532,22 @@ export default function AnnualToBiweeklyRent() {
 
   const annualScaled = parsed.ok ? (parsed.scaled as bigint) : 0n;
 
+  const fmt = (scaled: bigint) =>
+    roundDisplay
+      ? formatCurrencyFromScaled(scaled, currency, {
+          mode: "fixed",
+          digits: displayDecimals,
+        })
+      : formatCurrencyFromScaled(scaled, currency, {
+          mode: "max",
+          maxDigits: 12,
+        });
+
+  const interpretationLine = useMemo(() => {
+    if (!parsed.ok) return null;
+    return fmt(annualScaled);
+  }, [parsed.ok, annualScaled, currency, roundDisplay, displayDecimals]);
+
   const breakdownScaled = useMemo(() => {
     if (!parsed.ok) return null;
 
@@ -504,7 +561,7 @@ export default function AnnualToBiweeklyRent() {
 
     const monthlyMinus4w = monthly - every4w;
     const monthlyMinus4wPct =
-      every4w === 0n ? 0 : Number(monthlyMinus4w) / Number(every4w); // ratio only
+      every4w === 0n ? 0 : Number(monthlyMinus4w) / Number(every4w);
 
     const annualFromMonthly12 = monthly * 12n;
     const annualFromBiweekly26 = biweekly * 26n;
@@ -527,16 +584,6 @@ export default function AnnualToBiweeklyRent() {
   }, [parsed.ok, annualScaled]);
 
   const headlineBiweeklyScaled = breakdownScaled?.biweekly ?? 0n;
-
-  const effectiveDisplayDecimals = roundDisplay ? displayDecimals : 12;
-
-  const fmt = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, effectiveDisplayDecimals);
-
-  const interpretationLine = useMemo(() => {
-    if (!parsed.ok) return null;
-    return fmt(annualScaled);
-  }, [parsed.ok, annualScaled, currency, effectiveDisplayDecimals]);
 
   const canShowResults = parsed.ok && breakdownScaled !== null;
 
@@ -717,9 +764,13 @@ export default function AnnualToBiweeklyRent() {
 
       <section className="pb-4 rc-no-print">
         <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-500">
-          <a href={safeHref("/")} className="hover:underline">
-            Home
-          </a>{" "}
+          {ROUTE_WHITELIST.has("/") ? (
+            <SafeLink href="/" className="hover:underline">
+              Home
+            </SafeLink>
+          ) : (
+            <span>Home</span>
+          )}{" "}
           / Annual to Biweekly Rent Converter
         </nav>
       </section>
@@ -733,27 +784,6 @@ export default function AnnualToBiweeklyRent() {
           paycheque-style budgeting. Decimal-safe parsing, no guessing on
           ambiguous inputs, and an exportable breakdown.
         </p>
-
-        <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3 text-sm">
-          <a
-            href={safeHref("/rent-converter")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Rent converter hub
-          </a>
-          <a
-            href={safeHref("/weekly-to-monthly-rent")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Weekly to monthly
-          </a>
-          <a
-            href={safeHref("/how-much-rent-can-i-afford")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            How much rent can I afford
-          </a>
-        </div>
       </section>
 
       <section id="converter" className="mx-auto max-w-6xl px-6 pb-6">
@@ -764,19 +794,6 @@ export default function AnnualToBiweeklyRent() {
             </h2>
 
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
-              <button
-                type="button"
-                onClick={handleExportCsv}
-                disabled={!canShowResults}
-                className={`rounded-xl border px-4 py-2 text-sm font-semibold transition ${
-                  canShowResults
-                    ? "border-slate-200 bg-white text-slate-800 hover:bg-sky-50 hover:border-sky-200"
-                    : "border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed"
-                }`}
-                aria-disabled={!canShowResults}
-              >
-                Export CSV
-              </button>
               <button
                 type="button"
                 onClick={handlePrint}
@@ -986,7 +1003,9 @@ export default function AnnualToBiweeklyRent() {
                       onClick={() =>
                         handleCopy(
                           "summary",
-                          `Annual: ${fmt(annualScaled)} | Biweekly (14 days): ${fmt(headlineBiweeklyScaled)} | Assumptions: 365-day year`,
+                          `Annual: ${fmt(annualScaled)} | Biweekly (14 days): ${fmt(
+                            headlineBiweeklyScaled,
+                          )} | Assumptions: 365-day year`,
                         )
                       }
                       className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
@@ -1193,26 +1212,12 @@ export default function AnnualToBiweeklyRent() {
 
         <p className="text-slate-700 mb-4">
           Related tools:{" "}
-          <a
-            href={safeHref("/rent-converter")}
+          <SafeLink
+            href="/rent-converter"
             className="text-sky-700 hover:underline"
           >
             rent converter
-          </a>
-          ,{" "}
-          <a
-            href={safeHref("/weekly-to-monthly-rent")}
-            className="text-sky-700 hover:underline"
-          >
-            weekly to monthly rent
-          </a>
-          ,{" "}
-          <a
-            href={safeHref("/how-much-rent-can-i-afford")}
-            className="text-sky-700 hover:underline"
-          >
-            how much rent can I afford
-          </a>
+          </SafeLink>
           .
         </p>
       </section>

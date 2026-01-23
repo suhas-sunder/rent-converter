@@ -35,7 +35,7 @@ export const meta: Route.MetaFunction = () => [
   },
   {
     property: "og:url",
-    content: "https://rentconverter.com/rent-paid-every-4-weeks",
+    content: "https://rentconverter.com/rent-paid-every-4-weeks-calculator",
   },
   { property: "og:site_name", content: "RentConverter.com" },
   { property: "og:image", content: "https://rentconverter.com/og-image.jpg" },
@@ -54,7 +54,7 @@ export const meta: Route.MetaFunction = () => [
 
   {
     rel: "canonical",
-    href: "https://rentconverter.com/rent-paid-every-4-weeks",
+    href: "https://rentconverter.com/rent-paid-every-4-weeks-calculator",
   },
 ];
 
@@ -109,9 +109,60 @@ function isCurrency(x: string): x is Currency {
  * If you do not have a whitelist here, replace safeHref() usage with plain hrefs.
  */
 const ROUTE_WHITELIST = new Set<string>([
+  // Home
   "/",
+
+  // Rent converter hub
   "/rent-converter",
-  "/rent-paid-every-4-weeks",
+
+  // Frequency converters
+  "/monthly-to-weekly-rent-converter",
+  "/weekly-to-monthly-rent-converter",
+  "/weekly-to-annual-rent-converter",
+  "/weekly-to-biweekly-rent-converter",
+
+  "/biweekly-to-weekly-rent-converter",
+  "/biweekly-to-monthly-rent-converter",
+  "/biweekly-to-annual-rent-converter",
+
+  "/monthly-to-annual-rent-converter",
+  "/annual-to-monthly-rent-converter",
+
+  "/monthly-to-daily-rent-converter",
+  "/daily-to-monthly-rent-converter",
+
+  "/monthly-to-hourly-rent-converter",
+  "/hourly-to-monthly-rent-converter",
+
+  "/hourly-to-annual-rent-converter",
+  "/annual-to-hourly-rent-converter",
+
+  "/annual-to-weekly-rent-converter",
+  "/annual-to-biweekly-rent-converter",
+  "/monthly-to-biweekly-rent-converter",
+
+  // Rent calculators
+  "/rent-calculator",
+  "/rent-per-day-calculator",
+  "/rent-per-week-calculator",
+  "/rent-paid-every-4-weeks-calculator",
+  "/rent-per-paycheck-calculator",
+  "/rent-split-calculator",
+  "/rent-due-date-calculator",
+
+  // Affordability and income
+  "/rent-as-percentage-of-income-calculator",
+  "/how-much-rent-can-i-afford-calculator",
+  "/rent-after-tax-income-calculator",
+  "/rent-vs-take-home-pay-calculator",
+
+  // Rent increases
+  "/rent-increase-calculator",
+  "/rent-increase-percentage-calculator",
+  "/rent-after-increase-calculator",
+
+  // Rent vs buy
+  "/rent-vs-buy-calculator",
 ]);
 
 function safeHref(path: string): string {
@@ -330,7 +381,8 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
 
 export default function RentPaidEvery4Weeks() {
   const pageName = "Rent Paid Every 4 Weeks (28 Days) Calculator";
-  const canonicalUrl = "https://rentconverter.com/rent-paid-every-4-weeks";
+  const canonicalUrl =
+    "https://rentconverter.com/rent-paid-every-4-weeks-calculator";
 
   const [amount, setAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "650";
@@ -633,8 +685,11 @@ export default function RentPaidEvery4Weeks() {
     }
   };
 
+  const amountHelpId = "rc-4w-amount-help";
+  const amountErrorId = "rc-4w-amount-error";
+
   return (
-    <main className="bg-white text-slate-700 scroll-smooth">
+    <main className="bg-white text-slate-700 scroll-smooth text-[15px] sm:text-base leading-relaxed">
       <style
         dangerouslySetInnerHTML={{
           __html: `
@@ -649,9 +704,12 @@ export default function RentPaidEvery4Weeks() {
       />
 
       {/* Breadcrumbs */}
-      <section className="pt-6 pb-4 rc-no-print">
-        <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-500">
-          <a href={safeHref("/")} className="hover:underline">
+      <section className="pb-4 rc-no-print">
+        <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-600">
+          <a
+            href={safeHref("/")}
+            className="hover:underline rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+          >
             Home
           </a>{" "}
           / {pageName}
@@ -660,22 +718,15 @@ export default function RentPaidEvery4Weeks() {
 
       {/* Header */}
       <section className="pb-8 text-center bg-white rc-no-print">
-        <h1 className="text-4xl font-bold text-slate-800 mb-4">{pageName}</h1>
-        <p className="text-slate-600 max-w-3xl mx-auto text-lg">
+        <h1 className="text-4xl sm:text-[2.6rem] leading-tight font-bold text-slate-900 mb-4">
+          {pageName}
+        </h1>
+        <p className="text-slate-600 max-w-3xl mx-auto text-lg leading-relaxed">
           A 4-week rent schedule is a 28-day cycle, not a calendar month. This
           page converts a 4-week rent amount into monthly (average) and annual
           equivalents so you can compare listings and budgets on the same annual
           basis.
         </p>
-
-        <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3 text-sm">
-          <a
-            href={safeHref("/rent-converter")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Rent converter
-          </a>
-        </div>
       </section>
 
       {/* Calculator */}
@@ -686,7 +737,7 @@ export default function RentPaidEvery4Weeks() {
               <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
                 Convert 4-week rent to monthly and annual
               </h2>
-              <p className="mt-1 text-sm text-slate-600">
+              <p className="mt-1 text-sm text-slate-600 leading-relaxed">
                 Inputs are validated. Invalid input hides results, so you do not
                 get misleading zeros.
               </p>
@@ -695,21 +746,8 @@ export default function RentPaidEvery4Weeks() {
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
               <button
                 type="button"
-                onClick={handleExportCsv}
-                disabled={!computed.ok}
-                className={`rounded-xl border px-4 py-2 text-sm font-semibold transition ${
-                  computed.ok
-                    ? "border-slate-200 bg-white text-slate-800 hover:bg-sky-50 hover:border-sky-200"
-                    : "border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed"
-                }`}
-                aria-disabled={!computed.ok}
-              >
-                Export CSV
-              </button>
-              <button
-                type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
               >
                 Print / Save as PDF
               </button>
@@ -718,28 +756,45 @@ export default function RentPaidEvery4Weeks() {
 
           <div className="grid gap-5 md:grid-cols-12">
             <div className="md:col-span-6">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label
+                htmlFor="rc-4w-amount"
+                className="block text-sm font-semibold text-slate-800 mb-2"
+              >
                 4-week rent amount (every 28 days)
               </label>
 
               <div className="flex gap-2">
                 <input
+                  id="rc-4w-amount"
                   inputMode="decimal"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                   placeholder="e.g. 650 or 650.00"
-                  className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className={`w-full rounded-xl border px-4 py-3.5 text-base outline-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
+                    parsed.ok
+                      ? "border-slate-300 focus:border-sky-600"
+                      : "border-rose-300 focus:border-rose-500"
+                  }`}
                   aria-invalid={!parsed.ok}
+                  aria-describedby={
+                    parsed.ok
+                      ? amountHelpId
+                      : `${amountHelpId} ${amountErrorId}`
+                  }
                 />
 
+                <label htmlFor="rc-4w-currency" className="sr-only">
+                  Currency
+                </label>
                 <select
+                  id="rc-4w-currency"
                   value={currency}
                   onChange={(e) =>
                     setCurrency(
                       isCurrency(e.target.value) ? e.target.value : "CAD",
                     )
                   }
-                  className="rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="rounded-xl border border-slate-300 bg-white px-3.5 py-3.5 text-sm font-semibold outline-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus:border-sky-600"
                   aria-label="Currency"
                 >
                   {SUPPORTED_CURRENCIES.map((c) => (
@@ -750,36 +805,39 @@ export default function RentPaidEvery4Weeks() {
                 </select>
               </div>
 
-              <p className="mt-2 text-xs text-slate-500">
+              <p id={amountHelpId} className="mt-2 text-xs text-slate-600">
                 Accepted inputs: $650, 650, 650.00, .5, 12., 650,50 (comma
                 decimal). Ambiguous formats are rejected.
               </p>
 
               {!parsed.ok ? (
-                <p className="mt-2 text-sm font-semibold text-rose-700">
+                <p
+                  id={amountErrorId}
+                  className="mt-2 text-sm font-semibold text-rose-700"
+                >
                   {parsed.error}
                 </p>
               ) : null}
             </div>
 
             <div className="md:col-span-6">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label className="block text-sm font-semibold text-slate-800 mb-2">
                 Display
               </label>
               <div className="rounded-xl border border-slate-200 bg-white p-4">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                  <label className="flex items-center gap-2 text-sm text-slate-700">
+                  <label className="flex items-center gap-2 text-sm text-slate-800">
                     <input
                       type="checkbox"
                       checked={roundDisplay}
                       onChange={(e) => setRoundDisplay(e.target.checked)}
-                      className="h-4 w-4"
+                      className="h-4 w-4 rounded border-slate-300 text-sky-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                     />
                     Round displayed values (display only)
                   </label>
 
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-slate-500">
+                    <span className="text-xs text-slate-600">
                       Displayed decimals
                     </span>
                     <select
@@ -795,7 +853,8 @@ export default function RentPaidEvery4Weeks() {
                           ),
                         )
                       }
-                      className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
+                      className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus:border-sky-600"
+                      aria-label="Displayed decimals"
                     >
                       <option value={0}>0</option>
                       <option value={2}>2</option>
@@ -805,7 +864,7 @@ export default function RentPaidEvery4Weeks() {
                   </div>
                 </div>
 
-                <p className="mt-2 text-xs text-slate-500">
+                <p className="mt-2 text-xs text-slate-600">
                   Calculations preserve decimals internally (up to 12). Only
                   display rounding changes.
                 </p>
@@ -814,13 +873,18 @@ export default function RentPaidEvery4Weeks() {
           </div>
 
           {/* Results */}
-          <div className="mt-6 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
+          <div
+            className="mt-6 rounded-2xl border border-slate-200 border-l-4 border-l-sky-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block"
+            role="region"
+            aria-label="Results"
+            aria-live="polite"
+          >
             {!computed.ok ? (
               <div className="rounded-xl border border-slate-200 bg-white p-4">
-                <div className="font-semibold text-slate-800">
+                <div className="font-semibold text-slate-900">
                   No results to show
                 </div>
-                <p className="mt-1 text-sm text-slate-600">
+                <p className="mt-1 text-sm text-slate-700">
                   Fix the input to calculate equivalents.
                 </p>
                 <ul className="mt-3 list-disc pl-5 space-y-1 text-sm text-rose-700">
@@ -841,11 +905,11 @@ export default function RentPaidEvery4Weeks() {
               </div>
             ) : (
               <>
-                <div className="text-sm text-slate-600">
-                  4-week rent equivalents (annual-basis)
+                <div className="text-sm text-slate-700">
+                  4-week rent equivalents (annual basis)
                 </div>
 
-                <div className="rc-no-print mt-4 flex flex-wrap gap-2">
+                <div className="rc-no-print mt-4 flex flex-wrap gap-2 items-center">
                   <button
                     type="button"
                     onClick={() =>
@@ -858,10 +922,18 @@ export default function RentPaidEvery4Weeks() {
                         )} (365-day basis)`,
                       )
                     }
-                    className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                    className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                   >
                     {copiedKey === "summary" ? "Copied" : "Copy summary"}
                   </button>
+
+                  <span className="sr-only" aria-live="polite">
+                    {copiedKey === "summary"
+                      ? "Copied"
+                      : copiedKey === "copy_failed"
+                        ? "Copy failed"
+                        : ""}
+                  </span>
 
                   {copiedKey === "copy_failed" ? (
                     <span className="self-center text-sm font-semibold text-rose-700">
@@ -888,105 +960,105 @@ export default function RentPaidEvery4Weeks() {
                   ).map(([label, val, key]) => (
                     <div
                       key={key}
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-3"
+                      className="rounded-xl border border-slate-200 border-t-2 border-t-sky-100 bg-white px-4 py-3.5 shadow-sm"
                     >
-                      <div className="text-xs text-slate-500">{label}</div>
-                      <div className="mt-1 text-lg font-bold text-slate-900">
+                      <div className="text-xs text-slate-600">{label}</div>
+                      <div className="mt-1 text-lg font-bold text-slate-900 tabular-nums whitespace-nowrap">
                         {fmtMoney(val)}
                       </div>
                     </div>
                   ))}
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
-                    <div className="text-xs text-slate-500">
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3.5 shadow-sm">
+                    <div className="text-xs text-slate-600">
                       4-week vs monthly (same annual basis)
                     </div>
                     <div className="mt-2 grid gap-2 sm:grid-cols-3">
                       <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
-                        <div className="text-xs text-slate-500">
+                        <div className="text-xs text-slate-600">
                           4-week amount
                         </div>
-                        <div className="mt-1 text-sm font-bold text-slate-900">
+                        <div className="mt-1 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
                           {fmtMoney(computed.every4wScaled)}
                         </div>
-                        <div className="mt-1 text-xs text-slate-500">
+                        <div className="mt-1 text-xs text-slate-600">
                           Fixed 28-day period
                         </div>
                       </div>
 
                       <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
-                        <div className="text-xs text-slate-500">
+                        <div className="text-xs text-slate-600">
                           Monthly equivalent
                         </div>
-                        <div className="mt-1 text-sm font-bold text-slate-900">
+                        <div className="mt-1 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
                           {fmtMoney(computed.monthlyScaled)}
                         </div>
-                        <div className="mt-1 text-xs text-slate-500">
+                        <div className="mt-1 text-xs text-slate-600">
                           Average month (365 ÷ 12)
                         </div>
                       </div>
 
                       <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
-                        <div className="text-xs text-slate-500">Difference</div>
-                        <div className="mt-1 text-sm font-bold text-slate-900">
+                        <div className="text-xs text-slate-600">Difference</div>
+                        <div className="mt-1 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
                           {fmtMoney(computed.monthlyMinus4wScaled)}
                         </div>
-                        <div className="mt-1 text-xs text-slate-500">
+                        <div className="mt-1 text-xs text-slate-600 tabular-nums">
                           ≈ {computed.monthlyMinus4wPct.toFixed(2)}% of the
                           4-week amount
                         </div>
                       </div>
                     </div>
 
-                    <p className="mt-3 text-xs text-slate-500">
+                    <p className="mt-3 text-xs text-slate-600">
                       A 4-week period is 28 days. An average month is about
                       30.42 days (365 ÷ 12). The difference comes from period
                       length.
                     </p>
                   </div>
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
-                    <div className="text-xs text-slate-500">
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3.5 shadow-sm">
+                    <div className="text-xs text-slate-600">
                       Annual comparison: 13 payments vs 365-day equivalence
                     </div>
                     <div className="mt-2 grid gap-2 sm:grid-cols-3">
                       <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
-                        <div className="text-xs text-slate-500">
+                        <div className="text-xs text-slate-600">
                           4-week × 13
                         </div>
-                        <div className="mt-1 text-sm font-bold text-slate-900">
+                        <div className="mt-1 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
                           {fmtMoney(computed.annualVia13Scaled)}
                         </div>
-                        <div className="mt-1 text-xs text-slate-500">
+                        <div className="mt-1 text-xs text-slate-600">
                           52-week framing
                         </div>
                       </div>
 
                       <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
-                        <div className="text-xs text-slate-500">
+                        <div className="text-xs text-slate-600">
                           Annual (365-day basis)
                         </div>
-                        <div className="mt-1 text-sm font-bold text-slate-900">
+                        <div className="mt-1 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
                           {fmtMoney(computed.annualScaled)}
                         </div>
-                        <div className="mt-1 text-xs text-slate-500">
+                        <div className="mt-1 text-xs text-slate-600">
                           This tool’s basis
                         </div>
                       </div>
 
                       <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
-                        <div className="text-xs text-slate-500">Difference</div>
-                        <div className="mt-1 text-sm font-bold text-slate-900">
+                        <div className="text-xs text-slate-600">Difference</div>
+                        <div className="mt-1 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
                           {fmtMoney(computed.diffAnnualScaled)}
                         </div>
-                        <div className="mt-1 text-xs text-slate-500">
+                        <div className="mt-1 text-xs text-slate-600 tabular-nums">
                           ≈ {computed.diffAnnualPct.toFixed(2)}% vs the 13x
                           framing
                         </div>
                       </div>
                     </div>
 
-                    <p className="mt-3 text-xs text-slate-500">
+                    <p className="mt-3 text-xs text-slate-600">
                       This comparison is illustrative. Lease terms can define
                       specific payment counts or date rules.
                     </p>
@@ -1008,7 +1080,7 @@ export default function RentPaidEvery4Weeks() {
           </div>
 
           {/* Disclaimer */}
-          <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 rc-print-block">
+          <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 rc-print-block shadow-sm">
             <p className="text-xs text-slate-700 leading-relaxed">
               <strong>Disclaimer:</strong>
               <br />
@@ -1043,7 +1115,7 @@ export default function RentPaidEvery4Weeks() {
           line up cleanly with months.
         </p>
 
-        <div className="overflow-x-auto rounded-2xl border border-slate-200">
+        <div className="overflow-x-auto rounded-2xl border border-slate-200 shadow-sm">
           <table className="min-w-full bg-white">
             <thead className="bg-slate-50">
               <tr>
@@ -1063,46 +1135,58 @@ export default function RentPaidEvery4Weeks() {
             </thead>
             <tbody>
               <tr className="border-t border-slate-200">
-                <td className="px-4 py-3 text-sm text-slate-800">Monthly</td>
+                <td className="px-4 py-3 text-sm text-slate-900 font-semibold">
+                  Monthly
+                </td>
                 <td className="px-4 py-3 text-sm text-slate-800">
                   Calendar month
                 </td>
-                <td className="px-4 py-3 text-sm text-slate-800">
+                <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
                   12 payments
                 </td>
-                <td className="px-4 py-3 text-sm text-slate-800">12 months</td>
+                <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
+                  12 months
+                </td>
               </tr>
-              <tr className="border-t border-slate-200">
-                <td className="px-4 py-3 text-sm text-slate-800">
+              <tr className="border-t border-slate-200 bg-slate-50/40">
+                <td className="px-4 py-3 text-sm text-slate-900 font-semibold">
                   Every 4 weeks (28 days)
                 </td>
-                <td className="px-4 py-3 text-sm text-slate-800">28 days</td>
-                <td className="px-4 py-3 text-sm text-slate-800">
+                <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
+                  28 days
+                </td>
+                <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
                   13 payments
                 </td>
-                <td className="px-4 py-3 text-sm text-slate-800">
+                <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
                   {(365 / 28).toFixed(2)} periods
                 </td>
               </tr>
               <tr className="border-t border-slate-200">
-                <td className="px-4 py-3 text-sm text-slate-800">
+                <td className="px-4 py-3 text-sm text-slate-900 font-semibold">
                   Biweekly (every 2 weeks)
                 </td>
-                <td className="px-4 py-3 text-sm text-slate-800">14 days</td>
-                <td className="px-4 py-3 text-sm text-slate-800">
+                <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
+                  14 days
+                </td>
+                <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
                   26 payments
                 </td>
-                <td className="px-4 py-3 text-sm text-slate-800">
+                <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
                   {(365 / 14).toFixed(2)} periods
                 </td>
               </tr>
-              <tr className="border-t border-slate-200">
-                <td className="px-4 py-3 text-sm text-slate-800">Weekly</td>
-                <td className="px-4 py-3 text-sm text-slate-800">7 days</td>
-                <td className="px-4 py-3 text-sm text-slate-800">
+              <tr className="border-t border-slate-200 bg-slate-50/40">
+                <td className="px-4 py-3 text-sm text-slate-900 font-semibold">
+                  Weekly
+                </td>
+                <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
+                  7 days
+                </td>
+                <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
                   52 payments
                 </td>
-                <td className="px-4 py-3 text-sm text-slate-800">
+                <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
                   {(365 / 7).toFixed(2)} weeks
                 </td>
               </tr>
@@ -1110,7 +1194,7 @@ export default function RentPaidEvery4Weeks() {
           </table>
         </div>
 
-        <p className="mt-3 text-xs text-slate-500">
+        <p className="mt-3 text-xs text-slate-600">
           These counts are for comparison. Actual billing can depend on the
           lease start date, due-date rules, prorations, and how partial periods
           are handled.
@@ -1126,7 +1210,7 @@ export default function RentPaidEvery4Weeks() {
           How this tool works and what to expect
         </h2>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-6">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <p className="text-slate-700 mb-4">
             A 4-week rent schedule means rent is due every 28 days. Because
             calendar months are usually longer than 28 days, the due date moves
@@ -1158,7 +1242,7 @@ export default function RentPaidEvery4Weeks() {
             Related pages:{" "}
             <a
               href={safeHref("/rent-converter")}
-              className="text-sky-700 hover:underline"
+              className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded"
             >
               rent converter
             </a>
@@ -1178,7 +1262,7 @@ export default function RentPaidEvery4Weeks() {
               <h3 className="font-semibold text-lg text-slate-900 mb-1">
                 {f.q}
               </h3>
-              <p className="text-slate-700">{f.a}</p>
+              <p className="text-slate-700 leading-relaxed">{f.a}</p>
             </div>
           ))}
         </div>
@@ -1189,7 +1273,7 @@ export default function RentPaidEvery4Weeks() {
       <RentToolsByCountry />
 
       <section className="max-w-6xl mx-auto px-6 pb-10 rc-no-print">
-        <p className="text-xs text-slate-500 text-center leading-relaxed">
+        <p className="text-xs text-slate-600 text-center leading-relaxed">
           <em>
             Tools on this site are for budgeting and comparison. Calculations
             use standard time-period assumptions, including a 365-day year and

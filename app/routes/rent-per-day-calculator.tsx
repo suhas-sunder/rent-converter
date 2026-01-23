@@ -120,7 +120,38 @@ function isPeriod(x: string): x is Period {
 const ROUTE_WHITELIST = new Set<string>([
   "/",
   "/rent-converter",
+  "/monthly-to-weekly-rent-converter",
+  "/weekly-to-monthly-rent-converter",
+  "/weekly-to-annual-rent-converter",
+  "/weekly-to-biweekly-rent-converter",
+  "/biweekly-to-weekly-rent-converter",
+  "/biweekly-to-monthly-rent-converter",
+  "/biweekly-to-annual-rent-converter",
+  "/monthly-to-annual-rent-converter",
+  "/annual-to-monthly-rent-converter",
+  "/monthly-to-daily-rent-converter",
+  "/daily-to-monthly-rent-converter",
+  "/monthly-to-hourly-rent-converter",
+  "/hourly-to-monthly-rent-converter",
+  "/hourly-to-annual-rent-converter",
+  "/annual-to-hourly-rent-converter",
+  "/annual-to-weekly-rent-converter",
+  "/annual-to-biweekly-rent-converter",
+  "/monthly-to-biweekly-rent-converter",
+  "/rent-calculator",
   "/rent-per-day-calculator",
+  "/rent-per-week-calculator",
+  "/rent-paid-every-4-weeks-calculator",
+  "/rent-per-paycheck-calculator",
+  "/rent-split-calculator",
+  "/rent-due-date-calculator",
+  "/rent-as-percentage-of-income-calculator",
+  "/how-much-rent-can-i-afford-calculator",
+  "/rent-after-tax-income-calculator",
+  "/rent-vs-take-home-pay-calculator",
+  "/rent-increase-calculator",
+  "/rent-increase-percentage-calculator",
+  "/rent-after-increase-calculator",
 ]);
 
 function safeHref(path: string): string {
@@ -141,7 +172,7 @@ type ParsedScaled = {
 
 function clampScaled(v: bigint, min: bigint, max: bigint): bigint {
   if (v < min) return min;
-  if (v > max) return max;
+  if (v > max) return v > max ? max : v;
   return v;
 }
 
@@ -298,7 +329,7 @@ function annualizeFromScaled(valueScaled: bigint, from: Period): bigint {
   if (from === "biweekly") return (valueScaled * 365n) / 14n;
   if (from === "every_4_weeks") return (valueScaled * 365n) / 28n;
   if (from === "daily") return valueScaled * 365n;
-  return valueScaled * 24n * 365n; // hourly
+  return valueScaled * 24n * 365n;
 }
 
 function fromAnnualScaled(annualScaled: bigint, to: Period): bigint {
@@ -308,7 +339,7 @@ function fromAnnualScaled(annualScaled: bigint, to: Period): bigint {
   if (to === "biweekly") return (annualScaled / 365n) * 14n;
   if (to === "every_4_weeks") return (annualScaled / 365n) * 28n;
   if (to === "daily") return annualScaled / 365n;
-  return annualScaled / 365n / 24n; // hourly
+  return annualScaled / 365n / 24n;
 }
 
 function convertScaled(valueScaled: bigint, from: Period, to: Period): bigint {
@@ -387,7 +418,6 @@ export default function RentPerDayCalculator() {
     return isCurrency(saved) ? saved : "CAD";
   });
 
-  // Display-only rounding controls (do not affect computation)
   const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
     if (typeof window === "undefined") return true;
     return safeParseBoolean(localStorage.getItem("rpdc_round_display"), true);
@@ -452,7 +482,6 @@ export default function RentPerDayCalculator() {
     if (!errors.length) {
       const amountScaled = parsedAmount.scaled as bigint;
 
-      // Convert to daily (source of truth for per-day)
       const dailyScaled = convertScaled(amountScaled, from, "daily");
 
       const hourlyScaled = convertScaled(amountScaled, from, "hourly");
@@ -676,8 +705,20 @@ export default function RentPerDayCalculator() {
     url: canonicalUrl,
   };
 
+  const amountInputId = "rpdc_amount_input";
+  const amountHelpId = "rpdc_amount_help";
+  const amountErrorId = "rpdc_amount_error";
+
+  const periodSelectId = "rpdc_period_select";
+
+  const roundCheckboxId = "rpdc_round_display";
+  const decimalsSelectId = "rpdc_display_decimals";
+
+  const daysInputId = "rpdc_days_input";
+  const daysErrorId = "rpdc_days_error";
+
   return (
-    <main className="bg-white text-slate-700 scroll-smooth">
+    <main className="bg-white text-slate-700 scroll-smooth antialiased">
       <style
         dangerouslySetInnerHTML={{
           __html: `
@@ -691,40 +732,34 @@ export default function RentPerDayCalculator() {
         }}
       />
 
-      <section className="max-w-6xl mx-auto px-6 pt-8 rc-no-print">
-        <nav className="text-sm text-slate-500 mb-4">
-          <a href={safeHref("/")} className="hover:underline text-slate-600">
+      <section className="max-w-6xl mx-auto px-6 rc-no-print">
+        <nav className="text-sm text-slate-600 mb-4" aria-label="Breadcrumb">
+          <a
+            href={safeHref("/")}
+            className="inline-flex items-center gap-2 rounded-md text-slate-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
+          >
             Home
           </a>{" "}
-          / <span className="text-slate-700">{pageName}</span>
+          / <span className="text-slate-800">{pageName}</span>
         </nav>
 
-        <h1 className="text-4xl font-bold text-slate-800 mb-4">{pageName}</h1>
-        <p className="text-slate-600 max-w-3xl text-lg">
+        <h1 className="text-4xl font-bold text-slate-900 mb-4">{pageName}</h1>
+        <p className="text-slate-700 max-w-3xl text-lg leading-relaxed">
           Convert rent into a daily equivalent from monthly, weekly, every 4
           weeks (28 days), biweekly, hourly, or annual amounts. The daily figure
           is derived using a consistent 365-day annual basis so different
           billing cycles can be compared on the same footing.
         </p>
-
-        <div className="mt-6 flex flex-col sm:flex-row items-center justify-start gap-3 text-sm">
-          <a
-            href={safeHref("/rent-converter")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Rent converter
-          </a>
-        </div>
       </section>
 
       <section id="calculator" className="mx-auto max-w-6xl px-6 pb-6 pt-8">
         <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:p-8 rc-print-block">
           <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
-              <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-950">
                 Daily rent equivalent
               </h2>
-              <p className="mt-1 text-sm text-slate-600">
+              <p className="mt-1 text-sm text-slate-700 leading-relaxed">
                 Inputs are validated. Invalid input hides results, so you do not
                 get misleading zeros.
               </p>
@@ -733,21 +768,8 @@ export default function RentPerDayCalculator() {
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
               <button
                 type="button"
-                onClick={handleExportCsv}
-                disabled={!computed.ok}
-                className={`rounded-xl border px-4 py-2 text-sm font-semibold transition ${
-                  computed.ok
-                    ? "border-slate-200 bg-white text-slate-800 hover:bg-sky-50 hover:border-sky-200"
-                    : "border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed"
-                }`}
-                aria-disabled={!computed.ok}
-              >
-                Export CSV
-              </button>
-              <button
-                type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
               >
                 Print / Save as PDF
               </button>
@@ -756,17 +778,22 @@ export default function RentPerDayCalculator() {
 
           <div className="grid gap-5 md:grid-cols-12">
             <div className="md:col-span-6">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label
+                htmlFor={amountInputId}
+                className="block text-sm font-semibold text-slate-800 mb-2"
+              >
                 Rent amount
               </label>
               <div className="flex gap-2">
                 <input
+                  id={amountInputId}
                   inputMode="decimal"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                   placeholder="e.g. 2000 or 2000.00"
-                  className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="w-full min-w-0 rounded-xl border border-slate-300 px-4 py-3 text-base text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
                   aria-invalid={!parsedAmount.ok}
+                  aria-describedby={`${amountHelpId}${!parsedAmount.ok ? ` ${amountErrorId}` : ""}`}
                 />
                 <select
                   value={currency}
@@ -775,7 +802,7 @@ export default function RentPerDayCalculator() {
                       isCurrency(e.target.value) ? e.target.value : "CAD",
                     )
                   }
-                  className="rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
                   aria-label="Currency"
                 >
                   {SUPPORTED_CURRENCIES.map((c) => (
@@ -785,27 +812,38 @@ export default function RentPerDayCalculator() {
                   ))}
                 </select>
               </div>
-              <p className="mt-2 text-xs text-slate-500">
+              <p
+                id={amountHelpId}
+                className="mt-2 text-xs text-slate-600 leading-relaxed"
+              >
                 Accepted inputs: $2,000, 2000.00, .5, 12., 2000,50 (comma
                 decimal). Ambiguous formats are rejected.
               </p>
               {!parsedAmount.ok ? (
-                <p className="mt-2 text-sm font-semibold text-rose-700">
+                <p
+                  id={amountErrorId}
+                  className="mt-2 text-sm font-semibold text-rose-700"
+                  role="alert"
+                >
                   {parsedAmount.error}
                 </p>
               ) : null}
             </div>
 
             <div className="md:col-span-6">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label
+                htmlFor={periodSelectId}
+                className="block text-sm font-semibold text-slate-800 mb-2"
+              >
                 Billing period for that amount
               </label>
               <select
+                id={periodSelectId}
                 value={from}
                 onChange={(e) =>
                   setFrom(isPeriod(e.target.value) ? e.target.value : "monthly")
                 }
-                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
               >
                 <option value="hourly">{PERIOD_LABEL.hourly}</option>
                 <option value="daily">{PERIOD_LABEL.daily}</option>
@@ -817,33 +855,38 @@ export default function RentPerDayCalculator() {
                 <option value="monthly">{PERIOD_LABEL.monthly}</option>
                 <option value="annual">{PERIOD_LABEL.annual}</option>
               </select>
-              <p className="mt-2 text-xs text-slate-500">
+              <p className="mt-2 text-xs text-slate-600 leading-relaxed">
                 The daily equivalent is derived by converting the input to an
                 annual total (365-day basis), then to a 1-day amount.
               </p>
             </div>
 
             <div className="md:col-span-12">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label className="block text-sm font-semibold text-slate-800 mb-2">
                 Display
               </label>
               <div className="rounded-xl border border-slate-200 bg-white p-4">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                  <label className="flex items-center gap-2 text-sm text-slate-700">
+                  <label
+                    htmlFor={roundCheckboxId}
+                    className="flex items-center gap-2 text-sm text-slate-800"
+                  >
                     <input
+                      id={roundCheckboxId}
                       type="checkbox"
                       checked={roundDisplay}
                       onChange={(e) => setRoundDisplay(e.target.checked)}
-                      className="h-4 w-4"
+                      className="h-5 w-5 accent-sky-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2 rounded"
                     />
                     Round displayed values (display only)
                   </label>
 
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-slate-500">
+                    <span className="text-xs text-slate-600">
                       Displayed decimals
                     </span>
                     <select
+                      id={decimalsSelectId}
                       value={displayDecimals}
                       onChange={(e) =>
                         setDisplayDecimals(
@@ -856,7 +899,7 @@ export default function RentPerDayCalculator() {
                           ),
                         )
                       }
-                      className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
+                      className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
                     >
                       <option value={0}>0</option>
                       <option value={2}>2</option>
@@ -866,7 +909,7 @@ export default function RentPerDayCalculator() {
                   </div>
                 </div>
 
-                <p className="mt-2 text-xs text-slate-500">
+                <p className="mt-2 text-xs text-slate-600 leading-relaxed">
                   Calculations preserve decimals internally (up to 12). Only
                   display rounding changes.
                 </p>
@@ -874,13 +917,19 @@ export default function RentPerDayCalculator() {
             </div>
           </div>
 
-          <div className="mt-6 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
+          <div
+            className="mt-6 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block"
+            role="region"
+            aria-label="Results"
+            aria-live="polite"
+            aria-atomic="true"
+          >
             {!computed.ok ? (
-              <div className="rounded-xl border border-slate-200 bg-white p-4">
-                <div className="font-semibold text-slate-800">
+              <div className="rounded-xl border border-slate-200 bg-[#f7fbff] p-4">
+                <div className="font-semibold text-slate-900">
                   No results to show
                 </div>
-                <p className="mt-1 text-sm text-slate-600">
+                <p className="mt-1 text-sm text-slate-700 leading-relaxed">
                   Fix the input to calculate the daily equivalent.
                 </p>
                 {"errors" in computed ? (
@@ -893,18 +942,23 @@ export default function RentPerDayCalculator() {
               </div>
             ) : (
               <>
-                <div className="text-sm text-slate-600">
+                <div className="text-sm text-slate-700">
                   Rent per day (annual-basis)
                 </div>
 
                 <div className="mt-2 flex flex-col gap-2">
-                  <div className="text-4xl sm:text-5xl font-extrabold text-sky-800">
+                  <div className="text-4xl sm:text-5xl font-extrabold text-sky-800 tabular-nums break-words">
                     {fmtMoney(computed.dailyScaled)}
                   </div>
-                  <div className="text-sm text-slate-600">
-                    {fmtMoney(computed.amountScaled)} per{" "}
-                    {PERIOD_LABEL[from].toLowerCase()} ≈{" "}
-                    <strong>{fmtMoney(computed.dailyScaled)}</strong> per day
+                  <div className="text-sm text-slate-700 leading-relaxed">
+                    <span className="tabular-nums whitespace-nowrap">
+                      {fmtMoney(computed.amountScaled)}
+                    </span>{" "}
+                    per {PERIOD_LABEL[from].toLowerCase()} ≈{" "}
+                    <strong className="tabular-nums whitespace-nowrap">
+                      {fmtMoney(computed.dailyScaled)}
+                    </strong>{" "}
+                    per day
                   </div>
                 </div>
 
@@ -921,13 +975,16 @@ export default function RentPerDayCalculator() {
                         )} (365-day basis)`,
                       )
                     }
-                    className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                    className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
                   >
                     {copiedKey === "summary" ? "Copied" : "Copy summary"}
                   </button>
 
                   {copiedKey === "copy_failed" ? (
-                    <span className="self-center text-sm font-semibold text-rose-700">
+                    <span
+                      className="self-center text-sm font-semibold text-rose-700"
+                      role="alert"
+                    >
                       Copy failed
                     </span>
                   ) : null}
@@ -935,7 +992,7 @@ export default function RentPerDayCalculator() {
 
                 <div className="mt-6 grid gap-4 lg:grid-cols-12">
                   <div className="lg:col-span-7">
-                    <h3 className="text-lg font-bold text-slate-900 mb-3">
+                    <h3 className="text-lg font-bold text-slate-950 mb-3">
                       Full breakdown across periods
                     </h3>
 
@@ -965,35 +1022,35 @@ export default function RentPerDayCalculator() {
                       ).map(([label, val, key]) => (
                         <div
                           key={key}
-                          className="rounded-xl border border-slate-200 bg-white px-4 py-3"
+                          className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm"
                         >
-                          <div className="text-xs text-slate-500">{label}</div>
-                          <div className="mt-1 text-lg font-bold text-slate-800">
+                          <div className="text-xs text-slate-600">{label}</div>
+                          <div className="mt-1 text-lg font-bold text-slate-900 tabular-nums whitespace-nowrap">
                             {fmtMoney(val)}
                           </div>
                         </div>
                       ))}
                     </div>
 
-                    <div className="mt-4 rounded-xl border border-slate-200 bg-white px-4 py-3">
-                      <div className="text-xs text-slate-500">
+                    <div className="mt-4 rounded-xl border border-slate-200 bg-[#f7fbff] px-4 py-3">
+                      <div className="text-xs text-slate-700">
                         Monthly vs every 4 weeks (same annual basis)
                       </div>
                       <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                        <div className="text-sm text-slate-700">
+                        <div className="text-sm text-slate-800 leading-relaxed">
                           Monthly minus 4-week:{" "}
-                          <strong className="text-slate-900">
+                          <strong className="text-slate-950 tabular-nums whitespace-nowrap">
                             {fmtMoney(computed.monthlyMinus4wScaled)}
                           </strong>
                         </div>
-                        <div className="text-sm text-slate-700">
+                        <div className="text-sm text-slate-800 leading-relaxed">
                           Difference:{" "}
-                          <strong className="text-slate-900">
+                          <strong className="text-slate-950 tabular-nums whitespace-nowrap">
                             {computed.monthlyMinus4wPct.toFixed(2)}%
                           </strong>
                         </div>
                       </div>
-                      <p className="mt-2 text-xs text-slate-500">
+                      <p className="mt-2 text-xs text-slate-600 leading-relaxed">
                         A 4-week period is 28 days. An average month is about
                         30.42 days (365 ÷ 12). The gap is period length, not a
                         special rule.
@@ -1002,45 +1059,62 @@ export default function RentPerDayCalculator() {
                   </div>
 
                   <div className="lg:col-span-5">
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5">
-                      <h3 className="text-base font-bold text-slate-900 mb-2">
+                    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                      <h3 className="text-base font-bold text-slate-950 mb-2">
                         Total for a chosen number of days
                       </h3>
-                      <p className="text-sm text-slate-600 mb-4">
+                      <p className="text-sm text-slate-700 mb-4 leading-relaxed">
                         This multiplies the daily equivalent by a day count for
                         quick comparisons. Lease proration rules can differ from
                         this estimate.
                       </p>
 
-                      <label className="block text-sm font-semibold text-slate-700 mb-2">
+                      <label
+                        htmlFor={daysInputId}
+                        className="block text-sm font-semibold text-slate-800 mb-2"
+                      >
                         Number of days
                       </label>
                       <input
+                        id={daysInputId}
                         inputMode="numeric"
                         value={daysCount}
                         onChange={(e) => setDaysCount(e.target.value)}
                         placeholder="e.g. 30"
-                        className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                        className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
                         aria-invalid={!parsedDays.ok}
+                        aria-describedby={
+                          !parsedDays.ok ? daysErrorId : undefined
+                        }
                       />
                       {!parsedDays.ok ? (
-                        <p className="mt-2 text-sm font-semibold text-rose-700">
+                        <p
+                          id={daysErrorId}
+                          className="mt-2 text-sm font-semibold text-rose-700"
+                          role="alert"
+                        >
                           {parsedDays.error}
                         </p>
                       ) : null}
 
-                      <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-                        <div className="text-xs text-slate-500">
+                      <div className="mt-4 rounded-xl border border-slate-200 bg-[#f7fbff] px-4 py-3">
+                        <div className="text-xs text-slate-700">
                           Estimated total
                         </div>
-                        <div className="mt-1 text-2xl font-extrabold text-slate-800">
+                        <div className="mt-1 text-2xl font-extrabold text-slate-900 tabular-nums break-words">
                           {totalForDaysScaled.ok
                             ? fmtMoney(totalForDaysScaled.scaled)
                             : "—"}
                         </div>
-                        <div className="mt-1 text-xs text-slate-500">
-                          {fmtMoney(computed.dailyScaled)} per day ×{" "}
-                          {parsedDays.ok ? parsedDays.n : 0} days
+                        <div className="mt-1 text-xs text-slate-600 leading-relaxed">
+                          <span className="tabular-nums whitespace-nowrap">
+                            {fmtMoney(computed.dailyScaled)}
+                          </span>{" "}
+                          per day ×{" "}
+                          <span className="tabular-nums whitespace-nowrap">
+                            {parsedDays.ok ? parsedDays.n : 0}
+                          </span>{" "}
+                          days
                         </div>
                       </div>
                     </div>
@@ -1051,7 +1125,7 @@ export default function RentPerDayCalculator() {
           </div>
 
           <section className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 rc-print-block">
-            <p className="text-xs text-slate-700 leading-relaxed">
+            <p className="text-xs text-slate-800 leading-relaxed">
               <strong>Disclaimer:</strong>
               <br />
               Tools on this site are provided for informational, budgeting, and
@@ -1069,7 +1143,7 @@ export default function RentPerDayCalculator() {
             </p>
           </section>
 
-          <p className="mt-6 text-sm text-slate-500">
+          <p className="mt-6 text-sm text-slate-600 leading-relaxed">
             Assumptions: 1 year = 365 days, 1 week = 7 days, biweekly = 14 days,
             every 4 weeks = 28 days, and month = 365 ÷ 12 days (average). Exact
             due dates and lease terms vary.
@@ -1077,42 +1151,41 @@ export default function RentPerDayCalculator() {
         </div>
       </section>
 
-      {/* Required explanation section above FAQ */}
       <section
         id="how-it-works"
         className="max-w-5xl mx-auto px-6 pt-16 rc-no-print"
       >
-        <h2 className="text-3xl font-bold mb-6 text-center text-slate-900">
+        <h2 className="text-3xl font-bold mb-6 text-center text-slate-950">
           How this tool works and what to expect
         </h2>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-6">
-          <p className="text-slate-700 mb-4">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <p className="text-slate-800 mb-4 leading-relaxed">
             This page converts your entered rent into a daily equivalent by
             using an annual total as the common basis. First, the calculator
             converts the input period to an annual amount using a 365-day year.
             Then it converts that annual amount into a 1-day value.
           </p>
 
-          <p className="text-slate-700 mb-4">
+          <p className="text-slate-800 mb-4 leading-relaxed">
             This approach avoids mixing calendar assumptions. For example,
             dividing monthly rent by 30 changes the implied annual total. Here,
             a month is treated as an average month of 365 ÷ 12 days so all
             periods remain consistent when compared.
           </p>
 
-          <p className="text-slate-700 mb-4">
+          <p className="text-slate-800 mb-4 leading-relaxed">
             The “total for a chosen number of days” box is a quick estimator
             that multiplies the daily equivalent by a day count. It is not a
             lease proration engine. Real proration depends on how the lease
             defines a billing month, due dates, partial periods, and fees.
           </p>
 
-          <p className="text-slate-700 mt-6">
+          <p className="text-slate-800 mt-6 leading-relaxed">
             Related tool:{" "}
             <a
               href={safeHref("/rent-converter")}
-              className="text-sky-700 hover:underline"
+              className="inline-flex items-center gap-2 text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
             >
               rent converter
             </a>
@@ -1122,16 +1195,16 @@ export default function RentPerDayCalculator() {
       </section>
 
       <section id="faq" className="max-w-5xl mx-auto py-16 px-6 rc-no-print">
-        <h2 className="text-3xl font-bold text-center mb-8 text-slate-800">
+        <h2 className="text-3xl font-bold text-center mb-8 text-slate-900">
           Frequently Asked Questions
         </h2>
         <div className="space-y-8">
           {faqData.map((f, i) => (
             <div key={i}>
-              <h3 className="font-semibold text-lg text-slate-800 mb-1">
+              <h3 className="font-semibold text-lg text-slate-900 mb-1">
                 {f.q}
               </h3>
-              <p className="text-slate-600">{f.a}</p>
+              <p className="text-slate-700 leading-relaxed">{f.a}</p>
             </div>
           ))}
         </div>
@@ -1142,7 +1215,7 @@ export default function RentPerDayCalculator() {
       <RentToolsByCountry />
 
       <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
-        <p className="text-xs text-slate-500 text-center leading-relaxed">
+        <p className="text-xs text-slate-600 text-center leading-relaxed">
           <em>
             Tools on this site are for budgeting and comparison. Calculations
             use standard time-period assumptions, including a 365-day year and

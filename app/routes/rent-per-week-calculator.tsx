@@ -118,13 +118,60 @@ function isPeriod(x: string): x is Period {
  * Add routes only when confirmed.
  */
 const ROUTE_WHITELIST = new Set<string>([
+  // Home
   "/",
+
+  // Rent converter hub
   "/rent-converter",
-  "/rent-paid-weekly-vs-monthly",
-  "/rent-affordability-calculator",
-  "/rent-billed-every-28-days",
-  "/true-cost-of-rent-per-week",
+
+  // Frequency converters
+  "/monthly-to-weekly-rent-converter",
+  "/weekly-to-monthly-rent-converter",
+  "/weekly-to-annual-rent-converter",
+  "/weekly-to-biweekly-rent-converter",
+
+  "/biweekly-to-weekly-rent-converter",
+  "/biweekly-to-monthly-rent-converter",
+  "/biweekly-to-annual-rent-converter",
+
+  "/monthly-to-annual-rent-converter",
+  "/annual-to-monthly-rent-converter",
+
+  "/monthly-to-daily-rent-converter",
+  "/daily-to-monthly-rent-converter",
+
+  "/monthly-to-hourly-rent-converter",
+  "/hourly-to-monthly-rent-converter",
+
+  "/hourly-to-annual-rent-converter",
+  "/annual-to-hourly-rent-converter",
+
+  "/annual-to-weekly-rent-converter",
+  "/annual-to-biweekly-rent-converter",
+  "/monthly-to-biweekly-rent-converter",
+
+  // Rent calculators
+  "/rent-calculator",
+  "/rent-per-day-calculator",
   "/rent-per-week-calculator",
+  "/rent-paid-every-4-weeks-calculator",
+  "/rent-per-paycheck-calculator",
+  "/rent-split-calculator",
+  "/rent-due-date-calculator",
+
+  // Affordability and income
+  "/rent-as-percentage-of-income-calculator",
+  "/how-much-rent-can-i-afford-calculator",
+  "/rent-after-tax-income-calculator",
+  "/rent-vs-take-home-pay-calculator",
+
+  // Rent increases
+  "/rent-increase-calculator",
+  "/rent-increase-percentage-calculator",
+  "/rent-after-increase-calculator",
+
+  // Rent vs buy
+  "/rent-vs-buy-calculator",
 ]);
 
 function safeHref(path: string): string {
@@ -665,7 +712,7 @@ export default function RentPerWeekCalculator() {
         }}
       />
 
-      <section className="max-w-6xl mx-auto px-6 pt-8 rc-no-print">
+      <section className="max-w-6xl mx-auto px-6 rc-no-print">
         <nav className="text-sm text-slate-500 mb-4">
           <a href={safeHref("/")} className="hover:underline text-slate-600">
             Home
@@ -682,7 +729,7 @@ export default function RentPerWeekCalculator() {
         </p>
       </section>
 
-      <section id="calculator" className="mx-auto max-w-6xl px-6 pb-6 pt-8">
+      <section id="calculator" className="mx-auto max-w-6xl px-6 pb-6">
         <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:p-8 rc-print-block">
           <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
@@ -695,19 +742,6 @@ export default function RentPerWeekCalculator() {
             </div>
 
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
-              <button
-                type="button"
-                onClick={handleExportCsv}
-                disabled={!computed.ok}
-                className={`rounded-xl border px-4 py-2 text-sm font-semibold transition ${
-                  computed.ok
-                    ? "border-slate-200 bg-white text-slate-800 hover:bg-sky-50 hover:border-sky-200"
-                    : "border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed"
-                }`}
-                aria-disabled={!computed.ok}
-              >
-                Export CSV
-              </button>
               <button
                 type="button"
                 onClick={handlePrint}
@@ -1054,17 +1088,6 @@ export default function RentPerWeekCalculator() {
                     Monthly: <strong>12</strong> payments per year
                   </li>
                 </ul>
-
-                <p className="text-slate-700 mb-4">
-                  For weekly context beyond simple equivalence, see{" "}
-                  <a
-                    href={safeHref("/true-cost-of-rent-per-week")}
-                    className="text-sky-700 hover:underline"
-                  >
-                    true cost of rent per week
-                  </a>
-                  .
-                </p>
               </section>
             </>
           )}

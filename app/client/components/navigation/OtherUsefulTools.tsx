@@ -162,8 +162,8 @@ export default function OtherUsefulTools() {
           desc: "Calculate the per-week cost from your rent amount and period.",
         },
         {
-          label: "Rent per person calculator",
-          href: "/rent-per-person-calculator",
+          label: "Rent Split Calculator",
+          href: "/rent-split-calculator",
           desc: "Split rent across roommates.",
         },
       ],

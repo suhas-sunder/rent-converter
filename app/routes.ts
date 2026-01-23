@@ -99,7 +99,7 @@ export default [
     "rent-per-paycheck-calculator",
     "routes/rent-per-paycheck-calculator.tsx",
   ),
-  route("rent-per-person-calculator", "routes/rent-per-person-calculator.tsx"),
+  route("rent-split-calculator", "routes/rent-split-calculator.tsx"),
   route("rent-due-date-calculator", "routes/rent-due-date-calculator.tsx"),
 
   // Affordability and income

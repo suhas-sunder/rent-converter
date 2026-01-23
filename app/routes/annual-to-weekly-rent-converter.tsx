@@ -1,23 +1,16 @@
 import { useMemo, useEffect, useRef, useState } from "react";
-import type { Route } from "./+types/annual-to-monthly-rent-converter";
+import type { Route } from "./+types/annual-to-weekly-rent-converter";
 import OtherUsefulTools from "~/client/components/navigation/OtherUsefulTools";
 import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountry";
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
-/**
- * SEO Uniqueness Checklist (internal, not user-visible)
- * - Intent: Convert an ANNUAL rent total into a MONTHLY equivalent (12-month budgeting view).
- * - Unique angle: explicitly contrasts "monthly (12)" vs "every 4 weeks (13)" and shows the annualized difference,
- *   plus a clear note that "monthly here is annual ÷ 12 (average-month equivalent), not calendar-date proration."
- * - Unique examples: monthly vs 4-week budgeting scenarios and how listings mix "monthly" wording with 28-day cycles.
- * - Unique outputs: headline monthly result + always-visible breakdown + a dedicated annualization panel (monthly×12 vs 4-week×13)
- *   + CSV export + print-to-PDF workflow.
- */
-
 export const meta: Route.MetaFunction = () => {
-  const title = "Annual to Monthly Rent Converter (Annual ÷ 12)";
+  const title = "Annual to Weekly Rent Converter";
   const description =
-    "Convert annual rent to a monthly equivalent (annual ÷ 12) with decimal-safe input. Includes 4-week (28-day) comparison, annualization (12 vs 13 payments), CSV export, and print-to-PDF. Free and private.";
+    "Convert an annual rent total to a weekly amount using annual ÷ 52 (weekly budgeting view). Also shows a 365-day-week equivalent (annual × 7 ÷ 365), plus biweekly and 28-day comparisons. Decimal-safe, exportable, and private.";
+
+  const url = "https://rentconverter.com/annual-to-weekly-rent-converter";
+  const ogImage = "https://rentconverter.com/og-image.jpg";
 
   return [
     { title },
@@ -25,7 +18,7 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "keywords",
       content:
-        "annual to monthly rent, yearly to monthly rent, annual ÷ 12, annual rent to monthly calculator, 4 week rent vs monthly, 28 day rent vs monthly, 13 payments per year, rent converter annual to monthly",
+        "annual to weekly rent converter, annual rent to weekly, yearly to weekly rent, annual divided by 52, annual ÷ 52, weekly rent equivalent, annual × 7 ÷ 365, 365 day year weekly",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
@@ -34,94 +27,95 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:type", content: "website" },
     { property: "og:title", content: title },
     { property: "og:description", content: description },
-    {
-      property: "og:url",
-      content: "https://rentconverter.com/annual-to-monthly-rent",
-    },
+    { property: "og:url", content: url },
     { property: "og:site_name", content: "RentConverter.com" },
-    { property: "og:image", content: "https://rentconverter.com/og-image.jpg" },
+    { property: "og:image", content: ogImage },
 
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
-    {
-      name: "twitter:image",
-      content: "https://rentconverter.com/og-image.jpg",
-    },
+    { name: "twitter:image", content: ogImage },
 
-    {
-      rel: "canonical",
-      href: "https://rentconverter.com/annual-to-monthly-rent",
-    },
+    { tagName: "link", rel: "canonical", href: url },
   ];
 };
 
 type Period =
   | "hourly"
   | "daily"
-  | "weekly"
+  | "weekly_budget_52"
+  | "weekly_365"
   | "biweekly"
   | "every_4_weeks"
   | "monthly"
   | "annual";
 
 const PERIOD_LABEL: Record<Period, string> = {
-  hourly: "Hourly",
-  daily: "Daily",
-  weekly: "Weekly",
+  hourly: "Hourly (365-day year)",
+  daily: "Daily (365-day year)",
+  weekly_budget_52: "Weekly (annual ÷ 52)",
+  weekly_365: "Weekly (annual × 7 ÷ 365)",
   biweekly: "Every 2 weeks (14 days)",
   every_4_weeks: "Every 4 weeks (28 days)",
   monthly: "Monthly (annual ÷ 12)",
   annual: "Annual",
 };
 
-// Whitelist rule (single source of truth)
-//
-// Use this everywhere you create internal links.
-// If a link is not in ROUTE_WHITELIST, it must not appear anywhere in the UI.
 const ROUTE_WHITELIST = new Set<string>([
+  // Home
   "/",
-  "/monthly-to-weekly-rent",
-  "/weekly-to-monthly-rent",
-  "/biweekly-to-monthly-rent",
-  "/monthly-to-annual-rent",
-  "/annual-to-monthly-rent",
-  "/monthly-to-daily-rent",
-  "/daily-to-monthly-rent",
-  "/weekly-to-annual-rent",
-  "/annual-to-weekly-rent",
-  "/hourly-to-monthly-rent",
-  "/monthly-to-hourly-rent",
-  "/hourly-to-annual-rent",
-  "/annual-to-hourly-rent",
-  "/biweekly-to-weekly-rent",
-  "/weekly-to-biweekly-rent",
-  "/monthly-to-biweekly-rent",
-  "/annual-to-biweekly-rent",
-  "/annual-to-monthly-rent",
-  "/annual-to-biweekly-rent",
-  "/biweekly-to-annual-rent",
-  "/rent-paid-every-4-weeks",
-  "/rent-paid-every-2-weeks",
-  "/rent-billed-every-28-days",
-  "/rent-per-paycheck",
-  "/rent-per-pay-period",
-  "/rent-due-date-calculator",
-  "/true-cost-of-rent-per-day",
-  "/true-cost-of-rent-per-week",
+
+  // Rent converter hub
+  "/rent-converter",
+
+  // Frequency converters
+  "/monthly-to-weekly-rent-converter",
+  "/weekly-to-monthly-rent-converter",
+  "/weekly-to-annual-rent-converter",
+  "/weekly-to-biweekly-rent-converter",
+
+  "/biweekly-to-weekly-rent-converter",
+  "/biweekly-to-monthly-rent-converter",
+  "/biweekly-to-annual-rent-converter",
+
+  "/monthly-to-annual-rent-converter",
+  "/annual-to-monthly-rent-converter",
+
+  "/monthly-to-daily-rent-converter",
+  "/daily-to-monthly-rent-converter",
+
+  "/monthly-to-hourly-rent-converter",
+  "/hourly-to-monthly-rent-converter",
+
+  "/hourly-to-annual-rent-converter",
+  "/annual-to-hourly-rent-converter",
+
+  "/annual-to-weekly-rent-converter",
+  "/annual-to-biweekly-rent-converter",
+  "/monthly-to-biweekly-rent-converter",
+
+  // Rent calculators
+  "/rent-calculator",
   "/rent-per-day-calculator",
   "/rent-per-week-calculator",
-  "/rent-as-percentage-of-income",
-  "/how-much-rent-can-i-afford",
-  "/rent-after-tax-income",
-  "/rent-vs-take-home-pay",
+  "/rent-paid-every-4-weeks-calculator",
+  "/rent-per-paycheck-calculator",
+  "/rent-split-calculator",
+  "/rent-due-date-calculator",
+
+  // Affordability and income
+  "/rent-as-percentage-of-income-calculator",
+  "/how-much-rent-can-i-afford-calculator",
+  "/rent-after-tax-income-calculator",
+  "/rent-vs-take-home-pay-calculator",
+
+  // Rent increases
   "/rent-increase-calculator",
   "/rent-increase-percentage-calculator",
   "/rent-after-increase-calculator",
-  "/rent-per-person-calculator",
+
+  // Rent vs buy
   "/rent-vs-buy-calculator",
-  "/rent-converter",
-  "/rent-calculator",
 ]);
 
 function safeHref(path: string): string {
@@ -155,12 +149,6 @@ function isCurrency(x: string): x is Currency {
   return (SUPPORTED_CURRENCIES as readonly string[]).includes(x);
 }
 
-/**
- * Decimal-safe fixed-point representation
- * - Parse money-like inputs into scaled integers (BigInt).
- * - Do not round during computation.
- * - Allow display rounding only (explicit and labeled).
- */
 const MAX_DECIMALS = 12n;
 const SCALE = 10n ** MAX_DECIMALS;
 
@@ -176,30 +164,6 @@ function clampScaled(v: bigint, min: bigint, max: bigint): bigint {
   if (v < min) return min;
   if (v > max) return max;
   return v;
-}
-
-function toNumberSafe(scaled: bigint): number {
-  return Number(scaled) / Number(SCALE);
-}
-
-function formatCurrencyFromScaled(
-  scaled: bigint,
-  currency: Currency,
-  displayDecimals: number,
-): string {
-  const n = toNumberSafe(scaled);
-  if (!Number.isFinite(n)) return "—";
-  return new Intl.NumberFormat(undefined, {
-    style: "currency",
-    currency,
-    maximumFractionDigits: Math.max(0, Math.min(12, displayDecimals)),
-    minimumFractionDigits: 0,
-  }).format(n);
-}
-
-function formatPercent(n: number, displayDecimals: number): string {
-  if (!Number.isFinite(n)) return "—";
-  return `${(n * 100).toFixed(Math.max(0, Math.min(6, displayDecimals)))}%`;
 }
 
 function parseMoneyInputToScaled(raw: string): ParsedAmount {
@@ -248,13 +212,13 @@ function parseMoneyInputToScaled(raw: string): ParsedAmount {
       } else if (/^\d{3}$/.test(after) && /^\d{1,3}$/.test(before)) {
         decimalSep = null;
         warnings.push(
-          `Interpreted "${s0}" as thousands grouping (1234). If you meant a decimal, use a dot like "1.234".`,
+          `Interpreted "${s0}" as thousands grouping. If you meant a decimal, use a dot like "1.234".`,
         );
       } else {
         return {
           ok: false,
           error:
-            'That format is ambiguous. Try "1234.56" or "1,234.56" or "1234,56" (comma decimal).',
+            'That format is ambiguous. Try "1234.56" or "1,234.56" or "1234,56".',
           warnings,
         };
       }
@@ -291,6 +255,7 @@ function parseMoneyInputToScaled(raw: string): ParsedAmount {
       error: "Enter a valid number (invalid digits).",
       warnings,
     };
+
   if (fracPart && !/^\d+$/.test(fracPart))
     return {
       ok: false,
@@ -325,19 +290,72 @@ function mulDivScaled(
   return (valueScaled * mulNum) / divDen;
 }
 
+function roundScaledForDisplay(valueScaled: bigint, decimals: number): bigint {
+  const d = Math.max(0, Math.min(12, Math.trunc(decimals)));
+  if (d >= 12) return valueScaled;
+
+  const drop = 12 - d;
+  const factor = 10n ** BigInt(drop);
+  return ((valueScaled + factor / 2n) / factor) * factor;
+}
+
+function formatMoneyFromScaled(
+  valueScaled: bigint,
+  currency: Currency,
+  decimals: number,
+  roundDisplay: boolean,
+): string {
+  const d = Math.max(0, Math.min(12, Math.trunc(decimals)));
+  const scaled = roundDisplay
+    ? roundScaledForDisplay(valueScaled, d)
+    : valueScaled;
+
+  const sign = scaled < 0n ? "-" : "";
+  const abs = scaled < 0n ? -scaled : scaled;
+
+  const intPart = abs / SCALE;
+  const fracPart = abs % SCALE;
+
+  const groupedInt = new Intl.NumberFormat(undefined, {
+    useGrouping: true,
+    maximumFractionDigits: 0,
+  }).format(Number(intPart));
+
+  if (d === 0) return `${sign}${currency} ${groupedInt}`;
+
+  const fracStr12 = fracPart.toString().padStart(12, "0");
+  const shown = fracStr12.slice(0, d).padEnd(d, "0");
+  return `${sign}${currency} ${groupedInt}.${shown}`;
+}
+
+function formatPercent(n: number, displayDecimals: number): string {
+  if (!Number.isFinite(n)) return "—";
+  const d = Math.max(0, Math.min(6, Math.trunc(displayDecimals)));
+  return `${(n * 100).toFixed(d)}%`;
+}
+
+function ratioToNumber(numer: bigint, denom: bigint, precision = 6): number {
+  if (denom === 0n) return 0;
+  const p = Math.max(0, Math.min(12, Math.trunc(precision)));
+  const factor = 10n ** BigInt(p);
+  const scaled = (numer * factor) / denom;
+  return Number(scaled) / 10 ** p;
+}
+
 function annualToPeriodScaled(annualScaled: bigint, period: Period): bigint {
   switch (period) {
     case "annual":
       return annualScaled;
-    case "monthly":
-      // Intent of this route: monthly budgeting view = annual ÷ 12
-      return mulDivScaled(annualScaled, 1n, 12n);
-    case "every_4_weeks":
-      return mulDivScaled(annualScaled, 28n, 365n);
+    case "weekly_budget_52":
+      return mulDivScaled(annualScaled, 1n, 52n);
+    case "weekly_365":
+      return mulDivScaled(annualScaled, 7n, 365n);
     case "biweekly":
       return mulDivScaled(annualScaled, 14n, 365n);
-    case "weekly":
-      return mulDivScaled(annualScaled, 7n, 365n);
+    case "every_4_weeks":
+      return mulDivScaled(annualScaled, 28n, 365n);
+    case "monthly":
+      return mulDivScaled(annualScaled, 1n, 12n);
     case "daily":
       return mulDivScaled(annualScaled, 1n, 365n);
     case "hourly":
@@ -345,6 +363,16 @@ function annualToPeriodScaled(annualScaled: bigint, period: Period): bigint {
     default:
       return annualScaled;
   }
+}
+
+function impliedAnnualFromWeeklyBudget52(weeklyScaled: bigint): bigint {
+  return weeklyScaled * 52n;
+}
+function impliedAnnualFromWeekly365(weeklyScaled: bigint): bigint {
+  return mulDivScaled(weeklyScaled, 365n, 7n);
+}
+function impliedAnnualFromEvery4Weeks13(fourWeekScaled: bigint): bigint {
+  return fourWeekScaled * 13n;
 }
 
 function buildCsvRow(cols: string[]): string {
@@ -383,25 +411,22 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   }
 }
 
-export default function AnnualToMonthlyRent() {
+export default function AnnualToWeeklyRentConverter() {
   const [amount, setAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "24000";
-    const saved = window.localStorage.getItem("rc_atm_amount");
+    const saved = window.localStorage.getItem("rc_atw_amount");
     return saved ?? "24000";
   });
 
   const [currency, setCurrency] = useState<Currency>(() => {
     if (typeof window === "undefined") return "CAD";
-    const saved =
-      typeof window === "undefined"
-        ? null
-        : window.localStorage.getItem("rc_atm_currency");
+    const saved = window.localStorage.getItem("rc_atw_currency");
     return saved && isCurrency(saved) ? saved : "CAD";
   });
 
   const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
     if (typeof window === "undefined") return 2;
-    const saved = window.localStorage.getItem("rc_atm_display_decimals");
+    const saved = window.localStorage.getItem("rc_atw_display_decimals");
     const n = saved ? Number(saved) : 2;
     if (!Number.isFinite(n)) return 2;
     return Math.max(0, Math.min(6, Math.trunc(n)));
@@ -409,7 +434,7 @@ export default function AnnualToMonthlyRent() {
 
   const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
     if (typeof window === "undefined") return true;
-    const saved = window.localStorage.getItem("rc_atm_round_display");
+    const saved = window.localStorage.getItem("rc_atw_round_display");
     return safeParseBoolean(saved, true);
   });
 
@@ -419,18 +444,18 @@ export default function AnnualToMonthlyRent() {
   useEffect(() => {
     if (typeof window === "undefined") return;
     try {
-      window.localStorage.setItem("rc_atm_amount", amount);
-      window.localStorage.setItem("rc_atm_currency", currency);
+      window.localStorage.setItem("rc_atw_amount", amount);
+      window.localStorage.setItem("rc_atw_currency", currency);
       window.localStorage.setItem(
-        "rc_atm_display_decimals",
+        "rc_atw_display_decimals",
         String(displayDecimals),
       );
       window.localStorage.setItem(
-        "rc_atm_round_display",
+        "rc_atw_round_display",
         JSON.stringify(roundDisplay),
       );
     } catch {
-      // ignore
+      return;
     }
   }, [amount, currency, displayDecimals, roundDisplay]);
 
@@ -442,61 +467,71 @@ export default function AnnualToMonthlyRent() {
 
   const parsedAnnual = useMemo(() => parseMoneyInputToScaled(amount), [amount]);
   const annualScaled = parsedAnnual.ok ? (parsedAnnual.scaled as bigint) : 0n;
-
   const canShowResults = parsedAnnual.ok;
 
   const breakdownScaled = useMemo(() => {
     if (!parsedAnnual.ok) return null;
 
-    const hourly = annualToPeriodScaled(annualScaled, "hourly");
-    const daily = annualToPeriodScaled(annualScaled, "daily");
-    const weekly = annualToPeriodScaled(annualScaled, "weekly");
+    const weeklyBudget = annualToPeriodScaled(annualScaled, "weekly_budget_52");
+    const weekly365 = annualToPeriodScaled(annualScaled, "weekly_365");
     const biweekly = annualToPeriodScaled(annualScaled, "biweekly");
     const every4w = annualToPeriodScaled(annualScaled, "every_4_weeks");
     const monthly = annualToPeriodScaled(annualScaled, "monthly");
+    const daily = annualToPeriodScaled(annualScaled, "daily");
+    const hourly = annualToPeriodScaled(annualScaled, "hourly");
     const annual = annualScaled;
 
-    // Dedicated 12 vs 13 payment schedule context (unique angle for this route)
-    const annualFromMonthly12 = monthly * 12n;
-    const annualFrom4w13 = every4w * 13n;
-    const annualFromWeekly52 = weekly * 52n;
+    const weeklyBudgetMinus365 = weeklyBudget - weekly365;
+    const weeklyBudgetMinus365Pct = ratioToNumber(
+      weeklyBudgetMinus365,
+      weekly365,
+      8,
+    );
 
-    const monthlyMinus4w = monthly - every4w;
-    const monthlyMinus4wPct =
-      every4w === 0n ? 0 : Number(monthlyMinus4w) / Number(every4w);
+    const impliedAnnualWeekly52 = impliedAnnualFromWeeklyBudget52(weeklyBudget);
+    const impliedAnnualWeekly365 = impliedAnnualFromWeekly365(weekly365);
+    const impliedAnnual4w13 = impliedAnnualFromEvery4Weeks13(every4w);
 
-    const annualDiff_13vs12 = annualFrom4w13 - annualFromMonthly12;
-    const annualDiff_13vs12Pct =
-      annualFromMonthly12 === 0n
-        ? 0
-        : Number(annualDiff_13vs12) / Number(annualFromMonthly12);
+    const diff4w13_vs_weekly52 = impliedAnnual4w13 - impliedAnnualWeekly52;
+    const diff4w13_vs_weekly52Pct = ratioToNumber(
+      diff4w13_vs_weekly52,
+      impliedAnnualWeekly52,
+      8,
+    );
+
+    const reconstructionGapWeekly52 = annual - impliedAnnualWeekly52;
+    const reconstructionGapWeekly365 = annual - impliedAnnualWeekly365;
 
     return {
       hourly,
       daily,
-      weekly,
+      weeklyBudget,
+      weekly365,
       biweekly,
       every4w,
       monthly,
       annual,
-
-      monthlyMinus4w,
-      monthlyMinus4wPct,
-
-      annualFromMonthly12,
-      annualFrom4w13,
-      annualFromWeekly52,
-
-      annualDiff_13vs12,
-      annualDiff_13vs12Pct,
+      weeklyBudgetMinus365,
+      weeklyBudgetMinus365Pct,
+      impliedAnnualWeekly52,
+      impliedAnnualWeekly365,
+      impliedAnnual4w13,
+      diff4w13_vs_weekly52,
+      diff4w13_vs_weekly52Pct,
+      reconstructionGapWeekly52,
+      reconstructionGapWeekly365,
     };
   }, [parsedAnnual.ok, annualScaled]);
 
-  const effectiveDisplayDecimals = roundDisplay ? displayDecimals : 12;
-  const fmt = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, effectiveDisplayDecimals);
+  const effectiveDecimals = roundDisplay ? displayDecimals : 12;
 
-  const monthlyHeadlineScaled = breakdownScaled?.monthly ?? 0n;
+  const fmt = (scaled: bigint) =>
+    formatMoneyFromScaled(scaled, currency, effectiveDecimals, roundDisplay);
+
+  const fmtFull = (scaled: bigint) =>
+    formatMoneyFromScaled(scaled, currency, 12, false);
+
+  const weeklyHeadlineScaled = breakdownScaled?.weeklyBudget ?? 0n;
 
   const handleCopy = async (key: string, text: string) => {
     try {
@@ -515,84 +550,126 @@ export default function AnnualToMonthlyRent() {
     if (!canShowResults || !breakdownScaled) return;
 
     const rows: string[] = [];
-    rows.push(buildCsvRow(["Annual to Monthly Rent Converter"]));
+    rows.push(buildCsvRow(["Annual to Weekly Rent Converter"]));
     rows.push(
       buildCsvRow([
-        "Assumptions",
-        "Year=365 days",
-        "Month=annual ÷ 12 (budgeting view)",
-        "4-week=28 days (13 cycles/year)",
+        "Headline definition",
+        "Weekly (budgeting)=annual ÷ 52",
+        "Also shown",
+        "Weekly (365-day)=annual × 7 ÷ 365",
       ]),
     );
     rows.push(buildCsvRow(["Currency formatting", currency]));
     rows.push(
       buildCsvRow([
-        "Display",
+        "Display mode",
         roundDisplay
-          ? `Rounded to ${displayDecimals} decimals for display`
-          : "No display rounding (shows up to 12 decimals)",
+          ? `Rounded for display to ${displayDecimals} decimals`
+          : "No display rounding (shows 12 decimals)",
       ]),
     );
     rows.push(buildCsvRow([""]));
 
     rows.push(buildCsvRow(["Input (Annual)", fmt(annualScaled)]));
-    rows.push(buildCsvRow(["Headline (Monthly)", fmt(monthlyHeadlineScaled)]));
-    rows.push(buildCsvRow(["Monthly definition", "Annual ÷ 12"]));
+    rows.push(
+      buildCsvRow([
+        "Headline (Weekly, annual ÷ 52)",
+        fmt(weeklyHeadlineScaled),
+      ]),
+    );
     rows.push(buildCsvRow([""]));
 
-    rows.push(buildCsvRow(["Period", "Amount"]));
+    rows.push(
+      buildCsvRow([
+        "Period",
+        "Amount (shown)",
+        "Amount (full precision, 12dp)",
+      ]),
+    );
     const items: Array<[Period, bigint]> = [
       ["hourly", breakdownScaled.hourly],
       ["daily", breakdownScaled.daily],
-      ["weekly", breakdownScaled.weekly],
+      ["weekly_budget_52", breakdownScaled.weeklyBudget],
+      ["weekly_365", breakdownScaled.weekly365],
       ["biweekly", breakdownScaled.biweekly],
       ["every_4_weeks", breakdownScaled.every4w],
       ["monthly", breakdownScaled.monthly],
       ["annual", breakdownScaled.annual],
     ];
     for (const [p, val] of items)
-      rows.push(buildCsvRow([PERIOD_LABEL[p], fmt(val)]));
+      rows.push(buildCsvRow([PERIOD_LABEL[p], fmt(val), fmtFull(val)]));
 
     rows.push(buildCsvRow([""]));
+    rows.push(buildCsvRow(["Weekly comparison", "", ""]));
     rows.push(
       buildCsvRow([
-        "Monthly minus 4-week",
-        fmt(breakdownScaled.monthlyMinus4w),
+        "(Annual ÷ 52) minus (Annual × 7 ÷ 365)",
+        fmt(breakdownScaled.weeklyBudgetMinus365),
+        fmtFull(breakdownScaled.weeklyBudgetMinus365),
       ]),
     );
     rows.push(
       buildCsvRow([
-        "Monthly vs 4-week difference (%)",
-        formatPercent(breakdownScaled.monthlyMinus4wPct, 2),
+        "Difference (%) relative to 365-day weekly",
+        formatPercent(breakdownScaled.weeklyBudgetMinus365Pct, 4),
+        "",
       ]),
     );
 
     rows.push(buildCsvRow([""]));
-    rows.push(buildCsvRow(["Annualization context (illustrative)"]));
-    rows.push(
-      buildCsvRow(["Monthly × 12", fmt(breakdownScaled.annualFromMonthly12)]),
-    );
-    rows.push(
-      buildCsvRow(["4-week × 13", fmt(breakdownScaled.annualFrom4w13)]),
-    );
-    rows.push(
-      buildCsvRow(["Weekly × 52", fmt(breakdownScaled.annualFromWeekly52)]),
-    );
+    rows.push(buildCsvRow(["Illustrative annualization", "", ""]));
     rows.push(
       buildCsvRow([
-        "13 vs 12 difference",
-        fmt(breakdownScaled.annualDiff_13vs12),
+        "Implied annual from weekly (annual ÷ 52) × 52",
+        fmt(breakdownScaled.impliedAnnualWeekly52),
+        fmtFull(breakdownScaled.impliedAnnualWeekly52),
       ]),
     );
     rows.push(
       buildCsvRow([
-        "13 vs 12 difference (%)",
-        formatPercent(breakdownScaled.annualDiff_13vs12Pct, 2),
+        "Implied annual from weekly (annual × 7 ÷ 365) × 365 ÷ 7",
+        fmt(breakdownScaled.impliedAnnualWeekly365),
+        fmtFull(breakdownScaled.impliedAnnualWeekly365),
+      ]),
+    );
+    rows.push(
+      buildCsvRow([
+        "Implied annual from 4-week × 13",
+        fmt(breakdownScaled.impliedAnnual4w13),
+        fmtFull(breakdownScaled.impliedAnnual4w13),
+      ]),
+    );
+    rows.push(
+      buildCsvRow([
+        "4-week(13) minus weekly(52)",
+        fmt(breakdownScaled.diff4w13_vs_weekly52),
+        fmtFull(breakdownScaled.diff4w13_vs_weekly52),
+      ]),
+    );
+    rows.push(
+      buildCsvRow([
+        "4-week(13) vs weekly(52) difference (%)",
+        formatPercent(breakdownScaled.diff4w13_vs_weekly52Pct, 4),
+        "",
+      ]),
+    );
+    rows.push(
+      buildCsvRow([
+        "Input annual minus implied annual (weekly ÷ 52 reconstruction gap)",
+        fmt(breakdownScaled.reconstructionGapWeekly52),
+        fmtFull(breakdownScaled.reconstructionGapWeekly52),
+      ]),
+    );
+    rows.push(
+      buildCsvRow([
+        "Input annual minus implied annual (365-day weekly reconstruction gap)",
+        fmt(breakdownScaled.reconstructionGapWeekly365),
+        fmtFull(breakdownScaled.reconstructionGapWeekly365),
       ]),
     );
 
     downloadTextFile(
-      "annual-to-monthly-rent.csv",
+      "annual-to-weekly-rent-converter.csv",
       rows.join("\n"),
       "text/csv;charset=utf-8",
     );
@@ -605,28 +682,28 @@ export default function AnnualToMonthlyRent() {
 
   const faqData = [
     {
-      q: "How do you convert annual rent to monthly rent on this page?",
-      a: "This page uses a monthly budgeting view: monthly = annual ÷ 12. It treats your annual total as the source of truth and shows the equivalent monthly amount for comparison.",
+      q: "What weekly formula does this page use?",
+      a: "The headline result uses a weekly budgeting definition: weekly = annual ÷ 52. This is the most common annual-to-weekly conversion used for weekly budgeting.",
     },
     {
-      q: "Is monthly rent always annual rent ÷ 12?",
-      a: "It’s a common way to compare costs. Real leases can be based on calendar dates, prorations, and due-date rules. This calculator shows the annual-equivalent monthly amount (annual ÷ 12) for budgeting and comparison.",
+      q: "Why is there also a 365-day weekly amount?",
+      a: "Some comparisons are day-based (daily, hourly, 14-day, 28-day). The 365-day weekly equivalent uses annual × 7 ÷ 365 so week values stay aligned with those day-based conversions.",
     },
     {
-      q: "Why does 4-week (28-day) rent differ from monthly rent?",
-      a: "A 4-week cycle is 28 days and often results in 13 payments per year, while monthly is typically 12 payments per year. Different period lengths lead to different annual totals even if a listing sounds similar.",
+      q: "Which weekly number should I use?",
+      a: "Use annual ÷ 52 for a simple weekly budgeting figure. Use annual × 7 ÷ 365 when you want weekly aligned to a 365-day year (useful when comparing to daily, hourly, or 28-day cycles).",
     },
     {
-      q: "What assumptions does this converter use?",
-      a: "Year = 365 days, week = 7 days, biweekly = 14 days, 4-week = 28 days, and monthly uses annual ÷ 12 as the budgeting equivalent. Outputs are for comparison, not a promise of exact due dates.",
+      q: "Why can a 28-day schedule feel different than weekly?",
+      a: "A 28-day billing cycle often lands on 13 payments per year. That can imply a different annual total than 52 weekly payments, even if the advertised periodic price sounds similar.",
     },
     {
-      q: "Does this tool include utilities, fees, taxes, or deposits?",
-      a: "No. It does not guess what is included. Enter the annual total you want to treat as rent for your budgeting comparison.",
+      q: "Why do I see many decimals when rounding is off?",
+      a: "Some conversions produce repeating decimals. When rounding is off, the tool shows the full 12-decimal fixed-point precision it uses internally so you can see the exact computed value.",
     },
     {
-      q: "Does this convert currencies or exchange rates?",
-      a: "No. Currency selection only changes formatting. Convert currencies elsewhere before using this tool if needed.",
+      q: "Does currency selection convert exchange rates?",
+      a: "No. Currency selection only changes formatting. Convert currencies elsewhere before entering your annual total.",
     },
   ];
 
@@ -653,8 +730,8 @@ export default function AnnualToMonthlyRent() {
       {
         "@type": "ListItem",
         position: 2,
-        name: "Annual to Monthly Rent Converter",
-        item: "https://rentconverter.com/annual-to-monthly-rent",
+        name: "Annual to Weekly Rent Converter",
+        item: "https://rentconverter.com/annual-to-weekly-rent-converter",
       },
     ],
   };
@@ -674,75 +751,36 @@ export default function AnnualToMonthlyRent() {
         }}
       />
 
-      <section className="pt-6 pb-4 rc-no-print">
+      <section className=" pb-4 rc-no-print">
         <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-500">
           <a href={safeHref("/")} className="hover:underline">
             Home
           </a>{" "}
-          / Annual to Monthly Rent Converter
+          / Annual to Weekly Rent Converter
         </nav>
       </section>
 
       <section className="pb-8 text-center bg-white rc-no-print">
         <h1 className="text-4xl font-bold text-slate-800 mb-4">
-          Annual to Monthly Rent Converter
+          Annual to Weekly Rent Converter
         </h1>
         <p className="text-slate-600 max-w-3xl mx-auto text-lg">
-          Convert an annual rent total into a monthly budgeting equivalent. This
-          page defines monthly as <strong>annual ÷ 12</strong> and shows how
-          that differs from 28-day (every-4-weeks) billing that often implies 13
-          payments per year.
+          Turn an annual rent total into a weekly number for budgeting. The
+          headline weekly figure here is <strong>annual ÷ 52</strong>. For
+          comparison, you can also see a <strong>365-day-week</strong>{" "}
+          equivalent (<strong>annual × 7 ÷ 365</strong>) and other period
+          breakdowns.
         </p>
-
-        <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3 text-sm">
-          <a
-            href={safeHref("/rent-converter")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Rent converter hub
-          </a>
-          <a
-            href={safeHref("/monthly-to-annual-rent")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Monthly to annual
-          </a>
-          <a
-            href={safeHref("/rent-paid-every-4-weeks")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Paid every 4 weeks
-          </a>
-          <a
-            href={safeHref("/how-much-rent-can-i-afford")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            How much rent can I afford
-          </a>
-        </div>
       </section>
 
       <section id="converter" className="mx-auto max-w-6xl px-6 pb-6">
         <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:p-8 rc-print-block">
           <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <h2 className="text-xl sm:text-2xl font-bold">
-              Instant annual to monthly conversion
+              Annual to weekly conversion
             </h2>
 
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
-              <button
-                type="button"
-                onClick={handleExportCsv}
-                disabled={!canShowResults}
-                className={`rounded-xl border px-4 py-2 text-sm font-semibold transition ${
-                  canShowResults
-                    ? "border-slate-200 bg-white text-slate-800 hover:bg-sky-50 hover:border-sky-200"
-                    : "border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed"
-                }`}
-                aria-disabled={!canShowResults}
-              >
-                Export CSV
-              </button>
               <button
                 type="button"
                 onClick={handlePrint}
@@ -822,13 +860,13 @@ export default function AnnualToMonthlyRent() {
                 <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
                   <div className="text-xs text-slate-500">From</div>
                   <div className="mt-1 text-base font-bold text-slate-800">
-                    {PERIOD_LABEL.annual}
+                    Annual
                   </div>
                 </div>
                 <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
                   <div className="text-xs text-slate-500">To</div>
                   <div className="mt-1 text-base font-bold text-slate-800">
-                    {PERIOD_LABEL.monthly}
+                    Weekly (annual ÷ 52)
                   </div>
                 </div>
               </div>
@@ -849,8 +887,8 @@ export default function AnnualToMonthlyRent() {
                       Round displayed values
                     </label>
                     <p className="mt-1 text-xs text-slate-500">
-                      Calculations use up to 12 decimals internally. If enabled,
-                      displayed values are rounded to your chosen decimals.
+                      Computation preserves up to 12 decimals internally. When
+                      rounding is off, the page shows 12 decimals.
                     </p>
                   </div>
 
@@ -871,7 +909,12 @@ export default function AnnualToMonthlyRent() {
                           ),
                         )
                       }
-                      className="mt-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                      disabled={!roundDisplay}
+                      className={`mt-1 rounded-xl border bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 ${
+                        roundDisplay
+                          ? "border-slate-300"
+                          : "border-slate-200 text-slate-400 cursor-not-allowed"
+                      }`}
                       aria-label="Displayed decimals"
                     >
                       <option value={0}>0</option>
@@ -884,14 +927,13 @@ export default function AnnualToMonthlyRent() {
 
                 <div className="mt-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
                   <div className="font-semibold">
-                    What “monthly” means on this page
+                    What “weekly” means on this page
                   </div>
                   <p className="mt-1 text-xs text-slate-600">
-                    This route is a monthly budgeting view:{" "}
-                    <strong>monthly = annual ÷ 12</strong>. It is not a
-                    calendar-date proration tool. If your lease charges every 28
-                    days (4-week cycle), the annual total can differ because
-                    that schedule usually has 13 payments per year.
+                    The headline weekly result is <strong>annual ÷ 52</strong>{" "}
+                    (budgeting view). For comparison, the tool also shows{" "}
+                    <strong>annual × 7 ÷ 365</strong> (365-day-year weekly) so
+                    you can see the difference.
                   </p>
                 </div>
               </div>
@@ -899,13 +941,13 @@ export default function AnnualToMonthlyRent() {
           </div>
 
           <div className="mt-6 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
-            <div className="text-sm text-slate-600">Monthly equivalent</div>
+            <div className="text-sm text-slate-600">Weekly equivalent</div>
 
             {!canShowResults ? (
               <div className="mt-2 rounded-xl border border-slate-200 bg-white px-4 py-4 text-slate-700">
                 <div className="font-semibold">No result to show yet</div>
                 <p className="mt-1 text-sm text-slate-600">
-                  Enter a valid annual rent total above to see the monthly
+                  Enter a valid annual rent total above to see the weekly
                   equivalent and breakdown.
                 </p>
               </div>
@@ -913,32 +955,32 @@ export default function AnnualToMonthlyRent() {
               <>
                 <div className="mt-2 flex flex-col gap-2">
                   <div className="text-4xl sm:text-5xl font-extrabold text-sky-800">
-                    {fmt(monthlyHeadlineScaled)}
+                    {fmt(weeklyHeadlineScaled)}
                   </div>
                   <div className="text-sm text-slate-600">
                     {fmt(annualScaled)} annual ≈{" "}
-                    <strong>{fmt(monthlyHeadlineScaled)}</strong> per month
-                    (annual ÷ 12)
+                    <strong>{fmt(weeklyHeadlineScaled)}</strong> per week
+                    (annual ÷ 52)
                   </div>
 
                   <div className="rc-no-print mt-2 flex flex-wrap gap-2">
                     <button
                       type="button"
                       onClick={() =>
-                        handleCopy("monthly", fmt(monthlyHeadlineScaled))
+                        handleCopy("weekly", fmt(weeklyHeadlineScaled))
                       }
                       className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
                     >
-                      {copiedKey === "monthly"
-                        ? "Copied"
-                        : "Copy monthly amount"}
+                      {copiedKey === "weekly" ? "Copied" : "Copy weekly amount"}
                     </button>
                     <button
                       type="button"
                       onClick={() =>
                         handleCopy(
                           "summary",
-                          `Annual: ${fmt(annualScaled)} | Monthly (annual ÷ 12): ${fmt(monthlyHeadlineScaled)} | Assumptions: 365-day year, monthly=annual/12`,
+                          `Annual: ${fmt(annualScaled)} | Weekly (annual ÷ 52): ${fmt(
+                            weeklyHeadlineScaled,
+                          )} | Also shown: Weekly (annual × 7 ÷ 365): ${fmt(breakdownScaled!.weekly365)}`,
                         )
                       }
                       className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
@@ -955,13 +997,12 @@ export default function AnnualToMonthlyRent() {
                   <div className="mt-1 text-xs text-slate-500">
                     {roundDisplay ? (
                       <>
-                        Displayed values rounded to {displayDecimals} decimals.
-                        Calculations use up to 12 decimals internally.
+                        Displayed values rounded to {displayDecimals} decimals
+                        (display-only).
                       </>
                     ) : (
                       <>
-                        Displayed values show up to 12 decimals (no display
-                        rounding).
+                        Displayed values show 12 decimals (no display rounding).
                       </>
                     )}
                   </div>
@@ -970,9 +1011,22 @@ export default function AnnualToMonthlyRent() {
                 <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                   {(
                     [
-                      ["Hourly", breakdownScaled!.hourly, "hourly"],
-                      ["Daily", breakdownScaled!.daily, "daily"],
-                      ["Weekly", breakdownScaled!.weekly, "weekly"],
+                      [
+                        "Hourly (365-day year)",
+                        breakdownScaled!.hourly,
+                        "hourly",
+                      ],
+                      ["Daily (365-day year)", breakdownScaled!.daily, "daily"],
+                      [
+                        "Weekly (annual ÷ 52)",
+                        breakdownScaled!.weeklyBudget,
+                        "weekly_budget_52",
+                      ],
+                      [
+                        "Weekly (annual × 7 ÷ 365)",
+                        breakdownScaled!.weekly365,
+                        "weekly_365",
+                      ],
                       [
                         "Every 2 weeks (14 days)",
                         breakdownScaled!.biweekly,
@@ -1004,53 +1058,56 @@ export default function AnnualToMonthlyRent() {
 
                   <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
                     <div className="text-xs text-slate-500">
-                      4-week vs monthly comparison
+                      Weekly definition comparison
                     </div>
                     <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                       <div className="text-sm text-slate-700">
-                        Monthly minus 4-week ={" "}
+                        (Annual ÷ 52) minus (Annual × 7 ÷ 365) ={" "}
                         <strong className="text-slate-900">
-                          {fmt(breakdownScaled!.monthlyMinus4w)}
+                          {fmt(breakdownScaled!.weeklyBudgetMinus365)}
                         </strong>
                       </div>
                       <div className="text-sm text-slate-700">
                         Difference ≈{" "}
                         <strong className="text-slate-900">
-                          {formatPercent(breakdownScaled!.monthlyMinus4wPct, 2)}
+                          {formatPercent(
+                            breakdownScaled!.weeklyBudgetMinus365Pct,
+                            2,
+                          )}
                         </strong>
                       </div>
                     </div>
                     <p className="mt-2 text-xs text-slate-500">
-                      4-week is 28 days. “Monthly” here is annual ÷ 12.
-                      Different lengths lead to different equivalents and can
-                      change annual totals.
+                      These are two common conventions. The headline matches
+                      annual-to-weekly budgeting intent (÷ 52). The 365-day
+                      weekly aligns with day-based conversions.
                     </p>
                   </div>
 
                   <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
                     <div className="text-xs text-slate-500">
-                      Annualization context (12 vs 13 payments)
+                      28-day schedule context (13 payments)
                     </div>
 
                     <div className="mt-2 grid gap-2 sm:grid-cols-3">
                       <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
                         <div className="text-xs text-slate-500">
-                          Monthly × 12
+                          Implied annual (weekly ÷ 52) × 52
                         </div>
                         <div className="mt-1 text-sm font-bold text-slate-800">
-                          {fmt(breakdownScaled!.annualFromMonthly12)}
+                          {fmt(breakdownScaled!.impliedAnnualWeekly52)}
                         </div>
                         <div className="mt-1 text-xs text-slate-500">
-                          Typical monthly schedule
+                          Illustrative reconstruction
                         </div>
                       </div>
 
                       <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
                         <div className="text-xs text-slate-500">
-                          4-week × 13
+                          Implied annual (4-week) × 13
                         </div>
                         <div className="mt-1 text-sm font-bold text-slate-800">
-                          {fmt(breakdownScaled!.annualFrom4w13)}
+                          {fmt(breakdownScaled!.impliedAnnual4w13)}
                         </div>
                         <div className="mt-1 text-xs text-slate-500">
                           Common 28-day schedule
@@ -1060,12 +1117,12 @@ export default function AnnualToMonthlyRent() {
                       <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
                         <div className="text-xs text-slate-500">Difference</div>
                         <div className="mt-1 text-sm font-bold text-slate-800">
-                          {fmt(breakdownScaled!.annualDiff_13vs12)}
+                          {fmt(breakdownScaled!.diff4w13_vs_weekly52)}
                         </div>
                         <div className="mt-1 text-xs text-slate-500">
                           ≈{" "}
                           {formatPercent(
-                            breakdownScaled!.annualDiff_13vs12Pct,
+                            breakdownScaled!.diff4w13_vs_weekly52Pct,
                             2,
                           )}
                         </div>
@@ -1073,10 +1130,41 @@ export default function AnnualToMonthlyRent() {
                     </div>
 
                     <p className="mt-3 text-xs text-slate-500">
-                      This panel is illustrative. It shows how “monthly” (12)
-                      and “every 4 weeks” (13) schedules can imply different
-                      annual totals even when a listing feels similar.
+                      This panel is illustrative. It shows why every 4 weeks can
+                      imply a different annual total than weekly budgeting,
+                      because 28-day billing commonly lands on 13 payments.
                     </p>
+                  </div>
+
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
+                    <div className="text-xs text-slate-500">
+                      Precision note (fixed-point math)
+                    </div>
+                    <p className="mt-2 text-xs text-slate-600">
+                      Dividing by 52 or by 365/7 can produce a repeating
+                      decimal. This tool keeps up to 12 decimals internally and
+                      does not round during computation. If you reconstruct an
+                      annual total by multiplying a weekly figure back, you can
+                      see a small remainder due to truncation at 12 decimals.
+                    </p>
+                    <div className="mt-2 grid gap-2 sm:grid-cols-2">
+                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
+                        <div className="text-xs text-slate-500">
+                          Input annual minus (weekly ÷ 52) × 52
+                        </div>
+                        <div className="mt-1 text-sm font-bold text-slate-800">
+                          {fmt(breakdownScaled!.reconstructionGapWeekly52)}
+                        </div>
+                      </div>
+                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
+                        <div className="text-xs text-slate-500">
+                          Input annual minus (weekly 365-day) × 365 ÷ 7
+                        </div>
+                        <div className="mt-1 text-sm font-bold text-slate-800">
+                          {fmt(breakdownScaled!.reconstructionGapWeekly365)}
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </>
@@ -1084,83 +1172,14 @@ export default function AnnualToMonthlyRent() {
           </div>
 
           <p className="mt-6 text-sm text-slate-500">
-            Assumptions: year = 365 days, week = 7 days, biweekly = 14 days,
-            4-week = 28 days. This page defines monthly as annual ÷ 12
-            (budgeting equivalent). Actual due dates and totals can differ by
-            lease schedule, proration rules, fees, and what is included in rent.
+            Definitions: weekly (headline) = annual ÷ 52. Day-based conversions
+            use a 365-day year. Biweekly = 14 days and 4-week = 28 days. Results
+            are for budgeting and comparison, not a promise of exact due dates
+            or billed totals.
           </p>
         </div>
       </section>
 
-      <section id="learn" className="max-w-5xl mx-auto px-6 pt-16 rc-no-print">
-        <h2 className="text-3xl font-bold mb-6 text-center text-slate-900">
-          Annual to monthly conversion for budgeting
-        </h2>
-
-        <p className="text-slate-700 mb-4">
-          This page is built for a simple monthly budgeting question: “If my
-          rent total is X per year, what is the monthly equivalent?” The
-          definition used is <strong>annual ÷ 12</strong>. You also get a
-          breakdown so you can compare against weekly, biweekly, and 28-day
-          pricing.
-        </p>
-
-        <h3 className="text-2xl font-semibold mt-10 mb-4 text-slate-900">
-          Why “every 4 weeks” often surprises people
-        </h3>
-        <p className="text-slate-700 mb-4">
-          A 28-day cycle can land on a 13-payment year, while monthly is usually
-          12 payments. The 4-week vs monthly comparison and annualization panel
-          exist to keep that difference visible instead of hiding it.
-        </p>
-
-        <h3 className="text-2xl font-semibold mt-10 mb-4 text-slate-900">
-          Examples
-        </h3>
-        <ul className="text-slate-700 mb-4 list-disc pl-5 space-y-2">
-          <li>
-            If annual rent is <strong>$24,000</strong>, monthly budgeting
-            equivalent is <strong>$24,000 ÷ 12 = $2,000</strong>.
-          </li>
-          <li>
-            If a listing says <strong>$2,000 “every 4 weeks”</strong>, the
-            implied annual can be about <strong>$2,000 × 13 = $26,000</strong>{" "}
-            (not $24,000).
-          </li>
-          <li>
-            If you type <strong>1,234</strong>, this tool treats the comma as
-            thousands grouping (1234). If you meant a decimal, type{" "}
-            <strong>1.234</strong>.
-          </li>
-        </ul>
-
-        <p className="text-slate-700 mb-4">
-          Related tools:{" "}
-          <a
-            href={safeHref("/monthly-to-annual-rent")}
-            className="text-sky-700 hover:underline"
-          >
-            monthly to annual rent
-          </a>
-          ,{" "}
-          <a
-            href={safeHref("/rent-paid-every-4-weeks")}
-            className="text-sky-700 hover:underline"
-          >
-            rent paid every 4 weeks
-          </a>
-          ,{" "}
-          <a
-            href={safeHref("/rent-converter")}
-            className="text-sky-700 hover:underline"
-          >
-            rent converter
-          </a>
-          .
-        </p>
-      </section>
-
-      {/* RentConverter.com layout rule: add a “How it works” explanation section above the FAQ. */}
       <section
         id="how-it-works"
         className="max-w-5xl mx-auto px-6 pt-16 rc-no-print"
@@ -1172,34 +1191,31 @@ export default function AnnualToMonthlyRent() {
         <div className="rounded-2xl border border-slate-200 bg-white p-6">
           <ol className="list-decimal pl-5 space-y-3 text-slate-700">
             <li>
-              <strong>You enter an annual rent total.</strong> “Annual rent”
-              means the total you want to treat as rent for budgeting. This tool
-              does not guess inclusions like utilities, taxes, fees, or
-              deposits.
+              <strong>You enter an annual rent total.</strong> This is the total
+              you want to treat as rent for budgeting. The tool does not guess
+              what’s included (utilities, fees, taxes, deposits).
             </li>
             <li>
-              <strong>Monthly is computed as annual ÷ 12.</strong> This is the
-              monthly budgeting equivalent and matches the route intent.
-            </li>
-            <li>
-              <strong>
-                Other periods are derived from the same annual total.
-              </strong>{" "}
-              Weekly, biweekly, daily, and hourly equivalents use a 365-day year
-              so comparisons remain consistent.
+              <strong>Weekly budgeting is computed as annual ÷ 52.</strong> This
+              is the headline result and matches annual-to-weekly budgeting
+              intent.
             </li>
             <li>
               <strong>
-                4-week (28-day) equivalents are shown for clarity.
+                A 365-day weekly equivalent is shown for comparison.
               </strong>{" "}
-              A 28-day billing schedule often implies 13 payments per year,
-              which can differ from 12-month schedules.
+              It uses annual × 7 ÷ 365 so weekly stays aligned with day-based
+              breakdowns.
+            </li>
+            <li>
+              <strong>Other periods come from the same annual total.</strong>{" "}
+              Biweekly (14 days) and 4-week (28 days) are included to compare
+              common pay and billing cycles.
             </li>
             <li>
               <strong>Decimals are preserved.</strong> Inputs are parsed into
-              fixed-point integers (up to 12 decimals). If an input is
-              ambiguous, you’ll see a warning or an error instead of a
-              misleading result.
+              fixed-point integers (up to 12 decimals). Rounding, if enabled, is
+              display-only.
             </li>
           </ol>
         </div>
@@ -1248,10 +1264,8 @@ export default function AnnualToMonthlyRent() {
       <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
         <p className="text-xs text-slate-500 text-center leading-relaxed">
           <em>
-            Tools on this site are for budgeting and comparison. Calculations
-            use standard time-period assumptions, including a 365-day year.
-            Always confirm payment schedules and lease terms in your rental
-            agreement.
+            Tools on this site are for budgeting and comparison. Always confirm
+            payment schedules and lease terms in your rental agreement.
           </em>
         </p>
       </section>

@@ -26,7 +26,8 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:description", content: description },
     {
       property: "og:url",
-      content: "https://rentconverter.com/rent-as-percentage-of-income",
+      content:
+        "https://rentconverter.com/rent-as-percentage-of-income-calculator",
     },
     { property: "og:site_name", content: "RentConverter.com" },
     { property: "og:image", content: "https://rentconverter.com/og-image.jpg" },
@@ -41,7 +42,7 @@ export const meta: Route.MetaFunction = () => {
 
     {
       rel: "canonical",
-      href: "https://rentconverter.com/rent-as-percentage-of-income",
+      href: "https://rentconverter.com/rent-as-percentage-of-income-calculator",
     },
   ];
 };
@@ -67,15 +68,65 @@ const PERIOD_LABEL: Record<Period, string> = {
 
 /**
  * Only include routes you are sure exist.
- * If you do not have a whitelist, remove safeHref entirely and use plain hrefs.
+ * Unknown links should resolve to "/" to avoid linking to non-existent routes.
  */
 const ROUTE_WHITELIST = new Set<string>([
+  // Home
   "/",
-  "/rent-as-percentage-of-income",
-  "/rent-affordability-calculator",
-  "/rent-paid-every-4-weeks",
-  "/rent-paid-weekly-vs-monthly",
+
+  // Rent converter hub
+  "/rent-converter",
+
+  // Frequency converters
+  "/monthly-to-weekly-rent-converter",
+  "/weekly-to-monthly-rent-converter",
+  "/weekly-to-annual-rent-converter",
+  "/weekly-to-biweekly-rent-converter",
+
+  "/biweekly-to-weekly-rent-converter",
+  "/biweekly-to-monthly-rent-converter",
+  "/biweekly-to-annual-rent-converter",
+
+  "/monthly-to-annual-rent-converter",
+  "/annual-to-monthly-rent-converter",
+
+  "/monthly-to-daily-rent-converter",
+  "/daily-to-monthly-rent-converter",
+
+  "/monthly-to-hourly-rent-converter",
+  "/hourly-to-monthly-rent-converter",
+
+  "/hourly-to-annual-rent-converter",
+  "/annual-to-hourly-rent-converter",
+
+  "/annual-to-weekly-rent-converter",
+  "/annual-to-biweekly-rent-converter",
+  "/monthly-to-biweekly-rent-converter",
+
+  // Rent calculators
+  "/rent-calculator",
+  "/rent-per-day-calculator",
+  "/rent-per-week-calculator",
+  "/rent-paid-every-4-weeks-calculator",
+  "/rent-per-paycheck-calculator",
+  "/rent-split-calculator",
+  "/rent-due-date-calculator",
+
+  // Affordability and income
+  "/rent-as-percentage-of-income-calculator",
+  "/how-much-rent-can-i-afford-calculator",
+  "/rent-after-tax-income-calculator",
+  "/rent-vs-take-home-pay-calculator",
+
+  // Rent increases
+  "/rent-increase-calculator",
+  "/rent-increase-percentage-calculator",
+  "/rent-after-increase-calculator",
+
+  // Rent vs buy
+  "/rent-vs-buy-calculator",
 ]);
+
 function safeHref(path: string): string {
   return ROUTE_WHITELIST.has(path) ? path : "/";
 }
@@ -145,14 +196,22 @@ function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
   displayDecimals: number,
+  roundDisplay: boolean,
 ): string {
   const n = toNumberSafe(scaled);
   if (!Number.isFinite(n)) return "—";
+
+  const maxFrac = Math.max(0, Math.min(12, Math.trunc(displayDecimals)));
+
+  // If rounding enabled, lock to selected decimals. If disabled, still show cents by default.
+  const maximumFractionDigits = roundDisplay ? maxFrac : 12;
+  const minimumFractionDigits = roundDisplay ? maxFrac : 2;
+
   return new Intl.NumberFormat(undefined, {
     style: "currency",
     currency,
-    maximumFractionDigits: Math.max(0, Math.min(12, displayDecimals)),
-    minimumFractionDigits: 0,
+    maximumFractionDigits,
+    minimumFractionDigits,
   }).format(n);
 }
 
@@ -303,6 +362,18 @@ function convertScaled(valueScaled: bigint, from: Period, to: Period): bigint {
   return mulDivInt(dailyScaled, dpTo.num, dpTo.den);
 }
 
+function percentFromRatio(num: bigint, den: bigint, decimals: number): number {
+  if (den <= 0n) return 0;
+  const d = Math.max(0, Math.min(6, Math.trunc(decimals)));
+  const factor = 10n ** BigInt(d);
+  const percentScaled = (num * 100n * factor) / den;
+
+  // Keep conversion safe
+  const limit = 9_000_000_000_000_000n;
+  const safe = percentScaled > limit ? limit : percentScaled;
+  return Number(safe) / Number(factor);
+}
+
 function buildCsvRow(cols: string[]): string {
   return cols
     .map((c) => {
@@ -427,7 +498,12 @@ export default function RentAsPercentageOfIncome() {
 
   const effectiveDisplayDecimals = roundDisplay ? displayDecimals : 12;
   const fmtMoney = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, effectiveDisplayDecimals);
+    formatCurrencyFromScaled(
+      scaled,
+      currency,
+      effectiveDisplayDecimals,
+      roundDisplay,
+    );
 
   const computed = useMemo(() => {
     const errors: string[] = [];
@@ -464,7 +540,7 @@ export default function RentAsPercentageOfIncome() {
       };
     }
 
-    const ratioPct = (Number(annualRent) / Number(annualIncome)) * 100;
+    const ratioPct = percentFromRatio(annualRent, annualIncome, 4);
 
     const rentMonthly = convertScaled(annualRent, "annual", "monthly");
     const rentWeekly = convertScaled(annualRent, "annual", "weekly");
@@ -474,8 +550,7 @@ export default function RentAsPercentageOfIncome() {
     const incomeWeekly = convertScaled(annualIncome, "annual", "weekly");
     const income4w = convertScaled(annualIncome, "annual", "every_4_weeks");
 
-    const ratioOn4wBasis =
-      Number(income4w) > 0 ? (Number(rent4w) / Number(income4w)) * 100 : 0;
+    const ratioOn4wBasis = percentFromRatio(rent4w, income4w, 4);
 
     const paymentsPerYear = (p: Period): number => {
       if (p === "annual") return 1;
@@ -570,7 +645,7 @@ export default function RentAsPercentageOfIncome() {
         "Monthly (avg)",
         fmtMoney(computed.rentMonthly),
         fmtMoney(computed.incomeMonthly),
-        `${((Number(computed.rentMonthly) / Number(computed.incomeMonthly)) * 100).toFixed(2)}%`,
+        `${percentFromRatio(computed.rentMonthly, computed.incomeMonthly, 4).toFixed(2)}%`,
       ]),
     );
     rows.push(
@@ -586,12 +661,12 @@ export default function RentAsPercentageOfIncome() {
         "Weekly",
         fmtMoney(computed.rentWeekly),
         fmtMoney(computed.incomeWeekly),
-        `${((Number(computed.rentWeekly) / Number(computed.incomeWeekly)) * 100).toFixed(2)}%`,
+        `${percentFromRatio(computed.rentWeekly, computed.incomeWeekly, 4).toFixed(2)}%`,
       ]),
     );
 
     downloadTextFile(
-      "rent-as-percentage-of-income.csv",
+      "rent-as-percentage-of-income-calculator.csv",
       rows.join("\n"),
       "text/csv;charset=utf-8",
     );
@@ -683,7 +758,7 @@ export default function RentAsPercentageOfIncome() {
         "@type": "ListItem",
         position: 2,
         name: "Rent as Percentage of Income Calculator",
-        item: "https://rentconverter.com/rent-as-percentage-of-income",
+        item: "https://rentconverter.com/rent-as-percentage-of-income-calculator",
       },
     ],
   };
@@ -701,7 +776,7 @@ export default function RentAsPercentageOfIncome() {
     name: "Rent as Percentage of Income Calculator",
     description:
       "Calculate rent as a percentage of income using annual equivalence (365-day year). Compare pay cycles with annualized breakdowns.",
-    url: "https://rentconverter.com/rent-as-percentage-of-income",
+    url: "https://rentconverter.com/rent-as-percentage-of-income-calculator",
   };
 
   return (
@@ -737,27 +812,6 @@ export default function RentAsPercentageOfIncome() {
           makes monthly, weekly, and 4-week pay cycles comparable on one
           consistent basis.
         </p>
-
-        <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3 text-sm">
-          <a
-            href={safeHref("/rent-affordability-calculator")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Affordability calculator
-          </a>
-          <a
-            href={safeHref("/rent-paid-every-4-weeks")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Paid every 4 weeks
-          </a>
-          <a
-            href={safeHref("/rent-paid-weekly-vs-monthly")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Weekly vs monthly
-          </a>
-        </div>
       </section>
 
       <section id="calculator" className="mx-auto max-w-6xl px-6 pb-6">
@@ -774,19 +828,6 @@ export default function RentAsPercentageOfIncome() {
             </div>
 
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
-              <button
-                type="button"
-                onClick={handleExportCsv}
-                disabled={!computed.ok}
-                className={`rounded-xl border px-4 py-2 text-sm font-semibold transition ${
-                  computed.ok
-                    ? "border-slate-200 bg-white text-slate-800 hover:bg-sky-50 hover:border-sky-200"
-                    : "border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed"
-                }`}
-                aria-disabled={!computed.ok}
-              >
-                Export CSV
-              </button>
               <button
                 type="button"
                 onClick={handlePrint}
@@ -1013,7 +1054,11 @@ export default function RentAsPercentageOfIncome() {
                       onClick={() =>
                         handleCopy(
                           "summary",
-                          `Annual rent: ${fmtMoney(computed.annualRent)} | Annual income: ${fmtMoney(computed.annualIncome)} | Rent %: ${computed.ratioPct.toFixed(2)}%`,
+                          `Annual rent: ${fmtMoney(
+                            computed.annualRent,
+                          )} | Annual income: ${fmtMoney(
+                            computed.annualIncome,
+                          )} | Rent %: ${computed.ratioPct.toFixed(2)}%`,
                         )
                       }
                       className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
@@ -1222,24 +1267,24 @@ export default function RentAsPercentageOfIncome() {
           <p className="text-slate-700 mt-6">
             Related pages:{" "}
             <a
-              href={safeHref("/rent-affordability-calculator")}
+              href={safeHref("/how-much-rent-can-i-afford-calculator")}
               className="text-sky-700 hover:underline"
             >
-              rent affordability calculator
+              affordability calculator
             </a>
             ,{" "}
             <a
-              href={safeHref("/rent-paid-every-4-weeks")}
+              href={safeHref("/rent-paid-every-4-weeks-calculator")}
               className="text-sky-700 hover:underline"
             >
               rent paid every 4 weeks
             </a>
             ,{" "}
             <a
-              href={safeHref("/rent-paid-weekly-vs-monthly")}
+              href={safeHref("/weekly-to-monthly-rent-converter")}
               className="text-sky-700 hover:underline"
             >
-              weekly vs monthly
+              weekly to monthly converter
             </a>
             .
           </p>

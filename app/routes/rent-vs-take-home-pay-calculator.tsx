@@ -1,22 +1,8 @@
-import { useMemo, useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Route } from "./+types/rent-vs-take-home-pay-calculator";
 import OtherUsefulTools from "~/client/components/navigation/OtherUsefulTools";
 import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountry";
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
-
-/**
- * RentConverter.com refactor rules applied:
- * - Preserve decimals end-to-end (fixed-point BigInt).
- * - Avoid misleading "0" results on invalid input (show errors; hide results).
- * - Rounding is display-only (toggle + decimals selector).
- * - Fix money formatting (never drop decimals for values >= 10).
- * - Robust number parsing (commas/currency symbols/.5/12./comma-decimal).
- * - Validate Period/currency from localStorage.
- * - Export CSV + Print-to-PDF (window.print).
- * - Expand currency list (USD,CAD,EUR,GBP,AUD,NZD,JPY,CNY,HKD,SGD,INR,KRW,CHF,SEK,NOK,DKK,MXN,BRL).
- * - Include “How it works” above FAQ (route-specific copy).
- * - Internal link whitelist constraint (only link to known routes).
- */
 
 export const meta: Route.MetaFunction = () => [
   { title: "Rent vs Take-Home Pay Calculator" },
@@ -43,7 +29,7 @@ export const meta: Route.MetaFunction = () => [
   },
   {
     property: "og:url",
-    content: "https://rentconverter.com/rent-vs-take-home-pay",
+    content: "https://rentconverter.com/rent-vs-take-home-pay-calculator",
   },
   { property: "og:site_name", content: "RentConverter.com" },
   { property: "og:image", content: "https://rentconverter.com/og-image.jpg" },
@@ -57,7 +43,10 @@ export const meta: Route.MetaFunction = () => [
   },
   { name: "twitter:image", content: "https://rentconverter.com/og-image.jpg" },
 
-  { rel: "canonical", href: "https://rentconverter.com/rent-vs-take-home-pay" },
+  {
+    rel: "canonical",
+    href: "https://rentconverter.com/rent-vs-take-home-pay-calculator",
+  },
 ];
 
 type Period =
@@ -117,23 +106,59 @@ function isCurrency(x: string): x is Currency {
   return (SUPPORTED_CURRENCIES as readonly string[]).includes(x);
 }
 
-/**
- * Route whitelist. Only include routes you know exist.
- * Known (from your snippets): /, /rent-converter, /rent-affordability-calculator, /rent-paid-weekly-vs-monthly
- */
 const ROUTE_WHITELIST = new Set<string>([
   "/",
   "/rent-converter",
-  "/rent-affordability-calculator",
-  "/rent-paid-weekly-vs-monthly",
-  "/rent-vs-take-home-pay",
+
+  "/monthly-to-weekly-rent-converter",
+  "/weekly-to-monthly-rent-converter",
+  "/weekly-to-annual-rent-converter",
+  "/weekly-to-biweekly-rent-converter",
+
+  "/biweekly-to-weekly-rent-converter",
+  "/biweekly-to-monthly-rent-converter",
+  "/biweekly-to-annual-rent-converter",
+
+  "/monthly-to-annual-rent-converter",
+  "/annual-to-monthly-rent-converter",
+
+  "/monthly-to-daily-rent-converter",
+  "/daily-to-monthly-rent-converter",
+
+  "/monthly-to-hourly-rent-converter",
+  "/hourly-to-monthly-rent-converter",
+
+  "/hourly-to-annual-rent-converter",
+  "/annual-to-hourly-rent-converter",
+
+  "/annual-to-weekly-rent-converter",
+  "/annual-to-biweekly-rent-converter",
+  "/monthly-to-biweekly-rent-converter",
+
+  "/rent-calculator",
+  "/rent-per-day-calculator",
+  "/rent-per-week-calculator",
+  "/rent-paid-every-4-weeks-calculator",
+  "/rent-per-paycheck-calculator",
+  "/rent-split-calculator",
+  "/rent-due-date-calculator",
+
+  "/rent-as-percentage-of-income-calculator",
+  "/how-much-rent-can-i-afford-calculator",
+  "/rent-after-tax-income-calculator",
+  "/rent-vs-take-home-pay-calculator",
+
+  "/rent-increase-calculator",
+  "/rent-increase-percentage-calculator",
+  "/rent-after-increase-calculator",
+
+  "/rent-vs-buy-calculator",
 ]);
 
 function safeHref(path: string): string {
   return ROUTE_WHITELIST.has(path) ? path : "/";
 }
 
-/** Fixed-point decimals preserved end-to-end (up to 12 decimals). */
 const MAX_DECIMALS = 12n;
 const SCALE = 10n ** MAX_DECIMALS;
 
@@ -170,10 +195,6 @@ function formatCurrencyFromScaled(
   }).format(n);
 }
 
-/**
- * Accepts: $650, 650, 650.00, .5, 12., 650,50 (comma decimal).
- * Rejects ambiguous formats like "1,2,3".
- */
 function parseMoneyInputToScaled(raw: string, label = "value"): ParsedScaled {
   const warnings: string[] = [];
   const s0 = (raw ?? "").trim();
@@ -293,7 +314,6 @@ function mulDivRound(a: bigint, num: bigint, den: bigint): bigint {
 }
 
 function annualizeScaled(valueScaled: bigint, period: Period): bigint {
-  // Annual equivalence with a 365-day year; monthly uses average month = 365/12 => annual is exactly 12 months.
   switch (period) {
     case "annual":
       return valueScaled;
@@ -386,7 +406,8 @@ function downloadTextFile(
 
 export default function RentVsTakeHomePay() {
   const pageName = "Rent vs Take-Home Pay Calculator";
-  const canonicalUrl = "https://rentconverter.com/rent-vs-take-home-pay";
+  const canonicalUrl =
+    "https://rentconverter.com/rent-vs-take-home-pay-calculator";
 
   const [takeHomePay, setTakeHomePay] = useState<string>(() => {
     if (typeof window === "undefined") return "5000";
@@ -416,11 +437,11 @@ export default function RentVsTakeHomePay() {
     return isCurrency(saved) ? saved : "USD";
   });
 
-  // Display-only rounding controls
   const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
     if (typeof window === "undefined") return true;
     return safeParseBoolean(localStorage.getItem("rc_rvt_round_display"), true);
   });
+
   const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
     if (typeof window === "undefined") return 2;
     return safeParseInt(
@@ -439,7 +460,6 @@ export default function RentVsTakeHomePay() {
       localStorage.setItem("rc_rvt_rent", rentAmount);
       localStorage.setItem("rc_rvt_rent_period", rentPeriod);
       localStorage.setItem("rc_rvt_currency", currency);
-
       localStorage.setItem(
         "rc_rvt_round_display",
         JSON.stringify(roundDisplay),
@@ -468,13 +488,7 @@ export default function RentVsTakeHomePay() {
     if (!rent.ok) errors.push(rent.error ?? "Enter rent.");
     warnings.push(...rent.warnings);
 
-    return {
-      ok: errors.length === 0,
-      errors,
-      warnings,
-      takeHome,
-      rent,
-    };
+    return { ok: errors.length === 0, errors, warnings, takeHome, rent };
   }, [takeHomePay, rentAmount]);
 
   const computed = useMemo(() => {
@@ -494,7 +508,7 @@ export default function RentVsTakeHomePay() {
       rentPeriod,
     );
 
-    const annualLeft = annualTakeHome - annualRent; // allow negative (rent can exceed take-home)
+    const annualLeft = annualTakeHome - annualRent;
 
     const takeHomeMonthly = fromAnnualScaled(annualTakeHome, "monthly");
     const rentMonthly = fromAnnualScaled(annualRent, "monthly");
@@ -753,27 +767,6 @@ export default function RentVsTakeHomePay() {
           rent and pay use different cycles. Results use annual equivalence
           (365-day year).
         </p>
-
-        <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3 text-sm">
-          <a
-            href={safeHref("/rent-affordability-calculator")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Rent affordability calculator
-          </a>
-          <a
-            href={safeHref("/rent-converter")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Rent converter
-          </a>
-          <a
-            href={safeHref("/rent-paid-weekly-vs-monthly")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Weekly vs monthly rent
-          </a>
-        </div>
       </section>
 
       <section id="calculator" className="mx-auto max-w-6xl px-6 pb-6">
@@ -792,19 +785,6 @@ export default function RentVsTakeHomePay() {
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
               <button
                 type="button"
-                onClick={handleExportCsv}
-                disabled={!computed.ok}
-                className={`rounded-xl border px-4 py-2 text-sm font-semibold transition ${
-                  computed.ok
-                    ? "border-slate-200 bg-white text-slate-800 hover:bg-sky-50 hover:border-sky-200"
-                    : "border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed"
-                }`}
-                aria-disabled={!computed.ok}
-              >
-                Export CSV
-              </button>
-              <button
-                type="button"
                 onClick={handlePrint}
                 className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
               >
@@ -813,7 +793,6 @@ export default function RentVsTakeHomePay() {
             </div>
           </div>
 
-          {/* Display controls */}
           <div className="mb-6 rounded-2xl border border-slate-200 bg-white p-5 rc-no-print">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <label className="flex items-center gap-2 text-sm text-slate-700">
@@ -873,9 +852,7 @@ export default function RentVsTakeHomePay() {
                   value={takeHomePeriod}
                   onChange={(e) =>
                     setTakeHomePeriod(
-                      isPeriod(e.target.value)
-                        ? (e.target.value as Period)
-                        : "monthly",
+                      isPeriod(e.target.value) ? e.target.value : "monthly",
                     )
                   }
                   className="col-span-5 rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
@@ -911,9 +888,7 @@ export default function RentVsTakeHomePay() {
                   value={rentPeriod}
                   onChange={(e) =>
                     setRentPeriod(
-                      isPeriod(e.target.value)
-                        ? (e.target.value as Period)
-                        : "monthly",
+                      isPeriod(e.target.value) ? e.target.value : "monthly",
                     )
                   }
                   className="col-span-5 rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
@@ -936,9 +911,7 @@ export default function RentVsTakeHomePay() {
                 value={currency}
                 onChange={(e) =>
                   setCurrency(
-                    isCurrency(e.target.value)
-                      ? (e.target.value as Currency)
-                      : "USD",
+                    isCurrency(e.target.value) ? e.target.value : "USD",
                   )
                 }
                 className="w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
@@ -956,7 +929,6 @@ export default function RentVsTakeHomePay() {
             </div>
           </div>
 
-          {/* Errors/warnings */}
           {!parsed.ok ? (
             <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6">
               <div className="font-semibold text-slate-900">
@@ -1016,9 +988,13 @@ export default function RentVsTakeHomePay() {
                     onClick={() =>
                       handleCopy(
                         "headline",
-                        `Rent share: ${Number.isFinite(computed.rentPct) ? computed.rentPct.toFixed(2) : "N/A"}%; Annual rent: ${money(
-                          computed.annualRent,
-                        )}; Annual take-home: ${money(computed.annualTakeHome)}; Left after rent: ${money(computed.annualLeft)}`,
+                        `Rent share: ${
+                          Number.isFinite(computed.rentPct)
+                            ? computed.rentPct.toFixed(2)
+                            : "N/A"
+                        }%; Annual rent: ${money(computed.annualRent)}; Annual take-home: ${money(
+                          computed.annualTakeHome,
+                        )}; Left after rent: ${money(computed.annualLeft)}`,
                       )
                     }
                     className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
@@ -1166,7 +1142,6 @@ export default function RentVsTakeHomePay() {
         </div>
       </section>
 
-      {/* Required explanation section above FAQ */}
       <section className="max-w-5xl mx-auto px-6 pt-16 rc-no-print">
         <h2 className="text-3xl font-bold mb-6 text-center text-slate-900">
           How this tool works and what you can expect
@@ -1196,24 +1171,24 @@ export default function RentVsTakeHomePay() {
           <p className="text-slate-700 mt-6">
             Related tools:{" "}
             <a
-              href={safeHref("/rent-affordability-calculator")}
+              href={safeHref("/how-much-rent-can-i-afford-calculator")}
               className="text-sky-700 hover:underline"
             >
-              rent affordability calculator
+              how much rent can I afford
             </a>
             ,{" "}
+            <a
+              href={safeHref("/rent-after-tax-income-calculator")}
+              className="text-sky-700 hover:underline"
+            >
+              rent after-tax income calculator
+            </a>
+            , and{" "}
             <a
               href={safeHref("/rent-converter")}
               className="text-sky-700 hover:underline"
             >
               rent converter
-            </a>
-            , and{" "}
-            <a
-              href={safeHref("/rent-paid-weekly-vs-monthly")}
-              className="text-sky-700 hover:underline"
-            >
-              weekly vs monthly rent
             </a>
             .
           </p>

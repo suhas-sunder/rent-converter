@@ -26,7 +26,7 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:description", content: description },
     {
       property: "og:url",
-      content: "https://rentconverter.com/rent-after-increase",
+      content: "https://rentconverter.com/rent-after-increase-calculator",
     },
     { property: "og:site_name", content: "RentConverter.com" },
     { property: "og:image", content: "https://rentconverter.com/og-image.jpg" },
@@ -39,7 +39,10 @@ export const meta: Route.MetaFunction = () => {
       content: "https://rentconverter.com/og-image.jpg",
     },
 
-    { rel: "canonical", href: "https://rentconverter.com/rent-after-increase" },
+    {
+      rel: "canonical",
+      href: "https://rentconverter.com/rent-after-increase-calculator",
+    },
   ];
 };
 
@@ -67,12 +70,56 @@ const PERIOD_LABEL: Record<Period, string> = {
 // Only include routes that exist in your app.
 const ROUTE_WHITELIST = new Set<string>([
   "/",
-  "/rent-after-increase",
-  "/rent-after-increase-calculator",
-  "/rent-increase-percentage",
+  "/rent-converter",
+
+  // Frequency converters
+  "/monthly-to-weekly-rent-converter",
+  "/weekly-to-monthly-rent-converter",
+  "/weekly-to-annual-rent-converter",
+  "/weekly-to-biweekly-rent-converter",
+
+  "/biweekly-to-weekly-rent-converter",
+  "/biweekly-to-monthly-rent-converter",
+  "/biweekly-to-annual-rent-converter",
+
+  "/monthly-to-annual-rent-converter",
+  "/annual-to-monthly-rent-converter",
+
+  "/monthly-to-daily-rent-converter",
+  "/daily-to-monthly-rent-converter",
+
+  "/monthly-to-hourly-rent-converter",
+  "/hourly-to-monthly-rent-converter",
+
+  "/hourly-to-annual-rent-converter",
+  "/annual-to-hourly-rent-converter",
+
+  "/annual-to-weekly-rent-converter",
+  "/annual-to-biweekly-rent-converter",
+  "/monthly-to-biweekly-rent-converter",
+
+  // Rent calculators
+  "/rent-calculator",
+  "/rent-per-day-calculator",
+  "/rent-per-week-calculator",
+  "/rent-paid-every-4-weeks-calculator",
+  "/rent-per-paycheck-calculator",
+  "/rent-split-calculator",
+  "/rent-due-date-calculator",
+
+  // Affordability and income
+  "/rent-as-percentage-of-income-calculator",
+  "/how-much-rent-can-i-afford-calculator",
+  "/rent-after-tax-income-calculator",
+  "/rent-vs-take-home-pay-calculator",
+
+  // Rent increases
   "/rent-increase-calculator",
-  "/rent-affordability-calculator",
-  "/rent-paid-weekly-vs-monthly",
+  "/rent-increase-percentage-calculator",
+  "/rent-after-increase-calculator",
+
+  // Rent vs buy
+  "/rent-vs-buy-calculator",
 ]);
 
 function safeHref(path: string): string {
@@ -144,6 +191,11 @@ function toNumberSafe(scaled: bigint): number {
   return Number(scaled) / Number(SCALE);
 }
 
+/**
+ * Money formatting rules:
+ * - If displayDecimals === 12 (no display rounding mode), show up to 12 decimals (min 0).
+ * - Otherwise, show exactly displayDecimals decimals (min = max = displayDecimals).
+ */
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
@@ -151,11 +203,15 @@ function formatCurrencyFromScaled(
 ): string {
   const n = toNumberSafe(scaled);
   if (!Number.isFinite(n)) return "—";
+
+  const max = Math.max(0, Math.min(12, displayDecimals));
+  const fixed = max !== 12;
+
   return new Intl.NumberFormat(undefined, {
     style: "currency",
     currency,
-    maximumFractionDigits: Math.max(0, Math.min(12, displayDecimals)),
-    minimumFractionDigits: 0,
+    maximumFractionDigits: max,
+    minimumFractionDigits: fixed ? max : 0,
   }).format(n);
 }
 
@@ -251,10 +307,12 @@ function parseMoneyInputToScaled(raw: string): ParsedScaled {
   if (intPart === "") intPart = "0";
   intPart = intPart.replace(/^0+(?=\d)/, "");
 
-  if (!/^\d+$/.test(intPart))
+  if (!/^\d+$/.test(intPart)) {
     return { ok: false, error: "Enter a valid number.", warnings };
-  if (fracPart && !/^\d+$/.test(fracPart))
+  }
+  if (fracPart && !/^\d+$/.test(fracPart)) {
     return { ok: false, error: "Enter a valid number.", warnings };
+  }
 
   const maxDec = Number(MAX_DECIMALS);
   const fracRaw = fracPart ?? "";
@@ -288,12 +346,13 @@ function parsePercentToScaled(raw: string): ParsedScaled {
   s = s.replace(/%/g, "");
   s = s.replace(/[^\d.,\-]/g, "");
 
-  if (!s)
+  if (!s) {
     return {
       ok: false,
       error: "Enter a valid percent (example: 5 or 2.5).",
       warnings,
     };
+  }
 
   if (s.includes("-")) {
     if (!s.startsWith("-") || s.slice(1).includes("-")) {
@@ -319,26 +378,29 @@ function parsePercentToScaled(raw: string): ParsedScaled {
 
   if (hasComma) s = s.replace(",", ".");
 
-  // now only digits and dot
-  if (!/^\d*\.?\d*$/.test(s))
+  if (!/^\d*\.?\d*$/.test(s)) {
     return { ok: false, error: "Enter a valid percent.", warnings };
-  if (s === "." || s === "")
+  }
+  if (s === "." || s === "") {
     return { ok: false, error: "Enter a valid percent.", warnings };
+  }
 
-  // Convert to scaled (same 12-dec fixed point)
   const parts = s.split(".");
   const intPart = (parts[0] ?? "0").replace(/^0+(?=\d)/, "") || "0";
   const fracPart = parts[1] ?? "";
 
-  if (!/^\d+$/.test(intPart))
+  if (!/^\d+$/.test(intPart)) {
     return { ok: false, error: "Enter a valid percent.", warnings };
-  if (fracPart && !/^\d+$/.test(fracPart))
+  }
+  if (fracPart && !/^\d+$/.test(fracPart)) {
     return { ok: false, error: "Enter a valid percent.", warnings };
+  }
 
   const maxDec = Number(MAX_DECIMALS);
   const fracCapped =
     fracPart.length > maxDec ? fracPart.slice(0, maxDec) : fracPart;
   const fracPadded = fracCapped.padEnd(maxDec, "0");
+
   const scaled =
     BigInt(intPart) * SCALE + (fracPadded ? BigInt(fracPadded) : 0n);
 
@@ -561,7 +623,7 @@ export default function RentAfterIncrease() {
     // Annualize increase
     let annualIncrease = 0n;
     if (mode === "percent") {
-      // pctScaled is percent in SCALE units: e.g. "5" => 5*SCALE
+      // pctScaled is percent in SCALE units: "5" => 5*SCALE
       const pctScaled = pctParsed.scaled as bigint;
 
       // annualIncrease = annualCurrent * (pct / 100)
@@ -575,11 +637,12 @@ export default function RentAfterIncrease() {
 
     const annualNew = annualCurrent + annualIncrease;
 
-    // Effective percent (display)
-    const effectivePctNum =
+    // Effective percent (safe bigint math, 2 decimals)
+    const pctTimes100 =
       annualCurrent > 0n
-        ? (Number(annualIncrease) / Number(annualCurrent)) * 100
-        : 0;
+        ? mulDivInt(annualIncrease, 10_000n, annualCurrent)
+        : 0n;
+    const effectivePctNum = Number(pctTimes100) / 100;
 
     const periods: Period[] = [
       "hourly",
@@ -622,6 +685,7 @@ export default function RentAfterIncrease() {
       newMonthlyAvg,
       new4w,
       avgMonthDays: 365 / 12,
+      oldPerSelected,
     };
   }, [currentParsed, amtParsed, pctParsed, mode, period]);
 
@@ -738,7 +802,7 @@ export default function RentAfterIncrease() {
     );
 
     downloadTextFile(
-      "rent-after-increase.csv",
+      "rent-after-increase-calculator.csv",
       rows.join("\n"),
       "text/csv;charset=utf-8",
     );
@@ -826,7 +890,7 @@ export default function RentAfterIncrease() {
         "@type": "ListItem",
         position: 2,
         name: "Rent After Increase Calculator",
-        item: "https://rentconverter.com/rent-after-increase",
+        item: "https://rentconverter.com/rent-after-increase-calculator",
       },
     ],
   };
@@ -844,8 +908,21 @@ export default function RentAfterIncrease() {
     name: "Rent After Increase Calculator",
     description:
       "Calculate your new rent after an increase (percent or fixed amount) using annual equivalence (365-day year). Includes annual impact and pay-cycle breakdowns.",
-    url: "https://rentconverter.com/rent-after-increase",
+    url: "https://rentconverter.com/rent-after-increase-calculator",
   };
+
+  const currentDescribedBy = currentParsed.ok
+    ? "rc-current-help"
+    : "rc-current-help rc-current-error";
+
+  const increaseDescribedBy =
+    mode === "percent"
+      ? pctParsed.ok
+        ? "rc-inc-help"
+        : "rc-inc-help rc-inc-error"
+      : amtParsed.ok
+        ? "rc-inc-help"
+        : "rc-inc-help rc-inc-error";
 
   return (
     <main className="bg-white text-slate-700 scroll-smooth">
@@ -863,8 +940,14 @@ export default function RentAfterIncrease() {
       />
 
       <section className="pb-4 rc-no-print">
-        <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-500">
-          <a href={safeHref("/")} className="hover:underline">
+        <nav
+          className="max-w-6xl mx-auto px-6 text-sm text-slate-500"
+          aria-label="Breadcrumb"
+        >
+          <a
+            href={safeHref("/")}
+            className="hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded"
+          >
             Home
           </a>{" "}
           / Rent After Increase Calculator
@@ -875,42 +958,21 @@ export default function RentAfterIncrease() {
         <h1 className="text-4xl font-bold text-slate-800 mb-4">
           Rent After Increase Calculator
         </h1>
-        <p className="text-slate-600 max-w-2xl mx-auto text-lg">
+        <p className="text-slate-600 max-w-2xl mx-auto text-lg leading-relaxed">
           Estimate your new rent after an increase and see the annual impact.
           Results are calculated using annual equivalence so the change remains
           comparable across common billing cycles.
         </p>
-
-        <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3 text-sm">
-          <a
-            href={safeHref("/rent-increase-percentage")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Rent increase percentage
-          </a>
-          <a
-            href={safeHref("/rent-increase-calculator")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Rent increase calculator
-          </a>
-          <a
-            href={safeHref("/rent-affordability-calculator")}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-          >
-            Rent affordability calculator
-          </a>
-        </div>
       </section>
 
       <section id="calculator" className="mx-auto max-w-6xl px-6 pb-6">
         <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:p-8 rc-print-block">
           <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
-              <h2 className="text-xl sm:text-2xl font-bold">
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
                 Calculate the new rent after an increase
               </h2>
-              <p className="mt-1 text-sm text-slate-600">
+              <p className="mt-1 text-sm text-slate-600 leading-relaxed">
                 Enter the current rent, choose how the increase is stated, and
                 select the billing period used by the rent amount.
               </p>
@@ -919,21 +981,8 @@ export default function RentAfterIncrease() {
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
               <button
                 type="button"
-                onClick={handleExportCsv}
-                disabled={!canShowResults}
-                className={`rounded-xl border px-4 py-2 text-sm font-semibold transition ${
-                  canShowResults
-                    ? "border-slate-200 bg-white text-slate-800 hover:bg-sky-50 hover:border-sky-200"
-                    : "border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed"
-                }`}
-                aria-disabled={!canShowResults}
-              >
-                Export CSV
-              </button>
-              <button
-                type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
               >
                 Print / Save as PDF
               </button>
@@ -950,16 +999,21 @@ export default function RentAfterIncrease() {
                 value={currentRent}
                 onChange={(e) => setCurrentRent(e.target.value)}
                 placeholder="e.g. 2000 or 2000.00"
-                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
                 aria-invalid={!currentParsed.ok}
+                aria-describedby={currentDescribedBy}
               />
-              <p className="mt-2 text-xs text-slate-500">
+              <p id="rc-current-help" className="mt-2 text-xs text-slate-500">
                 Accepted inputs: $2,000, 2000.00, 2000, .5, 12., 2000,50 (comma
                 decimal). If input is invalid or ambiguous, results are not
                 shown.
               </p>
               {!currentParsed.ok ? (
-                <p className="mt-2 text-sm font-semibold text-rose-700">
+                <p
+                  id="rc-current-error"
+                  className="mt-2 text-sm font-semibold text-rose-700"
+                  role="alert"
+                >
                   {currentParsed.error}
                 </p>
               ) : currentParsed.warnings.length ? (
@@ -985,7 +1039,7 @@ export default function RentAfterIncrease() {
                     isPeriod(e.target.value) ? e.target.value : "monthly",
                   )
                 }
-                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
                 aria-label="Billing period"
               >
                 {Object.entries(PERIOD_LABEL).map(([k, v]) => (
@@ -994,7 +1048,7 @@ export default function RentAfterIncrease() {
                   </option>
                 ))}
               </select>
-              <p className="mt-2 text-xs text-slate-500">
+              <p className="mt-2 text-xs text-slate-500 leading-relaxed">
                 Conversions are computed through annual equivalence using a
                 365-day year and an average month length (365 ÷ 12 days).
               </p>
@@ -1006,7 +1060,7 @@ export default function RentAfterIncrease() {
                     type="checkbox"
                     checked={roundDisplay}
                     onChange={(e) => setRoundDisplay(e.target.checked)}
-                    className="h-4 w-4"
+                    className="h-4 w-4 accent-sky-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded"
                   />
                   Round displayed values (display only)
                 </label>
@@ -1025,7 +1079,8 @@ export default function RentAfterIncrease() {
                         ),
                       )
                     }
-                    className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
+                    className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
+                    aria-label="Displayed decimals"
                   >
                     <option value={0}>0</option>
                     <option value={2}>2</option>
@@ -1034,7 +1089,7 @@ export default function RentAfterIncrease() {
                   </select>
                 </div>
 
-                <p className="mt-2 text-xs text-slate-500">
+                <p className="mt-2 text-xs text-slate-500 leading-relaxed">
                   Calculations preserve decimals internally (up to 12). If
                   rounding is enabled, only displayed values are rounded.
                 </p>
@@ -1050,13 +1105,13 @@ export default function RentAfterIncrease() {
                 onChange={(e) =>
                   setMode(isMode(e.target.value) ? e.target.value : "percent")
                 }
-                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
                 aria-label="Increase type"
               >
                 <option value="percent">Percent increase</option>
                 <option value="amount">Fixed amount increase</option>
               </select>
-              <p className="mt-2 text-xs text-slate-500">
+              <p className="mt-2 text-xs text-slate-500 leading-relaxed">
                 Percent applies to annualized rent. Fixed amount is treated as
                 an add-on per the selected billing period.
               </p>
@@ -1074,15 +1129,20 @@ export default function RentAfterIncrease() {
                     value={increasePercent}
                     onChange={(e) => setIncreasePercent(e.target.value)}
                     placeholder="e.g. 5 or 2.5"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
                     aria-invalid={!pctParsed.ok}
+                    aria-describedby={increaseDescribedBy}
                   />
-                  <p className="mt-2 text-xs text-slate-500">
+                  <p id="rc-inc-help" className="mt-2 text-xs text-slate-500">
                     Enter a percent like 5, 2.5, or 5%. If invalid, results are
                     not shown.
                   </p>
                   {!pctParsed.ok ? (
-                    <p className="mt-2 text-sm font-semibold text-rose-700">
+                    <p
+                      id="rc-inc-error"
+                      className="mt-2 text-sm font-semibold text-rose-700"
+                      role="alert"
+                    >
                       {pctParsed.error}
                     </p>
                   ) : pctParsed.warnings.length ? (
@@ -1105,15 +1165,20 @@ export default function RentAfterIncrease() {
                     value={increaseAmount}
                     onChange={(e) => setIncreaseAmount(e.target.value)}
                     placeholder="e.g. 100 or 100.00"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
                     aria-invalid={!amtParsed.ok}
+                    aria-describedby={increaseDescribedBy}
                   />
-                  <p className="mt-2 text-xs text-slate-500">
+                  <p id="rc-inc-help" className="mt-2 text-xs text-slate-500">
                     Enter the increase as an amount per the same billing period
                     as the current rent. If invalid, results are not shown.
                   </p>
                   {!amtParsed.ok ? (
-                    <p className="mt-2 text-sm font-semibold text-rose-700">
+                    <p
+                      id="rc-inc-error"
+                      className="mt-2 text-sm font-semibold text-rose-700"
+                      role="alert"
+                    >
                       {amtParsed.error}
                     </p>
                   ) : amtParsed.warnings.length ? (
@@ -1143,7 +1208,7 @@ export default function RentAfterIncrease() {
                     isCurrency(e.target.value) ? e.target.value : "USD",
                   )
                 }
-                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
                 aria-label="Currency"
               >
                 {SUPPORTED_CURRENCIES.map((c) => (
@@ -1193,16 +1258,18 @@ export default function RentAfterIncrease() {
                 </div>
 
                 <div className="mt-2 flex flex-col gap-2">
-                  <div className="text-4xl sm:text-5xl font-extrabold text-sky-800">
+                  <div className="text-4xl sm:text-5xl font-extrabold text-sky-800 tabular-nums tracking-tight">
                     {fmt(computed.newPerSelected)}
                   </div>
-                  <div className="text-sm text-slate-600">
-                    {fmt(
-                      convertScaled(computed.annualCurrent, "annual", period),
-                    )}{" "}
+                  <div className="text-sm text-slate-600 leading-relaxed">
+                    <span className="tabular-nums">
+                      {fmt(computed.oldPerSelected)}
+                    </span>{" "}
                     per {PERIOD_LABEL[period].toLowerCase()} becomes{" "}
-                    <strong>{fmt(computed.newPerSelected)}</strong> per{" "}
-                    {PERIOD_LABEL[period].toLowerCase()} using annual
+                    <strong className="tabular-nums">
+                      {fmt(computed.newPerSelected)}
+                    </strong>{" "}
+                    per {PERIOD_LABEL[period].toLowerCase()} using annual
                     equivalence.
                   </div>
 
@@ -1212,7 +1279,7 @@ export default function RentAfterIncrease() {
                       onClick={() =>
                         handleCopy("new", fmt(computed.newPerSelected))
                       }
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                      className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                     >
                       {copiedKey === "new" ? "Copied" : "Copy new rent"}
                     </button>
@@ -1221,15 +1288,22 @@ export default function RentAfterIncrease() {
                       onClick={() =>
                         handleCopy(
                           "summary",
-                          `New per ${PERIOD_LABEL[period]}: ${fmt(computed.newPerSelected)} | Annual increase: ${fmt(computed.annualIncrease)} | New annual: ${fmt(computed.annualNew)}`,
+                          `New per ${PERIOD_LABEL[period]}: ${fmt(
+                            computed.newPerSelected,
+                          )} | Annual increase: ${fmt(computed.annualIncrease)} | New annual: ${fmt(
+                            computed.annualNew,
+                          )}`,
                         )
                       }
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                      className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                     >
                       {copiedKey === "summary" ? "Copied" : "Copy summary"}
                     </button>
                     {copiedKey === "copy_failed" ? (
-                      <span className="self-center text-sm font-semibold text-rose-700">
+                      <span
+                        className="self-center text-sm font-semibold text-rose-700"
+                        role="status"
+                      >
                         Copy failed
                       </span>
                     ) : null}
@@ -1241,7 +1315,7 @@ export default function RentAfterIncrease() {
                     <div className="text-xs text-slate-500">
                       Estimated percent change
                     </div>
-                    <div className="mt-1 text-lg font-bold text-slate-800">
+                    <div className="mt-1 text-lg font-bold text-slate-800 tabular-nums">
                       {computed.effectivePctNum.toFixed(2)}%
                     </div>
                   </div>
@@ -1250,7 +1324,7 @@ export default function RentAfterIncrease() {
                     <div className="text-xs text-slate-500">
                       Change per selected period
                     </div>
-                    <div className="mt-1 text-lg font-bold text-slate-800">
+                    <div className="mt-1 text-lg font-bold text-slate-800 tabular-nums">
                       {fmt(computed.deltaPerSelected)}
                     </div>
                   </div>
@@ -1259,7 +1333,7 @@ export default function RentAfterIncrease() {
                     <div className="text-xs text-slate-500">
                       Annual increase (annualized)
                     </div>
-                    <div className="mt-1 text-lg font-bold text-slate-800">
+                    <div className="mt-1 text-lg font-bold text-slate-800 tabular-nums">
                       {fmt(computed.annualIncrease)}
                     </div>
                   </div>
@@ -1269,19 +1343,19 @@ export default function RentAfterIncrease() {
                     <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                       <div className="text-sm text-slate-700">
                         Current annual rent:{" "}
-                        <strong className="text-slate-900">
+                        <strong className="text-slate-900 tabular-nums">
                           {fmt(computed.annualCurrent)}
                         </strong>
                       </div>
                       <div className="text-sm text-slate-700">
                         New annual rent:{" "}
-                        <strong className="text-slate-900">
+                        <strong className="text-slate-900 tabular-nums">
                           {fmt(computed.annualNew)}
                         </strong>
                       </div>
                       <div className="text-sm text-slate-700">
                         Difference:{" "}
-                        <strong className="text-slate-900">
+                        <strong className="text-slate-900 tabular-nums">
                           {fmt(computed.annualNew - computed.annualCurrent)}
                         </strong>
                       </div>
@@ -1295,25 +1369,25 @@ export default function RentAfterIncrease() {
                     <div className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
                       <div className="text-sm text-slate-700">
                         Current (monthly avg):{" "}
-                        <strong className="text-slate-900">
+                        <strong className="text-slate-900 tabular-nums">
                           {fmt(computed.oldMonthlyAvg)}
                         </strong>
                       </div>
                       <div className="text-sm text-slate-700">
                         Current (4 weeks):{" "}
-                        <strong className="text-slate-900">
+                        <strong className="text-slate-900 tabular-nums">
                           {fmt(computed.old4w)}
                         </strong>
                       </div>
                       <div className="text-sm text-slate-700">
                         New (monthly avg):{" "}
-                        <strong className="text-slate-900">
+                        <strong className="text-slate-900 tabular-nums">
                           {fmt(computed.newMonthlyAvg)}
                         </strong>
                       </div>
                       <div className="text-sm text-slate-700">
                         New (4 weeks):{" "}
-                        <strong className="text-slate-900">
+                        <strong className="text-slate-900 tabular-nums">
                           {fmt(computed.new4w)}
                         </strong>
                       </div>
@@ -1344,7 +1418,7 @@ export default function RentAfterIncrease() {
               <h3 className="text-lg font-bold text-slate-900 mb-3">
                 Full breakdown across periods (annual-equivalent)
               </h3>
-              <p className="text-sm text-slate-600 mb-4">
+              <p className="text-sm text-slate-600 mb-4 leading-relaxed">
                 This table annualizes the current rent and the new rent first,
                 then expresses both as hourly, daily, weekly, 4-week, monthly,
                 and annual equivalents. This helps compare the increase across
@@ -1367,13 +1441,13 @@ export default function RentAfterIncrease() {
                         <td className="py-2 pr-4 font-semibold text-slate-800">
                           {PERIOD_LABEL[row.p]}
                         </td>
-                        <td className="py-2 pr-4 text-slate-800">
+                        <td className="py-2 pr-4 text-slate-800 tabular-nums">
                           {fmt(row.oldVal)}
                         </td>
-                        <td className="py-2 pr-4 text-slate-800">
+                        <td className="py-2 pr-4 text-slate-800 tabular-nums">
                           {fmt(row.newVal)}
                         </td>
-                        <td className="py-2 pr-4 text-slate-800">
+                        <td className="py-2 pr-4 text-slate-800 tabular-nums">
                           {fmt(row.delta)}
                         </td>
                       </tr>
@@ -1382,7 +1456,7 @@ export default function RentAfterIncrease() {
                 </table>
               </div>
 
-              <p className="mt-4 text-xs text-slate-500">
+              <p className="mt-4 text-xs text-slate-500 leading-relaxed">
                 Assumptions: 1 year = 365 days, 1 week = 7 days, every 4 weeks =
                 28 days, and month = 365 ÷ 12 days (average). Exact billing and
                 due dates vary by agreement.
@@ -1390,7 +1464,7 @@ export default function RentAfterIncrease() {
             </div>
           ) : null}
 
-          <p className="mt-6 text-sm text-slate-500">
+          <p className="mt-6 text-sm text-slate-500 leading-relaxed">
             Assumptions: 1 year = 365 days, 1 week = 7 days, every 4 weeks = 28
             days, and month = 365 ÷ 12 days (average). This page estimates
             full-period equivalents and does not model fees, proration, or
@@ -1406,12 +1480,14 @@ export default function RentAfterIncrease() {
         </h2>
 
         <div className="rounded-2xl border border-slate-200 bg-white p-6">
-          <ol className="list-decimal pl-5 space-y-3 text-slate-700">
+          <ol className="list-decimal pl-5 space-y-3 text-slate-700 leading-relaxed">
             <li>
-              <strong>Input is validated before any results are shown.</strong>{" "}
+              <strong>
+                Inputs are validated before any results are shown.
+              </strong>{" "}
               If the current rent, increase percent, or increase amount is
-              invalid or ambiguous, the calculator does not show a misleading $0
-              result.
+              invalid or ambiguous, the calculator does not show a misleading
+              zero result.
             </li>
             <li>
               <strong>Everything is converted through an annual basis.</strong>{" "}
@@ -1445,7 +1521,7 @@ export default function RentAfterIncrease() {
 
           <div className="mt-4 rounded-xl border border-slate-100 bg-slate-50 p-4 text-sm text-slate-700">
             <div className="font-semibold">What you can do</div>
-            <ul className="mt-2 list-disc pl-5 space-y-1 text-slate-600">
+            <ul className="mt-2 list-disc pl-5 space-y-1 text-slate-600 leading-relaxed">
               <li>
                 Estimate your new rent in the same billing period you entered
               </li>
@@ -1457,27 +1533,27 @@ export default function RentAfterIncrease() {
             </ul>
           </div>
 
-          <p className="text-slate-700 mt-6">
+          <p className="text-slate-700 mt-6 leading-relaxed">
             Related pages:{" "}
             <a
-              href={safeHref("/rent-increase-percentage")}
-              className="text-sky-700 hover:underline"
+              href={safeHref("/rent-increase-percentage-calculator")}
+              className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded"
             >
-              rent increase percentage
+              rent increase percentage calculator
             </a>
             ,{" "}
             <a
-              href={safeHref("/rent-paid-weekly-vs-monthly")}
-              className="text-sky-700 hover:underline"
+              href={safeHref("/rent-increase-calculator")}
+              className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded"
             >
-              rent paid weekly vs monthly
+              rent increase calculator
             </a>
             , and{" "}
             <a
-              href={safeHref("/rent-affordability-calculator")}
-              className="text-sky-700 hover:underline"
+              href={safeHref("/rent-paid-every-4-weeks-calculator")}
+              className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded"
             >
-              rent affordability calculator
+              rent paid every 4 weeks calculator
             </a>
             .
           </p>
@@ -1494,7 +1570,7 @@ export default function RentAfterIncrease() {
               <h3 className="font-semibold text-lg text-slate-800 mb-1">
                 {f.q}
               </h3>
-              <p className="text-slate-600">{f.a}</p>
+              <p className="text-slate-600 leading-relaxed">{f.a}</p>
             </div>
           ))}
         </div>
