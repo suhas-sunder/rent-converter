@@ -1204,7 +1204,7 @@ export default function RentPaidEvery4Weeks() {
       {/* Required explanation section above FAQ */}
       <section
         id="how-it-works"
-        className="max-w-5xl mx-auto px-6 pt-16 rc-no-print"
+        className="max-w-5xl mx-auto px-6 pt-8 rc-no-print"
       >
         <h2 className="text-3xl font-bold mb-6 text-center text-slate-900">
           How this tool works and what to expect

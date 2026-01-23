@@ -1182,7 +1182,7 @@ export default function AnnualToWeeklyRentConverter() {
 
       <section
         id="how-it-works"
-        className="max-w-5xl mx-auto px-6 pt-16 rc-no-print"
+        className="max-w-5xl mx-auto px-6 pt-8 rc-no-print"
       >
         <h2 className="text-3xl font-bold text-center mb-6 text-slate-900">
           How it works
@@ -1221,7 +1221,7 @@ export default function AnnualToWeeklyRentConverter() {
         </div>
       </section>
 
-      <section id="faq" className="max-w-5xl mx-auto py-20 px-6 rc-no-print">
+      <section id="faq" className="max-w-5xl mx-auto py-16 px-6 rc-no-print">
         <h2 className="text-3xl font-bold text-center mb-8 text-slate-800">
           Frequently Asked Questions
         </h2>

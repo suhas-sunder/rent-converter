@@ -34,10 +34,59 @@ You are auditing and applying SMALL, LOCAL fixes to RentConverter.com Remix/Reac
 
 5. There's a list of valid links available for internal linking. If it's worth linking more pages, feel free to do so with the appropriate contextual information. Don't overdo it if there are already enough links being displayed.
 
+
+INPUT GROUPING PREVIEW RULE (NON-NEGOTIABLE)
+
+Goal:
+When the amount input is NOT focused, show a human-friendly preview with grouping separators (commas) so large numbers are readable. When the input IS focused, show the raw editable string exactly as the user typed it (no auto-formatting while typing).
+
+Definitions:
+- rawValue: the exact string in state that updates on every keystroke.
+- parsedValue: the validated numeric interpretation (scaled integer / fixed-point).
+- previewValue: the display-only, grouped representation derived from parsedValue.
+
+Behavior:
+1) While focused:
+   - input.value MUST equal rawValue.
+   - Do NOT inject commas or reformat the string while typing.
+   - Do NOT change decimals, remove trailing ".", or rewrite ".5" into "0.5".
+2) On blur (not focused):
+   - if rawValue parses successfully:
+       input.value MUST switch to previewValue = grouped formatting of parsedValue
+       (example: "240000" -> "240,000")
+   - if rawValue is invalid/ambiguous:
+       input.value MUST remain rawValue (do NOT “fix” it)
+       show an error message instead of silently changing it
+3) On focus again:
+   - immediately revert the input display back to rawValue (the editable string), not the grouped preview.
+
+Formatting requirements for previewValue:
+- Add grouping separators to the integer part (locale OK, but must include commas in en-US).
+- Preserve decimals (do not drop them).
+- Preserve up to the parser’s supported decimal precision (example: up to 6 or 12).
+- If currency formatting is used elsewhere, previewValue may be either:
+   A) grouped number only: "240,000.50"
+   B) currency-formatted: "HK$240,000.50"
+   But MUST be consistent across the app. (Pick one and stick to it.)
+
+Examples (expected):
+- rawValue "240000"   -> blur preview "240,000"
+- rawValue "240000.5" -> blur preview "240,000.5" (or "240,000.50" only if you explicitly standardize decimals)
+- rawValue ".5"       -> blur preview "0.5" (display-only; on focus should show ".5" again)
+- rawValue "12."      -> blur preview "12" or "12.0" ONLY if the parser treats trailing dot as valid; on focus must show "12."
+- rawValue "1,250.50" -> blur preview "1,250.50"
+- rawValue "$1,234.56"-> blur preview "1,234.56" (or "$1,234.56" if currency preview is chosen)
+- rawValue "1250,50"  -> blur preview "1,250.50" if comma-decimal is accepted and unambiguous
+- rawValue "1,2"      -> invalid, keep "1,2" on blur and show error (no preview)
+
+Implementation constraint:
+- This is DISPLAY-ONLY formatting. rawValue in state must never be rewritten just to add commas.
+- This rule must be applied to ALL amount inputs across RentConverter.com routes going forward.
+
+
 Deliverables
 A) Out the updated code in full.
 D) Keep changes minimal. No large refactors.
-
 
 Fix the code and give it back in full. No comments. No questions. Just the full fixed code.
 

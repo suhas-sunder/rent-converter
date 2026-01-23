@@ -1187,7 +1187,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="overview" className="max-w-5xl mx-auto px-6 pt-16">
+      <section id="overview" className="max-w-5xl mx-auto px-6 pt-8">
         <h2 className="text-3xl font-bold mb-6 text-center text-slate-900 tracking-tight">
           What this tool helps you do
         </h2>
@@ -1251,7 +1251,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="learn" className="max-w-5xl mx-auto px-6 pt-16">
+      <section id="learn" className="max-w-5xl mx-auto px-6 pt-8">
         <h2 className="text-3xl font-bold mb-6 text-center text-slate-900 tracking-tight">
           How rent conversion works
         </h2>
@@ -1293,7 +1293,7 @@ export default function Home() {
         </p>
       </section>
 
-      <section id="how-it-works" className="max-w-5xl mx-auto px-6 pt-16">
+      <section id="how-it-works" className="max-w-5xl mx-auto px-6 pt-8">
         <h2 className="text-3xl font-bold mb-6 text-center text-slate-900 tracking-tight">
           How it works on RentConverter.com
         </h2>
@@ -1321,7 +1321,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="faq" className="max-w-5xl mx-auto py-20 px-6">
+      <section id="faq" className="max-w-5xl mx-auto py-16 px-6">
         <h2 className="text-3xl font-bold text-center mb-8 text-slate-800 tracking-tight">
           Frequently Asked Questions
         </h2>

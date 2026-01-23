@@ -1104,7 +1104,7 @@ export default function BiweeklyToAnnualRent() {
       {/* Required: explanation above FAQ */}
       <section
         id="how-it-works"
-        className="max-w-5xl mx-auto px-6 pt-16 rc-no-print"
+        className="max-w-5xl mx-auto px-6 pt-8 rc-no-print"
       >
         <h2 className="text-3xl sm:text-4xl font-bold text-center mb-7 text-slate-900 tracking-tight">
           How it works
@@ -1141,7 +1141,7 @@ export default function BiweeklyToAnnualRent() {
         </div>
       </section>
 
-      <section id="faq" className="max-w-5xl mx-auto py-20 px-6 rc-no-print">
+      <section id="faq" className="max-w-5xl mx-auto py-16 px-6 rc-no-print">
         <h2 className="text-3xl sm:text-4xl font-bold text-center mb-9 text-slate-900 tracking-tight">
           Frequently Asked Questions
         </h2>

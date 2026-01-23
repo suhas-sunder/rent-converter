@@ -7,7 +7,7 @@ import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 export const meta: Route.MetaFunction = () => {
   const title = "Annual to Biweekly Rent Converter (14-Day Equivalent)";
   const description =
-    "Convert annual rent to a biweekly (every 14 days) equivalent using a 365-day year. Decimal-safe input, instant breakdown, CSV export, and print-to-PDF. Free and private (no signup).";
+    "Convert annual rent to a biweekly (every 14 days) equivalent using a 365-day year. Decimal-safe input, instant breakdown, and print-to-PDF. Free and private (no signup).";
 
   return [
     { title },
@@ -65,44 +65,27 @@ const PERIOD_LABEL: Record<Period, string> = {
   annual: "Annual",
 };
 
-// Whitelist rule (single source of truth)
-//
-// Use this everywhere you create internal links.
-// If a link is not in ROUTE_WHITELIST, it must not appear anywhere in the UI.
 const ROUTE_WHITELIST = new Set<string>([
-  // Home
   "/",
-
-  // Rent converter hub
   "/rent-converter",
-
-  // Frequency converters
   "/monthly-to-weekly-rent-converter",
   "/weekly-to-monthly-rent-converter",
   "/weekly-to-annual-rent-converter",
   "/weekly-to-biweekly-rent-converter",
-
   "/biweekly-to-weekly-rent-converter",
   "/biweekly-to-monthly-rent-converter",
   "/biweekly-to-annual-rent-converter",
-
   "/monthly-to-annual-rent-converter",
   "/annual-to-monthly-rent-converter",
-
   "/monthly-to-daily-rent-converter",
   "/daily-to-monthly-rent-converter",
-
   "/monthly-to-hourly-rent-converter",
   "/hourly-to-monthly-rent-converter",
-
   "/hourly-to-annual-rent-converter",
   "/annual-to-hourly-rent-converter",
-
   "/annual-to-weekly-rent-converter",
   "/annual-to-biweekly-rent-converter",
   "/monthly-to-biweekly-rent-converter",
-
-  // Rent calculators
   "/rent-calculator",
   "/rent-per-day-calculator",
   "/rent-per-week-calculator",
@@ -110,19 +93,13 @@ const ROUTE_WHITELIST = new Set<string>([
   "/rent-per-paycheck-calculator",
   "/rent-split-calculator",
   "/rent-due-date-calculator",
-
-  // Affordability and income
   "/rent-as-percentage-of-income-calculator",
   "/how-much-rent-can-i-afford-calculator",
   "/rent-after-tax-income-calculator",
   "/rent-vs-take-home-pay-calculator",
-
-  // Rent increases
   "/rent-increase-calculator",
   "/rent-increase-percentage-calculator",
   "/rent-after-increase-calculator",
-
-  // Rent vs buy
   "/rent-vs-buy-calculator",
 ]);
 
@@ -172,19 +149,13 @@ function isCurrency(x: string): x is Currency {
   return (SUPPORTED_CURRENCIES as readonly string[]).includes(x);
 }
 
-/**
- * Decimal-safe fixed-point representation:
- * - Keep up to MAX_DECIMALS digits after decimal internally as an integer "scaled" value.
- * - All computations occur on scaled integers to avoid common float drift.
- * - Results are effectively truncated beyond MAX_DECIMALS (internal precision cap), and display rounding is explicit.
- */
 const MAX_DECIMALS = 12n;
 const SCALE = 10n ** MAX_DECIMALS;
 
 type ParsedAmount = {
   ok: boolean;
-  scaled?: bigint; // amount * SCALE
-  normalized?: string; // normalized decimal with '.' as separator (no grouping)
+  scaled?: bigint;
+  normalized?: string;
   warnings: string[];
   error?: string;
 };
@@ -200,8 +171,6 @@ function absBigInt(x: bigint) {
 }
 
 function roundScaledToDigits(scaled: bigint, digits: number): bigint {
-  // scaled uses SCALE = 10^12.
-  // digits must be in [0..12]
   const d = Math.max(0, Math.min(12, Math.trunc(digits)));
   const drop = 12 - d;
   const factor = 10n ** BigInt(drop);
@@ -217,7 +186,6 @@ function roundScaledToDigits(scaled: bigint, digits: number): bigint {
 }
 
 function toNumberSafe(scaled: bigint): number {
-  // This route clamps inputs so Number conversion stays safe for Intl formatting.
   return Number(scaled) / Number(SCALE);
 }
 
@@ -250,17 +218,6 @@ function formatPercent(n: number, displayDecimals: number): string {
   return `${(n * 100).toFixed(Math.max(0, Math.min(6, displayDecimals)))}%`;
 }
 
-/**
- * Robust parser for money-like inputs.
- * Accepts:
- * - "$24,000.50", "24 000.50", "24000", "24000.00", ".5", "12."
- * - "1250,50" (comma as decimal)
- *
- * Avoids false info by:
- * - rejecting empty/invalid
- * - rejecting negative
- * - warning when interpreting single comma patterns like "1,234" as thousands grouping
- */
 function parseMoneyInputToScaled(raw: string): ParsedAmount {
   const warnings: string[] = [];
   const s0 = (raw ?? "").trim();
@@ -269,7 +226,6 @@ function parseMoneyInputToScaled(raw: string): ParsedAmount {
     return { ok: false, error: "Enter an annual rent amount.", warnings };
   }
 
-  // Keep digits, separators, and a leading minus for validation, strip currency symbols and letters.
   let s = s0.replace(/\s+/g, "");
   s = s.replace(/[^\d.,\-]/g, "");
 
@@ -281,7 +237,6 @@ function parseMoneyInputToScaled(raw: string): ParsedAmount {
     };
   }
 
-  // Negative handling
   if (s.includes("-")) {
     if (!s.startsWith("-") || s.slice(1).includes("-")) {
       return {
@@ -293,30 +248,24 @@ function parseMoneyInputToScaled(raw: string): ParsedAmount {
     return { ok: false, error: "Annual rent must be 0 or greater.", warnings };
   }
 
-  // Determine decimal separator:
   const lastDot = s.lastIndexOf(".");
   const lastComma = s.lastIndexOf(",");
 
   let decimalSep: "." | "," | null = null;
 
   if (lastDot !== -1 && lastComma !== -1) {
-    // Both present: last separator is decimal, the other(s) are grouping.
     decimalSep = lastDot > lastComma ? "." : ",";
   } else if (lastDot !== -1) {
-    // Only dot: treat as decimal.
     decimalSep = ".";
   } else if (lastComma !== -1) {
-    // Only comma: decide decimal vs grouping.
     const parts = s.split(",");
     if (parts.length === 2) {
       const after = parts[1] ?? "";
       const before = parts[0] ?? "";
 
-      // If 1-2 digits after comma, treat as decimal.
       if (/^\d{1,2}$/.test(after)) {
         decimalSep = ",";
       } else if (/^\d{3}$/.test(after) && /^\d{1,3}$/.test(before)) {
-        // Looks like thousands "1,234". Interpret as grouping but warn.
         decimalSep = null;
         warnings.push(
           `Interpreted "${s0}" as thousands grouping (1234). If you meant a decimal, use a dot like "1.234".`,
@@ -330,12 +279,10 @@ function parseMoneyInputToScaled(raw: string): ParsedAmount {
         };
       }
     } else {
-      // Multiple commas: assume grouping.
       decimalSep = null;
     }
   }
 
-  // Normalize: remove grouping separators, unify decimal to '.'
   let intPart = s;
   let fracPart = "";
 
@@ -352,18 +299,14 @@ function parseMoneyInputToScaled(raw: string): ParsedAmount {
     fracPart = split[1] ?? "";
   }
 
-  // Remove grouping separators from intPart
   if (decimalSep === ".") intPart = intPart.replace(/,/g, "");
   else if (decimalSep === ",") intPart = intPart.replace(/\./g, "");
   else intPart = intPart.replace(/[.,]/g, "");
 
-  // Handle leading ".5" or ",5" cases (intPart can be empty)
   if (intPart === "") intPart = "0";
 
-  // Strip leading zeros safely
   intPart = intPart.replace(/^0+(?=\d)/, "");
 
-  // Validate digits
   if (!/^\d+$/.test(intPart)) {
     return {
       ok: false,
@@ -388,7 +331,6 @@ function parseMoneyInputToScaled(raw: string): ParsedAmount {
   const scaled =
     BigInt(intPart) * SCALE + (fracPadded ? BigInt(fracPadded) : 0n);
 
-  // Clamp annual rent scaled to [0, 1_000_000_000]
   const maxAnnual = 1_000_000_000n * SCALE;
   const clamped = clampScaled(scaled, 0n, maxAnnual);
 
@@ -396,7 +338,6 @@ function parseMoneyInputToScaled(raw: string): ParsedAmount {
     warnings.push("Value was clamped to the supported maximum for safety.");
   }
 
-  // Normalized string for display in “interpreted as”
   const normalized = fracRaw.length ? `${intPart}.${fracCapped}` : `${intPart}`;
 
   return { ok: true, scaled: clamped, normalized, warnings };
@@ -408,13 +349,10 @@ function mulDivScaled(
   divDen: bigint,
 ): bigint {
   if (divDen === 0n) return 0n;
-  // No rounding inside math. Integer division truncates beyond MAX_DECIMALS precision cap.
   return (valueScaled * mulNum) / divDen;
 }
 
 function annualToPeriodScaled(annualScaled: bigint, period: Period): bigint {
-  // Annual is the source of truth: value over 365 days.
-  // monthly average is exactly annual / 12 in this model (since month = 365/12 days).
   switch (period) {
     case "annual":
       return annualScaled;
@@ -435,32 +373,6 @@ function annualToPeriodScaled(annualScaled: bigint, period: Period): bigint {
   }
 }
 
-function buildCsvRow(cols: string[]): string {
-  return cols
-    .map((c) => {
-      const s = String(c ?? "");
-      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
-      return s;
-    })
-    .join(",");
-}
-
-function downloadTextFile(
-  filename: string,
-  content: string,
-  mime = "text/plain;charset=utf-8",
-) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
 function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   if (raw === null) return fallback;
   try {
@@ -471,6 +383,28 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   }
 }
 
+function validateDisplayDecimals(raw: string | null): 0 | 2 | 4 | 6 {
+  if (raw === null) return 2;
+  const n = Number(raw);
+  if (!Number.isFinite(n)) return 2;
+  const t = Math.trunc(n);
+  if (t === 0 || t === 2 || t === 4 || t === 6) return t;
+  return 2;
+}
+
+function groupDigitsFromNormalized(normalized: string): string {
+  const s = String(normalized ?? "").trim();
+  if (!s) return "";
+  const parts = s.split(".");
+  const intPartRaw = parts[0] ?? "0";
+  const fracPart = parts[1] ?? "";
+
+  const intPart = intPartRaw.replace(/^0+(?=\d)/, "") || "0";
+  const grouped = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+  return fracPart ? `${grouped}.${fracPart}` : grouped;
+}
+
 export default function AnnualToBiweeklyRent() {
   const [amount, setAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "24000";
@@ -478,18 +412,19 @@ export default function AnnualToBiweeklyRent() {
     return saved ?? "24000";
   });
 
+  const [amountFocused, setAmountFocused] = useState<boolean>(false);
+
   const [currency, setCurrency] = useState<Currency>(() => {
     if (typeof window === "undefined") return "USD";
     const saved = window.localStorage.getItem("rc_atbw_currency");
     return saved && isCurrency(saved) ? saved : "USD";
   });
 
-  const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
+  const [displayDecimals, setDisplayDecimals] = useState<0 | 2 | 4 | 6>(() => {
     if (typeof window === "undefined") return 2;
-    const saved = window.localStorage.getItem("rc_atbw_display_decimals");
-    const n = saved ? Number(saved) : 2;
-    if (!Number.isFinite(n)) return 2;
-    return Math.max(0, Math.min(6, Math.trunc(n)));
+    return validateDisplayDecimals(
+      window.localStorage.getItem("rc_atbw_display_decimals"),
+    );
   });
 
   const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
@@ -544,6 +479,19 @@ export default function AnnualToBiweeklyRent() {
     if (!parsed.ok) return null;
     return fmt(annualScaled);
   }, [parsed.ok, annualScaled, currency, roundDisplay, displayDecimals]);
+
+  const amountPreview = useMemo(() => {
+    if (!parsed.ok) return null;
+    const normalized = parsed.normalized ?? "";
+    if (!normalized) return null;
+    return groupDigitsFromNormalized(normalized);
+  }, [parsed.ok, parsed.normalized]);
+
+  const amountInputValue = amountFocused
+    ? amount
+    : parsed.ok && amountPreview
+      ? amountPreview
+      : amount;
 
   const breakdownScaled = useMemo(() => {
     if (!parsed.ok) return null;
@@ -639,7 +587,7 @@ export default function AnnualToBiweeklyRent() {
         "@type": "ListItem",
         position: 2,
         name: "Annual to Biweekly Rent Converter",
-        item: "https://rentconverter.com/annual-to-biweekly-rent",
+        item: "https://rentconverter.com/annual-to-biweekly-rent-converter",
       },
     ],
   };
@@ -655,88 +603,6 @@ export default function AnnualToBiweeklyRent() {
       if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
       copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
     }
-  };
-
-  const handleExportCsv = () => {
-    if (!canShowResults || !breakdownScaled) return;
-
-    const rows: string[] = [];
-    rows.push(buildCsvRow(["Annual to Biweekly Rent Converter"]));
-    rows.push(
-      buildCsvRow([
-        "Assumptions",
-        "Year=365 days",
-        "Biweekly=14 days",
-        "4-week=28 days",
-        "Month=365/12 days (average)",
-      ]),
-    );
-    rows.push(buildCsvRow(["Currency formatting", currency]));
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Input (Annual)", interpretationLine ?? ""]));
-    rows.push(
-      buildCsvRow([
-        "Headline (Biweekly 14-day equivalent)",
-        fmt(headlineBiweeklyScaled),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Display",
-        roundDisplay
-          ? `Rounded to ${displayDecimals} decimals for display`
-          : "No display rounding (shows up to 12 decimals)",
-      ]),
-    );
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Period", "Amount"]));
-    const items: Array<[Period, string]> = [
-      ["hourly", fmt(breakdownScaled.hourly)],
-      ["daily", fmt(breakdownScaled.daily)],
-      ["weekly", fmt(breakdownScaled.weekly)],
-      ["biweekly", fmt(breakdownScaled.biweekly)],
-      ["every_4_weeks", fmt(breakdownScaled.every4w)],
-      ["monthly", fmt(breakdownScaled.monthly)],
-      ["annual", fmt(breakdownScaled.annual)],
-    ];
-    for (const [p, val] of items) {
-      rows.push(buildCsvRow([PERIOD_LABEL[p], val]));
-    }
-
-    rows.push(buildCsvRow([""]));
-    rows.push(
-      buildCsvRow([
-        "Monthly minus 4-week",
-        fmt(breakdownScaled.monthlyMinus4w),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Monthly vs 4-week difference (%)",
-        formatPercent(breakdownScaled.monthlyMinus4wPct, 2),
-      ]),
-    );
-
-    rows.push(buildCsvRow([""]));
-    rows.push(buildCsvRow(["Payment-count context (illustrative)", "Amount"]));
-    rows.push(
-      buildCsvRow(["Monthly × 12", fmt(breakdownScaled.annualFromMonthly12)]),
-    );
-    rows.push(
-      buildCsvRow(["Biweekly × 26", fmt(breakdownScaled.annualFromBiweekly26)]),
-    );
-    rows.push(
-      buildCsvRow(["4-week × 13", fmt(breakdownScaled.annualFrom4w13)]),
-    );
-
-    const csv = rows.join("\n");
-    downloadTextFile(
-      "annual-to-biweekly-rent.csv",
-      csv,
-      "text/csv;charset=utf-8",
-    );
   };
 
   const handlePrint = () => {
@@ -778,8 +644,8 @@ export default function AnnualToBiweeklyRent() {
         </h1>
         <p className="text-slate-600 max-w-3xl mx-auto text-lg">
           Convert an annual rent total into a biweekly 14-day equivalent for
-          paycheque-style budgeting. Decimal-safe parsing, no guessing on
-          ambiguous inputs, and an exportable breakdown.
+          paycheque-style budgeting. Decimal-safe parsing and no guessing on
+          ambiguous inputs.
         </p>
       </section>
 
@@ -809,8 +675,10 @@ export default function AnnualToBiweeklyRent() {
               <div className="flex gap-2">
                 <input
                   inputMode="decimal"
-                  value={amount}
+                  value={amountInputValue}
                   onChange={(e) => setAmount(e.target.value)}
+                  onFocus={() => setAmountFocused(true)}
+                  onBlur={() => setAmountFocused(false)}
                   placeholder="e.g. 24000 or 24000.50"
                   className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!parsed.ok}
@@ -868,6 +736,15 @@ export default function AnnualToBiweeklyRent() {
                   </span>
                 </p>
               ) : null}
+
+              {!amountFocused && parsed.ok && amountPreview ? (
+                <p className="mt-1 text-xs text-slate-500">
+                  Preview (grouped):{" "}
+                  <span className="font-semibold text-slate-700">
+                    {amountPreview}
+                  </span>
+                </p>
+              ) : null}
             </div>
 
             <div className="md:col-span-6">
@@ -887,73 +764,6 @@ export default function AnnualToBiweeklyRent() {
                   <div className="mt-1 text-base font-bold text-slate-800">
                     {PERIOD_LABEL.biweekly}
                   </div>
-                </div>
-              </div>
-
-              <div className="mt-3 rounded-xl border border-slate-200 bg-white p-4">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                  <div>
-                    <div className="text-xs text-slate-500">
-                      Rounding (display only)
-                    </div>
-                    <label className="mt-1 flex items-center gap-2 text-sm text-slate-700">
-                      <input
-                        type="checkbox"
-                        checked={roundDisplay}
-                        onChange={(e) => setRoundDisplay(e.target.checked)}
-                        className="h-4 w-4"
-                      />
-                      Round displayed values
-                    </label>
-                    <p className="mt-1 text-xs text-slate-500">
-                      Calculations use up to 12 decimals internally. If enabled,
-                      displayed values are rounded to your chosen decimals.
-                    </p>
-                  </div>
-
-                  <div className="sm:text-right">
-                    <div className="text-xs text-slate-500">
-                      Displayed decimals
-                    </div>
-                    <select
-                      value={displayDecimals}
-                      onChange={(e) =>
-                        setDisplayDecimals(
-                          Math.max(
-                            0,
-                            Math.min(
-                              6,
-                              Math.trunc(Number(e.target.value) || 2),
-                            ),
-                          ),
-                        )
-                      }
-                      className="mt-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
-                      aria-label="Displayed decimals"
-                    >
-                      <option value={0}>0</option>
-                      <option value={2}>2</option>
-                      <option value={4}>4</option>
-                      <option value={6}>6</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="mt-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
-                  <div className="font-semibold">
-                    Assumptions used on this page
-                  </div>
-                  <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
-                    <li>1 year = 365 days</li>
-                    <li>Biweekly = 14 days</li>
-                    <li>4-week rent = 28 days</li>
-                    <li>Month = 365 ÷ 12 days (average)</li>
-                    <li>
-                      This tool does not assume what is included in “rent”
-                      (fees, utilities, taxes). Enter the total you want to
-                      budget with.
-                    </li>
-                  </ul>
                 </div>
               </div>
             </div>
@@ -1165,9 +975,66 @@ export default function AnnualToBiweeklyRent() {
             prorations, fees, and what is included in rent.
           </p>
         </div>
+
+        <div className="mt-3 rounded-xl border border-slate-200 bg-white p-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <div className="text-xs text-slate-500">
+                Rounding (display only)
+              </div>
+              <label className="mt-1 flex items-center gap-2 text-sm text-slate-700">
+                <input
+                  type="checkbox"
+                  checked={roundDisplay}
+                  onChange={(e) => setRoundDisplay(e.target.checked)}
+                  className="h-4 w-4"
+                />
+                Round displayed values
+              </label>
+              <p className="mt-1 text-xs text-slate-500">
+                Calculations use up to 12 decimals internally. If enabled,
+                displayed values are rounded to your chosen decimals.
+              </p>
+            </div>
+
+            <div className="sm:text-right">
+              <div className="text-xs text-slate-500">Displayed decimals</div>
+              <select
+                value={displayDecimals}
+                onChange={(e) => {
+                  const v = Math.trunc(Number(e.target.value));
+                  setDisplayDecimals(
+                    v === 0 || v === 2 || v === 4 || v === 6 ? v : 2,
+                  );
+                }}
+                className="mt-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                aria-label="Displayed decimals"
+              >
+                <option value={0}>0</option>
+                <option value={2}>2</option>
+                <option value={4}>4</option>
+                <option value={6}>6</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="mt-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+            <div className="font-semibold">Assumptions used on this page</div>
+            <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
+              <li>1 year = 365 days</li>
+              <li>Biweekly = 14 days</li>
+              <li>4-week rent = 28 days</li>
+              <li>Month = 365 ÷ 12 days (average)</li>
+              <li>
+                This tool does not assume what is included in “rent” (fees,
+                utilities, taxes). Enter the total you want to budget with.
+              </li>
+            </ul>
+          </div>
+        </div>
       </section>
 
-      <section id="learn" className="max-w-5xl mx-auto px-6 pt-16 rc-no-print">
+      <section id="learn" className="max-w-5xl mx-auto px-6 pt-8 rc-no-print">
         <h2 className="text-3xl font-bold mb-6 text-center text-slate-900">
           Annual to biweekly conversion for paycheque budgeting
         </h2>
@@ -1214,15 +1081,21 @@ export default function AnnualToBiweeklyRent() {
             className="text-sky-700 hover:underline"
           >
             rent converter
+          </SafeLink>{" "}
+          and{" "}
+          <SafeLink
+            href="/annual-to-weekly-rent-converter"
+            className="text-sky-700 hover:underline"
+          >
+            annual to weekly rent converter
           </SafeLink>
           .
         </p>
       </section>
 
-      {/* RentConverter.com layout rule: add a “How it works” explanation section above the FAQ. */}
       <section
         id="how-it-works"
-        className="max-w-5xl mx-auto px-6 pt-16 rc-no-print"
+        className="max-w-5xl mx-auto px-6 pt-8 rc-no-print"
       >
         <h2 className="text-3xl font-bold text-center mb-6 text-slate-900">
           How it works
@@ -1258,7 +1131,7 @@ export default function AnnualToBiweeklyRent() {
         </div>
       </section>
 
-      <section id="faq" className="max-w-5xl mx-auto py-20 px-6 rc-no-print">
+      <section id="faq" className="max-w-5xl mx-auto py-16 px-6 rc-no-print">
         <h2 className="text-3xl font-bold text-center mb-8 text-slate-800">
           Frequently Asked Questions
         </h2>

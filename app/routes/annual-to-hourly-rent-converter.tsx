@@ -1428,7 +1428,7 @@ export default function AnnualToHourlyRent() {
         </div>
       </section>
 
-      <section id="learn" className="max-w-5xl mx-auto px-6 pt-16 rc-no-print">
+      <section id="learn" className="max-w-5xl mx-auto px-6 pt-8 rc-no-print">
         <h2 className="text-3xl font-bold mb-6 text-center text-slate-900">
           Annual to hourly conversion: 8,760-hour equivalence
         </h2>
@@ -1495,7 +1495,7 @@ export default function AnnualToHourlyRent() {
       {/* RentConverter.com layout rule: add a “How it works” explanation section above the FAQ. */}
       <section
         id="how-it-works"
-        className="max-w-5xl mx-auto px-6 pt-16 rc-no-print"
+        className="max-w-5xl mx-auto px-6 pt-8 rc-no-print"
       >
         <h2 className="text-3xl font-bold text-center mb-6 text-slate-900">
           How it works
@@ -1533,7 +1533,7 @@ export default function AnnualToHourlyRent() {
         </div>
       </section>
 
-      <section id="faq" className="max-w-5xl mx-auto py-20 px-6 rc-no-print">
+      <section id="faq" className="max-w-5xl mx-auto py-16 px-6 rc-no-print">
         <h2 className="text-3xl font-bold text-center mb-8 text-slate-800">
           Frequently Asked Questions
         </h2>
