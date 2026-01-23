@@ -1,0 +1,1243 @@
+import { useEffect, useMemo, useRef, useState } from "react";
+import type { Route } from "./+types/rent-per-week-calculator";
+import OtherUsefulTools from "~/client/components/navigation/OtherUsefulTools";
+import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountry";
+import RenterChecklists from "~/client/components/navigation/RenterChecklists";
+
+export const meta: Route.MetaFunction = () => [
+  {
+    title:
+      "Rent Per Week Calculator – Weekly Rent From Monthly, 4-Week, Biweekly, Daily, Hourly, Annual",
+  },
+  {
+    name: "description",
+    content:
+      "Calculate rent per week from monthly, every 4 weeks (28 days), biweekly, daily, hourly, or annual amounts using annual equivalence (365-day basis). Includes a full breakdown, payment counts, and an optional total estimator for a chosen number of weeks.",
+  },
+  {
+    name: "keywords",
+    content:
+      "rent per week calculator, weekly rent calculator, rent per week from monthly, weekly equivalent rent, rent per week from 4 week rent, rent per week from biweekly, prorated weekly rent",
+  },
+  { name: "robots", content: "index,follow" },
+  { name: "author", content: "RentConverter.com" },
+  { name: "theme-color", content: "#f8fafc" },
+
+  { property: "og:type", content: "website" },
+  {
+    property: "og:title",
+    content: "Rent Per Week Calculator – Weekly Equivalent Rent",
+  },
+  {
+    property: "og:description",
+    content:
+      "Convert rent to a weekly equivalent from monthly, 4-week (28-day), biweekly, daily, hourly, or annual amounts. Includes breakdowns and a weekly total estimator based on annual equivalence.",
+  },
+  {
+    property: "og:url",
+    content: "https://rentconverter.com/rent-per-week-calculator",
+  },
+  { property: "og:site_name", content: "RentConverter.com" },
+  { property: "og:image", content: "https://rentconverter.com/og-image.jpg" },
+
+  { name: "twitter:card", content: "summary_large_image" },
+  { name: "twitter:title", content: "Rent Per Week Calculator" },
+  {
+    name: "twitter:description",
+    content:
+      "Calculate weekly equivalent rent from monthly, 4-week (28-day), biweekly, daily, hourly, or annual amounts. Includes breakdowns and a weekly total estimator.",
+  },
+  { name: "twitter:image", content: "https://rentconverter.com/og-image.jpg" },
+
+  {
+    rel: "canonical",
+    href: "https://rentconverter.com/rent-per-week-calculator",
+  },
+];
+
+type Period =
+  | "hourly"
+  | "daily"
+  | "weekly"
+  | "biweekly"
+  | "every_4_weeks"
+  | "monthly"
+  | "annual";
+
+const PERIOD_LABEL: Record<Period, string> = {
+  hourly: "Hourly",
+  daily: "Daily",
+  weekly: "Weekly",
+  biweekly: "Every 2 weeks",
+  every_4_weeks: "Every 4 weeks (28 days)",
+  monthly: "Monthly",
+  annual: "Annual",
+};
+
+const SUPPORTED_CURRENCIES = [
+  "USD",
+  "CAD",
+  "EUR",
+  "GBP",
+  "AUD",
+  "NZD",
+  "JPY",
+  "CNY",
+  "HKD",
+  "SGD",
+  "INR",
+  "KRW",
+  "CHF",
+  "SEK",
+  "NOK",
+  "DKK",
+  "MXN",
+  "BRL",
+] as const;
+
+type Currency = (typeof SUPPORTED_CURRENCIES)[number];
+
+function isCurrency(x: string): x is Currency {
+  return (SUPPORTED_CURRENCIES as readonly string[]).includes(x);
+}
+
+function isPeriod(x: string): x is Period {
+  return (
+    x === "hourly" ||
+    x === "daily" ||
+    x === "weekly" ||
+    x === "biweekly" ||
+    x === "every_4_weeks" ||
+    x === "monthly" ||
+    x === "annual"
+  );
+}
+
+/**
+ * Route whitelist. Only include routes you know exist in your app.
+ * Add routes only when confirmed.
+ */
+const ROUTE_WHITELIST = new Set<string>([
+  "/",
+  "/rent-converter",
+  "/rent-paid-weekly-vs-monthly",
+  "/rent-affordability-calculator",
+  "/rent-billed-every-28-days",
+  "/true-cost-of-rent-per-week",
+  "/rent-per-week-calculator",
+]);
+
+function safeHref(path: string): string {
+  return ROUTE_WHITELIST.has(path) ? path : "/";
+}
+
+/** Fixed-point decimals preserved end-to-end (up to 12 decimals). */
+const MAX_DECIMALS = 12n;
+const SCALE = 10n ** MAX_DECIMALS;
+
+type ParsedScaled = {
+  ok: boolean;
+  scaled?: bigint;
+  normalized?: string;
+  warnings: string[];
+  error?: string;
+};
+
+function clampScaled(v: bigint, min: bigint, max: bigint): bigint {
+  if (v < min) return min;
+  if (v > max) return max;
+  return v;
+}
+
+function toNumberSafe(scaled: bigint): number {
+  return Number(scaled) / Number(SCALE);
+}
+
+function formatCurrencyFromScaled(
+  scaled: bigint,
+  currency: Currency,
+  displayDecimals: number,
+): string {
+  const n = toNumberSafe(scaled);
+  if (!Number.isFinite(n)) return "—";
+  const digits = Math.max(0, Math.min(12, displayDecimals));
+  return new Intl.NumberFormat(undefined, {
+    style: "currency",
+    currency,
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+  }).format(n);
+}
+
+/**
+ * Accepts: $650, 650, 650.00, .5, 12., 650,50 (comma decimal).
+ * Rejects ambiguous formats like "1,2,3".
+ */
+function parseMoneyInputToScaled(raw: string): ParsedScaled {
+  const warnings: string[] = [];
+  const s0 = (raw ?? "").trim();
+
+  if (!s0) return { ok: false, error: "Enter a rent amount.", warnings };
+
+  let s = s0.replace(/\s+/g, "");
+  s = s.replace(/[^\d.,\-]/g, "");
+
+  if (!s) {
+    return {
+      ok: false,
+      error: "Enter a valid number (example: 2000 or 2000.00).",
+      warnings,
+    };
+  }
+
+  if (s.includes("-")) {
+    if (!s.startsWith("-") || s.slice(1).includes("-")) {
+      return {
+        ok: false,
+        error: "Enter a valid number (misplaced minus sign).",
+        warnings,
+      };
+    }
+    return { ok: false, error: "Rent must be 0 or greater.", warnings };
+  }
+
+  const lastDot = s.lastIndexOf(".");
+  const lastComma = s.lastIndexOf(",");
+  let decimalSep: "." | "," | null = null;
+
+  if (lastDot !== -1 && lastComma !== -1) {
+    decimalSep = lastDot > lastComma ? "." : ",";
+  } else if (lastDot !== -1) {
+    decimalSep = ".";
+  } else if (lastComma !== -1) {
+    const parts = s.split(",");
+    if (parts.length === 2) {
+      const before = parts[0] ?? "";
+      const after = parts[1] ?? "";
+      if (/^\d{1,2}$/.test(after)) {
+        decimalSep = ",";
+      } else if (/^\d{3}$/.test(after) && /^\d{1,3}$/.test(before)) {
+        decimalSep = null;
+        warnings.push(
+          `Interpreted "${s0}" as thousands grouping. If you meant a decimal, use a dot like "1234.56".`,
+        );
+      } else {
+        return {
+          ok: false,
+          error:
+            'That format is ambiguous. Try "1234.56" or "1,234.56" or "1234,56".',
+          warnings,
+        };
+      }
+    } else {
+      decimalSep = null;
+    }
+  }
+
+  let intPart = s;
+  let fracPart = "";
+
+  if (decimalSep) {
+    const split = s.split(decimalSep);
+    if (split.length > 2) {
+      return {
+        ok: false,
+        error: "Enter a valid number (too many decimal separators).",
+        warnings,
+      };
+    }
+    intPart = split[0] ?? "";
+    fracPart = split[1] ?? "";
+  }
+
+  if (decimalSep === ".") intPart = intPart.replace(/,/g, "");
+  else if (decimalSep === ",") intPart = intPart.replace(/\./g, "");
+  else intPart = intPart.replace(/[.,]/g, "");
+
+  if (intPart === "") intPart = "0";
+  if (!/^\d+$/.test(intPart))
+    return { ok: false, error: "Enter a valid number.", warnings };
+  if (fracPart && !/^\d+$/.test(fracPart))
+    return { ok: false, error: "Enter a valid number.", warnings };
+
+  const maxDec = Number(MAX_DECIMALS);
+  const fracRaw = fracPart ?? "";
+  const fracCapped =
+    fracRaw.length > maxDec ? fracRaw.slice(0, maxDec) : fracRaw;
+  const fracPadded = fracCapped.padEnd(maxDec, "0");
+
+  const scaled =
+    BigInt(intPart) * SCALE + (fracPadded ? BigInt(fracPadded) : 0n);
+
+  const maxVal = 1_000_000_000n * SCALE;
+  const clamped = clampScaled(scaled, 0n, maxVal);
+  if (clamped !== scaled)
+    warnings.push("Value was clamped to the supported maximum.");
+
+  const normalized = fracRaw.length ? `${intPart}.${fracCapped}` : `${intPart}`;
+  return { ok: true, scaled: clamped, normalized, warnings };
+}
+
+type ParsedInt = { ok: boolean; value?: number; error?: string };
+
+function parseNonNegInt(raw: string, label: string, max: number): ParsedInt {
+  const s = (raw ?? "").trim();
+  if (!s) return { ok: false, error: `Enter ${label}.` };
+  const cleaned = s.replace(/[^\d]/g, "");
+  if (!cleaned)
+    return { ok: false, error: `Enter a whole number for ${label}.` };
+  const n = Number.parseInt(cleaned, 10);
+  if (!Number.isFinite(n))
+    return { ok: false, error: `Enter a valid ${label}.` };
+  if (n < 0) return { ok: false, error: `${label} must be 0 or more.` };
+  if (n > max) return { ok: false, error: `${label} must be ${max} or less.` };
+  return { ok: true, value: n };
+}
+
+/**
+ * Annual equivalence (365-day year), fixed counts for:
+ * - Week = 7 days
+ * - Biweekly = 14 days
+ * - Every 4 weeks = 28 days
+ * - Month = 365/12 days (average month)
+ * - Hour = 1/24 day
+ */
+function annualizeFromScaled(valueScaled: bigint, from: Period): bigint {
+  if (from === "annual") return valueScaled;
+  if (from === "monthly") return valueScaled * 12n;
+  if (from === "weekly") return (valueScaled * 365n) / 7n;
+  if (from === "biweekly") return (valueScaled * 365n) / 14n;
+  if (from === "every_4_weeks") return (valueScaled * 365n) / 28n;
+  if (from === "daily") return valueScaled * 365n;
+  return valueScaled * 24n * 365n; // hourly
+}
+
+function fromAnnualScaled(annualScaled: bigint, to: Period): bigint {
+  if (to === "annual") return annualScaled;
+  if (to === "monthly") return annualScaled / 12n;
+
+  // Convert via daily (annual/365), then multiply.
+  const daily = annualScaled / 365n;
+
+  if (to === "weekly") return daily * 7n;
+  if (to === "biweekly") return daily * 14n;
+  if (to === "every_4_weeks") return daily * 28n;
+  if (to === "daily") return daily;
+  return daily / 24n; // hourly
+}
+
+function buildCsvRow(cols: string[]): string {
+  return cols
+    .map((c) => {
+      const s = String(c ?? "");
+      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
+      return s;
+    })
+    .join(",");
+}
+
+function downloadTextFile(
+  filename: string,
+  content: string,
+  mime = "text/plain;charset=utf-8",
+) {
+  const blob = new Blob([content], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
+  if (raw === null) return fallback;
+  try {
+    const v = JSON.parse(raw);
+    return typeof v === "boolean" ? v : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function safeParseInt(
+  raw: string | null,
+  fallback: number,
+  min: number,
+  max: number,
+): number {
+  if (raw === null) return fallback;
+  const n = Number(raw);
+  if (!Number.isFinite(n)) return fallback;
+  const t = Math.trunc(n);
+  return Math.max(min, Math.min(max, t));
+}
+
+export default function RentPerWeekCalculator() {
+  const pageName = "Rent Per Week Calculator";
+  const canonicalUrl = "https://rentconverter.com/rent-per-week-calculator";
+
+  const [amount, setAmount] = useState<string>(() => {
+    if (typeof window === "undefined") return "2000";
+    return localStorage.getItem("rpwc_amount") ?? "2000";
+  });
+
+  const [from, setFrom] = useState<Exclude<Period, "weekly">>(() => {
+    if (typeof window === "undefined") return "monthly";
+    const saved = localStorage.getItem("rpwc_from") ?? "monthly";
+    // allow "weekly" in storage if it ever existed, but we treat it as valid Period
+    const p = isPeriod(saved) ? saved : "monthly";
+    return (p === "weekly" ? "monthly" : p) as Exclude<Period, "weekly">;
+  });
+
+  const [currency, setCurrency] = useState<Currency>(() => {
+    if (typeof window === "undefined") return "CAD";
+    const saved = localStorage.getItem("rpwc_currency") ?? "CAD";
+    return isCurrency(saved) ? saved : "CAD";
+  });
+
+  // Display-only rounding controls (do not affect computation)
+  const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
+    if (typeof window === "undefined") return true;
+    return safeParseBoolean(localStorage.getItem("rpwc_round_display"), true);
+  });
+
+  const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
+    if (typeof window === "undefined") return 2;
+    return safeParseInt(localStorage.getItem("rpwc_display_decimals"), 2, 0, 6);
+  });
+
+  const [weeksCount, setWeeksCount] = useState<string>(() => {
+    if (typeof window === "undefined") return "4";
+    return localStorage.getItem("rpwc_weeksCount") ?? "4";
+  });
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    localStorage.setItem("rpwc_amount", amount);
+    localStorage.setItem("rpwc_from", from);
+    localStorage.setItem("rpwc_currency", currency);
+    localStorage.setItem("rpwc_round_display", JSON.stringify(roundDisplay));
+    localStorage.setItem("rpwc_display_decimals", String(displayDecimals));
+    localStorage.setItem("rpwc_weeksCount", weeksCount);
+  }, [amount, from, currency, roundDisplay, displayDecimals, weeksCount]);
+
+  const parsedRent = useMemo(() => parseMoneyInputToScaled(amount), [amount]);
+
+  const parsedWeeks = useMemo(
+    () => parseNonNegInt(weeksCount, "number of weeks", 520),
+    [weeksCount],
+  );
+
+  const computed = useMemo(() => {
+    const warnings: string[] = [];
+    const errors: string[] = [];
+
+    if (!parsedRent.ok)
+      errors.push(parsedRent.error ?? "Enter a valid rent amount.");
+    if (parsedRent.warnings.length) warnings.push(...parsedRent.warnings);
+
+    if (!parsedWeeks.ok)
+      errors.push(parsedWeeks.error ?? "Enter a valid number of weeks.");
+
+    if (errors.length) return { ok: false as const, errors, warnings };
+
+    const rentScaled = parsedRent.scaled as bigint;
+
+    const annualScaled = annualizeFromScaled(rentScaled, from);
+    const weeklyScaled = fromAnnualScaled(annualScaled, "weekly");
+
+    const hourlyScaled = fromAnnualScaled(annualScaled, "hourly");
+    const dailyScaled = fromAnnualScaled(annualScaled, "daily");
+    const biweeklyScaled = fromAnnualScaled(annualScaled, "biweekly");
+    const fourWeeksScaled = fromAnnualScaled(annualScaled, "every_4_weeks");
+    const monthlyScaled = fromAnnualScaled(annualScaled, "monthly");
+
+    const monthlyMinus4w = monthlyScaled - fourWeeksScaled;
+
+    // % difference vs 4-week: (monthly - 4w)/4w
+    const pct =
+      fourWeeksScaled === 0n
+        ? 0
+        : Number(monthlyMinus4w) / Number(fourWeeksScaled);
+
+    const weeksN = parsedWeeks.value as number;
+    const totalForWeeksScaled = weeklyScaled * BigInt(weeksN);
+
+    return {
+      ok: true as const,
+      warnings,
+      rentScaled,
+      annualScaled,
+      weeklyScaled,
+      breakdown: {
+        hourlyScaled,
+        dailyScaled,
+        weeklyScaled,
+        biweeklyScaled,
+        fourWeeksScaled,
+        monthlyScaled,
+        annualScaled,
+        monthlyMinus4w,
+        monthlyMinus4wPct: pct,
+      },
+      weeksN,
+      totalForWeeksScaled,
+    };
+  }, [parsedRent, parsedWeeks, from]);
+
+  const effectiveDisplayDecimals = roundDisplay ? displayDecimals : 12;
+  const fmt = (scaled: bigint) =>
+    formatCurrencyFromScaled(scaled, currency, effectiveDisplayDecimals);
+
+  const handlePrint = () => {
+    if (typeof window === "undefined") return;
+    window.print();
+  };
+
+  const handleExportCsv = () => {
+    if (!computed.ok) return;
+
+    const rows: string[] = [];
+    rows.push(buildCsvRow([pageName]));
+    rows.push(buildCsvRow(["Currency", currency]));
+    rows.push(buildCsvRow(["Input rent", amount]));
+    rows.push(buildCsvRow(["Input period", from]));
+    rows.push(buildCsvRow(["Weekly equivalent", fmt(computed.weeklyScaled)]));
+    rows.push(buildCsvRow([""]));
+
+    rows.push(
+      buildCsvRow(["Annual total (365-day basis)", fmt(computed.annualScaled)]),
+    );
+    rows.push(buildCsvRow([""]));
+
+    rows.push(buildCsvRow(["Breakdown (annual-equivalent)"]));
+    rows.push(buildCsvRow(["Period", "Value"]));
+    rows.push(buildCsvRow(["Hourly", fmt(computed.breakdown.hourlyScaled)]));
+    rows.push(buildCsvRow(["Daily", fmt(computed.breakdown.dailyScaled)]));
+    rows.push(buildCsvRow(["Weekly", fmt(computed.breakdown.weeklyScaled)]));
+    rows.push(
+      buildCsvRow(["Every 2 weeks", fmt(computed.breakdown.biweeklyScaled)]),
+    );
+    rows.push(
+      buildCsvRow([
+        "Every 4 weeks (28 days)",
+        fmt(computed.breakdown.fourWeeksScaled),
+      ]),
+    );
+    rows.push(
+      buildCsvRow(["Monthly (average)", fmt(computed.breakdown.monthlyScaled)]),
+    );
+    rows.push(buildCsvRow(["Annual", fmt(computed.breakdown.annualScaled)]));
+    rows.push(buildCsvRow([""]));
+
+    rows.push(
+      buildCsvRow([
+        "Monthly minus 4-week",
+        fmt(computed.breakdown.monthlyMinus4w),
+        `${(computed.breakdown.monthlyMinus4wPct * 100).toFixed(2)}%`,
+      ]),
+    );
+
+    rows.push(buildCsvRow([""]));
+    rows.push(buildCsvRow(["Weeks entered", String(computed.weeksN)]));
+    rows.push(
+      buildCsvRow([
+        "Estimated total for weeks",
+        fmt(computed.totalForWeeksScaled),
+      ]),
+    );
+    rows.push(buildCsvRow([""]));
+
+    rows.push(
+      buildCsvRow([
+        "Assumptions",
+        "Year=365 days, Week=7 days, Biweekly=14 days, Every 4 weeks=28 days, Month=365/12 days (average).",
+      ]),
+    );
+
+    downloadTextFile(
+      "rent-per-week.csv",
+      rows.join("\n"),
+      "text/csv;charset=utf-8",
+    );
+  };
+
+  const [copiedKey, setCopiedKey] = useState<string | null>(null);
+  const copyTimerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
+    };
+  }, []);
+
+  const handleCopy = async (key: string, text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedKey(key);
+      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
+      copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
+    } catch {
+      setCopiedKey("copy_failed");
+      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
+      copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
+    }
+  };
+
+  const faqData = [
+    {
+      q: "What does “rent per week” mean on this calculator?",
+      a: "It is the rent amount converted into a weekly equivalent using annual equivalence (365-day basis). This helps compare listings quoted in different billing cycles on the same weekly basis.",
+    },
+    {
+      q: "Why isn’t monthly rent divided by 4 the same as weekly rent?",
+      a: "A month is not exactly 4 weeks. This calculator uses an average month length of 365 ÷ 12 days, converts to an annual total, then expresses that annual total as a weekly equivalent.",
+    },
+    {
+      q: "How does every 4 weeks (28 days) compare to weekly rent?",
+      a: "Every 4 weeks is exactly 28 days, which corresponds to 4 weeks. Many 4-week billing schedules imply about 13 payments per year, which can differ from monthly (12 payments per year).",
+    },
+    {
+      q: "Is this the same as prorated rent for a partial month?",
+      a: "Not necessarily. This tool is for equivalence and comparison. Lease proration depends on lease terms and how the landlord defines the billing month and due dates.",
+    },
+    {
+      q: "What assumptions does the calculator use?",
+      a: "It uses a 365-day year, week = 7 days, biweekly = 14 days, every 4 weeks = 28 days, and month = 365 ÷ 12 days (average).",
+    },
+  ];
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://rentconverter.com/",
+      },
+      { "@type": "ListItem", position: 2, name: pageName, item: canonicalUrl },
+    ],
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqData.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  };
+
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "RentConverter.com",
+    url: "https://rentconverter.com/",
+  };
+
+  const webPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: pageName,
+    description:
+      "Convert rent to a weekly equivalent from monthly, 4-week, biweekly, daily, hourly, or annual amounts using annual equivalence (365-day basis).",
+    url: canonicalUrl,
+  };
+
+  return (
+    <main className="bg-white text-slate-700 scroll-smooth">
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            @media print {
+              .rc-no-print { display: none !important; }
+              .rc-print-block { break-inside: avoid; }
+              main { background: #fff !important; }
+              a { text-decoration: none !important; color: #000 !important; }
+            }
+          `,
+        }}
+      />
+
+      <section className="max-w-6xl mx-auto px-6 pt-8 rc-no-print">
+        <nav className="text-sm text-slate-500 mb-4">
+          <a href={safeHref("/")} className="hover:underline text-slate-600">
+            Home
+          </a>{" "}
+          / <span className="text-slate-700">{pageName}</span>
+        </nav>
+
+        <h1 className="text-4xl font-bold text-slate-800 mb-4">{pageName}</h1>
+        <p className="text-slate-600 max-w-3xl text-lg">
+          Convert rent into a weekly equivalent from monthly, every 4 weeks (28
+          days), biweekly, daily, hourly, or annual amounts. The calculator uses
+          annual equivalence on a 365-day basis, then expresses the result as
+          rent per week.
+        </p>
+      </section>
+
+      <section id="calculator" className="mx-auto max-w-6xl px-6 pb-6 pt-8">
+        <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:p-8 rc-print-block">
+          <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <div>
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
+                Weekly rent equivalent
+              </h2>
+              <p className="mt-1 text-sm text-slate-600">
+                Invalid input hides results to avoid misleading “0” outputs.
+              </p>
+            </div>
+
+            <div className="rc-no-print flex flex-col sm:flex-row gap-2">
+              <button
+                type="button"
+                onClick={handleExportCsv}
+                disabled={!computed.ok}
+                className={`rounded-xl border px-4 py-2 text-sm font-semibold transition ${
+                  computed.ok
+                    ? "border-slate-200 bg-white text-slate-800 hover:bg-sky-50 hover:border-sky-200"
+                    : "border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed"
+                }`}
+                aria-disabled={!computed.ok}
+              >
+                Export CSV
+              </button>
+              <button
+                type="button"
+                onClick={handlePrint}
+                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+              >
+                Print / Save as PDF
+              </button>
+            </div>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-12">
+            <div className="md:col-span-6">
+              <label className="block text-sm font-semibold text-slate-700 mb-2">
+                Rent amount
+              </label>
+              <div className="flex gap-2">
+                <input
+                  inputMode="decimal"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  placeholder="e.g. 2000"
+                  className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  aria-invalid={!parsedRent.ok}
+                />
+                <select
+                  value={currency}
+                  onChange={(e) =>
+                    setCurrency(
+                      isCurrency(e.target.value) ? e.target.value : "CAD",
+                    )
+                  }
+                  className="rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  aria-label="Currency"
+                >
+                  {SUPPORTED_CURRENCIES.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <p className="mt-2 text-xs text-slate-500">
+                Accepted inputs: $2,000, 2000.00, .5, 12., 2000,50 (comma
+                decimal). Ambiguous formats are rejected.
+              </p>
+            </div>
+
+            <div className="md:col-span-6">
+              <label className="block text-sm font-semibold text-slate-700 mb-2">
+                Billing period for that amount
+              </label>
+              <select
+                value={from}
+                onChange={(e) => {
+                  const v = e.target.value;
+                  if (!isPeriod(v)) return;
+                  // This page is "per week", so we exclude selecting "weekly" as input to keep UI consistent,
+                  // but conversion code supports it.
+                  setFrom(
+                    (v === "weekly" ? "monthly" : v) as Exclude<
+                      Period,
+                      "weekly"
+                    >,
+                  );
+                }}
+                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+              >
+                {(
+                  [
+                    "monthly",
+                    "every_4_weeks",
+                    "biweekly",
+                    "annual",
+                    "daily",
+                    "hourly",
+                  ] as const
+                ).map((p) => (
+                  <option key={p} value={p}>
+                    {PERIOD_LABEL[p]}
+                  </option>
+                ))}
+              </select>
+              <p className="mt-2 text-xs text-slate-500">
+                The weekly equivalent is derived through annual equivalence,
+                then converted to a 7-day amount.
+              </p>
+            </div>
+
+            <div className="md:col-span-12">
+              <label className="block text-sm font-semibold text-slate-700 mb-2">
+                Display
+              </label>
+              <div className="rounded-xl border border-slate-200 bg-white p-4">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                  <label className="flex items-center gap-2 text-sm text-slate-700">
+                    <input
+                      type="checkbox"
+                      checked={roundDisplay}
+                      onChange={(e) => setRoundDisplay(e.target.checked)}
+                      className="h-4 w-4"
+                    />
+                    Round displayed values (display only)
+                  </label>
+
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-slate-500">
+                      Displayed decimals
+                    </span>
+                    <select
+                      value={displayDecimals}
+                      onChange={(e) =>
+                        setDisplayDecimals(
+                          Math.max(
+                            0,
+                            Math.min(
+                              6,
+                              Math.trunc(Number(e.target.value) || 2),
+                            ),
+                          ),
+                        )
+                      }
+                      className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
+                    >
+                      <option value={0}>0</option>
+                      <option value={2}>2</option>
+                      <option value={4}>4</option>
+                      <option value={6}>6</option>
+                    </select>
+                  </div>
+                </div>
+
+                <p className="mt-2 text-xs text-slate-500">
+                  Calculations preserve decimals internally (up to 12). Only
+                  display rounding changes.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {!computed.ok ? (
+            <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6">
+              <div className="font-semibold text-slate-900">
+                No results to show
+              </div>
+              <p className="mt-1 text-sm text-slate-600">
+                Fix the input to calculate weekly rent.
+              </p>
+              <ul className="mt-3 list-disc pl-5 space-y-1 text-sm text-rose-700">
+                {computed.errors.map((e, i) => (
+                  <li key={i}>{e}</li>
+                ))}
+              </ul>
+              {computed.warnings.length ? (
+                <ul className="mt-3 list-disc pl-5 space-y-1 text-sm text-amber-700">
+                  {computed.warnings.map((w, i) => (
+                    <li key={i}>{w}</li>
+                  ))}
+                </ul>
+              ) : null}
+            </div>
+          ) : (
+            <>
+              {computed.warnings.length ? (
+                <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+                  <ul className="list-disc pl-5 space-y-1">
+                    {computed.warnings.map((w, i) => (
+                      <li key={i}>{w}</li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+
+              <div className="mt-6 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
+                <div className="text-sm text-slate-600">Rent per week</div>
+
+                <div className="mt-2 flex flex-col gap-2">
+                  <div className="text-4xl sm:text-5xl font-extrabold text-sky-800">
+                    {fmt(computed.weeklyScaled)}
+                  </div>
+                  <div className="text-sm text-slate-600">
+                    {fmt(computed.rentScaled)}{" "}
+                    {PERIOD_LABEL[from].toLowerCase()} converts to{" "}
+                    <strong>{fmt(computed.weeklyScaled)}</strong> weekly (annual
+                    equivalence basis).
+                  </div>
+                </div>
+
+                <div className="rc-no-print mt-4 flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleCopy(
+                        "weekly",
+                        `Weekly equivalent: ${fmt(computed.weeklyScaled)} (${currency}); Annual total: ${fmt(
+                          computed.annualScaled,
+                        )} (365-day basis)`,
+                      )
+                    }
+                    className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                  >
+                    {copiedKey === "weekly" ? "Copied" : "Copy result"}
+                  </button>
+                  {copiedKey === "copy_failed" ? (
+                    <span className="self-center text-sm font-semibold text-rose-700">
+                      Copy failed
+                    </span>
+                  ) : null}
+                </div>
+
+                <div className="mt-6 grid gap-4 lg:grid-cols-12">
+                  <div className="lg:col-span-7">
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      {(
+                        [
+                          ["Hourly", computed.breakdown.hourlyScaled, "hourly"],
+                          ["Daily", computed.breakdown.dailyScaled, "daily"],
+                          ["Weekly", computed.breakdown.weeklyScaled, "weekly"],
+                          [
+                            "Every 2 weeks",
+                            computed.breakdown.biweeklyScaled,
+                            "biweekly",
+                          ],
+                          [
+                            "Every 4 weeks (28 days)",
+                            computed.breakdown.fourWeeksScaled,
+                            "every_4_weeks",
+                          ],
+                          [
+                            "Monthly (average)",
+                            computed.breakdown.monthlyScaled,
+                            "monthly",
+                          ],
+                          ["Annual", computed.breakdown.annualScaled, "annual"],
+                        ] as const
+                      ).map(([label, val, key]) => (
+                        <div
+                          key={key}
+                          className="rounded-xl border border-slate-200 bg-white px-4 py-3"
+                        >
+                          <div className="text-xs text-slate-500">{label}</div>
+                          <div className="mt-1 text-lg font-bold text-slate-800">
+                            {fmt(val)}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="mt-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
+                      <div className="text-xs text-slate-500">
+                        4-week vs monthly comparison
+                      </div>
+                      <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                        <div className="text-sm text-slate-700">
+                          Monthly minus 4-week ={" "}
+                          <strong className="text-slate-900">
+                            {fmt(computed.breakdown.monthlyMinus4w)}
+                          </strong>
+                        </div>
+                        <div className="text-sm text-slate-700">
+                          Difference ≈{" "}
+                          <strong className="text-slate-900">
+                            {(
+                              computed.breakdown.monthlyMinus4wPct * 100
+                            ).toFixed(2)}
+                            %
+                          </strong>
+                        </div>
+                      </div>
+                      <p className="mt-2 text-xs text-slate-500">
+                        A 4-week period is 28 days. A month averages about 30.42
+                        days (365 ÷ 12). The gap changes annual totals.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="lg:col-span-5">
+                    <div className="rounded-2xl border border-slate-200 bg-white p-5">
+                      <h3 className="text-base font-bold text-slate-900 mb-2">
+                        Total for a chosen number of weeks
+                      </h3>
+                      <p className="text-sm text-slate-600 mb-4">
+                        This multiplies the weekly equivalent by a week count
+                        for quick comparisons. Lease proration rules can differ
+                        from this estimate.
+                      </p>
+
+                      <label className="block text-sm font-semibold text-slate-700 mb-2">
+                        Number of weeks
+                      </label>
+                      <input
+                        inputMode="numeric"
+                        value={weeksCount}
+                        onChange={(e) => setWeeksCount(e.target.value)}
+                        placeholder="e.g. 4"
+                        className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                        aria-invalid={!parsedWeeks.ok}
+                      />
+
+                      <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+                        <div className="text-xs text-slate-500">
+                          Estimated total
+                        </div>
+                        <div className="mt-1 text-2xl font-extrabold text-slate-800">
+                          {fmt(computed.totalForWeeksScaled)}
+                        </div>
+                        <div className="mt-1 text-xs text-slate-500">
+                          {fmt(computed.weeklyScaled)} per week ×{" "}
+                          {computed.weeksN} weeks
+                        </div>
+                      </div>
+
+                      <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+                        <div className="text-xs text-slate-500">
+                          Annual total (source of truth)
+                        </div>
+                        <div className="mt-1 text-lg font-bold text-slate-800">
+                          {fmt(computed.annualScaled)}
+                        </div>
+                        <div className="mt-1 text-xs text-slate-500">
+                          365-day basis
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <section className="mt-10 rc-no-print">
+                <h3 className="text-2xl font-semibold mb-4 text-slate-900">
+                  Payment counts per year (for comparison)
+                </h3>
+                <ul className="list-disc ml-6 text-slate-700 mb-4">
+                  <li>
+                    Weekly: <strong>52</strong> payments per year
+                  </li>
+                  <li>
+                    Every 2 weeks: <strong>26</strong> payments per year
+                  </li>
+                  <li>
+                    Every 4 weeks (28 days): <strong>13</strong> payments per
+                    year
+                  </li>
+                  <li>
+                    Monthly: <strong>12</strong> payments per year
+                  </li>
+                </ul>
+
+                <p className="text-slate-700 mb-4">
+                  For weekly context beyond simple equivalence, see{" "}
+                  <a
+                    href={safeHref("/true-cost-of-rent-per-week")}
+                    className="text-sky-700 hover:underline"
+                  >
+                    true cost of rent per week
+                  </a>
+                  .
+                </p>
+              </section>
+            </>
+          )}
+
+          <section className="mt-10 rc-no-print">
+            <h3 className="text-2xl font-semibold mb-4 text-slate-900">
+              Related pages
+            </h3>
+            <ul className="list-disc ml-6 text-slate-700">
+              <li>
+                <a
+                  href={safeHref("/true-cost-of-rent-per-week")}
+                  className="text-sky-700 hover:underline"
+                >
+                  True cost of rent per week
+                </a>
+              </li>
+              <li>
+                <a
+                  href={safeHref("/rent-converter")}
+                  className="text-sky-700 hover:underline"
+                >
+                  Rent converter hub
+                </a>
+              </li>
+              <li>
+                <a
+                  href={safeHref("/rent-paid-weekly-vs-monthly")}
+                  className="text-sky-700 hover:underline"
+                >
+                  Weekly vs monthly rent
+                </a>
+              </li>
+              <li>
+                <a
+                  href={safeHref("/rent-affordability-calculator")}
+                  className="text-sky-700 hover:underline"
+                >
+                  Rent affordability calculator
+                </a>
+              </li>
+              <li>
+                <a
+                  href={safeHref("/rent-billed-every-28-days")}
+                  className="text-sky-700 hover:underline"
+                >
+                  Rent billed every 28 days
+                </a>
+              </li>
+            </ul>
+          </section>
+
+          <section className="mt-10 rounded-2xl border border-slate-200 bg-white p-6 rc-print-block">
+            <h3 className="text-xl font-bold text-slate-900 mb-3">
+              Disclaimer
+            </h3>
+            <p className="text-sm text-slate-700 leading-relaxed">
+              <strong>Disclaimer:</strong>
+              <br />
+              Tools on this site are provided for informational, budgeting, and
+              comparison purposes only. Calculations are based on standard
+              time-period assumptions (including a 365-day year and average
+              month length) and simplified models. Results are estimates, not
+              guarantees.
+              <br />
+              <br />
+              This website does not provide financial, legal, or tax advice.
+              Rental costs, affordability, payment schedules, and obligations
+              vary by location, landlord, lease terms, and individual
+              circumstances. Always review your lease agreement and consult
+              qualified professionals before making financial decisions.
+            </p>
+          </section>
+
+          <p className="mt-6 text-sm text-slate-500">
+            Assumptions: 1 year = 365 days, 1 week = 7 days, biweekly = 14 days,
+            every 4 weeks = 28 days, month = 365 ÷ 12 days (average). Actual due
+            dates and lease terms vary.
+          </p>
+        </div>
+      </section>
+
+      {/* Required explanation section above FAQ */}
+      <section
+        id="how-it-works"
+        className="max-w-5xl mx-auto px-6 pt-16 rc-no-print"
+      >
+        <h2 className="text-3xl font-bold mb-6 text-center text-slate-900">
+          How this tool works and what you can do with it
+        </h2>
+
+        <div className="rounded-2xl border border-slate-200 bg-white p-6">
+          <p className="text-slate-700 mb-4">
+            This calculator converts the rent amount you enter into an annual
+            total using a 365-day year. It then expresses that same annual total
+            as a weekly equivalent (a 7-day amount). This is the cleanest way to
+            compare rent listings that use different billing cycles.
+          </p>
+
+          <p className="text-slate-700 mb-4">
+            Use it to compare monthly rent against 4-week rent (28-day billing),
+            biweekly rent, or even hourly and daily rates. The breakdown cards
+            show the same annual rent expressed across multiple periods so you
+            can sanity-check what a listing really costs.
+          </p>
+
+          <p className="text-slate-700 mb-4">
+            The “total for a chosen number of weeks” estimator multiplies the
+            weekly equivalent by a week count for quick comparisons. It is not a
+            lease proration engine because proration rules depend on the lease
+            and the landlord’s definition of a billing month.
+          </p>
+
+          <p className="text-slate-700 mt-6">
+            Related page:{" "}
+            <a
+              href={safeHref("/true-cost-of-rent-per-week")}
+              className="text-sky-700 hover:underline"
+            >
+              true cost of rent per week
+            </a>
+            .
+          </p>
+        </div>
+      </section>
+
+      <section id="faq" className="max-w-5xl mx-auto py-20 px-6 rc-no-print">
+        <h2 className="text-3xl font-bold text-center mb-8 text-slate-800">
+          Frequently Asked Questions
+        </h2>
+        <div className="space-y-8">
+          {faqData.map((f, i) => (
+            <div key={i}>
+              <h3 className="font-semibold text-lg text-slate-800 mb-1">
+                {f.q}
+              </h3>
+              <p className="text-slate-600">{f.a}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <OtherUsefulTools />
+      <RenterChecklists />
+      <RentToolsByCountry />
+
+      <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
+        <p className="text-xs text-slate-500 text-center leading-relaxed">
+          <em>
+            Tools on this site are for budgeting and comparison. Calculations
+            use standard time-period assumptions, including a 365-day year and
+            average month length. Always confirm payment schedules and lease
+            terms in your rental agreement.
+          </em>
+        </p>
+      </section>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
+      />
+    </main>
+  );
+}

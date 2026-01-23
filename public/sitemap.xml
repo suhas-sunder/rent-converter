@@ -6,118 +6,159 @@
     <lastmod>2025-11-01T00:00:00.000Z</lastmod>
   </url>
 
+  <!-- Core pages -->
   <url>
-    <loc>https://www.rentconverter.com/monthly-to-weekly-rent</loc>
+    <loc>https://www.rentconverter.com/rent-converter</loc>
     <lastmod>2025-11-01T00:00:00.000Z</lastmod>
   </url>
   <url>
-    <loc>https://www.rentconverter.com/weekly-to-monthly-rent</loc>
+    <loc>https://www.rentconverter.com/rent-calculator</loc>
+    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
+  </url>
+
+  <!-- Frequency converters -->
+  <url>
+    <loc>https://www.rentconverter.com/monthly-to-weekly-rent-converter</loc>
     <lastmod>2025-11-01T00:00:00.000Z</lastmod>
   </url>
   <url>
-    <loc>https://www.rentconverter.com/biweekly-to-monthly-rent</loc>
-    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.rentconverter.com/monthly-to-annual-rent</loc>
-    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.rentconverter.com/annual-to-monthly-rent</loc>
-    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.rentconverter.com/monthly-to-daily-rent</loc>
-    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.rentconverter.com/daily-to-monthly-rent</loc>
-    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.rentconverter.com/weekly-to-annual-rent</loc>
-    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.rentconverter.com/annual-to-weekly-rent</loc>
-    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.rentconverter.com/hourly-to-monthly-rent</loc>
-    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.rentconverter.com/monthly-to-hourly-rent</loc>
-    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.rentconverter.com/hourly-to-annual-rent</loc>
-    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.rentconverter.com/annual-to-hourly-rent</loc>
+    <loc>https://www.rentconverter.com/weekly-to-monthly-rent-converter</loc>
     <lastmod>2025-11-01T00:00:00.000Z</lastmod>
   </url>
 
   <url>
-    <loc>https://www.rentconverter.com/biweekly-to-weekly-rent</loc>
+    <loc>https://www.rentconverter.com/weekly-to-annual-rent-converter</loc>
     <lastmod>2025-11-01T00:00:00.000Z</lastmod>
   </url>
   <url>
-    <loc>https://www.rentconverter.com/weekly-to-biweekly-rent</loc>
-    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.rentconverter.com/monthly-to-biweekly-rent</loc>
-    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.rentconverter.com/annual-to-biweekly-rent</loc>
-    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.rentconverter.com/biweekly-to-annual-rent</loc>
+    <loc>https://www.rentconverter.com/annual-to-weekly-rent-converter</loc>
     <lastmod>2025-11-01T00:00:00.000Z</lastmod>
   </url>
 
   <url>
-    <loc>https://www.rentconverter.com/rent-paid-every-4-weeks</loc>
+    <loc>https://www.rentconverter.com/weekly-to-biweekly-rent-converter</loc>
     <lastmod>2025-11-01T00:00:00.000Z</lastmod>
   </url>
   <url>
-    <loc>https://www.rentconverter.com/rent-paid-every-2-weeks</loc>
-    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.rentconverter.com/rent-billed-every-28-days</loc>
+    <loc>https://www.rentconverter.com/biweekly-to-weekly-rent-converter</loc>
     <lastmod>2025-11-01T00:00:00.000Z</lastmod>
   </url>
 
   <url>
-    <loc>https://www.rentconverter.com/rent-per-paycheck</loc>
+    <loc>https://www.rentconverter.com/biweekly-to-monthly-rent-converter</loc>
     <lastmod>2025-11-01T00:00:00.000Z</lastmod>
   </url>
   <url>
-    <loc>https://www.rentconverter.com/rent-per-pay-period</loc>
+    <loc>https://www.rentconverter.com/monthly-to-biweekly-rent-converter</loc>
     <lastmod>2025-11-01T00:00:00.000Z</lastmod>
   </url>
 
+  <url>
+    <loc>https://www.rentconverter.com/biweekly-to-annual-rent-converter</loc>
+    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.rentconverter.com/annual-to-biweekly-rent-converter</loc>
+    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://www.rentconverter.com/monthly-to-annual-rent-converter</loc>
+    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.rentconverter.com/annual-to-monthly-rent-converter</loc>
+    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://www.rentconverter.com/monthly-to-daily-rent-converter</loc>
+    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.rentconverter.com/daily-to-monthly-rent-converter</loc>
+    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://www.rentconverter.com/monthly-to-hourly-rent-converter</loc>
+    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.rentconverter.com/hourly-to-monthly-rent-converter</loc>
+    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://www.rentconverter.com/hourly-to-annual-rent-converter</loc>
+    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.rentconverter.com/annual-to-hourly-rent-converter</loc>
+    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
+  </url>
+
+  <!-- Rent calculators -->
+  <url>
+    <loc>https://www.rentconverter.com/rent-per-day-calculator</loc>
+    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.rentconverter.com/rent-per-week-calculator</loc>
+    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.rentconverter.com/rent-paid-every-4-weeks-calculator</loc>
+    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.rentconverter.com/rent-per-paycheck-calculator</loc>
+    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.rentconverter.com/rent-per-person-calculator</loc>
+    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
+  </url>
   <url>
     <loc>https://www.rentconverter.com/rent-due-date-calculator</loc>
     <lastmod>2025-11-01T00:00:00.000Z</lastmod>
   </url>
 
+  <!-- Affordability and income -->
   <url>
-    <loc>https://www.rentconverter.com/true-cost-of-rent-per-day</loc>
+    <loc>https://www.rentconverter.com/rent-as-percentage-of-income-calculator</loc>
     <lastmod>2025-11-01T00:00:00.000Z</lastmod>
   </url>
   <url>
-    <loc>https://www.rentconverter.com/true-cost-of-rent-per-week</loc>
+    <loc>https://www.rentconverter.com/how-much-rent-can-i-afford-calculator</loc>
+    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.rentconverter.com/rent-after-tax-income-calculator</loc>
+    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.rentconverter.com/rent-vs-take-home-pay-calculator</loc>
     <lastmod>2025-11-01T00:00:00.000Z</lastmod>
   </url>
 
+  <!-- Rent increases -->
   <url>
-    <loc>https://www.rentconverter.com/rent-per-day-calculator</loc>
+    <loc>https://www.rentconverter.com/rent-increase-calculator</loc>
+    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.rentconverter.com/rent-increase-percentage-calculator</loc>
+    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.rentconverter.com/rent-after-increase-calculator</loc>
+    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
+  </url>
+
+  <!-- Rent vs buy -->
+  <url>
+    <loc>https://www.rentconverter.com/rent-vs-buy-calculator</loc>
     <lastmod>2025-11-01T00:00:00.000Z</lastmod>
   </url>
 

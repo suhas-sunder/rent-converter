@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Route } from "./+types/rent-due-date-calculator";
 import OtherUsefulTools from "~/client/components/navigation/OtherUsefulTools";
 import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountry";
@@ -7,7 +7,7 @@ import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 export const meta: Route.MetaFunction = () => [
   {
     title:
-      "Rent Due Date Calculator – Schedule, Monthly Totals, Cumulative Paid, and Multi-Year View",
+      "Rent Due Date Calculator - Schedule, Monthly Totals, Cumulative Paid, and Multi-Year View",
   },
   {
     name: "description",
@@ -26,12 +26,12 @@ export const meta: Route.MetaFunction = () => [
   {
     property: "og:title",
     content:
-      "Rent Due Date Calculator – Monthly Totals, Cumulative Paid, and Multi-Year View",
+      "Rent Due Date Calculator - Monthly Totals, Cumulative Paid, and Multi-Year View",
   },
   {
     property: "og:description",
     content:
-      "Estimate your rent due dates and see payment counts per month, cumulative paid by an end date, and year totals for monthly, weekly, biweekly, and 28-day rent cycles.",
+      "Estimate rent due dates and see payment counts per month, cumulative paid by an end date, and year totals for monthly, weekly, biweekly, and 28-day rent cycles.",
   },
   {
     property: "og:url",
@@ -76,6 +76,54 @@ const BILLING_PAYMENTS_PER_YEAR: Record<BillingCycle, number> = {
   annual: 1,
 };
 
+const SUPPORTED_CURRENCIES = [
+  "USD",
+  "CAD",
+  "EUR",
+  "GBP",
+  "AUD",
+  "NZD",
+  "JPY",
+  "CNY",
+  "HKD",
+  "SGD",
+  "INR",
+  "KRW",
+  "CHF",
+  "SEK",
+  "NOK",
+  "DKK",
+  "MXN",
+  "BRL",
+] as const;
+
+type Currency = (typeof SUPPORTED_CURRENCIES)[number];
+
+function isCurrency(x: string): x is Currency {
+  return (SUPPORTED_CURRENCIES as readonly string[]).includes(x);
+}
+
+/**
+ * Only include routes you are sure exist.
+ * If you do not have a whitelist, remove safeHref and use plain hrefs.
+ */
+const ROUTE_WHITELIST = new Set<string>([
+  "/",
+  "/rent-due-date-calculator",
+  "/rent-paid-weekly-vs-monthly",
+  "/rent-converter",
+  "/rent-affordability-calculator",
+  "/rent-billed-every-28-days",
+  "/rent-paid-every-4-weeks",
+  "/true-cost-of-rent-per-day",
+  "/rent-as-percentage-of-income",
+  "/rent-paid-every-2-weeks",
+  "/rent-billed-every-28-days",
+]);
+function safeHref(path: string): string {
+  return ROUTE_WHITELIST.has(path) ? path : "/";
+}
+
 function clampNum(n: number, min: number, max: number) {
   if (!Number.isFinite(n)) return min;
   return Math.min(max, Math.max(min, n));
@@ -87,20 +135,149 @@ function safeParseInt(value: string, fallback: number) {
   return n;
 }
 
-function safeParseMoney(value: string) {
-  const cleaned = value.replace(/[^\d.]/g, "").replace(/(\..*)\./g, "$1");
-  const n = parseFloat(cleaned);
-  if (!Number.isFinite(n)) return 0;
-  return clampNum(n, 0, 1_000_000_000);
+/** Decimal-safe fixed point (up to 12 decimals). */
+const MAX_DECIMALS = 12n;
+const SCALE = 10n ** MAX_DECIMALS;
+
+type ParsedScaled = {
+  ok: boolean;
+  scaled?: bigint;
+  normalized?: string;
+  warnings: string[];
+  error?: string;
+};
+
+function clampScaled(v: bigint, min: bigint, max: bigint): bigint {
+  if (v < min) return min;
+  if (v > max) return max;
+  return v;
 }
 
-function money(n: number, currency: string) {
+function toNumberSafe(scaled: bigint): number {
+  return Number(scaled) / Number(SCALE);
+}
+
+function formatCurrencyFromScaled(
+  scaled: bigint,
+  currency: Currency,
+  displayDecimals: number,
+): string {
+  const n = toNumberSafe(scaled);
   if (!Number.isFinite(n)) return "—";
+  const digits = Math.max(0, Math.min(12, displayDecimals));
   return new Intl.NumberFormat(undefined, {
     style: "currency",
     currency,
-    maximumFractionDigits: n < 10 ? 2 : 0,
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
   }).format(n);
+}
+
+function parseMoneyInputToScaled(raw: string): ParsedScaled {
+  const warnings: string[] = [];
+  const s0 = (raw ?? "").trim();
+
+  if (!s0) return { ok: false, error: "Enter an amount.", warnings };
+
+  let s = s0.replace(/\s+/g, "");
+  s = s.replace(/[^\d.,\-]/g, "");
+
+  if (!s) {
+    return {
+      ok: false,
+      error: "Enter a valid number (example: 2000 or 2000.00).",
+      warnings,
+    };
+  }
+
+  if (s.includes("-")) {
+    if (!s.startsWith("-") || s.slice(1).includes("-")) {
+      return {
+        ok: false,
+        error: "Enter a valid number (misplaced minus sign).",
+        warnings,
+      };
+    }
+    return { ok: false, error: "Amount must be 0 or greater.", warnings };
+  }
+
+  const lastDot = s.lastIndexOf(".");
+  const lastComma = s.lastIndexOf(",");
+  let decimalSep: "." | "," | null = null;
+
+  if (lastDot !== -1 && lastComma !== -1) {
+    decimalSep = lastDot > lastComma ? "." : ",";
+  } else if (lastDot !== -1) {
+    decimalSep = ".";
+  } else if (lastComma !== -1) {
+    const parts = s.split(",");
+    if (parts.length === 2) {
+      const before = parts[0] ?? "";
+      const after = parts[1] ?? "";
+      if (/^\d{1,2}$/.test(after)) {
+        decimalSep = ",";
+      } else if (/^\d{3}$/.test(after) && /^\d{1,3}$/.test(before)) {
+        decimalSep = null;
+        warnings.push(
+          `Interpreted "${s0}" as thousands grouping. If you meant a decimal, use a dot like "1234.56".`,
+        );
+      } else {
+        return {
+          ok: false,
+          error:
+            'That format is ambiguous. Try "1234.56" or "1,234.56" or "1234,56".',
+          warnings,
+        };
+      }
+    } else {
+      decimalSep = null;
+    }
+  }
+
+  let intPart = s;
+  let fracPart = "";
+
+  if (decimalSep) {
+    const split = s.split(decimalSep);
+    if (split.length > 2) {
+      return {
+        ok: false,
+        error: "Enter a valid number (too many decimal separators).",
+        warnings,
+      };
+    }
+    intPart = split[0] ?? "";
+    fracPart = split[1] ?? "";
+  }
+
+  if (decimalSep === ".") intPart = intPart.replace(/,/g, "");
+  else if (decimalSep === ",") intPart = intPart.replace(/\./g, "");
+  else intPart = intPart.replace(/[.,]/g, "");
+
+  if (intPart === "") intPart = "0";
+  intPart = intPart.replace(/^0+(?=\d)/, "");
+
+  if (!/^\d+$/.test(intPart))
+    return { ok: false, error: "Enter a valid number.", warnings };
+  if (fracPart && !/^\d+$/.test(fracPart))
+    return { ok: false, error: "Enter a valid number.", warnings };
+
+  const maxDec = Number(MAX_DECIMALS);
+  const fracRaw = fracPart ?? "";
+  const fracCapped =
+    fracRaw.length > maxDec ? fracRaw.slice(0, maxDec) : fracRaw;
+  const fracPadded = fracCapped.padEnd(maxDec, "0");
+
+  const scaled =
+    BigInt(intPart) * SCALE + (fracPadded ? BigInt(fracPadded) : 0n);
+
+  const maxVal = 1_000_000_000n * SCALE;
+  const clamped = clampScaled(scaled, 0n, maxVal);
+  if (clamped !== scaled)
+    warnings.push("Value was clamped to the supported maximum for safety.");
+
+  const normalized = fracRaw.length ? `${intPart}.${fracCapped}` : `${intPart}`;
+  return { ok: true, scaled: clamped, normalized, warnings };
 }
 
 function formatDate(d: Date) {
@@ -276,90 +453,156 @@ function makeMonthKeysBetween(start: Date, end: Date) {
   return keys;
 }
 
+function buildCsvRow(cols: string[]): string {
+  return cols
+    .map((c) => {
+      const s = String(c ?? "");
+      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
+      return s;
+    })
+    .join(",");
+}
+
+function downloadTextFile(
+  filename: string,
+  content: string,
+  mime = "text/plain;charset=utf-8",
+) {
+  const blob = new Blob([content], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
+  if (raw === null) return fallback;
+  try {
+    const v = JSON.parse(raw);
+    return typeof v === "boolean" ? v : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function isBillingCycle(x: string): x is BillingCycle {
+  return (
+    x === "monthly" ||
+    x === "weekly" ||
+    x === "biweekly" ||
+    x === "every_4_weeks" ||
+    x === "annual"
+  );
+}
+
 export default function RentDueDateCalculator() {
   const pageName = "Rent Due Date Calculator";
   const canonicalUrl = "https://rentconverter.com/rent-due-date-calculator";
 
   const [cycle, setCycle] = useState<BillingCycle>(() => {
     if (typeof window === "undefined") return "monthly";
-    return (
-      (localStorage.getItem("rdd2_cycle") as BillingCycle | null) ?? "monthly"
-    );
+    const saved = window.localStorage.getItem("rdd2_cycle") ?? "monthly";
+    return isBillingCycle(saved) ? saved : "monthly";
   });
 
   const [amount, setAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "2000";
-    return localStorage.getItem("rdd2_amount") ?? "2000";
+    return window.localStorage.getItem("rdd2_amount") ?? "2000";
   });
 
-  const [currency, setCurrency] = useState<string>(() => {
+  const [currency, setCurrency] = useState<Currency>(() => {
     if (typeof window === "undefined") return "CAD";
-    return localStorage.getItem("rdd2_currency") ?? "CAD";
+    const saved = window.localStorage.getItem("rdd2_currency") ?? "CAD";
+    return isCurrency(saved) ? saved : "CAD";
   });
 
-  const [includeRounding, setIncludeRounding] = useState<boolean>(() => {
+  // Display-only rounding
+  const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
     if (typeof window === "undefined") return true;
-    const saved = localStorage.getItem("rdd2_rounding");
-    if (saved !== null) return JSON.parse(saved);
-    return true;
+    return safeParseBoolean(
+      window.localStorage.getItem("rdd2_round_display"),
+      true,
+    );
+  });
+
+  const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
+    if (typeof window === "undefined") return 2;
+    const saved = window.localStorage.getItem("rdd2_display_decimals");
+    const n = saved ? Number(saved) : 2;
+    if (!Number.isFinite(n)) return 2;
+    return Math.max(0, Math.min(6, Math.trunc(n)));
   });
 
   const [asOfDate, setAsOfDate] = useState<string>(() => {
     const d = new Date();
     if (typeof window === "undefined") return toISODateInputValue(d);
-    return localStorage.getItem("rdd2_asOf") ?? toISODateInputValue(d);
+    return window.localStorage.getItem("rdd2_asOf") ?? toISODateInputValue(d);
   });
 
   const [horizonMode, setHorizonMode] = useState<"years" | "end_date">(() => {
     if (typeof window === "undefined") return "years";
-    return (
-      (localStorage.getItem("rdd2_horizonMode") as
-        | "years"
-        | "end_date"
-        | null) ?? "years"
-    );
+    const saved = window.localStorage.getItem("rdd2_horizonMode");
+    return saved === "end_date" ? "end_date" : "years";
   });
 
   const [yearsAhead, setYearsAhead] = useState<string>(() => {
     if (typeof window === "undefined") return "1";
-    return localStorage.getItem("rdd2_yearsAhead") ?? "1";
+    return window.localStorage.getItem("rdd2_yearsAhead") ?? "1";
   });
 
   const [endDate, setEndDate] = useState<string>(() => {
     const d = addYears(new Date(), 1);
     if (typeof window === "undefined") return toISODateInputValue(d);
-    return localStorage.getItem("rdd2_endDate") ?? toISODateInputValue(d);
+    return (
+      window.localStorage.getItem("rdd2_endDate") ?? toISODateInputValue(d)
+    );
   });
 
   const [anchorDate, setAnchorDate] = useState<string>(() => {
     const d = new Date();
     d.setDate(Math.max(1, Math.min(28, d.getDate())));
     if (typeof window === "undefined") return toISODateInputValue(d);
-    return localStorage.getItem("rdd2_anchor") ?? toISODateInputValue(d);
+    return window.localStorage.getItem("rdd2_anchor") ?? toISODateInputValue(d);
   });
 
   const [dueDayMonthly, setDueDayMonthly] = useState<string>(() => {
     if (typeof window === "undefined") return "1";
-    return localStorage.getItem("rdd2_dueDay") ?? "1";
+    return window.localStorage.getItem("rdd2_dueDay") ?? "1";
   });
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    localStorage.setItem("rdd2_cycle", cycle);
-    localStorage.setItem("rdd2_amount", amount);
-    localStorage.setItem("rdd2_currency", currency);
-    localStorage.setItem("rdd2_rounding", JSON.stringify(includeRounding));
-    localStorage.setItem("rdd2_asOf", asOfDate);
-    localStorage.setItem("rdd2_horizonMode", horizonMode);
-    localStorage.setItem("rdd2_yearsAhead", yearsAhead);
-    localStorage.setItem("rdd2_endDate", endDate);
-    localStorage.setItem("rdd2_anchor", anchorDate);
-    localStorage.setItem("rdd2_dueDay", dueDayMonthly);
+    try {
+      window.localStorage.setItem("rdd2_cycle", cycle);
+      window.localStorage.setItem("rdd2_amount", amount);
+      window.localStorage.setItem("rdd2_currency", currency);
+      window.localStorage.setItem(
+        "rdd2_round_display",
+        JSON.stringify(roundDisplay),
+      );
+      window.localStorage.setItem(
+        "rdd2_display_decimals",
+        String(displayDecimals),
+      );
+      window.localStorage.setItem("rdd2_asOf", asOfDate);
+      window.localStorage.setItem("rdd2_horizonMode", horizonMode);
+      window.localStorage.setItem("rdd2_yearsAhead", yearsAhead);
+      window.localStorage.setItem("rdd2_endDate", endDate);
+      window.localStorage.setItem("rdd2_anchor", anchorDate);
+      window.localStorage.setItem("rdd2_dueDay", dueDayMonthly);
+    } catch {
+      // ignore
+    }
   }, [
     cycle,
     amount,
     currency,
-    includeRounding,
+    roundDisplay,
+    displayDecimals,
     asOfDate,
     horizonMode,
     yearsAhead,
@@ -368,13 +611,7 @@ export default function RentDueDateCalculator() {
     dueDayMonthly,
   ]);
 
-  const parsedAmount = useMemo(() => safeParseMoney(amount), [amount]);
-  const rentPerPaymentRaw = parsedAmount;
-
-  const rentPerPayment = useMemo(() => {
-    if (!includeRounding) return rentPerPaymentRaw;
-    return Math.round(rentPerPaymentRaw * 100) / 100;
-  }, [rentPerPaymentRaw, includeRounding]);
+  const parsedAmount = useMemo(() => parseMoneyInputToScaled(amount), [amount]);
 
   const parsedAsOf = useMemo(() => {
     const d = new Date(asOfDate);
@@ -396,7 +633,8 @@ export default function RentDueDateCalculator() {
   const computedEnd = useMemo(() => {
     if (horizonMode === "end_date") {
       const d = new Date(endDate);
-      if (!Number.isFinite(d.getTime())) return addYears(parsedAsOf, 1);
+      if (!Number.isFinite(d.getTime()))
+        return stripTime(addYears(parsedAsOf, 1));
       return stripTime(d);
     }
     const yrs = clampNum(safeParseInt(yearsAhead, 1), 1, 5);
@@ -413,55 +651,68 @@ export default function RentDueDateCalculator() {
     );
   }, [cycle, parsedAsOf, computedEnd, parsedAnchor, dueDay]);
 
-  const nextDue = schedule[0] ?? parsedAsOf;
+  const effectiveDisplayDecimals = roundDisplay ? displayDecimals : 12;
 
-  const monthlyKeys = useMemo(
-    () => makeMonthKeysBetween(parsedAsOf, computedEnd),
-    [parsedAsOf, computedEnd],
-  );
+  const fmtMoney = (scaled: bigint) =>
+    formatCurrencyFromScaled(scaled, currency, effectiveDisplayDecimals);
 
-  const paymentsByMonth = useMemo(() => {
-    const map = new Map<string, number>();
-    for (const k of monthlyKeys) map.set(k, 0);
+  const computed = useMemo(() => {
+    const errors: string[] = [];
+    const warnings: string[] = [];
+
+    if (!parsedAmount.ok)
+      errors.push(parsedAmount.error ?? "Enter a valid amount.");
+    if (parsedAmount.warnings.length) warnings.push(...parsedAmount.warnings);
+
+    if (computedEnd < parsedAsOf)
+      errors.push("End date must be on or after the as-of date.");
+
+    const rentPerPaymentScaled = parsedAmount.ok
+      ? (parsedAmount.scaled as bigint)
+      : 0n;
+
+    if (errors.length) {
+      return { ok: false as const, errors, warnings, rentPerPaymentScaled };
+    }
+
+    const nextDue = schedule[0] ?? parsedAsOf;
+    const paymentsTotal = schedule.length;
+
+    const totalPaidScaled = rentPerPaymentScaled * BigInt(paymentsTotal);
+
+    const monthlyKeys = makeMonthKeysBetween(parsedAsOf, computedEnd);
+    const paymentsByMonth = new Map<string, number>();
+    for (const k of monthlyKeys) paymentsByMonth.set(k, 0);
     for (const d of schedule) {
       const k = ymKey(d);
-      map.set(k, (map.get(k) ?? 0) + 1);
+      paymentsByMonth.set(k, (paymentsByMonth.get(k) ?? 0) + 1);
     }
-    return map;
-  }, [schedule, monthlyKeys]);
 
-  const monthRows = useMemo(() => {
-    return monthlyKeys.map((k) => {
+    const monthRows = monthlyKeys.map((k) => {
       const count = paymentsByMonth.get(k) ?? 0;
-      const total = count * rentPerPaymentRaw;
-      return { key: k, label: monthLabelFromKey(k), payments: count, total };
+      const totalScaled = rentPerPaymentScaled * BigInt(count);
+      return {
+        key: k,
+        label: monthLabelFromKey(k),
+        payments: count,
+        totalScaled,
+      };
     });
-  }, [monthlyKeys, paymentsByMonth, rentPerPaymentRaw]);
 
-  const paymentsTotal = schedule.length;
-  const totalPaidRaw = paymentsTotal * rentPerPaymentRaw;
-
-  const totalPaid = useMemo(() => {
-    if (!includeRounding) return totalPaidRaw;
-    return Math.round(totalPaidRaw * 100) / 100;
-  }, [totalPaidRaw, includeRounding]);
-
-  const yearTotals = useMemo(() => {
-    const map = new Map<string, number>();
+    const yearMap = new Map<string, number>();
     for (const d of schedule) {
       const y = yKey(d);
-      map.set(y, (map.get(y) ?? 0) + 1);
+      yearMap.set(y, (yearMap.get(y) ?? 0) + 1);
     }
-    const years = Array.from(map.keys()).sort();
-    return years.map((y) => {
-      const count = map.get(y) ?? 0;
-      const total = count * rentPerPaymentRaw;
-      return { year: y, payments: count, total };
-    });
-  }, [schedule, rentPerPaymentRaw]);
+    const yearTotals = Array.from(yearMap.keys())
+      .sort()
+      .map((y) => {
+        const count = yearMap.get(y) ?? 0;
+        const totalScaled = rentPerPaymentScaled * BigInt(count);
+        return { year: y, payments: count, totalScaled };
+      });
 
-  const standardAnnualTotals = useMemo(() => {
-    const rows = (
+    const standardAnnualTotals = (
       [
         "monthly",
         "every_4_weeks",
@@ -471,20 +722,29 @@ export default function RentDueDateCalculator() {
       ] as BillingCycle[]
     ).map((c) => {
       const paymentsPerYear = BILLING_PAYMENTS_PER_YEAR[c];
-      return {
-        key: c,
-        label: BILLING_LABEL[c],
-        paymentsPerYear,
-        annualTotal: paymentsPerYear * rentPerPaymentRaw,
-      };
+      const annualScaled = rentPerPaymentScaled * BigInt(paymentsPerYear);
+      return { key: c, label: BILLING_LABEL[c], paymentsPerYear, annualScaled };
     });
-    return rows;
-  }, [rentPerPaymentRaw]);
 
-  const currentCycleStandardAnnual = useMemo(() => {
-    const paymentsPerYear = BILLING_PAYMENTS_PER_YEAR[cycle] ?? 0;
-    return paymentsPerYear * rentPerPaymentRaw;
-  }, [cycle, rentPerPaymentRaw]);
+    const currentCycleStandardAnnualScaled =
+      rentPerPaymentScaled * BigInt(BILLING_PAYMENTS_PER_YEAR[cycle] ?? 0);
+
+    return {
+      ok: true as const,
+      warnings,
+
+      nextDue,
+      paymentsTotal,
+      totalPaidScaled,
+
+      monthRows,
+      yearTotals,
+      standardAnnualTotals,
+      currentCycleStandardAnnualScaled,
+
+      rentPerPaymentScaled,
+    };
+  }, [parsedAmount, computedEnd, parsedAsOf, cycle, schedule]);
 
   const relatedLinks = [
     { href: "/rent-paid-weekly-vs-monthly", text: "Weekly vs monthly rent" },
@@ -499,15 +759,15 @@ export default function RentDueDateCalculator() {
 
   const faqData = [
     {
-      q: "What does “total paid by end date” mean on this page?",
-      a: "It is the number of scheduled due dates from the as-of date through the selected end date, multiplied by the rent amount entered. It illustrates timing and cadence, not lease enforcement.",
+      q: "What does total paid by end date mean on this page?",
+      a: "It is the count of scheduled due dates from the as-of date through the selected end date, multiplied by the rent amount entered. It illustrates timing and cadence, not lease enforcement.",
     },
     {
       q: "Why can monthly totals vary for weekly, biweekly, or 28-day rent?",
       a: "Those cycles are fixed-day intervals. Some calendar months contain more interval due dates than others, which changes the count of payments that fall inside a given month.",
     },
     {
-      q: "How is monthly rent handled when the due day is 29–31?",
+      q: "How is monthly rent handled when the due day is 29 to 31?",
       a: "If the selected day does not exist in a month, the schedule estimate places the due date on that month’s last calendar day.",
     },
     {
@@ -523,7 +783,7 @@ export default function RentDueDateCalculator() {
       a: "No. It uses calendar dates and a simplified cadence to illustrate payment timing. Lease terms and landlord policies can define different rules.",
     },
     {
-      q: "Is the “standard annual total” the same as the multi-year schedule total?",
+      q: "Is the standard annual total the same as the multi-year schedule total?",
       a: "The standard annual total uses a simple payment count per year for comparison. The multi-year schedule total is a calendar-based rollup from the selected as-of date through the end date.",
     },
   ];
@@ -552,33 +812,190 @@ export default function RentDueDateCalculator() {
     })),
   };
 
+  const handlePrint = () => {
+    if (typeof window === "undefined") return;
+    window.print();
+  };
+
+  const handleExportCsv = () => {
+    if (!computed.ok) return;
+
+    const rows: string[] = [];
+    rows.push(buildCsvRow(["Rent Due Date Calculator"]));
+    rows.push(buildCsvRow(["Currency", currency]));
+    rows.push(buildCsvRow(["Cycle", BILLING_LABEL[cycle]]));
+    rows.push(buildCsvRow(["As-of date", formatDate(parsedAsOf)]));
+    rows.push(buildCsvRow(["End date", formatDate(computedEnd)]));
+    rows.push(buildCsvRow(["Monthly due day", String(dueDay)]));
+    rows.push(buildCsvRow(["Anchor date", formatDate(parsedAnchor)]));
+    rows.push(
+      buildCsvRow([
+        "Display",
+        roundDisplay
+          ? `Rounded to ${displayDecimals} decimals (display only)`
+          : "No display rounding (up to 12 decimals)",
+      ]),
+    );
+    rows.push(
+      buildCsvRow([
+        "Assumptions",
+        "Monthly uses calendar months (missing due day uses last day of month)",
+        "Weekly=7 days",
+        "Biweekly=14 days",
+        "Every 4 weeks=28 days",
+        "Annual repeats by calendar year on anchor month/day",
+      ]),
+    );
+
+    rows.push(buildCsvRow([""]));
+    rows.push(buildCsvRow(["Summary"]));
+    rows.push(buildCsvRow(["Next due date", formatDate(computed.nextDue)]));
+    rows.push(
+      buildCsvRow(["Payments in horizon", String(computed.paymentsTotal)]),
+    );
+    rows.push(
+      buildCsvRow([
+        "Total paid by end date",
+        fmtMoney(computed.totalPaidScaled),
+      ]),
+    );
+
+    rows.push(buildCsvRow([""]));
+    rows.push(buildCsvRow(["Monthly totals"]));
+    rows.push(
+      buildCsvRow(["Month", "Payments in month", "Total paid in month"]),
+    );
+    computed.monthRows.forEach((r) => {
+      rows.push(
+        buildCsvRow([r.label, String(r.payments), fmtMoney(r.totalScaled)]),
+      );
+    });
+
+    rows.push(buildCsvRow([""]));
+    rows.push(buildCsvRow(["Totals by calendar year"]));
+    rows.push(buildCsvRow(["Year", "Payments", "Total"]));
+    computed.yearTotals.forEach((r) => {
+      rows.push(
+        buildCsvRow([r.year, String(r.payments), fmtMoney(r.totalScaled)]),
+      );
+    });
+
+    rows.push(buildCsvRow([""]));
+    rows.push(buildCsvRow(["Standard annual totals (comparison)"]));
+    rows.push(
+      buildCsvRow([
+        "Billing cycle",
+        "Payments per year",
+        "Standard annual total",
+      ]),
+    );
+    computed.standardAnnualTotals.forEach((r) => {
+      rows.push(
+        buildCsvRow([
+          r.label,
+          String(r.paymentsPerYear),
+          fmtMoney(r.annualScaled),
+        ]),
+      );
+    });
+
+    rows.push(buildCsvRow([""]));
+    rows.push(buildCsvRow(["Upcoming due dates"]));
+    rows.push(buildCsvRow(["#", "Due date"]));
+    schedule.forEach((d, idx) => {
+      rows.push(buildCsvRow([String(idx + 1), formatDate(d)]));
+    });
+
+    downloadTextFile(
+      "rent-due-date-schedule.csv",
+      rows.join("\n"),
+      "text/csv;charset=utf-8",
+    );
+  };
+
+  const [copiedKey, setCopiedKey] = useState<string | null>(null);
+  const copyTimerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
+    };
+  }, []);
+
+  const handleCopy = async (key: string, text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedKey(key);
+      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
+      copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
+    } catch {
+      setCopiedKey("copy_failed");
+      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
+      copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
+    }
+  };
+
   return (
     <main className="bg-white text-slate-700 scroll-smooth">
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            @media print {
+              .rc-no-print { display: none !important; }
+              .rc-print-block { break-inside: avoid; }
+              main { background: #fff !important; }
+              a { text-decoration: none !important; color: #000 !important; }
+            }
+          `,
+        }}
+      />
+
       <section className="max-w-6xl mx-auto px-6 pt-8">
-        <nav className="text-sm text-slate-500 mb-4">
-          <a href="/" className="hover:underline text-slate-600">
+        <nav className="text-sm text-slate-500 mb-4 rc-no-print">
+          <a href={safeHref("/")} className="hover:underline text-slate-600">
             Home
           </a>{" "}
           / <span className="text-slate-700">{pageName}</span>
         </nav>
 
-        <h1 className="text-4xl font-bold text-slate-800 mb-4">
-          Rent Due Dates Can Change Your Monthly Totals
-        </h1>
-        <p className="text-slate-600 max-w-3xl text-lg">
-          This calculator estimates your upcoming rent due dates and summarizes
-          how many payments land in each calendar month. It also estimates total
-          rent paid by an end date and totals by year, which helps compare
-          monthly rent to weekly, biweekly, and 4-week billing cycles.
+        <h1 className="text-4xl font-bold text-slate-800 mb-4">{pageName}</h1>
+        <p className="text-slate-600 max-w-3xl text-lg rc-no-print">
+          Estimate upcoming rent due dates, then see how many payments land in
+          each calendar month. This also shows total rent paid by an end date
+          and totals by year for monthly, weekly, biweekly, 28-day, and annual
+          cycles.
         </p>
       </section>
 
       <section id="calculator" className="mx-auto max-w-6xl px-6 pb-6 pt-8">
-        <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:p-8">
-          <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <h2 className="text-xl sm:text-2xl font-bold">
+        <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:p-8 rc-print-block">
+          <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
               Rent due date schedule and totals
             </h2>
+
+            <div className="rc-no-print flex flex-col sm:flex-row gap-2">
+              <button
+                type="button"
+                onClick={handleExportCsv}
+                disabled={!computed.ok}
+                className={`rounded-xl border px-4 py-2 text-sm font-semibold transition ${
+                  computed.ok
+                    ? "border-slate-200 bg-white text-slate-800 hover:bg-sky-50 hover:border-sky-200"
+                    : "border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed"
+                }`}
+                aria-disabled={!computed.ok}
+              >
+                Export CSV
+              </button>
+              <button
+                type="button"
+                onClick={handlePrint}
+                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+              >
+                Print / Save as PDF
+              </button>
+            </div>
           </div>
 
           <div className="grid gap-5 md:grid-cols-12">
@@ -586,32 +1003,51 @@ export default function RentDueDateCalculator() {
               <label className="block text-sm font-semibold text-slate-700 mb-2">
                 Rent per payment
               </label>
-              <div className="flex gap-2">
+              <div className="grid grid-cols-12 gap-2">
                 <input
                   inputMode="decimal"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  placeholder="e.g. 2000"
-                  className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  placeholder="e.g. 2000 or 2000.00"
+                  className="col-span-7 rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  aria-invalid={!parsedAmount.ok}
                 />
                 <select
                   value={currency}
-                  onChange={(e) => setCurrency(e.target.value)}
-                  className="rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  onChange={(e) =>
+                    setCurrency(
+                      isCurrency(e.target.value) ? e.target.value : "USD",
+                    )
+                  }
+                  className="col-span-5 rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-label="Currency"
                 >
-                  <option value="CAD">CAD</option>
-                  <option value="USD">USD</option>
-                  <option value="AUD">AUD</option>
-                  <option value="NZD">NZD</option>
-                  <option value="GBP">GBP</option>
-                  <option value="EUR">EUR</option>
+                  {SUPPORTED_CURRENCIES.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
                 </select>
               </div>
               <p className="mt-2 text-xs text-slate-500">
-                This amount is treated as the payment amount for the selected
-                billing cycle.
+                Accepted inputs: $2,000, 2000.00, .5, 12., 2000,50 (comma
+                decimal). Invalid or ambiguous input hides results.
               </p>
+
+              {!parsedAmount.ok ? (
+                <p className="mt-2 text-sm font-semibold text-rose-700">
+                  {parsedAmount.error}
+                </p>
+              ) : parsedAmount.warnings.length ? (
+                <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                  <div className="font-semibold">Input interpretation note</div>
+                  <ul className="mt-1 list-disc pl-5 space-y-1">
+                    {parsedAmount.warnings.map((w, i) => (
+                      <li key={i}>{w}</li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
             </div>
 
             <div className="md:col-span-4">
@@ -620,7 +1056,11 @@ export default function RentDueDateCalculator() {
               </label>
               <select
                 value={cycle}
-                onChange={(e) => setCycle(e.target.value as BillingCycle)}
+                onChange={(e) =>
+                  setCycle(
+                    isBillingCycle(e.target.value) ? e.target.value : "monthly",
+                  )
+                }
                 className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
               >
                 {(
@@ -638,8 +1078,8 @@ export default function RentDueDateCalculator() {
                 ))}
               </select>
               <p className="mt-2 text-xs text-slate-500">
-                Weekly, biweekly, and 28-day cycles are fixed-day intervals.
-                Monthly uses calendar months.
+                Weekly, biweekly, and 28-day cycles repeat by fixed-day
+                intervals. Monthly repeats by calendar months.
               </p>
             </div>
 
@@ -667,7 +1107,9 @@ export default function RentDueDateCalculator() {
                 <select
                   value={horizonMode}
                   onChange={(e) =>
-                    setHorizonMode(e.target.value as "years" | "end_date")
+                    setHorizonMode(
+                      e.target.value === "end_date" ? "end_date" : "years",
+                    )
                   }
                   className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                 >
@@ -731,313 +1173,352 @@ export default function RentDueDateCalculator() {
                   : "The anchor date is the reference point for weekly, biweekly, and 28-day repeats."}
               </p>
             </div>
-          </div>
 
-          <div className="mt-6 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6">
-            <div className="grid gap-4 lg:grid-cols-3">
-              <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
-                <div className="text-xs text-slate-500">
-                  Next estimated due date
-                </div>
-                <div className="mt-1 text-lg font-bold text-slate-800">
-                  {formatDate(nextDue)}
-                </div>
-              </div>
+            <div className="md:col-span-12">
+              <div className="rounded-xl border border-slate-200 bg-white p-4">
+                <div className="text-xs text-slate-500">Display</div>
 
-              <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
-                <div className="text-xs text-slate-500">
-                  Payments in horizon
-                </div>
-                <div className="mt-1 text-lg font-bold text-slate-800">
-                  {paymentsTotal}
-                </div>
-              </div>
+                <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                  <label className="flex items-center gap-2 text-sm text-slate-700">
+                    <input
+                      type="checkbox"
+                      checked={roundDisplay}
+                      onChange={(e) => setRoundDisplay(e.target.checked)}
+                      className="h-4 w-4"
+                    />
+                    Round displayed values (display only)
+                  </label>
 
-              <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
-                <div className="text-xs text-slate-500">
-                  Total rent paid by end date
-                </div>
-                <div className="mt-1 text-lg font-bold text-slate-800">
-                  {money(totalPaid, currency)}
-                </div>
-                <div className="mt-1 text-xs text-slate-500">
-                  {paymentsTotal} payments × {money(rentPerPayment, currency)}
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-6 rounded-2xl border border-slate-200 bg-white overflow-hidden">
-              <div className="px-4 py-3 border-b border-slate-200">
-                <div className="text-sm font-semibold text-slate-800">
-                  Upcoming due dates
-                </div>
-                <div className="text-xs text-slate-500">
-                  Dates shown are estimates based on the selected cadence and
-                  horizon.
-                </div>
-              </div>
-              <ul className="divide-y divide-slate-200 max-h-[360px] overflow-auto">
-                {schedule.length === 0 ? (
-                  <li className="px-4 py-3 text-sm text-slate-600">
-                    No due dates in the selected range.
-                  </li>
-                ) : (
-                  schedule.map((d, idx) => (
-                    <li
-                      key={idx}
-                      className="flex items-center justify-between px-4 py-3"
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-slate-500">
+                      Displayed decimals
+                    </span>
+                    <select
+                      value={displayDecimals}
+                      onChange={(e) =>
+                        setDisplayDecimals(
+                          Math.max(
+                            0,
+                            Math.min(
+                              6,
+                              Math.trunc(Number(e.target.value) || 2),
+                            ),
+                          ),
+                        )
+                      }
+                      className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
                     >
-                      <div className="text-sm text-slate-700">
-                        Payment {idx + 1}
-                      </div>
-                      <div className="text-sm font-semibold text-slate-800">
-                        {formatDate(d)}
-                      </div>
-                    </li>
-                  ))
-                )}
-              </ul>
+                      <option value={0}>0</option>
+                      <option value={2}>2</option>
+                      <option value={4}>4</option>
+                      <option value={6}>6</option>
+                    </select>
+                  </div>
+                </div>
+
+                <p className="mt-2 text-xs text-slate-500">
+                  Calculations preserve decimals internally (up to 12). Only the
+                  display is rounded.
+                </p>
+              </div>
             </div>
           </div>
 
-          <section className="mt-10">
-            <h3 className="text-2xl font-semibold mb-4 text-slate-900">
-              Monthly totals
-            </h3>
-            <p className="text-slate-700 mb-4">
-              This table groups the scheduled due dates into calendar months.
-              Fixed-day cycles can produce months with different payment counts.
-            </p>
-
-            <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden">
-              <table className="w-full text-sm">
-                <thead className="bg-slate-50 text-slate-700">
-                  <tr>
-                    <th className="text-left px-4 py-3 font-semibold">Month</th>
-                    <th className="text-right px-4 py-3 font-semibold">
-                      Payments in month
-                    </th>
-                    <th className="text-right px-4 py-3 font-semibold">
-                      Total paid in month
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-200">
-                  {monthRows.map((r) => {
-                    const total = includeRounding
-                      ? Math.round(r.total * 100) / 100
-                      : r.total;
-                    return (
-                      <tr key={r.key}>
-                        <td className="px-4 py-3 text-slate-700">{r.label}</td>
-                        <td className="px-4 py-3 text-right font-semibold text-slate-800">
-                          {r.payments}
-                        </td>
-                        <td className="px-4 py-3 text-right font-semibold text-slate-800">
-                          {money(total, currency)}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          <section className="mt-10">
-            <h3 className="text-2xl font-semibold mb-4 text-slate-900">
-              Totals by calendar year
-            </h3>
-            <p className="text-slate-700 mb-4">
-              This view shows how many payments fall inside each calendar year
-              within the selected horizon.
-            </p>
-
-            <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden">
-              <table className="w-full text-sm">
-                <thead className="bg-slate-50 text-slate-700">
-                  <tr>
-                    <th className="text-left px-4 py-3 font-semibold">Year</th>
-                    <th className="text-right px-4 py-3 font-semibold">
-                      Payments
-                    </th>
-                    <th className="text-right px-4 py-3 font-semibold">
-                      Total
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-200">
-                  {yearTotals.length === 0 ? (
-                    <tr>
-                      <td className="px-4 py-3 text-slate-600" colSpan={3}>
-                        No payments in the selected range.
-                      </td>
-                    </tr>
-                  ) : (
-                    yearTotals.map((r) => {
-                      const total = includeRounding
-                        ? Math.round(r.total * 100) / 100
-                        : r.total;
-                      return (
-                        <tr key={r.year}>
-                          <td className="px-4 py-3 text-slate-700">{r.year}</td>
-                          <td className="px-4 py-3 text-right font-semibold text-slate-800">
-                            {r.payments}
-                          </td>
-                          <td className="px-4 py-3 text-right font-semibold text-slate-800">
-                            {money(total, currency)}
-                          </td>
-                        </tr>
-                      );
-                    })
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          <section className="mt-10">
-            <h3 className="text-2xl font-semibold mb-4 text-slate-900">
-              Annual payment count table
-            </h3>
-            <p className="text-slate-700 mb-4">
-              These standard counts help compare billing cycles. The schedule
-              totals above are calendar-based within the selected horizon.
-            </p>
-
-            <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden">
-              <table className="w-full text-sm">
-                <thead className="bg-slate-50 text-slate-700">
-                  <tr>
-                    <th className="text-left px-4 py-3 font-semibold">
-                      Billing cycle
-                    </th>
-                    <th className="text-right px-4 py-3 font-semibold">
-                      Payments per year
-                    </th>
-                    <th className="text-right px-4 py-3 font-semibold">
-                      Standard annual total
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-200">
-                  {standardAnnualTotals.map((r) => {
-                    const annualTotal = includeRounding
-                      ? Math.round(r.annualTotal * 100) / 100
-                      : r.annualTotal;
-                    return (
-                      <tr key={r.key}>
-                        <td className="px-4 py-3 text-slate-700">{r.label}</td>
-                        <td className="px-4 py-3 text-right font-semibold text-slate-800">
-                          {r.paymentsPerYear}
-                        </td>
-                        <td className="px-4 py-3 text-right font-semibold text-slate-800">
-                          {money(annualTotal, currency)}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          <section className="mt-10">
-            <h3 className="text-2xl font-semibold mb-4 text-slate-900">
-              Visual comparison (numbers only)
-            </h3>
-            <p className="text-slate-700 mb-4">
-              For the entered rent per payment, this shows the standard annual
-              total implied by each cycle.
-            </p>
-
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {standardAnnualTotals.map((r) => {
-                const annualTotal = includeRounding
-                  ? Math.round(r.annualTotal * 100) / 100
-                  : r.annualTotal;
-                return (
-                  <div
-                    key={r.key}
-                    className="rounded-xl border border-slate-200 bg-white px-4 py-3"
-                  >
-                    <div className="text-xs text-slate-500">{r.label}</div>
-                    <div className="mt-1 text-lg font-bold text-slate-800">
-                      {money(annualTotal, currency)}
+          <div className="mt-6 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
+            {!computed.ok ? (
+              <div className="rounded-xl border border-slate-200 bg-white p-4">
+                <div className="font-semibold text-slate-800">
+                  No results to show
+                </div>
+                <p className="mt-1 text-sm text-slate-600">
+                  Fix the inputs to generate a schedule.
+                </p>
+                <ul className="mt-3 list-disc pl-5 space-y-1 text-sm text-rose-700">
+                  {computed.errors.map((e, i) => (
+                    <li key={i}>{e}</li>
+                  ))}
+                </ul>
+                {computed.warnings.length ? (
+                  <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                    <div className="font-semibold">Notes</div>
+                    <ul className="mt-1 list-disc pl-5 space-y-1">
+                      {computed.warnings.map((w, i) => (
+                        <li key={i}>{w}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+              </div>
+            ) : (
+              <>
+                <div className="grid gap-4 lg:grid-cols-3">
+                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
+                    <div className="text-xs text-slate-500">
+                      Next estimated due date
                     </div>
-                    <div className="mt-1 text-xs text-slate-500">
-                      {r.paymentsPerYear} payments/year ×{" "}
-                      {money(rentPerPayment, currency)}
+                    <div className="mt-1 text-lg font-bold text-slate-800">
+                      {formatDate(computed.nextDue)}
                     </div>
                   </div>
-                );
-              })}
-              <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-                <div className="text-xs text-slate-500">
-                  Selected cycle (standard annual total)
-                </div>
-                <div className="mt-1 text-lg font-bold text-slate-800">
-                  {money(
-                    includeRounding
-                      ? Math.round(currentCycleStandardAnnual * 100) / 100
-                      : currentCycleStandardAnnual,
-                    currency,
-                  )}
-                </div>
-                <div className="mt-1 text-xs text-slate-500">
-                  Uses standard payment counts for comparison. Calendar-based
-                  totals can differ over partial years.
-                </div>
-              </div>
-            </div>
-          </section>
 
-          <section className="mt-10">
-            <h3 className="text-2xl font-semibold mb-4 text-slate-900">
-              Who this affects most
-            </h3>
-            <div className="grid gap-6 md:grid-cols-3">
-              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                <h4 className="text-lg font-semibold text-slate-900">
-                  Rent billed every 4 weeks
-                </h4>
-                <p className="mt-2 text-slate-700 text-sm">
-                  A 28-day cadence shifts across the calendar, which can create
-                  months with different payment counts. A monthly totals view
-                  helps illustrate that variation.
-                </p>
-              </div>
-              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                <h4 className="text-lg font-semibold text-slate-900">
-                  Weekly or biweekly rent
-                </h4>
-                <p className="mt-2 text-slate-700 text-sm">
-                  Fixed-day intervals do not align with calendar months.
-                  Grouping payments by month helps compare timing differences to
-                  monthly rent.
-                </p>
-              </div>
-              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                <h4 className="text-lg font-semibold text-slate-900">
-                  Monthly due days near month end
-                </h4>
-                <p className="mt-2 text-slate-700 text-sm">
-                  Some months do not include the 29th, 30th, or 31st. The
-                  schedule estimate places those due dates on the last day of
-                  shorter months.
-                </p>
-              </div>
-            </div>
-          </section>
+                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
+                    <div className="text-xs text-slate-500">
+                      Payments in horizon
+                    </div>
+                    <div className="mt-1 text-lg font-bold text-slate-800">
+                      {computed.paymentsTotal}
+                    </div>
+                  </div>
 
-          <section className="mt-10">
+                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
+                    <div className="text-xs text-slate-500">
+                      Total rent paid by end date
+                    </div>
+                    <div className="mt-1 text-lg font-bold text-slate-800">
+                      {fmtMoney(computed.totalPaidScaled)}
+                    </div>
+                    <div className="mt-1 text-xs text-slate-500">
+                      {computed.paymentsTotal} payments ×{" "}
+                      {fmtMoney(computed.rentPerPaymentScaled)}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="rc-no-print mt-4 flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleCopy(
+                        "summary",
+                        `Next due: ${formatDate(computed.nextDue)} | Payments: ${computed.paymentsTotal} | Total paid: ${fmtMoney(
+                          computed.totalPaidScaled,
+                        )}`,
+                      )
+                    }
+                    className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                  >
+                    {copiedKey === "summary" ? "Copied" : "Copy summary"}
+                  </button>
+
+                  {copiedKey === "copy_failed" ? (
+                    <span className="self-center text-sm font-semibold text-rose-700">
+                      Copy failed
+                    </span>
+                  ) : null}
+                </div>
+
+                <div className="mt-6 rounded-2xl border border-slate-200 bg-white overflow-hidden rc-print-block">
+                  <div className="px-4 py-3 border-b border-slate-200">
+                    <div className="text-sm font-semibold text-slate-800">
+                      Upcoming due dates
+                    </div>
+                    <div className="text-xs text-slate-500">
+                      Dates shown are estimates based on the selected cadence
+                      and horizon.
+                    </div>
+                  </div>
+                  <ul className="divide-y divide-slate-200 max-h-[360px] overflow-auto">
+                    {schedule.length === 0 ? (
+                      <li className="px-4 py-3 text-sm text-slate-600">
+                        No due dates in the selected range.
+                      </li>
+                    ) : (
+                      schedule.map((d, idx) => (
+                        <li
+                          key={idx}
+                          className="flex items-center justify-between px-4 py-3"
+                        >
+                          <div className="text-sm text-slate-700">
+                            Payment {idx + 1}
+                          </div>
+                          <div className="text-sm font-semibold text-slate-800">
+                            {formatDate(d)}
+                          </div>
+                        </li>
+                      ))
+                    )}
+                  </ul>
+                </div>
+
+                <section className="mt-10 rc-print-block">
+                  <h3 className="text-2xl font-semibold mb-4 text-slate-900">
+                    Monthly totals
+                  </h3>
+                  <p className="text-slate-700 mb-4">
+                    This table groups scheduled due dates into calendar months.
+                    Fixed-day cycles can produce months with different payment
+                    counts.
+                  </p>
+
+                  <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden">
+                    <table className="w-full text-sm">
+                      <thead className="bg-slate-50 text-slate-700">
+                        <tr>
+                          <th className="text-left px-4 py-3 font-semibold">
+                            Month
+                          </th>
+                          <th className="text-right px-4 py-3 font-semibold">
+                            Payments in month
+                          </th>
+                          <th className="text-right px-4 py-3 font-semibold">
+                            Total paid in month
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-200">
+                        {computed.monthRows.map((r) => (
+                          <tr key={r.key}>
+                            <td className="px-4 py-3 text-slate-700">
+                              {r.label}
+                            </td>
+                            <td className="px-4 py-3 text-right font-semibold text-slate-800">
+                              {r.payments}
+                            </td>
+                            <td className="px-4 py-3 text-right font-semibold text-slate-800">
+                              {fmtMoney(r.totalScaled)}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </section>
+
+                <section className="mt-10 rc-print-block">
+                  <h3 className="text-2xl font-semibold mb-4 text-slate-900">
+                    Totals by calendar year
+                  </h3>
+                  <p className="text-slate-700 mb-4">
+                    This shows how many payments fall inside each calendar year
+                    within the selected horizon.
+                  </p>
+
+                  <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden">
+                    <table className="w-full text-sm">
+                      <thead className="bg-slate-50 text-slate-700">
+                        <tr>
+                          <th className="text-left px-4 py-3 font-semibold">
+                            Year
+                          </th>
+                          <th className="text-right px-4 py-3 font-semibold">
+                            Payments
+                          </th>
+                          <th className="text-right px-4 py-3 font-semibold">
+                            Total
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-200">
+                        {computed.yearTotals.length === 0 ? (
+                          <tr>
+                            <td
+                              className="px-4 py-3 text-slate-600"
+                              colSpan={3}
+                            >
+                              No payments in the selected range.
+                            </td>
+                          </tr>
+                        ) : (
+                          computed.yearTotals.map((r) => (
+                            <tr key={r.year}>
+                              <td className="px-4 py-3 text-slate-700">
+                                {r.year}
+                              </td>
+                              <td className="px-4 py-3 text-right font-semibold text-slate-800">
+                                {r.payments}
+                              </td>
+                              <td className="px-4 py-3 text-right font-semibold text-slate-800">
+                                {fmtMoney(r.totalScaled)}
+                              </td>
+                            </tr>
+                          ))
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </section>
+
+                <section className="mt-10 rc-print-block">
+                  <h3 className="text-2xl font-semibold mb-4 text-slate-900">
+                    Standard annual totals (comparison)
+                  </h3>
+                  <p className="text-slate-700 mb-4">
+                    These standard counts help compare cycles. The schedule
+                    totals above are calendar-based within the selected horizon.
+                  </p>
+
+                  <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden">
+                    <table className="w-full text-sm">
+                      <thead className="bg-slate-50 text-slate-700">
+                        <tr>
+                          <th className="text-left px-4 py-3 font-semibold">
+                            Billing cycle
+                          </th>
+                          <th className="text-right px-4 py-3 font-semibold">
+                            Payments per year
+                          </th>
+                          <th className="text-right px-4 py-3 font-semibold">
+                            Standard annual total
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-200">
+                        {computed.standardAnnualTotals.map((r) => (
+                          <tr key={r.key}>
+                            <td className="px-4 py-3 text-slate-700">
+                              {r.label}
+                            </td>
+                            <td className="px-4 py-3 text-right font-semibold text-slate-800">
+                              {r.paymentsPerYear}
+                            </td>
+                            <td className="px-4 py-3 text-right font-semibold text-slate-800">
+                              {fmtMoney(r.annualScaled)}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+                    <div className="text-xs text-slate-500">
+                      Selected cycle (standard annual total)
+                    </div>
+                    <div className="mt-1 text-lg font-bold text-slate-800">
+                      {fmtMoney(computed.currentCycleStandardAnnualScaled)}
+                    </div>
+                    <div className="mt-1 text-xs text-slate-500">
+                      Uses standard payment counts for comparison.
+                      Calendar-based totals can differ over partial years.
+                    </div>
+                  </div>
+                </section>
+
+                {computed.warnings.length ? (
+                  <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 rc-no-print">
+                    <div className="font-semibold">Notes</div>
+                    <ul className="mt-1 list-disc pl-5 space-y-1">
+                      {computed.warnings.map((w, i) => (
+                        <li key={i}>{w}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+              </>
+            )}
+          </div>
+
+          <section className="mt-10 rc-no-print">
             <h3 className="text-2xl font-semibold mb-4 text-slate-900">
               Related pages
             </h3>
             <ul className="list-disc ml-6 text-slate-700">
               {relatedLinks.map((l) => (
                 <li key={l.href}>
-                  <a href={l.href} className="text-sky-700 hover:underline">
+                  <a
+                    href={safeHref(l.href)}
+                    className="text-sky-700 hover:underline"
+                  >
                     {l.text}
                   </a>
                 </li>
@@ -1045,7 +1526,7 @@ export default function RentDueDateCalculator() {
             </ul>
           </section>
 
-          <section className="mt-10 rounded-2xl border border-slate-200 bg-white p-6">
+          <section className="mt-10 rounded-2xl border border-slate-200 bg-white p-6 rc-print-block">
             <h3 className="text-xl font-bold text-slate-900 mb-3">
               Disclaimer
             </h3>
@@ -1067,17 +1548,70 @@ export default function RentDueDateCalculator() {
             </p>
           </section>
 
-          <p className="mt-6 text-sm text-slate-500">
-            Assumptions: 1 year = 365 days. Weekly uses 7-day intervals,
-            biweekly uses 14-day intervals, and every 4 weeks uses 28-day
-            intervals. Monthly schedules are estimated using calendar months,
-            with shorter months using the last day when a selected due day does
-            not exist. Actual due dates, grace periods, and lease terms vary.
+          <p className="mt-6 text-sm text-slate-500 rc-print-block">
+            Assumptions: Weekly uses 7-day intervals, biweekly uses 14-day
+            intervals, and every 4 weeks uses 28-day intervals. Monthly
+            schedules are estimated using calendar months, with shorter months
+            using the last day when a selected due day does not exist. Annual
+            repeats on the anchor month/day each year. Actual due dates, grace
+            periods, and lease terms vary.
           </p>
         </div>
       </section>
 
-      <section id="faq" className="max-w-5xl mx-auto py-16 px-6">
+      {/* Required explanation section above FAQ */}
+      <section
+        id="how-it-works"
+        className="max-w-5xl mx-auto px-6 pt-12 rc-no-print"
+      >
+        <h2 className="text-3xl font-bold mb-6 text-center text-slate-900">
+          How this tool works and what to expect
+        </h2>
+
+        <div className="rounded-2xl border border-slate-200 bg-white p-6">
+          <ol className="list-decimal pl-5 space-y-3 text-slate-700">
+            <li>
+              <strong>You enter the rent amount per payment.</strong> That
+              number is multiplied by the number of due dates that fall within
+              the horizon.
+            </li>
+            <li>
+              <strong>You pick a billing cycle.</strong> Weekly, biweekly, and
+              28-day cycles repeat by fixed-day intervals. Monthly repeats by
+              calendar months (with month-end fallback for missing days). Annual
+              repeats each year on the anchor month/day.
+            </li>
+            <li>
+              <strong>You choose an as-of date and a horizon.</strong> The
+              schedule lists the due dates on or after the as-of date through
+              the end date (or years ahead).
+            </li>
+            <li>
+              <strong>Monthly totals are calendar-based rollups.</strong> The
+              tool counts how many due dates land in each calendar month and
+              multiplies by your rent per payment.
+            </li>
+            <li>
+              <strong>Rounding is display-only.</strong> Internally, decimals
+              are preserved (up to 12). If rounding is enabled, only displayed
+              values are rounded.
+            </li>
+            <li>
+              <strong>Export and print.</strong> Export schedule and totals as
+              CSV, or print (including saving to PDF via your browser print
+              dialog).
+            </li>
+          </ol>
+
+          <p className="mt-6 text-slate-700">
+            Useful for: understanding why some months have more payments under
+            fixed-day cycles, and estimating total paid over a date range for
+            budgeting comparisons.
+          </p>
+        </div>
+      </section>
+
+      <section id="faq" className="max-w-5xl mx-auto py-16 px-6 rc-no-print">
         <h2 className="text-3xl font-bold text-center mb-8 text-slate-800">
           Frequently Asked Questions
         </h2>
@@ -1097,13 +1631,12 @@ export default function RentDueDateCalculator() {
       <RenterChecklists />
       <RentToolsByCountry />
 
-      <section className="max-w-6xl mx-auto px-6 pb-8">
+      <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
         <p className="text-xs text-slate-500 text-center leading-relaxed">
           <em>
             Tools on this site are for budgeting and comparison. Calculations
-            use standard time-period assumptions, including a 365-day year and
-            average month length. Always confirm payment schedules and lease
-            terms in your rental agreement.
+            use standard time-period assumptions. Always confirm payment
+            schedules and lease terms in your rental agreement.
           </em>
         </p>
       </section>

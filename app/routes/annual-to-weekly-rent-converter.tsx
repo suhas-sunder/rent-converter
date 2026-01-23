@@ -1,0 +1,1269 @@
+import { useMemo, useEffect, useRef, useState } from "react";
+import type { Route } from "./+types/annual-to-monthly-rent-converter";
+import OtherUsefulTools from "~/client/components/navigation/OtherUsefulTools";
+import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountry";
+import RenterChecklists from "~/client/components/navigation/RenterChecklists";
+
+/**
+ * SEO Uniqueness Checklist (internal, not user-visible)
+ * - Intent: Convert an ANNUAL rent total into a MONTHLY equivalent (12-month budgeting view).
+ * - Unique angle: explicitly contrasts "monthly (12)" vs "every 4 weeks (13)" and shows the annualized difference,
+ *   plus a clear note that "monthly here is annual ÷ 12 (average-month equivalent), not calendar-date proration."
+ * - Unique examples: monthly vs 4-week budgeting scenarios and how listings mix "monthly" wording with 28-day cycles.
+ * - Unique outputs: headline monthly result + always-visible breakdown + a dedicated annualization panel (monthly×12 vs 4-week×13)
+ *   + CSV export + print-to-PDF workflow.
+ */
+
+export const meta: Route.MetaFunction = () => {
+  const title = "Annual to Monthly Rent Converter (Annual ÷ 12)";
+  const description =
+    "Convert annual rent to a monthly equivalent (annual ÷ 12) with decimal-safe input. Includes 4-week (28-day) comparison, annualization (12 vs 13 payments), CSV export, and print-to-PDF. Free and private.";
+
+  return [
+    { title },
+    { name: "description", content: description },
+    {
+      name: "keywords",
+      content:
+        "annual to monthly rent, yearly to monthly rent, annual ÷ 12, annual rent to monthly calculator, 4 week rent vs monthly, 28 day rent vs monthly, 13 payments per year, rent converter annual to monthly",
+    },
+    { name: "robots", content: "index,follow" },
+    { name: "author", content: "RentConverter.com" },
+    { name: "theme-color", content: "#f8fafc" },
+
+    { property: "og:type", content: "website" },
+    { property: "og:title", content: title },
+    { property: "og:description", content: description },
+    {
+      property: "og:url",
+      content: "https://rentconverter.com/annual-to-monthly-rent",
+    },
+    { property: "og:site_name", content: "RentConverter.com" },
+    { property: "og:image", content: "https://rentconverter.com/og-image.jpg" },
+
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: description },
+    {
+      name: "twitter:image",
+      content: "https://rentconverter.com/og-image.jpg",
+    },
+
+    {
+      rel: "canonical",
+      href: "https://rentconverter.com/annual-to-monthly-rent",
+    },
+  ];
+};
+
+type Period =
+  | "hourly"
+  | "daily"
+  | "weekly"
+  | "biweekly"
+  | "every_4_weeks"
+  | "monthly"
+  | "annual";
+
+const PERIOD_LABEL: Record<Period, string> = {
+  hourly: "Hourly",
+  daily: "Daily",
+  weekly: "Weekly",
+  biweekly: "Every 2 weeks (14 days)",
+  every_4_weeks: "Every 4 weeks (28 days)",
+  monthly: "Monthly (annual ÷ 12)",
+  annual: "Annual",
+};
+
+// Whitelist rule (single source of truth)
+//
+// Use this everywhere you create internal links.
+// If a link is not in ROUTE_WHITELIST, it must not appear anywhere in the UI.
+const ROUTE_WHITELIST = new Set<string>([
+  "/",
+  "/monthly-to-weekly-rent",
+  "/weekly-to-monthly-rent",
+  "/biweekly-to-monthly-rent",
+  "/monthly-to-annual-rent",
+  "/annual-to-monthly-rent",
+  "/monthly-to-daily-rent",
+  "/daily-to-monthly-rent",
+  "/weekly-to-annual-rent",
+  "/annual-to-weekly-rent",
+  "/hourly-to-monthly-rent",
+  "/monthly-to-hourly-rent",
+  "/hourly-to-annual-rent",
+  "/annual-to-hourly-rent",
+  "/biweekly-to-weekly-rent",
+  "/weekly-to-biweekly-rent",
+  "/monthly-to-biweekly-rent",
+  "/annual-to-biweekly-rent",
+  "/annual-to-monthly-rent",
+  "/annual-to-biweekly-rent",
+  "/biweekly-to-annual-rent",
+  "/rent-paid-every-4-weeks",
+  "/rent-paid-every-2-weeks",
+  "/rent-billed-every-28-days",
+  "/rent-per-paycheck",
+  "/rent-per-pay-period",
+  "/rent-due-date-calculator",
+  "/true-cost-of-rent-per-day",
+  "/true-cost-of-rent-per-week",
+  "/rent-per-day-calculator",
+  "/rent-per-week-calculator",
+  "/rent-as-percentage-of-income",
+  "/how-much-rent-can-i-afford",
+  "/rent-after-tax-income",
+  "/rent-vs-take-home-pay",
+  "/rent-increase-calculator",
+  "/rent-increase-percentage-calculator",
+  "/rent-after-increase-calculator",
+  "/rent-per-person-calculator",
+  "/rent-vs-buy-calculator",
+  "/rent-converter",
+  "/rent-calculator",
+]);
+
+function safeHref(path: string): string {
+  return ROUTE_WHITELIST.has(path) ? path : "/";
+}
+
+const SUPPORTED_CURRENCIES = [
+  "USD",
+  "CAD",
+  "EUR",
+  "GBP",
+  "AUD",
+  "NZD",
+  "JPY",
+  "CNY",
+  "HKD",
+  "SGD",
+  "INR",
+  "KRW",
+  "CHF",
+  "SEK",
+  "NOK",
+  "DKK",
+  "MXN",
+  "BRL",
+] as const;
+
+type Currency = (typeof SUPPORTED_CURRENCIES)[number];
+
+function isCurrency(x: string): x is Currency {
+  return (SUPPORTED_CURRENCIES as readonly string[]).includes(x);
+}
+
+/**
+ * Decimal-safe fixed-point representation
+ * - Parse money-like inputs into scaled integers (BigInt).
+ * - Do not round during computation.
+ * - Allow display rounding only (explicit and labeled).
+ */
+const MAX_DECIMALS = 12n;
+const SCALE = 10n ** MAX_DECIMALS;
+
+type ParsedAmount = {
+  ok: boolean;
+  scaled?: bigint;
+  normalized?: string;
+  warnings: string[];
+  error?: string;
+};
+
+function clampScaled(v: bigint, min: bigint, max: bigint): bigint {
+  if (v < min) return min;
+  if (v > max) return max;
+  return v;
+}
+
+function toNumberSafe(scaled: bigint): number {
+  return Number(scaled) / Number(SCALE);
+}
+
+function formatCurrencyFromScaled(
+  scaled: bigint,
+  currency: Currency,
+  displayDecimals: number,
+): string {
+  const n = toNumberSafe(scaled);
+  if (!Number.isFinite(n)) return "—";
+  return new Intl.NumberFormat(undefined, {
+    style: "currency",
+    currency,
+    maximumFractionDigits: Math.max(0, Math.min(12, displayDecimals)),
+    minimumFractionDigits: 0,
+  }).format(n);
+}
+
+function formatPercent(n: number, displayDecimals: number): string {
+  if (!Number.isFinite(n)) return "—";
+  return `${(n * 100).toFixed(Math.max(0, Math.min(6, displayDecimals)))}%`;
+}
+
+function parseMoneyInputToScaled(raw: string): ParsedAmount {
+  const warnings: string[] = [];
+  const s0 = (raw ?? "").trim();
+
+  if (!s0)
+    return { ok: false, error: "Enter an annual rent amount.", warnings };
+
+  let s = s0.replace(/\s+/g, "");
+  s = s.replace(/[^\d.,\-]/g, "");
+
+  if (!s)
+    return {
+      ok: false,
+      error: "Enter a valid number (example: 24000 or 24000.50).",
+      warnings,
+    };
+
+  if (s.includes("-")) {
+    if (!s.startsWith("-") || s.slice(1).includes("-")) {
+      return {
+        ok: false,
+        error: "Enter a valid number (misplaced minus sign).",
+        warnings,
+      };
+    }
+    return { ok: false, error: "Annual rent must be 0 or greater.", warnings };
+  }
+
+  const lastDot = s.lastIndexOf(".");
+  const lastComma = s.lastIndexOf(",");
+  let decimalSep: "." | "," | null = null;
+
+  if (lastDot !== -1 && lastComma !== -1) {
+    decimalSep = lastDot > lastComma ? "." : ",";
+  } else if (lastDot !== -1) {
+    decimalSep = ".";
+  } else if (lastComma !== -1) {
+    const parts = s.split(",");
+    if (parts.length === 2) {
+      const before = parts[0] ?? "";
+      const after = parts[1] ?? "";
+      if (/^\d{1,2}$/.test(after)) {
+        decimalSep = ",";
+      } else if (/^\d{3}$/.test(after) && /^\d{1,3}$/.test(before)) {
+        decimalSep = null;
+        warnings.push(
+          `Interpreted "${s0}" as thousands grouping (1234). If you meant a decimal, use a dot like "1.234".`,
+        );
+      } else {
+        return {
+          ok: false,
+          error:
+            'That format is ambiguous. Try "1234.56" or "1,234.56" or "1234,56" (comma decimal).',
+          warnings,
+        };
+      }
+    } else {
+      decimalSep = null;
+    }
+  }
+
+  let intPart = s;
+  let fracPart = "";
+
+  if (decimalSep) {
+    const split = s.split(decimalSep);
+    if (split.length > 2)
+      return {
+        ok: false,
+        error: "Enter a valid number (too many decimal separators).",
+        warnings,
+      };
+    intPart = split[0] ?? "";
+    fracPart = split[1] ?? "";
+  }
+
+  if (decimalSep === ".") intPart = intPart.replace(/,/g, "");
+  else if (decimalSep === ",") intPart = intPart.replace(/\./g, "");
+  else intPart = intPart.replace(/[.,]/g, "");
+
+  if (intPart === "") intPart = "0";
+  intPart = intPart.replace(/^0+(?=\d)/, "");
+
+  if (!/^\d+$/.test(intPart))
+    return {
+      ok: false,
+      error: "Enter a valid number (invalid digits).",
+      warnings,
+    };
+  if (fracPart && !/^\d+$/.test(fracPart))
+    return {
+      ok: false,
+      error: "Enter a valid number (invalid decimals).",
+      warnings,
+    };
+
+  const maxDec = Number(MAX_DECIMALS);
+  const fracRaw = fracPart ?? "";
+  const fracCapped =
+    fracRaw.length > maxDec ? fracRaw.slice(0, maxDec) : fracRaw;
+  const fracPadded = fracCapped.padEnd(maxDec, "0");
+
+  const scaled =
+    BigInt(intPart) * SCALE + (fracPadded ? BigInt(fracPadded) : 0n);
+
+  const maxAnnual = 1_000_000_000n * SCALE;
+  const clamped = clampScaled(scaled, 0n, maxAnnual);
+  if (clamped !== scaled)
+    warnings.push("Value was clamped to the supported maximum for safety.");
+
+  const normalized = fracRaw.length ? `${intPart}.${fracCapped}` : `${intPart}`;
+  return { ok: true, scaled: clamped, normalized, warnings };
+}
+
+function mulDivScaled(
+  valueScaled: bigint,
+  mulNum: bigint,
+  divDen: bigint,
+): bigint {
+  if (divDen === 0n) return 0n;
+  return (valueScaled * mulNum) / divDen;
+}
+
+function annualToPeriodScaled(annualScaled: bigint, period: Period): bigint {
+  switch (period) {
+    case "annual":
+      return annualScaled;
+    case "monthly":
+      // Intent of this route: monthly budgeting view = annual ÷ 12
+      return mulDivScaled(annualScaled, 1n, 12n);
+    case "every_4_weeks":
+      return mulDivScaled(annualScaled, 28n, 365n);
+    case "biweekly":
+      return mulDivScaled(annualScaled, 14n, 365n);
+    case "weekly":
+      return mulDivScaled(annualScaled, 7n, 365n);
+    case "daily":
+      return mulDivScaled(annualScaled, 1n, 365n);
+    case "hourly":
+      return mulDivScaled(annualScaled, 1n, 365n * 24n);
+    default:
+      return annualScaled;
+  }
+}
+
+function buildCsvRow(cols: string[]): string {
+  return cols
+    .map((c) => {
+      const s = String(c ?? "");
+      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
+      return s;
+    })
+    .join(",");
+}
+
+function downloadTextFile(
+  filename: string,
+  content: string,
+  mime = "text/plain;charset=utf-8",
+) {
+  const blob = new Blob([content], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
+  if (raw === null) return fallback;
+  try {
+    const v = JSON.parse(raw);
+    return typeof v === "boolean" ? v : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+export default function AnnualToMonthlyRent() {
+  const [amount, setAmount] = useState<string>(() => {
+    if (typeof window === "undefined") return "24000";
+    const saved = window.localStorage.getItem("rc_atm_amount");
+    return saved ?? "24000";
+  });
+
+  const [currency, setCurrency] = useState<Currency>(() => {
+    if (typeof window === "undefined") return "CAD";
+    const saved =
+      typeof window === "undefined"
+        ? null
+        : window.localStorage.getItem("rc_atm_currency");
+    return saved && isCurrency(saved) ? saved : "CAD";
+  });
+
+  const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
+    if (typeof window === "undefined") return 2;
+    const saved = window.localStorage.getItem("rc_atm_display_decimals");
+    const n = saved ? Number(saved) : 2;
+    if (!Number.isFinite(n)) return 2;
+    return Math.max(0, Math.min(6, Math.trunc(n)));
+  });
+
+  const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
+    if (typeof window === "undefined") return true;
+    const saved = window.localStorage.getItem("rc_atm_round_display");
+    return safeParseBoolean(saved, true);
+  });
+
+  const [copiedKey, setCopiedKey] = useState<string | null>(null);
+  const copyTimerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      window.localStorage.setItem("rc_atm_amount", amount);
+      window.localStorage.setItem("rc_atm_currency", currency);
+      window.localStorage.setItem(
+        "rc_atm_display_decimals",
+        String(displayDecimals),
+      );
+      window.localStorage.setItem(
+        "rc_atm_round_display",
+        JSON.stringify(roundDisplay),
+      );
+    } catch {
+      // ignore
+    }
+  }, [amount, currency, displayDecimals, roundDisplay]);
+
+  useEffect(() => {
+    return () => {
+      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
+    };
+  }, []);
+
+  const parsedAnnual = useMemo(() => parseMoneyInputToScaled(amount), [amount]);
+  const annualScaled = parsedAnnual.ok ? (parsedAnnual.scaled as bigint) : 0n;
+
+  const canShowResults = parsedAnnual.ok;
+
+  const breakdownScaled = useMemo(() => {
+    if (!parsedAnnual.ok) return null;
+
+    const hourly = annualToPeriodScaled(annualScaled, "hourly");
+    const daily = annualToPeriodScaled(annualScaled, "daily");
+    const weekly = annualToPeriodScaled(annualScaled, "weekly");
+    const biweekly = annualToPeriodScaled(annualScaled, "biweekly");
+    const every4w = annualToPeriodScaled(annualScaled, "every_4_weeks");
+    const monthly = annualToPeriodScaled(annualScaled, "monthly");
+    const annual = annualScaled;
+
+    // Dedicated 12 vs 13 payment schedule context (unique angle for this route)
+    const annualFromMonthly12 = monthly * 12n;
+    const annualFrom4w13 = every4w * 13n;
+    const annualFromWeekly52 = weekly * 52n;
+
+    const monthlyMinus4w = monthly - every4w;
+    const monthlyMinus4wPct =
+      every4w === 0n ? 0 : Number(monthlyMinus4w) / Number(every4w);
+
+    const annualDiff_13vs12 = annualFrom4w13 - annualFromMonthly12;
+    const annualDiff_13vs12Pct =
+      annualFromMonthly12 === 0n
+        ? 0
+        : Number(annualDiff_13vs12) / Number(annualFromMonthly12);
+
+    return {
+      hourly,
+      daily,
+      weekly,
+      biweekly,
+      every4w,
+      monthly,
+      annual,
+
+      monthlyMinus4w,
+      monthlyMinus4wPct,
+
+      annualFromMonthly12,
+      annualFrom4w13,
+      annualFromWeekly52,
+
+      annualDiff_13vs12,
+      annualDiff_13vs12Pct,
+    };
+  }, [parsedAnnual.ok, annualScaled]);
+
+  const effectiveDisplayDecimals = roundDisplay ? displayDecimals : 12;
+  const fmt = (scaled: bigint) =>
+    formatCurrencyFromScaled(scaled, currency, effectiveDisplayDecimals);
+
+  const monthlyHeadlineScaled = breakdownScaled?.monthly ?? 0n;
+
+  const handleCopy = async (key: string, text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedKey(key);
+      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
+      copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
+    } catch {
+      setCopiedKey("copy_failed");
+      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
+      copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
+    }
+  };
+
+  const handleExportCsv = () => {
+    if (!canShowResults || !breakdownScaled) return;
+
+    const rows: string[] = [];
+    rows.push(buildCsvRow(["Annual to Monthly Rent Converter"]));
+    rows.push(
+      buildCsvRow([
+        "Assumptions",
+        "Year=365 days",
+        "Month=annual ÷ 12 (budgeting view)",
+        "4-week=28 days (13 cycles/year)",
+      ]),
+    );
+    rows.push(buildCsvRow(["Currency formatting", currency]));
+    rows.push(
+      buildCsvRow([
+        "Display",
+        roundDisplay
+          ? `Rounded to ${displayDecimals} decimals for display`
+          : "No display rounding (shows up to 12 decimals)",
+      ]),
+    );
+    rows.push(buildCsvRow([""]));
+
+    rows.push(buildCsvRow(["Input (Annual)", fmt(annualScaled)]));
+    rows.push(buildCsvRow(["Headline (Monthly)", fmt(monthlyHeadlineScaled)]));
+    rows.push(buildCsvRow(["Monthly definition", "Annual ÷ 12"]));
+    rows.push(buildCsvRow([""]));
+
+    rows.push(buildCsvRow(["Period", "Amount"]));
+    const items: Array<[Period, bigint]> = [
+      ["hourly", breakdownScaled.hourly],
+      ["daily", breakdownScaled.daily],
+      ["weekly", breakdownScaled.weekly],
+      ["biweekly", breakdownScaled.biweekly],
+      ["every_4_weeks", breakdownScaled.every4w],
+      ["monthly", breakdownScaled.monthly],
+      ["annual", breakdownScaled.annual],
+    ];
+    for (const [p, val] of items)
+      rows.push(buildCsvRow([PERIOD_LABEL[p], fmt(val)]));
+
+    rows.push(buildCsvRow([""]));
+    rows.push(
+      buildCsvRow([
+        "Monthly minus 4-week",
+        fmt(breakdownScaled.monthlyMinus4w),
+      ]),
+    );
+    rows.push(
+      buildCsvRow([
+        "Monthly vs 4-week difference (%)",
+        formatPercent(breakdownScaled.monthlyMinus4wPct, 2),
+      ]),
+    );
+
+    rows.push(buildCsvRow([""]));
+    rows.push(buildCsvRow(["Annualization context (illustrative)"]));
+    rows.push(
+      buildCsvRow(["Monthly × 12", fmt(breakdownScaled.annualFromMonthly12)]),
+    );
+    rows.push(
+      buildCsvRow(["4-week × 13", fmt(breakdownScaled.annualFrom4w13)]),
+    );
+    rows.push(
+      buildCsvRow(["Weekly × 52", fmt(breakdownScaled.annualFromWeekly52)]),
+    );
+    rows.push(
+      buildCsvRow([
+        "13 vs 12 difference",
+        fmt(breakdownScaled.annualDiff_13vs12),
+      ]),
+    );
+    rows.push(
+      buildCsvRow([
+        "13 vs 12 difference (%)",
+        formatPercent(breakdownScaled.annualDiff_13vs12Pct, 2),
+      ]),
+    );
+
+    downloadTextFile(
+      "annual-to-monthly-rent.csv",
+      rows.join("\n"),
+      "text/csv;charset=utf-8",
+    );
+  };
+
+  const handlePrint = () => {
+    if (typeof window === "undefined") return;
+    window.print();
+  };
+
+  const faqData = [
+    {
+      q: "How do you convert annual rent to monthly rent on this page?",
+      a: "This page uses a monthly budgeting view: monthly = annual ÷ 12. It treats your annual total as the source of truth and shows the equivalent monthly amount for comparison.",
+    },
+    {
+      q: "Is monthly rent always annual rent ÷ 12?",
+      a: "It’s a common way to compare costs. Real leases can be based on calendar dates, prorations, and due-date rules. This calculator shows the annual-equivalent monthly amount (annual ÷ 12) for budgeting and comparison.",
+    },
+    {
+      q: "Why does 4-week (28-day) rent differ from monthly rent?",
+      a: "A 4-week cycle is 28 days and often results in 13 payments per year, while monthly is typically 12 payments per year. Different period lengths lead to different annual totals even if a listing sounds similar.",
+    },
+    {
+      q: "What assumptions does this converter use?",
+      a: "Year = 365 days, week = 7 days, biweekly = 14 days, 4-week = 28 days, and monthly uses annual ÷ 12 as the budgeting equivalent. Outputs are for comparison, not a promise of exact due dates.",
+    },
+    {
+      q: "Does this tool include utilities, fees, taxes, or deposits?",
+      a: "No. It does not guess what is included. Enter the annual total you want to treat as rent for your budgeting comparison.",
+    },
+    {
+      q: "Does this convert currencies or exchange rates?",
+      a: "No. Currency selection only changes formatting. Convert currencies elsewhere before using this tool if needed.",
+    },
+  ];
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqData.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://rentconverter.com/",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Annual to Monthly Rent Converter",
+        item: "https://rentconverter.com/annual-to-monthly-rent",
+      },
+    ],
+  };
+
+  return (
+    <main className="bg-white text-slate-700 scroll-smooth">
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            @media print {
+              .rc-no-print { display: none !important; }
+              .rc-print-block { break-inside: avoid; }
+              main { background: #fff !important; }
+              a { text-decoration: none !important; color: #000 !important; }
+            }
+          `,
+        }}
+      />
+
+      <section className="pt-6 pb-4 rc-no-print">
+        <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-500">
+          <a href={safeHref("/")} className="hover:underline">
+            Home
+          </a>{" "}
+          / Annual to Monthly Rent Converter
+        </nav>
+      </section>
+
+      <section className="pb-8 text-center bg-white rc-no-print">
+        <h1 className="text-4xl font-bold text-slate-800 mb-4">
+          Annual to Monthly Rent Converter
+        </h1>
+        <p className="text-slate-600 max-w-3xl mx-auto text-lg">
+          Convert an annual rent total into a monthly budgeting equivalent. This
+          page defines monthly as <strong>annual ÷ 12</strong> and shows how
+          that differs from 28-day (every-4-weeks) billing that often implies 13
+          payments per year.
+        </p>
+
+        <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3 text-sm">
+          <a
+            href={safeHref("/rent-converter")}
+            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+          >
+            Rent converter hub
+          </a>
+          <a
+            href={safeHref("/monthly-to-annual-rent")}
+            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+          >
+            Monthly to annual
+          </a>
+          <a
+            href={safeHref("/rent-paid-every-4-weeks")}
+            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+          >
+            Paid every 4 weeks
+          </a>
+          <a
+            href={safeHref("/how-much-rent-can-i-afford")}
+            className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+          >
+            How much rent can I afford
+          </a>
+        </div>
+      </section>
+
+      <section id="converter" className="mx-auto max-w-6xl px-6 pb-6">
+        <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:p-8 rc-print-block">
+          <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <h2 className="text-xl sm:text-2xl font-bold">
+              Instant annual to monthly conversion
+            </h2>
+
+            <div className="rc-no-print flex flex-col sm:flex-row gap-2">
+              <button
+                type="button"
+                onClick={handleExportCsv}
+                disabled={!canShowResults}
+                className={`rounded-xl border px-4 py-2 text-sm font-semibold transition ${
+                  canShowResults
+                    ? "border-slate-200 bg-white text-slate-800 hover:bg-sky-50 hover:border-sky-200"
+                    : "border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed"
+                }`}
+                aria-disabled={!canShowResults}
+              >
+                Export CSV
+              </button>
+              <button
+                type="button"
+                onClick={handlePrint}
+                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+              >
+                Print / Save as PDF
+              </button>
+            </div>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-12">
+            <div className="md:col-span-6">
+              <label className="block text-sm font-semibold text-slate-700 mb-2">
+                Annual rent total
+              </label>
+              <div className="flex gap-2">
+                <input
+                  inputMode="decimal"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  placeholder="e.g. 24000 or 24000.50"
+                  className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  aria-invalid={!parsedAnnual.ok}
+                  aria-describedby="rc-amount-help rc-amount-error"
+                />
+                <select
+                  value={currency}
+                  onChange={(e) =>
+                    setCurrency(
+                      isCurrency(e.target.value)
+                        ? (e.target.value as Currency)
+                        : "CAD",
+                    )
+                  }
+                  className="rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  aria-label="Currency"
+                >
+                  {SUPPORTED_CURRENCIES.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <p id="rc-amount-help" className="mt-2 text-xs text-slate-500">
+                Accepted inputs: $24,000.50, 24000, 24000.00, .5, 12., 1250,50
+                (comma decimal). If your input is ambiguous, you will see a
+                warning or an error instead of a misleading result.
+              </p>
+
+              {!parsedAnnual.ok ? (
+                <p
+                  id="rc-amount-error"
+                  className="mt-2 text-sm font-semibold text-rose-700"
+                >
+                  {parsedAnnual.error}
+                </p>
+              ) : parsedAnnual.warnings.length ? (
+                <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                  <div className="font-semibold">Input interpretation note</div>
+                  <ul className="mt-1 list-disc pl-5 space-y-1">
+                    {parsedAnnual.warnings.map((w, i) => (
+                      <li key={i}>{w}</li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+            </div>
+
+            <div className="md:col-span-6">
+              <label className="block text-sm font-semibold text-slate-700 mb-2">
+                Display settings
+              </label>
+
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
+                  <div className="text-xs text-slate-500">From</div>
+                  <div className="mt-1 text-base font-bold text-slate-800">
+                    {PERIOD_LABEL.annual}
+                  </div>
+                </div>
+                <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
+                  <div className="text-xs text-slate-500">To</div>
+                  <div className="mt-1 text-base font-bold text-slate-800">
+                    {PERIOD_LABEL.monthly}
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-3 rounded-xl border border-slate-200 bg-white p-4">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                  <div>
+                    <div className="text-xs text-slate-500">
+                      Rounding (display only)
+                    </div>
+                    <label className="mt-1 flex items-center gap-2 text-sm text-slate-700">
+                      <input
+                        type="checkbox"
+                        checked={roundDisplay}
+                        onChange={(e) => setRoundDisplay(e.target.checked)}
+                        className="h-4 w-4"
+                      />
+                      Round displayed values
+                    </label>
+                    <p className="mt-1 text-xs text-slate-500">
+                      Calculations use up to 12 decimals internally. If enabled,
+                      displayed values are rounded to your chosen decimals.
+                    </p>
+                  </div>
+
+                  <div className="sm:text-right">
+                    <div className="text-xs text-slate-500">
+                      Displayed decimals
+                    </div>
+                    <select
+                      value={displayDecimals}
+                      onChange={(e) =>
+                        setDisplayDecimals(
+                          Math.max(
+                            0,
+                            Math.min(
+                              6,
+                              Math.trunc(Number(e.target.value) || 2),
+                            ),
+                          ),
+                        )
+                      }
+                      className="mt-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                      aria-label="Displayed decimals"
+                    >
+                      <option value={0}>0</option>
+                      <option value={2}>2</option>
+                      <option value={4}>4</option>
+                      <option value={6}>6</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="mt-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+                  <div className="font-semibold">
+                    What “monthly” means on this page
+                  </div>
+                  <p className="mt-1 text-xs text-slate-600">
+                    This route is a monthly budgeting view:{" "}
+                    <strong>monthly = annual ÷ 12</strong>. It is not a
+                    calendar-date proration tool. If your lease charges every 28
+                    days (4-week cycle), the annual total can differ because
+                    that schedule usually has 13 payments per year.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-6 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
+            <div className="text-sm text-slate-600">Monthly equivalent</div>
+
+            {!canShowResults ? (
+              <div className="mt-2 rounded-xl border border-slate-200 bg-white px-4 py-4 text-slate-700">
+                <div className="font-semibold">No result to show yet</div>
+                <p className="mt-1 text-sm text-slate-600">
+                  Enter a valid annual rent total above to see the monthly
+                  equivalent and breakdown.
+                </p>
+              </div>
+            ) : (
+              <>
+                <div className="mt-2 flex flex-col gap-2">
+                  <div className="text-4xl sm:text-5xl font-extrabold text-sky-800">
+                    {fmt(monthlyHeadlineScaled)}
+                  </div>
+                  <div className="text-sm text-slate-600">
+                    {fmt(annualScaled)} annual ≈{" "}
+                    <strong>{fmt(monthlyHeadlineScaled)}</strong> per month
+                    (annual ÷ 12)
+                  </div>
+
+                  <div className="rc-no-print mt-2 flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleCopy("monthly", fmt(monthlyHeadlineScaled))
+                      }
+                      className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                    >
+                      {copiedKey === "monthly"
+                        ? "Copied"
+                        : "Copy monthly amount"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleCopy(
+                          "summary",
+                          `Annual: ${fmt(annualScaled)} | Monthly (annual ÷ 12): ${fmt(monthlyHeadlineScaled)} | Assumptions: 365-day year, monthly=annual/12`,
+                        )
+                      }
+                      className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                    >
+                      {copiedKey === "summary" ? "Copied" : "Copy summary"}
+                    </button>
+                    {copiedKey === "copy_failed" ? (
+                      <span className="self-center text-sm font-semibold text-rose-700">
+                        Copy failed
+                      </span>
+                    ) : null}
+                  </div>
+
+                  <div className="mt-1 text-xs text-slate-500">
+                    {roundDisplay ? (
+                      <>
+                        Displayed values rounded to {displayDecimals} decimals.
+                        Calculations use up to 12 decimals internally.
+                      </>
+                    ) : (
+                      <>
+                        Displayed values show up to 12 decimals (no display
+                        rounding).
+                      </>
+                    )}
+                  </div>
+                </div>
+
+                <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  {(
+                    [
+                      ["Hourly", breakdownScaled!.hourly, "hourly"],
+                      ["Daily", breakdownScaled!.daily, "daily"],
+                      ["Weekly", breakdownScaled!.weekly, "weekly"],
+                      [
+                        "Every 2 weeks (14 days)",
+                        breakdownScaled!.biweekly,
+                        "biweekly",
+                      ],
+                      [
+                        "Every 4 weeks (28 days)",
+                        breakdownScaled!.every4w,
+                        "every_4_weeks",
+                      ],
+                      [
+                        "Monthly (annual ÷ 12)",
+                        breakdownScaled!.monthly,
+                        "monthly",
+                      ],
+                      ["Annual", breakdownScaled!.annual, "annual"],
+                    ] as const
+                  ).map(([label, val, key]) => (
+                    <div
+                      key={key}
+                      className="rounded-xl border border-slate-200 bg-white px-4 py-3"
+                    >
+                      <div className="text-xs text-slate-500">{label}</div>
+                      <div className="mt-1 text-lg font-bold text-slate-800">
+                        {fmt(val)}
+                      </div>
+                    </div>
+                  ))}
+
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
+                    <div className="text-xs text-slate-500">
+                      4-week vs monthly comparison
+                    </div>
+                    <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                      <div className="text-sm text-slate-700">
+                        Monthly minus 4-week ={" "}
+                        <strong className="text-slate-900">
+                          {fmt(breakdownScaled!.monthlyMinus4w)}
+                        </strong>
+                      </div>
+                      <div className="text-sm text-slate-700">
+                        Difference ≈{" "}
+                        <strong className="text-slate-900">
+                          {formatPercent(breakdownScaled!.monthlyMinus4wPct, 2)}
+                        </strong>
+                      </div>
+                    </div>
+                    <p className="mt-2 text-xs text-slate-500">
+                      4-week is 28 days. “Monthly” here is annual ÷ 12.
+                      Different lengths lead to different equivalents and can
+                      change annual totals.
+                    </p>
+                  </div>
+
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
+                    <div className="text-xs text-slate-500">
+                      Annualization context (12 vs 13 payments)
+                    </div>
+
+                    <div className="mt-2 grid gap-2 sm:grid-cols-3">
+                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
+                        <div className="text-xs text-slate-500">
+                          Monthly × 12
+                        </div>
+                        <div className="mt-1 text-sm font-bold text-slate-800">
+                          {fmt(breakdownScaled!.annualFromMonthly12)}
+                        </div>
+                        <div className="mt-1 text-xs text-slate-500">
+                          Typical monthly schedule
+                        </div>
+                      </div>
+
+                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
+                        <div className="text-xs text-slate-500">
+                          4-week × 13
+                        </div>
+                        <div className="mt-1 text-sm font-bold text-slate-800">
+                          {fmt(breakdownScaled!.annualFrom4w13)}
+                        </div>
+                        <div className="mt-1 text-xs text-slate-500">
+                          Common 28-day schedule
+                        </div>
+                      </div>
+
+                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
+                        <div className="text-xs text-slate-500">Difference</div>
+                        <div className="mt-1 text-sm font-bold text-slate-800">
+                          {fmt(breakdownScaled!.annualDiff_13vs12)}
+                        </div>
+                        <div className="mt-1 text-xs text-slate-500">
+                          ≈{" "}
+                          {formatPercent(
+                            breakdownScaled!.annualDiff_13vs12Pct,
+                            2,
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    <p className="mt-3 text-xs text-slate-500">
+                      This panel is illustrative. It shows how “monthly” (12)
+                      and “every 4 weeks” (13) schedules can imply different
+                      annual totals even when a listing feels similar.
+                    </p>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+
+          <p className="mt-6 text-sm text-slate-500">
+            Assumptions: year = 365 days, week = 7 days, biweekly = 14 days,
+            4-week = 28 days. This page defines monthly as annual ÷ 12
+            (budgeting equivalent). Actual due dates and totals can differ by
+            lease schedule, proration rules, fees, and what is included in rent.
+          </p>
+        </div>
+      </section>
+
+      <section id="learn" className="max-w-5xl mx-auto px-6 pt-16 rc-no-print">
+        <h2 className="text-3xl font-bold mb-6 text-center text-slate-900">
+          Annual to monthly conversion for budgeting
+        </h2>
+
+        <p className="text-slate-700 mb-4">
+          This page is built for a simple monthly budgeting question: “If my
+          rent total is X per year, what is the monthly equivalent?” The
+          definition used is <strong>annual ÷ 12</strong>. You also get a
+          breakdown so you can compare against weekly, biweekly, and 28-day
+          pricing.
+        </p>
+
+        <h3 className="text-2xl font-semibold mt-10 mb-4 text-slate-900">
+          Why “every 4 weeks” often surprises people
+        </h3>
+        <p className="text-slate-700 mb-4">
+          A 28-day cycle can land on a 13-payment year, while monthly is usually
+          12 payments. The 4-week vs monthly comparison and annualization panel
+          exist to keep that difference visible instead of hiding it.
+        </p>
+
+        <h3 className="text-2xl font-semibold mt-10 mb-4 text-slate-900">
+          Examples
+        </h3>
+        <ul className="text-slate-700 mb-4 list-disc pl-5 space-y-2">
+          <li>
+            If annual rent is <strong>$24,000</strong>, monthly budgeting
+            equivalent is <strong>$24,000 ÷ 12 = $2,000</strong>.
+          </li>
+          <li>
+            If a listing says <strong>$2,000 “every 4 weeks”</strong>, the
+            implied annual can be about <strong>$2,000 × 13 = $26,000</strong>{" "}
+            (not $24,000).
+          </li>
+          <li>
+            If you type <strong>1,234</strong>, this tool treats the comma as
+            thousands grouping (1234). If you meant a decimal, type{" "}
+            <strong>1.234</strong>.
+          </li>
+        </ul>
+
+        <p className="text-slate-700 mb-4">
+          Related tools:{" "}
+          <a
+            href={safeHref("/monthly-to-annual-rent")}
+            className="text-sky-700 hover:underline"
+          >
+            monthly to annual rent
+          </a>
+          ,{" "}
+          <a
+            href={safeHref("/rent-paid-every-4-weeks")}
+            className="text-sky-700 hover:underline"
+          >
+            rent paid every 4 weeks
+          </a>
+          ,{" "}
+          <a
+            href={safeHref("/rent-converter")}
+            className="text-sky-700 hover:underline"
+          >
+            rent converter
+          </a>
+          .
+        </p>
+      </section>
+
+      {/* RentConverter.com layout rule: add a “How it works” explanation section above the FAQ. */}
+      <section
+        id="how-it-works"
+        className="max-w-5xl mx-auto px-6 pt-16 rc-no-print"
+      >
+        <h2 className="text-3xl font-bold text-center mb-6 text-slate-900">
+          How it works
+        </h2>
+
+        <div className="rounded-2xl border border-slate-200 bg-white p-6">
+          <ol className="list-decimal pl-5 space-y-3 text-slate-700">
+            <li>
+              <strong>You enter an annual rent total.</strong> “Annual rent”
+              means the total you want to treat as rent for budgeting. This tool
+              does not guess inclusions like utilities, taxes, fees, or
+              deposits.
+            </li>
+            <li>
+              <strong>Monthly is computed as annual ÷ 12.</strong> This is the
+              monthly budgeting equivalent and matches the route intent.
+            </li>
+            <li>
+              <strong>
+                Other periods are derived from the same annual total.
+              </strong>{" "}
+              Weekly, biweekly, daily, and hourly equivalents use a 365-day year
+              so comparisons remain consistent.
+            </li>
+            <li>
+              <strong>
+                4-week (28-day) equivalents are shown for clarity.
+              </strong>{" "}
+              A 28-day billing schedule often implies 13 payments per year,
+              which can differ from 12-month schedules.
+            </li>
+            <li>
+              <strong>Decimals are preserved.</strong> Inputs are parsed into
+              fixed-point integers (up to 12 decimals). If an input is
+              ambiguous, you’ll see a warning or an error instead of a
+              misleading result.
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section id="faq" className="max-w-5xl mx-auto py-20 px-6 rc-no-print">
+        <h2 className="text-3xl font-bold text-center mb-8 text-slate-800">
+          Frequently Asked Questions
+        </h2>
+        <div className="space-y-8">
+          {faqData.map((f, i) => (
+            <div key={i}>
+              <h3 className="font-semibold text-lg text-slate-800 mb-1">
+                {f.q}
+              </h3>
+              <p className="text-slate-600">{f.a}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6">
+          <p className="text-xs text-slate-600 leading-relaxed">
+            <strong>Disclaimer:</strong>
+            <br />
+            Tools on this site are provided for informational, budgeting, and
+            comparison purposes only. Calculations are based on standard
+            time-period assumptions (including a 365-day year and simplified
+            models). Results are estimates, not guarantees.
+            <br />
+            <br />
+            This website does not provide financial, legal, or tax advice.
+            Rental costs, affordability, payment schedules, and obligations vary
+            by location, landlord, lease terms, and individual circumstances.
+            Always review your lease agreement and consult qualified
+            professionals before making financial decisions.
+          </p>
+        </div>
+      </section>
+
+      <OtherUsefulTools />
+      <RenterChecklists />
+      <RentToolsByCountry />
+
+      <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
+        <p className="text-xs text-slate-500 text-center leading-relaxed">
+          <em>
+            Tools on this site are for budgeting and comparison. Calculations
+            use standard time-period assumptions, including a 365-day year.
+            Always confirm payment schedules and lease terms in your rental
+            agreement.
+          </em>
+        </p>
+      </section>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+    </main>
+  );
+}

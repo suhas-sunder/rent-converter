@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Route } from "./+types/rent-per-person-calculator";
 import OtherUsefulTools from "~/client/components/navigation/OtherUsefulTools";
 import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountry";
@@ -9,7 +9,7 @@ export const meta: Route.MetaFunction = () => [
   {
     name: "description",
     content:
-      "Split rent per person (roommates) using annual equivalence (365-day year). See per-person rent by period, annual totals, and a full breakdown including monthly vs every 4 weeks.",
+      "Split rent per person (roommates) using annual equivalence on a 365-day basis. See per-person rent by period, annual totals, and a full breakdown including monthly (average) vs every 4 weeks.",
   },
   {
     name: "keywords",
@@ -25,7 +25,7 @@ export const meta: Route.MetaFunction = () => [
   {
     property: "og:description",
     content:
-      "Split rent per person using annual equivalence. Compare per-person rent across periods, including monthly vs every 4 weeks.",
+      "Split rent per person using annual equivalence. Compare per-person rent across periods, including monthly (average) vs every 4 weeks.",
   },
   { property: "og:url", content: "https://rentconverter.com/rent-per-person" },
   { property: "og:site_name", content: "RentConverter.com" },
@@ -36,7 +36,7 @@ export const meta: Route.MetaFunction = () => [
   {
     name: "twitter:description",
     content:
-      "Split rent per person using annual equivalence. Compare per-person rent across periods, including monthly vs every 4 weeks.",
+      "Split rent per person using annual equivalence. Compare per-person rent across periods, including monthly (average) vs every 4 weeks.",
   },
   { name: "twitter:image", content: "https://rentconverter.com/og-image.jpg" },
 
@@ -58,73 +58,320 @@ const PERIOD_LABEL: Record<Period, string> = {
   weekly: "Weekly",
   biweekly: "Every 2 weeks",
   every_4_weeks: "Every 4 weeks (28 days)",
-  monthly: "Monthly",
+  monthly: "Monthly (average)",
   annual: "Annual",
 };
 
-function clampNum(n: number, min: number, max: number) {
-  if (!Number.isFinite(n)) return min;
-  return Math.min(max, Math.max(min, n));
+const SUPPORTED_CURRENCIES = [
+  "USD",
+  "CAD",
+  "EUR",
+  "GBP",
+  "AUD",
+  "NZD",
+  "JPY",
+  "CNY",
+  "HKD",
+  "SGD",
+  "INR",
+  "KRW",
+  "CHF",
+  "SEK",
+  "NOK",
+  "DKK",
+  "MXN",
+  "BRL",
+] as const;
+
+type Currency = (typeof SUPPORTED_CURRENCIES)[number];
+
+function isCurrency(x: string): x is Currency {
+  return (SUPPORTED_CURRENCIES as readonly string[]).includes(x);
 }
 
-function parseMoney(input: string) {
-  const cleaned = input.replace(/[^\d.]/g, "").replace(/(\..*)\./g, "$1");
-  const n = parseFloat(cleaned);
-  if (!Number.isFinite(n)) return 0;
-  return clampNum(n, 0, 1_000_000_000);
+function isPeriod(x: string): x is Period {
+  return (
+    x === "hourly" ||
+    x === "daily" ||
+    x === "weekly" ||
+    x === "biweekly" ||
+    x === "every_4_weeks" ||
+    x === "monthly" ||
+    x === "annual"
+  );
 }
 
-function parsePeople(input: string) {
-  const cleaned = input.replace(/[^\d]/g, "");
-  const n = parseInt(cleaned || "0", 10);
-  if (!Number.isFinite(n)) return 0;
-  return clampNum(n, 0, 100);
+/**
+ * Route whitelist. Only include routes you know exist.
+ * Add to this list only when the route is confirmed in your app.
+ */
+const ROUTE_WHITELIST = new Set<string>([
+  "/",
+  "/rent-converter",
+  "/rent-paid-weekly-vs-monthly",
+  "/rent-affordability-calculator",
+  "/rent-billed-every-28-days",
+  "/rent-per-person",
+]);
+
+function safeHref(path: string): string {
+  return ROUTE_WHITELIST.has(path) ? path : "/";
 }
 
-function money(n: number, currency: string) {
+/** Fixed-point decimals preserved end-to-end (up to 12 decimals). */
+const MAX_DECIMALS = 12n;
+const SCALE = 10n ** MAX_DECIMALS;
+
+type ParsedScaled = {
+  ok: boolean;
+  scaled?: bigint;
+  normalized?: string;
+  warnings: string[];
+  error?: string;
+};
+
+function clampScaled(v: bigint, min: bigint, max: bigint): bigint {
+  if (v < min) return min;
+  if (v > max) return max;
+  return v;
+}
+
+function toNumberSafe(scaled: bigint): number {
+  return Number(scaled) / Number(SCALE);
+}
+
+function formatCurrencyFromScaled(
+  scaled: bigint,
+  currency: Currency,
+  displayDecimals: number,
+): string {
+  const n = toNumberSafe(scaled);
   if (!Number.isFinite(n)) return "—";
+  const digits = Math.max(0, Math.min(12, displayDecimals));
   return new Intl.NumberFormat(undefined, {
     style: "currency",
     currency,
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
   }).format(n);
 }
 
-function annualize(value: number, period: Period): number {
-  const daysPer: Record<Exclude<Period, "hourly">, number> = {
-    daily: 1,
-    weekly: 7,
-    biweekly: 14,
-    every_4_weeks: 28,
-    monthly: 365 / 12,
-    annual: 365,
-  };
+/**
+ * Accepts: $650, 650, 650.00, .5, 12., 650,50 (comma decimal).
+ * Rejects ambiguous formats like "1,2,3".
+ */
+function parseMoneyInputToScaled(raw: string): ParsedScaled {
+  const warnings: string[] = [];
+  const s0 = (raw ?? "").trim();
 
-  const perDay =
-    period === "hourly"
-      ? value * 24
-      : value / (daysPer[period as Exclude<Period, "hourly">] || 1);
+  if (!s0) return { ok: false, error: "Enter a rent amount.", warnings };
 
-  return perDay * 365;
+  let s = s0.replace(/\s+/g, "");
+  s = s.replace(/[^\d.,\-]/g, "");
+
+  if (!s) {
+    return {
+      ok: false,
+      error: "Enter a valid number (example: 2400 or 2400.00).",
+      warnings,
+    };
+  }
+
+  if (s.includes("-")) {
+    if (!s.startsWith("-") || s.slice(1).includes("-")) {
+      return {
+        ok: false,
+        error: "Enter a valid number (misplaced minus sign).",
+        warnings,
+      };
+    }
+    return { ok: false, error: "Rent must be 0 or greater.", warnings };
+  }
+
+  const lastDot = s.lastIndexOf(".");
+  const lastComma = s.lastIndexOf(",");
+  let decimalSep: "." | "," | null = null;
+
+  if (lastDot !== -1 && lastComma !== -1) {
+    decimalSep = lastDot > lastComma ? "." : ",";
+  } else if (lastDot !== -1) {
+    decimalSep = ".";
+  } else if (lastComma !== -1) {
+    const parts = s.split(",");
+    if (parts.length === 2) {
+      const before = parts[0] ?? "";
+      const after = parts[1] ?? "";
+      if (/^\d{1,2}$/.test(after)) {
+        decimalSep = ",";
+      } else if (/^\d{3}$/.test(after) && /^\d{1,3}$/.test(before)) {
+        decimalSep = null;
+        warnings.push(
+          `Interpreted "${s0}" as thousands grouping. If you meant a decimal, use a dot like "1234.56".`,
+        );
+      } else {
+        return {
+          ok: false,
+          error:
+            'That format is ambiguous. Try "1234.56" or "1,234.56" or "1234,56".',
+          warnings,
+        };
+      }
+    } else {
+      decimalSep = null;
+    }
+  }
+
+  let intPart = s;
+  let fracPart = "";
+
+  if (decimalSep) {
+    const split = s.split(decimalSep);
+    if (split.length > 2) {
+      return {
+        ok: false,
+        error: "Enter a valid number (too many decimal separators).",
+        warnings,
+      };
+    }
+    intPart = split[0] ?? "";
+    fracPart = split[1] ?? "";
+  }
+
+  if (decimalSep === ".") intPart = intPart.replace(/,/g, "");
+  else if (decimalSep === ",") intPart = intPart.replace(/\./g, "");
+  else intPart = intPart.replace(/[.,]/g, "");
+
+  if (intPart === "") intPart = "0";
+  if (!/^\d+$/.test(intPart))
+    return { ok: false, error: "Enter a valid number.", warnings };
+  if (fracPart && !/^\d+$/.test(fracPart))
+    return { ok: false, error: "Enter a valid number.", warnings };
+
+  const maxDec = Number(MAX_DECIMALS);
+  const fracRaw = fracPart ?? "";
+  const fracCapped =
+    fracRaw.length > maxDec ? fracRaw.slice(0, maxDec) : fracRaw;
+  const fracPadded = fracCapped.padEnd(maxDec, "0");
+
+  const scaled =
+    BigInt(intPart) * SCALE + (fracPadded ? BigInt(fracPadded) : 0n);
+
+  const maxVal = 1_000_000_000n * SCALE;
+  const clamped = clampScaled(scaled, 0n, maxVal);
+  if (clamped !== scaled)
+    warnings.push("Value was clamped to the supported maximum.");
+
+  const normalized = fracRaw.length ? `${intPart}.${fracCapped}` : `${intPart}`;
+  return { ok: true, scaled: clamped, normalized, warnings };
 }
 
-function fromAnnual(annual: number, to: Period): number {
-  const daysPer: Record<Exclude<Period, "hourly">, number> = {
-    daily: 1,
-    weekly: 7,
-    biweekly: 14,
-    every_4_weeks: 28,
-    monthly: 365 / 12,
-    annual: 365,
-  };
+type ParsedPeople = {
+  ok: boolean;
+  value?: number;
+  error?: string;
+};
 
-  const daily = annual / 365;
-  if (to === "hourly") return daily / 24;
-  return daily * (daysPer[to as Exclude<Period, "hourly">] || 1);
+function parsePeopleInput(raw: string): ParsedPeople {
+  const s = (raw ?? "").trim();
+  if (!s) return { ok: false, error: "Enter number of people." };
+
+  // allow "3", "03", "3 people" (strip non-digits)
+  const cleaned = s.replace(/[^\d]/g, "");
+  if (!cleaned) return { ok: false, error: "Enter a whole number of people." };
+
+  const n = Number.parseInt(cleaned, 10);
+  if (!Number.isFinite(n) || n <= 0)
+    return { ok: false, error: "People must be 1 or more." };
+  if (n > 100) return { ok: false, error: "People must be 100 or less." };
+  return { ok: true, value: n };
+}
+
+/**
+ * Assumptions (source of truth):
+ * - Year = 365 days
+ * - Month = 365/12 days (average month)
+ * - Week = 7 days
+ * - Biweekly = 14 days
+ * - Every 4 weeks = 28 days
+ * - Hour = 1/24 day
+ *
+ * Conversions are annual-basis:
+ * 1) convert input to annual (365-day basis)
+ * 2) derive any other period from annual
+ */
+function annualizeFromScaled(valueScaled: bigint, from: Period): bigint {
+  if (from === "annual") return valueScaled;
+  if (from === "monthly") return valueScaled * 12n;
+  if (from === "weekly") return (valueScaled * 365n) / 7n;
+  if (from === "biweekly") return (valueScaled * 365n) / 14n;
+  if (from === "every_4_weeks") return (valueScaled * 365n) / 28n;
+  if (from === "daily") return valueScaled * 365n;
+  return valueScaled * 24n * 365n; // hourly
+}
+
+function fromAnnualScaled(annualScaled: bigint, to: Period): bigint {
+  if (to === "annual") return annualScaled;
+  if (to === "monthly") return annualScaled / 12n;
+  if (to === "weekly") return (annualScaled / 365n) * 7n;
+  if (to === "biweekly") return (annualScaled / 365n) * 14n;
+  if (to === "every_4_weeks") return (annualScaled / 365n) * 28n;
+  if (to === "daily") return annualScaled / 365n;
+  return annualScaled / 365n / 24n; // hourly
+}
+
+function buildCsvRow(cols: string[]): string {
+  return cols
+    .map((c) => {
+      const s = String(c ?? "");
+      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
+      return s;
+    })
+    .join(",");
+}
+
+function downloadTextFile(
+  filename: string,
+  content: string,
+  mime = "text/plain;charset=utf-8",
+) {
+  const blob = new Blob([content], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
+  if (raw === null) return fallback;
+  try {
+    const v = JSON.parse(raw);
+    return typeof v === "boolean" ? v : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function safeParseInt(
+  raw: string | null,
+  fallback: number,
+  min: number,
+  max: number,
+): number {
+  if (raw === null) return fallback;
+  const n = Number(raw);
+  if (!Number.isFinite(n)) return fallback;
+  const t = Math.trunc(n);
+  return Math.max(min, Math.min(max, t));
 }
 
 export default function RentPerPerson() {
+  const pageName = "Rent Per Person Calculator";
+  const canonicalUrl = "https://rentconverter.com/rent-per-person";
+
   const [totalRent, setTotalRent] = useState<string>(() => {
     if (typeof window === "undefined") return "2400";
     return localStorage.getItem("rc_rpp_total") ?? "2400";
@@ -132,7 +379,8 @@ export default function RentPerPerson() {
 
   const [period, setPeriod] = useState<Period>(() => {
     if (typeof window === "undefined") return "monthly";
-    return (localStorage.getItem("rc_rpp_period") as Period) ?? "monthly";
+    const saved = localStorage.getItem("rc_rpp_period") ?? "monthly";
+    return isPeriod(saved) ? saved : "monthly";
   });
 
   const [people, setPeople] = useState<string>(() => {
@@ -140,9 +388,26 @@ export default function RentPerPerson() {
     return localStorage.getItem("rc_rpp_people") ?? "3";
   });
 
-  const [currency, setCurrency] = useState<string>(() => {
+  const [currency, setCurrency] = useState<Currency>(() => {
     if (typeof window === "undefined") return "USD";
-    return localStorage.getItem("rc_rpp_currency") ?? "USD";
+    const saved = localStorage.getItem("rc_rpp_currency") ?? "USD";
+    return isCurrency(saved) ? saved : "USD";
+  });
+
+  // Display-only rounding controls (do not affect computation)
+  const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
+    if (typeof window === "undefined") return true;
+    return safeParseBoolean(localStorage.getItem("rc_rpp_round_display"), true);
+  });
+
+  const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
+    if (typeof window === "undefined") return 2;
+    return safeParseInt(
+      localStorage.getItem("rc_rpp_display_decimals"),
+      2,
+      0,
+      6,
+    );
   });
 
   useEffect(() => {
@@ -152,19 +417,43 @@ export default function RentPerPerson() {
       localStorage.setItem("rc_rpp_period", period);
       localStorage.setItem("rc_rpp_people", people);
       localStorage.setItem("rc_rpp_currency", currency);
-    } catch {}
-  }, [totalRent, period, people, currency]);
+      localStorage.setItem(
+        "rc_rpp_round_display",
+        JSON.stringify(roundDisplay),
+      );
+      localStorage.setItem("rc_rpp_display_decimals", String(displayDecimals));
+    } catch {
+      // ignore
+    }
+  }, [totalRent, period, people, currency, roundDisplay, displayDecimals]);
 
-  const totalParsed = useMemo(() => parseMoney(totalRent), [totalRent]);
-  const peopleParsed = useMemo(() => parsePeople(people), [people]);
+  const parsedRent = useMemo(
+    () => parseMoneyInputToScaled(totalRent),
+    [totalRent],
+  );
+  const parsedPeople = useMemo(() => parsePeopleInput(people), [people]);
 
   const computed = useMemo(() => {
-    const safePeople = peopleParsed > 0 ? peopleParsed : 0;
+    const warnings: string[] = [];
+    const errors: string[] = [];
 
-    const annualTotal = annualize(totalParsed, period);
-    const annualPerPerson = safePeople > 0 ? annualTotal / safePeople : 0;
+    if (!parsedRent.ok)
+      errors.push(parsedRent.error ?? "Enter a valid rent amount.");
+    if (parsedRent.warnings.length) warnings.push(...parsedRent.warnings);
 
-    const perSelected = safePeople > 0 ? totalParsed / safePeople : 0;
+    if (!parsedPeople.ok)
+      errors.push(parsedPeople.error ?? "Enter a valid number of people.");
+
+    if (errors.length) return { ok: false as const, errors, warnings };
+
+    const rentScaled = parsedRent.scaled as bigint;
+    const peopleN = parsedPeople.value as number;
+
+    const annualTotalScaled = annualizeFromScaled(rentScaled, period);
+    const annualPerPersonScaled = annualTotalScaled / BigInt(peopleN);
+
+    // equal split in the same stated period (pure split of input, not annualized)
+    const perSelectedPeriodScaled = rentScaled / BigInt(peopleN);
 
     const periods: Period[] = [
       "hourly",
@@ -176,37 +465,158 @@ export default function RentPerPerson() {
       "annual",
     ];
 
-    const perPersonBreakdown = periods.map((p) => ({
-      p,
-      perPerson: fromAnnual(annualPerPerson, p),
-      total: fromAnnual(annualTotal, p),
+    const breakdown = periods.map((p) => ({
+      period: p,
+      totalScaled: fromAnnualScaled(annualTotalScaled, p),
+      perPersonScaled: fromAnnualScaled(annualPerPersonScaled, p),
     }));
 
-    const monthlyAvgPerPerson = fromAnnual(annualPerPerson, "monthly");
-    const fourWeekPerPerson = fromAnnual(annualPerPerson, "every_4_weeks");
+    const monthlyAvgPerPersonScaled = fromAnnualScaled(
+      annualPerPersonScaled,
+      "monthly",
+    );
+    const fourWeekPerPersonScaled = fromAnnualScaled(
+      annualPerPersonScaled,
+      "every_4_weeks",
+    );
 
-    const avgMonthDays = 365 / 12;
     const leftoverCents =
-      safePeople > 0
-        ? Math.round(totalParsed * 100) - Math.round(perSelected * 100) * safePeople
+      BigInt(peopleN) > 0n
+        ? (() => {
+            const totalCents = rentScaled / (SCALE / 100n);
+            const perCents =
+              (perSelectedPeriodScaled / (SCALE / 100n)) * BigInt(peopleN);
+            const diff = totalCents - perCents;
+            return Number(diff);
+          })()
         : 0;
 
     return {
-      safePeople,
-      annualTotal: Number.isFinite(annualTotal) ? annualTotal : 0,
-      annualPerPerson: Number.isFinite(annualPerPerson) ? annualPerPerson : 0,
-      perSelected: Number.isFinite(perSelected) ? perSelected : 0,
-      perPersonBreakdown,
-      monthlyAvgPerPerson,
-      fourWeekPerPerson,
-      avgMonthDays,
+      ok: true as const,
+      warnings,
+      peopleN,
+      rentScaled,
+      annualTotalScaled,
+      annualPerPersonScaled,
+      perSelectedPeriodScaled,
+      monthlyAvgPerPersonScaled,
+      fourWeekPerPersonScaled,
+      breakdown,
       leftoverCents,
     };
-  }, [totalParsed, period, peopleParsed]);
+  }, [parsedRent, parsedPeople, period]);
+
+  const effectiveDisplayDecimals = roundDisplay ? displayDecimals : 12;
+
+  const fmtMoney = (scaled: bigint) =>
+    formatCurrencyFromScaled(scaled, currency, effectiveDisplayDecimals);
+
+  const avgMonthDays = 365 / 12;
+
+  const handlePrint = () => {
+    if (typeof window === "undefined") return;
+    window.print();
+  };
+
+  const handleExportCsv = () => {
+    if (!computed.ok) return;
+
+    const rows: string[] = [];
+    rows.push(buildCsvRow([pageName]));
+    rows.push(buildCsvRow(["Currency", currency]));
+    rows.push(buildCsvRow(["Input rent", totalRent]));
+    rows.push(buildCsvRow(["Rent period", period]));
+    rows.push(buildCsvRow(["People", String(computed.peopleN)]));
+    rows.push(buildCsvRow([""]));
+
+    rows.push(buildCsvRow(["Annual totals (365-day basis)"]));
+    rows.push(
+      buildCsvRow(["Annual total rent", fmtMoney(computed.annualTotalScaled)]),
+    );
+    rows.push(
+      buildCsvRow([
+        "Annual per person",
+        fmtMoney(computed.annualPerPersonScaled),
+      ]),
+    );
+    rows.push(buildCsvRow([""]));
+
+    rows.push(buildCsvRow(["Equal split in selected rent period"]));
+    rows.push(
+      buildCsvRow([
+        `Per person (${PERIOD_LABEL[period]})`,
+        fmtMoney(computed.perSelectedPeriodScaled),
+      ]),
+    );
+    rows.push(buildCsvRow([""]));
+
+    rows.push(buildCsvRow(["Monthly vs every 4 weeks (per person)"]));
+    rows.push(
+      buildCsvRow([
+        "Monthly (average)",
+        fmtMoney(computed.monthlyAvgPerPersonScaled),
+      ]),
+    );
+    rows.push(
+      buildCsvRow([
+        "Every 4 weeks",
+        fmtMoney(computed.fourWeekPerPersonScaled),
+      ]),
+    );
+    rows.push(buildCsvRow([""]));
+
+    rows.push(buildCsvRow(["Full breakdown (annual-equivalent)"]));
+    rows.push(buildCsvRow(["Period", "Total", "Per person"]));
+    computed.breakdown.forEach((r) => {
+      rows.push(
+        buildCsvRow([
+          PERIOD_LABEL[r.period],
+          fmtMoney(r.totalScaled),
+          fmtMoney(r.perPersonScaled),
+        ]),
+      );
+    });
+
+    rows.push(buildCsvRow([""]));
+    rows.push(
+      buildCsvRow([
+        "Assumptions",
+        "Year=365 days, Week=7 days, Biweekly=14 days, Every 4 weeks=28 days, Month=365/12 days (average).",
+      ]),
+    );
+
+    downloadTextFile(
+      "rent-per-person.csv",
+      rows.join("\n"),
+      "text/csv;charset=utf-8",
+    );
+  };
+
+  const [copiedKey, setCopiedKey] = useState<string | null>(null);
+  const copyTimerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
+    };
+  }, []);
+
+  const handleCopy = async (key: string, text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedKey(key);
+      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
+      copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
+    } catch {
+      setCopiedKey("copy_failed");
+      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
+      copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
+    }
+  };
 
   const faqData = [
     {
-      q: "What does “rent per person” mean on this page?",
+      q: "What does rent per person mean on this page?",
       a: "It is an equal split of the rent amount you entered. The page also shows annual equivalents so the split stays comparable across different billing cycles.",
     },
     {
@@ -215,19 +625,19 @@ export default function RentPerPerson() {
     },
     {
       q: "Does the calculator handle uneven splits?",
-      a: "No. It calculates an equal split only. If one person pays more due to room size, a couple sharing a room, or income differences, the equal split can be used as a baseline and adjusted outside the tool.",
+      a: "No. It calculates an equal split only. If one person pays more due to room size, a couple sharing a room, or income differences, use the equal split as a baseline and adjust outside the tool.",
     },
     {
       q: "Why does the tool convert everything through annual totals?",
-      a: "Annual equivalence makes the comparisons consistent. It avoids mixing assumptions when the rent is discussed in one period but budgeted in another.",
+      a: "Annual equivalence keeps comparisons consistent and avoids mixing assumptions when rent is discussed in one period but budgeted in another.",
     },
     {
       q: "What if the split does not divide evenly to the cent?",
-      a: "Rent often does not split perfectly. The tool shows the exact per-person estimate; any leftover cents can be handled by rounding and assigning the small remainder to one person or rotating it across months.",
+      a: "Rent often does not split perfectly. You can assign the small remainder to one person or rotate it across months. The page also shows the cents remainder for the selected split period.",
     },
     {
       q: "Does this include utilities, parking, or fees?",
-      a: "No. It is rent-only. If shared bills are part of the arrangement, add them to the rent amount first or calculate them separately and combine totals.",
+      a: "No. It is rent-only. Add shared bills to the rent amount first or calculate them separately and combine totals.",
     },
     {
       q: "What assumptions are used for the conversions?",
@@ -249,49 +659,79 @@ export default function RentPerPerson() {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: "https://rentconverter.com/" },
       {
         "@type": "ListItem",
-        position: 2,
-        name: "Rent Per Person Calculator",
-        item: "https://rentconverter.com/rent-per-person",
+        position: 1,
+        name: "Home",
+        item: "https://rentconverter.com/",
       },
+      { "@type": "ListItem", position: 2, name: pageName, item: canonicalUrl },
     ],
+  };
+
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "RentConverter.com",
+    url: "https://rentconverter.com/",
+  };
+
+  const webPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: pageName,
+    description:
+      "Split rent per person using annual equivalence on a 365-day basis and compare monthly (average) vs every 4 weeks.",
+    url: canonicalUrl,
   };
 
   return (
     <main className="bg-white text-slate-700 scroll-smooth">
-      <section className="pb-4">
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            @media print {
+              .rc-no-print { display: none !important; }
+              .rc-print-block { break-inside: avoid; }
+              main { background: #fff !important; }
+              a { text-decoration: none !important; color: #000 !important; }
+            }
+          `,
+        }}
+      />
+
+      <section className="pb-4 rc-no-print">
         <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-500">
-          <a href="/" className="hover:underline">
+          <a href={safeHref("/")} className="hover:underline">
             Home
           </a>{" "}
-          / Rent Per Person Calculator
+          / {pageName}
         </nav>
       </section>
 
-      <section className="pb-8 text-center bg-white">
-        <h1 className="text-4xl font-bold text-slate-800 mb-4">Rent Per Person Calculator</h1>
+      <section className="pb-8 text-center bg-white rc-no-print">
+        <h1 className="text-4xl font-bold text-slate-800 mb-4">{pageName}</h1>
         <p className="text-slate-600 max-w-2xl mx-auto text-lg">
-          Split a rent amount evenly across roommates and see the per-person cost across common
-          billing periods. Results use annual equivalence to keep comparisons consistent.
+          Split a rent amount evenly across roommates and compare the per-person
+          cost across common billing periods using a consistent 365-day annual
+          basis.
         </p>
 
         <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3 text-sm">
           <a
-            href="/rent-converter"
+            href={safeHref("/rent-converter")}
             className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
           >
             Rent converter hub
           </a>
           <a
-            href="/rent-paid-weekly-vs-monthly"
+            href={safeHref("/rent-paid-weekly-vs-monthly")}
             className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
           >
             Weekly vs monthly rent
           </a>
           <a
-            href="/rent-affordability-calculator"
+            href={safeHref("/rent-affordability-calculator")}
             className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
           >
             Rent affordability calculator
@@ -300,54 +740,84 @@ export default function RentPerPerson() {
       </section>
 
       <section id="calculator" className="mx-auto max-w-6xl px-6 pb-6">
-        <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:p-8">
-          <div className="mb-6 flex flex-col gap-2">
-            <h2 className="text-xl sm:text-2xl font-bold">Split rent equally</h2>
-            <p className="text-sm text-slate-600">
-              Enter the total rent and number of people. The results update instantly and remain
-              visible even when inputs are zero.
-            </p>
+        <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:p-8 rc-print-block">
+          <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <div>
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
+                Split rent equally
+              </h2>
+              <p className="mt-1 text-sm text-slate-600">
+                Invalid input hides results, so you do not get misleading zeros.
+              </p>
+            </div>
+
+            <div className="rc-no-print flex flex-col sm:flex-row gap-2">
+              <button
+                type="button"
+                onClick={handleExportCsv}
+                disabled={!computed.ok}
+                className={`rounded-xl border px-4 py-2 text-sm font-semibold transition ${
+                  computed.ok
+                    ? "border-slate-200 bg-white text-slate-800 hover:bg-sky-50 hover:border-sky-200"
+                    : "border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed"
+                }`}
+                aria-disabled={!computed.ok}
+              >
+                Export CSV
+              </button>
+              <button
+                type="button"
+                onClick={handlePrint}
+                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+              >
+                Print / Save as PDF
+              </button>
+            </div>
           </div>
 
           <div className="grid gap-5 md:grid-cols-12">
-            <div className="md:col-span-6">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">Total rent</label>
+            <div className="md:col-span-5">
+              <label className="block text-sm font-semibold text-slate-700 mb-2">
+                Total rent
+              </label>
               <input
                 inputMode="decimal"
                 value={totalRent}
                 onChange={(e) => setTotalRent(e.target.value)}
-                placeholder="e.g. 2400"
+                placeholder="e.g. 2400 or 2400.00"
                 className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                aria-invalid={!parsedRent.ok}
               />
               <p className="mt-2 text-xs text-slate-500">
-                Paste values like $2,400, 2400.00, or 2400. Input is cleaned before calculation.
+                Accepted inputs: $2,400, 2400.00, .5, 12., 2400,50 (comma
+                decimal). Ambiguous formats are rejected.
               </p>
             </div>
 
-            <div className="md:col-span-6">
+            <div className="md:col-span-3">
               <label className="block text-sm font-semibold text-slate-700 mb-2">
-                Billing period (for the total rent)
+                Rent is listed as
               </label>
               <select
                 value={period}
-                onChange={(e) => setPeriod(e.target.value as Period)}
-                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
-                aria-label="Billing period"
+                onChange={(e) =>
+                  setPeriod(
+                    isPeriod(e.target.value) ? e.target.value : "monthly",
+                  )
+                }
+                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
               >
-                {Object.entries(PERIOD_LABEL).map(([k, v]) => (
-                  <option key={k} value={k}>
-                    {v}
+                {(Object.keys(PERIOD_LABEL) as Period[]).map((p) => (
+                  <option key={p} value={p}>
+                    {PERIOD_LABEL[p]}
                   </option>
                 ))}
               </select>
-              <p className="mt-2 text-xs text-slate-500">
-                Conversions are computed by annualizing the rent using a 365-day year.
-              </p>
             </div>
 
-            <div className="md:col-span-6">
+            <div className="md:col-span-2">
               <label className="block text-sm font-semibold text-slate-700 mb-2">
-                Number of people splitting rent
+                People
               </label>
               <input
                 inputMode="numeric"
@@ -355,194 +825,392 @@ export default function RentPerPerson() {
                 onChange={(e) => setPeople(e.target.value)}
                 placeholder="e.g. 3"
                 className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                aria-invalid={!parsedPeople.ok}
               />
               <p className="mt-2 text-xs text-slate-500">
-                Enter a whole number. If this is 0, the per-person values display as 0.
+                Whole numbers only (1 to 100).
               </p>
             </div>
 
-            <div className="md:col-span-6">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">Currency</label>
+            <div className="md:col-span-2">
+              <label className="block text-sm font-semibold text-slate-700 mb-2">
+                Currency
+              </label>
               <select
                 value={currency}
-                onChange={(e) => setCurrency(e.target.value)}
-                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                onChange={(e) =>
+                  setCurrency(
+                    isCurrency(e.target.value) ? e.target.value : "USD",
+                  )
+                }
+                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                 aria-label="Currency"
               >
-                <option value="USD">USD</option>
-                <option value="CAD">CAD</option>
-                <option value="AUD">AUD</option>
-                <option value="NZD">NZD</option>
-                <option value="GBP">GBP</option>
-                <option value="EUR">EUR</option>
+                {SUPPORTED_CURRENCIES.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
               </select>
-              <p className="mt-2 text-xs text-slate-500">Currency affects formatting only.</p>
-            </div>
-          </div>
-
-          <div className="mt-6 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6">
-            <div className="text-sm text-slate-600">Per-person rent (equal split)</div>
-
-            <div className="mt-2 flex flex-col gap-2">
-              <div className="text-4xl sm:text-5xl font-extrabold text-sky-800">
-                {money(computed.perSelected, currency)}
-              </div>
-              <div className="text-sm text-slate-600">
-                Based on {money(totalParsed, currency)} per {PERIOD_LABEL[period].toLowerCase()} split across{" "}
-                <strong>{computed.safePeople}</strong> {computed.safePeople === 1 ? "person" : "people"}.
-              </div>
             </div>
 
-            <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
-                <div className="text-xs text-slate-500">Per-person annual rent (annualized)</div>
-                <div className="mt-1 text-lg font-bold text-slate-800">
-                  {money(computed.annualPerPerson, currency)}
-                </div>
-              </div>
+            <div className="md:col-span-12">
+              <label className="block text-sm font-semibold text-slate-700 mb-2">
+                Display
+              </label>
+              <div className="rounded-xl border border-slate-200 bg-white p-4">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                  <label className="flex items-center gap-2 text-sm text-slate-700">
+                    <input
+                      type="checkbox"
+                      checked={roundDisplay}
+                      onChange={(e) => setRoundDisplay(e.target.checked)}
+                      className="h-4 w-4"
+                    />
+                    Round displayed values (display only)
+                  </label>
 
-              <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
-                <div className="text-xs text-slate-500">Total annual rent (annualized)</div>
-                <div className="mt-1 text-lg font-bold text-slate-800">
-                  {money(computed.annualTotal, currency)}
-                </div>
-              </div>
-
-              <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
-                <div className="text-xs text-slate-500">Split remainder after cents rounding</div>
-                <div className="mt-1 text-lg font-bold text-slate-800">
-                  {computed.safePeople > 0 ? `${computed.leftoverCents}¢` : "0¢"}
-                </div>
-              </div>
-
-              <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
-                <div className="text-xs text-slate-500">Monthly vs every 4 weeks (per person)</div>
-                <div className="mt-2 grid gap-2 sm:grid-cols-2">
-                  <div className="text-sm text-slate-700">
-                    Monthly (average):{" "}
-                    <strong className="text-slate-900">
-                      {money(computed.monthlyAvgPerPerson, currency)}
-                    </strong>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-slate-500">
+                      Displayed decimals
+                    </span>
+                    <select
+                      value={displayDecimals}
+                      onChange={(e) =>
+                        setDisplayDecimals(
+                          Math.max(
+                            0,
+                            Math.min(
+                              6,
+                              Math.trunc(Number(e.target.value) || 2),
+                            ),
+                          ),
+                        )
+                      }
+                      className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
+                    >
+                      <option value={0}>0</option>
+                      <option value={2}>2</option>
+                      <option value={4}>4</option>
+                      <option value={6}>6</option>
+                    </select>
                   </div>
-                  <div className="text-sm text-slate-700">
-                    Every 4 weeks (28 days):{" "}
-                    <strong className="text-slate-900">
-                      {money(computed.fourWeekPerPerson, currency)}
-                    </strong>
-                  </div>
                 </div>
+
                 <p className="mt-2 text-xs text-slate-500">
-                  Every 4 weeks is 28 days. An average month is {computed.avgMonthDays.toFixed(2)} days (365 ÷ 12).
+                  Calculations preserve decimals internally (up to 12). Only
+                  display rounding changes.
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6">
-            <h3 className="text-lg font-bold text-slate-900 mb-3">
-              Full breakdown (total and per person)
-            </h3>
-            <p className="text-sm text-slate-600 mb-4">
-              The table annualizes the total rent first, then expresses the total and the per-person
-              split across common pay cycles. This avoids mixing periods when comparing options.
-            </p>
-
-            <div className="overflow-x-auto">
-              <table className="min-w-[860px] w-full text-sm">
-                <thead>
-                  <tr className="text-left text-slate-500 border-b border-slate-200">
-                    <th className="py-2 pr-4">Period</th>
-                    <th className="py-2 pr-4">Total rent</th>
-                    <th className="py-2 pr-4">Per person</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {computed.perPersonBreakdown.map((row) => (
-                    <tr key={row.p} className="border-b border-slate-100">
-                      <td className="py-2 pr-4 font-semibold text-slate-800">
-                        {PERIOD_LABEL[row.p]}
-                      </td>
-                      <td className="py-2 pr-4 text-slate-800">{money(row.total, currency)}</td>
-                      <td className="py-2 pr-4 text-slate-800">{money(row.perPerson, currency)}</td>
-                    </tr>
+          {!computed.ok ? (
+            <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6">
+              <div className="font-semibold text-slate-900">
+                No results to show
+              </div>
+              <p className="mt-1 text-sm text-slate-600">
+                Fix the input to calculate rent per person.
+              </p>
+              <ul className="mt-3 list-disc pl-5 space-y-1 text-sm text-rose-700">
+                {computed.errors.map((e, i) => (
+                  <li key={i}>{e}</li>
+                ))}
+              </ul>
+              {computed.warnings.length ? (
+                <ul className="mt-3 list-disc pl-5 space-y-1 text-sm text-amber-700">
+                  {computed.warnings.map((w, i) => (
+                    <li key={i}>{w}</li>
                   ))}
-                </tbody>
-              </table>
+                </ul>
+              ) : null}
             </div>
+          ) : (
+            <>
+              {computed.warnings.length ? (
+                <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+                  <ul className="list-disc pl-5 space-y-1">
+                    {computed.warnings.map((w, i) => (
+                      <li key={i}>{w}</li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
 
-            <p className="mt-4 text-xs text-slate-500">
-              Assumptions: 1 year = 365 days, 1 week = 7 days, every 4 weeks = 28 days, and month = 365 ÷ 12 days (average).
-              Exact billing and due dates vary by agreement.
+              <div className="mt-6 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
+                <div className="text-sm text-slate-600">
+                  Per-person rent (equal split)
+                </div>
+
+                <div className="mt-2 flex flex-col gap-2">
+                  <div className="text-4xl sm:text-5xl font-extrabold text-sky-800">
+                    {fmtMoney(computed.perSelectedPeriodScaled)}
+                  </div>
+                  <div className="text-sm text-slate-600">
+                    Based on {fmtMoney(computed.rentScaled)} per{" "}
+                    {PERIOD_LABEL[period].toLowerCase()} split across{" "}
+                    <strong>{computed.peopleN}</strong>{" "}
+                    {computed.peopleN === 1 ? "person" : "people"}.
+                  </div>
+                </div>
+
+                <div className="rc-no-print mt-4 flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleCopy(
+                        "summary",
+                        `Per person (${PERIOD_LABEL[period]}): ${fmtMoney(
+                          computed.perSelectedPeriodScaled,
+                        )}; Annual per person: ${fmtMoney(
+                          computed.annualPerPersonScaled,
+                        )}; Annual total: ${fmtMoney(computed.annualTotalScaled)} (365-day basis)`,
+                      )
+                    }
+                    className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                  >
+                    {copiedKey === "summary" ? "Copied" : "Copy summary"}
+                  </button>
+                  {copiedKey === "copy_failed" ? (
+                    <span className="self-center text-sm font-semibold text-rose-700">
+                      Copy failed
+                    </span>
+                  ) : null}
+                </div>
+
+                <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
+                    <div className="text-xs text-slate-500">
+                      Annual per person (annualized)
+                    </div>
+                    <div className="mt-1 text-lg font-bold text-slate-800">
+                      {fmtMoney(computed.annualPerPersonScaled)}
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
+                    <div className="text-xs text-slate-500">
+                      Annual total (annualized)
+                    </div>
+                    <div className="mt-1 text-lg font-bold text-slate-800">
+                      {fmtMoney(computed.annualTotalScaled)}
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
+                    <div className="text-xs text-slate-500">
+                      Cents remainder for the split
+                    </div>
+                    <div className="mt-1 text-lg font-bold text-slate-800">
+                      {computed.leftoverCents}¢
+                    </div>
+                    <div className="mt-1 text-xs text-slate-500">
+                      After splitting the selected period amount to cents.
+                    </div>
+                  </div>
+
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
+                    <div className="text-xs text-slate-500">
+                      Monthly (average) vs every 4 weeks (per person)
+                    </div>
+                    <div className="mt-2 grid gap-2 sm:grid-cols-2">
+                      <div className="text-sm text-slate-700">
+                        Monthly (average):{" "}
+                        <strong className="text-slate-900">
+                          {fmtMoney(computed.monthlyAvgPerPersonScaled)}
+                        </strong>
+                      </div>
+                      <div className="text-sm text-slate-700">
+                        Every 4 weeks (28 days):{" "}
+                        <strong className="text-slate-900">
+                          {fmtMoney(computed.fourWeekPerPersonScaled)}
+                        </strong>
+                      </div>
+                    </div>
+                    <p className="mt-2 text-xs text-slate-500">
+                      Every 4 weeks is 28 days. An average month is{" "}
+                      {avgMonthDays.toFixed(2)} days (365 ÷ 12).
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 rc-print-block">
+                <h3 className="text-lg font-bold text-slate-900 mb-3">
+                  Full breakdown (annual-equivalent totals and per person)
+                </h3>
+                <p className="text-sm text-slate-600 mb-4">
+                  The table annualizes the total rent first, then expresses the
+                  total and per-person values across common periods.
+                </p>
+
+                <div className="overflow-x-auto">
+                  <table className="min-w-[860px] w-full text-sm">
+                    <thead>
+                      <tr className="text-left text-slate-500 border-b border-slate-200">
+                        <th className="py-2 pr-4">Period</th>
+                        <th className="py-2 pr-4">Total rent</th>
+                        <th className="py-2 pr-4">Per person</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {computed.breakdown.map((row) => (
+                        <tr
+                          key={row.period}
+                          className="border-b border-slate-100"
+                        >
+                          <td className="py-2 pr-4 font-semibold text-slate-800">
+                            {PERIOD_LABEL[row.period]}
+                          </td>
+                          <td className="py-2 pr-4 text-slate-800">
+                            {fmtMoney(row.totalScaled)}
+                          </td>
+                          <td className="py-2 pr-4 text-slate-800">
+                            {fmtMoney(row.perPersonScaled)}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                <p className="mt-4 text-xs text-slate-500">
+                  Assumptions: 1 year = 365 days, 1 week = 7 days, every 4 weeks
+                  = 28 days, and month = 365 ÷ 12 days (average). Exact billing
+                  and due dates vary by agreement.
+                </p>
+              </div>
+            </>
+          )}
+
+          <section className="mt-10 rc-no-print">
+            <h3 className="text-2xl font-semibold mb-4 text-slate-900">
+              Links to related tools
+            </h3>
+            <ul className="list-disc ml-6 text-slate-700">
+              <li>
+                <a
+                  href={safeHref("/rent-paid-weekly-vs-monthly")}
+                  className="text-sky-700 hover:underline"
+                >
+                  Weekly vs monthly rent
+                </a>
+              </li>
+              <li>
+                <a
+                  href={safeHref("/rent-converter")}
+                  className="text-sky-700 hover:underline"
+                >
+                  Rent converter hub
+                </a>
+              </li>
+              <li>
+                <a
+                  href={safeHref("/rent-affordability-calculator")}
+                  className="text-sky-700 hover:underline"
+                >
+                  Rent affordability calculator
+                </a>
+              </li>
+              <li>
+                <a
+                  href={safeHref("/rent-billed-every-28-days")}
+                  className="text-sky-700 hover:underline"
+                >
+                  Rent billed every 28 days
+                </a>
+              </li>
+            </ul>
+          </section>
+
+          <section className="mt-10 rounded-2xl border border-slate-200 bg-white p-6 rc-print-block">
+            <h3 className="text-xl font-bold text-slate-900 mb-3">
+              Disclaimer
+            </h3>
+            <p className="text-sm text-slate-700 leading-relaxed">
+              <strong>Disclaimer:</strong>
+              <br />
+              Tools on this site are provided for informational, budgeting, and
+              comparison purposes only. Calculations are based on standard
+              time-period assumptions (including a 365-day year and average
+              month length) and simplified models. Results are estimates, not
+              guarantees.
+              <br />
+              <br />
+              This website does not provide financial, legal, or tax advice.
+              Rental costs, affordability, payment schedules, and obligations
+              vary by location, landlord, lease terms, and individual
+              circumstances. Always review your lease agreement and consult
+              qualified professionals before making financial decisions.
             </p>
-          </div>
+          </section>
+
+          <p className="mt-6 text-sm text-slate-500">
+            Assumptions: 1 year = 365 days, 1 week = 7 days, biweekly = 14 days,
+            4-week rent = 28 days, month = 365 ÷ 12 days (average). Actual
+            calendars and billing schedules vary.
+          </p>
         </div>
       </section>
 
       {/* Required explanation section above FAQ */}
-      <section className="max-w-5xl mx-auto px-6 pt-16">
+      <section
+        id="how-it-works"
+        className="max-w-5xl mx-auto px-6 pt-16 rc-no-print"
+      >
         <h2 className="text-3xl font-bold mb-6 text-center text-slate-900">
-          How to use this rent split calculator
+          How this tool works and what to expect
         </h2>
 
-        <p className="text-slate-700 mb-4">
-          This page answers a specific question: “If the rent is X for the unit, what is the equal share per person?”
-          The calculator splits the rent evenly and then shows what that share looks like across common periods.
-          That extra breakdown matters when one listing is monthly, another is weekly, or a lease collects payments every 28 days.
-        </p>
+        <div className="rounded-2xl border border-slate-200 bg-white p-6">
+          <p className="text-slate-700 mb-4">
+            This calculator splits the rent evenly across the number of people
+            you enter. It then converts the rent into an annual total on a
+            365-day basis and expresses that same annual total in different
+            periods (weekly, every 4 weeks, monthly average, and more).
+          </p>
 
-        <p className="text-slate-700 mb-4">
-          Start by entering the total rent using the same period it is stated in (for example monthly, weekly, or every 4 weeks).
-          Then enter the number of people participating in the split. The main result shows the per-person amount in that same period,
-          and the table translates both the total and the per-person share into equivalent hourly, daily, weekly, 4-week, monthly-average, and annual values.
-        </p>
+          <p className="text-slate-700 mb-4">
+            That annual equivalence step is what makes comparisons consistent.
+            It prevents "monthly" from being treated as a fixed number of weeks
+            and shows why "every 4 weeks" can differ from a monthly rent amount.
+          </p>
 
-        <p className="text-slate-700 mb-4">
-          The conversions run through annual totals using a 365-day year. That keeps the math consistent and avoids treating “monthly” as a fixed number of weeks.
-          If the arrangement is not an equal split (room size differences, couples sharing a room, or different income contributions), this tool still provides a clear baseline:
-          the equal-share reference point that can be adjusted outside the calculator.
-        </p>
+          <p className="text-slate-700 mb-4">
+            The main per-person value is the equal split in the period you
+            selected (the same period as your input). The breakdown table is for
+            comparing alternatives and understanding the timeline differences.
+            If your roommates use an uneven split, treat the equal split as a
+            baseline and adjust outside the tool.
+          </p>
 
-        <p className="text-slate-700 mt-6">
-          Related pages:{" "}
-          <a href="/rent-paid-weekly-vs-monthly" className="text-sky-700 hover:underline">
-            rent paid weekly vs monthly
-          </a>
-          ,{" "}
-          <a href="/rent-converter" className="text-sky-700 hover:underline">
-            rent converter
-          </a>
-          , and{" "}
-          <a href="/rent-affordability-calculator" className="text-sky-700 hover:underline">
-            rent affordability calculator
-          </a>
-          .
-        </p>
+          <p className="text-slate-700 mt-6">
+            Related tool:{" "}
+            <a
+              href={safeHref("/rent-converter")}
+              className="text-sky-700 hover:underline"
+            >
+              rent converter
+            </a>
+            .
+          </p>
+        </div>
       </section>
 
-      <section id="faq" className="max-w-5xl mx-auto py-20 px-6">
+      <section id="faq" className="max-w-5xl mx-auto py-20 px-6 rc-no-print">
         <h2 className="text-3xl font-bold text-center mb-8 text-slate-800">
           Frequently Asked Questions
         </h2>
         <div className="space-y-8">
           {faqData.map((f, i) => (
             <div key={i}>
-              <h3 className="font-semibold text-lg text-slate-800 mb-1">{f.q}</h3>
+              <h3 className="font-semibold text-lg text-slate-800 mb-1">
+                {f.q}
+              </h3>
               <p className="text-slate-600">{f.a}</p>
             </div>
           ))}
-        </div>
-      </section>
-
-      <section className="max-w-6xl mx-auto px-6 pb-8">
-        <div className="rounded-2xl border border-slate-200 bg-white p-6">
-          <p className="text-xs text-slate-600 leading-relaxed">
-            <strong>Disclaimer:</strong>
-            <br />
-            Tools on this site are provided for informational, budgeting, and comparison purposes only. Calculations are based on standard time-period assumptions (including a 365-day year and average month length) and simplified models. Results are estimates, not guarantees.
-            <br />
-            <br />
-            This website does not provide financial, legal, or tax advice. Rental costs, affordability, payment schedules, and obligations vary by location, landlord, lease terms, and individual circumstances. Always review your lease agreement and consult qualified professionals before making financial decisions.
-          </p>
         </div>
       </section>
 
@@ -550,11 +1218,13 @@ export default function RentPerPerson() {
       <RenterChecklists />
       <RentToolsByCountry />
 
-      <section className="max-w-6xl mx-auto px-6 pb-8">
+      <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
         <p className="text-xs text-slate-500 text-center leading-relaxed">
           <em>
-            Tools on this site are for budgeting and comparison. Calculations use standard time-period assumptions,
-            including a 365-day year and average month length. Always confirm payment schedules and lease terms in your rental agreement.
+            Tools on this site are for budgeting and comparison. Calculations
+            use standard time-period assumptions, including a 365-day year and
+            average month length. Always confirm payment schedules and lease
+            terms in your rental agreement.
           </em>
         </p>
       </section>
@@ -563,7 +1233,18 @@ export default function RentPerPerson() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
+      />
     </main>
   );
 }
