@@ -409,9 +409,9 @@ export default function MonthlyToBiweeklyRent() {
   });
 
   const [currency, setCurrency] = useState<Currency>(() => {
-    if (typeof window === "undefined") return "CAD";
+    if (typeof window === "undefined") return "USD";
     const saved = window.localStorage.getItem("rc_mtbw_currency");
-    return saved && isCurrency(saved) ? saved : "CAD";
+    return saved && isCurrency(saved) ? saved : "USD";
   });
 
   // Rounding is display-only and labeled
@@ -776,7 +776,7 @@ export default function MonthlyToBiweeklyRent() {
                     setCurrency(
                       isCurrency(e.target.value)
                         ? (e.target.value as Currency)
-                        : "CAD",
+                        : "USD",
                     )
                   }
                   className="rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"

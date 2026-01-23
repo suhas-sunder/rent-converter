@@ -413,9 +413,9 @@ export default function RentPerDayCalculator() {
   });
 
   const [currency, setCurrency] = useState<Currency>(() => {
-    if (typeof window === "undefined") return "CAD";
-    const saved = localStorage.getItem("rpdc_currency") ?? "CAD";
-    return isCurrency(saved) ? saved : "CAD";
+    if (typeof window === "undefined") return "USD";
+    const saved = localStorage.getItem("rpdc_currency") ?? "USD";
+    return isCurrency(saved) ? saved : "USD";
   });
 
   const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
@@ -799,7 +799,7 @@ export default function RentPerDayCalculator() {
                   value={currency}
                   onChange={(e) =>
                     setCurrency(
-                      isCurrency(e.target.value) ? e.target.value : "CAD",
+                      isCurrency(e.target.value) ? e.target.value : "USD",
                     )
                   }
                   className="rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"

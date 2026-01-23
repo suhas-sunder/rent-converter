@@ -559,9 +559,9 @@ export default function RentDueDateCalculator() {
   });
 
   const [currency, setCurrency] = useState<Currency>(() => {
-    if (typeof window === "undefined") return "CAD";
-    const saved = window.localStorage.getItem("rdd2_currency") ?? "CAD";
-    return isCurrency(saved) ? saved : "CAD";
+    if (typeof window === "undefined") return "USD";
+    const saved = window.localStorage.getItem("rdd2_currency") ?? "USD";
+    return isCurrency(saved) ? saved : "USD";
   });
 
   // Display-only rounding

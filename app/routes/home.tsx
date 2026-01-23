@@ -12,7 +12,7 @@ export const meta: Route.MetaFunction = () => [
   {
     name: "description",
     content:
-      "Convert rent between weekly, monthly, every 4 weeks (28 days), biweekly, daily, hourly, and annual using clear, consistent assumptions. Decimal-safe input, private (no signup), and exportable results.",
+      "Convert rent between weekly, monthly, every 4 weeks (28 days), biweekly, daily, hourly, and annual using clear, consistent assumptions. Decimal-safe input and clear breakdown.",
   },
   {
     name: "keywords",
@@ -33,7 +33,7 @@ export const meta: Route.MetaFunction = () => [
   {
     property: "og:description",
     content:
-      "Convert rent between weekly, monthly, biweekly, every 4 weeks (28 days), daily, hourly, and annual. Decimal-safe input, clear assumptions, and exportable breakdown.",
+      "Convert rent between weekly, monthly, biweekly, every 4 weeks (28 days), daily, hourly, and annual. Decimal-safe input and clear assumptions.",
   },
   { property: "og:url", content: "https://rentconverter.com/" },
   { property: "og:site_name", content: "RentConverter.com" },
@@ -49,7 +49,7 @@ export const meta: Route.MetaFunction = () => [
   {
     name: "twitter:description",
     content:
-      "Accurate rent period conversions with decimal-safe parsing, clear assumptions, and a full breakdown you can export.",
+      "Accurate rent period conversions with decimal-safe parsing, clear assumptions, and a full breakdown.",
   },
   { name: "twitter:image", content: "https://rentconverter.com/og-image.jpg" },
   { rel: "canonical", href: "https://rentconverter.com/" },
@@ -193,6 +193,13 @@ function safeCurrency(value: string | null, fallback: string): string {
   return CURRENCY_OPTIONS.some((c) => c.code === v) ? v : fallback;
 }
 
+function safeDisplayDecimals(value: string | null, fallback: 0 | 2 | 4 | 6) {
+  if (value === null) return fallback;
+  const n = Number(value);
+  if (n === 0 || n === 2 || n === 4 || n === 6) return n as 0 | 2 | 4 | 6;
+  return fallback;
+}
+
 /**
  * Decimal-safe math (no float drift in computation).
  * We parse user input to a scaled integer (micro-units) and keep all conversions as rational BigInt.
@@ -224,10 +231,6 @@ function normRational(r: Rational): Rational {
   return { n: n / g, d: d / g };
 }
 
-function addR(a: Rational, b: Rational): Rational {
-  return normRational({ n: a.n * b.d + b.n * a.d, d: a.d * b.d });
-}
-
 function subR(a: Rational, b: Rational): Rational {
   return normRational({ n: a.n * b.d - b.n * a.d, d: a.d * b.d });
 }
@@ -246,7 +249,6 @@ function fromScaledUnits(scaled: bigint): Rational {
 }
 
 function toScaledUnits(r: Rational): bigint {
-  // r is currency units; return scaled integer with truncation toward zero.
   const rr = normRational(r);
   return (rr.n * SCALE) / rr.d;
 }
@@ -256,8 +258,6 @@ function absBigInt(x: bigint) {
 }
 
 function roundScaledToDigits(scaled: bigint, digits: number): bigint {
-  // scaled is in micro-units (1e-6). To round to `digits` decimals, we reduce micro-units to 10^(6-digits).
-  // digits must be in [0..6]
   const d = Math.max(0, Math.min(6, digits));
   const drop = 6 - d;
   const factor = 10n ** BigInt(drop);
@@ -280,9 +280,8 @@ function scaledToDecimalString(
   const x = absBigInt(scaled);
 
   const intPart = x / SCALE;
-  const fracPart = x % SCALE; // 0..999999
+  const fracPart = x % SCALE;
 
-  // fracPart is 6 digits; we need d digits
   const fracStr6 = fracPart.toString().padStart(6, "0");
   const fracStr = d === 0 ? "" : fracStr6.slice(0, d);
 
@@ -293,7 +292,6 @@ function scaledToDecimalString(
   }
 
   if (opts?.fixed && d > 0) {
-    // ensure exactly d decimals
     const m = out.match(/^(-?\d+)(?:\.(\d+))?$/u);
     if (m) {
       const a = m[1];
@@ -323,7 +321,6 @@ function parseMoneyToScaled(input: string): {
   const raw = input.trim();
   if (!raw) return { ok: false, error: "Enter a rent amount." };
 
-  // Keep digits, separators, sign, parentheses, spaces, and currency symbols.
   const sanitized = raw.replace(/[^\d.,+\-()\s$€£¥₹₩₽₫₴₱₦₲₵₡₺₸]/g, "");
 
   const isParenNeg =
@@ -332,12 +329,10 @@ function parseMoneyToScaled(input: string): {
     !sanitized.includes("-");
   const noParens = sanitized.replace(/[()]/g, "");
 
-  // Strip currency symbols and spaces
   const s0 = noParens.replace(/[$€£¥₹₩₽₫₴₱₦₲₵₡₺₸]/g, "").replace(/\s+/g, "");
 
   if (!s0) return { ok: false, error: "Enter a rent amount." };
 
-  // Reject multiple signs
   const signCount = (s0.match(/[+\-]/g) ?? []).length;
   if (signCount > 1) {
     return {
@@ -346,10 +341,9 @@ function parseMoneyToScaled(input: string): {
     };
   }
 
-  // Normalize leading sign
   let s = s0;
   const hasMinus = s.includes("-");
-  s = s.replace(/[+\-]/g, ""); // remove signs for parsing digits
+  s = s.replace(/[+\-]/g, "");
   const isNegative = isParenNeg || hasMinus;
 
   if (isNegative) {
@@ -363,17 +357,13 @@ function parseMoneyToScaled(input: string): {
     };
   }
 
-  // If both '.' and ',' exist, infer decimal separator as the last occurring one.
   const lastDot = s.lastIndexOf(".");
   const lastComma = s.lastIndexOf(",");
   if (lastDot !== -1 && lastComma !== -1) {
     const decimalSep = lastDot > lastComma ? "." : ",";
     const thousandsSep = decimalSep === "." ? "," : ".";
-    // Remove all thousands separators
     s = s.split(thousandsSep).join("");
-    // Convert decimal separator to '.'
     if (decimalSep === ",") s = s.replace(",", ".");
-    // If still more than one '.', reject
     if ((s.match(/\./g) ?? []).length > 1) {
       return {
         ok: false,
@@ -382,7 +372,6 @@ function parseMoneyToScaled(input: string): {
       };
     }
   } else if (lastComma !== -1 && lastDot === -1) {
-    // Only comma present. Accept as decimal ONLY if exactly 2 digits after comma, else reject ambiguity.
     const commaCount = (s.match(/,/g) ?? []).length;
     if (commaCount !== 1) {
       return {
@@ -402,22 +391,18 @@ function parseMoneyToScaled(input: string): {
     }
     s = `${parts[0]}.${right}`;
   } else {
-    // Only dot or no separator. Validate dot count.
     if ((s.match(/\./g) ?? []).length > 1) {
       return {
         ok: false,
         error: "That number format looks unclear. Try 1250.50 or 1,250.50.",
       };
     }
-    // Remove any commas (should not exist in this branch, but safe)
     s = s.replace(/,/g, "");
   }
 
-  // Accept ".5" and "12."
   if (s.startsWith(".")) s = `0${s}`;
   if (s.endsWith(".")) s = `${s}0`;
 
-  // Final validation: digits and optional single dot
   if (!/^\d+(\.\d+)?$/u.test(s)) {
     return {
       ok: false,
@@ -427,17 +412,14 @@ function parseMoneyToScaled(input: string): {
   }
 
   const [intStr, fracStrRaw = ""] = s.split(".");
-  const fracStr = fracStrRaw.slice(0, 6); // preserve up to 6 decimals
+  const fracStr = fracStrRaw.slice(0, 6);
   const fracPadded = fracStr.padEnd(6, "0");
 
-  // Avoid empty integer part (should not happen due to regex)
   const intPart = BigInt(intStr || "0");
   const fracPart = BigInt(fracPadded || "0");
 
   const scaled = intPart * SCALE + fracPart;
 
-  // Range protection (avoid misleading huge numbers)
-  // Max: 1,000,000,000 currency units (1e9) with 6 decimals.
   const maxScaled = 1_000_000_000n * SCALE;
   if (scaled > maxScaled) {
     return {
@@ -465,26 +447,17 @@ function formatMoneyFromDecimalString(
   }).format(n);
 }
 
-function toCsvRow(values: Array<string | number>) {
-  return values
-    .map((v) => {
-      const s = String(v);
-      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
-      return s;
-    })
-    .join(",");
-}
-
-function downloadTextFile(filename: string, content: string, mime: string) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
+function formatGroupedNumberFromDecimalString(
+  decimalStr: string,
+  opts: { minimumFractionDigits: number; maximumFractionDigits: number },
+) {
+  const n = Number(decimalStr);
+  if (!Number.isFinite(n)) return "";
+  return new Intl.NumberFormat(undefined, {
+    useGrouping: true,
+    minimumFractionDigits: opts.minimumFractionDigits,
+    maximumFractionDigits: opts.maximumFractionDigits,
+  }).format(n);
 }
 
 const DAYS_PER_PERIOD: Record<Exclude<Period, "hourly">, Rational> = {
@@ -498,21 +471,17 @@ const DAYS_PER_PERIOD: Record<Exclude<Period, "hourly">, Rational> = {
 
 function toDailyRate(amount: Rational, from: Period): Rational {
   if (from === "hourly") {
-    // hourly * 24 = daily
     return mulR(amount, { n: 24n, d: 1n });
   }
   const days = DAYS_PER_PERIOD[from as Exclude<Period, "hourly">];
-  // amount per period -> per day = amount / days
   return divR(amount, days);
 }
 
 function fromDailyRate(daily: Rational, to: Period): Rational {
   if (to === "hourly") {
-    // daily / 24 = hourly
     return divR(daily, { n: 24n, d: 1n });
   }
   const days = DAYS_PER_PERIOD[to as Exclude<Period, "hourly">];
-  // per day -> per period = daily * days
   return mulR(daily, days);
 }
 
@@ -523,16 +492,14 @@ function convertRational(amount: Rational, from: Period, to: Period): Rational {
 }
 
 function percentStringFromRatio(ratio: Rational, digits = 2) {
-  // ratio is unitless (e.g. 0.1234). Convert to percent = ratio*100.
   const pct = mulR(ratio, { n: 100n, d: 1n });
-  const scaled = toScaledUnits(pct); // micro-percent units of "percent"
+  const scaled = toScaledUnits(pct);
   const rounded = roundScaledToDigits(scaled, Math.max(0, Math.min(6, digits)));
   return `${scaledToDecimalString(rounded, digits, { fixed: true })}%`;
 }
 
 function safeEnvIsDev(): boolean {
   try {
-    // Remix/Vite: import.meta.env.DEV
     const v = (import.meta as any)?.env?.DEV;
     return Boolean(v);
   } catch {
@@ -546,6 +513,8 @@ export default function Home() {
     return localStorage.getItem("rc_amount") ?? "500";
   });
 
+  const [amountFocused, setAmountFocused] = useState<boolean>(false);
+
   const [from, setFrom] = useState<Period>(() => {
     if (typeof window === "undefined") return "weekly";
     return safePeriod(localStorage.getItem("rc_from"), "weekly");
@@ -557,14 +526,18 @@ export default function Home() {
   });
 
   const [currency, setCurrency] = useState<string>(() => {
-    if (typeof window === "undefined") return "CAD";
-    return safeCurrency(localStorage.getItem("rc_currency"), "CAD");
+    if (typeof window === "undefined") return "USD";
+    return safeCurrency(localStorage.getItem("rc_currency"), "USD");
   });
 
-  // This toggles rounding FOR DISPLAY ONLY (math stays exact rational).
   const [roundForDisplay, setRoundForDisplay] = useState<boolean>(() => {
     if (typeof window === "undefined") return true;
     return safeJsonParseBoolean(localStorage.getItem("rc_rounding"), true);
+  });
+
+  const [displayDecimals, setDisplayDecimals] = useState<0 | 2 | 4 | 6>(() => {
+    if (typeof window === "undefined") return 2;
+    return safeDisplayDecimals(localStorage.getItem("rc_display_decimals"), 2);
   });
 
   useEffect(() => {
@@ -574,11 +547,9 @@ export default function Home() {
     localStorage.setItem("rc_to", to);
     localStorage.setItem("rc_currency", currency);
     localStorage.setItem("rc_rounding", JSON.stringify(roundForDisplay));
-  }, [amount, from, to, currency, roundForDisplay]);
+    localStorage.setItem("rc_display_decimals", String(displayDecimals));
+  }, [amount, from, to, currency, roundForDisplay, displayDecimals]);
 
-  // ---------------------------
-  // Robust parsing + validation
-  // ---------------------------
   const hasInput = useMemo(() => amount.trim().length > 0, [amount]);
 
   const parsed = useMemo(() => {
@@ -604,55 +575,92 @@ export default function Home() {
     return { ok: true, message: "" };
   }, [hasInput, parsed.ok, parsed.error, parsed.scaled]);
 
-  // Parsed amount as rational currency units
   const amountR: Rational | null = useMemo(() => {
     if (!validation.ok || !parsed.ok || parsed.scaled === undefined)
       return null;
     return fromScaledUnits(parsed.scaled);
   }, [validation.ok, parsed.ok, parsed.scaled]);
 
-  // ---------------------------
-  // Derived results (decimal-safe, no float math)
-  // ---------------------------
   const rawResultR = useMemo(() => {
     if (!amountR) return null;
     return convertRational(amountR, from, to);
   }, [amountR, from, to]);
 
-  const displayDigits = roundForDisplay ? 2 : 6;
   const roundingNote = roundForDisplay
-    ? "Display rounded to 2 decimals (math stays exact in decimals up to 6 places)."
-    : "No display rounding (shown up to 6 decimals).";
+    ? `Display rounded to ${displayDecimals} decimals (math stays exact in decimals up to 6 places).`
+    : "No display rounding (shown with up to 12 decimals when available).";
 
   const displayMoney = useMemo(() => {
     if (!rawResultR) return "—";
     const scaled = toScaledUnits(rawResultR);
+
     const roundedScaled = roundForDisplay
-      ? roundScaledToDigits(scaled, 2)
+      ? roundScaledToDigits(scaled, displayDecimals)
       : scaled;
 
-    const dec = scaledToDecimalString(roundedScaled, displayDigits, {
-      fixed: roundForDisplay,
+    const dec = scaledToDecimalString(roundedScaled, 6, {
+      fixed: roundForDisplay ? displayDecimals > 0 : false,
       trimTrailingZeros: !roundForDisplay,
     });
 
     return formatMoneyFromDecimalString(dec, currency, {
-      minimumFractionDigits: roundForDisplay ? 2 : 0,
-      maximumFractionDigits: roundForDisplay ? 2 : 6,
+      minimumFractionDigits: roundForDisplay ? displayDecimals : 0,
+      maximumFractionDigits: roundForDisplay ? displayDecimals : 12,
     });
-  }, [rawResultR, roundForDisplay, currency, displayDigits]);
+  }, [rawResultR, roundForDisplay, displayDecimals, currency]);
 
-  const parsedDisplay = useMemo(() => {
-    if (!parsed.ok || parsed.scaled === undefined) return "—";
-    // Show the user's parsed value (up to 6 decimals) to avoid false certainty.
+  const inputGroupedDisplay = useMemo(() => {
+    if (amountFocused) return amount;
+    if (!hasInput) return amount;
+    if (!parsed.ok || parsed.scaled === undefined) return amount;
+
     const dec = scaledToDecimalString(parsed.scaled, 6, {
       trimTrailingZeros: true,
     });
-    return formatMoneyFromDecimalString(dec, currency, {
+
+    return formatGroupedNumberFromDecimalString(dec, {
       minimumFractionDigits: 0,
       maximumFractionDigits: 6,
     });
-  }, [parsed.ok, parsed.scaled, currency]);
+  }, [amountFocused, amount, hasInput, parsed.ok, parsed.scaled]);
+
+  const interpretationLine = useMemo(() => {
+    if (!validation.ok || !parsed.ok || parsed.scaled === undefined)
+      return null;
+
+    const raw = amount.trim();
+    if (!raw) return null;
+
+    const hasCurrencySymbol = /[$€£¥₹₩₽₫₴₱₦₲₵₡₺₸]/u.test(raw);
+    const hasWhitespace = /\s/u.test(raw);
+    const startsWithDot = raw.startsWith(".");
+    const endsWithDot = raw.endsWith(".");
+    const hasComma = raw.includes(",");
+    const hasDot = raw.includes(".");
+    const isSimple = /^\d+(\.\d+)?$/u.test(raw);
+
+    const shouldShow =
+      !isSimple &&
+      (startsWithDot ||
+        endsWithDot ||
+        hasCurrencySymbol ||
+        hasWhitespace ||
+        (hasComma && !hasDot) ||
+        (hasComma && hasDot));
+
+    if (!shouldShow) return null;
+
+    const dec = scaledToDecimalString(parsed.scaled, 6, {
+      trimTrailingZeros: true,
+    });
+
+    const nice = formatMoneyFromDecimalString(dec, currency, {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 6,
+    });
+
+    return `Interpreting that as ${nice}.`;
+  }, [validation.ok, parsed.ok, parsed.scaled, amount, currency]);
 
   const breakdown = useMemo(() => {
     if (!amountR) {
@@ -694,170 +702,25 @@ export default function Home() {
     };
   }, [amountR, from]);
 
-  function formatRationalMoney(r: Rational | null, fixed2: boolean) {
+  function formatRationalMoney(r: Rational | null) {
     if (!r) return "—";
     const scaled = toScaledUnits(r);
-    const digits = fixed2 ? 2 : 6;
-    const roundedScaled = fixed2 ? roundScaledToDigits(scaled, 2) : scaled;
-    const dec = scaledToDecimalString(roundedScaled, digits, {
-      fixed: fixed2,
-      trimTrailingZeros: !fixed2,
+
+    const roundedScaled = roundForDisplay
+      ? roundScaledToDigits(scaled, displayDecimals)
+      : scaled;
+
+    const dec = scaledToDecimalString(roundedScaled, 6, {
+      fixed: roundForDisplay ? displayDecimals > 0 : false,
+      trimTrailingZeros: !roundForDisplay,
     });
+
     return formatMoneyFromDecimalString(dec, currency, {
-      minimumFractionDigits: fixed2 ? 2 : 0,
-      maximumFractionDigits: fixed2 ? 2 : 6,
+      minimumFractionDigits: roundForDisplay ? displayDecimals : 0,
+      maximumFractionDigits: roundForDisplay ? displayDecimals : 12,
     });
   }
 
-  // ---------------------------
-  // Export helpers (CSV + print-to-PDF workflow)
-  // ---------------------------
-  const exportCsv = () => {
-    if (typeof window === "undefined") return;
-    if (!validation.ok || !parsed.ok || parsed.scaled === undefined || !amountR)
-      return;
-
-    const assumptions =
-      "Year=365 days; Month=365/12 days (average); Week=7 days; Biweekly=14 days; 4 weeks=28 days; Hour=1/24 day";
-    const roundingLabel = roundForDisplay
-      ? "Display rounded to 2 decimals"
-      : "No display rounding (up to 6 decimals shown)";
-
-    const rows: string[] = [];
-    rows.push(
-      toCsvRow([
-        "Input Amount",
-        "Input Period",
-        "Output Period",
-        "Currency",
-        "Converted Rent",
-        "Rounding",
-        "Assumptions",
-      ]),
-    );
-
-    const inputDec = scaledToDecimalString(parsed.scaled, 6, {
-      trimTrailingZeros: true,
-    });
-
-    const outputScaled = rawResultR ? toScaledUnits(rawResultR) : 0n;
-    const outputScaledRounded = roundForDisplay
-      ? roundScaledToDigits(outputScaled, 2)
-      : outputScaled;
-
-    const outputDec = scaledToDecimalString(
-      outputScaledRounded,
-      roundForDisplay ? 2 : 6,
-      {
-        fixed: roundForDisplay,
-        trimTrailingZeros: !roundForDisplay,
-      },
-    );
-
-    rows.push(
-      toCsvRow([
-        inputDec,
-        PERIOD_LABEL[from],
-        PERIOD_LABEL[to],
-        currency,
-        outputDec,
-        roundingLabel,
-        assumptions,
-      ]),
-    );
-
-    rows.push("");
-    rows.push(toCsvRow(["Breakdown Period", "Value"]));
-
-    const items: Array<[string, Rational | null]> = [
-      ["Hourly", breakdown.hourly],
-      ["Daily", breakdown.daily],
-      ["Weekly", breakdown.weekly],
-      ["Every 2 weeks", breakdown.biweekly],
-      ["Every 4 weeks (28 days)", breakdown.every_4_weeks],
-      ["Monthly", breakdown.monthly],
-      ["Annual", breakdown.annual],
-    ];
-
-    for (const [label, val] of items) {
-      if (!val) {
-        rows.push(toCsvRow([label, ""]));
-        continue;
-      }
-      const scaled = toScaledUnits(val);
-      const roundedScaled = roundForDisplay
-        ? roundScaledToDigits(scaled, 2)
-        : scaled;
-      const dec = scaledToDecimalString(
-        roundedScaled,
-        roundForDisplay ? 2 : 6,
-        {
-          fixed: roundForDisplay,
-          trimTrailingZeros: !roundForDisplay,
-        },
-      );
-      rows.push(toCsvRow([label, dec]));
-    }
-
-    const csv = rows.join("\n");
-    downloadTextFile("rent-conversion.csv", csv, "text/csv;charset=utf-8");
-  };
-
-  const printToPdf = () => {
-    if (typeof window === "undefined") return;
-    window.print();
-  };
-
-  const copyOneRowCsv = async () => {
-    if (
-      typeof window === "undefined" ||
-      !navigator.clipboard ||
-      !validation.ok ||
-      !parsed.ok ||
-      parsed.scaled === undefined ||
-      !rawResultR
-    )
-      return;
-
-    const inputDec = scaledToDecimalString(parsed.scaled, 6, {
-      trimTrailingZeros: true,
-    });
-
-    const outputScaled = toScaledUnits(rawResultR);
-    const outputScaledRounded = roundForDisplay
-      ? roundScaledToDigits(outputScaled, 2)
-      : outputScaled;
-
-    const outputDec = scaledToDecimalString(
-      outputScaledRounded,
-      roundForDisplay ? 2 : 6,
-      {
-        fixed: roundForDisplay,
-        trimTrailingZeros: !roundForDisplay,
-      },
-    );
-
-    const header = toCsvRow([
-      "Input Amount",
-      "Input Period",
-      "Output Period",
-      "Currency",
-      "Converted Rent",
-    ]);
-    const row = toCsvRow([
-      inputDec,
-      PERIOD_LABEL[from],
-      PERIOD_LABEL[to],
-      currency,
-      outputDec,
-    ]);
-
-    await navigator.clipboard.writeText(`${header}\n${row}`);
-  };
-
-  // ---------------------------
-  // Dev-only runtime checks (decimal correctness hard mode)
-  // ---------------------------
   useEffect(() => {
     if (!safeEnvIsDev()) return;
 
@@ -875,14 +738,11 @@ export default function Home() {
     for (const c of cases) {
       const p = parseMoneyToScaled(c);
       if (!p.ok || p.scaled === undefined) {
-        // Accept that some inputs may be rejected by design (ambiguity), but these should pass.
-        // If any fails, log it.
         // eslint-disable-next-line no-console
         console.warn("[DEV] Parse failed unexpectedly:", c, p.error);
       }
     }
 
-    // Drift check: 0.1 + 0.2 should equal 0.3 in our scaled integer world.
     const a = parseMoneyToScaled("0.1");
     const b = parseMoneyToScaled("0.2");
     if (a.ok && b.ok && a.scaled !== undefined && b.scaled !== undefined) {
@@ -899,9 +759,6 @@ export default function Home() {
     }
   }, []);
 
-  // ---------------------------
-  // SEO: FAQ + schemas
-  // ---------------------------
   const faqData = [
     {
       q: "What does “rent” mean on this page?",
@@ -920,8 +777,8 @@ export default function Home() {
       a: "Yes. We parse and compute using decimal-safe math (not floating point). Optional rounding is display-only and clearly labeled.",
     },
     {
-      q: "Can I export the results?",
-      a: "Yes. Download a CSV breakdown, or use Print / Save PDF to save a PDF from your browser.",
+      q: "Can I save the results?",
+      a: "Yes. Use Print / Save PDF to save a copy from your browser.",
     },
   ];
 
@@ -947,13 +804,10 @@ export default function Home() {
     "@type": "WebPage",
     name: "Rent Converter Calculator: Weekly, Monthly, 4-Week (28-Day), Biweekly, Daily, Hourly, Annual",
     description:
-      "Convert rent between weekly, monthly, every 4 weeks (28 days), biweekly, daily, hourly, and annual using clear assumptions. Decimal-safe input and exportable results.",
+      "Convert rent between weekly, monthly, every 4 weeks (28 days), biweekly, daily, hourly, and annual using clear assumptions. Decimal-safe input and a clear breakdown.",
     url: "https://rentconverter.com/",
   };
 
-  // ---------------------------
-  // Page
-  // ---------------------------
   const convertSummaryLine = useMemo(() => {
     if (
       !validation.ok ||
@@ -968,18 +822,15 @@ export default function Home() {
     });
 
     const outputScaled = toScaledUnits(rawResultR);
+
     const outputRounded = roundForDisplay
-      ? roundScaledToDigits(outputScaled, 2)
+      ? roundScaledToDigits(outputScaled, displayDecimals)
       : outputScaled;
 
-    const outputDec = scaledToDecimalString(
-      outputRounded,
-      roundForDisplay ? 2 : 6,
-      {
-        fixed: roundForDisplay,
-        trimTrailingZeros: !roundForDisplay,
-      },
-    );
+    const outputDec = scaledToDecimalString(outputRounded, 6, {
+      fixed: roundForDisplay ? displayDecimals > 0 : false,
+      trimTrailingZeros: !roundForDisplay,
+    });
 
     const inputFormatted = formatMoneyFromDecimalString(inputDec, currency, {
       minimumFractionDigits: 0,
@@ -987,8 +838,8 @@ export default function Home() {
     });
 
     const outputFormatted = formatMoneyFromDecimalString(outputDec, currency, {
-      minimumFractionDigits: roundForDisplay ? 2 : 0,
-      maximumFractionDigits: roundForDisplay ? 2 : 6,
+      minimumFractionDigits: roundForDisplay ? displayDecimals : 0,
+      maximumFractionDigits: roundForDisplay ? displayDecimals : 12,
     });
 
     return `${inputFormatted} ${PERIOD_LABEL[from].toLowerCase()} ≈ ${outputFormatted} ${PERIOD_LABEL[to].toLowerCase()}.`;
@@ -998,6 +849,7 @@ export default function Home() {
     parsed.scaled,
     rawResultR,
     roundForDisplay,
+    displayDecimals,
     currency,
     from,
     to,
@@ -1011,10 +863,10 @@ export default function Home() {
   const amountHelpId = "rent-amount-help";
   const amountStatusId = "rent-amount-status";
   const resultRegionId = "converted-rent-region";
+  const decimalsHelpId = "display-decimals-help";
 
   return (
     <main className="bg-white text-slate-700 scroll-smooth antialiased">
-      {/* Print styles for PDF workflow */}
       <style
         dangerouslySetInnerHTML={{
           __html: `
@@ -1029,7 +881,6 @@ export default function Home() {
         }}
       />
 
-      {/* Hero */}
       <section className="pb-8 text-center bg-white">
         <h1 className="text-4xl sm:text-5xl font-bold text-slate-800 mb-4 tracking-tight">
           Rent Converter
@@ -1042,7 +893,6 @@ export default function Home() {
         </p>
       </section>
 
-      {/* Converter */}
       <section id="converter" className="mx-auto max-w-6xl px-6 pb-8">
         <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:p-8">
           <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -1050,7 +900,7 @@ export default function Home() {
               Instant rent conversion
             </h2>
 
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3">
               <label className="inline-flex items-center gap-2 text-sm font-medium text-slate-700 select-none">
                 <input
                   type="checkbox"
@@ -1060,11 +910,32 @@ export default function Home() {
                 />
                 Round results for display
               </label>
+
+              <label className="inline-flex items-center gap-2 text-sm font-medium text-slate-700 select-none">
+                <span className="sr-only">Display decimals</span>
+                <select
+                  value={displayDecimals}
+                  onChange={(e) =>
+                    setDisplayDecimals(safeDisplayDecimals(e.target.value, 2))
+                  }
+                  className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-sky-400"
+                  aria-describedby={decimalsHelpId}
+                  aria-label="Display decimals"
+                >
+                  <option value={0}>0 decimals</option>
+                  <option value={2}>2 decimals</option>
+                  <option value={4}>4 decimals</option>
+                  <option value={6}>6 decimals</option>
+                </select>
+              </label>
             </div>
           </div>
 
+          <p id={decimalsHelpId} className="sr-only">
+            Controls how many decimals to show when rounding is enabled.
+          </p>
+
           <div className="grid gap-5 md:grid-cols-12">
-            {/* Amount */}
             <div className="md:col-span-5">
               <label className="block text-sm font-semibold text-slate-800 mb-2">
                 Rent amount
@@ -1072,7 +943,9 @@ export default function Home() {
               <div className="flex gap-2">
                 <input
                   inputMode="decimal"
-                  value={amount}
+                  value={inputGroupedDisplay}
+                  onFocus={() => setAmountFocused(true)}
+                  onBlur={() => setAmountFocused(false)}
                   onChange={(e) => setAmount(e.target.value)}
                   placeholder="e.g. 500 or 1250.50"
                   className="w-full min-w-0 rounded-xl border border-slate-300 px-4 py-3 text-base text-slate-900 placeholder:text-slate-400 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-sky-400"
@@ -1126,18 +999,15 @@ export default function Home() {
                 </p>
               )}
 
-              {validation.ok && parsed.ok && parsed.scaled !== undefined ? (
+              {interpretationLine ? (
                 <p className="mt-2 text-sm text-slate-600" aria-live="polite">
-                  Parsed as:{" "}
                   <span className="font-semibold tabular-nums">
-                    {parsedDisplay}
-                  </span>{" "}
-                  ({currency})
+                    {interpretationLine}
+                  </span>
                 </p>
               ) : null}
             </div>
 
-            {/* From */}
             <div className="md:col-span-3">
               <label className="block text-sm font-semibold text-slate-800 mb-2">
                 From
@@ -1156,7 +1026,6 @@ export default function Home() {
               </select>
             </div>
 
-            {/* To */}
             <div className="md:col-span-3">
               <label className="block text-sm font-semibold text-slate-800 mb-2">
                 To
@@ -1175,7 +1044,6 @@ export default function Home() {
               </select>
             </div>
 
-            {/* Swap */}
             <div className="md:col-span-1 flex md:items-end">
               <button
                 type="button"
@@ -1191,7 +1059,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Result */}
           <div
             id={resultRegionId}
             className="mt-6 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 shadow-sm relative"
@@ -1237,7 +1104,6 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Breakdown */}
             <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {(
                 [
@@ -1262,9 +1128,7 @@ export default function Home() {
                     {label}
                   </div>
                   <div className="mt-1 text-lg font-bold text-slate-900 tabular-nums whitespace-nowrap overflow-hidden text-ellipsis">
-                    {validation.ok
-                      ? formatRationalMoney(val, roundForDisplay)
-                      : "—"}
+                    {validation.ok ? formatRationalMoney(val) : "—"}
                   </div>
                 </div>
               ))}
@@ -1278,10 +1142,7 @@ export default function Home() {
                     Monthly minus 4-week ={" "}
                     <strong className="text-slate-900 tabular-nums whitespace-nowrap">
                       {validation.ok
-                        ? formatRationalMoney(
-                            breakdown.monthlyMinus4w,
-                            roundForDisplay,
-                          )
+                        ? formatRationalMoney(breakdown.monthlyMinus4w)
                         : "—"}
                     </strong>
                   </div>
@@ -1300,7 +1161,6 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Exports */}
             <div
               id="export-controls"
               className="mt-6 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
@@ -1308,15 +1168,10 @@ export default function Home() {
               <div className="flex flex-wrap gap-2">
                 <button
                   type="button"
-                  onClick={copyOneRowCsv}
-                  disabled={!validation.ok}
-                  className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fbff]"
-                >
-                  Copy 1-row CSV
-                </button>
-                <button
-                  type="button"
-                  onClick={printToPdf}
+                  onClick={() => {
+                    if (typeof window === "undefined") return;
+                    window.print();
+                  }}
                   className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fbff]"
                 >
                   Print / Save PDF
@@ -1332,7 +1187,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* SEO-rich home content */}
       <section id="overview" className="max-w-5xl mx-auto px-6 pt-16">
         <h2 className="text-3xl font-bold mb-6 text-center text-slate-900 tracking-tight">
           What this tool helps you do
@@ -1364,8 +1218,8 @@ export default function Home() {
             </h3>
             <p className="mt-2 text-slate-700 text-sm leading-relaxed">
               A 4-week period is exactly 28 days. An average month is about
-              30.42 days. That difference matters when you compare “how much
-              time” your rent covers.
+              30.42 days. That difference matters when you compare how much time
+              your rent covers.
             </p>
             <div className="mt-3 text-sm">
               <SafeLink
@@ -1397,7 +1251,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Learn */}
       <section id="learn" className="max-w-5xl mx-auto px-6 pt-16">
         <h2 className="text-3xl font-bold mb-6 text-center text-slate-900 tracking-tight">
           How rent conversion works
@@ -1406,8 +1259,8 @@ export default function Home() {
         <p className="text-slate-700 mb-4 leading-relaxed">
           This page uses a consistent comparison model. We treat your input as a
           rate per time period, convert it to a per-day rate, then convert it to
-          the target period. This keeps assumptions explicit and avoids “close
-          enough” math.
+          the target period. This keeps assumptions explicit and avoids close
+          enough math.
         </p>
 
         <h3 className="text-2xl font-semibold mt-10 mb-4 text-slate-900 tracking-tight">
@@ -1440,7 +1293,6 @@ export default function Home() {
         </p>
       </section>
 
-      {/* How it works (required above FAQ for RentConverter.com) */}
       <section id="how-it-works" className="max-w-5xl mx-auto px-6 pt-16">
         <h2 className="text-3xl font-bold mb-6 text-center text-slate-900 tracking-tight">
           How it works on RentConverter.com
@@ -1464,15 +1316,11 @@ export default function Home() {
               You get a headline conversion plus a full breakdown across all
               periods.
             </li>
-            <li>
-              Export as CSV, or print the page to save as a PDF from your
-              browser.
-            </li>
+            <li>Print the page to save as a PDF from your browser.</li>
           </ol>
         </div>
       </section>
 
-      {/* FAQ */}
       <section id="faq" className="max-w-5xl mx-auto py-20 px-6">
         <h2 className="text-3xl font-bold text-center mb-8 text-slate-800 tracking-tight">
           Frequently Asked Questions
@@ -1489,14 +1337,12 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Bottom navigation blocks */}
       <div id="bottom-nav">
         <OtherUsefulTools />
         <RenterChecklists />
         <RentToolsByCountry />
       </div>
 
-      {/* Disclaimer */}
       <section className="max-w-6xl mx-auto px-6 pb-8">
         <p className="text-xs text-slate-600 text-center leading-relaxed">
           <em>
@@ -1508,7 +1354,6 @@ export default function Home() {
         </p>
       </section>
 
-      {/* JSON-LD */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}

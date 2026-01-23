@@ -440,9 +440,9 @@ export default function RentPerWeekCalculator() {
   });
 
   const [currency, setCurrency] = useState<Currency>(() => {
-    if (typeof window === "undefined") return "CAD";
-    const saved = localStorage.getItem("rpwc_currency") ?? "CAD";
-    return isCurrency(saved) ? saved : "CAD";
+    if (typeof window === "undefined") return "USD";
+    const saved = localStorage.getItem("rpwc_currency") ?? "USD";
+    return isCurrency(saved) ? saved : "USD";
   });
 
   // Display-only rounding controls (do not affect computation)
@@ -770,7 +770,7 @@ export default function RentPerWeekCalculator() {
                   value={currency}
                   onChange={(e) =>
                     setCurrency(
-                      isCurrency(e.target.value) ? e.target.value : "CAD",
+                      isCurrency(e.target.value) ? e.target.value : "USD",
                     )
                   }
                   className="rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"

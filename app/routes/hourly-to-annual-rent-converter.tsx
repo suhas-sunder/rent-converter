@@ -386,9 +386,9 @@ export default function HourlyToAnnualRent() {
   });
 
   const [currency, setCurrency] = useState<Currency>(() => {
-    if (typeof window === "undefined") return "CAD";
+    if (typeof window === "undefined") return "USD";
     const saved = window.localStorage.getItem("rc_hta_currency");
-    return saved && isCurrency(saved) ? saved : "CAD";
+    return saved && isCurrency(saved) ? saved : "USD";
   });
 
   const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
@@ -833,7 +833,7 @@ export default function HourlyToAnnualRent() {
                     setCurrency(
                       isCurrency(e.target.value)
                         ? (e.target.value as Currency)
-                        : "CAD",
+                        : "USD",
                     )
                   }
                   className="rounded-xl border border-slate-300 bg-white px-3 py-3.5 text-sm font-semibold text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus:border-sky-500"

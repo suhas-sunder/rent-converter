@@ -532,12 +532,12 @@ export default function AnnualToHourlyRent() {
   });
 
   const [currency, setCurrency] = useState<Currency>(() => {
-    if (typeof window === "undefined") return "CAD";
+    if (typeof window === "undefined") return "USD";
     const saved =
       typeof window === "undefined"
         ? null
         : window.localStorage.getItem("rc_ath_currency");
-    return saved && isCurrency(saved) ? saved : "CAD";
+    return saved && isCurrency(saved) ? saved : "USD";
   });
 
   const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
@@ -990,7 +990,7 @@ export default function AnnualToHourlyRent() {
                     setCurrency(
                       isCurrency(e.target.value)
                         ? (e.target.value as Currency)
-                        : "CAD",
+                        : "USD",
                     )
                   }
                   className="rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"

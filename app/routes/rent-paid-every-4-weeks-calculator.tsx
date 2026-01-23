@@ -390,9 +390,9 @@ export default function RentPaidEvery4Weeks() {
   });
 
   const [currency, setCurrency] = useState<Currency>(() => {
-    if (typeof window === "undefined") return "CAD";
-    const saved = localStorage.getItem("rc_4w_currency") ?? "CAD";
-    return isCurrency(saved) ? saved : "CAD";
+    if (typeof window === "undefined") return "USD";
+    const saved = localStorage.getItem("rc_4w_currency") ?? "USD";
+    return isCurrency(saved) ? saved : "USD";
   });
 
   // Display-only rounding controls (do not affect computation)
@@ -791,7 +791,7 @@ export default function RentPaidEvery4Weeks() {
                   value={currency}
                   onChange={(e) =>
                     setCurrency(
-                      isCurrency(e.target.value) ? e.target.value : "CAD",
+                      isCurrency(e.target.value) ? e.target.value : "USD",
                     )
                   }
                   className="rounded-xl border border-slate-300 bg-white px-3.5 py-3.5 text-sm font-semibold outline-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus:border-sky-600"

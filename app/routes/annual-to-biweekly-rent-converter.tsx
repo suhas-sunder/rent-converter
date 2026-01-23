@@ -479,12 +479,9 @@ export default function AnnualToBiweeklyRent() {
   });
 
   const [currency, setCurrency] = useState<Currency>(() => {
-    if (typeof window === "undefined") return "CAD";
-    const saved =
-      typeof window === "undefined"
-        ? null
-        : window.localStorage.getItem("rc_atbw_currency");
-    return saved && isCurrency(saved) ? saved : "CAD";
+    if (typeof window === "undefined") return "USD";
+    const saved = window.localStorage.getItem("rc_atbw_currency");
+    return saved && isCurrency(saved) ? saved : "USD";
   });
 
   const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
