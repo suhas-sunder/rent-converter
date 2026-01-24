@@ -885,7 +885,7 @@ export default function Home() {
         <h1 className="text-4xl sm:text-5xl font-bold text-slate-800 mb-4 tracking-tight">
           Rent Converter
         </h1>
-        <p className="text-slate-700 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed">
+        <p className="text-slate-700 max-w-5xl mx-auto text-base sm:text-lg leading-relaxed">
           Convert rent between weekly, monthly, every 4 weeks (28 days),
           biweekly, daily, hourly, and annual amounts. This is a comparison
           tool: it uses consistent time-length assumptions so you can compare
@@ -1077,19 +1077,6 @@ export default function Home() {
                   "Enter a valid amount to see results."
                 )}
               </div>
-
-              <div className="mt-2 text-xs text-slate-600 leading-relaxed">
-                Assumptions used here: year = 365 days; average month = 365 ÷ 12
-                days; week = 7 days; biweekly = 14 days; 4-week = 28 days;
-                hourly = 1/24 day. This is for budgeting comparisons, not
-                calendar-exact lease proration.
-              </div>
-
-              <div className="mt-2 text-xs text-slate-600 leading-relaxed">
-                What is included: rent only. Utilities, parking, fees, taxes,
-                and deposits are not added unless you include them in your
-                input.
-              </div>
             </div>
 
             <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -1168,7 +1155,17 @@ export default function Home() {
             </div>
           </div>
 
-          <p className="mt-6 text-sm text-slate-600 leading-relaxed">
+          <div className="mt-4 text-sm text-slate-600 leading-relaxed">
+            Assumptions used here: year = 365 days; average month = 365 ÷ 12
+            days; week = 7 days; biweekly = 14 days; 4-week = 28 days; hourly =
+            1/24 day. This is for budgeting comparisons, not calendar-exact
+            lease proration.
+          </div>
+          <div className="mt-3 text-sm text-slate-600 leading-relaxed">
+            What is included: rent only. Utilities, parking, fees, taxes, and
+            deposits are not added unless you include them in your input.
+          </div>
+          <p className="mt-3 text-sm text-slate-600 leading-relaxed">
             Disclaimer: this tool is for budgeting and comparison. Always
             confirm payment schedules and lease terms in your agreement.
           </p>

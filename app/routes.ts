@@ -130,6 +130,9 @@ export default [
     "rent-after-increase-calculator",
     "routes/rent-after-increase-calculator.tsx",
   ),
+  route("terms-of-service", "routes/terms-of-service.tsx"),
+  route("privacy-policy", "routes/privacy-policy.tsx"),
+  route("cookies", "routes/cookies.tsx"),
 
   // Rent vs buy
   route("rent-vs-buy-calculator", "routes/rent-vs-buy-calculator.tsx"),

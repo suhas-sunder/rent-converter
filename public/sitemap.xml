@@ -116,7 +116,7 @@
     <lastmod>2025-11-01T00:00:00.000Z</lastmod>
   </url>
   <url>
-    <loc>https://www.rentconverter.com/rent-per-person-calculator</loc>
+    <loc>https://www.rentconverter.com/rent-split-calculator</loc>
     <lastmod>2025-11-01T00:00:00.000Z</lastmod>
   </url>
   <url>
@@ -162,4 +162,18 @@
     <lastmod>2025-11-01T00:00:00.000Z</lastmod>
   </url>
 
+  <url>
+    <loc>https://www.rentconverter.com/cookies</loc>
+    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://www.rentconverter.com/terms-of-service</loc>
+    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
+  </url>
+
+  <url>
+    <loc>https://www.rentconverter.com/privacy-policy</loc>
+    <lastmod>2025-11-01T00:00:00.000Z</lastmod>
+  </url>
 </urlset>

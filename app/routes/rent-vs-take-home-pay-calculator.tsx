@@ -1120,7 +1120,7 @@ export default function RentVsTakeHomePay() {
           ) : null}
         </div>
 
-        <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 rc-no-print mt-6">
+        <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 rc-no-print">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <label className="flex items-center gap-2 text-sm text-slate-700">
               <input
