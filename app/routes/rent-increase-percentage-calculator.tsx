@@ -821,10 +821,7 @@ export default function RentIncreasePercentage() {
                   oldParsed.ok ? oldHelpId : `${oldHelpId} ${oldErrorId}`
                 }
               />
-              <p id={oldHelpId} className="mt-2 text-xs text-slate-600">
-                Accepted inputs: $2,000, 2000.00, .5, 12., 2000,50 (comma
-                decimal). Invalid or ambiguous input hides results.
-              </p>
+
               {!oldParsed.ok ? (
                 <p
                   id={oldErrorId}

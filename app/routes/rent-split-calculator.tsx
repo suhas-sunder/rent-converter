@@ -835,13 +835,7 @@ export default function RentPerPerson() {
                 aria-invalid={!parsedRent.ok}
                 aria-describedby={`${totalRentHelpId}${!parsedRent.ok ? ` ${totalRentErrorId}` : ""}`}
               />
-              <p
-                id={totalRentHelpId}
-                className="mt-2 text-xs text-slate-600 leading-relaxed"
-              >
-                Accepted inputs: $2,400, 2400.00, .5, 12., 2400,50 (comma
-                decimal). Ambiguous formats are rejected.
-              </p>
+
               {!parsedRent.ok ? (
                 <p
                   id={totalRentErrorId}

@@ -70,13 +70,9 @@ const PERIOD_LABEL: Record<Period, string> = {
 // Use this everywhere you create internal links.
 // If a link is not in ROUTE_WHITELIST, it must not appear anywhere in the UI.
 const ROUTE_WHITELIST = new Set<string>([
-  // Home
   "/",
-
-  // Rent converter hub
   "/rent-converter",
 
-  // Frequency converters
   "/monthly-to-weekly-rent-converter",
   "/weekly-to-monthly-rent-converter",
   "/weekly-to-annual-rent-converter",
@@ -102,7 +98,6 @@ const ROUTE_WHITELIST = new Set<string>([
   "/annual-to-biweekly-rent-converter",
   "/monthly-to-biweekly-rent-converter",
 
-  // Rent calculators
   "/rent-calculator",
   "/rent-per-day-calculator",
   "/rent-per-week-calculator",
@@ -111,18 +106,15 @@ const ROUTE_WHITELIST = new Set<string>([
   "/rent-split-calculator",
   "/rent-due-date-calculator",
 
-  // Affordability and income
   "/rent-as-percentage-of-income-calculator",
   "/how-much-rent-can-i-afford-calculator",
   "/rent-after-tax-income-calculator",
   "/rent-vs-take-home-pay-calculator",
 
-  // Rent increases
   "/rent-increase-calculator",
   "/rent-increase-percentage-calculator",
   "/rent-after-increase-calculator",
 
-  // Rent vs buy
   "/rent-vs-buy-calculator",
 ]);
 
@@ -238,7 +230,6 @@ function formatCurrencyFromScaled(
     style: "currency",
     currency,
     maximumFractionDigits: digits,
-    // If user enables display rounding, keep money formatting consistent by showing exactly that many decimals.
     minimumFractionDigits: opts.mode === "fixed" ? digits : 0,
   }).format(n);
 }
@@ -258,12 +249,13 @@ function parseMoneyInputToScaled(raw: string): ParsedAmount {
   let s = s0.replace(/\s+/g, "");
   s = s.replace(/[^\d.,\-]/g, "");
 
-  if (!s)
+  if (!s) {
     return {
       ok: false,
       error: "Enter a valid number (example: 24000 or 24000.50).",
       warnings,
     };
+  }
 
   if (s.includes("-")) {
     if (!s.startsWith("-") || s.slice(1).includes("-")) {
@@ -314,12 +306,13 @@ function parseMoneyInputToScaled(raw: string): ParsedAmount {
 
   if (decimalSep) {
     const split = s.split(decimalSep);
-    if (split.length > 2)
+    if (split.length > 2) {
       return {
         ok: false,
         error: "Enter a valid number (too many decimal separators).",
         warnings,
       };
+    }
     intPart = split[0] ?? "";
     fracPart = split[1] ?? "";
   }
@@ -331,18 +324,20 @@ function parseMoneyInputToScaled(raw: string): ParsedAmount {
   if (intPart === "") intPart = "0";
   intPart = intPart.replace(/^0+(?=\d)/, "");
 
-  if (!/^\d+$/.test(intPart))
+  if (!/^\d+$/.test(intPart)) {
     return {
       ok: false,
       error: "Enter a valid number (invalid digits).",
       warnings,
     };
-  if (fracPart && !/^\d+$/.test(fracPart))
+  }
+  if (fracPart && !/^\d+$/.test(fracPart)) {
     return {
       ok: false,
       error: "Enter a valid number (invalid decimals).",
       warnings,
     };
+  }
 
   const maxDec = Number(MAX_DECIMALS);
   const fracRaw = fracPart ?? "";
@@ -355,8 +350,9 @@ function parseMoneyInputToScaled(raw: string): ParsedAmount {
 
   const maxAnnual = 1_000_000_000n * SCALE;
   const clamped = clampScaled(scaled, 0n, maxAnnual);
-  if (clamped !== scaled)
+  if (clamped !== scaled) {
     warnings.push("Value was clamped to the supported maximum for safety.");
+  }
 
   const normalized = fracRaw.length ? `${intPart}.${fracCapped}` : `${intPart}`;
   return { ok: true, scaled: clamped, normalized, warnings };
@@ -429,6 +425,28 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   }
 }
 
+function validateDisplayDecimals(raw: string | null): 0 | 2 | 4 | 6 {
+  if (raw === null) return 2;
+  const n = Number(raw);
+  if (!Number.isFinite(n)) return 2;
+  const t = Math.trunc(n);
+  if (t === 0 || t === 2 || t === 4 || t === 6) return t;
+  return 2;
+}
+
+function groupDigitsFromNormalized(normalized: string): string {
+  const s = String(normalized ?? "").trim();
+  if (!s) return "";
+  const parts = s.split(".");
+  const intPartRaw = parts[0] ?? "0";
+  const fracPart = parts[1] ?? "";
+
+  const intPart = intPartRaw.replace(/^0+(?=\d)/, "") || "0";
+  const grouped = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+  return fracPart ? `${grouped}.${fracPart}` : grouped;
+}
+
 export default function AnnualToMonthlyRent() {
   const [amount, setAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "24000";
@@ -436,21 +454,19 @@ export default function AnnualToMonthlyRent() {
     return saved ?? "24000";
   });
 
+  const [amountFocused, setAmountFocused] = useState<boolean>(false);
+
   const [currency, setCurrency] = useState<Currency>(() => {
     if (typeof window === "undefined") return "USD";
-    const saved =
-      typeof window === "undefined"
-        ? null
-        : window.localStorage.getItem("rc_atm_currency");
+    const saved = window.localStorage.getItem("rc_atm_currency");
     return saved && isCurrency(saved) ? saved : "USD";
   });
 
-  const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
+  const [displayDecimals, setDisplayDecimals] = useState<0 | 2 | 4 | 6>(() => {
     if (typeof window === "undefined") return 2;
-    const saved = window.localStorage.getItem("rc_atm_display_decimals");
-    const n = saved ? Number(saved) : 2;
-    if (!Number.isFinite(n)) return 2;
-    return Math.max(0, Math.min(6, Math.trunc(n)));
+    return validateDisplayDecimals(
+      window.localStorage.getItem("rc_atm_display_decimals"),
+    );
   });
 
   const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
@@ -488,6 +504,19 @@ export default function AnnualToMonthlyRent() {
 
   const parsedAnnual = useMemo(() => parseMoneyInputToScaled(amount), [amount]);
   const annualScaled = parsedAnnual.ok ? (parsedAnnual.scaled as bigint) : 0n;
+
+  const amountPreview = useMemo(() => {
+    if (!parsedAnnual.ok) return null;
+    const normalized = parsedAnnual.normalized ?? "";
+    if (!normalized) return null;
+    return groupDigitsFromNormalized(normalized);
+  }, [parsedAnnual.ok, parsedAnnual.normalized]);
+
+  const amountInputValue = amountFocused
+    ? amount
+    : parsedAnnual.ok && amountPreview
+      ? amountPreview
+      : amount;
 
   const canShowResults = parsedAnnual.ok;
 
@@ -603,8 +632,9 @@ export default function AnnualToMonthlyRent() {
       ["monthly", breakdownScaled.monthly],
       ["annual", breakdownScaled.annual],
     ];
-    for (const [p, val] of items)
+    for (const [p, val] of items) {
       rows.push(buildCsvRow([PERIOD_LABEL[p], fmt(val)]));
+    }
 
     rows.push(buildCsvRow([""]));
     rows.push(
@@ -712,6 +742,11 @@ export default function AnnualToMonthlyRent() {
     ],
   };
 
+  const annualInterpreted = useMemo(() => {
+    if (!parsedAnnual.ok) return null;
+    return fmt(annualScaled);
+  }, [parsedAnnual.ok, annualScaled, currency, roundDisplay, displayDecimals]);
+
   return (
     <main className="bg-white text-slate-700 scroll-smooth">
       <style
@@ -727,7 +762,7 @@ export default function AnnualToMonthlyRent() {
         }}
       />
 
-      <section className=" pb-4 rc-no-print">
+      <section className="pb-4 rc-no-print">
         <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-500">
           <SafeLink href="/" className="hover:underline">
             Home
@@ -774,8 +809,10 @@ export default function AnnualToMonthlyRent() {
               <div className="flex gap-2">
                 <input
                   inputMode="decimal"
-                  value={amount}
+                  value={amountInputValue}
                   onChange={(e) => setAmount(e.target.value)}
+                  onFocus={() => setAmountFocused(true)}
+                  onBlur={() => setAmountFocused(false)}
                   placeholder="e.g. 24000 or 24000.50"
                   className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!parsedAnnual.ok}
@@ -801,12 +838,6 @@ export default function AnnualToMonthlyRent() {
                 </select>
               </div>
 
-              <p id="rc-amount-help" className="mt-2 text-xs text-slate-500">
-                Accepted inputs: $24,000.50, 24000, 24000.00, .5, 12., 1250,50
-                (comma decimal). If your input is ambiguous, you will see a
-                warning or an error instead of a misleading result.
-              </p>
-
               {!parsedAnnual.ok ? (
                 <p
                   id="rc-amount-error"
@@ -823,6 +854,24 @@ export default function AnnualToMonthlyRent() {
                     ))}
                   </ul>
                 </div>
+              ) : null}
+
+              {parsedAnnual.ok && annualInterpreted ? (
+                <p className="mt-2 text-xs text-slate-600">
+                  Interpreting your annual total as{" "}
+                  <span className="font-semibold text-slate-800">
+                    {annualInterpreted}
+                  </span>
+                </p>
+              ) : null}
+
+              {!amountFocused && parsedAnnual.ok && amountPreview ? (
+                <p className="mt-1 text-xs text-slate-500">
+                  Preview (grouped){" "}
+                  <span className="font-semibold text-slate-700">
+                    {amountPreview}
+                  </span>
+                </p>
               ) : null}
             </div>
 
@@ -843,69 +892,6 @@ export default function AnnualToMonthlyRent() {
                   <div className="mt-1 text-base font-bold text-slate-800">
                     {PERIOD_LABEL.monthly}
                   </div>
-                </div>
-              </div>
-
-              <div className="mt-3 rounded-xl border border-slate-200 bg-white p-4">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                  <div>
-                    <div className="text-xs text-slate-500">
-                      Rounding (display only)
-                    </div>
-                    <label className="mt-1 flex items-center gap-2 text-sm text-slate-700">
-                      <input
-                        type="checkbox"
-                        checked={roundDisplay}
-                        onChange={(e) => setRoundDisplay(e.target.checked)}
-                        className="h-4 w-4"
-                      />
-                      Round displayed values
-                    </label>
-                    <p className="mt-1 text-xs text-slate-500">
-                      Calculations use up to 12 decimals internally. If enabled,
-                      displayed values are rounded to your chosen decimals.
-                    </p>
-                  </div>
-
-                  <div className="sm:text-right">
-                    <div className="text-xs text-slate-500">
-                      Displayed decimals
-                    </div>
-                    <select
-                      value={displayDecimals}
-                      onChange={(e) =>
-                        setDisplayDecimals(
-                          Math.max(
-                            0,
-                            Math.min(
-                              6,
-                              Math.trunc(Number(e.target.value) || 2),
-                            ),
-                          ),
-                        )
-                      }
-                      className="mt-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
-                      aria-label="Displayed decimals"
-                    >
-                      <option value={0}>0</option>
-                      <option value={2}>2</option>
-                      <option value={4}>4</option>
-                      <option value={6}>6</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="mt-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
-                  <div className="font-semibold">
-                    What “monthly” means on this page
-                  </div>
-                  <p className="mt-1 text-xs text-slate-600">
-                    This route is a monthly budgeting view:{" "}
-                    <strong>monthly = annual ÷ 12</strong>. It is not a
-                    calendar-date proration tool. If your lease charges every 28
-                    days (4-week cycle), the annual total can differ because
-                    that schedule usually has 13 payments per year.
-                  </p>
                 </div>
               </div>
             </div>
@@ -1023,13 +1009,13 @@ export default function AnnualToMonthlyRent() {
                     </div>
                     <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                       <div className="text-sm text-slate-700">
-                        Monthly minus 4-week ={" "}
+                        Monthly minus 4-week{" "}
                         <strong className="text-slate-900">
                           {fmt(breakdownScaled!.monthlyMinus4w)}
                         </strong>
                       </div>
                       <div className="text-sm text-slate-700">
-                        Difference ≈{" "}
+                        Difference{" "}
                         <strong className="text-slate-900">
                           {formatPercent(breakdownScaled!.monthlyMinus4wPct, 2)}
                         </strong>
@@ -1078,7 +1064,6 @@ export default function AnnualToMonthlyRent() {
                           {fmt(breakdownScaled!.annualDiff_13vs12)}
                         </div>
                         <div className="mt-1 text-xs text-slate-500">
-                          ≈{" "}
                           {formatPercent(
                             breakdownScaled!.annualDiff_13vs12Pct,
                             2,
@@ -1093,6 +1078,18 @@ export default function AnnualToMonthlyRent() {
                       annual totals even when a listing feels similar.
                     </p>
                   </div>
+
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
+                    <div className="text-xs text-slate-500">
+                      Avoid misleading interpretations
+                    </div>
+                    <p className="mt-1 text-sm text-slate-700">
+                      This tool shows equivalents for budgeting and comparison.
+                      It does not predict your lease due dates, prorations, or
+                      what is included in rent. If your annual total includes
+                      fees or utilities, the equivalents include them too.
+                    </p>
+                  </div>
                 </div>
               </>
             )}
@@ -1104,6 +1101,62 @@ export default function AnnualToMonthlyRent() {
             (budgeting equivalent). Actual due dates and totals can differ by
             lease schedule, proration rules, fees, and what is included in rent.
           </p>
+        </div>
+
+        <div className="mt-3 rounded-xl border border-slate-200 bg-white p-4 rc-no-print">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <div className="text-xs text-slate-500">
+                Rounding (display only)
+              </div>
+              <label className="mt-1 flex items-center gap-2 text-sm text-slate-700">
+                <input
+                  type="checkbox"
+                  checked={roundDisplay}
+                  onChange={(e) => setRoundDisplay(e.target.checked)}
+                  className="h-4 w-4"
+                />
+                Round displayed values
+              </label>
+              <p className="mt-1 text-xs text-slate-500">
+                Calculations use up to 12 decimals internally. If enabled,
+                displayed values are rounded to your chosen decimals.
+              </p>
+            </div>
+
+            <div className="sm:text-right">
+              <div className="text-xs text-slate-500">Displayed decimals</div>
+              <select
+                value={displayDecimals}
+                onChange={(e) => {
+                  const v = Math.trunc(Number(e.target.value));
+                  setDisplayDecimals(
+                    v === 0 || v === 2 || v === 4 || v === 6 ? v : 2,
+                  );
+                }}
+                className="mt-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                aria-label="Displayed decimals"
+              >
+                <option value={0}>0</option>
+                <option value={2}>2</option>
+                <option value={4}>4</option>
+                <option value={6}>6</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="mt-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+            <div className="font-semibold">
+              What “monthly” means on this page
+            </div>
+            <p className="mt-1 text-xs text-slate-600">
+              This route is a monthly budgeting view{" "}
+              <strong>monthly = annual ÷ 12</strong>. It is not a calendar-date
+              proration tool. If your lease charges every 28 days (4-week
+              cycle), the annual total can differ because that schedule usually
+              has 13 payments per year.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -1138,9 +1191,9 @@ export default function AnnualToMonthlyRent() {
             equivalent is <strong>$24,000 ÷ 12 = $2,000</strong>.
           </li>
           <li>
-            If a listing says <strong>$2,000 “every 4 weeks”</strong>, the
-            implied annual can be about <strong>$2,000 × 13 = $26,000</strong>{" "}
-            (not $24,000).
+            If a listing says <strong>$2,000 every 4 weeks</strong>, the implied
+            annual can be about <strong>$2,000 × 13 = $26,000</strong> (not
+            $24,000).
           </li>
           <li>
             If you type <strong>1,234</strong>, this tool treats the comma as
@@ -1150,7 +1203,7 @@ export default function AnnualToMonthlyRent() {
         </ul>
 
         <p className="text-slate-700 mb-4">
-          Related tools:{" "}
+          Related tools{" "}
           <SafeLink
             href="/rent-converter"
             className="text-sky-700 hover:underline"

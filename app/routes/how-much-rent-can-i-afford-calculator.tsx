@@ -777,15 +777,6 @@ export default function HowMuchRentCanIAfford() {
                 aria-describedby="rc-income-help rc-income-error"
               />
 
-              <p
-                id="rc-income-help"
-                className="mt-2 text-sm text-slate-600 leading-relaxed"
-              >
-                Accepted inputs: $6,000, 6000.00, 6000, .5, 12., 6000,50 (comma
-                decimal). If input is invalid or ambiguous, results are not
-                shown.
-              </p>
-
               {!parsedIncome.ok ? (
                 <p
                   id="rc-income-error"

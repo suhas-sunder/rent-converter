@@ -704,12 +704,6 @@ export default function AnnualToBiweeklyRent() {
                 </select>
               </div>
 
-              <p id="rc-amount-help" className="mt-2 text-xs text-slate-500">
-                Accepted inputs: $24,000.50, 24000, 24000.00, .5, 12., 1250,50
-                (comma decimal). If a format could be interpreted in more than
-                one way, this page will warn you or ask you to adjust it.
-              </p>
-
               {!parsed.ok ? (
                 <p
                   id="rc-amount-error"

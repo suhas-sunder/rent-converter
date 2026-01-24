@@ -847,15 +847,6 @@ export default function HourlyToAnnualRent() {
                 </select>
               </div>
 
-              <p
-                id="rc-hourly-help"
-                className="mt-2 text-sm text-slate-600 leading-relaxed"
-              >
-                Accepted inputs: $25.50, 25, 25.00, .5, 12., 1250,50 (comma
-                decimal). If an input is ambiguous, the page shows a warning or
-                error instead of a misleading result.
-              </p>
-
               {!parsedHourly.ok ? (
                 <p
                   id="rc-hourly-error"

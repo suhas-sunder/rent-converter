@@ -1083,10 +1083,6 @@ export default function RentDueDateCalculator() {
                   ))}
                 </select>
               </div>
-              <p className="mt-2 text-xs text-slate-500">
-                Accepted inputs: $2,000, 2000.00, .5, 12., 2000,50 (comma
-                decimal). Invalid or ambiguous input hides results.
-              </p>
 
               {!parsedAmount.ok ? (
                 <p className="mt-2 text-sm font-semibold text-rose-700">

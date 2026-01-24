@@ -7,7 +7,7 @@ import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 export const meta: Route.MetaFunction = () => {
   const title = "Annual to Hourly Rent Converter (8,760-Hour Equivalent)";
   const description =
-    "Convert annual rent to an hourly equivalent using a 365-day (8,760-hour) year. Decimal-safe input, full breakdown, optional paid-hours scenario, CSV export, and print-to-PDF. Free and private (no signup).";
+    "Convert annual rent to an hourly equivalent using a 365-day (8,760-hour) year. Decimal-safe input, full breakdown, optional paid-hours scenario, and print-to-PDF. Free and private (no signup).";
 
   return [
     { title },
@@ -65,44 +65,27 @@ const PERIOD_LABEL: Record<Period, string> = {
   annual: "Annual",
 };
 
-// Whitelist rule (single source of truth)
-//
-// Use this everywhere you create internal links.
-// If a link is not in ROUTE_WHITELIST, it must not appear anywhere in the UI.
 const ROUTE_WHITELIST = new Set<string>([
-  // Home
   "/",
-
-  // Rent converter hub
   "/rent-converter",
-
-  // Frequency converters
   "/monthly-to-weekly-rent-converter",
   "/weekly-to-monthly-rent-converter",
   "/weekly-to-annual-rent-converter",
   "/weekly-to-biweekly-rent-converter",
-
   "/biweekly-to-weekly-rent-converter",
   "/biweekly-to-monthly-rent-converter",
   "/biweekly-to-annual-rent-converter",
-
   "/monthly-to-annual-rent-converter",
   "/annual-to-monthly-rent-converter",
-
   "/monthly-to-daily-rent-converter",
   "/daily-to-monthly-rent-converter",
-
   "/monthly-to-hourly-rent-converter",
   "/hourly-to-monthly-rent-converter",
-
   "/hourly-to-annual-rent-converter",
   "/annual-to-hourly-rent-converter",
-
   "/annual-to-weekly-rent-converter",
   "/annual-to-biweekly-rent-converter",
   "/monthly-to-biweekly-rent-converter",
-
-  // Rent calculators
   "/rent-calculator",
   "/rent-per-day-calculator",
   "/rent-per-week-calculator",
@@ -110,19 +93,13 @@ const ROUTE_WHITELIST = new Set<string>([
   "/rent-per-paycheck-calculator",
   "/rent-split-calculator",
   "/rent-due-date-calculator",
-
-  // Affordability and income
   "/rent-as-percentage-of-income-calculator",
   "/how-much-rent-can-i-afford-calculator",
   "/rent-after-tax-income-calculator",
   "/rent-vs-take-home-pay-calculator",
-
-  // Rent increases
   "/rent-increase-calculator",
   "/rent-increase-percentage-calculator",
   "/rent-after-increase-calculator",
-
-  // Rent vs buy
   "/rent-vs-buy-calculator",
 ]);
 
@@ -172,19 +149,13 @@ function isCurrency(x: string): x is Currency {
   return (SUPPORTED_CURRENCIES as readonly string[]).includes(x);
 }
 
-/**
- * Decimal-safe fixed-point representation:
- * - Money inputs are parsed into scaled integers (BigInt) using SCALE.
- * - Math is performed on scaled integers (no float rounding during computation).
- * - Display rounding is explicit and user-controlled.
- */
 const MAX_DECIMALS = 12n;
 const SCALE = 10n ** MAX_DECIMALS;
 
 type ParsedAmount = {
   ok: boolean;
-  scaled?: bigint; // amount * SCALE
-  normalized?: string; // normalized decimal ('.' as separator, no grouping)
+  scaled?: bigint;
+  normalized?: string;
   warnings: string[];
   error?: string;
 };
@@ -200,7 +171,6 @@ function absBigInt(x: bigint) {
 }
 
 function roundScaledToDigits(scaled: bigint, digits: number): bigint {
-  // SCALE is 10^12, so we can round by dropping (12 - digits) places.
   const d = Math.max(0, Math.min(12, Math.trunc(digits)));
   const drop = 12 - d;
   const factor = 10n ** BigInt(drop);
@@ -239,8 +209,6 @@ function formatCurrencyFromScaled(
     style: "currency",
     currency,
     maximumFractionDigits: digits,
-    // If user chose rounding, keep money formatting consistent by showing exactly that many decimals.
-    // If not rounding, allow variable decimals up to maxDigits.
     minimumFractionDigits: opts.mode === "fixed" ? digits : 0,
   }).format(n);
 }
@@ -250,17 +218,6 @@ function formatPercent(n: number, displayDecimals: number): string {
   return `${(n * 100).toFixed(Math.max(0, Math.min(6, displayDecimals)))}%`;
 }
 
-/**
- * Robust parser for money-like inputs.
- * Accepts:
- * - "$30,000.50", "30 000.50", "30000", "30000.00", ".5", "12."
- * - "1250,50" (comma as decimal)
- *
- * Avoids false info by:
- * - rejecting empty/invalid
- * - rejecting negative
- * - warning when interpreting single comma patterns like "1,234" as thousands grouping
- */
 function parseMoneyInputToScaled(raw: string): ParsedAmount {
   const warnings: string[] = [];
   const s0 = (raw ?? "").trim();
@@ -280,7 +237,6 @@ function parseMoneyInputToScaled(raw: string): ParsedAmount {
     };
   }
 
-  // Negative handling
   if (s.includes("-")) {
     if (!s.startsWith("-") || s.slice(1).includes("-")) {
       return {
@@ -292,7 +248,6 @@ function parseMoneyInputToScaled(raw: string): ParsedAmount {
     return { ok: false, error: "Annual rent must be 0 or greater.", warnings };
   }
 
-  // Determine decimal separator
   const lastDot = s.lastIndexOf(".");
   const lastComma = s.lastIndexOf(",");
 
@@ -344,7 +299,6 @@ function parseMoneyInputToScaled(raw: string): ParsedAmount {
     fracPart = split[1] ?? "";
   }
 
-  // Remove grouping separators from intPart
   if (decimalSep === ".") intPart = intPart.replace(/,/g, "");
   else if (decimalSep === ",") intPart = intPart.replace(/\./g, "");
   else intPart = intPart.replace(/[.,]/g, "");
@@ -391,7 +345,8 @@ function parseMoneyInputToScaled(raw: string): ParsedAmount {
 
 function parseHoursInput(raw: string): {
   ok: boolean;
-  hoursPerWeek?: bigint; // scaled by SCALE
+  hoursPerWeek?: bigint;
+  normalized?: string;
   error?: string;
   warnings: string[];
 } {
@@ -425,7 +380,6 @@ function parseHoursInput(raw: string): {
     };
   }
 
-  // Hours can be decimal (e.g., 37.5). Reuse money parser for robust decimal parsing.
   const parsed = parseMoneyInputToScaled(s);
   if (!parsed.ok || parsed.scaled === undefined) {
     return {
@@ -442,7 +396,12 @@ function parseHoursInput(raw: string): {
     warnings.push("Hours per week was clamped to 168 (max hours in a week).");
   }
 
-  return { ok: true, hoursPerWeek: clamped, warnings };
+  return {
+    ok: true,
+    hoursPerWeek: clamped,
+    normalized: parsed.normalized,
+    warnings: [...parsed.warnings, ...warnings],
+  };
 }
 
 function mulDivScaled(
@@ -469,49 +428,19 @@ function annualToPeriodScaled(annualScaled: bigint, period: Period): bigint {
     case "daily":
       return mulDivScaled(annualScaled, 1n, 365n);
     case "hourly":
-      return mulDivScaled(annualScaled, 1n, 365n * 24n); // annual ÷ 8,760
+      return mulDivScaled(annualScaled, 1n, 365n * 24n);
     default:
       return annualScaled;
   }
 }
 
-// Paid-hours hourly: annual ÷ (hours/week × 52)
 function annualToPaidHoursHourlyScaled(
   annualScaled: bigint,
   hoursPerWeekScaled: bigint,
 ): bigint {
-  // denominator = (hours/week) * 52, both in scaled units, so:
-  // annualScaled / ((hoursPerWeekScaled / SCALE) * 52)
-  // => annualScaled * SCALE / (hoursPerWeekScaled * 52)
   const den = hoursPerWeekScaled * 52n;
   if (den === 0n) return 0n;
   return (annualScaled * SCALE) / den;
-}
-
-function buildCsvRow(cols: string[]): string {
-  return cols
-    .map((c) => {
-      const s = String(c ?? "");
-      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
-      return s;
-    })
-    .join(",");
-}
-
-function downloadTextFile(
-  filename: string,
-  content: string,
-  mime = "text/plain;charset=utf-8",
-) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
 }
 
 function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
@@ -524,6 +453,28 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   }
 }
 
+function validateDisplayDecimals(raw: string | null): 0 | 2 | 4 | 6 {
+  if (raw === null) return 2;
+  const n = Number(raw);
+  if (!Number.isFinite(n)) return 2;
+  const t = Math.trunc(n);
+  if (t === 0 || t === 2 || t === 4 || t === 6) return t;
+  return 2;
+}
+
+function groupDigitsFromNormalized(normalized: string): string {
+  const s = String(normalized ?? "").trim();
+  if (!s) return "";
+  const parts = s.split(".");
+  const intPartRaw = parts[0] ?? "0";
+  const fracPart = parts[1] ?? "";
+
+  const intPart = intPartRaw.replace(/^0+(?=\d)/, "") || "0";
+  const grouped = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+  return fracPart ? `${grouped}.${fracPart}` : grouped;
+}
+
 export default function AnnualToHourlyRent() {
   const [amount, setAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "30000";
@@ -531,21 +482,19 @@ export default function AnnualToHourlyRent() {
     return saved ?? "30000";
   });
 
+  const [amountFocused, setAmountFocused] = useState<boolean>(false);
+
   const [currency, setCurrency] = useState<Currency>(() => {
     if (typeof window === "undefined") return "USD";
-    const saved =
-      typeof window === "undefined"
-        ? null
-        : window.localStorage.getItem("rc_ath_currency");
+    const saved = window.localStorage.getItem("rc_ath_currency");
     return saved && isCurrency(saved) ? saved : "USD";
   });
 
-  const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
-    if (typeof window === "undefined") return 4;
-    const saved = window.localStorage.getItem("rc_ath_display_decimals");
-    const n = saved ? Number(saved) : 4;
-    if (!Number.isFinite(n)) return 4;
-    return Math.max(0, Math.min(6, Math.trunc(n)));
+  const [displayDecimals, setDisplayDecimals] = useState<0 | 2 | 4 | 6>(() => {
+    if (typeof window === "undefined") return 2;
+    return validateDisplayDecimals(
+      window.localStorage.getItem("rc_ath_display_decimals"),
+    );
   });
 
   const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
@@ -567,6 +516,8 @@ export default function AnnualToHourlyRent() {
     const saved = window.localStorage.getItem("rc_ath_paid_hours_week");
     return saved ?? "40";
   });
+
+  const [paidHoursFocused, setPaidHoursFocused] = useState<boolean>(false);
 
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const copyTimerRef = useRef<number | null>(null);
@@ -610,10 +561,36 @@ export default function AnnualToHourlyRent() {
   const parsedAnnual = useMemo(() => parseMoneyInputToScaled(amount), [amount]);
   const annualScaled = parsedAnnual.ok ? (parsedAnnual.scaled as bigint) : 0n;
 
+  const amountPreview = useMemo(() => {
+    if (!parsedAnnual.ok) return null;
+    const normalized = parsedAnnual.normalized ?? "";
+    if (!normalized) return null;
+    return groupDigitsFromNormalized(normalized);
+  }, [parsedAnnual.ok, parsedAnnual.normalized]);
+
+  const amountInputValue = amountFocused
+    ? amount
+    : parsedAnnual.ok && amountPreview
+      ? amountPreview
+      : amount;
+
   const parsedHours = useMemo(() => {
     if (!showPaidHoursScenario) return null;
     return parseHoursInput(paidHoursPerWeek);
   }, [paidHoursPerWeek, showPaidHoursScenario]);
+
+  const hoursPreview = useMemo(() => {
+    if (!parsedHours?.ok) return null;
+    const normalized = parsedHours.normalized ?? "";
+    if (!normalized) return null;
+    return groupDigitsFromNormalized(normalized);
+  }, [parsedHours?.ok, parsedHours?.normalized]);
+
+  const paidHoursInputValue = paidHoursFocused
+    ? paidHoursPerWeek
+    : parsedHours?.ok && hoursPreview
+      ? hoursPreview
+      : paidHoursPerWeek;
 
   const hoursPerWeekScaled = parsedHours?.ok
     ? (parsedHours.hoursPerWeek as bigint)
@@ -664,7 +641,7 @@ export default function AnnualToHourlyRent() {
         paidMinusClockPct = null;
         paidHoursPerYearLabel = null;
       } else {
-        const hoursPerYearScaled = hoursPerWeekScaled * 52n; // still scaled
+        const hoursPerYearScaled = hoursPerWeekScaled * 52n;
         paidHoursPerYearLabel = `${toNumberSafe(
           hoursPerYearScaled,
         ).toLocaleString(undefined, { maximumFractionDigits: 4 })} hours/year`;
@@ -674,7 +651,6 @@ export default function AnnualToHourlyRent() {
           hoursPerWeekScaled,
         );
         paidMinusClock = paidHourly - hourly;
-
         paidMinusClockPct =
           hourly === 0n ? 0 : Number(paidMinusClock) / Number(hourly);
       }
@@ -728,126 +704,6 @@ export default function AnnualToHourlyRent() {
       if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
       copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
     }
-  };
-
-  const handleExportCsv = () => {
-    if (!canShowAnnualResults || !breakdownScaled) return;
-
-    const rows: string[] = [];
-    rows.push(buildCsvRow(["Annual to Hourly Rent Converter"]));
-    rows.push(
-      buildCsvRow([
-        "Assumptions",
-        "Year=365 days",
-        "Hours/day=24",
-        "Hours/year=8,760",
-        "Month=365/12 days (average)",
-      ]),
-    );
-    rows.push(buildCsvRow(["Currency formatting", currency]));
-    rows.push(
-      buildCsvRow([
-        "Display",
-        roundDisplay
-          ? `Rounded to ${displayDecimals} decimals for display`
-          : "No display rounding (shows up to 12 decimals)",
-      ]),
-    );
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Input (Annual)", annualInterpreted ?? ""]));
-    rows.push(
-      buildCsvRow(["Headline (Hourly time-based)", fmt(headlineHourlyScaled)]),
-    );
-    rows.push(buildCsvRow(["Hourly definition", "Annual ÷ (365 × 24)"]));
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Period", "Amount"]));
-    const items: Array<[Period, bigint]> = [
-      ["hourly", breakdownScaled.hourly],
-      ["daily", breakdownScaled.daily],
-      ["weekly", breakdownScaled.weekly],
-      ["biweekly", breakdownScaled.biweekly],
-      ["every_4_weeks", breakdownScaled.every4w],
-      ["monthly", breakdownScaled.monthly],
-      ["annual", breakdownScaled.annual],
-    ];
-    for (const [p, val] of items) {
-      rows.push(buildCsvRow([PERIOD_LABEL[p], fmt(val)]));
-    }
-
-    rows.push(buildCsvRow([""]));
-    rows.push(
-      buildCsvRow([
-        "Monthly minus 4-week",
-        fmt(breakdownScaled.monthlyMinus4w),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Monthly vs 4-week difference (%)",
-        formatPercent(breakdownScaled.monthlyMinus4wPct, 2),
-      ]),
-    );
-
-    rows.push(buildCsvRow([""]));
-    rows.push(
-      buildCsvRow([
-        "Paid-hours scenario enabled",
-        showPaidHoursScenario ? "Yes" : "No",
-      ]),
-    );
-
-    if (showPaidHoursScenario) {
-      if (
-        parsedHours?.ok &&
-        breakdownScaled.paidHourly !== null &&
-        breakdownScaled.paidMinusClock !== null &&
-        breakdownScaled.paidMinusClockPct !== null
-      ) {
-        rows.push(
-          buildCsvRow([
-            "Paid hours per week",
-            String(toNumberSafe(hoursPerWeekScaled)),
-          ]),
-        );
-        rows.push(
-          buildCsvRow([
-            "Paid-hours hourly definition",
-            "Annual ÷ (hours/week × 52)",
-          ]),
-        );
-        rows.push(
-          buildCsvRow(["Paid-hours hourly", fmt(breakdownScaled.paidHourly)]),
-        );
-        rows.push(
-          buildCsvRow([
-            "Difference vs time-based hourly",
-            fmt(breakdownScaled.paidMinusClock),
-          ]),
-        );
-        rows.push(
-          buildCsvRow([
-            "Difference (%)",
-            formatPercent(breakdownScaled.paidMinusClockPct, 2),
-          ]),
-        );
-      } else {
-        rows.push(
-          buildCsvRow([
-            "Paid-hours scenario",
-            "Invalid hours input (no paid-hours results exported).",
-          ]),
-        );
-      }
-    }
-
-    const csv = rows.join("\n");
-    downloadTextFile(
-      "annual-to-hourly-rent-converter.csv",
-      csv,
-      "text/csv;charset=utf-8",
-    );
   };
 
   const handlePrint = () => {
@@ -958,14 +814,74 @@ export default function AnnualToHourlyRent() {
               Instant annual to hourly conversion
             </h2>
 
-            <div className="rc-no-print flex flex-col sm:flex-row gap-2">
-              <button
-                type="button"
-                onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-              >
-                Print / Save as PDF
-              </button>
+            <div className=" rounded-xl border border-slate-200 bg-white p-4 rc-no-print">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <div className="text-sm font-semibold text-slate-700">
+                    Paid-hours scenario (optional)
+                  </div>
+                  <p className="mt-1 text-xs text-slate-500">
+                    Compare the 8,760-hour equivalence against an assumed
+                    paid-hours schedule (hours/week × 52).
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setShowPaidHoursScenario((v) => !v)}
+                  className={`relative inline-flex h-6 w-11 rounded-full transition cursor-pointer ${
+                    showPaidHoursScenario ? "bg-sky-600" : "bg-slate-300"
+                  }`}
+                  aria-label="Toggle paid-hours scenario"
+                >
+                  <span
+                    className={`absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white shadow transition ${
+                      showPaidHoursScenario ? "translate-x-5" : ""
+                    }`}
+                  />
+                </button>
+              </div>
+
+              {showPaidHoursScenario ? (
+                <div className="mt-4">
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">
+                    Paid hours per week
+                  </label>
+                  <input
+                    inputMode="decimal"
+                    value={paidHoursInputValue}
+                    onChange={(e) => setPaidHoursPerWeek(e.target.value)}
+                    onFocus={() => setPaidHoursFocused(true)}
+                    onBlur={() => setPaidHoursFocused(false)}
+                    placeholder="e.g. 40 or 37.5"
+                    className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    aria-invalid={Boolean(parsedHours && !parsedHours.ok)}
+                    aria-describedby="rc-hours-help rc-hours-error"
+                  />
+                  <p id="rc-hours-help" className="mt-2 text-xs text-slate-500">
+                    Valid range is 0 to 168 hours/week. This does not replace
+                    the main conversion. It’s only an illustrative comparison.
+                  </p>
+
+                  {parsedHours && !parsedHours.ok ? (
+                    <p
+                      id="rc-hours-error"
+                      className="mt-2 text-sm font-semibold text-rose-700"
+                    >
+                      {parsedHours.error}
+                    </p>
+                  ) : parsedHours && parsedHours.warnings.length ? (
+                    <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                      <div className="font-semibold">Hours input note</div>
+                      <ul className="mt-1 list-disc pl-5 space-y-1">
+                        {parsedHours.warnings.map((w, i) => (
+                          <li key={i}>{w}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+                </div>
+              ) : null}
             </div>
           </div>
 
@@ -977,8 +893,10 @@ export default function AnnualToHourlyRent() {
               <div className="flex gap-2">
                 <input
                   inputMode="decimal"
-                  value={amount}
+                  value={amountInputValue}
                   onChange={(e) => setAmount(e.target.value)}
+                  onFocus={() => setAmountFocused(true)}
+                  onBlur={() => setAmountFocused(false)}
                   placeholder="e.g. 30000 or 30000.50"
                   className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!parsedAnnual.ok}
@@ -1003,13 +921,6 @@ export default function AnnualToHourlyRent() {
                   ))}
                 </select>
               </div>
-
-              <p id="rc-amount-help" className="mt-2 text-xs text-slate-500">
-                Accepted inputs: $30,000.50, 30000, 30000.00, .5, 12., 1250,50
-                (comma decimal). If a format is ambiguous, you will see a
-                warning or an error instead of a misleading result.
-              </p>
-
               {!parsedAnnual.ok ? (
                 <p
                   id="rc-amount-error"
@@ -1037,76 +948,14 @@ export default function AnnualToHourlyRent() {
                 </p>
               ) : null}
 
-              <div className="mt-5 rounded-xl border border-slate-200 bg-white p-4 rc-no-print">
-                <div className="flex items-center justify-between gap-3">
-                  <div>
-                    <div className="text-sm font-semibold text-slate-700">
-                      Paid-hours scenario (optional)
-                    </div>
-                    <p className="mt-1 text-xs text-slate-500">
-                      Compare the 8,760-hour equivalence against an assumed
-                      paid-hours schedule (hours/week × 52).
-                    </p>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => setShowPaidHoursScenario((v) => !v)}
-                    className={`relative inline-flex h-6 w-11 rounded-full transition cursor-pointer ${
-                      showPaidHoursScenario ? "bg-sky-600" : "bg-slate-300"
-                    }`}
-                    aria-label="Toggle paid-hours scenario"
-                  >
-                    <span
-                      className={`absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white shadow transition ${
-                        showPaidHoursScenario ? "translate-x-5" : ""
-                      }`}
-                    />
-                  </button>
-                </div>
-
-                {showPaidHoursScenario ? (
-                  <div className="mt-4">
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">
-                      Paid hours per week
-                    </label>
-                    <input
-                      inputMode="decimal"
-                      value={paidHoursPerWeek}
-                      onChange={(e) => setPaidHoursPerWeek(e.target.value)}
-                      placeholder="e.g. 40 or 37.5"
-                      className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
-                      aria-invalid={Boolean(parsedHours && !parsedHours.ok)}
-                      aria-describedby="rc-hours-help rc-hours-error"
-                    />
-                    <p
-                      id="rc-hours-help"
-                      className="mt-2 text-xs text-slate-500"
-                    >
-                      Valid range is 0 to 168 hours/week. This does not replace
-                      the main conversion. It’s only an illustrative comparison.
-                    </p>
-
-                    {parsedHours && !parsedHours.ok ? (
-                      <p
-                        id="rc-hours-error"
-                        className="mt-2 text-sm font-semibold text-rose-700"
-                      >
-                        {parsedHours.error}
-                      </p>
-                    ) : parsedHours && parsedHours.warnings.length ? (
-                      <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-                        <div className="font-semibold">Hours input note</div>
-                        <ul className="mt-1 list-disc pl-5 space-y-1">
-                          {parsedHours.warnings.map((w, i) => (
-                            <li key={i}>{w}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    ) : null}
-                  </div>
-                ) : null}
-              </div>
+              {!amountFocused && parsedAnnual.ok && amountPreview ? (
+                <p className="mt-1 text-xs text-slate-500">
+                  Preview (grouped):{" "}
+                  <span className="font-semibold text-slate-700">
+                    {amountPreview}
+                  </span>
+                </p>
+              ) : null}
             </div>
 
             <div className="md:col-span-6">
@@ -1126,72 +975,6 @@ export default function AnnualToHourlyRent() {
                   <div className="mt-1 text-base font-bold text-slate-800">
                     {PERIOD_LABEL.hourly}
                   </div>
-                </div>
-              </div>
-
-              <div className="mt-3 rounded-xl border border-slate-200 bg-white p-4">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                  <div>
-                    <div className="text-xs text-slate-500">
-                      Rounding (display only)
-                    </div>
-                    <label className="mt-1 flex items-center gap-2 text-sm text-slate-700">
-                      <input
-                        type="checkbox"
-                        checked={roundDisplay}
-                        onChange={(e) => setRoundDisplay(e.target.checked)}
-                        className="h-4 w-4"
-                      />
-                      Round displayed values
-                    </label>
-                    <p className="mt-1 text-xs text-slate-500">
-                      Calculations use up to 12 decimals internally. If enabled,
-                      displayed values are rounded to your chosen decimals.
-                    </p>
-                  </div>
-
-                  <div className="sm:text-right">
-                    <div className="text-xs text-slate-500">
-                      Displayed decimals
-                    </div>
-                    <select
-                      value={displayDecimals}
-                      onChange={(e) =>
-                        setDisplayDecimals(
-                          Math.max(
-                            0,
-                            Math.min(
-                              6,
-                              Math.trunc(Number(e.target.value) || 4),
-                            ),
-                          ),
-                        )
-                      }
-                      className="mt-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
-                      aria-label="Displayed decimals"
-                    >
-                      <option value={0}>0</option>
-                      <option value={2}>2</option>
-                      <option value={4}>4</option>
-                      <option value={6}>6</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="mt-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
-                  <div className="font-semibold">
-                    Assumptions used on this page
-                  </div>
-                  <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
-                    <li>1 year = 365 days</li>
-                    <li>24 hours per day (so 8,760 hours per year)</li>
-                    <li>Month = 365 ÷ 12 days (average)</li>
-                    <li>
-                      This tool does not assume what is included in “rent”
-                      (fees, utilities, taxes). Enter the total you want to
-                      budget with.
-                    </li>
-                  </ul>
                 </div>
               </div>
             </div>
@@ -1413,6 +1196,16 @@ export default function AnnualToHourlyRent() {
                       input.
                     </p>
                   </div>
+
+                  <div className="rc-no-print flex flex-col sm:flex-row gap-2">
+                    <button
+                      type="button"
+                      onClick={handlePrint}
+                      className="rounded-xl cursor-pointer border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                    >
+                      Print / Save as PDF
+                    </button>
+                  </div>
                 </div>
               </>
             )}
@@ -1425,6 +1218,62 @@ export default function AnnualToHourlyRent() {
             can differ by lease schedule, prorations, fees, and what is included
             in rent.
           </p>
+        </div>
+
+        <div className="mt-3 rounded-xl border border-slate-200 bg-white p-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <div className="text-xs text-slate-500">
+                Rounding (display only)
+              </div>
+              <label className="mt-1 flex items-center gap-2 text-sm text-slate-700">
+                <input
+                  type="checkbox"
+                  checked={roundDisplay}
+                  onChange={(e) => setRoundDisplay(e.target.checked)}
+                  className="h-4 w-4"
+                />
+                Round displayed values
+              </label>
+              <p className="mt-1 text-xs text-slate-500">
+                Calculations use up to 12 decimals internally. If enabled,
+                displayed values are rounded to your chosen decimals.
+              </p>
+            </div>
+
+            <div className="sm:text-right">
+              <div className="text-xs text-slate-500">Displayed decimals</div>
+              <select
+                value={displayDecimals}
+                onChange={(e) => {
+                  const v = Math.trunc(Number(e.target.value));
+                  setDisplayDecimals(
+                    v === 0 || v === 2 || v === 4 || v === 6 ? v : 2,
+                  );
+                }}
+                className="mt-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                aria-label="Displayed decimals"
+              >
+                <option value={0}>0</option>
+                <option value={2}>2</option>
+                <option value={4}>4</option>
+                <option value={6}>6</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="mt-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+            <div className="font-semibold">Assumptions used on this page</div>
+            <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
+              <li>1 year = 365 days</li>
+              <li>24 hours per day (so 8,760 hours per year)</li>
+              <li>Month = 365 ÷ 12 days (average)</li>
+              <li>
+                This tool does not assume what is included in “rent” (fees,
+                utilities, taxes). Enter the total you want to budget with.
+              </li>
+            </ul>
+          </div>
         </div>
       </section>
 
@@ -1487,12 +1336,25 @@ export default function AnnualToHourlyRent() {
             className="text-sky-700 hover:underline"
           >
             rent converter
+          </SafeLink>{" "}
+          ,{" "}
+          <SafeLink
+            href="/monthly-to-hourly-rent-converter"
+            className="text-sky-700 hover:underline"
+          >
+            monthly to hourly rent converter
+          </SafeLink>
+          , and{" "}
+          <SafeLink
+            href="/hourly-to-annual-rent-converter"
+            className="text-sky-700 hover:underline"
+          >
+            hourly to annual rent converter
           </SafeLink>
           .
         </p>
       </section>
 
-      {/* RentConverter.com layout rule: add a “How it works” explanation section above the FAQ. */}
       <section
         id="how-it-works"
         className="max-w-5xl mx-auto px-6 pt-8 rc-no-print"

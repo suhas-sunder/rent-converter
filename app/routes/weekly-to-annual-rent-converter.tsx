@@ -859,9 +859,6 @@ export default function WeeklyToAnnualRent() {
                   ))}
                 </select>
               </div>
-              <p className="mt-2 text-xs text-slate-500">
-                Accepted: $550, 550.00, .5, 12., 550,50.
-              </p>
             </div>
 
             <div className="md:col-span-5">

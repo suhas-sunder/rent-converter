@@ -7,7 +7,7 @@ import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 export const meta: Route.MetaFunction = () => {
   const title = "Annual to Weekly Rent Converter";
   const description =
-    "Convert an annual rent total to a weekly amount using annual ÷ 52 (weekly budgeting view). Also shows a 365-day-week equivalent (annual × 7 ÷ 365), plus biweekly and 28-day comparisons. Decimal-safe, exportable, and private.";
+    "Convert an annual rent total to a weekly amount using annual ÷ 52 (weekly budgeting view). Also shows a 365-day-week equivalent (annual × 7 ÷ 365), plus biweekly and 28-day comparisons. Decimal-safe and private.";
 
   const url = "https://rentconverter.com/annual-to-weekly-rent-converter";
   const ogImage = "https://rentconverter.com/og-image.jpg";
@@ -316,16 +316,21 @@ function formatMoneyFromScaled(
   const intPart = abs / SCALE;
   const fracPart = abs % SCALE;
 
-  const groupedInt = new Intl.NumberFormat(undefined, {
+  const groupedInt = new Intl.NumberFormat("en-US", {
     useGrouping: true,
     maximumFractionDigits: 0,
   }).format(Number(intPart));
 
-  if (d === 0) return `${sign}${currency} ${groupedInt}`;
+  if (roundDisplay) {
+    if (d === 0) return `${sign}${currency} ${groupedInt}`;
+    const fracStr12 = fracPart.toString().padStart(12, "0");
+    const shown = fracStr12.slice(0, d).padEnd(d, "0");
+    return `${sign}${currency} ${groupedInt}.${shown}`;
+  }
 
-  const fracStr12 = fracPart.toString().padStart(12, "0");
-  const shown = fracStr12.slice(0, d).padEnd(d, "0");
-  return `${sign}${currency} ${groupedInt}.${shown}`;
+  const fracStr12 = fracPart.toString().padStart(12, "0").replace(/0+$/, "");
+  if (!fracStr12) return `${sign}${currency} ${groupedInt}`;
+  return `${sign}${currency} ${groupedInt}.${fracStr12}`;
 }
 
 function formatPercent(n: number, displayDecimals: number): string {
@@ -375,32 +380,6 @@ function impliedAnnualFromEvery4Weeks13(fourWeekScaled: bigint): bigint {
   return fourWeekScaled * 13n;
 }
 
-function buildCsvRow(cols: string[]): string {
-  return cols
-    .map((c) => {
-      const s = String(c ?? "");
-      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
-      return s;
-    })
-    .join(",");
-}
-
-function downloadTextFile(
-  filename: string,
-  content: string,
-  mime = "text/plain;charset=utf-8",
-) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
 function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   if (raw === null) return fallback;
   try {
@@ -411,6 +390,25 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   }
 }
 
+function validateDisplayDecimals(raw: string | null): 0 | 2 | 4 | 6 {
+  const n = raw === null ? NaN : Number(raw);
+  if (n === 0 || n === 2 || n === 4 || n === 6) return n;
+  return 2;
+}
+
+function formatGroupedPreviewFromNormalized(normalized: string): string {
+  const s = (normalized ?? "").trim();
+  if (!s) return s;
+  const [intRaw, fracRaw] = s.split(".");
+  const intPart = intRaw && /^\d+$/.test(intRaw) ? intRaw : "0";
+  const groupedInt = new Intl.NumberFormat("en-US", {
+    useGrouping: true,
+    maximumFractionDigits: 0,
+  }).format(Number(intPart));
+  if (fracRaw === undefined || fracRaw === "") return groupedInt;
+  return `${groupedInt}.${fracRaw}`;
+}
+
 export default function AnnualToWeeklyRentConverter() {
   const [amount, setAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "24000";
@@ -418,18 +416,18 @@ export default function AnnualToWeeklyRentConverter() {
     return saved ?? "24000";
   });
 
+  const [amountFocused, setAmountFocused] = useState<boolean>(false);
+
   const [currency, setCurrency] = useState<Currency>(() => {
     if (typeof window === "undefined") return "USD";
     const saved = window.localStorage.getItem("rc_atw_currency");
     return saved && isCurrency(saved) ? saved : "USD";
   });
 
-  const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
+  const [displayDecimals, setDisplayDecimals] = useState<0 | 2 | 4 | 6>(() => {
     if (typeof window === "undefined") return 2;
     const saved = window.localStorage.getItem("rc_atw_display_decimals");
-    const n = saved ? Number(saved) : 2;
-    if (!Number.isFinite(n)) return 2;
-    return Math.max(0, Math.min(6, Math.trunc(n)));
+    return validateDisplayDecimals(saved);
   });
 
   const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
@@ -468,6 +466,14 @@ export default function AnnualToWeeklyRentConverter() {
   const parsedAnnual = useMemo(() => parseMoneyInputToScaled(amount), [amount]);
   const annualScaled = parsedAnnual.ok ? (parsedAnnual.scaled as bigint) : 0n;
   const canShowResults = parsedAnnual.ok;
+
+  const amountDisplayValue = useMemo(() => {
+    if (amountFocused) return amount;
+    if (parsedAnnual.ok && parsedAnnual.normalized) {
+      return formatGroupedPreviewFromNormalized(parsedAnnual.normalized);
+    }
+    return amount;
+  }, [amountFocused, amount, parsedAnnual.ok, parsedAnnual.normalized]);
 
   const breakdownScaled = useMemo(() => {
     if (!parsedAnnual.ok) return null;
@@ -523,13 +529,8 @@ export default function AnnualToWeeklyRentConverter() {
     };
   }, [parsedAnnual.ok, annualScaled]);
 
-  const effectiveDecimals = roundDisplay ? displayDecimals : 12;
-
   const fmt = (scaled: bigint) =>
-    formatMoneyFromScaled(scaled, currency, effectiveDecimals, roundDisplay);
-
-  const fmtFull = (scaled: bigint) =>
-    formatMoneyFromScaled(scaled, currency, 12, false);
+    formatMoneyFromScaled(scaled, currency, displayDecimals, roundDisplay);
 
   const weeklyHeadlineScaled = breakdownScaled?.weeklyBudget ?? 0n;
 
@@ -544,135 +545,6 @@ export default function AnnualToWeeklyRentConverter() {
       if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
       copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
     }
-  };
-
-  const handleExportCsv = () => {
-    if (!canShowResults || !breakdownScaled) return;
-
-    const rows: string[] = [];
-    rows.push(buildCsvRow(["Annual to Weekly Rent Converter"]));
-    rows.push(
-      buildCsvRow([
-        "Headline definition",
-        "Weekly (budgeting)=annual ÷ 52",
-        "Also shown",
-        "Weekly (365-day)=annual × 7 ÷ 365",
-      ]),
-    );
-    rows.push(buildCsvRow(["Currency formatting", currency]));
-    rows.push(
-      buildCsvRow([
-        "Display mode",
-        roundDisplay
-          ? `Rounded for display to ${displayDecimals} decimals`
-          : "No display rounding (shows 12 decimals)",
-      ]),
-    );
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Input (Annual)", fmt(annualScaled)]));
-    rows.push(
-      buildCsvRow([
-        "Headline (Weekly, annual ÷ 52)",
-        fmt(weeklyHeadlineScaled),
-      ]),
-    );
-    rows.push(buildCsvRow([""]));
-
-    rows.push(
-      buildCsvRow([
-        "Period",
-        "Amount (shown)",
-        "Amount (full precision, 12dp)",
-      ]),
-    );
-    const items: Array<[Period, bigint]> = [
-      ["hourly", breakdownScaled.hourly],
-      ["daily", breakdownScaled.daily],
-      ["weekly_budget_52", breakdownScaled.weeklyBudget],
-      ["weekly_365", breakdownScaled.weekly365],
-      ["biweekly", breakdownScaled.biweekly],
-      ["every_4_weeks", breakdownScaled.every4w],
-      ["monthly", breakdownScaled.monthly],
-      ["annual", breakdownScaled.annual],
-    ];
-    for (const [p, val] of items)
-      rows.push(buildCsvRow([PERIOD_LABEL[p], fmt(val), fmtFull(val)]));
-
-    rows.push(buildCsvRow([""]));
-    rows.push(buildCsvRow(["Weekly comparison", "", ""]));
-    rows.push(
-      buildCsvRow([
-        "(Annual ÷ 52) minus (Annual × 7 ÷ 365)",
-        fmt(breakdownScaled.weeklyBudgetMinus365),
-        fmtFull(breakdownScaled.weeklyBudgetMinus365),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Difference (%) relative to 365-day weekly",
-        formatPercent(breakdownScaled.weeklyBudgetMinus365Pct, 4),
-        "",
-      ]),
-    );
-
-    rows.push(buildCsvRow([""]));
-    rows.push(buildCsvRow(["Illustrative annualization", "", ""]));
-    rows.push(
-      buildCsvRow([
-        "Implied annual from weekly (annual ÷ 52) × 52",
-        fmt(breakdownScaled.impliedAnnualWeekly52),
-        fmtFull(breakdownScaled.impliedAnnualWeekly52),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Implied annual from weekly (annual × 7 ÷ 365) × 365 ÷ 7",
-        fmt(breakdownScaled.impliedAnnualWeekly365),
-        fmtFull(breakdownScaled.impliedAnnualWeekly365),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Implied annual from 4-week × 13",
-        fmt(breakdownScaled.impliedAnnual4w13),
-        fmtFull(breakdownScaled.impliedAnnual4w13),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "4-week(13) minus weekly(52)",
-        fmt(breakdownScaled.diff4w13_vs_weekly52),
-        fmtFull(breakdownScaled.diff4w13_vs_weekly52),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "4-week(13) vs weekly(52) difference (%)",
-        formatPercent(breakdownScaled.diff4w13_vs_weekly52Pct, 4),
-        "",
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Input annual minus implied annual (weekly ÷ 52 reconstruction gap)",
-        fmt(breakdownScaled.reconstructionGapWeekly52),
-        fmtFull(breakdownScaled.reconstructionGapWeekly52),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Input annual minus implied annual (365-day weekly reconstruction gap)",
-        fmt(breakdownScaled.reconstructionGapWeekly365),
-        fmtFull(breakdownScaled.reconstructionGapWeekly365),
-      ]),
-    );
-
-    downloadTextFile(
-      "annual-to-weekly-rent-converter.csv",
-      rows.join("\n"),
-      "text/csv;charset=utf-8",
-    );
   };
 
   const handlePrint = () => {
@@ -699,7 +571,7 @@ export default function AnnualToWeeklyRentConverter() {
     },
     {
       q: "Why do I see many decimals when rounding is off?",
-      a: "Some conversions produce repeating decimals. When rounding is off, the tool shows the full 12-decimal fixed-point precision it uses internally so you can see the exact computed value.",
+      a: "Some conversions produce repeating decimals. When rounding is off, the tool shows up to 12 decimals without forcing trailing zeros, so you can see the computed precision.",
     },
     {
       q: "Does currency selection convert exchange rates?",
@@ -756,6 +628,10 @@ export default function AnnualToWeeklyRentConverter() {
           <a href={safeHref("/")} className="hover:underline">
             Home
           </a>{" "}
+          /{" "}
+          <a href={safeHref("/rent-converter")} className="hover:underline">
+            Rent Converter
+          </a>{" "}
           / Annual to Weekly Rent Converter
         </nav>
       </section>
@@ -770,6 +646,23 @@ export default function AnnualToWeeklyRentConverter() {
           comparison, you can also see a <strong>365-day-week</strong>{" "}
           equivalent (<strong>annual × 7 ÷ 365</strong>) and other period
           breakdowns.
+        </p>
+        <p className="mt-3 text-sm text-slate-600">
+          Related tools:{" "}
+          <a
+            href={safeHref("/annual-to-monthly-rent-converter")}
+            className="font-semibold text-sky-800 hover:underline"
+          >
+            Annual to Monthly
+          </a>{" "}
+          and{" "}
+          <a
+            href={safeHref("/weekly-to-annual-rent-converter")}
+            className="font-semibold text-sky-800 hover:underline"
+          >
+            Weekly to Annual
+          </a>
+          .
         </p>
       </section>
 
@@ -799,7 +692,9 @@ export default function AnnualToWeeklyRentConverter() {
               <div className="flex gap-2">
                 <input
                   inputMode="decimal"
-                  value={amount}
+                  value={amountDisplayValue}
+                  onFocus={() => setAmountFocused(true)}
+                  onBlur={() => setAmountFocused(false)}
                   onChange={(e) => setAmount(e.target.value)}
                   placeholder="e.g. 24000 or 24000.50"
                   className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
@@ -825,12 +720,6 @@ export default function AnnualToWeeklyRentConverter() {
                   ))}
                 </select>
               </div>
-
-              <p id="rc-amount-help" className="mt-2 text-xs text-slate-500">
-                Accepted inputs: $24,000.50, 24000, 24000.00, .5, 12., 1250,50
-                (comma decimal). If your input is ambiguous, you will see a
-                warning or an error instead of a misleading result.
-              </p>
 
               {!parsedAnnual.ok ? (
                 <p
@@ -868,73 +757,6 @@ export default function AnnualToWeeklyRentConverter() {
                   <div className="mt-1 text-base font-bold text-slate-800">
                     Weekly (annual ÷ 52)
                   </div>
-                </div>
-              </div>
-
-              <div className="mt-3 rounded-xl border border-slate-200 bg-white p-4">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                  <div>
-                    <div className="text-xs text-slate-500">
-                      Rounding (display only)
-                    </div>
-                    <label className="mt-1 flex items-center gap-2 text-sm text-slate-700">
-                      <input
-                        type="checkbox"
-                        checked={roundDisplay}
-                        onChange={(e) => setRoundDisplay(e.target.checked)}
-                        className="h-4 w-4"
-                      />
-                      Round displayed values
-                    </label>
-                    <p className="mt-1 text-xs text-slate-500">
-                      Computation preserves up to 12 decimals internally. When
-                      rounding is off, the page shows 12 decimals.
-                    </p>
-                  </div>
-
-                  <div className="sm:text-right">
-                    <div className="text-xs text-slate-500">
-                      Displayed decimals
-                    </div>
-                    <select
-                      value={displayDecimals}
-                      onChange={(e) =>
-                        setDisplayDecimals(
-                          Math.max(
-                            0,
-                            Math.min(
-                              6,
-                              Math.trunc(Number(e.target.value) || 2),
-                            ),
-                          ),
-                        )
-                      }
-                      disabled={!roundDisplay}
-                      className={`mt-1 rounded-xl border bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 ${
-                        roundDisplay
-                          ? "border-slate-300"
-                          : "border-slate-200 text-slate-400 cursor-not-allowed"
-                      }`}
-                      aria-label="Displayed decimals"
-                    >
-                      <option value={0}>0</option>
-                      <option value={2}>2</option>
-                      <option value={4}>4</option>
-                      <option value={6}>6</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="mt-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
-                  <div className="font-semibold">
-                    What “weekly” means on this page
-                  </div>
-                  <p className="mt-1 text-xs text-slate-600">
-                    The headline weekly result is <strong>annual ÷ 52</strong>{" "}
-                    (budgeting view). For comparison, the tool also shows{" "}
-                    <strong>annual × 7 ÷ 365</strong> (365-day-year weekly) so
-                    you can see the difference.
-                  </p>
                 </div>
               </div>
             </div>
@@ -1002,7 +824,7 @@ export default function AnnualToWeeklyRentConverter() {
                       </>
                     ) : (
                       <>
-                        Displayed values show 12 decimals (no display rounding).
+                        Displayed values show up to 12 decimals (display-only).
                       </>
                     )}
                   </div>
@@ -1177,6 +999,62 @@ export default function AnnualToWeeklyRentConverter() {
             are for budgeting and comparison, not a promise of exact due dates
             or billed totals.
           </p>
+        </div>
+
+        <div className="mt-3 rounded-xl border border-slate-200 bg-white p-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <div className="text-xs text-slate-500">
+                Rounding (display only)
+              </div>
+              <label className="mt-1 flex items-center gap-2 text-sm text-slate-700">
+                <input
+                  type="checkbox"
+                  checked={roundDisplay}
+                  onChange={(e) => setRoundDisplay(e.target.checked)}
+                  className="h-4 w-4"
+                />
+                Round displayed values
+              </label>
+              <p className="mt-1 text-xs text-slate-500">
+                Computation preserves up to 12 decimals internally.
+              </p>
+            </div>
+
+            <div className="sm:text-right">
+              <div className="text-xs text-slate-500">Displayed decimals</div>
+              <select
+                value={displayDecimals}
+                onChange={(e) =>
+                  setDisplayDecimals(validateDisplayDecimals(e.target.value))
+                }
+                disabled={!roundDisplay}
+                className={`mt-1 rounded-xl border bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 ${
+                  roundDisplay
+                    ? "border-slate-300"
+                    : "border-slate-200 text-slate-400 cursor-not-allowed"
+                }`}
+                aria-label="Displayed decimals"
+              >
+                <option value={0}>0</option>
+                <option value={2}>2</option>
+                <option value={4}>4</option>
+                <option value={6}>6</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="mt-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+            <div className="font-semibold">
+              What “weekly” means on this page
+            </div>
+            <p className="mt-1 text-xs text-slate-600">
+              The headline weekly result is <strong>annual ÷ 52</strong>{" "}
+              (budgeting view). For comparison, the tool also shows{" "}
+              <strong>annual × 7 ÷ 365</strong> (365-day-year weekly) so you can
+              see the difference.
+            </p>
+          </div>
         </div>
       </section>
 

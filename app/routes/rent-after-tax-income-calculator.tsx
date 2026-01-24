@@ -962,11 +962,7 @@ export default function RentAfterTaxIncome() {
                   ))}
                 </select>
               </div>
-              <p className="mt-2 text-xs text-slate-500">
-                Accepted inputs: $60,000, 60000.00, .5, 12., 60000,50 (comma
-                decimal). If input is invalid or ambiguous, results are not
-                shown.
-              </p>
+
               {!grossParsed.ok ? (
                 <p className="mt-2 text-sm font-semibold text-rose-700">
                   {grossParsed.error}

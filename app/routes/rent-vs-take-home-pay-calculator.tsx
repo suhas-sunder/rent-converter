@@ -865,10 +865,6 @@ export default function RentVsTakeHomePay() {
                   ))}
                 </select>
               </div>
-              <p className="mt-2 text-xs text-slate-500">
-                Accepted inputs: $5,000, 5000.00, .5, 12., 5000,50 (comma
-                decimal).
-              </p>
             </div>
 
             <div className="md:col-span-6">

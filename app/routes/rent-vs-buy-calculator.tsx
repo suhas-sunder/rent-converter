@@ -1201,10 +1201,6 @@ export default function RentVsBuyCalculator() {
                 className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                 aria-invalid={!parsed.rent.ok}
               />
-              <p className="mt-2 text-xs text-slate-500">
-                Accepted inputs: $2,200, 2200.00, .5, 12., 2200,50 (comma
-                decimal).
-              </p>
 
               <div className="mt-4">
                 <label className="block text-sm font-semibold text-slate-700 mb-2">

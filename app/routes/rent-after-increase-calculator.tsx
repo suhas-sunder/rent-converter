@@ -1003,11 +1003,7 @@ export default function RentAfterIncrease() {
                 aria-invalid={!currentParsed.ok}
                 aria-describedby={currentDescribedBy}
               />
-              <p id="rc-current-help" className="mt-2 text-xs text-slate-500">
-                Accepted inputs: $2,000, 2000.00, 2000, .5, 12., 2000,50 (comma
-                decimal). If input is invalid or ambiguous, results are not
-                shown.
-              </p>
+              
               {!currentParsed.ok ? (
                 <p
                   id="rc-current-error"

@@ -805,11 +805,6 @@ export default function RentPaidEvery4Weeks() {
                 </select>
               </div>
 
-              <p id={amountHelpId} className="mt-2 text-xs text-slate-600">
-                Accepted inputs: $650, 650, 650.00, .5, 12., 650,50 (comma
-                decimal). Ambiguous formats are rejected.
-              </p>
-
               {!parsed.ok ? (
                 <p
                   id={amountErrorId}

@@ -1,93 +1,200 @@
-You are auditing and applying SMALL, LOCAL fixes to RentConverter.com Remix/React pages (TypeScript). Do NOT refactor architecture, do NOT add libraries, and do NOT rewrite unrelated sections. Make simple, safe edits only.
-1. Comma grouping for large numeric inputs without breaking calculations
-   Goal: when the user types 2000, the UI should help them see 2,000, but parsing must still work.
-   Implement the simplest approach:
+Hard constraints (absolute)
 
-- Keep raw typing while the input is focused.
-- On blur (or when not focused), display a formatted version with thousands separators.
-- Parsing must always strip grouping separators and must not change the actual numeric value used.
-- Do NOT introduce caret jumping. Prefer format-on-blur instead of live formatting.
-- If you choose to add an inline “preview” instead of formatting the input value itself, that is acceptable, as long as it shows grouped digits (e.g., “Preview: 2,000.00”) and never breaks calculations.
+Do NOT refactor architecture.
 
-2. Display decimals: consistent behavior with default 2
+Do NOT add libraries.
 
-- The default displayDecimals must be 2.
-- LocalStorage must be validated:
-  - Only allow: 0, 2, 4, 6 (exact).
-  - Any invalid value (null/NaN/other numbers) must fall back to 2.
-- Selecting 0 must reliably display 0 decimals (never randomly reverting to 2 or 4).
-- Rounding is display-only; internal math stays at full precision.
-- IMPORTANT: Fix current formatting logic so “roundDisplay = false” does NOT force minimumFractionDigits=2 and maximumFractionDigits=12 in a way that makes the UI confusing.
-  - Expected behavior:
-    - If roundDisplay=true: min=max=displayDecimals.
-    - If roundDisplay=false: show up to 12 decimals, but do NOT force 2 decimals if the number is an integer; minimumFractionDigits should be 0 (or at most 2 only if you explicitly justify it as a product decision). Keep it consistent across pages.
+Do NOT rewrite unrelated sections.
 
-3. Currency conversion correctness for all supported currencies (site-wide contract)
-   Even if this specific page doesn’t convert between currencies, enforce a consistent rule:
+Make minimal, safe, localized edits only.
 
-- Any conversion feature must support every currency in SUPPORTED_CURRENCIES.
-- Validate base/target currency selections with isCurrency().
-- If rate data is missing/unavailable, results must show a clear error state and hide converted outputs (no NaN, no zeros).
-- Display rounding is allowed; conversion math must preserve decimals internally.
+Do NOT change existing behavior unless explicitly required below.
 
-4. There may be code related to downloading/exporting CSV format. I removed that feature. You can remove it, but do it carefully without breaking any other features. You can also remove and text that mentions csv download or export.
+Keep all existing exports, route types, and Remix conventions intact.
 
-5. There's a list of valid links available for internal linking. If it's worth linking more pages, feel free to do so with the appropriate contextual information. Don't overdo it if there are already enough links being displayed.
+If route type imports use ./+types/<route-name>, keep the slug consistent everywhere (canonical, og:url, schema, links).
 
+Output rules (NON-NEGOTIABLE)
 
-INPUT GROUPING PREVIEW RULE (NON-NEGOTIABLE)
+In Step 2, output ONLY the full updated file contents inside exactly one fenced code block.
 
-Goal:
-When the amount input is NOT focused, show a human-friendly preview with grouping separators (commas) so large numbers are readable. When the input IS focused, show the raw editable string exactly as the user typed it (no auto-formatting while typing).
+Start the fence with ts or tsx (matching the file).
+
+End with ```
+
+No text before or after the code block.
+
+No diffs, no snippets, no explanations, no comments, no headings.
+
+No extra whitespace outside the single code block.
+
+Process
+
+This message is instruction-only. Do NOT write code yet.
+
+You must respond with exactly:
+
+One sentence confirming you understand every requirement.
+
+The exact phrase: “Ready for the code.”
+
+After I paste the page code, return ONLY the full updated code per the output rules.
+
+Fix requirements (must be implemented exactly)
+1) Comma-grouped preview formatting for ALL amount inputs (PRIMARY, NON-NEGOTIABLE)
+
+Goal: Improve readability (e.g. 2000 → 2,000) without breaking parsing, without caret jumping, and without altering user typing.
 
 Definitions:
-- rawValue: the exact string in state that updates on every keystroke.
-- parsedValue: the validated numeric interpretation (scaled integer / fixed-point).
-- previewValue: the display-only, grouped representation derived from parsedValue.
 
-Behavior:
-1) While focused:
-   - input.value MUST equal rawValue.
-   - Do NOT inject commas or reformat the string while typing.
-   - Do NOT change decimals, remove trailing ".", or rewrite ".5" into "0.5".
-2) On blur (not focused):
-   - if rawValue parses successfully:
-       input.value MUST switch to previewValue = grouped formatting of parsedValue
-       (example: "240000" -> "240,000")
-   - if rawValue is invalid/ambiguous:
-       input.value MUST remain rawValue (do NOT “fix” it)
-       show an error message instead of silently changing it
-3) On focus again:
-   - immediately revert the input display back to rawValue (the editable string), not the grouped preview.
+rawValue: Exact string stored in React state, updated every keystroke.
 
-Formatting requirements for previewValue:
-- Add grouping separators to the integer part (locale OK, but must include commas in en-US).
-- Preserve decimals (do not drop them).
-- Preserve up to the parser’s supported decimal precision (example: up to 6 or 12).
-- If currency formatting is used elsewhere, previewValue may be either:
-   A) grouped number only: "240,000.50"
-   B) currency-formatted: "HK$240,000.50"
-   But MUST be consistent across the app. (Pick one and stick to it.)
+parsedValue: Validated numeric interpretation used for calculations (full precision).
 
-Examples (expected):
-- rawValue "240000"   -> blur preview "240,000"
-- rawValue "240000.5" -> blur preview "240,000.5" (or "240,000.50" only if you explicitly standardize decimals)
-- rawValue ".5"       -> blur preview "0.5" (display-only; on focus should show ".5" again)
-- rawValue "12."      -> blur preview "12" or "12.0" ONLY if the parser treats trailing dot as valid; on focus must show "12."
-- rawValue "1,250.50" -> blur preview "1,250.50"
-- rawValue "$1,234.56"-> blur preview "1,234.56" (or "$1,234.56" if currency preview is chosen)
-- rawValue "1250,50"  -> blur preview "1,250.50" if comma-decimal is accepted and unambiguous
-- rawValue "1,2"      -> invalid, keep "1,2" on blur and show error (no preview)
+previewValue: Display-only, comma-grouped representation derived from parsedValue.
+
+Required behavior:
+
+While focused
+
+input.value MUST equal rawValue.
+
+Never inject commas or reformat while typing.
+
+Never rewrite .5 to 0.5.
+
+Never remove a trailing ..
+
+Never auto-correct, normalize, or “fix” user input.
+
+On blur
+
+If rawValue parses successfully into a finite number:
+
+Display previewValue using en-US thousands separators.
+
+Preserve decimals exactly as allowed by the parser.
+
+Do NOT drop decimals.
+
+If rawValue is invalid or ambiguous:
+
+Leave the displayed value exactly as rawValue.
+
+Show a visible error message.
+
+Do NOT silently fix or coerce the value.
+
+On focus
+
+Immediately revert display back to rawValue.
+
+No commas shown while focused.
+
+Formatting rules for previewValue:
+
+Use en-US grouping for the integer part.
+
+Preserve decimals.
+
+Preserve precision up to the parser’s max (e.g. 6 or 12).
+
+DISPLAY ONLY. rawValue must NEVER contain commas.
 
 Implementation constraint:
-- This is DISPLAY-ONLY formatting. rawValue in state must never be rewritten just to add commas.
-- This rule must be applied to ALL amount inputs across RentConverter.com routes going forward.
 
+Preview formatting MUST be done via a separate display layer (e.g. focus state + conditional value or parallel display state).
 
-Deliverables
-A) Out the updated code in full.
-D) Keep changes minimal. No large refactors.
+rawValue must remain untouched by formatting logic.
 
-Fix the code and give it back in full. No comments. No questions. Just the full fixed code.
+No mid-edit reformatting under any circumstance.
 
-Page provided for inspection (apply fixes here): 
+2) Display decimals and strict localStorage validation
+
+Default displayDecimals = 2.
+
+Read from localStorage with strict validation:
+
+Allowed values ONLY: 0, 2, 4, 6.
+
+Any other value (null, NaN, undefined, other numbers) MUST fall back to 2.
+
+Selecting 0 decimals must reliably persist and display 0 (no reversion).
+
+Rounding is display-only. Internal math remains full precision.
+
+Formatting behavior:
+
+If roundDisplay === true:
+
+minimumFractionDigits = displayDecimals
+
+maximumFractionDigits = displayDecimals
+
+If roundDisplay === false:
+
+minimumFractionDigits = 0
+
+maximumFractionDigits = 12
+
+Do NOT force decimals on integers.
+
+3) Currency conversion correctness (site-wide contract)
+
+If this page performs currency conversion:
+
+Must support every currency in SUPPORTED_CURRENCIES.
+
+Validate base and target currencies with isCurrency().
+
+If rate data is missing or unavailable:
+
+Show a clear error state.
+
+Hide converted outputs.
+
+No NaN, no 0, no misleading fallback values.
+
+Display rounding is allowed.
+
+Conversion math must preserve full internal precision.
+
+4) CSV / export removal (HARD REQUIREMENT)
+
+Remove ALL CSV/export-related code, UI, handlers, helpers, and text.
+
+Do NOT leave commented code.
+
+Do NOT reintroduce CSV/export logic in any form.
+
+Ensure removal does NOT break unrelated features.
+
+5) Internal linking
+
+There is a whitelist of valid internal routes.
+
+If genuinely useful, add 1–3 contextual internal links.
+
+Do NOT link to non-existent routes.
+
+Slugs must exactly match route definitions.
+
+Pre-output self-check (MANDATORY)
+
+Before emitting Step 2 code, verify:
+
+All amount inputs show commas ONLY on blur when valid.
+
+Inputs revert to raw (no commas) immediately on focus.
+
+rawValue never contains commas.
+
+.5 stays .5 while typing.
+
+Trailing . is preserved while typing.
+
+Invalid input remains unchanged on blur and shows an error.
+
+No CSV/export code or text exists anywhere.
+
+Output is exactly one full-file code block and nothing else.

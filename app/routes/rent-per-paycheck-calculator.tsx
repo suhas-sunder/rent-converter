@@ -860,13 +860,7 @@ export default function RentPerPaycheck() {
                   ))}
                 </select>
               </div>
-              <p
-                id={amountHelpId}
-                className="mt-2 text-xs text-slate-600 leading-relaxed"
-              >
-                Accepted inputs: $2,000, 2000.00, .5, 12., 2000,50 (comma
-                decimal). Ambiguous formats are rejected.
-              </p>
+
               {!parsedAmount.ok ? (
                 <p
                   id={amountErrorId}

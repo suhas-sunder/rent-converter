@@ -774,15 +774,6 @@ export default function DailyToMonthlyRent() {
                 </select>
               </div>
 
-              <p
-                id="rc-amount-help"
-                className="mt-2 text-sm text-slate-600 leading-relaxed"
-              >
-                Accepted inputs: $70.50, 70, 70.00, .5, 12., 1250,50 (comma
-                decimal). If an input is ambiguous, the page shows a warning or
-                error instead of a misleading result.
-              </p>
-
               {!parsedDaily.ok ? (
                 <p
                   id="rc-amount-error"

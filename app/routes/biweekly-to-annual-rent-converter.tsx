@@ -7,7 +7,7 @@ import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 export const meta: Route.MetaFunction = () => {
   const title = "Biweekly to Annual Rent Converter (14-day basis)";
   const description =
-    "Convert biweekly rent (every 14 days) to an annual equivalent using a 365-day year. Decimal-safe input, full breakdown, payment-count context (26 vs 365/14), CSV export, and print-to-PDF.";
+    "Convert biweekly rent (every 14 days) to an annual equivalent using a 365-day year. Decimal-safe input, full breakdown, payment-count context (26 vs 365/14), and print-to-PDF.";
 
   return [
     { title },
@@ -179,15 +179,26 @@ function toNumberSafe(scaled: bigint): number {
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
-  displayDecimals: number,
+  displayDecimals: 0 | 2 | 4 | 6,
+  roundDisplay: boolean,
 ): string {
   const n = toNumberSafe(scaled);
   if (!Number.isFinite(n)) return "—";
+
+  const opts = roundDisplay
+    ? {
+        maximumFractionDigits: displayDecimals,
+        minimumFractionDigits: displayDecimals,
+      }
+    : {
+        maximumFractionDigits: 12,
+        minimumFractionDigits: 0,
+      };
+
   return new Intl.NumberFormat(undefined, {
     style: "currency",
     currency,
-    maximumFractionDigits: Math.max(0, Math.min(12, displayDecimals)),
-    minimumFractionDigits: 0,
+    ...opts,
   }).format(n);
 }
 
@@ -348,32 +359,6 @@ function biweeklyToPeriodScaled(
   }
 }
 
-function buildCsvRow(cols: string[]): string {
-  return cols
-    .map((c) => {
-      const s = String(c ?? "");
-      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
-      return s;
-    })
-    .join(",");
-}
-
-function downloadTextFile(
-  filename: string,
-  content: string,
-  mime = "text/plain;charset=utf-8",
-) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
 function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   if (raw === null) return fallback;
   try {
@@ -384,6 +369,25 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   }
 }
 
+function validateDisplayDecimals(raw: string | null): 0 | 2 | 4 | 6 {
+  const n = raw === null ? NaN : Number(raw);
+  if (n === 0 || n === 2 || n === 4 || n === 6) return n;
+  return 2;
+}
+
+function formatGroupedPreviewFromNormalized(normalized: string): string {
+  const s = (normalized ?? "").trim();
+  if (!s) return s;
+  const [intRaw, fracRaw] = s.split(".");
+  const intPart = intRaw && /^\d+$/.test(intRaw) ? intRaw : "0";
+  const groupedInt = new Intl.NumberFormat("en-US", {
+    useGrouping: true,
+    maximumFractionDigits: 0,
+  }).format(Number(intPart));
+  if (fracRaw === undefined || fracRaw === "") return groupedInt;
+  return `${groupedInt}.${fracRaw}`;
+}
+
 export default function BiweeklyToAnnualRent() {
   const [amount, setAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "900";
@@ -391,18 +395,18 @@ export default function BiweeklyToAnnualRent() {
     return saved ?? "900";
   });
 
+  const [amountFocused, setAmountFocused] = useState<boolean>(false);
+
   const [currency, setCurrency] = useState<Currency>(() => {
     if (typeof window === "undefined") return "USD";
     const saved = window.localStorage.getItem("rc_b2a_currency");
     return saved && isCurrency(saved) ? saved : "USD";
   });
 
-  const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
+  const [displayDecimals, setDisplayDecimals] = useState<0 | 2 | 4 | 6>(() => {
     if (typeof window === "undefined") return 2;
     const saved = window.localStorage.getItem("rc_b2a_display_decimals");
-    const n = saved ? Number(saved) : 2;
-    if (!Number.isFinite(n)) return 2;
-    return Math.max(0, Math.min(6, Math.trunc(n)));
+    return validateDisplayDecimals(saved);
   });
 
   const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
@@ -448,6 +452,14 @@ export default function BiweeklyToAnnualRent() {
 
   const canShowResults = parsedBiweekly.ok;
 
+  const amountDisplayValue = useMemo(() => {
+    if (amountFocused) return amount;
+    if (parsedBiweekly.ok && parsedBiweekly.normalized) {
+      return formatGroupedPreviewFromNormalized(parsedBiweekly.normalized);
+    }
+    return amount;
+  }, [amountFocused, amount, parsedBiweekly.ok, parsedBiweekly.normalized]);
+
   const breakdownScaled = useMemo(() => {
     if (!parsedBiweekly.ok) return null;
 
@@ -461,7 +473,6 @@ export default function BiweeklyToAnnualRent() {
 
     // Payment-count context: 26 vs 365/14
     const annualVia26 = biweeklyScaled * 26n;
-    const countBiweeks365_num = 365 / 14; // for display only, use number below
     const annualVia365Day = annual;
 
     const annualDiff = annualVia365Day - annualVia26;
@@ -483,7 +494,6 @@ export default function BiweeklyToAnnualRent() {
 
       annualVia26,
       annualVia365Day,
-      countBiweeks365_num,
 
       annualDiff,
       annualDiffPct,
@@ -493,9 +503,8 @@ export default function BiweeklyToAnnualRent() {
     };
   }, [parsedBiweekly.ok, biweeklyScaled]);
 
-  const effectiveDisplayDecimals = roundDisplay ? displayDecimals : 12;
   const fmt = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, effectiveDisplayDecimals);
+    formatCurrencyFromScaled(scaled, currency, displayDecimals, roundDisplay);
 
   const annualHeadlineScaled = breakdownScaled?.annual ?? 0n;
 
@@ -510,90 +519,6 @@ export default function BiweeklyToAnnualRent() {
       if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
       copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
     }
-  };
-
-  const handleExportCsv = () => {
-    if (!canShowResults || !breakdownScaled) return;
-
-    const rows: string[] = [];
-    rows.push(buildCsvRow(["Biweekly to Annual Rent Converter"]));
-    rows.push(
-      buildCsvRow([
-        "Assumptions",
-        "Year=365 days",
-        "Biweekly=14 days",
-        "Month=365 ÷ 12 days (average)",
-      ]),
-    );
-    rows.push(buildCsvRow(["Currency formatting", currency]));
-    rows.push(
-      buildCsvRow([
-        "Display",
-        roundDisplay
-          ? `Rounded to ${displayDecimals} decimals for display`
-          : "No display rounding (shows up to 12 decimals)",
-      ]),
-    );
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Input (Biweekly)", fmt(biweeklyScaled)]));
-    rows.push(buildCsvRow(["Headline (Annual)", fmt(annualHeadlineScaled)]));
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Period", "Amount"]));
-    const items: Array<[Period, bigint]> = [
-      ["hourly", breakdownScaled.hourly],
-      ["daily", breakdownScaled.daily],
-      ["weekly", breakdownScaled.weekly],
-      ["biweekly", breakdownScaled.biweekly],
-      ["every_4_weeks", breakdownScaled.every4w],
-      ["monthly", breakdownScaled.monthly],
-      ["annual", breakdownScaled.annual],
-    ];
-    for (const [p, val] of items)
-      rows.push(buildCsvRow([PERIOD_LABEL[p], fmt(val)]));
-
-    rows.push(buildCsvRow([""]));
-    rows.push(buildCsvRow(["Payment-count context (illustrative)"]));
-    rows.push(buildCsvRow(["Biweekly × 26", fmt(breakdownScaled.annualVia26)]));
-    rows.push(
-      buildCsvRow([
-        "365-day annual equivalence",
-        fmt(breakdownScaled.annualVia365Day),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Difference (365-day minus 26x)",
-        fmt(breakdownScaled.annualDiff),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Difference (%) of 26x",
-        formatPercent(breakdownScaled.annualDiffPct, 2),
-      ]),
-    );
-
-    rows.push(buildCsvRow([""]));
-    rows.push(
-      buildCsvRow([
-        "Monthly minus 4-week",
-        fmt(breakdownScaled.monthlyMinus4w),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Monthly vs 4-week difference (%)",
-        formatPercent(breakdownScaled.monthlyMinus4wPct, 2),
-      ]),
-    );
-
-    downloadTextFile(
-      "biweekly-to-annual-rent-converter.csv",
-      rows.join("\n"),
-      "text/csv;charset=utf-8",
-    );
   };
 
   const handlePrint = () => {
@@ -684,6 +609,13 @@ export default function BiweeklyToAnnualRent() {
           >
             Home
           </a>{" "}
+          /{" "}
+          <a
+            href={safeHref("/rent-converter")}
+            className="hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+          >
+            Rent Converter
+          </a>{" "}
           / Biweekly to Annual Rent Converter
         </nav>
       </section>
@@ -696,6 +628,23 @@ export default function BiweeklyToAnnualRent() {
           Convert a biweekly rent amount (every 14 days) into an annual
           equivalent using a 365-day year. Results update instantly and include
           a full breakdown plus a 26-payments shortcut comparison.
+        </p>
+        <p className="mt-3 text-sm text-slate-600">
+          Related tools:{" "}
+          <a
+            href={safeHref("/biweekly-to-monthly-rent-converter")}
+            className="font-semibold text-sky-800 hover:underline"
+          >
+            Biweekly to Monthly
+          </a>{" "}
+          and{" "}
+          <a
+            href={safeHref("/biweekly-to-weekly-rent-converter")}
+            className="font-semibold text-sky-800 hover:underline"
+          >
+            Biweekly to Weekly
+          </a>
+          .
         </p>
       </section>
 
@@ -729,7 +678,9 @@ export default function BiweeklyToAnnualRent() {
                 <input
                   id={amountInputId}
                   inputMode="decimal"
-                  value={amount}
+                  value={amountDisplayValue}
+                  onFocus={() => setAmountFocused(true)}
+                  onBlur={() => setAmountFocused(false)}
                   onChange={(e) => setAmount(e.target.value)}
                   placeholder="e.g. 900 or 900.50"
                   className="w-full rounded-xl border border-slate-300 px-4 py-3.5 text-base sm:text-[1.05rem] leading-6 outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus-visible:border-sky-500"
@@ -755,15 +706,6 @@ export default function BiweeklyToAnnualRent() {
                   ))}
                 </select>
               </div>
-
-              <p
-                id="rc-amount-help"
-                className="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed"
-              >
-                Accepted inputs: $900.50, 900, 900.00, .5, 12., 1250,50 (comma
-                decimal). If your input is ambiguous, you will see a warning or
-                an error instead of a misleading result.
-              </p>
 
               {!parsedBiweekly.ok ? (
                 <p
@@ -806,68 +748,6 @@ export default function BiweeklyToAnnualRent() {
                   <div className="mt-1 text-base font-bold text-slate-900">
                     {PERIOD_LABEL.annual}
                   </div>
-                </div>
-              </div>
-
-              <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4 sm:p-5">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                  <div className="min-w-0">
-                    <div className="text-xs text-slate-600">
-                      Rounding (display only)
-                    </div>
-                    <label className="mt-1 flex items-center gap-2 text-sm sm:text-[0.95rem] text-slate-800">
-                      <input
-                        type="checkbox"
-                        checked={roundDisplay}
-                        onChange={(e) => setRoundDisplay(e.target.checked)}
-                        className="h-4 w-4 rounded border-slate-300 text-sky-600 focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-                      />
-                      Round displayed values
-                    </label>
-                    <p className="mt-1 text-xs sm:text-sm text-slate-600 leading-relaxed">
-                      Calculations use up to 12 decimals internally. If enabled,
-                      displayed values are rounded to your chosen decimals.
-                    </p>
-                  </div>
-
-                  <div className="sm:text-right">
-                    <div className="text-xs text-slate-600">
-                      Displayed decimals
-                    </div>
-                    <select
-                      value={displayDecimals}
-                      onChange={(e) =>
-                        setDisplayDecimals(
-                          Math.max(
-                            0,
-                            Math.min(
-                              6,
-                              Math.trunc(Number(e.target.value) || 2),
-                            ),
-                          ),
-                        )
-                      }
-                      className="mt-1 rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm sm:text-base font-semibold outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus-visible:border-sky-500"
-                      aria-label="Displayed decimals"
-                    >
-                      <option value={0}>0</option>
-                      <option value={2}>2</option>
-                      <option value={4}>4</option>
-                      <option value={6}>6</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm text-slate-800">
-                  <div className="font-semibold">
-                    What the annual result represents
-                  </div>
-                  <p className="mt-1 text-xs sm:text-sm text-slate-700 leading-relaxed">
-                    Biweekly is treated as a 14-day amount. This tool converts
-                    to a daily equivalent (biweekly ÷ 14) and multiplies by 365
-                    to produce an annual equivalence. A separate panel shows the
-                    common shortcut biweekly × 26 so you can see the difference.
-                  </p>
                 </div>
               </div>
             </div>
@@ -1098,6 +978,63 @@ export default function BiweeklyToAnnualRent() {
             4-week = 28 days, month = 365 ÷ 12 days (average). Actual due dates
             and billing terms vary by agreement.
           </p>
+        </div>
+
+        <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4 sm:p-5">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="min-w-0">
+              <div className="text-xs text-slate-600">
+                Rounding (display only)
+              </div>
+              <label className="mt-1 flex items-center gap-2 text-sm sm:text-[0.95rem] text-slate-800">
+                <input
+                  type="checkbox"
+                  checked={roundDisplay}
+                  onChange={(e) => setRoundDisplay(e.target.checked)}
+                  className="h-4 w-4 rounded border-slate-300 text-sky-600 focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                />
+                Round displayed values
+              </label>
+              <p className="mt-1 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Calculations use up to 12 decimals internally. If enabled,
+                displayed values are rounded to your chosen decimals.
+              </p>
+            </div>
+
+            <div className="sm:text-right">
+              <div className="text-xs text-slate-600">Displayed decimals</div>
+              <select
+                value={displayDecimals}
+                onChange={(e) =>
+                  setDisplayDecimals(validateDisplayDecimals(e.target.value))
+                }
+                className={`mt-1 rounded-xl border bg-white px-3 py-2.5 text-sm sm:text-base font-semibold outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus-visible:border-sky-500 ${
+                  roundDisplay
+                    ? "border-slate-300"
+                    : "border-slate-200 text-slate-400 cursor-not-allowed"
+                }`}
+                aria-label="Displayed decimals"
+                disabled={!roundDisplay}
+              >
+                <option value={0}>0</option>
+                <option value={2}>2</option>
+                <option value={4}>4</option>
+                <option value={6}>6</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm text-slate-800">
+            <div className="font-semibold">
+              What the annual result represents
+            </div>
+            <p className="mt-1 text-xs sm:text-sm text-slate-700 leading-relaxed">
+              Biweekly is treated as a 14-day amount. This tool converts to a
+              daily equivalent (biweekly ÷ 14) and multiplies by 365 to produce
+              an annual equivalence. A separate panel shows the common shortcut
+              biweekly × 26 so you can see the difference.
+            </p>
+          </div>
         </div>
       </section>
 

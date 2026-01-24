@@ -869,10 +869,7 @@ export default function RentAsPercentageOfIncome() {
                   ))}
                 </select>
               </div>
-              <p className="mt-2 text-xs text-slate-500">
-                Accepted inputs: $2,200, 2200.00, .5, 12., 2200,50 (comma
-                decimal). Invalid or ambiguous input hides results.
-              </p>
+
               {!rentParsed.ok ? (
                 <p className="mt-2 text-sm font-semibold text-rose-700">
                   {rentParsed.error}

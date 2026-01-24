@@ -783,10 +783,6 @@ export default function RentPerWeekCalculator() {
                   ))}
                 </select>
               </div>
-              <p className="mt-2 text-xs text-slate-500">
-                Accepted inputs: $2,000, 2000.00, .5, 12., 2000,50 (comma
-                decimal). Ambiguous formats are rejected.
-              </p>
             </div>
 
             <div className="md:col-span-6">

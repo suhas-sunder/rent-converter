@@ -984,19 +984,7 @@ export default function Home() {
                   {validation.message}
                 </p>
               ) : (
-                <p
-                  id={amountHelpId}
-                  className="mt-2 text-xs text-slate-600 leading-relaxed"
-                >
-                  Accepted examples: <span className="font-semibold">$650</span>
-                  , <span className="font-semibold">650.00</span>,{" "}
-                  <span className="font-semibold">1,250.50</span>,{" "}
-                  <span className="font-semibold">.5</span>,{" "}
-                  <span className="font-semibold">12.</span>, or{" "}
-                  <span className="font-semibold">1250,50</span> (comma-decimal
-                  with 2 digits). Ambiguous inputs are rejected to avoid false
-                  results.
-                </p>
+                <></>
               )}
 
               {interpretationLine ? (

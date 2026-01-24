@@ -849,9 +849,6 @@ export default function WeeklyToBiweeklyRent() {
                   ))}
                 </select>
               </div>
-              <p className="mt-2 text-xs text-slate-500">
-                Accepted: $450, 450.00, .5, 12., 450,50.
-              </p>
             </div>
 
             <div className="md:col-span-5">
