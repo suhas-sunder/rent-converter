@@ -12,7 +12,7 @@ export const meta: Route.MetaFunction = () => [
   {
     name: "description",
     content:
-      "Understand rent paid every 4 weeks (28 days). Convert a 4-week rent amount to monthly (average) and annual equivalents using a consistent 365-day annual basis. Includes payment-count context, a 13-payments comparison, and export tools.",
+      "Understand rent paid every 4 weeks (28 days). Convert a 4-week rent amount to monthly (average) and annual equivalents using a consistent 365-day annual basis. Includes payment-count context and a 13-payments comparison.",
   },
   {
     name: "keywords",
@@ -194,16 +194,47 @@ function toNumberSafe(scaled: bigint): number {
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
+  roundDisplay: boolean,
   displayDecimals: number,
 ): string {
   const n = toNumberSafe(scaled);
   if (!Number.isFinite(n)) return "—";
-  const digits = Math.max(0, Math.min(12, displayDecimals));
+
+  if (roundDisplay) {
+    const digits = displayDecimals;
+    return new Intl.NumberFormat(undefined, {
+      style: "currency",
+      currency,
+      minimumFractionDigits: digits,
+      maximumFractionDigits: digits,
+    }).format(n);
+  }
+
   return new Intl.NumberFormat(undefined, {
     style: "currency",
     currency,
-    minimumFractionDigits: digits,
-    maximumFractionDigits: digits,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 12,
+  }).format(n);
+}
+
+function formatNumberPreviewFromParsed(
+  parsed: ParsedScaled,
+  locale = "en-US",
+): string | null {
+  if (!parsed.ok || typeof parsed.scaled === "undefined") return null;
+
+  const n = toNumberSafe(parsed.scaled);
+  if (!Number.isFinite(n)) return null;
+
+  const normalized = parsed.normalized ?? "";
+  const dot = normalized.indexOf(".");
+  const decimals = dot >= 0 ? Math.max(0, normalized.length - dot - 1) : 0;
+
+  return new Intl.NumberFormat(locale, {
+    useGrouping: true,
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
   }).format(n);
 }
 
@@ -343,32 +374,6 @@ function fromAnnualScaled(annualScaled: bigint, to: Period): bigint {
   return annualScaled / 365n / 24n; // hourly
 }
 
-function buildCsvRow(cols: string[]): string {
-  return cols
-    .map((c) => {
-      const s = String(c ?? "");
-      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
-      return s;
-    })
-    .join(",");
-}
-
-function downloadTextFile(
-  filename: string,
-  content: string,
-  mime = "text/plain;charset=utf-8",
-) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
 function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   if (raw === null) return fallback;
   try {
@@ -379,6 +384,22 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   }
 }
 
+function sanitizeRawAmountKeepCaret(raw: string, caret: number | null) {
+  const before = caret === null ? raw : raw.slice(0, Math.max(0, caret));
+  const commasBefore = (before.match(/,/g) || []).length;
+  const sanitized = raw.replace(/,/g, "");
+  const nextCaret = caret === null ? null : Math.max(0, caret - commasBefore);
+  return { sanitized, nextCaret };
+}
+
+function coerceDisplayDecimalsFromStorage(raw: string | null): number {
+  const allowed = new Set([0, 2, 4, 6]);
+  const n = raw === null ? NaN : Number(raw);
+  if (!Number.isFinite(n)) return 2;
+  const t = Math.trunc(n);
+  return allowed.has(t) ? t : 2;
+}
+
 export default function RentPaidEvery4Weeks() {
   const pageName = "Rent Paid Every 4 Weeks (28 Days) Calculator";
   const canonicalUrl =
@@ -386,8 +407,11 @@ export default function RentPaidEvery4Weeks() {
 
   const [amount, setAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "650";
-    return localStorage.getItem("rc_4w_amount") ?? "650";
+    const saved = localStorage.getItem("rc_4w_amount") ?? "650";
+    return saved.replace(/,/g, "");
   });
+
+  const [amountFocused, setAmountFocused] = useState<boolean>(false);
 
   const [currency, setCurrency] = useState<Currency>(() => {
     if (typeof window === "undefined") return "USD";
@@ -403,10 +427,9 @@ export default function RentPaidEvery4Weeks() {
 
   const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
     if (typeof window === "undefined") return 2;
-    const saved = localStorage.getItem("rc_4w_display_decimals");
-    const n = saved ? Number(saved) : 2;
-    if (!Number.isFinite(n)) return 2;
-    return Math.max(0, Math.min(6, Math.trunc(n)));
+    return coerceDisplayDecimalsFromStorage(
+      localStorage.getItem("rc_4w_display_decimals"),
+    );
   });
 
   useEffect(() => {
@@ -423,9 +446,8 @@ export default function RentPaidEvery4Weeks() {
 
   const parsed = useMemo(() => parseMoneyInputToScaled(amount), [amount]);
 
-  const effectiveDisplayDecimals = roundDisplay ? displayDecimals : 12;
   const fmtMoney = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, effectiveDisplayDecimals);
+    formatCurrencyFromScaled(scaled, currency, roundDisplay, displayDecimals);
 
   const computed = useMemo(() => {
     const warnings: string[] = [];
@@ -497,6 +519,17 @@ export default function RentPaidEvery4Weeks() {
     };
   }, [parsed]);
 
+  const amountPreviewValue = useMemo(() => {
+    const preview = formatNumberPreviewFromParsed(parsed, "en-US");
+    return preview ?? amount;
+  }, [parsed, amount]);
+
+  const amountDisplayValue = amountFocused
+    ? amount
+    : parsed.ok
+      ? amountPreviewValue
+      : amount;
+
   const faqData = [
     {
       q: "What does “rent paid every 4 weeks” mean?",
@@ -564,103 +597,13 @@ export default function RentPaidEvery4Weeks() {
     "@type": "WebPage",
     name: pageName,
     description:
-      "Convert rent paid every 4 weeks (28 days) into monthly (average), weekly, and annual equivalents using a consistent 365-day annual basis. Includes schedule comparisons and exports.",
+      "Convert rent paid every 4 weeks (28 days) into monthly (average), weekly, and annual equivalents using a consistent 365-day annual basis. Includes schedule comparisons.",
     url: canonicalUrl,
   };
 
   const handlePrint = () => {
     if (typeof window === "undefined") return;
     window.print();
-  };
-
-  const handleExportCsv = () => {
-    if (!computed.ok) return;
-
-    const rows: string[] = [];
-    rows.push(buildCsvRow([pageName]));
-    rows.push(buildCsvRow(["Currency", currency]));
-    rows.push(buildCsvRow(["Input", amount]));
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Equivalents (annual-basis)"]));
-    rows.push(buildCsvRow(["Period", "Amount"]));
-    rows.push(
-      buildCsvRow([PERIOD_LABEL.hourly, fmtMoney(computed.hourlyScaled)]),
-    );
-    rows.push(
-      buildCsvRow([PERIOD_LABEL.daily, fmtMoney(computed.dailyScaled)]),
-    );
-    rows.push(
-      buildCsvRow([PERIOD_LABEL.weekly, fmtMoney(computed.weeklyScaled)]),
-    );
-    rows.push(
-      buildCsvRow([PERIOD_LABEL.biweekly, fmtMoney(computed.biweeklyScaled)]),
-    );
-    rows.push(
-      buildCsvRow([
-        PERIOD_LABEL.every_4_weeks,
-        fmtMoney(computed.every4wScaled),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([PERIOD_LABEL.monthly, fmtMoney(computed.monthlyScaled)]),
-    );
-    rows.push(
-      buildCsvRow([PERIOD_LABEL.annual, fmtMoney(computed.annualScaled)]),
-    );
-
-    rows.push(buildCsvRow([""]));
-    rows.push(buildCsvRow(["Comparisons"]));
-    rows.push(
-      buildCsvRow([
-        "4-week x 13 (52-week framing)",
-        fmtMoney(computed.annualVia13Scaled),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Annual (365-day equivalence)",
-        fmtMoney(computed.annualScaled),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Difference (365-day minus 13x)",
-        fmtMoney(computed.diffAnnualScaled),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Difference percent",
-        `${computed.diffAnnualPct.toFixed(2)}%`,
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Monthly minus 4-week (same annual basis)",
-        fmtMoney(computed.monthlyMinus4wScaled),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Monthly minus 4-week percent",
-        `${computed.monthlyMinus4wPct.toFixed(2)}%`,
-      ]),
-    );
-
-    rows.push(buildCsvRow([""]));
-    rows.push(
-      buildCsvRow([
-        "Assumptions",
-        "Year=365 days, Week=7 days, Biweekly=14 days, Every 4 weeks=28 days, Month=365/12 days (average).",
-      ]),
-    );
-
-    downloadTextFile(
-      "rent-paid-every-4-weeks-28-days.csv",
-      rows.join("\n"),
-      "text/csv;charset=utf-8",
-    );
   };
 
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
@@ -721,7 +664,7 @@ export default function RentPaidEvery4Weeks() {
         <h1 className="text-4xl sm:text-[2.6rem] leading-tight font-bold text-slate-900 mb-4">
           {pageName}
         </h1>
-        <p className="text-slate-600 max-w-3xl mx-auto text-lg leading-relaxed">
+        <p className="text-slate-600 max-w-5xl mx-auto text-lg leading-relaxed">
           A 4-week rent schedule is a 28-day cycle, not a calendar month. This
           page converts a 4-week rent amount into monthly (average) and annual
           equivalents so you can compare listings and budgets on the same annual
@@ -737,10 +680,6 @@ export default function RentPaidEvery4Weeks() {
               <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
                 Convert 4-week rent to monthly and annual
               </h2>
-              <p className="mt-1 text-sm text-slate-600 leading-relaxed">
-                Inputs are validated. Invalid input hides results, so you do not
-                get misleading zeros.
-              </p>
             </div>
 
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
@@ -767,8 +706,29 @@ export default function RentPaidEvery4Weeks() {
                 <input
                   id="rc-4w-amount"
                   inputMode="decimal"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
+                  value={amountDisplayValue}
+                  onFocus={() => setAmountFocused(true)}
+                  onBlur={() => setAmountFocused(false)}
+                  onChange={(e) => {
+                    const caret = e.currentTarget.selectionStart;
+                    const next = sanitizeRawAmountKeepCaret(
+                      e.target.value,
+                      caret,
+                    );
+                    setAmount(next.sanitized);
+                    if (next.nextCaret !== null) {
+                      queueMicrotask(() => {
+                        try {
+                          e.currentTarget.setSelectionRange(
+                            next.nextCaret as number,
+                            next.nextCaret as number,
+                          );
+                        } catch {
+                          // ignore
+                        }
+                      });
+                    }
+                  }}
                   placeholder="e.g. 650 or 650.00"
                   className={`w-full rounded-xl border px-4 py-3.5 text-base outline-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
                     parsed.ok
@@ -813,57 +773,6 @@ export default function RentPaidEvery4Weeks() {
                   {parsed.error}
                 </p>
               ) : null}
-            </div>
-
-            <div className="md:col-span-6">
-              <label className="block text-sm font-semibold text-slate-800 mb-2">
-                Display
-              </label>
-              <div className="rounded-xl border border-slate-200 bg-white p-4">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                  <label className="flex items-center gap-2 text-sm text-slate-800">
-                    <input
-                      type="checkbox"
-                      checked={roundDisplay}
-                      onChange={(e) => setRoundDisplay(e.target.checked)}
-                      className="h-4 w-4 rounded border-slate-300 text-sky-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-                    />
-                    Round displayed values (display only)
-                  </label>
-
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs text-slate-600">
-                      Displayed decimals
-                    </span>
-                    <select
-                      value={displayDecimals}
-                      onChange={(e) =>
-                        setDisplayDecimals(
-                          Math.max(
-                            0,
-                            Math.min(
-                              6,
-                              Math.trunc(Number(e.target.value) || 2),
-                            ),
-                          ),
-                        )
-                      }
-                      className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus:border-sky-600"
-                      aria-label="Displayed decimals"
-                    >
-                      <option value={0}>0</option>
-                      <option value={2}>2</option>
-                      <option value={4}>4</option>
-                      <option value={6}>6</option>
-                    </select>
-                  </div>
-                </div>
-
-                <p className="mt-2 text-xs text-slate-600">
-                  Calculations preserve decimals internally (up to 12). Only
-                  display rounding changes.
-                </p>
-              </div>
             </div>
           </div>
 
@@ -1094,6 +1003,48 @@ export default function RentPaidEvery4Weeks() {
             </p>
           </div>
         </div>
+
+        <div className="md:col-span-6 mt-6">
+          <div className="rounded-xl border border-slate-200 bg-white p-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <label className="flex items-center gap-2 text-sm text-slate-800">
+                <input
+                  type="checkbox"
+                  checked={roundDisplay}
+                  onChange={(e) => setRoundDisplay(e.target.checked)}
+                  className="h-4 w-4 rounded border-slate-300 text-sky-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                />
+                Round displayed values (display only)
+              </label>
+
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-slate-600">
+                  Displayed decimals
+                </span>
+                <select
+                  value={displayDecimals}
+                  onChange={(e) =>
+                    setDisplayDecimals(
+                      coerceDisplayDecimalsFromStorage(e.target.value),
+                    )
+                  }
+                  className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus:border-sky-600"
+                  aria-label="Displayed decimals"
+                >
+                  <option value={0}>0</option>
+                  <option value={2}>2</option>
+                  <option value={4}>4</option>
+                  <option value={6}>6</option>
+                </select>
+              </div>
+            </div>
+
+            <p className="mt-2 text-xs text-slate-600">
+              Calculations preserve decimals internally (up to 12). Only display
+              rounding changes.
+            </p>
+          </div>
+        </div>
       </section>
 
       {/* Annual payment count table */}
@@ -1240,6 +1191,20 @@ export default function RentPaidEvery4Weeks() {
               className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded"
             >
               rent converter
+            </a>
+            ,{" "}
+            <a
+              href={safeHref("/weekly-to-monthly-rent-converter")}
+              className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded"
+            >
+              weekly to monthly
+            </a>
+            ,{" "}
+            <a
+              href={safeHref("/monthly-to-annual-rent-converter")}
+              className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded"
+            >
+              monthly to annual
             </a>
             .
           </p>

@@ -715,11 +715,11 @@ export default function HourlyToAnnualRent() {
         </nav>
       </section>
 
-      <section className="pb-8 text-center bg-white rc-no-print">
+      <section className="flex flex-col pb-8 text-center bg-white rc-no-print">
         <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-4 tracking-tight">
           Hourly to Annual Rent Converter
         </h1>
-        <p className="text-slate-700 max-w-3xl mx-auto text-lg leading-relaxed">
+        <p className="text-slate-700 max-w-5xl mx-auto text-lg leading-relaxed">
           Convert an hourly amount into an annual rent equivalent using annual
           equivalence as the source of truth. If “hourly” can mean “paid hours
           only,” you can switch to a paid-hours scenario to see how the assumed
@@ -730,11 +730,10 @@ export default function HourlyToAnnualRent() {
       <section id="converter" className="mx-auto max-w-6xl px-6 pb-6">
         <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:p-8 rc-print-block">
           <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-            <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
+            <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-auto">
               Instant hourly to annual conversion
             </h2>
-
-            <div className="mt-4 max-w-xl rounded-xl border border-slate-200 bg-white p-4">
+            <div className="ml-auto max-w-xl rounded-xl border border-slate-200 bg-white p-4">
               <div className="text-sm font-semibold text-slate-800 mb-2">
                 Hour interpretation
               </div>
@@ -746,7 +745,7 @@ export default function HourlyToAnnualRent() {
                 <button
                   type="button"
                   onClick={() => setHourMode("clock")}
-                  className={`px-3 py-2 text-sm font-semibold rounded-lg transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 ${
+                  className={`cursor-pointer px-3 py-2 text-sm font-semibold rounded-lg transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 ${
                     hourMode === "clock"
                       ? "bg-sky-600 text-white"
                       : "text-slate-800 hover:bg-slate-50"
@@ -760,7 +759,7 @@ export default function HourlyToAnnualRent() {
                 <button
                   type="button"
                   onClick={() => setHourMode("paid")}
-                  className={`px-3 py-2 text-sm font-semibold rounded-lg transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 ${
+                  className={`cursor-pointer px-3 py-2 text-sm font-semibold rounded-lg transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 ${
                     hourMode === "paid"
                       ? "bg-sky-600 text-white"
                       : "text-slate-800 hover:bg-slate-50"
@@ -771,12 +770,6 @@ export default function HourlyToAnnualRent() {
                 >
                   Paid hours
                 </button>
-              </div>
-
-              <div className="mt-3 text-sm text-slate-600 leading-relaxed">
-                24/7 hours uses a pure time-based equivalence. Paid hours shows
-                a scenario where the hourly amount applies only to a chosen
-                number of hours per week.
               </div>
 
               {hourMode === "paid" ? (
@@ -815,6 +808,16 @@ export default function HourlyToAnnualRent() {
                   ) : null}
                 </div>
               ) : null}
+            </div>
+
+            <div className="rc-no-print mt-5 flex flex-col sm:flex-row gap-2 mb-auto">
+              <button
+                type="button"
+                onClick={handlePrint}
+                className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
+              >
+                Print / Save as PDF
+              </button>
             </div>
           </div>
 
@@ -988,19 +991,6 @@ export default function HourlyToAnnualRent() {
                     ) : null}
                   </div>
 
-                  <div className="mt-1 text-sm text-slate-600 leading-relaxed">
-                    {roundDisplay ? (
-                      <>
-                        Displayed values rounded to {displayDecimals} decimals.
-                        Calculations use up to 12 decimals internally.
-                      </>
-                    ) : (
-                      <>
-                        Displayed values show up to 12 decimals (no display
-                        rounding).
-                      </>
-                    )}
-                  </div>
                 </div>
 
                 <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -1142,15 +1132,13 @@ export default function HourlyToAnnualRent() {
               </>
             )}
           </div>
-          <div className="rc-no-print mt-5 flex flex-col sm:flex-row gap-2">
-            <button
-              type="button"
-              onClick={handlePrint}
-              className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
-            >
-              Print / Save as PDF
-            </button>
+
+          <div className="mt-3 text-sm text-slate-600 leading-relaxed">
+            24/7 hours uses a pure time-based equivalence. Paid hours shows a
+            scenario where the hourly amount applies only to a chosen number of
+            hours per week.
           </div>
+
           <p className="mt-6 text-sm text-slate-600 leading-relaxed">
             Assumptions: year = 365 days, day = 24 hours, week = 7 days,
             biweekly = 14 days, 4-week = 28 days, month = 365 ÷ 12 days

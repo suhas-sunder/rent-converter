@@ -9,7 +9,7 @@ export const meta: Route.MetaFunction = () => [
   {
     name: "description",
     content:
-      "Convert weekly rent to a biweekly (14-day) equivalent using annual equivalence (365-day year). Includes a full breakdown, monthly vs 4-week context, export to CSV, and print-to-PDF.",
+      "Convert weekly rent to a biweekly (14-day) equivalent using annual equivalence (365-day year). Includes a full breakdown and monthly vs 4-week context.",
   },
   {
     name: "keywords",
@@ -188,16 +188,27 @@ function toNumberSafe(scaled: bigint): number {
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
+  roundDisplay: boolean,
   displayDecimals: number,
 ): string {
   const n = toNumberSafe(scaled);
   if (!Number.isFinite(n)) return "N/A";
-  const digits = Math.max(0, Math.min(12, displayDecimals));
+
+  if (roundDisplay) {
+    const digits = displayDecimals;
+    return new Intl.NumberFormat(undefined, {
+      style: "currency",
+      currency,
+      minimumFractionDigits: digits,
+      maximumFractionDigits: digits,
+    }).format(n);
+  }
+
   return new Intl.NumberFormat(undefined, {
     style: "currency",
     currency,
-    minimumFractionDigits: digits,
-    maximumFractionDigits: digits,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 12,
   }).format(n);
 }
 
@@ -307,6 +318,77 @@ function parseMoneyInputToScaled(raw: string, label = "value"): ParsedScaled {
   return { ok: true, scaled: clamped, warnings };
 }
 
+function isAmbiguousRawOnBlur(raw: string): boolean {
+  const s0 = (raw ?? "").trim();
+  if (!s0) return true;
+
+  const s = s0.replace(/\s+/g, "");
+  if (/[.,]$/.test(s)) return true;
+
+  const cleaned = s.replace(/[^\d.,]/g, "");
+  if (!cleaned) return true;
+  if (/[.,]$/.test(cleaned)) return true;
+
+  return false;
+}
+
+function getRawFractionDigitsForPreview(raw: string): number | null {
+  const s0 = (raw ?? "").trim();
+  if (!s0) return null;
+
+  let s = s0.replace(/\s+/g, "");
+  s = s.replace(/[^\d.,\-]/g, "");
+  if (!s) return null;
+  if (s.includes("-")) return null;
+
+  const lastDot = s.lastIndexOf(".");
+  const lastComma = s.lastIndexOf(",");
+  let decimalSep: "." | "," | null = null;
+
+  if (lastDot !== -1 && lastComma !== -1) {
+    decimalSep = lastDot > lastComma ? "." : ",";
+  } else if (lastDot !== -1) {
+    decimalSep = ".";
+  } else if (lastComma !== -1) {
+    const parts = s.split(",");
+    if (parts.length === 2) {
+      const before = parts[0] ?? "";
+      const after = parts[1] ?? "";
+      if (/^\d{1,2}$/.test(after)) decimalSep = ",";
+      else if (/^\d{3}$/.test(after) && /^\d{1,3}$/.test(before))
+        decimalSep = null;
+      else return null;
+    } else {
+      decimalSep = null;
+    }
+  }
+
+  if (!decimalSep) return 0;
+
+  const split = s.split(decimalSep);
+  if (split.length !== 2) return null;
+
+  const frac = split[1] ?? "";
+  if (frac.length === 0) return null;
+
+  const maxDec = Number(MAX_DECIMALS);
+  return Math.max(0, Math.min(maxDec, frac.length));
+}
+
+function formatNumberPreviewFromScaled(
+  scaled: bigint,
+  fractionDigits: number,
+): string {
+  const n = toNumberSafe(scaled);
+  if (!Number.isFinite(n)) return "";
+  const digits = Math.max(0, Math.min(12, Math.trunc(fractionDigits)));
+  return new Intl.NumberFormat("en-US", {
+    useGrouping: true,
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+  }).format(n);
+}
+
 function mulDivRound(a: bigint, num: bigint, den: bigint): bigint {
   if (den === 0n) return 0n;
   const sign =
@@ -377,43 +459,13 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   }
 }
 
-function safeParseInt(
-  raw: string | null,
-  fallback: number,
-  min: number,
-  max: number,
-): number {
+function safeParseDisplayDecimals(raw: string | null, fallback = 2): number {
   if (raw === null) return fallback;
   const n = Number(raw);
   if (!Number.isFinite(n)) return fallback;
   const t = Math.trunc(n);
-  return Math.max(min, Math.min(max, t));
-}
-
-function buildCsvRow(cols: string[]): string {
-  return cols
-    .map((c) => {
-      const s = String(c ?? "");
-      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
-      return s;
-    })
-    .join(",");
-}
-
-function downloadTextFile(
-  filename: string,
-  content: string,
-  mime = "text/plain;charset=utf-8",
-) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
+  if (t === 0 || t === 2 || t === 4 || t === 6) return t;
+  return fallback;
 }
 
 export default function WeeklyToBiweeklyRent() {
@@ -447,11 +499,9 @@ export default function WeeklyToBiweeklyRent() {
 
   const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
     if (typeof window === "undefined") return 2;
-    return safeParseInt(
+    return safeParseDisplayDecimals(
       localStorage.getItem("rc_wtbw_display_decimals"),
       2,
-      0,
-      6,
     );
   });
 
@@ -533,84 +583,12 @@ export default function WeeklyToBiweeklyRent() {
     };
   }, [parsed]);
 
-  const effectiveDisplayDecimals = roundDisplay ? displayDecimals : 12;
   const money = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, effectiveDisplayDecimals);
+    formatCurrencyFromScaled(scaled, currency, roundDisplay, displayDecimals);
 
   const handlePrint = () => {
     if (typeof window === "undefined") return;
     window.print();
-  };
-
-  const handleExportCsv = () => {
-    if (!computed.ok) return;
-
-    const rows: string[] = [];
-    rows.push(buildCsvRow([pageName]));
-    rows.push(buildCsvRow(["URL", canonicalUrl]));
-    rows.push(buildCsvRow(["Currency", currency]));
-    rows.push(buildCsvRow(["Input weekly amount (as entered)", amount]));
-    rows.push(buildCsvRow(["Display rounding enabled", String(roundDisplay)]));
-    rows.push(buildCsvRow(["Displayed decimals", String(displayDecimals)]));
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Primary conversion"]));
-    rows.push(buildCsvRow(["Weekly", money(computed.weekly)]));
-    rows.push(
-      buildCsvRow(["Biweekly (14-day equivalent)", money(computed.biweekly)]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Biweekly if exactly double weekly",
-        money(computed.biweeklyDouble),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Delta (biweekly - 2xweekly)",
-        money(computed.biweeklyDelta),
-      ]),
-    );
-
-    rows.push(buildCsvRow([""]));
-    rows.push(buildCsvRow(["Full breakdown (from annual total)"]));
-    rows.push(buildCsvRow(["Period", "Amount"]));
-    rows.push(buildCsvRow(["Hourly", money(computed.hourly)]));
-    rows.push(buildCsvRow(["Daily", money(computed.daily)]));
-    rows.push(buildCsvRow(["Weekly", money(computed.weekly)]));
-    rows.push(buildCsvRow(["Biweekly", money(computed.biweekly)]));
-    rows.push(
-      buildCsvRow(["Every 4 weeks (28 days)", money(computed.every_4_weeks)]),
-    );
-    rows.push(buildCsvRow(["Monthly (average)", money(computed.monthly)]));
-    rows.push(buildCsvRow(["Annual (365-day)", money(computed.annual)]));
-
-    rows.push(buildCsvRow([""]));
-    rows.push(buildCsvRow(["Monthly vs 4-week context"]));
-    rows.push(
-      buildCsvRow(["Monthly minus 4-week", money(computed.monthlyMinus4w)]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Monthly minus 4-week (% of 4-week)",
-        Number.isFinite(computed.monthlyMinus4wPct)
-          ? (computed.monthlyMinus4wPct * 100).toFixed(6)
-          : "",
-      ]),
-    );
-
-    rows.push(buildCsvRow([""]));
-    rows.push(buildCsvRow(["Calendar payment-count illustrations"]));
-    rows.push(buildCsvRow(["Weekly x 52", money(computed.annualFromWeekly52)]));
-    rows.push(
-      buildCsvRow(["Biweekly x 26", money(computed.annualFromBiweekly26)]),
-    );
-
-    downloadTextFile(
-      "weekly-to-biweekly-rent.csv",
-      rows.join("\n"),
-      "text/csv;charset=utf-8",
-    );
   };
 
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
@@ -634,6 +612,54 @@ export default function WeeklyToBiweeklyRent() {
       copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
     }
   };
+
+  const [amountFocused, setAmountFocused] = useState(false);
+  const [amountBlurred, setAmountBlurred] = useState(false);
+  const [amountBlurError, setAmountBlurError] = useState<string | null>(null);
+
+  const amountDisplayValue = useMemo(() => {
+    if (amountFocused) return amount;
+
+    if (!amountBlurred) return amount;
+
+    if (amountBlurError) return amount;
+
+    if (!parsed.ok) return amount;
+
+    const fd = getRawFractionDigitsForPreview(amount);
+    if (fd === null) return amount;
+
+    return formatNumberPreviewFromScaled(parsed.p.scaled as bigint, fd);
+  }, [amountFocused, amountBlurred, amountBlurError, amount, parsed]);
+
+  useEffect(() => {
+    if (!amountBlurred) return;
+
+    const trimmed = (amount ?? "").trim();
+    if (!trimmed) {
+      setAmountBlurError("Enter weekly rent amount.");
+      return;
+    }
+
+    if (isAmbiguousRawOnBlur(amount)) {
+      setAmountBlurError("That value is incomplete or ambiguous.");
+      return;
+    }
+
+    const p = parseMoneyInputToScaled(amount, "weekly rent amount");
+    if (!p.ok) {
+      setAmountBlurError(p.error ?? "Enter a valid weekly rent amount.");
+      return;
+    }
+
+    const fd = getRawFractionDigitsForPreview(amount);
+    if (fd === null) {
+      setAmountBlurError("That value is incomplete or ambiguous.");
+      return;
+    }
+
+    setAmountBlurError(null);
+  }, [amount, amountBlurred]);
 
   const faqData = [
     {
@@ -730,7 +756,7 @@ export default function WeeklyToBiweeklyRent() {
         <h1 className="text-4xl font-bold text-slate-800 mb-4">
           Weekly to Biweekly Rent Converter
         </h1>
-        <p className="text-slate-600 max-w-3xl mx-auto text-lg">
+        <p className="text-slate-600 max-w-5xl mx-auto text-lg">
           Convert a weekly rent amount into a biweekly (14-day) equivalent using
           annual equivalence (365-day year). This helps compare weekly listings
           with rent quoted every two weeks (often aligned to pay cycles).
@@ -744,26 +770,9 @@ export default function WeeklyToBiweeklyRent() {
               <h2 className="text-xl sm:text-2xl font-bold">
                 Instant weekly to biweekly conversion
               </h2>
-              <p className="text-sm text-slate-600 mt-2">
-                Invalid input hides results to avoid misleading 0 outputs.
-                Calculations preserve decimals; rounding is display-only.
-              </p>
             </div>
 
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
-              <button
-                type="button"
-                onClick={handleExportCsv}
-                disabled={!computed.ok}
-                className={`rounded-xl border px-4 py-2 text-sm font-semibold transition ${
-                  computed.ok
-                    ? "border-slate-200 bg-white text-slate-800 hover:bg-sky-50 hover:border-sky-200"
-                    : "border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed"
-                }`}
-                aria-disabled={!computed.ok}
-              >
-                Export CSV
-              </button>
               <button
                 type="button"
                 onClick={handlePrint}
@@ -774,48 +783,6 @@ export default function WeeklyToBiweeklyRent() {
             </div>
           </div>
 
-          {/* Display controls */}
-          <div className="mb-6 rounded-2xl border border-slate-200 bg-white p-5 rc-no-print">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <label className="flex items-center gap-2 text-sm text-slate-700">
-                <input
-                  type="checkbox"
-                  checked={roundDisplay}
-                  onChange={(e) => setRoundDisplay(e.target.checked)}
-                  className="h-4 w-4"
-                />
-                Round displayed values (display only)
-              </label>
-
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-slate-500">
-                  Displayed decimals
-                </span>
-                <select
-                  value={displayDecimals}
-                  onChange={(e) =>
-                    setDisplayDecimals(
-                      Math.max(
-                        0,
-                        Math.min(6, Math.trunc(Number(e.target.value) || 2)),
-                      ),
-                    )
-                  }
-                  className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
-                >
-                  <option value={0}>0</option>
-                  <option value={2}>2</option>
-                  <option value={4}>4</option>
-                  <option value={6}>6</option>
-                </select>
-              </div>
-            </div>
-            <p className="mt-2 text-xs text-slate-500">
-              Internal math is fixed-point up to 12 decimals. This only changes
-              what is displayed.
-            </p>
-          </div>
-
           <div className="grid gap-5 md:grid-cols-12">
             <div className="md:col-span-7">
               <label className="block text-sm font-semibold text-slate-700 mb-2">
@@ -824,11 +791,16 @@ export default function WeeklyToBiweeklyRent() {
               <div className="flex gap-2">
                 <input
                   inputMode="decimal"
-                  value={amount}
+                  value={amountDisplayValue}
                   onChange={(e) => setAmount(e.target.value)}
+                  onFocus={() => setAmountFocused(true)}
+                  onBlur={() => {
+                    setAmountFocused(false);
+                    setAmountBlurred(true);
+                  }}
                   placeholder="e.g. 450"
                   className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
-                  aria-invalid={!parsed.ok}
+                  aria-invalid={amountBlurred && !!amountBlurError}
                 />
                 <select
                   value={currency}
@@ -849,6 +821,12 @@ export default function WeeklyToBiweeklyRent() {
                   ))}
                 </select>
               </div>
+
+              {amountBlurred && amountBlurError ? (
+                <div className="mt-2 text-sm text-rose-700 font-semibold">
+                  {amountBlurError}
+                </div>
+              ) : null}
             </div>
 
             <div className="md:col-span-5">
@@ -868,18 +846,6 @@ export default function WeeklyToBiweeklyRent() {
                     {PERIOD_LABEL.biweekly}
                   </div>
                 </div>
-              </div>
-
-              <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4">
-                <div className="text-xs text-slate-500">
-                  Interpretation note
-                </div>
-                <p className="mt-1 text-sm text-slate-700">
-                  Under day-based definitions, biweekly is 14 days and weekly is
-                  7 days, so the biweekly equivalent is effectively 2x weekly.
-                  This page still runs everything through a 365-day annual total
-                  so monthly and 4-week equivalents stay consistent.
-                </p>
               </div>
             </div>
           </div>
@@ -1057,6 +1023,43 @@ export default function WeeklyToBiweeklyRent() {
               </p>
             </>
           ) : null}
+        </div>
+
+        <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 rc-no-print">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <label className="flex items-center gap-2 text-sm text-slate-700">
+              <input
+                type="checkbox"
+                checked={roundDisplay}
+                onChange={(e) => setRoundDisplay(e.target.checked)}
+                className="h-4 w-4"
+              />
+              Round displayed values (display only)
+            </label>
+
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-slate-500">Displayed decimals</span>
+              <select
+                value={displayDecimals}
+                onChange={(e) => {
+                  const v = Math.trunc(Number(e.target.value));
+                  setDisplayDecimals(
+                    v === 0 || v === 2 || v === 4 || v === 6 ? v : 2,
+                  );
+                }}
+                className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
+              >
+                <option value={0}>0</option>
+                <option value={2}>2</option>
+                <option value={4}>4</option>
+                <option value={6}>6</option>
+              </select>
+            </div>
+          </div>
+          <p className="mt-2 text-xs text-slate-500">
+            Internal math is fixed-point up to 12 decimals. This only changes
+            what is displayed.
+          </p>
         </div>
       </section>
 

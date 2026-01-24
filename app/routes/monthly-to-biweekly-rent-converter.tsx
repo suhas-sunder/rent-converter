@@ -648,7 +648,7 @@ export default function MonthlyToBiweeklyRent() {
         <h1 className="text-4xl font-bold text-slate-800 mb-4">
           Monthly to Biweekly Rent Converter
         </h1>
-        <p className="text-slate-600 max-w-3xl mx-auto text-lg">
+        <p className="text-slate-600 max-w-5xl mx-auto text-lg">
           Convert a monthly rent amount into a biweekly equivalent using annual
           equivalence as the basis. This helps compare a monthly quote with rent
           expressed every two weeks, including pay-cycle style listings. See the{" "}

@@ -912,10 +912,6 @@ export default function RentAfterIncrease() {
               <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
                 Calculate the new rent after an increase
               </h2>
-              <p className="mt-1 text-sm text-slate-600 leading-relaxed">
-                Enter the current rent, choose how the increase is stated, and
-                select the billing period used by the rent amount.
-              </p>
             </div>
 
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
@@ -1133,9 +1129,6 @@ export default function RentAfterIncrease() {
                   </option>
                 ))}
               </select>
-              <p className="mt-2 text-xs text-slate-500">
-                Currency affects formatting only.
-              </p>
             </div>
 
             <div className="md:col-span-6" />

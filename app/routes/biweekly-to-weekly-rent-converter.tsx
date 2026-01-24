@@ -794,19 +794,6 @@ export default function BiweeklyToWeeklyRent() {
                     ) : null}
                   </div>
 
-                  <div className="mt-1 text-xs text-slate-500">
-                    {roundDisplay ? (
-                      <>
-                        Displayed values shown with exactly {displayDecimals}{" "}
-                        decimals. Calculations use up to 12 decimals internally.
-                      </>
-                    ) : (
-                      <>
-                        Displayed values show up to 12 decimals (no display
-                        rounding).
-                      </>
-                    )}
-                  </div>
                 </div>
 
                 <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

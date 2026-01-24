@@ -9,7 +9,7 @@ export const meta: Route.MetaFunction = () => [
   {
     name: "description",
     content:
-      "Convert weekly rent to an annual total using annual equivalence (365-day year). Includes a full period breakdown, 52 vs 365-day context, 4-week (28-day) context, export to CSV, and print-to-PDF.",
+      "Convert weekly rent to an annual total using annual equivalence (365-day year). Includes a full period breakdown, 52 vs 365-day context, 4-week (28-day) context, and print-to-PDF.",
   },
   {
     name: "keywords",
@@ -171,6 +171,7 @@ const SCALE = 10n ** MAX_DECIMALS;
 type ParsedScaled = {
   ok: boolean;
   scaled?: bigint;
+  decimals?: number;
   warnings: string[];
   error?: string;
 };
@@ -188,16 +189,33 @@ function toNumberSafe(scaled: bigint): number {
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
+  roundDisplay: boolean,
   displayDecimals: number,
 ): string {
   const n = toNumberSafe(scaled);
   if (!Number.isFinite(n)) return "—";
-  const digits = Math.max(0, Math.min(12, displayDecimals));
+
+  const dec = Math.max(0, Math.min(12, Math.trunc(displayDecimals)));
+  const minimumFractionDigits = roundDisplay ? dec : 0;
+  const maximumFractionDigits = roundDisplay ? dec : 12;
+
   return new Intl.NumberFormat(undefined, {
     style: "currency",
     currency,
-    minimumFractionDigits: digits,
-    maximumFractionDigits: digits,
+    minimumFractionDigits,
+    maximumFractionDigits,
+  }).format(n);
+}
+
+function formatPreviewFromParsedScaled(p: ParsedScaled): string {
+  if (!p.ok || p.scaled === undefined) return "";
+  const n = toNumberSafe(p.scaled);
+  if (!Number.isFinite(n)) return "";
+  const dec = Math.max(0, Math.min(12, Math.trunc(p.decimals ?? 0)));
+  return new Intl.NumberFormat("en-US", {
+    useGrouping: true,
+    minimumFractionDigits: dec,
+    maximumFractionDigits: dec,
   }).format(n);
 }
 
@@ -294,6 +312,7 @@ function parseMoneyInputToScaled(raw: string, label = "value"): ParsedScaled {
   const fracRaw = fracPart ?? "";
   const fracCapped =
     fracRaw.length > maxDec ? fracRaw.slice(0, maxDec) : fracRaw;
+  const decimals = fracCapped.length;
   const fracPadded = fracCapped.padEnd(maxDec, "0");
 
   const scaled =
@@ -304,7 +323,7 @@ function parseMoneyInputToScaled(raw: string, label = "value"): ParsedScaled {
   if (clamped !== scaled)
     warnings.push("Value was clamped to the supported maximum.");
 
-  return { ok: true, scaled: clamped, warnings };
+  return { ok: true, scaled: clamped, decimals, warnings };
 }
 
 function mulDivRound(a: bigint, num: bigint, den: bigint): bigint {
@@ -373,43 +392,20 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   }
 }
 
-function safeParseInt(
+function safeParseDisplayDecimals(
   raw: string | null,
   fallback: number,
-  min: number,
-  max: number,
 ): number {
   if (raw === null) return fallback;
   const n = Number(raw);
   if (!Number.isFinite(n)) return fallback;
   const t = Math.trunc(n);
-  return Math.max(min, Math.min(max, t));
+  return t === 0 || t === 2 || t === 4 || t === 6 ? t : fallback;
 }
 
-function buildCsvRow(cols: string[]): string {
-  return cols
-    .map((c) => {
-      const s = String(c ?? "");
-      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
-      return s;
-    })
-    .join(",");
-}
-
-function downloadTextFile(
-  filename: string,
-  content: string,
-  mime = "text/plain;charset=utf-8",
-) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
+function normalizeDisplayDecimals(n: number, fallback: number): number {
+  const t = Math.trunc(n);
+  return t === 0 || t === 2 || t === 4 || t === 6 ? t : fallback;
 }
 
 export default function WeeklyToAnnualRent() {
@@ -421,6 +417,8 @@ export default function WeeklyToAnnualRent() {
     if (typeof window === "undefined") return "550";
     return localStorage.getItem("rc_wta_amount") ?? "550";
   });
+
+  const [isAmountFocused, setIsAmountFocused] = useState<boolean>(false);
 
   const [currency, setCurrency] = useState<Currency>(() => {
     if (typeof window === "undefined") return "USD";
@@ -442,11 +440,9 @@ export default function WeeklyToAnnualRent() {
 
   const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
     if (typeof window === "undefined") return 2;
-    return safeParseInt(
+    return safeParseDisplayDecimals(
       localStorage.getItem("rc_wta_display_decimals"),
       2,
-      0,
-      6,
     );
   });
 
@@ -472,6 +468,12 @@ export default function WeeklyToAnnualRent() {
     if (!p.ok) errors.push(p.error ?? "Enter a weekly rent amount.");
     return { ok: errors.length === 0, errors, warnings: p.warnings, p };
   }, [amount]);
+
+  const amountDisplayValue = useMemo(() => {
+    if (isAmountFocused) return amount;
+    if (parsed.ok) return formatPreviewFromParsedScaled(parsed.p);
+    return amount;
+  }, [amount, isAmountFocused, parsed.ok, parsed.p]);
 
   const computed = useMemo(() => {
     if (!parsed.ok)
@@ -542,117 +544,12 @@ export default function WeeklyToAnnualRent() {
     };
   }, [parsed]);
 
-  const effectiveDisplayDecimals = roundDisplay ? displayDecimals : 12;
   const money = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, effectiveDisplayDecimals);
+    formatCurrencyFromScaled(scaled, currency, roundDisplay, displayDecimals);
 
   const handlePrint = () => {
     if (typeof window === "undefined") return;
     window.print();
-  };
-
-  const handleExportCsv = () => {
-    if (!computed.ok) return;
-
-    const rows: string[] = [];
-    rows.push(buildCsvRow([pageName]));
-    rows.push(buildCsvRow(["URL", canonicalUrl]));
-    rows.push(buildCsvRow(["Currency", currency]));
-    rows.push(buildCsvRow(["Input weekly amount (as entered)", amount]));
-    rows.push(buildCsvRow(["Display rounding enabled", String(roundDisplay)]));
-    rows.push(buildCsvRow(["Displayed decimals", String(displayDecimals)]));
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Annual equivalent (365-day annual equivalence)"]));
-    rows.push(buildCsvRow(["Weekly rent", money(computed.weekly)]));
-    rows.push(
-      buildCsvRow(["Annual rent (annualized)", money(computed.annual)]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Implied weeks per 365-day year",
-        Number.isFinite(computed.impliedWeeksPerYear)
-          ? computed.impliedWeeksPerYear.toFixed(6)
-          : "",
-      ]),
-    );
-
-    rows.push(buildCsvRow([""]));
-    rows.push(buildCsvRow(["Full period breakdown (from annual total)"]));
-    rows.push(buildCsvRow(["Period", "Amount"]));
-    rows.push(buildCsvRow(["Hourly", money(computed.hourly)]));
-    rows.push(buildCsvRow(["Daily", money(computed.daily)]));
-    rows.push(buildCsvRow(["Weekly", money(computed.weekly)]));
-    rows.push(buildCsvRow(["Every 2 weeks", money(computed.biweekly)]));
-    rows.push(
-      buildCsvRow(["Every 4 weeks (28 days)", money(computed.fourWeeks)]),
-    );
-    rows.push(buildCsvRow(["Monthly (average)", money(computed.monthly)]));
-    rows.push(buildCsvRow(["Annual", money(computed.annual)]));
-
-    rows.push(buildCsvRow([""]));
-    rows.push(buildCsvRow(["Payment-count context"]));
-    rows.push(
-      buildCsvRow([
-        "52 weekly payments (weekly × 52)",
-        money(computed.annualIf52Payments),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "365-day basis minus (weekly × 52)",
-        money(computed.delta52),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Difference vs 52 (%)",
-        Number.isFinite(computed.pct52)
-          ? (computed.pct52 * 100).toFixed(6)
-          : "",
-      ]),
-    );
-
-    rows.push(
-      buildCsvRow([
-        "53 weekly payments (weekly × 53)",
-        money(computed.annualIf53Payments),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "365-day basis minus (weekly × 53)",
-        money(computed.delta53),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Difference vs 53 (%)",
-        Number.isFinite(computed.pct53)
-          ? (computed.pct53 * 100).toFixed(6)
-          : "",
-      ]),
-    );
-
-    rows.push(buildCsvRow([""]));
-    rows.push(buildCsvRow(["4-week vs monthly context"]));
-    rows.push(
-      buildCsvRow(["Monthly minus 4-week", money(computed.monthlyMinus4w)]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Monthly minus 4-week (% of 4-week)",
-        Number.isFinite(computed.monthlyMinus4wPct)
-          ? (computed.monthlyMinus4wPct * 100).toFixed(6)
-          : "",
-      ]),
-    );
-
-    downloadTextFile(
-      "weekly-to-annual-rent.csv",
-      rows.join("\n"),
-      "text/csv;charset=utf-8",
-    );
   };
 
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
@@ -756,11 +653,6 @@ export default function WeeklyToAnnualRent() {
         <h1 className="text-4xl font-bold text-slate-800 mb-4">
           Weekly to Annual Rent Converter
         </h1>
-        <p className="text-slate-600 max-w-3xl mx-auto text-lg">
-          Convert weekly rent into an annual total using annual equivalence as
-          the source of truth (365-day year). This keeps the breakdown
-          consistent across monthly, 4-week, and daily equivalents.
-        </p>
       </section>
 
       <section id="converter" className="mx-auto max-w-6xl px-6 pb-6">
@@ -770,10 +662,6 @@ export default function WeeklyToAnnualRent() {
               <h2 className="text-xl sm:text-2xl font-bold">
                 Instant weekly to annual conversion
               </h2>
-              <p className="text-sm text-slate-600 mt-2">
-                Invalid input hides results to avoid misleading “0” outputs.
-                Calculations preserve decimals; rounding is display-only.
-              </p>
             </div>
 
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
@@ -787,47 +675,6 @@ export default function WeeklyToAnnualRent() {
             </div>
           </div>
 
-          <div className="mb-6 rounded-2xl border border-slate-200 bg-white p-5 rc-no-print">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <label className="flex items-center gap-2 text-sm text-slate-700">
-                <input
-                  type="checkbox"
-                  checked={roundDisplay}
-                  onChange={(e) => setRoundDisplay(e.target.checked)}
-                  className="h-4 w-4"
-                />
-                Round displayed values (display only)
-              </label>
-
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-slate-500">
-                  Displayed decimals
-                </span>
-                <select
-                  value={displayDecimals}
-                  onChange={(e) =>
-                    setDisplayDecimals(
-                      Math.max(
-                        0,
-                        Math.min(6, Math.trunc(Number(e.target.value) || 2)),
-                      ),
-                    )
-                  }
-                  className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
-                >
-                  <option value={0}>0</option>
-                  <option value={2}>2</option>
-                  <option value={4}>4</option>
-                  <option value={6}>6</option>
-                </select>
-              </div>
-            </div>
-            <p className="mt-2 text-xs text-slate-500">
-              Internal math is fixed-point up to 12 decimals. This only changes
-              what is displayed.
-            </p>
-          </div>
-
           <div className="grid gap-5 md:grid-cols-12">
             <div className="md:col-span-7">
               <label className="block text-sm font-semibold text-slate-700 mb-2">
@@ -836,8 +683,10 @@ export default function WeeklyToAnnualRent() {
               <div className="flex gap-2">
                 <input
                   inputMode="decimal"
-                  value={amount}
+                  value={amountDisplayValue}
                   onChange={(e) => setAmount(e.target.value)}
+                  onFocus={() => setIsAmountFocused(true)}
+                  onBlur={() => setIsAmountFocused(false)}
                   placeholder="e.g. 550"
                   className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!parsed.ok}
@@ -1092,6 +941,45 @@ export default function WeeklyToAnnualRent() {
             </>
           ) : null}
         </div>
+        
+
+          <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 rc-no-print">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <label className="flex items-center gap-2 text-sm text-slate-700">
+                <input
+                  type="checkbox"
+                  checked={roundDisplay}
+                  onChange={(e) => setRoundDisplay(e.target.checked)}
+                  className="h-4 w-4"
+                />
+                Round displayed values (display only)
+              </label>
+
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-slate-500">
+                  Displayed decimals
+                </span>
+                <select
+                  value={displayDecimals}
+                  onChange={(e) =>
+                    setDisplayDecimals(
+                      normalizeDisplayDecimals(Number(e.target.value), 2),
+                    )
+                  }
+                  className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
+                >
+                  <option value={0}>0</option>
+                  <option value={2}>2</option>
+                  <option value={4}>4</option>
+                  <option value={6}>6</option>
+                </select>
+              </div>
+            </div>
+            <p className="mt-2 text-xs text-slate-500">
+              Internal math is fixed-point up to 12 decimals. This only changes
+              what is displayed.
+            </p>
+          </div>
       </section>
 
       <section id="learn" className="max-w-5xl mx-auto px-6 pt-8 rc-no-print">

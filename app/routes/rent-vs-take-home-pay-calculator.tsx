@@ -182,16 +182,21 @@ function toNumberSafe(scaled: bigint): number {
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
+  roundDisplay: boolean,
   displayDecimals: number,
 ): string {
   const n = toNumberSafe(scaled);
   if (!Number.isFinite(n)) return "—";
+
   const digits = Math.max(0, Math.min(12, displayDecimals));
+  const minimumFractionDigits = roundDisplay ? digits : 0;
+  const maximumFractionDigits = roundDisplay ? digits : 12;
+
   return new Intl.NumberFormat(undefined, {
     style: "currency",
     currency,
-    minimumFractionDigits: digits,
-    maximumFractionDigits: digits,
+    minimumFractionDigits,
+    maximumFractionDigits,
   }).format(n);
 }
 
@@ -365,43 +370,86 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   }
 }
 
-function safeParseInt(
+function safeParseDisplayDecimals(
   raw: string | null,
   fallback: number,
-  min: number,
-  max: number,
 ): number {
   if (raw === null) return fallback;
   const n = Number(raw);
   if (!Number.isFinite(n)) return fallback;
   const t = Math.trunc(n);
-  return Math.max(min, Math.min(max, t));
+  return t === 0 || t === 2 || t === 4 || t === 6 ? t : fallback;
 }
 
-function buildCsvRow(cols: string[]): string {
-  return cols
-    .map((c) => {
-      const s = String(c ?? "");
-      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
-      return s;
-    })
-    .join(",");
+function stripCommas(s: string): string {
+  return (s ?? "").replace(/,/g, "");
 }
 
-function downloadTextFile(
-  filename: string,
-  content: string,
-  mime = "text/plain;charset=utf-8",
-) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
+function inferPreviewFraction(raw: string): {
+  fractionDigits: number;
+  trailingDecimalPoint: boolean;
+} {
+  const s0 = (raw ?? "").trim();
+  if (!s0) return { fractionDigits: 0, trailingDecimalPoint: false };
+
+  let s = s0.replace(/\s+/g, "");
+  s = s.replace(/[^\d.,\-]/g, "");
+
+  const lastDot = s.lastIndexOf(".");
+  const lastComma = s.lastIndexOf(",");
+  let decimalSep: "." | "," | null = null;
+
+  if (lastDot !== -1 && lastComma !== -1) {
+    decimalSep = lastDot > lastComma ? "." : ",";
+  } else if (lastDot !== -1) {
+    decimalSep = ".";
+  } else if (lastComma !== -1) {
+    const parts = s.split(",");
+    if (parts.length === 2) {
+      const after = parts[1] ?? "";
+      if (/^\d{1,2}$/.test(after)) decimalSep = ",";
+      else decimalSep = null;
+    } else {
+      decimalSep = null;
+    }
+  }
+
+  if (!decimalSep) return { fractionDigits: 0, trailingDecimalPoint: false };
+
+  const idx = s.lastIndexOf(decimalSep);
+  const trailingDecimalPoint = idx === s.length - 1;
+
+  const frac = trailingDecimalPoint ? "" : s.slice(idx + 1);
+  const fracDigits = /^\d+$/.test(frac) ? Math.min(12, frac.length) : 0;
+
+  return { fractionDigits: fracDigits, trailingDecimalPoint };
+}
+
+function formatAmountPreviewFromRaw(raw: string): {
+  ok: boolean;
+  value: string;
+  error?: string;
+} {
+  const parsed = parseMoneyInputToScaled(raw, "value");
+  if (!parsed.ok || parsed.scaled === undefined)
+    return { ok: false, value: raw, error: parsed.error ?? "Enter a value." };
+
+  const n = toNumberSafe(parsed.scaled);
+  if (!Number.isFinite(n))
+    return { ok: false, value: raw, error: "Enter a valid value." };
+
+  const { fractionDigits, trailingDecimalPoint } = inferPreviewFraction(raw);
+
+  const formatted = new Intl.NumberFormat("en-US", {
+    useGrouping: true,
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits,
+  }).format(n);
+
+  return {
+    ok: true,
+    value: trailingDecimalPoint ? `${formatted}.` : formatted,
+  };
 }
 
 export default function RentVsTakeHomePay() {
@@ -411,7 +459,7 @@ export default function RentVsTakeHomePay() {
 
   const [takeHomePay, setTakeHomePay] = useState<string>(() => {
     if (typeof window === "undefined") return "5000";
-    return localStorage.getItem("rc_rvt_takehome") ?? "5000";
+    return stripCommas(localStorage.getItem("rc_rvt_takehome") ?? "5000");
   });
 
   const [takeHomePeriod, setTakeHomePeriod] = useState<Period>(() => {
@@ -422,7 +470,7 @@ export default function RentVsTakeHomePay() {
 
   const [rentAmount, setRentAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "1800";
-    return localStorage.getItem("rc_rvt_rent") ?? "1800";
+    return stripCommas(localStorage.getItem("rc_rvt_rent") ?? "1800");
   });
 
   const [rentPeriod, setRentPeriod] = useState<Period>(() => {
@@ -444,13 +492,46 @@ export default function RentVsTakeHomePay() {
 
   const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
     if (typeof window === "undefined") return 2;
-    return safeParseInt(
+    return safeParseDisplayDecimals(
       localStorage.getItem("rc_rvt_display_decimals"),
       2,
-      0,
-      6,
     );
   });
+
+  const [takeHomeFocused, setTakeHomeFocused] = useState(false);
+  const [rentFocused, setRentFocused] = useState(false);
+
+  const [takeHomeDisplay, setTakeHomeDisplay] = useState<string>(() => "5000");
+  const [rentDisplay, setRentDisplay] = useState<string>(() => "1800");
+
+  const [takeHomeInputError, setTakeHomeInputError] = useState<string | null>(
+    null,
+  );
+  const [rentInputError, setRentInputError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!takeHomeFocused) {
+      const res = formatAmountPreviewFromRaw(takeHomePay);
+      setTakeHomeDisplay(res.value);
+      setTakeHomeInputError(
+        res.ok ? null : (res.error ?? "Enter take-home pay."),
+      );
+    } else {
+      setTakeHomeDisplay(takeHomePay);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [takeHomePay, takeHomeFocused]);
+
+  useEffect(() => {
+    if (!rentFocused) {
+      const res = formatAmountPreviewFromRaw(rentAmount);
+      setRentDisplay(res.value);
+      setRentInputError(res.ok ? null : (res.error ?? "Enter rent."));
+    } else {
+      setRentDisplay(rentAmount);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rentAmount, rentFocused]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -562,96 +643,12 @@ export default function RentVsTakeHomePay() {
     };
   }, [parsed, takeHomePeriod, rentPeriod]);
 
-  const effectiveDisplayDecimals = roundDisplay ? displayDecimals : 12;
   const money = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, effectiveDisplayDecimals);
+    formatCurrencyFromScaled(scaled, currency, roundDisplay, displayDecimals);
 
   const handlePrint = () => {
     if (typeof window === "undefined") return;
     window.print();
-  };
-
-  const handleExportCsv = () => {
-    if (!computed.ok) return;
-
-    const rows: string[] = [];
-    rows.push(buildCsvRow([pageName]));
-    rows.push(buildCsvRow(["URL", canonicalUrl]));
-    rows.push(buildCsvRow(["Currency", currency]));
-    rows.push(buildCsvRow(["Take-home period", takeHomePeriod]));
-    rows.push(buildCsvRow(["Rent period", rentPeriod]));
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Headline results"]));
-    rows.push(
-      buildCsvRow([
-        "Annual take-home (annualized)",
-        money(computed.annualTakeHome),
-      ]),
-    );
-    rows.push(
-      buildCsvRow(["Annual rent (annualized)", money(computed.annualRent)]),
-    );
-    rows.push(
-      buildCsvRow(["Annual left after rent", money(computed.annualLeft)]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Rent as % of take-home",
-        Number.isFinite(computed.rentPct) ? computed.rentPct.toFixed(4) : "",
-      ]),
-    );
-
-    rows.push(buildCsvRow([""]));
-    rows.push(buildCsvRow(["Equivalents from annual totals"]));
-    rows.push(buildCsvRow(["Period", "Take-home", "Rent", "Left after rent"]));
-    rows.push(
-      buildCsvRow([
-        "Monthly (avg)",
-        money(computed.takeHomeMonthly),
-        money(computed.rentMonthly),
-        money(computed.leftMonthly),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Weekly",
-        money(computed.takeHomeWeekly),
-        money(computed.rentWeekly),
-        money(computed.leftWeekly),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Every 4 weeks",
-        money(computed.takeHome4w),
-        money(computed.rent4w),
-        money(computed.left4w),
-      ]),
-    );
-
-    rows.push(buildCsvRow([""]));
-    rows.push(buildCsvRow(["Monthly vs 4-week rent"]));
-    rows.push(
-      buildCsvRow([
-        "Monthly rent (avg) - 4-week rent",
-        money(computed.monthMinus4wRent),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Difference as % of 4-week rent",
-        Number.isFinite(computed.monthMinus4wRentPct)
-          ? (computed.monthMinus4wRentPct * 100).toFixed(4)
-          : "",
-      ]),
-    );
-
-    downloadTextFile(
-      "rent-vs-take-home-pay.csv",
-      rows.join("\n"),
-      "text/csv;charset=utf-8",
-    );
   };
 
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
@@ -762,7 +759,7 @@ export default function RentVsTakeHomePay() {
 
       <section className="pb-8 text-center bg-white rc-no-print">
         <h1 className="text-4xl font-bold text-slate-800 mb-4">{pageName}</h1>
-        <p className="text-slate-600 max-w-3xl mx-auto text-lg">
+        <p className="text-slate-600 max-w-5xl mx-auto text-lg">
           Compare rent to take-home pay on a consistent annual basis, even if
           rent and pay use different cycles. Results use annual equivalence
           (365-day year).
@@ -776,10 +773,6 @@ export default function RentVsTakeHomePay() {
               <h2 className="text-xl sm:text-2xl font-bold">
                 Compare rent to take-home pay
               </h2>
-              <p className="text-sm text-slate-600">
-                Invalid input hides results to avoid misleading “0” outputs.
-                Calculations preserve decimals; rounding is display-only.
-              </p>
             </div>
 
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
@@ -793,47 +786,6 @@ export default function RentVsTakeHomePay() {
             </div>
           </div>
 
-          <div className="mb-6 rounded-2xl border border-slate-200 bg-white p-5 rc-no-print">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <label className="flex items-center gap-2 text-sm text-slate-700">
-                <input
-                  type="checkbox"
-                  checked={roundDisplay}
-                  onChange={(e) => setRoundDisplay(e.target.checked)}
-                  className="h-4 w-4"
-                />
-                Round displayed values (display only)
-              </label>
-
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-slate-500">
-                  Displayed decimals
-                </span>
-                <select
-                  value={displayDecimals}
-                  onChange={(e) =>
-                    setDisplayDecimals(
-                      Math.max(
-                        0,
-                        Math.min(6, Math.trunc(Number(e.target.value) || 2)),
-                      ),
-                    )
-                  }
-                  className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
-                >
-                  <option value={0}>0</option>
-                  <option value={2}>2</option>
-                  <option value={4}>4</option>
-                  <option value={6}>6</option>
-                </select>
-              </div>
-            </div>
-            <p className="mt-2 text-xs text-slate-500">
-              Internal math is fixed-point up to 12 decimals. This control only
-              changes what is displayed.
-            </p>
-          </div>
-
           <div className="grid gap-5 md:grid-cols-12">
             <div className="md:col-span-6">
               <label className="block text-sm font-semibold text-slate-700 mb-2">
@@ -842,8 +794,20 @@ export default function RentVsTakeHomePay() {
               <div className="grid grid-cols-12 gap-2">
                 <input
                   inputMode="decimal"
-                  value={takeHomePay}
-                  onChange={(e) => setTakeHomePay(e.target.value)}
+                  value={takeHomeFocused ? takeHomePay : takeHomeDisplay}
+                  onFocus={() => {
+                    setTakeHomeFocused(true);
+                    setTakeHomeDisplay(takeHomePay);
+                  }}
+                  onBlur={() => {
+                    setTakeHomeFocused(false);
+                    const res = formatAmountPreviewFromRaw(takeHomePay);
+                    setTakeHomeDisplay(res.value);
+                    setTakeHomeInputError(
+                      res.ok ? null : (res.error ?? "Enter take-home pay."),
+                    );
+                  }}
+                  onChange={(e) => setTakeHomePay(stripCommas(e.target.value))}
                   placeholder="e.g. 5000"
                   className="col-span-7 rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!parsed.takeHome.ok}
@@ -865,6 +829,11 @@ export default function RentVsTakeHomePay() {
                   ))}
                 </select>
               </div>
+              {!takeHomeFocused && takeHomeInputError ? (
+                <div className="mt-2 text-sm font-semibold text-rose-700">
+                  {takeHomeInputError}
+                </div>
+              ) : null}
             </div>
 
             <div className="md:col-span-6">
@@ -874,8 +843,20 @@ export default function RentVsTakeHomePay() {
               <div className="grid grid-cols-12 gap-2">
                 <input
                   inputMode="decimal"
-                  value={rentAmount}
-                  onChange={(e) => setRentAmount(e.target.value)}
+                  value={rentFocused ? rentAmount : rentDisplay}
+                  onFocus={() => {
+                    setRentFocused(true);
+                    setRentDisplay(rentAmount);
+                  }}
+                  onBlur={() => {
+                    setRentFocused(false);
+                    const res = formatAmountPreviewFromRaw(rentAmount);
+                    setRentDisplay(res.value);
+                    setRentInputError(
+                      res.ok ? null : (res.error ?? "Enter rent."),
+                    );
+                  }}
+                  onChange={(e) => setRentAmount(stripCommas(e.target.value))}
                   placeholder="e.g. 1800"
                   className="col-span-7 rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!parsed.rent.ok}
@@ -897,6 +878,11 @@ export default function RentVsTakeHomePay() {
                   ))}
                 </select>
               </div>
+              {!rentFocused && rentInputError ? (
+                <div className="mt-2 text-sm font-semibold text-rose-700">
+                  {rentInputError}
+                </div>
+              ) : null}
             </div>
 
             <div className="md:col-span-6">
@@ -919,9 +905,6 @@ export default function RentVsTakeHomePay() {
                   </option>
                 ))}
               </select>
-              <p className="mt-2 text-xs text-slate-500">
-                Currency affects formatting only.
-              </p>
             </div>
           </div>
 
@@ -1135,6 +1118,43 @@ export default function RentVsTakeHomePay() {
               </p>
             </>
           ) : null}
+        </div>
+
+        <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 rc-no-print mt-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <label className="flex items-center gap-2 text-sm text-slate-700">
+              <input
+                type="checkbox"
+                checked={roundDisplay}
+                onChange={(e) => setRoundDisplay(e.target.checked)}
+                className="h-4 w-4"
+              />
+              Round displayed values (display only)
+            </label>
+
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-slate-500">Displayed decimals</span>
+              <select
+                value={displayDecimals}
+                onChange={(e) => {
+                  const v = Math.trunc(Number(e.target.value));
+                  setDisplayDecimals(
+                    v === 0 || v === 2 || v === 4 || v === 6 ? v : 2,
+                  );
+                }}
+                className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
+              >
+                <option value={0}>0</option>
+                <option value={2}>2</option>
+                <option value={4}>4</option>
+                <option value={6}>6</option>
+              </select>
+            </div>
+          </div>
+          <p className="mt-2 text-xs text-slate-500">
+            Internal math is fixed-point up to 12 decimals. This control only
+            changes what is displayed.
+          </p>
         </div>
       </section>
 

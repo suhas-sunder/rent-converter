@@ -681,7 +681,7 @@ export default function HowMuchRentCanIAfford() {
         <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-4 tracking-tight">
           How Much Rent Can I Afford?
         </h1>
-        <p className="max-w-3xl mx-auto text-slate-700 text-lg leading-relaxed">
+        <p className="max-w-5xl mx-auto text-slate-700 text-lg leading-relaxed">
           Estimate rent targets as a share of income using a consistent annual
           comparison. This helps compare affordability across different pay
           cycles without mixing calendar-month and 4-week assumptions.
@@ -895,19 +895,6 @@ export default function HowMuchRentCanIAfford() {
                     ) : null}
                   </div>
 
-                  <div className="mt-2 text-sm text-slate-600 leading-relaxed">
-                    {roundDisplay ? (
-                      <>
-                        Displayed values rounded to {displayDecimals} decimals.
-                        Calculations use up to 12 decimals internally.
-                      </>
-                    ) : (
-                      <>
-                        Displayed values show up to 12 decimals (no display
-                        rounding).
-                      </>
-                    )}
-                  </div>
                 </div>
 
                 <div className="mt-6 grid gap-4 sm:grid-cols-3 rc-print-block">

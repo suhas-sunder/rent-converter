@@ -179,6 +179,16 @@ function safeParseInt(value: string, fallback: number) {
   return n;
 }
 
+const ALLOWED_DISPLAY_DECIMALS = new Set<number>([0, 2, 4, 6]);
+
+function parseDisplayDecimals(raw: string | null): number {
+  if (!raw) return 2;
+  const n = Number(raw);
+  if (!Number.isFinite(n)) return 2;
+  const t = Math.trunc(n);
+  return ALLOWED_DISPLAY_DECIMALS.has(t) ? t : 2;
+}
+
 /** Decimal-safe fixed point (up to 12 decimals). */
 const MAX_DECIMALS = 12n;
 const SCALE = 10n ** MAX_DECIMALS;
@@ -204,17 +214,48 @@ function toNumberSafe(scaled: bigint): number {
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
+  roundDisplay: boolean,
   displayDecimals: number,
 ): string {
   const n = toNumberSafe(scaled);
   if (!Number.isFinite(n)) return "—";
-  const digits = Math.max(0, Math.min(12, displayDecimals));
+
+  if (roundDisplay) {
+    const digits = ALLOWED_DISPLAY_DECIMALS.has(displayDecimals)
+      ? displayDecimals
+      : 2;
+    return new Intl.NumberFormat(undefined, {
+      style: "currency",
+      currency,
+      minimumFractionDigits: digits,
+      maximumFractionDigits: digits,
+    }).format(n);
+  }
+
   return new Intl.NumberFormat(undefined, {
     style: "currency",
     currency,
-    minimumFractionDigits: digits,
-    maximumFractionDigits: digits,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 12,
   }).format(n);
+}
+
+function formatGroupedPreviewFromNormalized(normalized: string): string {
+  const s = (normalized ?? "").trim();
+  if (!s) return s;
+
+  const [intPartRaw, fracPart] = s.split(".", 2);
+  const intPart = intPartRaw === "" ? "0" : intPartRaw;
+
+  if (!/^\d+$/.test(intPart)) return s;
+
+  const grouped = new Intl.NumberFormat("en-US", {
+    useGrouping: true,
+    maximumFractionDigits: 0,
+  }).format(Number(intPart));
+
+  if (typeof fracPart === "string") return `${grouped}.${fracPart}`;
+  return grouped;
 }
 
 function parseMoneyInputToScaled(raw: string): ParsedScaled {
@@ -497,32 +538,6 @@ function makeMonthKeysBetween(start: Date, end: Date) {
   return keys;
 }
 
-function buildCsvRow(cols: string[]): string {
-  return cols
-    .map((c) => {
-      const s = String(c ?? "");
-      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
-      return s;
-    })
-    .join(",");
-}
-
-function downloadTextFile(
-  filename: string,
-  content: string,
-  mime = "text/plain;charset=utf-8",
-) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
 function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   if (raw === null) return fallback;
   try {
@@ -558,6 +573,8 @@ export default function RentDueDateCalculator() {
     return window.localStorage.getItem("rdd2_amount") ?? "2000";
   });
 
+  const [amountFocused, setAmountFocused] = useState<boolean>(false);
+
   const [currency, setCurrency] = useState<Currency>(() => {
     if (typeof window === "undefined") return "USD";
     const saved = window.localStorage.getItem("rdd2_currency") ?? "USD";
@@ -575,10 +592,9 @@ export default function RentDueDateCalculator() {
 
   const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
     if (typeof window === "undefined") return 2;
-    const saved = window.localStorage.getItem("rdd2_display_decimals");
-    const n = saved ? Number(saved) : 2;
-    if (!Number.isFinite(n)) return 2;
-    return Math.max(0, Math.min(6, Math.trunc(n)));
+    return parseDisplayDecimals(
+      window.localStorage.getItem("rdd2_display_decimals"),
+    );
   });
 
   const [asOfDate, setAsOfDate] = useState<string>(() => {
@@ -657,6 +673,14 @@ export default function RentDueDateCalculator() {
 
   const parsedAmount = useMemo(() => parseMoneyInputToScaled(amount), [amount]);
 
+  const amountDisplayValue = useMemo(() => {
+    if (amountFocused) return amount;
+    if (parsedAmount.ok && parsedAmount.normalized) {
+      return formatGroupedPreviewFromNormalized(parsedAmount.normalized);
+    }
+    return amount;
+  }, [amountFocused, amount, parsedAmount.ok, parsedAmount.normalized]);
+
   const parsedAsOf = useMemo(() => {
     const d = new Date(asOfDate);
     if (!Number.isFinite(d.getTime())) return stripTime(new Date());
@@ -695,10 +719,8 @@ export default function RentDueDateCalculator() {
     );
   }, [cycle, parsedAsOf, computedEnd, parsedAnchor, dueDay]);
 
-  const effectiveDisplayDecimals = roundDisplay ? displayDecimals : 12;
-
   const fmtMoney = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, effectiveDisplayDecimals);
+    formatCurrencyFromScaled(scaled, currency, roundDisplay, displayDecimals);
 
   const computed = useMemo(() => {
     const errors: string[] = [];
@@ -798,16 +820,8 @@ export default function RentDueDateCalculator() {
       text: "Weekly to monthly rent converter",
     },
     {
-      href: "/monthly-to-weekly-rent-converter",
-      text: "Monthly to weekly rent converter",
-    },
-    {
       href: "/rent-paid-every-4-weeks-calculator",
       text: "Rent paid every 4 weeks calculator",
-    },
-    {
-      href: "/rent-per-paycheck-calculator",
-      text: "Rent per paycheck calculator",
     },
   ];
 
@@ -871,115 +885,6 @@ export default function RentDueDateCalculator() {
     window.print();
   };
 
-  const handleExportCsv = () => {
-    if (!computed.ok) return;
-
-    const rows: string[] = [];
-    rows.push(buildCsvRow(["Rent Due Date Calculator"]));
-    rows.push(buildCsvRow(["Currency", currency]));
-    rows.push(buildCsvRow(["Cycle", BILLING_LABEL[cycle]]));
-    rows.push(buildCsvRow(["As-of date", formatDate(parsedAsOf)]));
-    rows.push(buildCsvRow(["End date", formatDate(computedEnd)]));
-
-    // FIX: avoid misleading values based on cycle
-    rows.push(
-      buildCsvRow([
-        "Monthly due day",
-        cycle === "monthly" ? String(dueDay) : "—",
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Anchor date",
-        cycle === "monthly" ? "—" : formatDate(parsedAnchor),
-      ]),
-    );
-
-    rows.push(
-      buildCsvRow([
-        "Display",
-        roundDisplay
-          ? `Rounded to ${displayDecimals} decimals (display only)`
-          : "No display rounding (up to 12 decimals)",
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Assumptions",
-        "Monthly uses calendar months (missing due day uses last day of month)",
-        "Weekly=7 days",
-        "Biweekly=14 days",
-        "Every 4 weeks=28 days",
-        "Annual repeats by calendar year on anchor month/day",
-      ]),
-    );
-
-    rows.push(buildCsvRow([""]));
-    rows.push(buildCsvRow(["Summary"]));
-    rows.push(buildCsvRow(["Next due date", formatDate(computed.nextDue)]));
-    rows.push(
-      buildCsvRow(["Payments in horizon", String(computed.paymentsTotal)]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Total paid by end date",
-        fmtMoney(computed.totalPaidScaled),
-      ]),
-    );
-
-    rows.push(buildCsvRow([""]));
-    rows.push(buildCsvRow(["Monthly totals"]));
-    rows.push(
-      buildCsvRow(["Month", "Payments in month", "Total paid in month"]),
-    );
-    computed.monthRows.forEach((r) => {
-      rows.push(
-        buildCsvRow([r.label, String(r.payments), fmtMoney(r.totalScaled)]),
-      );
-    });
-
-    rows.push(buildCsvRow([""]));
-    rows.push(buildCsvRow(["Totals by calendar year"]));
-    rows.push(buildCsvRow(["Year", "Payments", "Total"]));
-    computed.yearTotals.forEach((r) => {
-      rows.push(
-        buildCsvRow([r.year, String(r.payments), fmtMoney(r.totalScaled)]),
-      );
-    });
-
-    rows.push(buildCsvRow([""]));
-    rows.push(buildCsvRow(["Standard annual totals (comparison)"]));
-    rows.push(
-      buildCsvRow([
-        "Billing cycle",
-        "Payments per year",
-        "Standard annual total",
-      ]),
-    );
-    computed.standardAnnualTotals.forEach((r) => {
-      rows.push(
-        buildCsvRow([
-          r.label,
-          String(r.paymentsPerYear),
-          fmtMoney(r.annualScaled),
-        ]),
-      );
-    });
-
-    rows.push(buildCsvRow([""]));
-    rows.push(buildCsvRow(["Upcoming due dates"]));
-    rows.push(buildCsvRow(["#", "Due date"]));
-    schedule.forEach((d, idx) => {
-      rows.push(buildCsvRow([String(idx + 1), formatDate(d)]));
-    });
-
-    downloadTextFile(
-      "rent-due-date-schedule.csv",
-      rows.join("\n"),
-      "text/csv;charset=utf-8",
-    );
-  };
-
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const copyTimerRef = useRef<number | null>(null);
 
@@ -1025,8 +930,10 @@ export default function RentDueDateCalculator() {
           / <span className="text-slate-700">{pageName}</span>
         </nav>
 
-        <h1 className="text-4xl font-bold text-slate-800 mb-4">{pageName}</h1>
-        <p className="text-slate-600 max-w-3xl text-lg rc-no-print">
+        <h1 className="text-4xl font-bold text-slate-800 mb-4 text-center">
+          {pageName}
+        </h1>
+        <p className="text-slate-600 max-w-5xl text-lg rc-no-print text-center">
           Estimate upcoming rent due dates, then see how many payments land in
           each calendar month. This also shows total rent paid by an end date
           and totals by year for monthly, weekly, biweekly, 28-day, and annual
@@ -1060,7 +967,9 @@ export default function RentDueDateCalculator() {
               <div className="grid grid-cols-12 gap-2">
                 <input
                   inputMode="decimal"
-                  value={amount}
+                  value={amountDisplayValue}
+                  onFocus={() => setAmountFocused(true)}
+                  onBlur={() => setAmountFocused(false)}
                   onChange={(e) => setAmount(e.target.value)}
                   placeholder="e.g. 2000 or 2000.00"
                   className="col-span-7 rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
@@ -1223,55 +1132,6 @@ export default function RentDueDateCalculator() {
                   : "The anchor date is the reference point for weekly, biweekly, and 28-day repeats."}
               </p>
             </div>
-
-            <div className="md:col-span-12">
-              <div className="rounded-xl border border-slate-200 bg-white p-4">
-                <div className="text-xs text-slate-500">Display</div>
-
-                <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                  <label className="flex items-center gap-2 text-sm text-slate-700">
-                    <input
-                      type="checkbox"
-                      checked={roundDisplay}
-                      onChange={(e) => setRoundDisplay(e.target.checked)}
-                      className="h-4 w-4"
-                    />
-                    Round displayed values (display only)
-                  </label>
-
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs text-slate-500">
-                      Displayed decimals
-                    </span>
-                    <select
-                      value={displayDecimals}
-                      onChange={(e) =>
-                        setDisplayDecimals(
-                          Math.max(
-                            0,
-                            Math.min(
-                              6,
-                              Math.trunc(Number(e.target.value) || 2),
-                            ),
-                          ),
-                        )
-                      }
-                      className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
-                    >
-                      <option value={0}>0</option>
-                      <option value={2}>2</option>
-                      <option value={4}>4</option>
-                      <option value={6}>6</option>
-                    </select>
-                  </div>
-                </div>
-
-                <p className="mt-2 text-xs text-slate-500">
-                  Calculations preserve decimals internally (up to 12). Only the
-                  display is rounded.
-                </p>
-              </div>
-            </div>
           </div>
 
           <div className="mt-6 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
@@ -1306,7 +1166,7 @@ export default function RentDueDateCalculator() {
                     <div className="text-xs text-slate-500">
                       Next estimated due date
                     </div>
-                    <div className="mt-1 text-lg font-bold text-slate-800">
+                    <div className="mt-1 text-2xl font-bold text-sky-800">
                       {formatDate(computed.nextDue)}
                     </div>
                   </div>
@@ -1315,7 +1175,7 @@ export default function RentDueDateCalculator() {
                     <div className="text-xs text-slate-500">
                       Payments in horizon
                     </div>
-                    <div className="mt-1 text-lg font-bold text-slate-800">
+                    <div className="mt-1 text-2xl font-bold text-sky-800">
                       {computed.paymentsTotal}
                     </div>
                   </div>
@@ -1324,10 +1184,10 @@ export default function RentDueDateCalculator() {
                     <div className="text-xs text-slate-500">
                       Total rent paid by end date
                     </div>
-                    <div className="mt-1 text-lg font-bold text-slate-800">
+                    <div className="mt-1 text-2xl font-bold text-sky-800">
                       {fmtMoney(computed.totalPaidScaled)}
                     </div>
-                    <div className="mt-1 text-xs text-slate-500">
+                    <div className="mt-1 text-xs text-sky-900">
                       {computed.paymentsTotal} payments ×{" "}
                       {fmtMoney(computed.rentPerPaymentScaled)}
                     </div>
@@ -1558,23 +1418,6 @@ export default function RentDueDateCalculator() {
             )}
           </div>
 
-          <section className="mt-10 rc-no-print">
-            <h3 className="text-2xl font-semibold mb-4 text-slate-900">
-              Related pages
-            </h3>
-            <ul className="list-disc ml-6 text-slate-700">
-              {relatedLinks.map((l) => (
-                <li key={l.href}>
-                  <a
-                    href={safeHref(l.href)}
-                    className="text-sky-700 hover:underline"
-                  >
-                    {l.text}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </section>
 
           <section className="mt-10 rounded-2xl border border-slate-200 bg-white p-6 rc-print-block">
             <h3 className="text-xl font-bold text-slate-900 mb-3">
@@ -1606,6 +1449,45 @@ export default function RentDueDateCalculator() {
             repeats on the anchor month/day each year. Actual due dates, grace
             periods, and lease terms vary.
           </p>
+        </div>
+
+        <div className="md:col-span-12 mt-6">
+          <div className="rounded-xl border border-slate-200 bg-white p-4">
+            <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <label className="flex items-center gap-2 text-sm text-slate-700">
+                <input
+                  type="checkbox"
+                  checked={roundDisplay}
+                  onChange={(e) => setRoundDisplay(e.target.checked)}
+                  className="h-4 w-4"
+                />
+                Round displayed values (display only)
+              </label>
+
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-slate-500">
+                  Displayed decimals
+                </span>
+                <select
+                  value={displayDecimals}
+                  onChange={(e) =>
+                    setDisplayDecimals(parseDisplayDecimals(e.target.value))
+                  }
+                  className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
+                >
+                  <option value={0}>0</option>
+                  <option value={2}>2</option>
+                  <option value={4}>4</option>
+                  <option value={6}>6</option>
+                </select>
+              </div>
+            </div>
+
+            <p className="mt-2 text-xs text-slate-500">
+              Calculations preserve decimals internally (up to 12). Only the
+              display is rounded.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -1647,9 +1529,8 @@ export default function RentDueDateCalculator() {
               values are rounded.
             </li>
             <li>
-              <strong>Export and print.</strong> Export schedule and totals as
-              CSV, or print (including saving to PDF via your browser print
-              dialog).
+              <strong>Print.</strong> You can print the results (including
+              saving to PDF via your browser print dialog).
             </li>
           </ol>
 
@@ -1659,6 +1540,24 @@ export default function RentDueDateCalculator() {
             budgeting comparisons.
           </p>
         </div>
+        
+          <section className="mt-10 rc-no-print">
+            <h3 className="text-2xl font-semibold mb-4 text-slate-900">
+              Related pages
+            </h3>
+            <ul className="list-disc ml-6 text-slate-700">
+              {relatedLinks.map((l) => (
+                <li key={l.href}>
+                  <a
+                    href={safeHref(l.href)}
+                    className="text-sky-700 hover:underline"
+                  >
+                    {l.text}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
       </section>
 
       <section id="faq" className="max-w-5xl mx-auto py-16 px-6 rc-no-print">

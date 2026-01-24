@@ -677,7 +677,7 @@ export default function MonthlyToAnnualRent() {
         <h1 className="text-4xl font-bold text-slate-800 mb-4">
           Monthly to Annual Rent Converter
         </h1>
-        <p className="text-slate-600 max-w-3xl mx-auto text-lg">
+        <p className="text-slate-600 max-w-5xl mx-auto text-lg">
           See what a monthly rent price implies over a year. This page converts
           monthly rent using annual equivalence (365-day year) and includes a
           full breakdown across billing periods.

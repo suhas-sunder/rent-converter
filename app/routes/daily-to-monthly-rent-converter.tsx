@@ -803,20 +803,6 @@ export default function DailyToMonthlyRent() {
                       </span>
                     ) : null}
                   </div>
-
-                  <div className="mt-1 text-sm text-slate-600 leading-relaxed">
-                    {roundDisplay ? (
-                      <>
-                        Displayed values rounded to {displayDecimals} decimals.
-                        Calculations use up to 12 decimals internally.
-                      </>
-                    ) : (
-                      <>
-                        Displayed values show up to 12 decimals (no display
-                        rounding).
-                      </>
-                    )}
-                  </div>
                 </div>
 
                 <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

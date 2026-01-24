@@ -203,17 +203,41 @@ function toNumberSafe(scaled: bigint): number {
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
+  roundDisplay: boolean,
   displayDecimals: number,
 ): string {
   const n = toNumberSafe(scaled);
   if (!Number.isFinite(n)) return "—";
+
   const digits = Math.max(0, Math.min(12, displayDecimals));
+
+  const minimumFractionDigits = roundDisplay ? digits : 0;
+  const maximumFractionDigits = roundDisplay ? digits : 12;
+
   return new Intl.NumberFormat(undefined, {
     style: "currency",
     currency,
-    minimumFractionDigits: digits,
-    maximumFractionDigits: digits,
+    minimumFractionDigits,
+    maximumFractionDigits,
   }).format(n);
+}
+
+function groupThousandsEnUS(intDigits: string): string {
+  const s = (intDigits ?? "").replace(/^0+(?=\d)/, "");
+  return s.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function formatMoneyPreviewFromParsed(parsed: ParsedScaled): string {
+  const normalized = parsed.normalized ?? "";
+  const [intPartRaw, fracPartRaw] = normalized.split(".");
+  const intPart = intPartRaw ?? "0";
+  const fracPart = fracPartRaw ?? "";
+
+  const groupedInt = groupThousandsEnUS(intPart);
+
+  if (normalized.includes("."))
+    return `${groupedInt}.${fracPart}`.replace(/^\./, "0.");
+  return groupedInt;
 }
 
 /**
@@ -379,32 +403,6 @@ function fromAnnualScaled(annualScaled: bigint, to: Period): bigint {
   return annualScaled / 365n / 24n; // hourly
 }
 
-function buildCsvRow(cols: string[]): string {
-  return cols
-    .map((c) => {
-      const s = String(c ?? "");
-      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
-      return s;
-    })
-    .join(",");
-}
-
-function downloadTextFile(
-  filename: string,
-  content: string,
-  mime = "text/plain;charset=utf-8",
-) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
 function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   if (raw === null) return fallback;
   try {
@@ -415,26 +413,25 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   }
 }
 
-function safeParseInt(
-  raw: string | null,
-  fallback: number,
-  min: number,
-  max: number,
-): number {
+function safeParseDisplayDecimals(raw: string | null, fallback = 2): number {
   if (raw === null) return fallback;
   const n = Number(raw);
   if (!Number.isFinite(n)) return fallback;
   const t = Math.trunc(n);
-  return Math.max(min, Math.min(max, t));
+  return t === 0 || t === 2 || t === 4 || t === 6 ? t : fallback;
 }
 
 export default function RentPerPerson() {
   const pageName = "Rent Split Calculator";
   const canonicalUrl = "https://rentconverter.com/rent-split-calculator";
 
+  const totalRentInputRef = useRef<HTMLInputElement | null>(null);
+  const [isTotalRentFocused, setIsTotalRentFocused] = useState(false);
+
   const [totalRent, setTotalRent] = useState<string>(() => {
     if (typeof window === "undefined") return "2400";
-    return localStorage.getItem("rc_rpp_total") ?? "2400";
+    const saved = localStorage.getItem("rc_rpp_total") ?? "2400";
+    return saved.replace(/,/g, "");
   });
 
   const [period, setPeriod] = useState<Period>(() => {
@@ -462,11 +459,9 @@ export default function RentPerPerson() {
 
   const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
     if (typeof window === "undefined") return 2;
-    return safeParseInt(
+    return safeParseDisplayDecimals(
       localStorage.getItem("rc_rpp_display_decimals"),
       2,
-      0,
-      6,
     );
   });
 
@@ -563,90 +558,14 @@ export default function RentPerPerson() {
     };
   }, [parsedRent, parsedPeople, period]);
 
-  const effectiveDisplayDecimals = roundDisplay ? displayDecimals : 12;
-
   const fmtMoney = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, effectiveDisplayDecimals);
+    formatCurrencyFromScaled(scaled, currency, roundDisplay, displayDecimals);
 
   const avgMonthDays = 365 / 12;
 
   const handlePrint = () => {
     if (typeof window === "undefined") return;
     window.print();
-  };
-
-  const handleExportCsv = () => {
-    if (!computed.ok) return;
-
-    const rows: string[] = [];
-    rows.push(buildCsvRow([pageName]));
-    rows.push(buildCsvRow(["Currency", currency]));
-    rows.push(buildCsvRow(["Input rent", totalRent]));
-    rows.push(buildCsvRow(["Rent period", period]));
-    rows.push(buildCsvRow(["People", String(computed.peopleN)]));
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Annual totals (365-day basis)"]));
-    rows.push(
-      buildCsvRow(["Annual total rent", fmtMoney(computed.annualTotalScaled)]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Annual per person",
-        fmtMoney(computed.annualPerPersonScaled),
-      ]),
-    );
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Equal split in selected rent period"]));
-    rows.push(
-      buildCsvRow([
-        `Per person (${PERIOD_LABEL[period]})`,
-        fmtMoney(computed.perSelectedPeriodScaled),
-      ]),
-    );
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Monthly vs every 4 weeks (per person)"]));
-    rows.push(
-      buildCsvRow([
-        "Monthly (average)",
-        fmtMoney(computed.monthlyAvgPerPersonScaled),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Every 4 weeks",
-        fmtMoney(computed.fourWeekPerPersonScaled),
-      ]),
-    );
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Full breakdown (annual-equivalent)"]));
-    rows.push(buildCsvRow(["Period", "Total", "Per person"]));
-    computed.breakdown.forEach((r) => {
-      rows.push(
-        buildCsvRow([
-          PERIOD_LABEL[r.period],
-          fmtMoney(r.totalScaled),
-          fmtMoney(r.perPersonScaled),
-        ]),
-      );
-    });
-
-    rows.push(buildCsvRow([""]));
-    rows.push(
-      buildCsvRow([
-        "Assumptions",
-        "Year=365 days, Week=7 days, Biweekly=14 days, Every 4 weeks=28 days, Month=365/12 days (average).",
-      ]),
-    );
-
-    downloadTextFile(
-      "rent-split-calculator.csv",
-      rows.join("\n"),
-      "text/csv;charset=utf-8",
-    );
   };
 
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
@@ -669,6 +588,41 @@ export default function RentPerPerson() {
       if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
       copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
     }
+  };
+
+  const totalRentDisplayValue = isTotalRentFocused
+    ? totalRent
+    : parsedRent.ok
+      ? formatMoneyPreviewFromParsed(parsedRent)
+      : totalRent;
+
+  const handleTotalRentChange = (next: string) => {
+    const inputEl = totalRentInputRef.current;
+    const start = inputEl?.selectionStart ?? null;
+    const end = inputEl?.selectionEnd ?? null;
+
+    if (start === null || end === null) {
+      setTotalRent(next.replace(/,/g, ""));
+      return;
+    }
+
+    const beforeCaret = next.slice(0, start);
+    const commasBeforeCaret = (beforeCaret.match(/,/g) ?? []).length;
+    const nextSanitized = next.replace(/,/g, "");
+
+    setTotalRent(nextSanitized);
+
+    requestAnimationFrame(() => {
+      const el = totalRentInputRef.current;
+      if (!el) return;
+
+      const newPos = Math.max(0, start - commasBeforeCaret);
+      try {
+        el.setSelectionRange(newPos, newPos);
+      } catch {
+        // ignore
+      }
+    });
   };
 
   const faqData = [
@@ -801,9 +755,6 @@ export default function RentPerPerson() {
               <h2 className="text-xl sm:text-2xl font-bold text-slate-950">
                 Split rent equally
               </h2>
-              <p className="mt-1 text-sm text-slate-700 leading-relaxed">
-                Invalid input hides results, so you do not get misleading zeros.
-              </p>
             </div>
 
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
@@ -826,10 +777,13 @@ export default function RentPerPerson() {
                 Total rent
               </label>
               <input
+                ref={totalRentInputRef}
                 id={totalRentId}
                 inputMode="decimal"
-                value={totalRent}
-                onChange={(e) => setTotalRent(e.target.value)}
+                value={totalRentDisplayValue}
+                onFocus={() => setIsTotalRentFocused(true)}
+                onBlur={() => setIsTotalRentFocused(false)}
+                onChange={(e) => handleTotalRentChange(e.target.value)}
                 placeholder="e.g. 2400 or 2400.00"
                 className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
                 aria-invalid={!parsedRent.ok}
@@ -889,9 +843,6 @@ export default function RentPerPerson() {
                 aria-invalid={!parsedPeople.ok}
                 aria-describedby={`${peopleHelpId}${!parsedPeople.ok ? ` ${peopleErrorId}` : ""}`}
               />
-              <p id={peopleHelpId} className="mt-2 text-xs text-slate-600">
-                Whole numbers only (1 to 100).
-              </p>
               {!parsedPeople.ok ? (
                 <p
                   id={peopleErrorId}
@@ -927,61 +878,6 @@ export default function RentPerPerson() {
                   </option>
                 ))}
               </select>
-            </div>
-
-            <div className="md:col-span-12">
-              <label className="block text-sm font-semibold text-slate-800 mb-2">
-                Display
-              </label>
-              <div className="rounded-xl border border-slate-200 bg-white p-4">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                  <label
-                    htmlFor={roundId}
-                    className="flex items-center gap-2 text-sm text-slate-800"
-                  >
-                    <input
-                      id={roundId}
-                      type="checkbox"
-                      checked={roundDisplay}
-                      onChange={(e) => setRoundDisplay(e.target.checked)}
-                      className="h-5 w-5 accent-sky-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2 rounded"
-                    />
-                    Round displayed values (display only)
-                  </label>
-
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs text-slate-600">
-                      Displayed decimals
-                    </span>
-                    <select
-                      id={decimalsId}
-                      value={displayDecimals}
-                      onChange={(e) =>
-                        setDisplayDecimals(
-                          Math.max(
-                            0,
-                            Math.min(
-                              6,
-                              Math.trunc(Number(e.target.value) || 2),
-                            ),
-                          ),
-                        )
-                      }
-                      className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
-                    >
-                      <option value={0}>0</option>
-                      <option value={2}>2</option>
-                      <option value={4}>4</option>
-                      <option value={6}>6</option>
-                    </select>
-                  </div>
-                </div>
-
-                <p className="mt-2 text-xs text-slate-600 leading-relaxed">
-                  Calculations preserve decimals internally (up to 12). Only
-                  display rounding changes.
-                </p>
-              </div>
             </div>
           </div>
 
@@ -1184,46 +1080,6 @@ export default function RentPerPerson() {
             )}
           </div>
 
-          <section className="mt-10 rc-no-print">
-            <h3 className="text-2xl font-semibold mb-4 text-slate-950">
-              Links to related tools
-            </h3>
-            <ul className="list-disc ml-6 text-slate-800">
-              <li>
-                <a
-                  href={safeHref("/rent-converter")}
-                  className="text-sky-700 hover:underline rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
-                >
-                  Rent converter hub
-                </a>
-              </li>
-              <li>
-                <a
-                  href={safeHref("/rent-per-paycheck-calculator")}
-                  className="text-sky-700 hover:underline rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
-                >
-                  Rent per paycheck
-                </a>
-              </li>
-              <li>
-                <a
-                  href={safeHref("/rent-paid-every-4-weeks-calculator")}
-                  className="text-sky-700 hover:underline rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
-                >
-                  Rent paid every 4 weeks
-                </a>
-              </li>
-              <li>
-                <a
-                  href={safeHref("/rent-per-week-calculator")}
-                  className="text-sky-700 hover:underline rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
-                >
-                  Rent per week
-                </a>
-              </li>
-            </ul>
-          </section>
-
           <section className="mt-10 rounded-2xl border border-slate-200 bg-white p-6 rc-print-block">
             <h3 className="text-xl font-bold text-slate-950 mb-3">
               Disclaimer
@@ -1252,6 +1108,92 @@ export default function RentPerPerson() {
             calendars and billing schedules vary.
           </p>
         </div>
+
+        <div className="md:col-span-12 mt-6">
+          <div className="rounded-xl border border-slate-200 bg-white p-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <label
+                htmlFor={roundId}
+                className="flex items-center gap-2 text-sm text-slate-800"
+              >
+                <input
+                  id={roundId}
+                  type="checkbox"
+                  checked={roundDisplay}
+                  onChange={(e) => setRoundDisplay(e.target.checked)}
+                  className="h-5 w-5 accent-sky-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2 rounded"
+                />
+                Round displayed values (display only)
+              </label>
+
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-slate-600">
+                  Displayed decimals
+                </span>
+                <select
+                  id={decimalsId}
+                  value={displayDecimals}
+                  onChange={(e) =>
+                    setDisplayDecimals(
+                      safeParseDisplayDecimals(e.target.value, 2),
+                    )
+                  }
+                  className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
+                >
+                  <option value={0}>0</option>
+                  <option value={2}>2</option>
+                  <option value={4}>4</option>
+                  <option value={6}>6</option>
+                </select>
+              </div>
+            </div>
+
+            <p className="mt-2 text-xs text-slate-600 leading-relaxed">
+              Calculations preserve decimals internally (up to 12). Only display
+              rounding changes.
+            </p>
+          </div>
+        </div>
+
+        <section className="mt-10 rc-no-print">
+          <h3 className="text-2xl font-semibold mb-4 text-slate-950">
+            Links to related tools
+          </h3>
+          <ul className="list-disc ml-6 text-slate-800">
+            <li>
+              <a
+                href={safeHref("/rent-converter")}
+                className="text-sky-700 hover:underline rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
+              >
+                Rent converter hub
+              </a>
+            </li>
+            <li>
+              <a
+                href={safeHref("/rent-per-paycheck-calculator")}
+                className="text-sky-700 hover:underline rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
+              >
+                Rent per paycheck
+              </a>
+            </li>
+            <li>
+              <a
+                href={safeHref("/rent-paid-every-4-weeks-calculator")}
+                className="text-sky-700 hover:underline rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
+              >
+                Rent paid every 4 weeks
+              </a>
+            </li>
+            <li>
+              <a
+                href={safeHref("/rent-per-week-calculator")}
+                className="text-sky-700 hover:underline rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
+              >
+                Rent per week
+              </a>
+            </li>
+          </ul>
+        </section>
       </section>
 
       {/* Required explanation section above FAQ */}

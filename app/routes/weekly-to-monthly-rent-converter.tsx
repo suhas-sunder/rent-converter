@@ -9,7 +9,7 @@ export const meta: Route.MetaFunction = () => [
   {
     name: "description",
     content:
-      "Convert weekly rent to a monthly equivalent using annual equivalence (365-day year). Includes a full breakdown, a 4-week (28-day) comparison, export to CSV, and print-to-PDF.",
+      "Convert weekly rent to a monthly equivalent using annual equivalence (365-day year). Includes a full breakdown, a 4-week (28-day) comparison, and print-to-PDF.",
   },
   {
     name: "keywords",
@@ -189,15 +189,46 @@ function toNumberSafe(scaled: bigint): number {
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
+  roundDisplay: boolean,
   displayDecimals: number,
 ): string {
   const n = toNumberSafe(scaled);
   if (!Number.isFinite(n)) return "N/A";
-  const digits = Math.max(0, Math.min(12, displayDecimals));
+
+  if (roundDisplay) {
+    const digits =
+      displayDecimals === 0 ||
+      displayDecimals === 2 ||
+      displayDecimals === 4 ||
+      displayDecimals === 6
+        ? displayDecimals
+        : 2;
+    return new Intl.NumberFormat(undefined, {
+      style: "currency",
+      currency,
+      minimumFractionDigits: digits,
+      maximumFractionDigits: digits,
+    }).format(n);
+  }
+
   return new Intl.NumberFormat(undefined, {
     style: "currency",
     currency,
-    minimumFractionDigits: digits,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 12,
+  }).format(n);
+}
+
+function formatNumberPreviewFromScaled(
+  scaled: bigint,
+  maxFractionDigits: number,
+): string {
+  const n = toNumberSafe(scaled);
+  if (!Number.isFinite(n)) return "";
+  const digits = Math.max(0, Math.min(12, maxFractionDigits));
+  return new Intl.NumberFormat("en-US", {
+    useGrouping: true,
+    minimumFractionDigits: 0,
     maximumFractionDigits: digits,
   }).format(n);
 }
@@ -378,43 +409,12 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   }
 }
 
-function safeParseInt(
-  raw: string | null,
-  fallback: number,
-  min: number,
-  max: number,
-): number {
-  if (raw === null) return fallback;
+function parseStrictDisplayDecimals(raw: string | null): number {
+  if (raw === null) return 2;
   const n = Number(raw);
-  if (!Number.isFinite(n)) return fallback;
+  if (!Number.isFinite(n)) return 2;
   const t = Math.trunc(n);
-  return Math.max(min, Math.min(max, t));
-}
-
-function buildCsvRow(cols: string[]): string {
-  return cols
-    .map((c) => {
-      const s = String(c ?? "");
-      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
-      return s;
-    })
-    .join(",");
-}
-
-function downloadTextFile(
-  filename: string,
-  content: string,
-  mime = "text/plain;charset=utf-8",
-) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
+  return t === 0 || t === 2 || t === 4 || t === 6 ? t : 2;
 }
 
 export default function WeeklyToMonthlyRent() {
@@ -426,6 +426,9 @@ export default function WeeklyToMonthlyRent() {
     if (typeof window === "undefined") return "500";
     return localStorage.getItem("rc_wtm_amount") ?? "500";
   });
+
+  const [isAmountFocused, setIsAmountFocused] = useState<boolean>(false);
+  const [amountTouched, setAmountTouched] = useState<boolean>(false);
 
   const [currency, setCurrency] = useState<Currency>(() => {
     if (typeof window === "undefined") return "USD";
@@ -448,11 +451,8 @@ export default function WeeklyToMonthlyRent() {
 
   const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
     if (typeof window === "undefined") return 2;
-    return safeParseInt(
+    return parseStrictDisplayDecimals(
       localStorage.getItem("rc_wtm_display_decimals"),
-      2,
-      0,
-      6,
     );
   });
 
@@ -478,6 +478,17 @@ export default function WeeklyToMonthlyRent() {
     if (!p.ok) errors.push(p.error ?? "Enter a weekly rent amount.");
     return { ok: errors.length === 0, errors, warnings: p.warnings, p };
   }, [amount]);
+
+  const amountPreviewValue = useMemo(() => {
+    if (!parsed.ok || !parsed.p.scaled) return amount;
+    return formatNumberPreviewFromScaled(parsed.p.scaled, 12);
+  }, [amount, parsed]);
+
+  const amountInputValue = isAmountFocused
+    ? amount
+    : parsed.ok
+      ? amountPreviewValue
+      : amount;
 
   const computed = useMemo(() => {
     if (!parsed.ok)
@@ -533,84 +544,12 @@ export default function WeeklyToMonthlyRent() {
     };
   }, [parsed]);
 
-  const effectiveDisplayDecimals = roundDisplay ? displayDecimals : 12;
   const money = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, effectiveDisplayDecimals);
+    formatCurrencyFromScaled(scaled, currency, roundDisplay, displayDecimals);
 
   const handlePrint = () => {
     if (typeof window === "undefined") return;
     window.print();
-  };
-
-  const handleExportCsv = () => {
-    if (!computed.ok) return;
-
-    const rows: string[] = [];
-    rows.push(buildCsvRow([pageName]));
-    rows.push(buildCsvRow(["URL", canonicalUrl]));
-    rows.push(buildCsvRow(["Currency", currency]));
-    rows.push(buildCsvRow(["Input weekly amount (as entered)", amount]));
-    rows.push(buildCsvRow(["Display rounding enabled", String(roundDisplay)]));
-    rows.push(buildCsvRow(["Displayed decimals", String(displayDecimals)]));
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Primary conversion"]));
-    rows.push(buildCsvRow(["Weekly", money(computed.weekly)]));
-    rows.push(
-      buildCsvRow([
-        "Monthly (average, derived from 365-day annual)",
-        money(computed.monthly),
-      ]),
-    );
-    rows.push(
-      buildCsvRow(["Weekly x 4 (28 days)", money(computed.weeklyTimes4)]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Delta (monthly - weekly x 4)",
-        money(computed.weeklyTimes4Delta),
-      ]),
-    );
-
-    rows.push(buildCsvRow([""]));
-    rows.push(buildCsvRow(["Full breakdown (from annual total)"]));
-    rows.push(buildCsvRow(["Period", "Amount"]));
-    rows.push(buildCsvRow(["Hourly", money(computed.hourly)]));
-    rows.push(buildCsvRow(["Daily", money(computed.daily)]));
-    rows.push(buildCsvRow(["Weekly", money(computed.weekly)]));
-    rows.push(buildCsvRow(["Every 2 weeks", money(computed.biweekly)]));
-    rows.push(
-      buildCsvRow(["Every 4 weeks (28 days)", money(computed.every_4_weeks)]),
-    );
-    rows.push(buildCsvRow(["Monthly (average)", money(computed.monthly)]));
-    rows.push(buildCsvRow(["Annual (365-day)", money(computed.annual)]));
-
-    rows.push(buildCsvRow([""]));
-    rows.push(buildCsvRow(["Monthly vs 4-week context"]));
-    rows.push(
-      buildCsvRow(["Monthly minus 4-week", money(computed.monthlyMinus4w)]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Monthly minus 4-week (% of 4-week)",
-        Number.isFinite(computed.monthlyMinus4wPct)
-          ? (computed.monthlyMinus4wPct * 100).toFixed(6)
-          : "",
-      ]),
-    );
-
-    rows.push(buildCsvRow([""]));
-    rows.push(buildCsvRow(["Calendar payment-count illustrations"]));
-    rows.push(buildCsvRow(["Weekly x 52", money(computed.annualFromWeekly52)]));
-    rows.push(
-      buildCsvRow(["Monthly x 12", money(computed.annualFromMonthly12)]),
-    );
-
-    downloadTextFile(
-      "weekly-to-monthly-rent.csv",
-      rows.join("\n"),
-      "text/csv;charset=utf-8",
-    );
   };
 
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
@@ -730,7 +669,7 @@ export default function WeeklyToMonthlyRent() {
         <h1 className="text-4xl font-bold text-slate-800 mb-4">
           Weekly to Monthly Rent Converter
         </h1>
-        <p className="text-slate-600 max-w-3xl mx-auto text-lg">
+        <p className="text-slate-600 max-w-5xl mx-auto text-lg">
           Convert weekly rent into a monthly equivalent using annual equivalence
           (365-day year). This helps compare weekly listings and monthly
           listings using the same annual basis.
@@ -744,26 +683,9 @@ export default function WeeklyToMonthlyRent() {
               <h2 className="text-xl sm:text-2xl font-bold">
                 Instant weekly to monthly conversion
               </h2>
-              <p className="text-sm text-slate-600 mt-2">
-                Invalid input hides results to avoid misleading 0 outputs.
-                Calculations preserve decimals; rounding is display-only.
-              </p>
             </div>
 
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
-              <button
-                type="button"
-                onClick={handleExportCsv}
-                disabled={!computed.ok}
-                className={`rounded-xl border px-4 py-2 text-sm font-semibold transition ${
-                  computed.ok
-                    ? "border-slate-200 bg-white text-slate-800 hover:bg-sky-50 hover:border-sky-200"
-                    : "border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed"
-                }`}
-                aria-disabled={!computed.ok}
-              >
-                Export CSV
-              </button>
               <button
                 type="button"
                 onClick={handlePrint}
@@ -774,48 +696,6 @@ export default function WeeklyToMonthlyRent() {
             </div>
           </div>
 
-          {/* Display controls */}
-          <div className="mb-6 rounded-2xl border border-slate-200 bg-white p-5 rc-no-print">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <label className="flex items-center gap-2 text-sm text-slate-700">
-                <input
-                  type="checkbox"
-                  checked={roundDisplay}
-                  onChange={(e) => setRoundDisplay(e.target.checked)}
-                  className="h-4 w-4"
-                />
-                Round displayed values (display only)
-              </label>
-
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-slate-500">
-                  Displayed decimals
-                </span>
-                <select
-                  value={displayDecimals}
-                  onChange={(e) =>
-                    setDisplayDecimals(
-                      Math.max(
-                        0,
-                        Math.min(6, Math.trunc(Number(e.target.value) || 2)),
-                      ),
-                    )
-                  }
-                  className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
-                >
-                  <option value={0}>0</option>
-                  <option value={2}>2</option>
-                  <option value={4}>4</option>
-                  <option value={6}>6</option>
-                </select>
-              </div>
-            </div>
-            <p className="mt-2 text-xs text-slate-500">
-              Internal math is fixed-point up to 12 decimals. This only changes
-              what is displayed.
-            </p>
-          </div>
-
           <div className="grid gap-5 md:grid-cols-12">
             <div className="md:col-span-7">
               <label className="block text-sm font-semibold text-slate-700 mb-2">
@@ -824,11 +704,16 @@ export default function WeeklyToMonthlyRent() {
               <div className="flex gap-2">
                 <input
                   inputMode="decimal"
-                  value={amount}
+                  value={amountInputValue}
                   onChange={(e) => setAmount(e.target.value)}
+                  onFocus={() => setIsAmountFocused(true)}
+                  onBlur={() => {
+                    setIsAmountFocused(false);
+                    setAmountTouched(true);
+                  }}
                   placeholder="e.g. 500"
                   className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
-                  aria-invalid={!parsed.ok}
+                  aria-invalid={amountTouched && !parsed.ok}
                 />
                 <select
                   value={currency}
@@ -849,6 +734,17 @@ export default function WeeklyToMonthlyRent() {
                   ))}
                 </select>
               </div>
+
+              {amountTouched && !parsed.ok ? (
+                <div className="mt-3 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
+                  <div className="font-semibold">Invalid amount</div>
+                  <ul className="mt-1 list-disc pl-5 space-y-1">
+                    {parsed.errors.map((e, i) => (
+                      <li key={i}>{e}</li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
             </div>
 
             <div className="md:col-span-5">
@@ -868,17 +764,6 @@ export default function WeeklyToMonthlyRent() {
                     {PERIOD_LABEL.monthly}
                   </div>
                 </div>
-              </div>
-
-              <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4">
-                <div className="text-xs text-slate-500">
-                  Interpretation note
-                </div>
-                <p className="mt-1 text-sm text-slate-700">
-                  Monthly is derived from a 365-day annual total (then divided
-                  by 12). That is why weekly x 4 (28 days) is not the same as
-                  monthly.
-                </p>
               </div>
             </div>
           </div>
@@ -1069,6 +954,42 @@ export default function WeeklyToMonthlyRent() {
               </p>
             </>
           ) : null}
+        </div>
+        <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 rc-no-print">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <label className="flex items-center gap-2 text-sm text-slate-700">
+              <input
+                type="checkbox"
+                checked={roundDisplay}
+                onChange={(e) => setRoundDisplay(e.target.checked)}
+                className="h-4 w-4"
+              />
+              Round displayed values (display only)
+            </label>
+
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-slate-500">Displayed decimals</span>
+              <select
+                value={displayDecimals}
+                onChange={(e) => {
+                  const v = Math.trunc(Number(e.target.value));
+                  setDisplayDecimals(
+                    v === 0 || v === 2 || v === 4 || v === 6 ? v : 2,
+                  );
+                }}
+                className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
+              >
+                <option value={0}>0</option>
+                <option value={2}>2</option>
+                <option value={4}>4</option>
+                <option value={6}>6</option>
+              </select>
+            </div>
+          </div>
+          <p className="mt-2 text-xs text-slate-500">
+            Internal math is fixed-point up to 12 decimals. This only changes
+            what is displayed.
+          </p>
         </div>
       </section>
 

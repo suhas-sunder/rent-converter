@@ -642,7 +642,7 @@ export default function AnnualToBiweeklyRent() {
         <h1 className="text-4xl font-bold text-slate-800 mb-4">
           Annual to Biweekly Rent Converter
         </h1>
-        <p className="text-slate-600 max-w-3xl mx-auto text-lg">
+        <p className="text-slate-600 max-w-5xl mx-auto text-lg">
           Convert an annual rent total into a biweekly 14-day equivalent for
           paycheque-style budgeting. Decimal-safe parsing and no guessing on
           ambiguous inputs.
@@ -818,20 +818,6 @@ export default function AnnualToBiweeklyRent() {
                         Copy failed
                       </span>
                     ) : null}
-                  </div>
-
-                  <div className="mt-1 text-xs text-slate-500">
-                    {roundDisplay ? (
-                      <>
-                        Displayed values rounded to {displayDecimals} decimals.
-                        Calculations use up to 12 decimals internally.
-                      </>
-                    ) : (
-                      <>
-                        Displayed values show up to 12 decimals (no display
-                        rounding).
-                      </>
-                    )}
                   </div>
                 </div>
 

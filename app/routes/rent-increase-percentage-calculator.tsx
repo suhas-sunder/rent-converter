@@ -205,17 +205,61 @@ function toNumberSafe(scaled: bigint): number {
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
+  roundDisplay: boolean,
   displayDecimals: number,
 ): string {
   const n = toNumberSafe(scaled);
   if (!Number.isFinite(n)) return "—";
-  const digits = Math.max(0, Math.min(12, displayDecimals));
+
+  let minimumFractionDigits = 0;
+  let maximumFractionDigits = 12;
+
+  if (roundDisplay) {
+    const digits = Math.max(0, Math.min(12, displayDecimals));
+    minimumFractionDigits = digits;
+    maximumFractionDigits = digits;
+  } else {
+    minimumFractionDigits = 0;
+    maximumFractionDigits = 12;
+  }
+
   return new Intl.NumberFormat(undefined, {
     style: "currency",
     currency,
-    minimumFractionDigits: digits,
-    maximumFractionDigits: digits,
+    minimumFractionDigits,
+    maximumFractionDigits,
   }).format(n);
+}
+
+function groupIntEnUS(intStr: string): string {
+  const s = intStr.replace(/^0+(?=\d)/, "");
+  return s.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function formatPreviewFromParsed(parsed: ParsedScaled): string {
+  if (!parsed.ok || parsed.scaled === undefined) return "";
+  const scaled = parsed.scaled;
+
+  let decimals = 0;
+  if (parsed.normalized && parsed.normalized.includes(".")) {
+    const parts = parsed.normalized.split(".");
+    const frac = parts[1] ?? "";
+    decimals = clampNum(frac.length, 0, Number(MAX_DECIMALS));
+  }
+
+  const intPart = scaled / SCALE;
+  const fracPart = scaled % SCALE;
+
+  const intStr = groupIntEnUS(intPart.toString());
+
+  if (decimals <= 0) return intStr;
+
+  const fracFull = fracPart
+    .toString()
+    .padStart(Number(MAX_DECIMALS), "0")
+    .slice(0, decimals);
+
+  return `${intStr}.${fracFull}`;
 }
 
 /**
@@ -297,6 +341,21 @@ function parseMoneyInputToScaled(raw: string): ParsedScaled {
     }
     intPart = split[0] ?? "";
     fracPart = split[1] ?? "";
+
+    if (decimalSep === "." && s.endsWith(".")) {
+      return {
+        ok: false,
+        error: "That number is incomplete (ends with a decimal point).",
+        warnings,
+      };
+    }
+    if (decimalSep === "," && s.endsWith(",")) {
+      return {
+        ok: false,
+        error: "That number is incomplete (ends with a decimal separator).",
+        warnings,
+      };
+    }
   }
 
   if (decimalSep === ".") intPart = intPart.replace(/,/g, "");
@@ -356,32 +415,6 @@ function fromAnnualScaled(annualScaled: bigint, to: Period): bigint {
   return annualScaled;
 }
 
-function buildCsvRow(cols: string[]): string {
-  return cols
-    .map((c) => {
-      const s = String(c ?? "");
-      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
-      return s;
-    })
-    .join(",");
-}
-
-function downloadTextFile(
-  filename: string,
-  content: string,
-  mime = "text/plain;charset=utf-8",
-) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
 function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   if (raw === null) return fallback;
   try {
@@ -390,6 +423,17 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   } catch {
     return fallback;
   }
+}
+
+function safeParseDisplayDecimals(
+  raw: string | null,
+  fallback: number,
+): number {
+  if (raw === null) return fallback;
+  const n = Number(raw);
+  if (!Number.isFinite(n)) return fallback;
+  const t = Math.trunc(n);
+  return t === 0 || t === 2 || t === 4 || t === 6 ? t : fallback;
 }
 
 export default function RentIncreasePercentage() {
@@ -426,10 +470,30 @@ export default function RentIncreasePercentage() {
 
   const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
     if (typeof window === "undefined") return 2;
-    const saved = localStorage.getItem("rc_rip_display_decimals");
-    const n = saved ? Number(saved) : 2;
-    if (!Number.isFinite(n)) return 2;
-    return Math.max(0, Math.min(6, Math.trunc(n)));
+    return safeParseDisplayDecimals(
+      localStorage.getItem("rc_rip_display_decimals"),
+      2,
+    );
+  });
+
+  const [oldFocused, setOldFocused] = useState(false);
+  const [newFocused, setNewFocused] = useState(false);
+
+  const oldParsed = useMemo(() => parseMoneyInputToScaled(oldRent), [oldRent]);
+  const newParsed = useMemo(() => parseMoneyInputToScaled(newRent), [newRent]);
+
+  const [oldDisplay, setOldDisplay] = useState<string>(() => {
+    if (typeof window === "undefined") return "2000";
+    const initial = localStorage.getItem("rc_rip_old") ?? "2000";
+    const p = parseMoneyInputToScaled(initial);
+    return p.ok ? formatPreviewFromParsed(p) : initial;
+  });
+
+  const [newDisplay, setNewDisplay] = useState<string>(() => {
+    if (typeof window === "undefined") return "2100";
+    const initial = localStorage.getItem("rc_rip_new") ?? "2100";
+    const p = parseMoneyInputToScaled(initial);
+    return p.ok ? formatPreviewFromParsed(p) : initial;
   });
 
   useEffect(() => {
@@ -449,12 +513,30 @@ export default function RentIncreasePercentage() {
     }
   }, [oldRent, newRent, period, currency, roundDisplay, displayDecimals]);
 
-  const oldParsed = useMemo(() => parseMoneyInputToScaled(oldRent), [oldRent]);
-  const newParsed = useMemo(() => parseMoneyInputToScaled(newRent), [newRent]);
+  useEffect(() => {
+    if (oldFocused) return;
+    setOldDisplay(oldParsed.ok ? formatPreviewFromParsed(oldParsed) : oldRent);
+  }, [
+    oldRent,
+    oldParsed.ok,
+    oldParsed.scaled,
+    oldParsed.normalized,
+    oldFocused,
+  ]);
 
-  const effectiveDisplayDecimals = roundDisplay ? displayDecimals : 12;
+  useEffect(() => {
+    if (newFocused) return;
+    setNewDisplay(newParsed.ok ? formatPreviewFromParsed(newParsed) : newRent);
+  }, [
+    newRent,
+    newParsed.ok,
+    newParsed.scaled,
+    newParsed.normalized,
+    newFocused,
+  ]);
+
   const fmtMoney = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, effectiveDisplayDecimals);
+    formatCurrencyFromScaled(scaled, currency, roundDisplay, displayDecimals);
 
   const computed = useMemo(() => {
     const errors: string[] = [];
@@ -624,89 +706,6 @@ export default function RentIncreasePercentage() {
     window.print();
   };
 
-  const handleExportCsv = () => {
-    if (!computed.ok) return;
-
-    const rows: string[] = [];
-    rows.push(buildCsvRow([pageName]));
-    rows.push(buildCsvRow(["Currency", currency]));
-    rows.push(buildCsvRow(["Billing period", PERIOD_LABEL[period]]));
-    rows.push(buildCsvRow(["Old rent (input)", oldRent]));
-    rows.push(buildCsvRow(["New rent (input)", newRent]));
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Summary"]));
-    rows.push(
-      buildCsvRow([
-        "Old (same period)",
-        fmtMoney(fromAnnualScaled(computed.annualOldScaled, period)),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "New (same period)",
-        fmtMoney(fromAnnualScaled(computed.annualNewScaled, period)),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Change per selected period",
-        fmtMoney(computed.deltaPerSelectedPeriodScaled),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Annual old (annualized)",
-        fmtMoney(computed.annualOldScaled),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Annual new (annualized)",
-        fmtMoney(computed.annualNewScaled),
-      ]),
-    );
-    rows.push(
-      buildCsvRow(["Annual difference", fmtMoney(computed.annualDeltaScaled)]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Percent change",
-        computed.pct === null ? "N/A" : computed.pct.toFixed(6),
-      ]),
-    );
-    if (computed.pctNote)
-      rows.push(buildCsvRow(["Percent note", computed.pctNote]));
-
-    rows.push(buildCsvRow([""]));
-    rows.push(buildCsvRow(["Breakdown across periods (annual-equivalent)"]));
-    rows.push(buildCsvRow(["Period", "Old", "New", "Difference"]));
-    computed.breakdown.forEach((b) => {
-      rows.push(
-        buildCsvRow([
-          PERIOD_LABEL[b.p],
-          fmtMoney(b.oldValScaled),
-          fmtMoney(b.newValScaled),
-          fmtMoney(b.deltaScaled),
-        ]),
-      );
-    });
-
-    rows.push(buildCsvRow([""]));
-    rows.push(
-      buildCsvRow([
-        "Assumptions",
-        "Year=365 days, Week=7 days, Every 4 weeks=28 days, Month=365/12 days (average).",
-      ]),
-    );
-
-    downloadTextFile(
-      "rent-increase-percentage-calculator.csv",
-      rows.join("\n"),
-      "text/csv;charset=utf-8",
-    );
-  };
-
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const copyTimerRef = useRef<number | null>(null);
 
@@ -808,8 +807,18 @@ export default function RentIncreasePercentage() {
               <input
                 id="rc-rip-old"
                 inputMode="decimal"
-                value={oldRent}
+                value={oldFocused ? oldRent : oldDisplay}
                 onChange={(e) => setOldRent(e.target.value)}
+                onFocus={() => {
+                  setOldFocused(true);
+                  setOldDisplay(oldRent);
+                }}
+                onBlur={() => {
+                  setOldFocused(false);
+                  setOldDisplay(
+                    oldParsed.ok ? formatPreviewFromParsed(oldParsed) : oldRent,
+                  );
+                }}
                 placeholder="e.g. 2000 or 2000.00"
                 className={`w-full rounded-xl border px-4 py-3.5 text-base outline-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
                   oldParsed.ok
@@ -842,8 +851,18 @@ export default function RentIncreasePercentage() {
               <input
                 id="rc-rip-new"
                 inputMode="decimal"
-                value={newRent}
+                value={newFocused ? newRent : newDisplay}
                 onChange={(e) => setNewRent(e.target.value)}
+                onFocus={() => {
+                  setNewFocused(true);
+                  setNewDisplay(newRent);
+                }}
+                onBlur={() => {
+                  setNewFocused(false);
+                  setNewDisplay(
+                    newParsed.ok ? formatPreviewFromParsed(newParsed) : newRent,
+                  );
+                }}
                 placeholder="e.g. 2100 or 2100.00"
                 className={`w-full rounded-xl border px-4 py-3.5 text-base outline-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
                   newParsed.ok
@@ -923,59 +942,6 @@ export default function RentIncreasePercentage() {
                   </option>
                 ))}
               </select>
-              <p className="mt-2 text-xs text-slate-600">
-                Currency affects formatting only.
-              </p>
-            </div>
-
-            <div className="md:col-span-12">
-              <label className="block text-sm font-semibold text-slate-800 mb-2">
-                Display
-              </label>
-              <div className="rounded-xl border border-slate-200 bg-white p-4">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                  <label className="flex items-center gap-2 text-sm text-slate-800">
-                    <input
-                      type="checkbox"
-                      checked={roundDisplay}
-                      onChange={(e) => setRoundDisplay(e.target.checked)}
-                      className="h-4 w-4 rounded border-slate-300 text-sky-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-                    />
-                    Round displayed values (display only)
-                  </label>
-
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs text-slate-600">
-                      Displayed decimals
-                    </span>
-                    <select
-                      value={displayDecimals}
-                      onChange={(e) =>
-                        setDisplayDecimals(
-                          Math.max(
-                            0,
-                            Math.min(
-                              6,
-                              Math.trunc(Number(e.target.value) || 2),
-                            ),
-                          ),
-                        )
-                      }
-                      className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus:border-sky-600"
-                    >
-                      <option value={0}>0</option>
-                      <option value={2}>2</option>
-                      <option value={4}>4</option>
-                      <option value={6}>6</option>
-                    </select>
-                  </div>
-                </div>
-
-                <p className="mt-2 text-xs text-slate-600">
-                  Calculations preserve decimals internally (up to 12). Only the
-                  displayed values are rounded.
-                </p>
-              </div>
             </div>
           </div>
 
@@ -1280,6 +1246,47 @@ export default function RentIncreasePercentage() {
             dates.
           </p>
         </div>
+
+        <div className="md:col-span-12 mt-6">
+          <div className="rounded-xl border border-slate-200 bg-white p-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <label className="flex items-center gap-2 text-sm text-slate-800">
+                <input
+                  type="checkbox"
+                  checked={roundDisplay}
+                  onChange={(e) => setRoundDisplay(e.target.checked)}
+                  className="h-4 w-4 rounded border-slate-300 text-sky-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                />
+                Round displayed values (display only)
+              </label>
+
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-slate-600">
+                  Displayed decimals
+                </span>
+                <select
+                  value={displayDecimals}
+                  onChange={(e) =>
+                    setDisplayDecimals(
+                      safeParseDisplayDecimals(e.target.value, 2),
+                    )
+                  }
+                  className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus:border-sky-600"
+                >
+                  <option value={0}>0</option>
+                  <option value={2}>2</option>
+                  <option value={4}>4</option>
+                  <option value={6}>6</option>
+                </select>
+              </div>
+            </div>
+
+            <p className="mt-2 text-xs text-slate-600">
+              Calculations preserve decimals internally (up to 12). Only the
+              displayed values are rounded.
+            </p>
+          </div>
+        </div>
       </section>
 
       <section
@@ -1319,8 +1326,7 @@ export default function RentIncreasePercentage() {
             </li>
             <li>
               <strong>Decimals are preserved end-to-end.</strong> If you enable
-              rounding, only the displayed values are rounded. Exports include
-              the displayed formatting.
+              rounding, only the displayed values are rounded.
             </li>
           </ol>
 

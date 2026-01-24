@@ -9,7 +9,7 @@ export const meta: Route.MetaFunction = () => [
   {
     name: "description",
     content:
-      "Compare renting vs buying using a simple cost model over a chosen time horizon. See total rent cost, total ownership outflow, estimated equity, and an estimated break-even year. Includes a year-by-year table and export options.",
+      "Compare renting vs buying using a simple cost model over a chosen time horizon. See total rent cost, total ownership outflow, estimated equity, and an estimated break-even year. Includes a year-by-year table.",
   },
   {
     name: "keywords",
@@ -153,16 +153,27 @@ function toNumberSafe(scaled: bigint): number {
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
+  roundDisplay: boolean,
   displayDecimals: number,
 ): string {
   const n = toNumberSafe(scaled);
   if (!Number.isFinite(n)) return "N/A";
-  const digits = Math.max(0, Math.min(12, displayDecimals));
+
+  if (roundDisplay) {
+    const digits = Math.max(0, Math.min(12, displayDecimals));
+    return new Intl.NumberFormat(undefined, {
+      style: "currency",
+      currency,
+      minimumFractionDigits: digits,
+      maximumFractionDigits: digits,
+    }).format(n);
+  }
+
   return new Intl.NumberFormat(undefined, {
     style: "currency",
     currency,
-    minimumFractionDigits: digits,
-    maximumFractionDigits: digits,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 12,
   }).format(n);
 }
 
@@ -322,43 +333,75 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   }
 }
 
-function safeParseInt(
-  raw: string | null,
-  fallback: number,
-  min: number,
-  max: number,
-): number {
-  if (raw === null) return fallback;
+function safeParseDisplayDecimals(raw: string | null): number {
+  if (raw === null) return 2;
   const n = Number(raw);
-  if (!Number.isFinite(n)) return fallback;
+  if (!Number.isFinite(n)) return 2;
   const t = Math.trunc(n);
-  return Math.max(min, Math.min(max, t));
+  return t === 0 || t === 2 || t === 4 || t === 6 ? t : 2;
 }
 
-function buildCsvRow(cols: string[]): string {
-  return cols
-    .map((c) => {
-      const s = String(c ?? "");
-      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
-      return s;
-    })
-    .join(",");
+function groupThousandsEnUs(intStr: string): string {
+  const s = intStr.replace(/^0+(?=\d)/, "") || "0";
+  let out = "";
+  for (let i = 0; i < s.length; i++) {
+    const idxFromRight = s.length - i;
+    out += s[i];
+    if (idxFromRight > 1 && idxFromRight % 3 === 1) out += ",";
+  }
+  return out;
 }
 
-function downloadTextFile(
-  filename: string,
-  content: string,
-  mime = "text/plain;charset=utf-8",
-) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
+function inferPreviewDecimalsFromRaw(raw: string): number {
+  const s0 = (raw ?? "").trim();
+  if (!s0) return 0;
+
+  let s = s0.replace(/\s+/g, "");
+  s = s.replace(/[^\d.,]/g, "");
+  if (!s) return 0;
+
+  const lastDot = s.lastIndexOf(".");
+  const lastComma = s.lastIndexOf(",");
+
+  let decimalSep: "." | "," | null = null;
+
+  if (lastDot !== -1 && lastComma !== -1) {
+    decimalSep = lastDot > lastComma ? "." : ",";
+  } else if (lastDot !== -1) {
+    decimalSep = ".";
+  } else if (lastComma !== -1) {
+    const parts = s.split(",");
+    if (parts.length === 2) {
+      const after = parts[1] ?? "";
+      if (/^\d{1,2}$/.test(after)) decimalSep = ",";
+      else decimalSep = null;
+    } else {
+      decimalSep = null;
+    }
+  }
+
+  if (!decimalSep) return 0;
+
+  const split = s.split(decimalSep);
+  if (split.length !== 2) return 0;
+  const frac = split[1] ?? "";
+  if (!frac) return 0;
+  if (!/^\d+$/.test(frac)) return 0;
+  return Math.max(0, Math.min(12, frac.length));
+}
+
+function formatPreviewFromScaledAndRaw(scaled: bigint, raw: string): string {
+  const decimals = inferPreviewDecimalsFromRaw(raw);
+  const intPart = scaled / SCALE;
+  const fracPart = scaled % SCALE;
+
+  const intStr = groupThousandsEnUs(intPart.toString());
+
+  if (decimals <= 0) return intStr;
+
+  const fracFull = fracPart.toString().padStart(Number(MAX_DECIMALS), "0");
+  const fracOut = fracFull.slice(0, decimals);
+  return `${intStr}.${fracOut}`;
 }
 
 function pctToRate(p: number) {
@@ -503,13 +546,22 @@ export default function RentVsBuyCalculator() {
   });
   const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
     if (typeof window === "undefined") return 2;
-    return safeParseInt(
+    return safeParseDisplayDecimals(
       localStorage.getItem("rc_rvb_display_decimals"),
-      2,
-      0,
-      6,
     );
   });
+
+  const [rentFocused, setRentFocused] = useState(false);
+  const [homePriceFocused, setHomePriceFocused] = useState(false);
+  const [homeInsuranceFocused, setHomeInsuranceFocused] = useState(false);
+  const [hoaFocused, setHoaFocused] = useState(false);
+  const [buyClosingFocused, setBuyClosingFocused] = useState(false);
+
+  const [rentTouched, setRentTouched] = useState(false);
+  const [homePriceTouched, setHomePriceTouched] = useState(false);
+  const [homeInsuranceTouched, setHomeInsuranceTouched] = useState(false);
+  const [hoaTouched, setHoaTouched] = useState(false);
+  const [buyClosingTouched, setBuyClosingTouched] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -887,116 +939,12 @@ export default function RentVsBuyCalculator() {
     };
   }, [parsed]);
 
-  const effectiveDisplayDecimals = roundDisplay ? displayDecimals : 12;
   const money = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, effectiveDisplayDecimals);
+    formatCurrencyFromScaled(scaled, currency, roundDisplay, displayDecimals);
 
   const handlePrint = () => {
     if (typeof window === "undefined") return;
     window.print();
-  };
-
-  const handleExportCsv = () => {
-    if (!computed.ok) return;
-
-    const rows: string[] = [];
-    rows.push(buildCsvRow([pageName]));
-    rows.push(buildCsvRow(["Currency", currency]));
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Headline results"]));
-    rows.push(
-      buildCsvRow(["Total rent cost", money(computed.totalRentCostScaled)]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Ownership net cost",
-        money(computed.ownershipNetCostScaled),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Break-even year",
-        computed.breakEvenYear === null ? "" : String(computed.breakEvenYear),
-      ]),
-    );
-
-    rows.push(buildCsvRow([""]));
-    rows.push(buildCsvRow(["Key computed values"]));
-    rows.push(buildCsvRow(["Down payment", money(computed.downPaymentScaled)]));
-    rows.push(
-      buildCsvRow(["Buy closing costs", money(computed.buyCloseScaled)]),
-    );
-    rows.push(
-      buildCsvRow(["Loan principal", money(computed.loanPrincipalScaled)]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Monthly mortgage payment (P+I)",
-        money(computed.monthlyMortgagePaymentScaled),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Estimated net sale proceeds",
-        money(computed.estimatedNetSaleProceedsScaled),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Estimated selling costs",
-        money(computed.estimatedSellCostsScaled),
-      ]),
-    );
-    rows.push(
-      buildCsvRow(["Ending home value", money(computed.endingHomeValueScaled)]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Ending mortgage balance",
-        money(computed.endingBalanceScaled),
-      ]),
-    );
-
-    rows.push(buildCsvRow([""]));
-    rows.push(buildCsvRow(["Year-by-year table"]));
-    rows.push(
-      buildCsvRow([
-        "Year",
-        "Rent (annual)",
-        "Rent (cumulative)",
-        "Home value",
-        "Mortgage balance (end)",
-        "Ownership outflow (annual)",
-        "Ownership outflow (cumulative)",
-        "Interest paid (year)",
-        "Principal paid (year)",
-        "Equity (end)",
-      ]),
-    );
-
-    for (const r of computed.rows) {
-      rows.push(
-        buildCsvRow([
-          String(r.year),
-          money(r.rentAnnual),
-          money(r.rentCumulative),
-          money(r.homeValue),
-          money(r.mortgageBalanceEnd),
-          money(r.ownershipAnnualOutflow),
-          money(r.ownershipCumulativeOutflow),
-          money(r.interestPaidThisYear),
-          money(r.principalPaidThisYear),
-          money(r.equityEnd),
-        ]),
-      );
-    }
-
-    downloadTextFile(
-      "rent-vs-buy.csv",
-      rows.join("\n"),
-      "text/csv;charset=utf-8",
-    );
   };
 
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
@@ -1085,6 +1033,42 @@ export default function RentVsBuyCalculator() {
     ],
   };
 
+  const monthlyRentDisplayValue = rentFocused
+    ? monthlyRent
+    : parsed.rent.ok
+      ? formatPreviewFromScaledAndRaw(parsed.rent.scaled as bigint, monthlyRent)
+      : monthlyRent;
+
+  const homePriceDisplayValue = homePriceFocused
+    ? homePrice
+    : parsed.price.ok
+      ? formatPreviewFromScaledAndRaw(parsed.price.scaled as bigint, homePrice)
+      : homePrice;
+
+  const homeInsuranceDisplayValue = homeInsuranceFocused
+    ? homeInsuranceAnnual
+    : parsed.insAnnual.ok
+      ? formatPreviewFromScaledAndRaw(
+          parsed.insAnnual.scaled as bigint,
+          homeInsuranceAnnual,
+        )
+      : homeInsuranceAnnual;
+
+  const hoaDisplayValue = hoaFocused
+    ? hoaMonthly
+    : parsed.hoa.ok
+      ? formatPreviewFromScaledAndRaw(parsed.hoa.scaled as bigint, hoaMonthly)
+      : hoaMonthly;
+
+  const buyClosingDisplayValue = buyClosingFocused
+    ? buyClosingCosts
+    : parsed.buyClose.ok
+      ? formatPreviewFromScaledAndRaw(
+          parsed.buyClose.scaled as bigint,
+          buyClosingCosts,
+        )
+      : buyClosingCosts;
+
   return (
     <main className="bg-white text-slate-700 scroll-smooth">
       <style
@@ -1111,7 +1095,7 @@ export default function RentVsBuyCalculator() {
 
       <section className="pb-8 text-center bg-white rc-no-print">
         <h1 className="text-4xl font-bold text-slate-800 mb-4">{pageName}</h1>
-        <p className="text-slate-600 max-w-3xl mx-auto text-lg">
+        <p className="text-slate-600 max-w-5xl mx-auto text-lg">
           Compare rent costs to a simplified cost of ownership over a time
           horizon. The model shows cash outflow, estimated equity, and an
           end-of-horizon sale estimate.
@@ -1125,10 +1109,6 @@ export default function RentVsBuyCalculator() {
               <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
                 Compare costs over time
               </h2>
-              <p className="text-sm text-slate-600 mt-2">
-                Invalid input hides results to avoid misleading “0” outputs.
-                Calculations preserve decimals; rounding is display-only.
-              </p>
             </div>
 
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
@@ -1142,48 +1122,6 @@ export default function RentVsBuyCalculator() {
             </div>
           </div>
 
-          <div className="mb-6 rounded-2xl border border-slate-200 bg-white p-5 rc-no-print">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <label className="flex items-center gap-2 text-sm text-slate-700">
-                <input
-                  type="checkbox"
-                  checked={roundDisplay}
-                  onChange={(e) => setRoundDisplay(e.target.checked)}
-                  className="h-4 w-4"
-                />
-                Round displayed values (display only)
-              </label>
-
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-slate-500">
-                  Displayed decimals
-                </span>
-                <select
-                  value={displayDecimals}
-                  onChange={(e) =>
-                    setDisplayDecimals(
-                      Math.max(
-                        0,
-                        Math.min(6, Math.trunc(Number(e.target.value) || 2)),
-                      ),
-                    )
-                  }
-                  className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
-                >
-                  <option value={0}>0</option>
-                  <option value={2}>2</option>
-                  <option value={4}>4</option>
-                  <option value={6}>6</option>
-                </select>
-              </div>
-            </div>
-
-            <p className="mt-2 text-xs text-slate-500">
-              Internal math is fixed-point up to 12 decimals. This control only
-              changes what is displayed.
-            </p>
-          </div>
-
           <div className="grid gap-6 lg:grid-cols-12">
             <div className="lg:col-span-4 rounded-2xl border border-slate-200 bg-white p-5">
               <h3 className="text-base font-bold text-slate-900 mb-3">
@@ -1195,12 +1133,27 @@ export default function RentVsBuyCalculator() {
               </label>
               <input
                 inputMode="decimal"
-                value={monthlyRent}
+                value={monthlyRentDisplayValue}
                 onChange={(e) => setMonthlyRent(e.target.value)}
+                onFocus={() => setRentFocused(true)}
+                onBlur={() => {
+                  setRentFocused(false);
+                  setRentTouched(true);
+                }}
                 placeholder="e.g. 2200"
                 className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                 aria-invalid={!parsed.rent.ok}
               />
+              {rentTouched && !rentFocused && !parsed.rent.ok ? (
+                <p className="mt-2 text-xs text-rose-700">
+                  {parsed.rent.error ?? "Enter monthly rent."}
+                </p>
+              ) : (
+                <p className="mt-2 text-xs text-slate-500">
+                  Accepted inputs: $2,200, 2200.00, .5, 12., 2200,50 (comma
+                  decimal).
+                </p>
+              )}
 
               <div className="mt-4">
                 <label className="block text-sm font-semibold text-slate-700 mb-2">
@@ -1239,9 +1192,6 @@ export default function RentVsBuyCalculator() {
                     </option>
                   ))}
                 </select>
-                <p className="mt-2 text-xs text-slate-500">
-                  Currency affects formatting only.
-                </p>
               </div>
             </div>
 
@@ -1255,12 +1205,22 @@ export default function RentVsBuyCalculator() {
               </label>
               <input
                 inputMode="decimal"
-                value={homePrice}
+                value={homePriceDisplayValue}
                 onChange={(e) => setHomePrice(e.target.value)}
+                onFocus={() => setHomePriceFocused(true)}
+                onBlur={() => {
+                  setHomePriceFocused(false);
+                  setHomePriceTouched(true);
+                }}
                 placeholder="e.g. 550000"
                 className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                 aria-invalid={!parsed.price.ok}
               />
+              {homePriceTouched && !homePriceFocused && !parsed.price.ok ? (
+                <p className="mt-2 text-xs text-rose-700">
+                  {parsed.price.error ?? "Enter home price."}
+                </p>
+              ) : null}
 
               <div className="grid gap-4 sm:grid-cols-2 mt-4">
                 <div>
@@ -1356,12 +1316,24 @@ export default function RentVsBuyCalculator() {
                   </label>
                   <input
                     inputMode="decimal"
-                    value={homeInsuranceAnnual}
+                    value={homeInsuranceDisplayValue}
                     onChange={(e) => setHomeInsuranceAnnual(e.target.value)}
+                    onFocus={() => setHomeInsuranceFocused(true)}
+                    onBlur={() => {
+                      setHomeInsuranceFocused(false);
+                      setHomeInsuranceTouched(true);
+                    }}
                     placeholder="e.g. 1200"
                     className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                     aria-invalid={!parsed.insAnnual.ok}
                   />
+                  {homeInsuranceTouched &&
+                  !homeInsuranceFocused &&
+                  !parsed.insAnnual.ok ? (
+                    <p className="mt-2 text-xs text-rose-700">
+                      {parsed.insAnnual.error ?? "Enter annual home insurance."}
+                    </p>
+                  ) : null}
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">
@@ -1369,12 +1341,22 @@ export default function RentVsBuyCalculator() {
                   </label>
                   <input
                     inputMode="decimal"
-                    value={hoaMonthly}
+                    value={hoaDisplayValue}
                     onChange={(e) => setHoaMonthly(e.target.value)}
+                    onFocus={() => setHoaFocused(true)}
+                    onBlur={() => {
+                      setHoaFocused(false);
+                      setHoaTouched(true);
+                    }}
                     placeholder="e.g. 0"
                     className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                     aria-invalid={!parsed.hoa.ok}
                   />
+                  {hoaTouched && !hoaFocused && !parsed.hoa.ok ? (
+                    <p className="mt-2 text-xs text-rose-700">
+                      {parsed.hoa.error ?? "Enter HOA."}
+                    </p>
+                  ) : null}
                 </div>
               </div>
 
@@ -1385,12 +1367,24 @@ export default function RentVsBuyCalculator() {
                   </label>
                   <input
                     inputMode="decimal"
-                    value={buyClosingCosts}
+                    value={buyClosingDisplayValue}
                     onChange={(e) => setBuyClosingCosts(e.target.value)}
+                    onFocus={() => setBuyClosingFocused(true)}
+                    onBlur={() => {
+                      setBuyClosingFocused(false);
+                      setBuyClosingTouched(true);
+                    }}
                     placeholder="e.g. 8000"
                     className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                     aria-invalid={!parsed.buyClose.ok}
                   />
+                  {buyClosingTouched &&
+                  !buyClosingFocused &&
+                  !parsed.buyClose.ok ? (
+                    <p className="mt-2 text-xs text-rose-700">
+                      {parsed.buyClose.error ?? "Enter buy closing costs."}
+                    </p>
+                  ) : null}
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">
@@ -1724,6 +1718,45 @@ export default function RentVsBuyCalculator() {
               professionals before making financial decisions.
             </p>
           </section>
+        </div>
+
+        <div className="mb-6 rounded-2xl border border-slate-200 bg-white p-5 rc-no-print mt-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <label className="flex items-center gap-2 text-sm text-slate-700">
+              <input
+                type="checkbox"
+                checked={roundDisplay}
+                onChange={(e) => setRoundDisplay(e.target.checked)}
+                className="h-4 w-4"
+              />
+              Round displayed values (display only)
+            </label>
+
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-slate-500">Displayed decimals</span>
+              <select
+                value={displayDecimals}
+                onChange={(e) => {
+                  const n = Number(e.target.value);
+                  const t = Math.trunc(n);
+                  setDisplayDecimals(
+                    t === 0 || t === 2 || t === 4 || t === 6 ? t : 2,
+                  );
+                }}
+                className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
+              >
+                <option value={0}>0</option>
+                <option value={2}>2</option>
+                <option value={4}>4</option>
+                <option value={6}>6</option>
+              </select>
+            </div>
+          </div>
+
+          <p className="mt-2 text-xs text-slate-500">
+            Internal math is fixed-point up to 12 decimals. This control only
+            changes what is displayed.
+          </p>
         </div>
       </section>
 

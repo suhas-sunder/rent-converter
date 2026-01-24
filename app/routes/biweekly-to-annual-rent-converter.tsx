@@ -624,7 +624,7 @@ export default function BiweeklyToAnnualRent() {
         <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-4 tracking-tight">
           Biweekly to Annual Rent Converter
         </h1>
-        <p className="text-slate-700/90 max-w-3xl mx-auto text-lg sm:text-xl leading-relaxed">
+        <p className="text-slate-700/90 max-w-5xl mx-auto text-lg sm:text-xl leading-relaxed">
           Convert a biweekly rent amount (every 14 days) into an annual
           equivalent using a 365-day year. Results update instantly and include
           a full breakdown plus a 26-payments shortcut comparison.
@@ -827,21 +827,6 @@ export default function BiweeklyToAnnualRent() {
                       >
                         Copy failed
                       </span>
-                    </div>
-
-                    <div className="mt-1 text-xs sm:text-sm text-slate-600 leading-relaxed">
-                      {roundDisplay ? (
-                        <>
-                          Displayed values rounded to {displayDecimals}{" "}
-                          decimals. Calculations use up to 12 decimals
-                          internally.
-                        </>
-                      ) : (
-                        <>
-                          Displayed values show up to 12 decimals (no display
-                          rounding).
-                        </>
-                      )}
                     </div>
                   </div>
 

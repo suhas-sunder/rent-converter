@@ -172,7 +172,7 @@ type ParsedScaled = {
 
 function clampScaled(v: bigint, min: bigint, max: bigint): bigint {
   if (v < min) return min;
-  if (v > max) return v > max ? max : v;
+  if (v > max) return max;
   return v;
 }
 
@@ -183,17 +183,36 @@ function toNumberSafe(scaled: bigint): number {
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
+  roundDisplay: boolean,
   displayDecimals: number,
 ): string {
   const n = toNumberSafe(scaled);
   if (!Number.isFinite(n)) return "—";
-  const digits = Math.max(0, Math.min(12, displayDecimals));
+
+  const allowed =
+    displayDecimals === 0 ||
+    displayDecimals === 2 ||
+    displayDecimals === 4 ||
+    displayDecimals === 6;
+  const dec = allowed ? displayDecimals : 2;
+
+  const minimumFractionDigits = roundDisplay ? dec : 0;
+  const maximumFractionDigits = roundDisplay ? dec : 12;
+
   return new Intl.NumberFormat(undefined, {
     style: "currency",
     currency,
-    minimumFractionDigits: digits,
-    maximumFractionDigits: digits,
+    minimumFractionDigits,
+    maximumFractionDigits,
   }).format(n);
+}
+
+function formatGroupedPreviewFromNormalized(normalized: string): string {
+  const [intPartRaw, fracPartRaw] = normalized.split(".");
+  const intPart = (intPartRaw ?? "0").replace(/^0+(?=\d)/, "0");
+  const groupedInt = (intPart || "0").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  if (typeof fracPartRaw === "string") return `${groupedInt}.${fracPartRaw}`;
+  return groupedInt;
 }
 
 /**
@@ -348,32 +367,6 @@ function convertScaled(valueScaled: bigint, from: Period, to: Period): bigint {
   return fromAnnualScaled(annual, to);
 }
 
-function buildCsvRow(cols: string[]): string {
-  return cols
-    .map((c) => {
-      const s = String(c ?? "");
-      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
-      return s;
-    })
-    .join(",");
-}
-
-function downloadTextFile(
-  filename: string,
-  content: string,
-  mime = "text/plain;charset=utf-8",
-) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
 function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   if (raw === null) return fallback;
   try {
@@ -384,17 +377,13 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   }
 }
 
-function safeParseInt(
-  raw: string | null,
-  fallback: number,
-  min: number,
-  max: number,
-) {
+function safeParseDisplayDecimals(raw: string | null): number {
+  const fallback = 2;
   if (raw === null) return fallback;
   const n = Number(raw);
   if (!Number.isFinite(n)) return fallback;
   const t = Math.trunc(n);
-  return Math.max(min, Math.min(max, t));
+  return t === 0 || t === 2 || t === 4 || t === 6 ? t : fallback;
 }
 
 export default function RentPerDayCalculator() {
@@ -405,6 +394,14 @@ export default function RentPerDayCalculator() {
     if (typeof window === "undefined") return "2000";
     return localStorage.getItem("rpdc_amount") ?? "2000";
   });
+
+  const amountInputRef = useRef<HTMLInputElement | null>(null);
+  const pendingAmountSelectionRef = useRef<{
+    start: number;
+    end: number;
+  } | null>(null);
+  const [amountFocused, setAmountFocused] = useState<boolean>(false);
+  const [amountPreview, setAmountPreview] = useState<string>(() => amount);
 
   const [from, setFrom] = useState<Period>(() => {
     if (typeof window === "undefined") return "monthly";
@@ -425,7 +422,9 @@ export default function RentPerDayCalculator() {
 
   const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
     if (typeof window === "undefined") return 2;
-    return safeParseInt(localStorage.getItem("rpdc_display_decimals"), 2, 0, 6);
+    return safeParseDisplayDecimals(
+      localStorage.getItem("rpdc_display_decimals"),
+    );
   });
 
   const [daysCount, setDaysCount] = useState<string>(() => {
@@ -449,11 +448,49 @@ export default function RentPerDayCalculator() {
 
   const parsedAmount = useMemo(() => parseMoneyInputToScaled(amount), [amount]);
 
+  useEffect(() => {
+    if (!amountFocused) {
+      if (parsedAmount.ok && parsedAmount.normalized) {
+        setAmountPreview(
+          formatGroupedPreviewFromNormalized(parsedAmount.normalized),
+        );
+      } else {
+        setAmountPreview(amount);
+      }
+    }
+  }, [amount, amountFocused, parsedAmount.ok, parsedAmount.normalized]);
+
+  useEffect(() => {
+    const sel = pendingAmountSelectionRef.current;
+    if (!sel) return;
+    if (!amountFocused) {
+      pendingAmountSelectionRef.current = null;
+      return;
+    }
+    const el = amountInputRef.current;
+    if (!el) {
+      pendingAmountSelectionRef.current = null;
+      return;
+    }
+    try {
+      el.setSelectionRange(sel.start, sel.end);
+    } catch {
+      // ignore
+    }
+    pendingAmountSelectionRef.current = null;
+  }, [amount, amountFocused]);
+
   const parsedDays = useMemo(() => {
-    const cleaned = (daysCount ?? "").replace(/[^\d]/g, "");
-    if (!cleaned)
-      return { ok: false as const, n: 0, error: "Enter a day count." };
-    const n = Number(cleaned);
+    const s = (daysCount ?? "").trim();
+    if (!s) return { ok: false as const, n: 0, error: "Enter a day count." };
+    if (!/^\d+$/.test(s)) {
+      return {
+        ok: false as const,
+        n: 0,
+        error: "Enter a whole number of days.",
+      };
+    }
+    const n = Number(s);
     if (!Number.isFinite(n))
       return { ok: false as const, n: 0, error: "Enter a valid day count." };
     const t = Math.trunc(n);
@@ -466,10 +503,8 @@ export default function RentPerDayCalculator() {
     return { ok: true as const, n: Math.max(0, Math.min(3660, t)) };
   }, [daysCount]);
 
-  const effectiveDisplayDecimals = roundDisplay ? displayDecimals : 12;
-
   const fmtMoney = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, effectiveDisplayDecimals);
+    formatCurrencyFromScaled(scaled, currency, roundDisplay, displayDecimals);
 
   const computed = useMemo(() => {
     const warnings: string[] = [];
@@ -533,87 +568,6 @@ export default function RentPerDayCalculator() {
   const handlePrint = () => {
     if (typeof window === "undefined") return;
     window.print();
-  };
-
-  const handleExportCsv = () => {
-    if (!computed.ok) return;
-
-    const rows: string[] = [];
-    rows.push(buildCsvRow([pageName]));
-    rows.push(buildCsvRow(["Currency", currency]));
-    rows.push(buildCsvRow(["Input amount", amount]));
-    rows.push(buildCsvRow(["Input period", from]));
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Daily equivalent (annual-basis)"]));
-    rows.push(buildCsvRow(["Daily", fmtMoney(computed.dailyScaled)]));
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Full breakdown (annual-basis)"]));
-    rows.push(buildCsvRow(["Period", "Amount"]));
-    rows.push(
-      buildCsvRow([PERIOD_LABEL.hourly, fmtMoney(computed.hourlyScaled)]),
-    );
-    rows.push(
-      buildCsvRow([PERIOD_LABEL.daily, fmtMoney(computed.dailyScaled)]),
-    );
-    rows.push(
-      buildCsvRow([PERIOD_LABEL.weekly, fmtMoney(computed.weeklyScaled)]),
-    );
-    rows.push(
-      buildCsvRow([PERIOD_LABEL.biweekly, fmtMoney(computed.biweeklyScaled)]),
-    );
-    rows.push(
-      buildCsvRow([
-        PERIOD_LABEL.every_4_weeks,
-        fmtMoney(computed.every4wScaled),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([PERIOD_LABEL.monthly, fmtMoney(computed.monthlyScaled)]),
-    );
-    rows.push(
-      buildCsvRow([PERIOD_LABEL.annual, fmtMoney(computed.annualScaled)]),
-    );
-
-    rows.push(buildCsvRow([""]));
-    rows.push(buildCsvRow(["Monthly vs 4-week (same annual basis)"]));
-    rows.push(
-      buildCsvRow([
-        "Monthly minus 4-week",
-        fmtMoney(computed.monthlyMinus4wScaled),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Difference percent",
-        `${computed.monthlyMinus4wPct.toFixed(2)}%`,
-      ]),
-    );
-
-    if (parsedDays.ok && totalForDaysScaled.ok) {
-      rows.push(buildCsvRow([""]));
-      rows.push(buildCsvRow(["Total estimator"]));
-      rows.push(buildCsvRow(["Days", String(parsedDays.n)]));
-      rows.push(buildCsvRow(["Daily", fmtMoney(computed.dailyScaled)]));
-      rows.push(
-        buildCsvRow(["Estimated total", fmtMoney(totalForDaysScaled.scaled)]),
-      );
-    }
-
-    rows.push(buildCsvRow([""]));
-    rows.push(
-      buildCsvRow([
-        "Assumptions",
-        "Year=365 days, Week=7 days, Biweekly=14 days, Every 4 weeks=28 days, Month=365/12 days (average).",
-      ]),
-    );
-
-    downloadTextFile(
-      "rent-per-day-calculator.csv",
-      rows.join("\n"),
-      "text/csv;charset=utf-8",
-    );
   };
 
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
@@ -759,10 +713,6 @@ export default function RentPerDayCalculator() {
               <h2 className="text-xl sm:text-2xl font-bold text-slate-950">
                 Daily rent equivalent
               </h2>
-              <p className="mt-1 text-sm text-slate-700 leading-relaxed">
-                Inputs are validated. Invalid input hides results, so you do not
-                get misleading zeros.
-              </p>
             </div>
 
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
@@ -786,10 +736,35 @@ export default function RentPerDayCalculator() {
               </label>
               <div className="flex gap-2">
                 <input
+                  ref={amountInputRef}
                   id={amountInputId}
                   inputMode="decimal"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
+                  value={amountFocused ? amount : amountPreview}
+                  onFocus={() => setAmountFocused(true)}
+                  onBlur={() => setAmountFocused(false)}
+                  onChange={(e) => {
+                    const el = e.target;
+                    const next = el.value;
+                    const start = el.selectionStart ?? next.length;
+                    const end = el.selectionEnd ?? next.length;
+
+                    const beforeStart = next.slice(0, start);
+                    const beforeEnd = next.slice(0, end);
+                    const removedBeforeStart = (beforeStart.match(/,/g) || [])
+                      .length;
+                    const removedBeforeEnd = (beforeEnd.match(/,/g) || [])
+                      .length;
+
+                    const sanitized = next.replace(/,/g, "");
+                    const newStart = Math.max(0, start - removedBeforeStart);
+                    const newEnd = Math.max(0, end - removedBeforeEnd);
+
+                    pendingAmountSelectionRef.current = {
+                      start: newStart,
+                      end: newEnd,
+                    };
+                    setAmount(sanitized);
+                  }}
                   placeholder="e.g. 2000 or 2000.00"
                   className="w-full min-w-0 rounded-xl border border-slate-300 px-4 py-3 text-base text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
                   aria-invalid={!parsedAmount.ok}
@@ -849,65 +824,6 @@ export default function RentPerDayCalculator() {
                 <option value="monthly">{PERIOD_LABEL.monthly}</option>
                 <option value="annual">{PERIOD_LABEL.annual}</option>
               </select>
-              <p className="mt-2 text-xs text-slate-600 leading-relaxed">
-                The daily equivalent is derived by converting the input to an
-                annual total (365-day basis), then to a 1-day amount.
-              </p>
-            </div>
-
-            <div className="md:col-span-12">
-              <label className="block text-sm font-semibold text-slate-800 mb-2">
-                Display
-              </label>
-              <div className="rounded-xl border border-slate-200 bg-white p-4">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                  <label
-                    htmlFor={roundCheckboxId}
-                    className="flex items-center gap-2 text-sm text-slate-800"
-                  >
-                    <input
-                      id={roundCheckboxId}
-                      type="checkbox"
-                      checked={roundDisplay}
-                      onChange={(e) => setRoundDisplay(e.target.checked)}
-                      className="h-5 w-5 accent-sky-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2 rounded"
-                    />
-                    Round displayed values (display only)
-                  </label>
-
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs text-slate-600">
-                      Displayed decimals
-                    </span>
-                    <select
-                      id={decimalsSelectId}
-                      value={displayDecimals}
-                      onChange={(e) =>
-                        setDisplayDecimals(
-                          Math.max(
-                            0,
-                            Math.min(
-                              6,
-                              Math.trunc(Number(e.target.value) || 2),
-                            ),
-                          ),
-                        )
-                      }
-                      className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
-                    >
-                      <option value={0}>0</option>
-                      <option value={2}>2</option>
-                      <option value={4}>4</option>
-                      <option value={6}>6</option>
-                    </select>
-                  </div>
-                </div>
-
-                <p className="mt-2 text-xs text-slate-600 leading-relaxed">
-                  Calculations preserve decimals internally (up to 12). Only
-                  display rounding changes.
-                </p>
-              </div>
             </div>
           </div>
 
@@ -964,7 +880,9 @@ export default function RentPerDayCalculator() {
                         "summary",
                         `Daily: ${fmtMoney(computed.dailyScaled)}; Weekly: ${fmtMoney(
                           computed.weeklyScaled,
-                        )}; Monthly: ${fmtMoney(computed.monthlyScaled)}; Annual: ${fmtMoney(
+                        )}; Monthly: ${fmtMoney(
+                          computed.monthlyScaled,
+                        )}; Annual: ${fmtMoney(
                           computed.annualScaled,
                         )} (365-day basis)`,
                       )
@@ -1028,7 +946,7 @@ export default function RentPerDayCalculator() {
 
                     <div className="mt-4 rounded-xl border border-slate-200 bg-[#f7fbff] px-4 py-3">
                       <div className="text-xs text-slate-700">
-                        Monthly vs every 4 weeks (same annual basis)
+                        Monthly vs every 4-week (same annual basis)
                       </div>
                       <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                         <div className="text-sm text-slate-800 leading-relaxed">
@@ -1143,6 +1061,53 @@ export default function RentPerDayCalculator() {
             due dates and lease terms vary.
           </p>
         </div>
+
+        <div className="md:col-span-12 mt-6">
+          <div className="rounded-xl border border-slate-200 bg-white p-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <label
+                htmlFor={roundCheckboxId}
+                className="flex items-center gap-2 text-sm text-slate-800"
+              >
+                <input
+                  id={roundCheckboxId}
+                  type="checkbox"
+                  checked={roundDisplay}
+                  onChange={(e) => setRoundDisplay(e.target.checked)}
+                  className="h-5 w-5 accent-sky-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2 rounded"
+                />
+                Round displayed values (display only)
+              </label>
+
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-slate-600">
+                  Displayed decimals
+                </span>
+                <select
+                  id={decimalsSelectId}
+                  value={displayDecimals}
+                  onChange={(e) => {
+                    const v = Math.trunc(Number(e.target.value));
+                    setDisplayDecimals(
+                      v === 0 || v === 2 || v === 4 || v === 6 ? v : 2,
+                    );
+                  }}
+                  className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
+                >
+                  <option value={0}>0</option>
+                  <option value={2}>2</option>
+                  <option value={4}>4</option>
+                  <option value={6}>6</option>
+                </select>
+              </div>
+            </div>
+
+            <p className="mt-2 text-xs text-slate-600 leading-relaxed">
+              Calculations preserve decimals internally (up to 12). Only display
+              rounding changes.
+            </p>
+          </div>
+        </div>
       </section>
 
       <section
@@ -1176,12 +1141,26 @@ export default function RentPerDayCalculator() {
           </p>
 
           <p className="text-slate-800 mt-6 leading-relaxed">
-            Related tool:{" "}
+            Related tools:{" "}
             <a
               href={safeHref("/rent-converter")}
               className="inline-flex items-center gap-2 text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
             >
               rent converter
+            </a>
+            ,{" "}
+            <a
+              href={safeHref("/monthly-to-daily-rent-converter")}
+              className="inline-flex items-center gap-2 text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
+            >
+              monthly to daily
+            </a>
+            ,{" "}
+            <a
+              href={safeHref("/rent-paid-every-4-weeks-calculator")}
+              className="inline-flex items-center gap-2 text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
+            >
+              rent paid every 4 weeks
             </a>
             .
           </p>

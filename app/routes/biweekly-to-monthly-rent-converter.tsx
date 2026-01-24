@@ -865,14 +865,14 @@ export default function BiweeklyToMonthlyRent() {
                 Display settings
               </label>
 
-              <div className="grid gap-3 sm:grid-cols-2">
-                <div className="rounded-xl border border-slate-200 bg-white px-4 py-3.5 shadow-[0_1px_0_rgba(15,23,42,0.02)]">
+              <div className="grid gap-3 sm:grid-cols-3">
+                <div className="rounded-xl border col-span-1 border-slate-200 bg-white px-4 py-3.5 shadow-[0_1px_0_rgba(15,23,42,0.02)]">
                   <div className="text-xs text-slate-600">From</div>
                   <div className="mt-1 text-base font-bold text-slate-900">
                     {PERIOD_LABEL.biweekly}
                   </div>
                 </div>
-                <div className="rounded-xl border border-slate-200 bg-white px-4 py-3.5 shadow-[0_1px_0_rgba(15,23,42,0.02)]">
+                <div className="rounded-xl col-span-1 sm:col-span-2 border border-slate-200 bg-white px-4 py-3.5 shadow-[0_1px_0_rgba(15,23,42,0.02)]">
                   <div className="text-xs text-slate-600">To</div>
                   <div className="mt-1 text-base font-bold text-slate-900">
                     {PERIOD_LABEL.monthly}
@@ -959,21 +959,6 @@ export default function BiweeklyToMonthlyRent() {
                       >
                         Copy failed
                       </span>
-                    </div>
-
-                    <div className="mt-1 text-xs sm:text-sm text-slate-600 leading-relaxed">
-                      {roundDisplay ? (
-                        <>
-                          Displayed values rounded to {displayDecimals}{" "}
-                          decimals. Calculations use up to 12 decimals
-                          internally.
-                        </>
-                      ) : (
-                        <>
-                          Displayed values show up to 12 decimals (no display
-                          rounding).
-                        </>
-                      )}
                     </div>
                   </div>
 

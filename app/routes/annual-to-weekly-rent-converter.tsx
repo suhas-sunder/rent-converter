@@ -640,7 +640,7 @@ export default function AnnualToWeeklyRentConverter() {
         <h1 className="text-4xl font-bold text-slate-800 mb-4">
           Annual to Weekly Rent Converter
         </h1>
-        <p className="text-slate-600 max-w-3xl mx-auto text-lg">
+        <p className="text-slate-600 max-w-5xl mx-auto text-lg">
           Turn an annual rent total into a weekly number for budgeting. The
           headline weekly figure here is <strong>annual ÷ 52</strong>. For
           comparison, you can also see a <strong>365-day-week</strong>{" "}
@@ -816,18 +816,6 @@ export default function AnnualToWeeklyRentConverter() {
                     ) : null}
                   </div>
 
-                  <div className="mt-1 text-xs text-slate-500">
-                    {roundDisplay ? (
-                      <>
-                        Displayed values rounded to {displayDecimals} decimals
-                        (display-only).
-                      </>
-                    ) : (
-                      <>
-                        Displayed values show up to 12 decimals (display-only).
-                      </>
-                    )}
-                  </div>
                 </div>
 
                 <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

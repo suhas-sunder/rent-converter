@@ -12,7 +12,7 @@ export const meta: Route.MetaFunction = () => [
   {
     name: "description",
     content:
-      "Calculate how much rent to set aside from each paycheck. Converts rent to an annual total using a consistent 365-day basis, then divides by pay frequency (weekly, biweekly, semimonthly, monthly). Includes payment counts, comparisons, and exports.",
+      "Calculate how much rent to set aside from each paycheck. Converts rent to an annual total using a consistent 365-day basis, then divides by pay frequency (weekly, biweekly, semimonthly, monthly). Includes payment counts and comparisons.",
   },
   {
     name: "keywords",
@@ -209,6 +209,7 @@ function toNumberSafe(scaled: bigint): number {
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
+  roundDisplay: boolean,
   displayDecimals: number,
 ): string {
   const n = toNumberSafe(scaled);
@@ -217,9 +218,22 @@ function formatCurrencyFromScaled(
   return new Intl.NumberFormat(undefined, {
     style: "currency",
     currency,
-    minimumFractionDigits: digits,
-    maximumFractionDigits: digits,
+    minimumFractionDigits: roundDisplay ? digits : 0,
+    maximumFractionDigits: roundDisplay ? digits : 12,
   }).format(n);
+}
+
+function formatMoneyPreviewFromNormalized(normalized: string): string {
+  const [intRaw, fracRaw] = normalized.split(".");
+  const intStr = (() => {
+    try {
+      return BigInt(intRaw || "0").toString();
+    } catch {
+      return intRaw || "0";
+    }
+  })();
+  const grouped = intStr.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return fracRaw && fracRaw.length > 0 ? `${grouped}.${fracRaw}` : grouped;
 }
 
 /**
@@ -374,32 +388,6 @@ function convertScaled(
   return fromAnnualScaled(annual, to);
 }
 
-function buildCsvRow(cols: string[]): string {
-  return cols
-    .map((c) => {
-      const s = String(c ?? "");
-      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
-      return s;
-    })
-    .join(",");
-}
-
-function downloadTextFile(
-  filename: string,
-  content: string,
-  mime = "text/plain;charset=utf-8",
-) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
 function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   if (raw === null) return fallback;
   try {
@@ -410,17 +398,12 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   }
 }
 
-function safeParseInt(
-  raw: string | null,
-  fallback: number,
-  min: number,
-  max: number,
-): number {
-  if (raw === null) return fallback;
+function safeParseDisplayDecimals(raw: string | null): number {
+  if (raw === null) return 2;
   const n = Number(raw);
-  if (!Number.isFinite(n)) return fallback;
+  if (!Number.isFinite(n)) return 2;
   const t = Math.trunc(n);
-  return Math.max(min, Math.min(max, t));
+  return t === 0 || t === 2 || t === 4 || t === 6 ? t : 2;
 }
 
 export default function RentPerPaycheck() {
@@ -457,7 +440,9 @@ export default function RentPerPaycheck() {
 
   const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
     if (typeof window === "undefined") return 2;
-    return safeParseInt(localStorage.getItem("rpc_display_decimals"), 2, 0, 6);
+    return safeParseDisplayDecimals(
+      localStorage.getItem("rpc_display_decimals"),
+    );
   });
 
   useEffect(() => {
@@ -476,9 +461,34 @@ export default function RentPerPaycheck() {
 
   const parsedAmount = useMemo(() => parseMoneyInputToScaled(amount), [amount]);
 
-  const effectiveDisplayDecimals = roundDisplay ? displayDecimals : 12;
   const fmtMoney = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, effectiveDisplayDecimals);
+    formatCurrencyFromScaled(scaled, currency, roundDisplay, displayDecimals);
+
+  const [amountIsFocused, setAmountIsFocused] = useState<boolean>(false);
+  const [amountDisplay, setAmountDisplay] = useState<string>(() => {
+    const initialParsed = parseMoneyInputToScaled(
+      typeof window === "undefined"
+        ? "2000"
+        : (localStorage.getItem("rpc_amount") ?? "2000"),
+    );
+    if (initialParsed.ok && initialParsed.normalized) {
+      return formatMoneyPreviewFromNormalized(initialParsed.normalized);
+    }
+    return typeof window === "undefined"
+      ? "2000"
+      : (localStorage.getItem("rpc_amount") ?? "2000");
+  });
+
+  useEffect(() => {
+    if (amountIsFocused) return;
+    if (parsedAmount.ok && parsedAmount.normalized) {
+      setAmountDisplay(
+        formatMoneyPreviewFromNormalized(parsedAmount.normalized),
+      );
+    } else {
+      setAmountDisplay(amount);
+    }
+  }, [amountIsFocused, parsedAmount.ok, parsedAmount.normalized, amount]);
 
   const computed = useMemo(() => {
     const warnings: string[] = [];
@@ -545,124 +555,6 @@ export default function RentPerPaycheck() {
   const handlePrint = () => {
     if (typeof window === "undefined") return;
     window.print();
-  };
-
-  const handleExportCsv = () => {
-    if (!computed.ok) return;
-
-    const rows: string[] = [];
-    rows.push(buildCsvRow([pageName]));
-    rows.push(buildCsvRow(["Currency", currency]));
-    rows.push(buildCsvRow(["Input amount", amount]));
-    rows.push(buildCsvRow(["Rent listed as", rentPeriod]));
-    rows.push(buildCsvRow(["Pay frequency", payFreq]));
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Annual total (365-day basis)"]));
-    rows.push(
-      buildCsvRow(["Annual rent", fmtMoney(computed.annualRentScaled)]),
-    );
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Estimated rent per paycheck"]));
-    rows.push(buildCsvRow(["Selected pay frequency", PAY_LABEL[payFreq]]));
-    rows.push(
-      buildCsvRow(["Per paycheck", fmtMoney(computed.perPaycheckScaled)]),
-    );
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Paycheck allocations from the same annual total"]));
-    rows.push(
-      buildCsvRow(["Pay frequency", "Paychecks per year", "Allocation"]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Weekly",
-        "52",
-        fmtMoney(computed.paycheckBreakdown.weekly),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Biweekly",
-        "26",
-        fmtMoney(computed.paycheckBreakdown.biweekly),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Semimonthly",
-        "24",
-        fmtMoney(computed.paycheckBreakdown.semimonthly),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Monthly",
-        "12",
-        fmtMoney(computed.paycheckBreakdown.monthly),
-      ]),
-    );
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Rent period breakdown (same annual basis)"]));
-    rows.push(buildCsvRow(["Period", "Amount"]));
-    rows.push(
-      buildCsvRow([
-        RENT_PERIOD_LABEL.hourly,
-        fmtMoney(computed.rentBreakdown.hourly),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        RENT_PERIOD_LABEL.daily,
-        fmtMoney(computed.rentBreakdown.daily),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        RENT_PERIOD_LABEL.weekly,
-        fmtMoney(computed.rentBreakdown.weekly),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        RENT_PERIOD_LABEL.biweekly,
-        fmtMoney(computed.rentBreakdown.biweekly),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        RENT_PERIOD_LABEL.every_4_weeks,
-        fmtMoney(computed.rentBreakdown.every_4_weeks),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        RENT_PERIOD_LABEL.monthly,
-        fmtMoney(computed.rentBreakdown.monthly),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        RENT_PERIOD_LABEL.annual,
-        fmtMoney(computed.rentBreakdown.annual),
-      ]),
-    );
-
-    rows.push(buildCsvRow([""]));
-    rows.push(
-      buildCsvRow([
-        "Assumptions",
-        "Year=365 days, Week=7 days, Biweekly=14 days, Every 4 weeks=28 days, Month=365/12 days (average). Paychecks: weekly=52, biweekly=26, semimonthly=24, monthly=12.",
-      ]),
-    );
-
-    downloadTextFile(
-      "rent-per-paycheck-calculator.csv",
-      rows.join("\n"),
-      "text/csv;charset=utf-8",
-    );
   };
 
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
@@ -792,8 +684,10 @@ export default function RentPerPaycheck() {
           / <span className="text-slate-800">{pageName}</span>
         </nav>
 
-        <h1 className="text-4xl font-bold text-slate-900 mb-4">{pageName}</h1>
-        <p className="text-slate-700 max-w-3xl text-lg leading-relaxed">
+        <h1 className="text-4xl font-bold text-slate-900 mb-4 text-center">
+          {pageName}
+        </h1>
+        <p className="text-slate-700 max-w-5xl text-center text-lg leading-relaxed mx-auto">
           Estimate how much rent to set aside from each paycheck when rent and
           pay cycles do not match. This calculator converts the rent amount to
           an annual total first (365-day basis), then divides by your pay
@@ -801,16 +695,13 @@ export default function RentPerPaycheck() {
         </p>
       </section>
 
-      <section id="calculator" className="mx-auto max-w-6xl px-6 pb-6">
+      <section id="calculator" className="mx-auto max-w-6xl px-6 pb-6 mt-6">
         <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:p-8 rc-print-block">
           <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
               <h2 className="text-xl sm:text-2xl font-bold text-slate-950">
                 Rent allocation per paycheck
               </h2>
-              <p className="mt-1 text-sm text-slate-700 leading-relaxed">
-                Invalid input hides results, so you do not get misleading zeros.
-              </p>
             </div>
 
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
@@ -836,8 +727,27 @@ export default function RentPerPaycheck() {
                 <input
                   id={amountInputId}
                   inputMode="decimal"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
+                  value={amountIsFocused ? amount : amountDisplay}
+                  onFocus={() => {
+                    setAmountIsFocused(true);
+                    setAmountDisplay(amount);
+                  }}
+                  onBlur={() => {
+                    setAmountIsFocused(false);
+                    if (parsedAmount.ok && parsedAmount.normalized) {
+                      setAmountDisplay(
+                        formatMoneyPreviewFromNormalized(
+                          parsedAmount.normalized,
+                        ),
+                      );
+                    } else {
+                      setAmountDisplay(amount);
+                    }
+                  }}
+                  onChange={(e) => {
+                    const nextRaw = (e.target.value || "").replace(/,/g, "");
+                    setAmount(nextRaw);
+                  }}
                   placeholder="e.g. 2000 or 2000.00"
                   className="w-full min-w-0 rounded-xl border border-slate-300 px-4 py-3 text-base text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
                   aria-invalid={!parsedAmount.ok}
@@ -922,61 +832,6 @@ export default function RentPerPaycheck() {
                   </option>
                 ))}
               </select>
-            </div>
-
-            <div className="md:col-span-12">
-              <label className="block text-sm font-semibold text-slate-800 mb-2">
-                Display
-              </label>
-              <div className="rounded-xl border border-slate-200 bg-white p-4">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                  <label
-                    htmlFor={roundCheckboxId}
-                    className="flex items-center gap-2 text-sm text-slate-800"
-                  >
-                    <input
-                      id={roundCheckboxId}
-                      type="checkbox"
-                      checked={roundDisplay}
-                      onChange={(e) => setRoundDisplay(e.target.checked)}
-                      className="h-5 w-5 accent-sky-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2 rounded"
-                    />
-                    Round displayed values (display only)
-                  </label>
-
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs text-slate-600">
-                      Displayed decimals
-                    </span>
-                    <select
-                      id={decimalsSelectId}
-                      value={displayDecimals}
-                      onChange={(e) =>
-                        setDisplayDecimals(
-                          Math.max(
-                            0,
-                            Math.min(
-                              6,
-                              Math.trunc(Number(e.target.value) || 2),
-                            ),
-                          ),
-                        )
-                      }
-                      className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
-                    >
-                      <option value={0}>0</option>
-                      <option value={2}>2</option>
-                      <option value={4}>4</option>
-                      <option value={6}>6</option>
-                    </select>
-                  </div>
-                </div>
-
-                <p className="mt-2 text-xs text-slate-600 leading-relaxed">
-                  Calculations preserve decimals internally (up to 12). Only
-                  display rounding changes.
-                </p>
-              </div>
             </div>
           </div>
 
@@ -1274,62 +1129,6 @@ export default function RentPerPaycheck() {
             </section>
           ) : null}
 
-          <section className="mt-10 rc-no-print">
-            <h3 className="text-2xl font-semibold mb-4 text-slate-950">
-              Links to related tools
-            </h3>
-            <ul className="list-disc ml-6 text-slate-800">
-              <li>
-                <a
-                  href={safeHref("/rent-paid-weekly-vs-monthly")}
-                  className="inline-flex items-center gap-2 text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
-                >
-                  <span
-                    aria-hidden="true"
-                    className="inline-block h-1.5 w-1.5 rounded-full bg-sky-500"
-                  />
-                  Weekly vs monthly rent
-                </a>
-              </li>
-              <li>
-                <a
-                  href={safeHref("/rent-converter")}
-                  className="inline-flex items-center gap-2 text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
-                >
-                  <span
-                    aria-hidden="true"
-                    className="inline-block h-1.5 w-1.5 rounded-full bg-sky-500"
-                  />
-                  Rent converter hub
-                </a>
-              </li>
-              <li>
-                <a
-                  href={safeHref("/rent-affordability-calculator")}
-                  className="inline-flex items-center gap-2 text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
-                >
-                  <span
-                    aria-hidden="true"
-                    className="inline-block h-1.5 w-1.5 rounded-full bg-sky-500"
-                  />
-                  Rent affordability calculator
-                </a>
-              </li>
-              <li>
-                <a
-                  href={safeHref("/rent-billed-every-28-days")}
-                  className="inline-flex items-center gap-2 text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
-                >
-                  <span
-                    aria-hidden="true"
-                    className="inline-block h-1.5 w-1.5 rounded-full bg-sky-500"
-                  />
-                  Rent billed every 28 days
-                </a>
-              </li>
-            </ul>
-          </section>
-
           <section className="mt-10 rounded-2xl border border-slate-200 bg-white p-6 rc-print-block">
             <h3 className="text-xl font-bold text-slate-950 mb-3">
               Disclaimer
@@ -1360,6 +1159,85 @@ export default function RentPerPaycheck() {
             schedules vary.
           </p>
         </div>
+
+        <div className="md:col-span-12 mt-6">
+          <div className="rounded-xl border border-slate-200 bg-white p-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <label
+                htmlFor={roundCheckboxId}
+                className="flex items-center gap-2 text-sm text-slate-800"
+              >
+                <input
+                  id={roundCheckboxId}
+                  type="checkbox"
+                  checked={roundDisplay}
+                  onChange={(e) => setRoundDisplay(e.target.checked)}
+                  className="h-5 w-5 accent-sky-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2 rounded"
+                />
+                Round displayed values (display only)
+              </label>
+
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-slate-600">
+                  Displayed decimals
+                </span>
+                <select
+                  id={decimalsSelectId}
+                  value={displayDecimals}
+                  onChange={(e) => {
+                    const v = Number(e.target.value);
+                    setDisplayDecimals(
+                      v === 0 || v === 2 || v === 4 || v === 6 ? v : 2,
+                    );
+                  }}
+                  className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
+                >
+                  <option value={0}>0</option>
+                  <option value={2}>2</option>
+                  <option value={4}>4</option>
+                  <option value={6}>6</option>
+                </select>
+              </div>
+            </div>
+
+            <p className="mt-2 text-xs text-slate-600 leading-relaxed">
+              Calculations preserve decimals internally (up to 12). Only display
+              rounding changes.
+            </p>
+          </div>
+        </div>
+
+        <section className="mt-10 rc-no-print">
+          <h3 className="text-2xl font-semibold mb-4 text-slate-950">
+            Links to related tools
+          </h3>
+          <ul className="list-disc ml-6 text-slate-800">
+            <li>
+              <a
+                href={safeHref("/rent-converter")}
+                className="inline-flex items-center gap-2 text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
+              >
+                Rent converter hub
+              </a>
+            </li>
+            <li>
+              <a
+                href={safeHref("/how-much-rent-can-i-afford-calculator")}
+                className="inline-flex items-center gap-2 text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
+              >
+                How much rent can I afford?
+              </a>
+            </li>
+            <li>
+              <a
+                href={safeHref("/rent-after-tax-income-calculator")}
+                className="inline-flex items-center gap-2 text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
+              >
+                Rent after tax income calculator
+              </a>
+            </li>
+          </ul>
+        </section>
       </section>
 
       <section

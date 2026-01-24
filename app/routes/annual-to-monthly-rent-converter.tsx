@@ -775,7 +775,7 @@ export default function AnnualToMonthlyRent() {
         <h1 className="text-4xl font-bold text-slate-800 mb-4">
           Annual to Monthly Rent Converter
         </h1>
-        <p className="text-slate-600 max-w-3xl mx-auto text-lg">
+        <p className="text-slate-600 max-w-5xl mx-auto text-lg">
           Convert an annual rent total into a monthly budgeting equivalent. This
           page defines monthly as <strong>annual ÷ 12</strong> and shows how
           that differs from 28-day (every 4 weeks) billing that often implies 13
@@ -951,20 +951,6 @@ export default function AnnualToMonthlyRent() {
                         Copy failed
                       </span>
                     ) : null}
-                  </div>
-
-                  <div className="mt-1 text-xs text-slate-500">
-                    {roundDisplay ? (
-                      <>
-                        Displayed values rounded to {displayDecimals} decimals.
-                        Calculations use up to 12 decimals internally.
-                      </>
-                    ) : (
-                      <>
-                        Displayed values show up to 12 decimals (no display
-                        rounding).
-                      </>
-                    )}
                   </div>
                 </div>
 

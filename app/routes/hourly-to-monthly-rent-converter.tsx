@@ -627,11 +627,11 @@ export default function HourlyToMonthlyRent() {
         </nav>
       </section>
 
-      <section className="pb-8 text-center bg-white rc-no-print">
+      <section className="pb-8 text-center bg-white rc-no-print flex flex-col w-full justify-center items-center">
         <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-4 tracking-tight">
           Hourly to Monthly Rent Converter
         </h1>
-        <p className="text-slate-700 max-w-3xl mx-auto text-lg leading-relaxed">
+        <p className="text-slate-700 max-w-5xl text-center  text-lg leading-relaxed">
           Convert an hourly rent amount into a monthly equivalent using annual
           equivalence as the source of truth. This helps compare hourly pricing
           to monthly rent using consistent time-period assumptions.
@@ -743,14 +743,14 @@ export default function HourlyToMonthlyRent() {
                 Display settings
               </label>
 
-              <div className="grid gap-3 sm:grid-cols-2">
-                <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
+              <div className="grid gap-3 sm:grid-cols-3">
+                <div className="rounded-xl col-span-1 border border-slate-200 bg-white px-4 py-3">
                   <div className="text-xs text-slate-600">From</div>
                   <div className="mt-1 text-base font-bold text-slate-900">
                     {PERIOD_LABEL.hourly}
                   </div>
                 </div>
-                <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
+                <div className="rounded-xl sm:col-span-2 border border-slate-200 bg-white px-4 py-3">
                   <div className="text-xs text-slate-600">To</div>
                   <div className="mt-1 text-base font-bold text-slate-900">
                     {PERIOD_LABEL.monthly}
@@ -841,20 +841,6 @@ export default function HourlyToMonthlyRent() {
                         Copy failed
                       </span>
                     ) : null}
-                  </div>
-
-                  <div className="mt-1 text-sm text-slate-600 leading-relaxed">
-                    {roundDisplay ? (
-                      <>
-                        Displayed values rounded to {displayDecimals} decimals.
-                        Calculations use up to 12 decimals internally.
-                      </>
-                    ) : (
-                      <>
-                        Displayed values show up to 12 decimals (no display
-                        rounding).
-                      </>
-                    )}
                   </div>
                 </div>
 

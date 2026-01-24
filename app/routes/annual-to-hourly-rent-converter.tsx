@@ -799,7 +799,7 @@ export default function AnnualToHourlyRent() {
         <h1 className="text-4xl font-bold text-slate-800 mb-4">
           Annual to Hourly Rent Converter
         </h1>
-        <p className="text-slate-600 max-w-3xl mx-auto text-lg">
+        <p className="text-slate-600 max-w-5xl mx-auto text-lg">
           Convert an annual rent total into an hourly equivalent. The headline
           result is the 8,760-hour time-based equivalence (365 days × 24 hours).
           Optionally, compare against a paid-hours assumption to see how the
@@ -1032,20 +1032,6 @@ export default function AnnualToHourlyRent() {
                         Copy failed
                       </span>
                     ) : null}
-                  </div>
-
-                  <div className="mt-1 text-xs text-slate-500">
-                    {roundDisplay ? (
-                      <>
-                        Displayed values rounded to {displayDecimals} decimals.
-                        Calculations use up to 12 decimals internally.
-                      </>
-                    ) : (
-                      <>
-                        Displayed values show up to 12 decimals (no display
-                        rounding).
-                      </>
-                    )}
                   </div>
                 </div>
 
