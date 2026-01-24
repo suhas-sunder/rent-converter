@@ -365,32 +365,6 @@ function convertScaled(valueScaled: bigint, from: Period, to: Period): bigint {
   return mulDivInt(dailyScaled, dpTo.num, dpTo.den);
 }
 
-function buildCsvRow(cols: string[]): string {
-  return cols
-    .map((c) => {
-      const s = String(c ?? "");
-      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
-      return s;
-    })
-    .join(",");
-}
-
-function downloadTextFile(
-  filename: string,
-  content: string,
-  mime = "text/plain;charset=utf-8",
-) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
 function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   if (raw === null) return fallback;
   try {
@@ -401,11 +375,50 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   }
 }
 
+function formatAmountPreviewFromNormalized(normalized: string): string {
+  const s = (normalized ?? "").trim();
+  if (!s) return s;
+
+  const parts = s.split(".");
+  const intPartRaw = parts[0] ?? "0";
+  const fracPart = parts.length > 1 ? (parts[1] ?? "") : "";
+
+  const intPart = intPartRaw.replace(/^0+(?=\d)/, "") || "0";
+  const groupedInt = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+  return fracPart.length ? `${groupedInt}.${fracPart}` : groupedInt;
+}
+
+function sanitizeAmountInputPreserveCaret(
+  el: HTMLInputElement,
+  rawNext: string,
+): { sanitized: string; nextCaret: number | null } {
+  const caret = el.selectionStart;
+  if (caret === null)
+    return { sanitized: rawNext.replace(/,/g, ""), nextCaret: null };
+
+  let commasBeforeCaret = 0;
+  for (let i = 0; i < Math.min(caret, rawNext.length); i++) {
+    if (rawNext[i] === ",") commasBeforeCaret++;
+  }
+  const sanitized = rawNext.replace(/,/g, "");
+  const nextCaret = Math.max(0, caret - commasBeforeCaret);
+  return { sanitized, nextCaret };
+}
+
+const ALLOWED_DISPLAY_DECIMALS = new Set<number>([0, 2, 4, 6]);
+
 export default function MonthlyToAnnualRent() {
+  const amountInputRef = useRef<HTMLInputElement | null>(null);
+  const pendingCaretRef = useRef<number | null>(null);
+
   const [amount, setAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "2000";
-    return window.localStorage.getItem("rc_mta_amount") ?? "2000";
+    const saved = window.localStorage.getItem("rc_mta_amount") ?? "2000";
+    return saved.replace(/,/g, "");
   });
+
+  const [isAmountFocused, setIsAmountFocused] = useState<boolean>(false);
 
   const [currency, setCurrency] = useState<Currency>(() => {
     if (typeof window === "undefined") return "USD";
@@ -424,9 +437,10 @@ export default function MonthlyToAnnualRent() {
   const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
     if (typeof window === "undefined") return 2;
     const saved = window.localStorage.getItem("rc_mta_display_decimals");
-    const n = saved ? Number(saved) : 2;
+    const n = saved === null ? NaN : Number(saved);
     if (!Number.isFinite(n)) return 2;
-    return Math.max(0, Math.min(6, Math.trunc(n)));
+    const v = Math.trunc(n);
+    return ALLOWED_DISPLAY_DECIMALS.has(v) ? v : 2;
   });
 
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
@@ -456,6 +470,18 @@ export default function MonthlyToAnnualRent() {
     };
   }, []);
 
+  useEffect(() => {
+    const el = amountInputRef.current;
+    const caret = pendingCaretRef.current;
+    if (!el || caret === null) return;
+    pendingCaretRef.current = null;
+    try {
+      el.setSelectionRange(caret, caret);
+    } catch {
+      // ignore
+    }
+  });
+
   const parsedAmount = useMemo(() => parseMoneyInputToScaled(amount), [amount]);
   const monthlyScaled = parsedAmount.ok ? (parsedAmount.scaled as bigint) : 0n;
 
@@ -463,6 +489,14 @@ export default function MonthlyToAnnualRent() {
   const minDecimals = roundDisplay ? displayDecimals : 0;
   const fmt = (scaled: bigint) =>
     formatCurrencyFromScaled(scaled, currency, maxDecimals, minDecimals);
+
+  const amountPreviewValue = useMemo(() => {
+    if (!parsedAmount.ok) return amount;
+    const normalized = parsedAmount.normalized ?? "";
+    return formatAmountPreviewFromNormalized(normalized);
+  }, [parsedAmount.ok, parsedAmount.normalized, amount]);
+
+  const amountDisplayValue = isAmountFocused ? amount : amountPreviewValue;
 
   const breakdown = useMemo(() => {
     if (!parsedAmount.ok) return null;
@@ -536,79 +570,6 @@ export default function MonthlyToAnnualRent() {
       if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
       copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
     }
-  };
-
-  const handleExportCsv = () => {
-    if (!canShowResults || !breakdown) return;
-
-    const rows: string[] = [];
-    rows.push(buildCsvRow(["Monthly to Annual Rent Converter"]));
-    rows.push(buildCsvRow(["Input (monthly)", fmt(monthlyScaled)]));
-    rows.push(
-      buildCsvRow([
-        "Annual equivalent (365-day basis)",
-        fmt(breakdown.annualEquiv),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Assumptions",
-        "Year=365 days",
-        "Month=365 ÷ 12 days",
-        "4-week=28 days",
-        "Week=7 days",
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Display",
-        roundDisplay
-          ? `Rounded to ${displayDecimals} decimals for display`
-          : "No display rounding (shows up to 12 decimals)",
-      ]),
-    );
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Period breakdown", "Amount"]));
-    rows.push(buildCsvRow(["Hourly", fmt(breakdown.hourly)]));
-    rows.push(buildCsvRow(["Daily", fmt(breakdown.daily)]));
-    rows.push(buildCsvRow(["Weekly", fmt(breakdown.weekly)]));
-    rows.push(buildCsvRow(["Biweekly", fmt(breakdown.biweekly)]));
-    rows.push(buildCsvRow(["Every 4 weeks (28 days)", fmt(breakdown.every4w)]));
-    rows.push(buildCsvRow(["Monthly", fmt(breakdown.monthly)]));
-    rows.push(
-      buildCsvRow(["Annual (equivalence)", fmt(breakdown.annualEquiv)]),
-    );
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Schedule comparisons", "Annual total", "Notes"]));
-    rows.push(
-      buildCsvRow([
-        "Monthly × 12 payments",
-        fmt(breakdown.annualFromMonthly12),
-        "Common shorthand",
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Weekly × 52 payments",
-        fmt(breakdown.annualFromWeekly52),
-        "Schedule-style multiplication",
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "4-week × 13 payments",
-        fmt(breakdown.annualFrom4w13),
-        "Illustrative 13-payment framing",
-      ]),
-    );
-
-    downloadTextFile(
-      "monthly-to-annual-rent-converter.csv",
-      rows.join("\n"),
-      "text/csv;charset=utf-8",
-    );
   };
 
   const handlePrint = () => {
@@ -748,9 +709,19 @@ export default function MonthlyToAnnualRent() {
               </label>
               <div className="flex gap-2">
                 <input
+                  ref={amountInputRef}
                   inputMode="decimal"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
+                  value={amountDisplayValue}
+                  onFocus={() => setIsAmountFocused(true)}
+                  onBlur={() => setIsAmountFocused(false)}
+                  onChange={(e) => {
+                    const el = e.currentTarget;
+                    const nextRaw = el.value ?? "";
+                    const { sanitized, nextCaret } =
+                      sanitizeAmountInputPreserveCaret(el, nextRaw);
+                    if (nextCaret !== null) pendingCaretRef.current = nextCaret;
+                    setAmount(sanitized);
+                  }}
                   placeholder="e.g. 2000 or 2000.00"
                   className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!parsedAmount.ok}
@@ -793,55 +764,6 @@ export default function MonthlyToAnnualRent() {
                   </ul>
                 </div>
               ) : null}
-            </div>
-
-            <div className="md:col-span-6">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
-                Display
-              </label>
-              <div className="rounded-xl border border-slate-200 bg-white p-4">
-                <div className="text-xs text-slate-500">
-                  Rounding (display only)
-                </div>
-                <label className="mt-1 flex items-center gap-2 text-sm text-slate-700">
-                  <input
-                    type="checkbox"
-                    checked={roundDisplay}
-                    onChange={(e) => setRoundDisplay(e.target.checked)}
-                    className="h-4 w-4"
-                  />
-                  Round displayed values
-                </label>
-
-                <div className="mt-3 flex items-center justify-between gap-3">
-                  <div className="text-xs text-slate-500">
-                    Displayed decimals
-                  </div>
-                  <select
-                    value={displayDecimals}
-                    onChange={(e) =>
-                      setDisplayDecimals(
-                        Math.max(
-                          0,
-                          Math.min(6, Math.trunc(Number(e.target.value) || 2)),
-                        ),
-                      )
-                    }
-                    className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
-                  >
-                    <option value={0}>0</option>
-                    <option value={2}>2</option>
-                    <option value={4}>4</option>
-                    <option value={6}>6</option>
-                  </select>
-                </div>
-
-                <p className="mt-2 text-xs text-slate-500">
-                  Calculations preserve decimals internally (up to 12). If
-                  rounding is enabled, displayed values keep exactly the
-                  selected decimals.
-                </p>
-              </div>
             </div>
           </div>
 
@@ -1049,6 +971,46 @@ export default function MonthlyToAnnualRent() {
             rules can produce different totals.
           </p>
         </div>
+
+        <div className="md:col-span-6 mt-6">
+          <div className="rounded-xl border border-slate-200 bg-white p-4">
+            <div className="text-xs text-slate-500">
+              Rounding (display only)
+            </div>
+            <label className="mt-1 flex items-center gap-2 text-sm text-slate-700">
+              <input
+                type="checkbox"
+                checked={roundDisplay}
+                onChange={(e) => setRoundDisplay(e.target.checked)}
+                className="h-4 w-4"
+              />
+              Round displayed values
+            </label>
+
+            <div className="mt-3 flex items-center justify-between gap-3">
+              <div className="text-xs text-slate-500">Displayed decimals</div>
+              <select
+                value={displayDecimals}
+                onChange={(e) => {
+                  const n = Number(e.target.value);
+                  const v = Number.isFinite(n) ? Math.trunc(n) : 2;
+                  setDisplayDecimals(ALLOWED_DISPLAY_DECIMALS.has(v) ? v : 2);
+                }}
+                className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
+              >
+                <option value={0}>0</option>
+                <option value={2}>2</option>
+                <option value={4}>4</option>
+                <option value={6}>6</option>
+              </select>
+            </div>
+
+            <p className="mt-2 text-xs text-slate-500">
+              Calculations preserve decimals internally (up to 12). If rounding
+              is enabled, displayed values keep exactly the selected decimals.
+            </p>
+          </div>
+        </div>
       </section>
 
       {/* Required: explanation above FAQ */}
@@ -1064,9 +1026,8 @@ export default function MonthlyToAnnualRent() {
           <ol className="list-decimal pl-5 space-y-3 text-slate-700">
             <li>
               <strong>You enter a monthly rent amount.</strong> The input parser
-              supports commas, currency symbols, and formats like .5 and 12.,
-              and it avoids showing misleading results on invalid or ambiguous
-              input.
+              supports currency symbols and formats like .5 and 12., and it
+              avoids showing misleading results on invalid or ambiguous input.
             </li>
             <li>
               <strong>
@@ -1090,8 +1051,8 @@ export default function MonthlyToAnnualRent() {
               not the equivalence basis.
             </li>
             <li>
-              <strong>Export and printing.</strong> Results can be exported to
-              CSV, and printing supports saving as a PDF in the browser.
+              <strong>Printing.</strong> Use your browser’s print dialog to save
+              as a PDF.
             </li>
           </ol>
 
@@ -1107,7 +1068,7 @@ export default function MonthlyToAnnualRent() {
                 Compare with payment schedule scenarios (monthly × 12, 4-week ×
                 13) for context
               </li>
-              <li>Export results to CSV or print to save as a PDF</li>
+              <li>Print the results to save as a PDF</li>
             </ul>
           </div>
         </div>

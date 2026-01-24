@@ -787,7 +787,7 @@ export default function RentPerPerson() {
 
       <section className="pb-8 text-center bg-white rc-no-print">
         <h1 className="text-4xl font-bold text-slate-900 mb-4">{pageName}</h1>
-        <p className="text-slate-700 max-w-2xl mx-auto text-lg leading-relaxed">
+        <p className="text-slate-700 max-w-5xl mx-auto text-lg leading-relaxed">
           Split a rent amount evenly across roommates and compare the per-person
           cost across common billing periods using a consistent 365-day annual
           basis.

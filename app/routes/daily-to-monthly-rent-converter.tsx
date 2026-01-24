@@ -618,7 +618,7 @@ export default function DailyToMonthlyRent() {
         <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-4 tracking-tight">
           Daily to Monthly Rent Converter
         </h1>
-        <p className="text-slate-700 max-w-2xl mx-auto text-lg leading-relaxed">
+        <p className="text-slate-700 max-w-5xl mx-auto text-lg leading-relaxed">
           Turn a daily rent price into a monthly equivalent you can compare
           against typical listings. This page uses a year-based method so daily,
           weekly, 4-week, and monthly numbers come from the same assumptions.

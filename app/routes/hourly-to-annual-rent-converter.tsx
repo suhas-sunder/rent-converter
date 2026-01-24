@@ -7,7 +7,7 @@ import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 export const meta: Route.MetaFunction = () => {
   const title = "Hourly to Annual Rent Converter (365-day basis)";
   const description =
-    "Convert an hourly rent or rate into an annual rent equivalent using a 365-day year (annual equivalence). Decimal-safe input, full breakdown, paid-hours scenario, CSV export, and print-to-PDF.";
+    "Convert an hourly rent or rate into an annual rent equivalent using a 365-day year (annual equivalence). Decimal-safe input, full breakdown, paid-hours scenario, and print-to-PDF.";
 
   return [
     { title },
@@ -166,19 +166,47 @@ function toNumberSafe(scaled: bigint): number {
   return Number(scaled) / Number(SCALE);
 }
 
+function groupThousandsEnUS(intStr: string): string {
+  const s = String(intStr ?? "");
+  if (!/^\d+$/.test(s)) return s;
+  return s.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function formatPreviewFromParsed(parsed: ParsedAmount): string {
+  const normalized = parsed.normalized ?? "";
+  if (!normalized) return normalized;
+  const parts = normalized.split(".");
+  const intPart = parts[0] ?? "0";
+  const fracPart = parts[1] ?? "";
+  const grouped = groupThousandsEnUS(intPart);
+  return fracPart ? `${grouped}.${fracPart}` : grouped;
+}
+
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
   displayDecimals: number,
+  roundDisplay: boolean,
 ): string {
   const n = toNumberSafe(scaled);
   if (!Number.isFinite(n)) return "—";
-  return new Intl.NumberFormat(undefined, {
+
+  const dec = Math.max(0, Math.min(12, Math.trunc(displayDecimals)));
+  const opts: Intl.NumberFormatOptions = {
     style: "currency",
     currency,
-    maximumFractionDigits: Math.max(0, Math.min(12, displayDecimals)),
-    minimumFractionDigits: 0,
-  }).format(n);
+  };
+
+  if (roundDisplay) {
+    const fixed = Math.max(0, Math.min(12, dec));
+    opts.minimumFractionDigits = fixed;
+    opts.maximumFractionDigits = fixed;
+  } else {
+    opts.minimumFractionDigits = 0;
+    opts.maximumFractionDigits = 12;
+  }
+
+  return new Intl.NumberFormat(undefined, opts).format(n);
 }
 
 function formatNumber(n: number, displayDecimals: number): string {
@@ -334,32 +362,6 @@ function hourlyToPeriodScaled(hourlyScaled: bigint, period: Period): bigint {
   }
 }
 
-function buildCsvRow(cols: string[]): string {
-  return cols
-    .map((c) => {
-      const s = String(c ?? "");
-      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
-      return s;
-    })
-    .join(",");
-}
-
-function downloadTextFile(
-  filename: string,
-  content: string,
-  mime = "text/plain;charset=utf-8",
-) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
 function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   if (raw === null) return fallback;
   try {
@@ -379,10 +381,25 @@ function safeParseEnum<T extends string>(
   return (allowed as readonly string[]).includes(raw) ? (raw as T) : fallback;
 }
 
+function safeParseDisplayDecimals(
+  raw: string | null,
+  fallback: number,
+): number {
+  const allowed = new Set<number>([0, 2, 4, 6]);
+  if (!raw) return fallback;
+  const n = Number(raw);
+  if (!Number.isFinite(n)) return fallback;
+  const t = Math.trunc(n);
+  return allowed.has(t) ? t : fallback;
+}
+
 export default function HourlyToAnnualRent() {
   const [amount, setAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "25";
-    return window.localStorage.getItem("rc_hta_amount") ?? "25";
+    return (window.localStorage.getItem("rc_hta_amount") ?? "25").replace(
+      /,/g,
+      "",
+    );
   });
 
   const [currency, setCurrency] = useState<Currency>(() => {
@@ -393,10 +410,10 @@ export default function HourlyToAnnualRent() {
 
   const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
     if (typeof window === "undefined") return 2;
-    const saved = window.localStorage.getItem("rc_hta_display_decimals");
-    const n = saved ? Number(saved) : 2;
-    if (!Number.isFinite(n)) return 2;
-    return Math.max(0, Math.min(6, Math.trunc(n)));
+    return safeParseDisplayDecimals(
+      window.localStorage.getItem("rc_hta_display_decimals"),
+      2,
+    );
   });
 
   const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
@@ -418,8 +435,13 @@ export default function HourlyToAnnualRent() {
 
   const [paidHoursPerWeek, setPaidHoursPerWeek] = useState<string>(() => {
     if (typeof window === "undefined") return "40";
-    return window.localStorage.getItem("rc_hta_paid_hours_week") ?? "40";
+    return (
+      window.localStorage.getItem("rc_hta_paid_hours_week") ?? "40"
+    ).replace(/,/g, "");
   });
+
+  const [amountFocused, setAmountFocused] = useState<boolean>(false);
+  const [paidHoursFocused, setPaidHoursFocused] = useState<boolean>(false);
 
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const copyTimerRef = useRef<number | null>(null);
@@ -489,6 +511,21 @@ export default function HourlyToAnnualRent() {
     parsedHourly.ok && (hourMode === "clock" || parsedPaidHours.ok);
   const hourlyScaled = parsedHourly.ok ? (parsedHourly.scaled as bigint) : 0n;
 
+  const amountDisplayValue = useMemo(() => {
+    if (amountFocused) return amount;
+    if (parsedHourly.ok) return formatPreviewFromParsed(parsedHourly);
+    return amount;
+  }, [amountFocused, amount, parsedHourly]);
+
+  const paidHoursDisplayValue = useMemo(() => {
+    if (paidHoursFocused) return paidHoursPerWeek;
+    if (parsedPaidHours.ok) {
+      const out = parseMoneyInputToScaled(paidHoursPerWeek);
+      if (out.ok) return formatPreviewFromParsed(out);
+    }
+    return paidHoursPerWeek;
+  }, [paidHoursFocused, paidHoursPerWeek, parsedPaidHours.ok]);
+
   const breakdownScaled = useMemo(() => {
     if (!parsedHourly.ok) return null;
 
@@ -544,9 +581,8 @@ export default function HourlyToAnnualRent() {
     parsedPaidHours.hours,
   ]);
 
-  const effectiveDisplayDecimals = roundDisplay ? displayDecimals : 12;
   const fmt = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, effectiveDisplayDecimals);
+    formatCurrencyFromScaled(scaled, currency, displayDecimals, roundDisplay);
 
   const displayedAnnualScaled = useMemo(() => {
     if (!breakdownScaled) return 0n;
@@ -573,109 +609,6 @@ export default function HourlyToAnnualRent() {
       if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
       copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
     }
-  };
-
-  const handleExportCsv = () => {
-    if (!canShowResults || !breakdownScaled) return;
-
-    const rows: string[] = [];
-    rows.push(buildCsvRow(["Hourly to Annual Rent Converter"]));
-    rows.push(
-      buildCsvRow([
-        "Assumptions",
-        "Year=365 days",
-        "Day=24 hours",
-        "Week=7 days",
-        "4-week=28 days",
-        "Month=365 ÷ 12 days (average)",
-      ]),
-    );
-    rows.push(buildCsvRow(["Currency formatting", currency]));
-    rows.push(
-      buildCsvRow([
-        "Display",
-        roundDisplay
-          ? `Rounded to ${displayDecimals} decimals for display`
-          : "No display rounding (shows up to 12 decimals)",
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Mode",
-        hourMode === "clock"
-          ? "24/7 clock-hour equivalence"
-          : `Paid-hours scenario (${parsedPaidHours.ok ? parsedPaidHours.hours : "—"} hours/week × 52)`,
-      ]),
-    );
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Input (Hourly)", fmt(hourlyScaled)]));
-    rows.push(buildCsvRow(["Headline (Annual)", fmt(displayedAnnualScaled)]));
-    rows.push(
-      buildCsvRow([
-        "Implied Monthly (Annual ÷ 12)",
-        fmt(displayedMonthlyScaled),
-      ]),
-    );
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Period (clock-hour equivalence)", "Amount"]));
-    const items: Array<[Period, bigint]> = [
-      ["hourly", breakdownScaled.hourly],
-      ["daily", breakdownScaled.daily],
-      ["weekly", breakdownScaled.weekly],
-      ["biweekly", breakdownScaled.biweekly],
-      ["every_4_weeks", breakdownScaled.every4w],
-      ["monthly", breakdownScaled.monthly],
-      ["annual", breakdownScaled.annualClock],
-    ];
-    for (const [p, val] of items)
-      rows.push(buildCsvRow([PERIOD_LABEL[p], fmt(val)]));
-
-    rows.push(buildCsvRow([""]));
-    rows.push(buildCsvRow(["Paid-hours comparison"]));
-    rows.push(
-      buildCsvRow(["Annual (24/7 clock)", fmt(breakdownScaled.annualClock)]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Annual (paid-hours)",
-        fmt(breakdownScaled.annualPaidScaled),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Difference (paid - clock)",
-        fmt(breakdownScaled.annualPaidMinusClock),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Difference (%)",
-        formatPercent(breakdownScaled.annualPaidMinusClockPct, 2),
-      ]),
-    );
-
-    rows.push(buildCsvRow([""]));
-    rows.push(buildCsvRow(["Monthly vs 4-week"]));
-    rows.push(
-      buildCsvRow([
-        "Monthly minus 4-week",
-        fmt(breakdownScaled.monthlyMinus4w),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Difference (%)",
-        formatPercent(breakdownScaled.monthlyMinus4wPct, 2),
-      ]),
-    );
-
-    downloadTextFile(
-      "hourly-to-annual-rent-converter.csv",
-      rows.join("\n"),
-      "text/csv;charset=utf-8",
-    );
   };
 
   const handlePrint = () => {
@@ -751,7 +684,7 @@ export default function HourlyToAnnualRent() {
     "@type": "WebPage",
     name: "Hourly to Annual Rent Converter",
     description:
-      "Convert an hourly rent or rate into an annual rent equivalent using a 365-day year (annual equivalence). Includes a full breakdown and a paid-hours scenario comparison, plus export and printing.",
+      "Convert an hourly rent or rate into an annual rent equivalent using a 365-day year (annual equivalence). Includes a full breakdown and a paid-hours scenario comparison, plus printing.",
     url: "https://rentconverter.com/hourly-to-annual-rent-converter",
   };
 
@@ -801,14 +734,87 @@ export default function HourlyToAnnualRent() {
               Instant hourly to annual conversion
             </h2>
 
-            <div className="rc-no-print flex flex-col sm:flex-row gap-2">
-              <button
-                type="button"
-                onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
+            <div className="mt-4 max-w-xl rounded-xl border border-slate-200 bg-white p-4">
+              <div className="text-sm font-semibold text-slate-800 mb-2">
+                Hour interpretation
+              </div>
+              <div
+                className="inline-flex rounded-xl border border-slate-200 bg-white p-1"
+                role="tablist"
+                aria-label="Hour interpretation"
               >
-                Print / Save as PDF
-              </button>
+                <button
+                  type="button"
+                  onClick={() => setHourMode("clock")}
+                  className={`px-3 py-2 text-sm font-semibold rounded-lg transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 ${
+                    hourMode === "clock"
+                      ? "bg-sky-600 text-white"
+                      : "text-slate-800 hover:bg-slate-50"
+                  }`}
+                  aria-label="Use 24/7 clock-hour equivalence"
+                  role="tab"
+                  aria-selected={hourMode === "clock"}
+                >
+                  24/7 hours
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setHourMode("paid")}
+                  className={`px-3 py-2 text-sm font-semibold rounded-lg transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 ${
+                    hourMode === "paid"
+                      ? "bg-sky-600 text-white"
+                      : "text-slate-800 hover:bg-slate-50"
+                  }`}
+                  aria-label="Use paid-hours per week scenario"
+                  role="tab"
+                  aria-selected={hourMode === "paid"}
+                >
+                  Paid hours
+                </button>
+              </div>
+
+              <div className="mt-3 text-sm text-slate-600 leading-relaxed">
+                24/7 hours uses a pure time-based equivalence. Paid hours shows
+                a scenario where the hourly amount applies only to a chosen
+                number of hours per week.
+              </div>
+
+              {hourMode === "paid" ? (
+                <div className="mt-4">
+                  <label className="block text-sm font-semibold text-slate-800 mb-2">
+                    Paid hours per week (scenario)
+                  </label>
+                  <input
+                    inputMode="decimal"
+                    value={paidHoursDisplayValue}
+                    onFocus={() => setPaidHoursFocused(true)}
+                    onBlur={() => setPaidHoursFocused(false)}
+                    onChange={(e) =>
+                      setPaidHoursPerWeek(e.target.value.replace(/,/g, ""))
+                    }
+                    placeholder="e.g. 40"
+                    className="w-full rounded-xl border border-slate-300 px-4 py-3.5 text-base text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus:border-sky-500"
+                    aria-invalid={!parsedPaidHours.ok}
+                    aria-describedby="rc-paid-hours-help rc-paid-hours-error"
+                  />
+                  <p
+                    id="rc-paid-hours-help"
+                    className="mt-2 text-sm text-slate-600 leading-relaxed"
+                  >
+                    Range: 0 to 168 hours per week.
+                  </p>
+                  {!parsedPaidHours.ok ? (
+                    <p
+                      id="rc-paid-hours-error"
+                      className="mt-1 text-sm font-semibold text-rose-700"
+                      role="alert"
+                      aria-live="assertive"
+                    >
+                      {parsedPaidHours.error}
+                    </p>
+                  ) : null}
+                </div>
+              ) : null}
             </div>
           </div>
 
@@ -820,8 +826,10 @@ export default function HourlyToAnnualRent() {
               <div className="flex gap-2">
                 <input
                   inputMode="decimal"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
+                  value={amountDisplayValue}
+                  onFocus={() => setAmountFocused(true)}
+                  onBlur={() => setAmountFocused(false)}
+                  onChange={(e) => setAmount(e.target.value.replace(/,/g, ""))}
                   placeholder="e.g. 25 or 25.50"
                   className="w-full rounded-xl border border-slate-300 px-4 py-3.5 text-base text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus:border-sky-500"
                   aria-invalid={!parsedHourly.ok}
@@ -870,85 +878,6 @@ export default function HourlyToAnnualRent() {
                   </ul>
                 </div>
               ) : null}
-
-              <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4">
-                <div className="text-sm font-semibold text-slate-800 mb-2">
-                  Hour interpretation
-                </div>
-                <div
-                  className="inline-flex rounded-xl border border-slate-200 bg-white p-1"
-                  role="tablist"
-                  aria-label="Hour interpretation"
-                >
-                  <button
-                    type="button"
-                    onClick={() => setHourMode("clock")}
-                    className={`px-3 py-2 text-sm font-semibold rounded-lg transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 ${
-                      hourMode === "clock"
-                        ? "bg-sky-600 text-white"
-                        : "text-slate-800 hover:bg-slate-50"
-                    }`}
-                    aria-label="Use 24/7 clock-hour equivalence"
-                    role="tab"
-                    aria-selected={hourMode === "clock"}
-                  >
-                    24/7 hours
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setHourMode("paid")}
-                    className={`px-3 py-2 text-sm font-semibold rounded-lg transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 ${
-                      hourMode === "paid"
-                        ? "bg-sky-600 text-white"
-                        : "text-slate-800 hover:bg-slate-50"
-                    }`}
-                    aria-label="Use paid-hours per week scenario"
-                    role="tab"
-                    aria-selected={hourMode === "paid"}
-                  >
-                    Paid hours
-                  </button>
-                </div>
-
-                <div className="mt-3 text-sm text-slate-600 leading-relaxed">
-                  24/7 hours uses a pure time-based equivalence. Paid hours
-                  shows a scenario where the hourly amount applies only to a
-                  chosen number of hours per week.
-                </div>
-
-                {hourMode === "paid" ? (
-                  <div className="mt-4">
-                    <label className="block text-sm font-semibold text-slate-800 mb-2">
-                      Paid hours per week (scenario)
-                    </label>
-                    <input
-                      inputMode="decimal"
-                      value={paidHoursPerWeek}
-                      onChange={(e) => setPaidHoursPerWeek(e.target.value)}
-                      placeholder="e.g. 40"
-                      className="w-full rounded-xl border border-slate-300 px-4 py-3.5 text-base text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus:border-sky-500"
-                      aria-invalid={!parsedPaidHours.ok}
-                      aria-describedby="rc-paid-hours-help rc-paid-hours-error"
-                    />
-                    <p
-                      id="rc-paid-hours-help"
-                      className="mt-2 text-sm text-slate-600 leading-relaxed"
-                    >
-                      Range: 0 to 168 hours per week.
-                    </p>
-                    {!parsedPaidHours.ok ? (
-                      <p
-                        id="rc-paid-hours-error"
-                        className="mt-1 text-sm font-semibold text-rose-700"
-                        role="alert"
-                        aria-live="assertive"
-                      >
-                        {parsedPaidHours.error}
-                      </p>
-                    ) : null}
-                  </div>
-                ) : null}
-              </div>
             </div>
 
             <div className="md:col-span-6">
@@ -968,64 +897,6 @@ export default function HourlyToAnnualRent() {
                   <div className="mt-1 text-base font-bold text-slate-900">
                     {PERIOD_LABEL.annual}
                   </div>
-                </div>
-              </div>
-
-              <div className="mt-3 rounded-xl border border-slate-200 bg-white p-4">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                  <div>
-                    <div className="text-xs text-slate-600">
-                      Rounding (display only)
-                    </div>
-                    <label className="mt-1 flex items-center gap-2 text-sm text-slate-800">
-                      <input
-                        type="checkbox"
-                        checked={roundDisplay}
-                        onChange={(e) => setRoundDisplay(e.target.checked)}
-                        className="h-4 w-4 accent-sky-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
-                      />
-                      Round displayed values
-                    </label>
-                    <p className="mt-1 text-sm text-slate-600 leading-relaxed">
-                      Calculations use up to 12 decimals internally. If enabled,
-                      displayed values are rounded to your chosen decimals.
-                    </p>
-                  </div>
-
-                  <div className="sm:text-right">
-                    <div className="text-xs text-slate-600">
-                      Displayed decimals
-                    </div>
-                    <select
-                      value={displayDecimals}
-                      onChange={(e) =>
-                        setDisplayDecimals(
-                          Math.max(
-                            0,
-                            Math.min(
-                              6,
-                              Math.trunc(Number(e.target.value) || 2),
-                            ),
-                          ),
-                        )
-                      }
-                      className="mt-1 rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm font-semibold text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus:border-sky-500"
-                      aria-label="Displayed decimals"
-                    >
-                      <option value={0}>0</option>
-                      <option value={2}>2</option>
-                      <option value={4}>4</option>
-                      <option value={6}>6</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="mt-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-800">
-                  <div className="font-semibold">Math basis</div>
-                  <p className="mt-1 text-sm text-slate-700 leading-relaxed">
-                    Clock-hour equivalence uses 365 days × 24 hours. Paid-hours
-                    mode uses hours/week × 52 as a scenario illustration.
-                  </p>
                 </div>
               </div>
             </div>
@@ -1271,12 +1142,71 @@ export default function HourlyToAnnualRent() {
               </>
             )}
           </div>
-
+          <div className="rc-no-print mt-5 flex flex-col sm:flex-row gap-2">
+            <button
+              type="button"
+              onClick={handlePrint}
+              className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
+            >
+              Print / Save as PDF
+            </button>
+          </div>
           <p className="mt-6 text-sm text-slate-600 leading-relaxed">
             Assumptions: year = 365 days, day = 24 hours, week = 7 days,
             biweekly = 14 days, 4-week = 28 days, month = 365 ÷ 12 days
             (average). Exact billing depends on the agreement.
           </p>
+        </div>
+
+        <div className="mt-3 rounded-xl border border-slate-200 bg-white p-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <div className="text-xs text-slate-600">
+                Rounding (display only)
+              </div>
+              <label className="mt-1 flex items-center gap-2 text-sm text-slate-800">
+                <input
+                  type="checkbox"
+                  checked={roundDisplay}
+                  onChange={(e) => setRoundDisplay(e.target.checked)}
+                  className="h-4 w-4 accent-sky-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
+                />
+                Round displayed values
+              </label>
+              <p className="mt-1 text-sm text-slate-600 leading-relaxed">
+                Calculations use up to 12 decimals internally. If enabled,
+                displayed values are rounded to your chosen decimals.
+              </p>
+            </div>
+
+            <div className="sm:text-right">
+              <div className="text-xs text-slate-600">Displayed decimals</div>
+              <select
+                value={displayDecimals}
+                onChange={(e) => {
+                  const n = Number(e.target.value);
+                  setDisplayDecimals(
+                    n === 0 || n === 2 || n === 4 || n === 6 ? n : 2,
+                  );
+                }}
+                className="mt-1 rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm font-semibold text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus:border-sky-500"
+                aria-label="Displayed decimals"
+              >
+                <option value={0}>0</option>
+                <option value={2}>2</option>
+                <option value={4}>4</option>
+                <option value={6}>6</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="mt-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-800">
+            <div className="font-semibold">Math basis</div>
+            <p className="mt-1 text-sm text-slate-700 leading-relaxed">
+              Clock-hour equivalence uses 365 days × 24 hours. Paid-hours mode
+              uses hours/week × 52 as a scenario illustration.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -1312,8 +1242,8 @@ export default function HourlyToAnnualRent() {
               hourly does not mean “24/7.”
             </li>
             <li>
-              <strong>Export and printing.</strong> You can export the breakdown
-              to CSV and print the page to save as a PDF.
+              <strong>Printing.</strong> You can print the page to save as a
+              PDF.
             </li>
           </ol>
         </div>

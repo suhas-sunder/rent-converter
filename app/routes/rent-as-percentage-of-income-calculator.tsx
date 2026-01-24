@@ -201,11 +201,11 @@ function formatCurrencyFromScaled(
   const n = toNumberSafe(scaled);
   if (!Number.isFinite(n)) return "—";
 
-  const maxFrac = Math.max(0, Math.min(12, Math.trunc(displayDecimals)));
+  const allowed = new Set<number>([0, 2, 4, 6]);
+  const dd = allowed.has(displayDecimals) ? displayDecimals : 2;
 
-  // If rounding enabled, lock to selected decimals. If disabled, still show cents by default.
-  const maximumFractionDigits = roundDisplay ? maxFrac : 12;
-  const minimumFractionDigits = roundDisplay ? maxFrac : 2;
+  const maximumFractionDigits = roundDisplay ? dd : 12;
+  const minimumFractionDigits = roundDisplay ? dd : 0;
 
   return new Intl.NumberFormat(undefined, {
     style: "currency",
@@ -374,32 +374,6 @@ function percentFromRatio(num: bigint, den: bigint, decimals: number): number {
   return Number(safe) / Number(factor);
 }
 
-function buildCsvRow(cols: string[]): string {
-  return cols
-    .map((c) => {
-      const s = String(c ?? "");
-      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
-      return s;
-    })
-    .join(",");
-}
-
-function downloadTextFile(
-  filename: string,
-  content: string,
-  mime = "text/plain;charset=utf-8",
-) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
 function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   if (raw === null) return fallback;
   try {
@@ -410,10 +384,27 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   }
 }
 
+function groupThousandsEnUS(intPart: string): string {
+  const s = intPart.replace(/^0+(?=\d)/, "") || "0";
+  return s.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function formatPreviewFromNormalized(normalized: string): string {
+  const idx = normalized.indexOf(".");
+  if (idx === -1) return groupThousandsEnUS(normalized);
+  const intPart = normalized.slice(0, idx) || "0";
+  const fracPart = normalized.slice(idx + 1);
+  return `${groupThousandsEnUS(intPart)}.${fracPart}`;
+}
+
 export default function RentAsPercentageOfIncome() {
+  const rentInputRef = useRef<HTMLInputElement | null>(null);
+  const incomeInputRef = useRef<HTMLInputElement | null>(null);
+
   const [rentAmount, setRentAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "2200";
-    return window.localStorage.getItem("rc_rpi_rent_amount") ?? "2200";
+    const v = window.localStorage.getItem("rc_rpi_rent_amount") ?? "2200";
+    return v.includes(",") ? v.replace(/,/g, "") : v;
   });
 
   const [rentPeriod, setRentPeriod] = useState<Period>(() => {
@@ -425,7 +416,8 @@ export default function RentAsPercentageOfIncome() {
 
   const [incomeAmount, setIncomeAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "6500";
-    return window.localStorage.getItem("rc_rpi_income_amount") ?? "6500";
+    const v = window.localStorage.getItem("rc_rpi_income_amount") ?? "6500";
+    return v.includes(",") ? v.replace(/,/g, "") : v;
   });
 
   const [incomePeriod, setIncomePeriod] = useState<Period>(() => {
@@ -454,9 +446,12 @@ export default function RentAsPercentageOfIncome() {
     if (typeof window === "undefined") return 2;
     const saved = window.localStorage.getItem("rc_rpi_display_decimals");
     const n = saved ? Number(saved) : 2;
-    if (!Number.isFinite(n)) return 2;
-    return Math.max(0, Math.min(6, Math.trunc(n)));
+    const allowed = new Set<number>([0, 2, 4, 6]);
+    return allowed.has(n) ? n : 2;
   });
+
+  const [rentFocused, setRentFocused] = useState(false);
+  const [incomeFocused, setIncomeFocused] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -496,14 +491,8 @@ export default function RentAsPercentageOfIncome() {
     [incomeAmount],
   );
 
-  const effectiveDisplayDecimals = roundDisplay ? displayDecimals : 12;
   const fmtMoney = (scaled: bigint) =>
-    formatCurrencyFromScaled(
-      scaled,
-      currency,
-      effectiveDisplayDecimals,
-      roundDisplay,
-    );
+    formatCurrencyFromScaled(scaled, currency, displayDecimals, roundDisplay);
 
   const computed = useMemo(() => {
     const errors: string[] = [];
@@ -587,91 +576,6 @@ export default function RentAsPercentageOfIncome() {
     };
   }, [rentParsed, incomeParsed, rentPeriod, incomePeriod]);
 
-  const handleExportCsv = () => {
-    if (!computed.ok) return;
-
-    const rows: string[] = [];
-    rows.push(buildCsvRow(["Rent as Percentage of Income Calculator"]));
-    rows.push(buildCsvRow(["Currency", currency]));
-    rows.push(buildCsvRow(["Rent period (input)", PERIOD_LABEL[rentPeriod]]));
-    rows.push(
-      buildCsvRow(["Income period (input)", PERIOD_LABEL[incomePeriod]]),
-    );
-
-    rows.push(
-      buildCsvRow(["Rent (input)", fmtMoney(rentParsed.scaled as bigint)]),
-    );
-    rows.push(
-      buildCsvRow(["Income (input)", fmtMoney(incomeParsed.scaled as bigint)]),
-    );
-
-    rows.push(
-      buildCsvRow([
-        "Display",
-        roundDisplay
-          ? `Rounded to ${displayDecimals} decimals for display`
-          : "No display rounding (up to 12 decimals)",
-      ]),
-    );
-
-    rows.push(
-      buildCsvRow([
-        "Assumptions",
-        "Year=365 days",
-        "Month=365 ÷ 12 days",
-        "Week=7 days",
-        "Biweekly=14 days",
-        "4-week=28 days",
-        "Day=1",
-        "Hour=1/24 day",
-      ]),
-    );
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Annual totals", "Amount"]));
-    rows.push(buildCsvRow(["Annual rent", fmtMoney(computed.annualRent)]));
-    rows.push(buildCsvRow(["Annual income", fmtMoney(computed.annualIncome)]));
-    rows.push(
-      buildCsvRow([
-        "Rent as % of income (annual basis)",
-        `${computed.ratioPct.toFixed(2)}%`,
-      ]),
-    );
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Derived comparisons", "Rent", "Income", "Rent %"]));
-    rows.push(
-      buildCsvRow([
-        "Monthly (avg)",
-        fmtMoney(computed.rentMonthly),
-        fmtMoney(computed.incomeMonthly),
-        `${percentFromRatio(computed.rentMonthly, computed.incomeMonthly, 4).toFixed(2)}%`,
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Every 4 weeks",
-        fmtMoney(computed.rent4w),
-        fmtMoney(computed.income4w),
-        `${computed.ratioOn4wBasis.toFixed(2)}%`,
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Weekly",
-        fmtMoney(computed.rentWeekly),
-        fmtMoney(computed.incomeWeekly),
-        `${percentFromRatio(computed.rentWeekly, computed.incomeWeekly, 4).toFixed(2)}%`,
-      ]),
-    );
-
-    downloadTextFile(
-      "rent-as-percentage-of-income-calculator.csv",
-      rows.join("\n"),
-      "text/csv;charset=utf-8",
-    );
-  };
-
   const handlePrint = () => {
     if (typeof window === "undefined") return;
     window.print();
@@ -698,6 +602,50 @@ export default function RentAsPercentageOfIncome() {
       copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
     }
   };
+
+  const handleAmountChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    setValue: (v: string) => void,
+    inputRef: React.RefObject<HTMLInputElement | null>,
+  ) => {
+    const el = e.target;
+    const v = el.value;
+    if (!v.includes(",")) {
+      setValue(v);
+      return;
+    }
+
+    const start = el.selectionStart ?? v.length;
+    const commasBefore = (v.slice(0, start).match(/,/g) || []).length;
+    const next = v.replace(/,/g, "");
+    const nextPos = Math.max(0, start - commasBefore);
+
+    setValue(next);
+
+    requestAnimationFrame(() => {
+      const node = inputRef.current;
+      if (!node) return;
+      try {
+        node.setSelectionRange(nextPos, nextPos);
+      } catch {
+        // ignore
+      }
+    });
+  };
+
+  const rentDisplayValue = useMemo(() => {
+    if (rentFocused) return rentAmount;
+    if (!rentParsed.ok) return rentAmount;
+    const normalized = rentParsed.normalized ?? rentAmount;
+    return formatPreviewFromNormalized(normalized);
+  }, [rentFocused, rentAmount, rentParsed]);
+
+  const incomeDisplayValue = useMemo(() => {
+    if (incomeFocused) return incomeAmount;
+    if (!incomeParsed.ok) return incomeAmount;
+    const normalized = incomeParsed.normalized ?? incomeAmount;
+    return formatPreviewFromNormalized(normalized);
+  }, [incomeFocused, incomeAmount, incomeParsed]);
 
   const faqData = [
     {
@@ -838,16 +786,21 @@ export default function RentAsPercentageOfIncome() {
             </div>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-12">
-            <div className="md:col-span-6">
+          <div className="grid gap-5 md:grid-cols-4">
+            <div className="md:col-span-2">
               <label className="block text-sm font-semibold text-slate-700 mb-2">
                 Rent amount
               </label>
               <div className="grid grid-cols-12 gap-2">
                 <input
+                  ref={rentInputRef}
                   inputMode="decimal"
-                  value={rentAmount}
-                  onChange={(e) => setRentAmount(e.target.value)}
+                  value={rentDisplayValue}
+                  onFocus={() => setRentFocused(true)}
+                  onBlur={() => setRentFocused(false)}
+                  onChange={(e) =>
+                    handleAmountChange(e, setRentAmount, rentInputRef)
+                  }
                   placeholder="e.g. 2200 or 2200.00"
                   className="col-span-7 rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!rentParsed.ok}
@@ -886,15 +839,20 @@ export default function RentAsPercentageOfIncome() {
               ) : null}
             </div>
 
-            <div className="md:col-span-6">
+            <div className="md:col-span-2">
               <label className="block text-sm font-semibold text-slate-700 mb-2">
                 Income amount
               </label>
               <div className="grid grid-cols-12 gap-2">
                 <input
+                  ref={incomeInputRef}
                   inputMode="decimal"
-                  value={incomeAmount}
-                  onChange={(e) => setIncomeAmount(e.target.value)}
+                  value={incomeDisplayValue}
+                  onFocus={() => setIncomeFocused(true)}
+                  onBlur={() => setIncomeFocused(false)}
+                  onChange={(e) =>
+                    handleAmountChange(e, setIncomeAmount, incomeInputRef)
+                  }
                   placeholder="e.g. 6500 or 6500.00"
                   className="col-span-7 rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!incomeParsed.ok}
@@ -917,7 +875,7 @@ export default function RentAsPercentageOfIncome() {
                 </select>
               </div>
 
-              <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              <div className="mt-3 grid gap-3 ">
                 <div>
                   <label className="block text-xs font-semibold text-slate-600 mb-2">
                     Currency
@@ -938,50 +896,6 @@ export default function RentAsPercentageOfIncome() {
                       </option>
                     ))}
                   </select>
-                </div>
-
-                <div className="rounded-xl border border-slate-200 bg-white p-4">
-                  <div className="text-xs text-slate-500">Display</div>
-                  <label className="mt-1 flex items-center gap-2 text-sm text-slate-700">
-                    <input
-                      type="checkbox"
-                      checked={roundDisplay}
-                      onChange={(e) => setRoundDisplay(e.target.checked)}
-                      className="h-4 w-4"
-                    />
-                    Round displayed values (display only)
-                  </label>
-
-                  <div className="mt-3 flex items-center justify-between gap-3">
-                    <div className="text-xs text-slate-500">
-                      Displayed decimals
-                    </div>
-                    <select
-                      value={displayDecimals}
-                      onChange={(e) =>
-                        setDisplayDecimals(
-                          Math.max(
-                            0,
-                            Math.min(
-                              6,
-                              Math.trunc(Number(e.target.value) || 2),
-                            ),
-                          ),
-                        )
-                      }
-                      className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
-                    >
-                      <option value={0}>0</option>
-                      <option value={2}>2</option>
-                      <option value={4}>4</option>
-                      <option value={6}>6</option>
-                    </select>
-                  </div>
-
-                  <p className="mt-2 text-xs text-slate-500">
-                    Calculations preserve decimals internally (up to 12). Only
-                    the display is rounded.
-                  </p>
                 </div>
               </div>
 
@@ -1194,6 +1108,42 @@ export default function RentAsPercentageOfIncome() {
             dates, billing dates, and proration rules depend on the agreement.
           </p>
         </div>
+
+        <div className="rounded-xl border border-slate-200 bg-white p-4 mt-6">
+          <div className="text-xs text-slate-500">Display</div>
+          <label className="mt-1 flex items-center gap-2 text-sm text-slate-700">
+            <input
+              type="checkbox"
+              checked={roundDisplay}
+              onChange={(e) => setRoundDisplay(e.target.checked)}
+              className="h-4 w-4"
+            />
+            Round displayed values (display only)
+          </label>
+
+          <div className="mt-3 flex items-center justify-between gap-3">
+            <div className="text-xs text-slate-500">Displayed decimals</div>
+            <select
+              value={displayDecimals}
+              onChange={(e) => {
+                const n = Number(e.target.value);
+                const allowed = new Set<number>([0, 2, 4, 6]);
+                setDisplayDecimals(allowed.has(n) ? n : 2);
+              }}
+              className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
+            >
+              <option value={0}>0</option>
+              <option value={2}>2</option>
+              <option value={4}>4</option>
+              <option value={6}>6</option>
+            </select>
+          </div>
+
+          <p className="mt-2 text-xs text-slate-500">
+            Calculations preserve decimals internally (up to 12). Only the
+            display is rounded.
+          </p>
+        </div>
       </section>
 
       {/* Required explanation section above FAQ */}
@@ -1235,10 +1185,6 @@ export default function RentAsPercentageOfIncome() {
               <strong>Rounding is display-only.</strong> Calculations preserve
               decimals internally (up to 12). If rounding is enabled, only
               displayed values are rounded.
-            </li>
-            <li>
-              <strong>Export and print.</strong> Export the key values to CSV,
-              or print (including save-as-PDF via your browser print dialog).
             </li>
           </ol>
 

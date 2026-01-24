@@ -198,12 +198,10 @@ function formatCurrencyFromScaled(
   const n = toNumberSafe(scaled);
   if (!Number.isFinite(n)) return "—";
 
-  const maxFrac = Math.max(0, Math.min(12, displayDecimals));
+  const dec = Math.max(0, Math.min(12, Math.trunc(displayDecimals)));
 
-  // If rounding is enabled, lock to the chosen decimals for consistent display.
-  // If rounding is disabled, allow up to 12 decimals, but do not drop cents.
-  const maximumFractionDigits = roundDisplay ? maxFrac : 12;
-  const minimumFractionDigits = roundDisplay ? maxFrac : 2;
+  const minimumFractionDigits = roundDisplay ? dec : 0;
+  const maximumFractionDigits = roundDisplay ? dec : 12;
 
   return new Intl.NumberFormat(undefined, {
     style: "currency",
@@ -211,6 +209,25 @@ function formatCurrencyFromScaled(
     maximumFractionDigits,
     minimumFractionDigits,
   }).format(n);
+}
+
+function formatNumberPreviewFromParsed(parsed: ParsedScaled): string | null {
+  if (!parsed.ok || !parsed.normalized) return null;
+
+  const normalized = parsed.normalized;
+  const [intStr, fracStr] = normalized.split(".");
+  const intNum = Number(intStr || "0");
+  if (!Number.isFinite(intNum)) return null;
+
+  const groupedInt = new Intl.NumberFormat("en-US", {
+    useGrouping: true,
+    maximumFractionDigits: 0,
+  }).format(intNum);
+
+  if (typeof fracStr === "string" && fracStr.length > 0) {
+    return `${groupedInt}.${fracStr}`;
+  }
+  return groupedInt;
 }
 
 function parseMoneyInputToScaled(raw: string): ParsedScaled {
@@ -430,32 +447,6 @@ function convertScaled(valueScaled: bigint, from: Period, to: Period): bigint {
   return mulDivInt(dailyScaled, dpTo.num, dpTo.den);
 }
 
-function buildCsvRow(cols: string[]): string {
-  return cols
-    .map((c) => {
-      const s = String(c ?? "");
-      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
-      return s;
-    })
-    .join(",");
-}
-
-function downloadTextFile(
-  filename: string,
-  content: string,
-  mime = "text/plain;charset=utf-8",
-) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
 function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   if (raw === null) return fallback;
   try {
@@ -477,6 +468,15 @@ function percentFromRatio(num: bigint, den: bigint, decimals: number): number {
   const limit = 9_000_000_000_000_000n; // ~9e15
   const safe = percentScaled > limit ? limit : percentScaled;
   return Number(safe) / Number(factor);
+}
+
+function parseDisplayDecimalsStrict(raw: string | null): number {
+  const allowed = new Set<number>([0, 2, 4, 6]);
+  if (raw === null) return 2;
+  const n = Number(raw);
+  if (!Number.isFinite(n)) return 2;
+  const t = Math.trunc(n);
+  return allowed.has(t) ? t : 2;
 }
 
 export default function RentAfterTaxIncome() {
@@ -526,11 +526,13 @@ export default function RentAfterTaxIncome() {
 
   const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
     if (typeof window === "undefined") return 2;
-    const saved = window.localStorage.getItem("rc_rati_display_decimals");
-    const n = saved ? Number(saved) : 2;
-    if (!Number.isFinite(n)) return 2;
-    return Math.max(0, Math.min(6, Math.trunc(n)));
+    return parseDisplayDecimalsStrict(
+      window.localStorage.getItem("rc_rati_display_decimals"),
+    );
   });
+
+  const [isGrossFocused, setIsGrossFocused] = useState(false);
+  const [isRentFocused, setIsRentFocused] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -584,6 +586,18 @@ export default function RentAfterTaxIncome() {
       effectiveDisplayDecimals,
       roundDisplay,
     );
+
+  const grossPreview = useMemo(() => {
+    if (isGrossFocused) return grossIncome;
+    const pv = formatNumberPreviewFromParsed(grossParsed);
+    return pv ?? grossIncome;
+  }, [grossIncome, grossParsed, isGrossFocused]);
+
+  const rentPreview = useMemo(() => {
+    if (isRentFocused) return rentAmount;
+    const pv = formatNumberPreviewFromParsed(rentParsed);
+    return pv ?? rentAmount;
+  }, [rentAmount, rentParsed, isRentFocused]);
 
   const computed = useMemo(() => {
     const errors: string[] = [];
@@ -657,111 +671,6 @@ export default function RentAfterTaxIncome() {
       avgMonthDays,
     };
   }, [grossParsed, rentParsed, taxParsed, incomePeriod, rentPeriod]);
-
-  const canShowResults = computed.ok;
-
-  const handleExportCsv = () => {
-    if (!computed.ok) return;
-
-    const rows: string[] = [];
-    rows.push(buildCsvRow(["Rent After-Tax Income Calculator"]));
-    rows.push(buildCsvRow(["Currency", currency]));
-    rows.push(
-      buildCsvRow(["Income period (input)", PERIOD_LABEL[incomePeriod]]),
-    );
-    rows.push(buildCsvRow(["Rent period (input)", PERIOD_LABEL[rentPeriod]]));
-
-    rows.push(
-      buildCsvRow([
-        "Pre-tax income (input)",
-        fmtMoney(grossParsed.scaled as bigint),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Effective tax rate (input)",
-        `${toNumberSafe(taxParsed.scaled as bigint)}%`,
-      ]),
-    );
-    rows.push(
-      buildCsvRow(["Rent (input)", fmtMoney(rentParsed.scaled as bigint)]),
-    );
-
-    rows.push(
-      buildCsvRow([
-        "Display",
-        roundDisplay
-          ? `Rounded to ${displayDecimals} decimals for display`
-          : "No display rounding (up to 12 decimals)",
-      ]),
-    );
-
-    rows.push(
-      buildCsvRow([
-        "Assumptions",
-        "Year=365 days",
-        "Month=365 ÷ 12 days",
-        "Week=7 days",
-        "Biweekly=14 days",
-        "4-week=28 days",
-        "Day=1",
-        "Hour=1/24 day",
-      ]),
-    );
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Annual totals", "Amount"]));
-    rows.push(
-      buildCsvRow(["Annual pre-tax income", fmtMoney(computed.annualGross)]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Annual after-tax income (estimated)",
-        fmtMoney(computed.annualNet),
-      ]),
-    );
-    rows.push(buildCsvRow(["Annual rent", fmtMoney(computed.annualRent)]));
-    rows.push(
-      buildCsvRow([
-        "Annual after-tax income left after rent",
-        fmtMoney(computed.annualNetAfterRent),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Rent share of after-tax income",
-        `${computed.rentShareNetPct.toFixed(2)}%`,
-      ]),
-    );
-    rows.push(buildCsvRow([""]));
-
-    rows.push(
-      buildCsvRow([
-        "Per-period breakdown (annual-equivalent)",
-        "Gross",
-        "Net",
-        "Rent",
-        "Net after rent",
-      ]),
-    );
-    computed.breakdown.forEach((r) => {
-      rows.push(
-        buildCsvRow([
-          PERIOD_LABEL[r.p],
-          fmtMoney(r.grossP),
-          fmtMoney(r.netP),
-          fmtMoney(r.rentP),
-          fmtMoney(r.leftP),
-        ]),
-      );
-    });
-
-    downloadTextFile(
-      "rent-after-tax-income-calculator.csv",
-      rows.join("\n"),
-      "text/csv;charset=utf-8",
-    );
-  };
 
   const handlePrint = () => {
     if (typeof window === "undefined") return;
@@ -898,7 +807,7 @@ export default function RentAfterTaxIncome() {
         <h1 className="text-4xl font-bold text-slate-800 mb-4">
           Rent After-Tax Income Calculator
         </h1>
-        <p className="text-slate-600 max-w-2xl mx-auto text-lg">
+        <p className="text-slate-600 max-w-5xl mx-auto text-lg">
           Enter pre-tax income, an effective tax rate, and rent. This page
           estimates after-tax income and shows rent as a share of that take-home
           amount using a consistent annual basis.
@@ -912,12 +821,6 @@ export default function RentAfterTaxIncome() {
               <h2 className="text-xl sm:text-2xl font-bold">
                 Estimate rent share using after-tax income
               </h2>
-              <p className="mt-1 text-sm text-slate-600">
-                Income and rent are annualized first (365-day year). After-tax
-                income is estimated using your effective tax rate. Rent share
-                and "income left after rent" are computed from those annual
-                totals.
-              </p>
             </div>
 
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
@@ -939,8 +842,12 @@ export default function RentAfterTaxIncome() {
               <div className="grid grid-cols-12 gap-2">
                 <input
                   inputMode="decimal"
-                  value={grossIncome}
-                  onChange={(e) => setGrossIncome(e.target.value)}
+                  value={grossPreview}
+                  onChange={(e) =>
+                    setGrossIncome(e.target.value.replace(/,/g, ""))
+                  }
+                  onFocus={() => setIsGrossFocused(true)}
+                  onBlur={() => setIsGrossFocused(false)}
                   placeholder="e.g. 60000 or 5000.50"
                   className="col-span-7 rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!grossParsed.ok}
@@ -1023,8 +930,12 @@ export default function RentAfterTaxIncome() {
               <div className="grid grid-cols-12 gap-2">
                 <input
                   inputMode="decimal"
-                  value={rentAmount}
-                  onChange={(e) => setRentAmount(e.target.value)}
+                  value={rentPreview}
+                  onChange={(e) =>
+                    setRentAmount(e.target.value.replace(/,/g, ""))
+                  }
+                  onFocus={() => setIsRentFocused(true)}
+                  onBlur={() => setIsRentFocused(false)}
                   placeholder="e.g. 2200 or 2200.00"
                   className="col-span-7 rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!rentParsed.ok}
@@ -1082,47 +993,6 @@ export default function RentAfterTaxIncome() {
                   </option>
                 ))}
               </select>
-
-              <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4">
-                <div className="text-xs text-slate-500">Display</div>
-                <label className="mt-1 flex items-center gap-2 text-sm text-slate-700">
-                  <input
-                    type="checkbox"
-                    checked={roundDisplay}
-                    onChange={(e) => setRoundDisplay(e.target.checked)}
-                    className="h-4 w-4"
-                  />
-                  Round displayed values (display only)
-                </label>
-
-                <div className="mt-3 flex items-center justify-between gap-3">
-                  <div className="text-xs text-slate-500">
-                    Displayed decimals
-                  </div>
-                  <select
-                    value={displayDecimals}
-                    onChange={(e) =>
-                      setDisplayDecimals(
-                        Math.max(
-                          0,
-                          Math.min(6, Math.trunc(Number(e.target.value) || 2)),
-                        ),
-                      )
-                    }
-                    className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
-                  >
-                    <option value={0}>0</option>
-                    <option value={2}>2</option>
-                    <option value={4}>4</option>
-                    <option value={6}>6</option>
-                  </select>
-                </div>
-
-                <p className="mt-2 text-xs text-slate-500">
-                  Calculations preserve decimals internally (up to 12). If
-                  rounding is enabled, only displayed values are rounded.
-                </p>
-              </div>
             </div>
           </div>
 
@@ -1371,6 +1241,49 @@ export default function RentAfterTaxIncome() {
             days, and month = 365 ÷ 12 days (average). The tax rate is an input
             estimate and does not model brackets, deductions, or credits.
           </p>
+
+          <p className="mt-4 text-sm text-slate-600">
+            Income and rent are annualized first (365-day year). After-tax
+            income is estimated using your effective tax rate. Rent share and
+            "income left after rent" are computed from those annual totals.
+          </p>
+        </div>
+
+        <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4">
+          <div className="text-xs text-slate-500">Display</div>
+          <label className="mt-1 flex items-center gap-2 text-sm text-slate-700">
+            <input
+              type="checkbox"
+              checked={roundDisplay}
+              onChange={(e) => setRoundDisplay(e.target.checked)}
+              className="h-4 w-4"
+            />
+            Round displayed values (display only)
+          </label>
+
+          <div className="mt-3 flex items-center justify-between gap-3">
+            <div className="text-xs text-slate-500">Displayed decimals</div>
+            <select
+              value={displayDecimals}
+              onChange={(e) => {
+                const v = Number(e.target.value);
+                const allowed = new Set<number>([0, 2, 4, 6]);
+                const t = Number.isFinite(v) ? Math.trunc(v) : 2;
+                setDisplayDecimals(allowed.has(t) ? t : 2);
+              }}
+              className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
+            >
+              <option value={0}>0</option>
+              <option value={2}>2</option>
+              <option value={4}>4</option>
+              <option value={6}>6</option>
+            </select>
+          </div>
+
+          <p className="mt-2 text-xs text-slate-500">
+            Calculations preserve decimals internally (up to 12). If rounding is
+            enabled, only displayed values are rounded.
+          </p>
         </div>
       </section>
 
@@ -1409,11 +1322,6 @@ export default function RentAfterTaxIncome() {
               <strong>Rounding is display-only.</strong> Calculations preserve
               decimals internally (up to 12). If rounding is enabled, only
               displayed values are rounded.
-            </li>
-            <li>
-              <strong>Export and print.</strong> You can export a CSV of the
-              breakdown and print the results (including save-as-PDF via the
-              browser print dialog).
             </li>
           </ol>
 

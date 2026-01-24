@@ -765,7 +765,7 @@ export default function RentIncreasePercentage() {
         <h1 className="text-4xl sm:text-[2.6rem] leading-tight font-bold text-slate-900 mb-4">
           {pageName}
         </h1>
-        <p className="text-slate-600 max-w-2xl mx-auto text-lg leading-relaxed">
+        <p className="text-slate-600 max-w-5xl mx-auto text-lg leading-relaxed">
           Compare an old rent and a new rent to estimate the percentage change
           and the annual impact. Results are shown using annual equivalence so
           common billing cycles can be compared on the same basis.

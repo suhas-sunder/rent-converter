@@ -7,7 +7,7 @@ import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 export const meta: Route.MetaFunction = () => {
   const title = "How Much Rent Can I Afford? (Income-Based Estimator)";
   const description =
-    "Estimate rent affordability from income using annual equivalence (365-day year). Compare affordable rent across monthly, weekly, and every 4 weeks, with CSV export and print-to-PDF.";
+    "Estimate rent affordability from income using annual equivalence (365-day year). Compare affordable rent across monthly, weekly, and every 4 weeks, and print or save as PDF.";
 
   return [
     { title },
@@ -204,6 +204,21 @@ function formatPercent(n: number, displayDecimals: number): string {
   return `${(n * 100).toFixed(Math.max(0, Math.min(6, displayDecimals)))}%`;
 }
 
+function groupThousandsEnUSInt(intStr: string): string {
+  const s = intStr || "0";
+  return s.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function formatPreviewFromNormalized(normalized: string): string {
+  const trimmed = (normalized ?? "").trim();
+  if (!trimmed) return "";
+  const parts = trimmed.split(".");
+  const intPart = parts[0] ?? "0";
+  const fracPart = parts.length === 2 ? (parts[1] ?? "") : "";
+  const groupedInt = groupThousandsEnUSInt(intPart.replace(/^0+(?=\d)/, ""));
+  return fracPart.length ? `${groupedInt}.${fracPart}` : groupedInt;
+}
+
 /**
  * Parses:
  * - $1,234.56
@@ -398,32 +413,6 @@ function fromAnnualScaled(annualScaled: bigint, to: Period): bigint {
   return mulDivInt(dailyScaled, dp.num, dp.den);
 }
 
-function buildCsvRow(cols: string[]): string {
-  return cols
-    .map((c) => {
-      const s = String(c ?? "");
-      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
-      return s;
-    })
-    .join(",");
-}
-
-function downloadTextFile(
-  filename: string,
-  content: string,
-  mime = "text/plain;charset=utf-8",
-) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
 function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   if (raw === null) return fallback;
   try {
@@ -434,11 +423,25 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   }
 }
 
+function sanitizeRawAmountForState(raw: string): string {
+  return (raw ?? "").replace(/,/g, "");
+}
+
+function normalizeDisplayDecimals(raw: unknown): number {
+  const n = typeof raw === "number" ? raw : Number(raw);
+  if (!Number.isFinite(n)) return 2;
+  const v = Math.trunc(n);
+  return v === 0 || v === 2 || v === 4 || v === 6 ? v : 2;
+}
+
 export default function HowMuchRentCanIAfford() {
   const [income, setIncome] = useState<string>(() => {
     if (typeof window === "undefined") return "6000";
-    return window.localStorage.getItem("rc_aff_income") ?? "6000";
+    const saved = window.localStorage.getItem("rc_aff_income");
+    return sanitizeRawAmountForState(saved ?? "6000");
   });
+
+  const [incomeFocused, setIncomeFocused] = useState<boolean>(false);
 
   const [period, setPeriod] = useState<Period>(() => {
     if (typeof window === "undefined") return "monthly";
@@ -463,9 +466,7 @@ export default function HowMuchRentCanIAfford() {
   const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
     if (typeof window === "undefined") return 2;
     const saved = window.localStorage.getItem("rc_aff_display_decimals");
-    const n = saved ? Number(saved) : 2;
-    if (!Number.isFinite(n)) return 2;
-    return Math.max(0, Math.min(6, Math.trunc(n)));
+    return normalizeDisplayDecimals(saved ?? 2);
   });
 
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
@@ -498,6 +499,13 @@ export default function HowMuchRentCanIAfford() {
 
   const parsedIncome = useMemo(() => parseMoneyInputToScaled(income), [income]);
   const incomeScaled = parsedIncome.ok ? (parsedIncome.scaled as bigint) : 0n;
+
+  const incomePreviewValue = useMemo(() => {
+    if (incomeFocused) return income;
+    if (!parsedIncome.ok) return income;
+    const normalized = parsedIncome.normalized ?? "";
+    return formatPreviewFromNormalized(normalized);
+  }, [incomeFocused, income, parsedIncome.ok, parsedIncome.normalized]);
 
   const annualIncomeScaled = useMemo(() => {
     if (!parsedIncome.ok) return null;
@@ -556,69 +564,6 @@ export default function HowMuchRentCanIAfford() {
 
   const canShowResults =
     parsedIncome.ok && !!annualIncomeScaled && !!affordability;
-
-  const handleExportCsv = () => {
-    if (!canShowResults || !annualIncomeScaled || !affordability) return;
-
-    const rows: string[] = [];
-    rows.push(buildCsvRow(["How Much Rent Can I Afford?"]));
-    rows.push(buildCsvRow(["Input income", fmt(incomeScaled)]));
-    rows.push(buildCsvRow(["Income period", PERIOD_LABEL[period]]));
-    rows.push(
-      buildCsvRow([
-        "Annualized income (365-day basis)",
-        fmt(annualIncomeScaled),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Assumptions",
-        "Year=365 days",
-        "Month=365 ÷ 12 days",
-        "4-week=28 days",
-        "Week=7 days",
-        "Hourly assumes 24 hours/day when annualized",
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Display",
-        roundDisplay
-          ? `Rounded to ${displayDecimals} decimals for display`
-          : "No display rounding (shows up to 12 decimals)",
-      ]),
-    );
-    rows.push(buildCsvRow([""]));
-
-    rows.push(
-      buildCsvRow([
-        "Rent share",
-        "Label",
-        "Monthly",
-        "Weekly",
-        "Every 4 weeks",
-        "Annual",
-      ]),
-    );
-    for (const row of affordability) {
-      rows.push(
-        buildCsvRow([
-          `${Math.round(row.ratio * 100)}%`,
-          row.label,
-          fmt(row.monthly),
-          fmt(row.weekly),
-          fmt(row.every4w),
-          fmt(row.annual),
-        ]),
-      );
-    }
-
-    downloadTextFile(
-      "how-much-rent-can-i-afford.csv",
-      rows.join("\n"),
-      "text/csv;charset=utf-8",
-    );
-  };
 
   const handlePrint = () => {
     if (typeof window === "undefined") return;
@@ -701,7 +646,7 @@ export default function HowMuchRentCanIAfford() {
     "@type": "WebPage",
     name: "How Much Rent Can I Afford?",
     description:
-      "Estimate rent affordability from income using annual equivalence (365-day year). Compare affordable rent across monthly, weekly, and every 4 weeks, with CSV export and print-to-PDF.",
+      "Estimate rent affordability from income using annual equivalence (365-day year). Compare affordable rent across monthly, weekly, and every 4 weeks, and print or save as PDF.",
     url: "https://rentconverter.com/how-much-rent-can-i-afford-calculator",
   };
 
@@ -769,8 +714,34 @@ export default function HowMuchRentCanIAfford() {
 
               <input
                 inputMode="decimal"
-                value={income}
-                onChange={(e) => setIncome(e.target.value)}
+                value={incomePreviewValue}
+                onFocus={() => setIncomeFocused(true)}
+                onBlur={() => setIncomeFocused(false)}
+                onChange={(e) => {
+                  const el = e.currentTarget;
+                  const next = el.value;
+
+                  if (next.includes(",")) {
+                    const start = el.selectionStart ?? next.length;
+                    const before = next.slice(0, start);
+                    const cleaned = sanitizeRawAmountForState(next);
+                    const newPos = sanitizeRawAmountForState(before).length;
+
+                    setIncome(cleaned);
+
+                    requestAnimationFrame(() => {
+                      try {
+                        el.setSelectionRange(newPos, newPos);
+                      } catch {
+                        // ignore
+                      }
+                    });
+
+                    return;
+                  }
+
+                  setIncome(next);
+                }}
                 className="w-full rounded-xl border border-slate-300 px-4 py-3.5 text-base text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus:border-sky-500"
                 placeholder="e.g. 6000 or 6000.00"
                 aria-invalid={!parsedIncome.ok}
@@ -827,19 +798,6 @@ export default function HowMuchRentCanIAfford() {
                   ),
                 )}
               </select>
-
-              <p className="mt-2 text-sm text-slate-600 leading-relaxed">
-                Income is annualized using a 365-day year so monthly, weekly,
-                and every-4-weeks comparisons stay consistent.
-              </p>
-
-              <div className="mt-4 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-800">
-                <div className="font-semibold">Annualization basis</div>
-                <p className="mt-1 text-sm text-slate-700 leading-relaxed">
-                  Annualized income is computed using daily equivalence on a
-                  365-day year. Monthly uses 365 ÷ 12 days per month.
-                </p>
-              </div>
             </div>
 
             <div className="md:col-span-3">
@@ -865,51 +823,6 @@ export default function HowMuchRentCanIAfford() {
                   </option>
                 ))}
               </select>
-
-              <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4">
-                <div className="text-xs text-slate-600">
-                  Rounding (display only)
-                </div>
-
-                <label className="mt-1 flex items-center gap-2 text-sm text-slate-800">
-                  <input
-                    type="checkbox"
-                    checked={roundDisplay}
-                    onChange={(e) => setRoundDisplay(e.target.checked)}
-                    className="h-4 w-4 accent-sky-600 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
-                  />
-                  Round displayed values
-                </label>
-
-                <div className="mt-3 flex items-center justify-between gap-3">
-                  <div className="text-xs text-slate-600">
-                    Displayed decimals
-                  </div>
-                  <select
-                    value={displayDecimals}
-                    onChange={(e) =>
-                      setDisplayDecimals(
-                        Math.max(
-                          0,
-                          Math.min(6, Math.trunc(Number(e.target.value) || 2)),
-                        ),
-                      )
-                    }
-                    className="rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm font-semibold text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus:border-sky-500"
-                    aria-label="Displayed decimals"
-                  >
-                    <option value={0}>0</option>
-                    <option value={2}>2</option>
-                    <option value={4}>4</option>
-                    <option value={6}>6</option>
-                  </select>
-                </div>
-
-                <p className="mt-2 text-sm text-slate-600 leading-relaxed">
-                  Calculations use up to 12 decimals internally. If rounding is
-                  enabled, displayed values keep exactly your chosen decimals.
-                </p>
-              </div>
             </div>
           </div>
 
@@ -937,7 +850,7 @@ export default function HowMuchRentCanIAfford() {
                   <div className="text-sm text-slate-600">
                     Annualized income (365-day basis)
                   </div>
-                  <div className="mt-1 text-2xl sm:text-3xl font-extrabold text-slate-900 tabular-nums whitespace-nowrap">
+                  <div className="mt-1 text-4xl sm:text-6xl font-extrabold text-sky-700 tabular-nums whitespace-nowrap">
                     {fmt(annualIncomeScaled!)}
                   </div>
 
@@ -1043,6 +956,68 @@ export default function HowMuchRentCanIAfford() {
               </>
             )}
           </div>
+
+          <div className="flex mt-6 w-full mx-auto ">
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="flex items-start gap-3">
+                <div className="mt-0.5 flex h-9 items-center justify-center rounded-xl bg-slate-50 text-slate-700">
+                  i
+                </div>
+
+                <div className="min-w-0">
+                  <div className="text-sm font-semibold text-slate-900">
+                    Annualization basis
+                  </div>
+
+                  <p className="mt-1 text-sm text-slate-600 leading-relaxed">
+                    Income is annualized using a 365-day year so monthly,
+                    weekly, and every-4-weeks comparisons stay consistent.
+                  </p>
+
+                  <p className="mt-2 text-sm text-slate-700 leading-relaxed">
+                    Annualized income is computed using daily equivalence on a
+                    365-day year. Monthly uses 365 ÷ 12 days per month.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4">
+          <div className="text-xs text-slate-600">Rounding (display only)</div>
+
+          <label className="mt-1 flex items-center gap-2 text-sm text-slate-800">
+            <input
+              type="checkbox"
+              checked={roundDisplay}
+              onChange={(e) => setRoundDisplay(e.target.checked)}
+              className="h-4 w-4 accent-sky-600 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
+            />
+            Round displayed values
+          </label>
+
+          <div className="mt-3 flex items-center justify-between gap-3">
+            <div className="text-xs text-slate-600">Displayed decimals</div>
+            <select
+              value={displayDecimals}
+              onChange={(e) =>
+                setDisplayDecimals(normalizeDisplayDecimals(e.target.value))
+              }
+              className="rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm font-semibold text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus:border-sky-500"
+              aria-label="Displayed decimals"
+            >
+              <option value={0}>0</option>
+              <option value={2}>2</option>
+              <option value={4}>4</option>
+              <option value={6}>6</option>
+            </select>
+          </div>
+
+          <p className="mt-2 text-sm text-slate-600 leading-relaxed">
+            Calculations use up to 12 decimals internally. If rounding is
+            enabled, displayed values keep exactly your chosen decimals.
+          </p>
         </div>
       </section>
 
@@ -1080,8 +1055,8 @@ export default function HowMuchRentCanIAfford() {
               basis.
             </li>
             <li>
-              <strong>Export and printing.</strong> You can export the table to
-              CSV and print the page to save as a PDF.
+              <strong>Printing.</strong> Use print or save as PDF to keep a copy
+              of your results.
             </li>
           </ol>
 

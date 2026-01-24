@@ -7,7 +7,7 @@ import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 export const meta: Route.MetaFunction = () => {
   const title = "Hourly to Monthly Rent Converter (365-day basis)";
   const description =
-    "Convert hourly rent to a monthly equivalent using annual equivalence (365-day year). Decimal-safe input, full period breakdown, month-length comparison, CSV export, and print-to-PDF.";
+    "Convert hourly rent to a monthly equivalent using annual equivalence (365-day year). Decimal-safe input, full period breakdown, and month-length comparison.";
 
   return [
     { title },
@@ -194,14 +194,21 @@ function formatCurrencyFromScaled(
   }).format(n);
 }
 
-function formatNumber(n: number, displayDecimals: number): string {
-  if (!Number.isFinite(n)) return "—";
-  return n.toFixed(Math.max(0, Math.min(6, displayDecimals)));
-}
-
 function formatPercent(n: number, displayDecimals: number): string {
   if (!Number.isFinite(n)) return "—";
   return `${(n * 100).toFixed(Math.max(0, Math.min(6, displayDecimals)))}%`;
+}
+
+function formatGroupedPreviewFromNormalized(normalized: string): string {
+  const s = (normalized ?? "").trim();
+  if (!s) return s;
+  const [intPartRaw, fracPart] = s.split(".");
+  const intPart = (intPartRaw ?? "0").replace(/^0+(?=\d)/, "") || "0";
+  const groupedInt = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  if (typeof fracPart === "string" && fracPart.length > 0) {
+    return `${groupedInt}.${fracPart}`;
+  }
+  return groupedInt;
 }
 
 /**
@@ -361,32 +368,6 @@ function hourlyToPeriodScaled(hourlyScaled: bigint, period: Period): bigint {
   }
 }
 
-function buildCsvRow(cols: string[]): string {
-  return cols
-    .map((c) => {
-      const s = String(c ?? "");
-      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
-      return s;
-    })
-    .join(",");
-}
-
-function downloadTextFile(
-  filename: string,
-  content: string,
-  mime = "text/plain;charset=utf-8",
-) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
 function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   if (raw === null) return fallback;
   try {
@@ -395,6 +376,13 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   } catch {
     return fallback;
   }
+}
+
+const ALLOWED_DISPLAY_DECIMALS = new Set<number>([0, 2, 4, 6]);
+
+function parseDisplayDecimalsStrict(raw: string | null): number {
+  const n = raw === null ? NaN : Number(raw);
+  return Number.isFinite(n) && ALLOWED_DISPLAY_DECIMALS.has(n) ? n : 2;
 }
 
 export default function HourlyToMonthlyRent() {
@@ -411,10 +399,9 @@ export default function HourlyToMonthlyRent() {
 
   const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
     if (typeof window === "undefined") return 2;
-    const saved = window.localStorage.getItem("rc_htm_display_decimals");
-    const n = saved ? Number(saved) : 2;
-    if (!Number.isFinite(n)) return 2;
-    return Math.max(0, Math.min(6, Math.trunc(n)));
+    return parseDisplayDecimalsStrict(
+      window.localStorage.getItem("rc_htm_display_decimals"),
+    );
   });
 
   const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
@@ -427,6 +414,9 @@ export default function HourlyToMonthlyRent() {
 
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const copyTimerRef = useRef<number | null>(null);
+
+  const [amountFocused, setAmountFocused] = useState<boolean>(false);
+  const amountInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -454,6 +444,18 @@ export default function HourlyToMonthlyRent() {
 
   const parsedHourly = useMemo(() => parseMoneyInputToScaled(amount), [amount]);
   const hourlyScaled = parsedHourly.ok ? (parsedHourly.scaled as bigint) : 0n;
+
+  const amountPreviewValue = useMemo(() => {
+    if (!parsedHourly.ok) return amount;
+    const normalized = parsedHourly.normalized ?? "";
+    return formatGroupedPreviewFromNormalized(normalized);
+  }, [amount, parsedHourly.ok, parsedHourly.normalized]);
+
+  const amountDisplayValue = amountFocused
+    ? amount
+    : parsedHourly.ok
+      ? amountPreviewValue
+      : amount;
 
   const breakdownScaled = useMemo(() => {
     if (!parsedHourly.ok) return null;
@@ -515,103 +517,6 @@ export default function HourlyToMonthlyRent() {
       if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
       copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
     }
-  };
-
-  const handleExportCsv = () => {
-    if (!canShowResults || !breakdownScaled) return;
-
-    const rows: string[] = [];
-    rows.push(buildCsvRow(["Hourly to Monthly Rent Converter"]));
-    rows.push(
-      buildCsvRow([
-        "Assumptions",
-        "Year=365 days",
-        "Day=24 hours",
-        "Week=7 days",
-        "4-week=28 days",
-        "Month=365 ÷ 12 days (average)",
-      ]),
-    );
-    rows.push(buildCsvRow(["Currency formatting", currency]));
-    rows.push(
-      buildCsvRow([
-        "Display",
-        roundDisplay
-          ? `Rounded to ${displayDecimals} decimals for display`
-          : "No display rounding (shows up to 12 decimals)",
-      ]),
-    );
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Input (Hourly)", fmt(breakdownScaled.hourly)]));
-    rows.push(
-      buildCsvRow(["Headline (Monthly)", fmt(breakdownScaled.monthly)]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Annual (clock-hour equivalence)",
-        fmt(breakdownScaled.annual),
-      ]),
-    );
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Period (clock-hour equivalence)", "Amount"]));
-    const items: Array<[Period, bigint]> = [
-      ["hourly", breakdownScaled.hourly],
-      ["daily", breakdownScaled.daily],
-      ["weekly", breakdownScaled.weekly],
-      ["biweekly", breakdownScaled.biweekly],
-      ["every_4_weeks", breakdownScaled.every4w],
-      ["monthly", breakdownScaled.monthly],
-      ["annual", breakdownScaled.annual],
-    ];
-    for (const [p, val] of items)
-      rows.push(buildCsvRow([PERIOD_LABEL[p], fmt(val)]));
-
-    rows.push(buildCsvRow([""]));
-    rows.push(buildCsvRow(["Month length comparison"]));
-    rows.push(
-      buildCsvRow(["30-day month estimate", fmt(breakdownScaled.monthly30Day)]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Average month (365 ÷ 12)",
-        fmt(breakdownScaled.monthlyAvg),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Difference (avg - 30-day)",
-        fmt(breakdownScaled.monthDelta),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Difference (%)",
-        formatPercent(breakdownScaled.monthDeltaPct, 2),
-      ]),
-    );
-
-    rows.push(buildCsvRow([""]));
-    rows.push(buildCsvRow(["Monthly vs 4-week"]));
-    rows.push(
-      buildCsvRow([
-        "Monthly minus 4-week",
-        fmt(breakdownScaled.monthlyMinus4w),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Difference (%)",
-        formatPercent(breakdownScaled.monthlyMinus4wPct, 2),
-      ]),
-    );
-
-    downloadTextFile(
-      "hourly-to-monthly-rent-converter.csv",
-      rows.join("\n"),
-      "text/csv;charset=utf-8",
-    );
   };
 
   const handlePrint = () => {
@@ -691,7 +596,7 @@ export default function HourlyToMonthlyRent() {
     "@type": "WebPage",
     name: "Hourly to Monthly Rent Converter",
     description:
-      "Convert hourly rent to a monthly equivalent using annual equivalence (365-day year). Includes a full period breakdown and a month-length comparison, plus CSV export and print-to-PDF.",
+      "Convert hourly rent to a monthly equivalent using annual equivalence (365-day year). Includes a full period breakdown and a month-length comparison.",
     url: "https://rentconverter.com/hourly-to-monthly-rent-converter",
   };
 
@@ -758,9 +663,31 @@ export default function HourlyToMonthlyRent() {
               </label>
               <div className="flex gap-2">
                 <input
+                  ref={amountInputRef}
                   inputMode="decimal"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
+                  value={amountDisplayValue}
+                  onFocus={() => setAmountFocused(true)}
+                  onBlur={() => setAmountFocused(false)}
+                  onChange={(e) => {
+                    const el = e.currentTarget;
+                    const incoming = el.value;
+                    const caret = el.selectionStart ?? incoming.length;
+                    const before = incoming.slice(0, caret);
+                    const commasBefore = (before.match(/,/g) ?? []).length;
+                    const cleaned = incoming.replace(/,/g, "");
+                    const nextCaret = Math.max(0, caret - commasBefore);
+                    setAmount(cleaned);
+                    requestAnimationFrame(() => {
+                      const node = amountInputRef.current;
+                      if (!node) return;
+                      if (document.activeElement !== node) return;
+                      try {
+                        node.setSelectionRange(nextCaret, nextCaret);
+                      } catch {
+                        // ignore
+                      }
+                    });
+                  }}
                   placeholder="e.g. 2.5 or 2.50"
                   className="w-full rounded-xl border border-slate-300 px-4 py-3.5 text-base text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus:border-sky-500"
                   aria-invalid={!parsedHourly.ok}
@@ -828,64 +755,6 @@ export default function HourlyToMonthlyRent() {
                   <div className="mt-1 text-base font-bold text-slate-900">
                     {PERIOD_LABEL.monthly}
                   </div>
-                </div>
-              </div>
-
-              <div className="mt-3 rounded-xl border border-slate-200 bg-white p-4">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                  <div>
-                    <div className="text-xs text-slate-600">
-                      Rounding (display only)
-                    </div>
-                    <label className="mt-1 flex items-center gap-2 text-sm text-slate-800">
-                      <input
-                        type="checkbox"
-                        checked={roundDisplay}
-                        onChange={(e) => setRoundDisplay(e.target.checked)}
-                        className="h-4 w-4 accent-sky-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
-                      />
-                      Round displayed values
-                    </label>
-                    <p className="mt-1 text-sm text-slate-600 leading-relaxed">
-                      Calculations use up to 12 decimals internally. If enabled,
-                      displayed values are rounded to your chosen decimals.
-                    </p>
-                  </div>
-
-                  <div className="sm:text-right">
-                    <div className="text-xs text-slate-600">
-                      Displayed decimals
-                    </div>
-                    <select
-                      value={displayDecimals}
-                      onChange={(e) =>
-                        setDisplayDecimals(
-                          Math.max(
-                            0,
-                            Math.min(
-                              6,
-                              Math.trunc(Number(e.target.value) || 2),
-                            ),
-                          ),
-                        )
-                      }
-                      className="mt-1 rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm font-semibold text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus:border-sky-500"
-                      aria-label="Displayed decimals"
-                    >
-                      <option value={0}>0</option>
-                      <option value={2}>2</option>
-                      <option value={4}>4</option>
-                      <option value={6}>6</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="mt-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-800">
-                  <div className="font-semibold">Math basis</div>
-                  <p className="mt-1 text-sm text-slate-700 leading-relaxed">
-                    Monthly = (hourly × 24 × 365) ÷ 12 using a 365-day year and
-                    an average month length.
-                  </p>
                 </div>
               </div>
             </div>
@@ -1129,6 +998,59 @@ export default function HourlyToMonthlyRent() {
             (average). Actual billing depends on the agreement.
           </p>
         </div>
+
+        <div className="mt-3 rounded-xl border border-slate-200 bg-white p-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <div className="text-xs text-slate-600">
+                Rounding (display only)
+              </div>
+              <label className="mt-1 flex items-center gap-2 text-sm text-slate-800">
+                <input
+                  type="checkbox"
+                  checked={roundDisplay}
+                  onChange={(e) => setRoundDisplay(e.target.checked)}
+                  className="h-4 w-4 accent-sky-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
+                />
+                Round displayed values
+              </label>
+              <p className="mt-1 text-sm text-slate-600 leading-relaxed">
+                Calculations use up to 12 decimals internally. If enabled,
+                displayed values are rounded to your chosen decimals.
+              </p>
+            </div>
+
+            <div className="sm:text-right">
+              <div className="text-xs text-slate-600">Displayed decimals</div>
+              <select
+                value={displayDecimals}
+                onChange={(e) => {
+                  const n = Number(e.target.value);
+                  setDisplayDecimals(
+                    Number.isFinite(n) && ALLOWED_DISPLAY_DECIMALS.has(n)
+                      ? n
+                      : 2,
+                  );
+                }}
+                className="mt-1 rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm font-semibold text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus:border-sky-500"
+                aria-label="Displayed decimals"
+              >
+                <option value={0}>0</option>
+                <option value={2}>2</option>
+                <option value={4}>4</option>
+                <option value={6}>6</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="mt-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-800">
+            <div className="font-semibold">Math basis</div>
+            <p className="mt-1 text-sm text-slate-700 leading-relaxed">
+              Monthly = (hourly × 24 × 365) ÷ 12 using a 365-day year and an
+              average month length.
+            </p>
+          </div>
+        </div>
       </section>
 
       {/* Required: explanation above FAQ */}
@@ -1160,10 +1082,6 @@ export default function HourlyToMonthlyRent() {
               <strong>Breakdowns stay consistent.</strong> Daily, weekly,
               biweekly, 4-week, monthly, and annual values all come from the
               same time assumptions.
-            </li>
-            <li>
-              <strong>Export and printing.</strong> You can export the breakdown
-              to CSV and print the page to save as a PDF.
             </li>
           </ol>
         </div>

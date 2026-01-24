@@ -364,32 +364,6 @@ function convertScaled(valueScaled: bigint, from: Period, to: Period): bigint {
   return mulDivInt(dailyScaled, dpTo.num, dpTo.den);
 }
 
-function buildCsvRow(cols: string[]): string {
-  return cols
-    .map((c) => {
-      const s = String(c ?? "");
-      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
-      return s;
-    })
-    .join(",");
-}
-
-function downloadTextFile(
-  filename: string,
-  content: string,
-  mime = "text/plain;charset=utf-8",
-) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
 function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   if (raw === null) return fallback;
   try {
@@ -398,6 +372,28 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   } catch {
     return fallback;
   }
+}
+
+function groupThousandsEnUS(intStr: string): string {
+  const s = intStr.replace(/^0+(?=\d)/, "");
+  return (s || "0").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function formatPreviewFromNormalized(normalized: string): string {
+  const parts = normalized.split(".");
+  const intPart = parts[0] ?? "0";
+  const fracPart = parts[1];
+  const groupedInt = groupThousandsEnUS(intPart);
+  if (typeof fracPart === "string") return `${groupedInt}.${fracPart}`;
+  return groupedInt;
+}
+
+function strictReadDisplayDecimals(saved: string | null): number {
+  if (saved === null) return 2;
+  const n = Number(saved);
+  if (!Number.isFinite(n)) return 2;
+  const v = Math.trunc(n);
+  return v === 0 || v === 2 || v === 4 || v === 6 ? v : 2;
 }
 
 export default function MonthlyToDailyRent() {
@@ -423,14 +419,26 @@ export default function MonthlyToDailyRent() {
 
   const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
     if (typeof window === "undefined") return 2;
-    const saved = window.localStorage.getItem("rc_mtd_display_decimals");
-    const n = saved ? Number(saved) : 2;
-    if (!Number.isFinite(n)) return 2;
-    return Math.max(0, Math.min(6, Math.trunc(n)));
+    return strictReadDisplayDecimals(
+      window.localStorage.getItem("rc_mtd_display_decimals"),
+    );
   });
 
   const parsedAmount = useMemo(() => parseMoneyInputToScaled(amount), [amount]);
   const monthlyScaled = parsedAmount.ok ? (parsedAmount.scaled as bigint) : 0n;
+
+  const [isAmountFocused, setIsAmountFocused] = useState(false);
+  const [amountDisplay, setAmountDisplay] = useState<string>(() => {
+    const initial = typeof window === "undefined" ? "2000" : undefined;
+    const raw =
+      initial ??
+      (typeof window === "undefined"
+        ? "2000"
+        : (window.localStorage.getItem("rc_mtd_amount") ?? "2000"));
+    const p = parseMoneyInputToScaled(raw);
+    if (p.ok && p.normalized) return formatPreviewFromNormalized(p.normalized);
+    return raw;
+  });
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -513,86 +521,6 @@ export default function MonthlyToDailyRent() {
       if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
       copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
     }
-  };
-
-  const handleExportCsv = () => {
-    if (!canShowResults || !breakdown) return;
-
-    const rows: string[] = [];
-    rows.push(buildCsvRow(["Monthly to Daily Rent Converter"]));
-    rows.push(buildCsvRow(["Input (monthly)", fmt(monthlyScaled)]));
-    rows.push(
-      buildCsvRow(["Daily equivalent (365-day basis)", fmt(breakdown.daily)]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Annual equivalent (365-day basis)",
-        fmt(breakdown.annualEquiv),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Assumptions",
-        "Year=365 days",
-        "Month=365 ÷ 12 days",
-        "Week=7 days",
-        "Biweekly=14 days",
-        "4-week=28 days",
-        "Day=1",
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Display",
-        roundDisplay
-          ? `Rounded to ${displayDecimals} decimals for display`
-          : "No display rounding (shows up to 12 decimals)",
-      ]),
-    );
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Period breakdown", "Amount"]));
-    rows.push(buildCsvRow(["Hourly", fmt(breakdown.hourly)]));
-    rows.push(buildCsvRow(["Daily", fmt(breakdown.daily)]));
-    rows.push(buildCsvRow(["Weekly", fmt(breakdown.weekly)]));
-    rows.push(
-      buildCsvRow(["Every 2 weeks (14 days)", fmt(breakdown.biweekly)]),
-    );
-    rows.push(buildCsvRow(["Every 4 weeks (28 days)", fmt(breakdown.every4w)]));
-    rows.push(buildCsvRow(["Monthly (average)", fmt(breakdown.monthly)]));
-    rows.push(
-      buildCsvRow(["Annual (equivalence)", fmt(breakdown.annualEquiv)]),
-    );
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Monthly vs 4-week", "Value"]));
-    rows.push(
-      buildCsvRow(["Monthly minus 4-week", fmt(breakdown.monthlyMinus4w)]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Difference percent",
-        `${(breakdown.monthlyMinus4wPct * 100).toFixed(2)}%`,
-      ]),
-    );
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Context (schedule-style)", "Annual total"]));
-    rows.push(
-      buildCsvRow([
-        "Monthly × 12 payments",
-        fmt(breakdown.annualFromMonthly12),
-      ]),
-    );
-    rows.push(
-      buildCsvRow(["Weekly × 52 payments", fmt(breakdown.annualFromWeekly52)]),
-    );
-
-    downloadTextFile(
-      "monthly-to-daily-rent-converter.csv",
-      rows.join("\n"),
-      "text/csv;charset=utf-8",
-    );
   };
 
   const handlePrint = () => {
@@ -700,7 +628,7 @@ export default function MonthlyToDailyRent() {
         <h1 className="text-4xl font-bold text-slate-800 mb-4">
           Monthly to Daily Rent Converter
         </h1>
-        <p className="text-slate-600 max-w-2xl mx-auto text-lg">
+        <p className="text-slate-600 max-w-5xl mx-auto text-lg">
           Enter your monthly rent and get a daily equivalent using annual
           equivalence. This helps compare listings and budgets when rent is
           advertised using different billing periods.
@@ -733,8 +661,22 @@ export default function MonthlyToDailyRent() {
               <div className="flex gap-2">
                 <input
                   inputMode="decimal"
-                  value={amount}
+                  value={isAmountFocused ? amount : amountDisplay}
                   onChange={(e) => setAmount(e.target.value)}
+                  onFocus={() => {
+                    setIsAmountFocused(true);
+                    setAmountDisplay(amount);
+                  }}
+                  onBlur={() => {
+                    setIsAmountFocused(false);
+                    if (parsedAmount.ok && parsedAmount.normalized) {
+                      setAmountDisplay(
+                        formatPreviewFromNormalized(parsedAmount.normalized),
+                      );
+                    } else {
+                      setAmountDisplay(amount);
+                    }
+                  }}
                   placeholder="e.g. 2000 or 2000.00"
                   className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!parsedAmount.ok}
@@ -796,48 +738,6 @@ export default function MonthlyToDailyRent() {
                     {PERIOD_LABEL.daily}
                   </div>
                 </div>
-              </div>
-
-              <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4">
-                <div className="text-xs text-slate-500">Display</div>
-                <label className="mt-1 flex items-center gap-2 text-sm text-slate-700">
-                  <input
-                    type="checkbox"
-                    checked={roundDisplay}
-                    onChange={(e) => setRoundDisplay(e.target.checked)}
-                    className="h-4 w-4"
-                  />
-                  Round displayed values (display only)
-                </label>
-
-                <div className="mt-3 flex items-center justify-between gap-3">
-                  <div className="text-xs text-slate-500">
-                    Displayed decimals
-                  </div>
-                  <select
-                    value={displayDecimals}
-                    onChange={(e) =>
-                      setDisplayDecimals(
-                        Math.max(
-                          0,
-                          Math.min(6, Math.trunc(Number(e.target.value) || 2)),
-                        ),
-                      )
-                    }
-                    className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
-                  >
-                    <option value={0}>0</option>
-                    <option value={2}>2</option>
-                    <option value={4}>4</option>
-                    <option value={6}>6</option>
-                  </select>
-                </div>
-
-                <p className="mt-2 text-xs text-slate-500">
-                  Calculations preserve decimals internally (up to 12). If
-                  rounding is enabled, displayed values keep exactly the
-                  selected decimals.
-                </p>
               </div>
             </div>
           </div>
@@ -988,6 +888,40 @@ export default function MonthlyToDailyRent() {
             schedules and due dates vary.
           </p>
         </div>
+
+        <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4">
+          <div className="text-xs text-slate-500">Display</div>
+          <label className="mt-1 flex items-center gap-2 text-sm text-slate-700">
+            <input
+              type="checkbox"
+              checked={roundDisplay}
+              onChange={(e) => setRoundDisplay(e.target.checked)}
+              className="h-4 w-4"
+            />
+            Round displayed values (display only)
+          </label>
+
+          <div className="mt-3 flex items-center justify-between gap-3">
+            <div className="text-xs text-slate-500">Displayed decimals</div>
+            <select
+              value={displayDecimals}
+              onChange={(e) =>
+                setDisplayDecimals(strictReadDisplayDecimals(e.target.value))
+              }
+              className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
+            >
+              <option value={0}>0</option>
+              <option value={2}>2</option>
+              <option value={4}>4</option>
+              <option value={6}>6</option>
+            </select>
+          </div>
+
+          <p className="mt-2 text-xs text-slate-500">
+            Calculations preserve decimals internally (up to 12). If rounding is
+            enabled, displayed values keep exactly the selected decimals.
+          </p>
+        </div>
       </section>
 
       {/* Required: explanation above FAQ */}
@@ -1023,10 +957,6 @@ export default function MonthlyToDailyRent() {
               decimals internally (up to 12). If rounding is enabled, only the
               displayed values are rounded.
             </li>
-            <li>
-              <strong>You can export and print.</strong> Results can be exported
-              to CSV, and printing supports save-as-PDF in the browser.
-            </li>
           </ol>
 
           <div className="mt-4 rounded-xl border border-slate-100 bg-slate-50 p-4 text-sm text-slate-700">
@@ -1040,7 +970,6 @@ export default function MonthlyToDailyRent() {
                 Use the breakdown to sanity-check what the rent implies across
                 time periods
               </li>
-              <li>Export results for budgeting, sharing, or record-keeping</li>
             </ul>
           </div>
         </div>

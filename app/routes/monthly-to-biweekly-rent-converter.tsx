@@ -323,6 +323,17 @@ function parseMoneyInputToScaled(raw: string): ParsedAmount {
   return { ok: true, scaled: clamped, normalized, warnings };
 }
 
+function formatAmountPreviewFromParsed(parsed: ParsedAmount): string {
+  if (!parsed.ok || !parsed.normalized) return "";
+  const s = parsed.normalized;
+  const dot = s.indexOf(".");
+  const intPart = dot === -1 ? s : s.slice(0, dot);
+  const fracPart = dot === -1 ? "" : s.slice(dot + 1);
+
+  const intGrouped = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return fracPart.length ? `${intGrouped}.${fracPart}` : intGrouped;
+}
+
 function mulDivInt(value: bigint, mul: bigint, div: bigint): bigint {
   if (div === 0n) return 0n;
   return (value * mul) / div;
@@ -366,32 +377,6 @@ function convertScaled(valueScaled: bigint, from: Period, to: Period): bigint {
   return mulDivInt(dailyScaled, dpTo.num, dpTo.den);
 }
 
-function buildCsvRow(cols: string[]): string {
-  return cols
-    .map((c) => {
-      const s = String(c ?? "");
-      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
-      return s;
-    })
-    .join(",");
-}
-
-function downloadTextFile(
-  filename: string,
-  content: string,
-  mime = "text/plain;charset=utf-8",
-) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
 function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   if (raw === null) return fallback;
   try {
@@ -402,11 +387,24 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   }
 }
 
+function safeParseDisplayDecimals(
+  raw: string | null,
+  fallback: number,
+): number {
+  if (raw === null) return fallback;
+  const n = Number(raw);
+  if (!Number.isFinite(n)) return fallback;
+  const v = Math.trunc(n);
+  return v === 0 || v === 2 || v === 4 || v === 6 ? v : fallback;
+}
+
 export default function MonthlyToBiweeklyRent() {
   const [amount, setAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "2000";
     return window.localStorage.getItem("rc_mtbw_amount") ?? "2000";
   });
+
+  const [isAmountFocused, setIsAmountFocused] = useState<boolean>(false);
 
   const [currency, setCurrency] = useState<Currency>(() => {
     if (typeof window === "undefined") return "USD";
@@ -425,10 +423,10 @@ export default function MonthlyToBiweeklyRent() {
 
   const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
     if (typeof window === "undefined") return 2;
-    const saved = window.localStorage.getItem("rc_mtbw_display_decimals");
-    const n = saved ? Number(saved) : 2;
-    if (!Number.isFinite(n)) return 2;
-    return Math.max(0, Math.min(6, Math.trunc(n)));
+    return safeParseDisplayDecimals(
+      window.localStorage.getItem("rc_mtbw_display_decimals"),
+      2,
+    );
   });
 
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
@@ -460,6 +458,17 @@ export default function MonthlyToBiweeklyRent() {
 
   const parsedAmount = useMemo(() => parseMoneyInputToScaled(amount), [amount]);
   const monthlyScaled = parsedAmount.ok ? (parsedAmount.scaled as bigint) : 0n;
+
+  const amountPreviewValue = useMemo(
+    () => (parsedAmount.ok ? formatAmountPreviewFromParsed(parsedAmount) : ""),
+    [parsedAmount],
+  );
+
+  const amountInputValue = isAmountFocused
+    ? amount
+    : parsedAmount.ok
+      ? amountPreviewValue
+      : amount;
 
   const maxDecimals = roundDisplay ? displayDecimals : 12;
   const minDecimals = roundDisplay ? displayDecimals : 0;
@@ -524,97 +533,6 @@ export default function MonthlyToBiweeklyRent() {
       if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
       copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
     }
-  };
-
-  const handleExportCsv = () => {
-    if (!canShowResults || !breakdown) return;
-
-    const rows: string[] = [];
-    rows.push(buildCsvRow(["Monthly to Biweekly Rent Converter"]));
-    rows.push(buildCsvRow(["Input (monthly)", fmt(monthlyScaled)]));
-    rows.push(
-      buildCsvRow([
-        "Biweekly equivalent (14-day basis)",
-        fmt(breakdown.biweekly),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Annual equivalent (365-day basis)",
-        fmt(breakdown.annualEquiv),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Assumptions",
-        "Year=365 days",
-        "Month=365 ÷ 12 days",
-        "Biweekly=14 days",
-        "4-week=28 days",
-        "Week=7 days",
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Display",
-        roundDisplay
-          ? `Rounded to ${displayDecimals} decimals for display`
-          : "No display rounding (shows up to 12 decimals)",
-      ]),
-    );
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Period breakdown", "Amount"]));
-    rows.push(buildCsvRow(["Hourly", fmt(breakdown.hourly)]));
-    rows.push(buildCsvRow(["Daily", fmt(breakdown.daily)]));
-    rows.push(buildCsvRow(["Weekly", fmt(breakdown.weekly)]));
-    rows.push(buildCsvRow(["Biweekly (14 days)", fmt(breakdown.biweekly)]));
-    rows.push(buildCsvRow(["Every 4 weeks (28 days)", fmt(breakdown.every4w)]));
-    rows.push(buildCsvRow(["Monthly (average)", fmt(breakdown.monthly)]));
-    rows.push(
-      buildCsvRow(["Annual (equivalence)", fmt(breakdown.annualEquiv)]),
-    );
-    rows.push(buildCsvRow([""]));
-
-    rows.push(
-      buildCsvRow(["Schedule comparisons (context)", "Annual total", "Notes"]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Monthly × 12 payments",
-        fmt(breakdown.annualFromMonthly12),
-        "Common shorthand",
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Biweekly × 26 payments",
-        fmt(breakdown.annualFromBiweekly26),
-        "Common schedule framing",
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "4-week × 13 payments",
-        fmt(breakdown.annualFrom4w13),
-        "Illustrative 13-payment framing",
-      ]),
-    );
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Confusion check", "Value"]));
-    rows.push(
-      buildCsvRow(["Monthly ÷ 2 (half-month)", fmt(breakdown.monthlyDiv2)]),
-    );
-    rows.push(
-      buildCsvRow(["Biweekly equivalent (14 days)", fmt(breakdown.biweekly)]),
-    );
-
-    downloadTextFile(
-      "monthly-to-biweekly-rent-converter.csv",
-      rows.join("\n"),
-      "text/csv;charset=utf-8",
-    );
   };
 
   const handlePrint = () => {
@@ -733,7 +651,21 @@ export default function MonthlyToBiweeklyRent() {
         <p className="text-slate-600 max-w-3xl mx-auto text-lg">
           Convert a monthly rent amount into a biweekly equivalent using annual
           equivalence as the basis. This helps compare a monthly quote with rent
-          expressed every two weeks, including pay-cycle style listings.
+          expressed every two weeks, including pay-cycle style listings. See the{" "}
+          <a
+            href={safeHref("/rent-converter")}
+            className="text-sky-700 underline"
+          >
+            rent converter hub
+          </a>{" "}
+          or convert the other direction with{" "}
+          <a
+            href={safeHref("/biweekly-to-monthly-rent-converter")}
+            className="text-sky-700 underline"
+          >
+            biweekly to monthly
+          </a>
+          .
         </p>
       </section>
 
@@ -763,8 +695,10 @@ export default function MonthlyToBiweeklyRent() {
               <div className="flex gap-2">
                 <input
                   inputMode="decimal"
-                  value={amount}
+                  value={amountInputValue}
                   onChange={(e) => setAmount(e.target.value)}
+                  onFocus={() => setIsAmountFocused(true)}
+                  onBlur={() => setIsAmountFocused(false)}
                   placeholder="e.g. 2000 or 2000.00"
                   className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!parsedAmount.ok}
@@ -807,64 +741,6 @@ export default function MonthlyToBiweeklyRent() {
                   </ul>
                 </div>
               ) : null}
-            </div>
-
-            <div className="md:col-span-6">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
-                Display
-              </label>
-              <div className="rounded-xl border border-slate-200 bg-white p-4">
-                <div className="text-xs text-slate-500">
-                  Rounding (display only)
-                </div>
-                <label className="mt-1 flex items-center gap-2 text-sm text-slate-700">
-                  <input
-                    type="checkbox"
-                    checked={roundDisplay}
-                    onChange={(e) => setRoundDisplay(e.target.checked)}
-                    className="h-4 w-4"
-                  />
-                  Round displayed values
-                </label>
-
-                <div className="mt-3 flex items-center justify-between gap-3">
-                  <div className="text-xs text-slate-500">
-                    Displayed decimals
-                  </div>
-                  <select
-                    value={displayDecimals}
-                    onChange={(e) =>
-                      setDisplayDecimals(
-                        Math.max(
-                          0,
-                          Math.min(6, Math.trunc(Number(e.target.value) || 2)),
-                        ),
-                      )
-                    }
-                    className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
-                  >
-                    <option value={0}>0</option>
-                    <option value={2}>2</option>
-                    <option value={4}>4</option>
-                    <option value={6}>6</option>
-                  </select>
-                </div>
-
-                <p className="mt-2 text-xs text-slate-500">
-                  Calculations preserve decimals internally (up to 12). If
-                  rounding is enabled, displayed values keep exactly the
-                  selected decimals.
-                </p>
-              </div>
-
-              <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4">
-                <div className="text-xs text-slate-500">Key distinction</div>
-                <p className="mt-1 text-sm text-slate-700">
-                  Biweekly means every 14 days. Twice per month is a monthly
-                  schedule. This page converts a monthly amount to a 14-day
-                  equivalent using the same annual basis as the full breakdown.
-                </p>
-              </div>
             </div>
           </div>
 
@@ -1068,8 +944,66 @@ export default function MonthlyToBiweeklyRent() {
           <p className="mt-6 text-sm text-slate-500">
             Assumptions: 1 year = 365 days, 1 week = 7 days, biweekly = 14 days,
             4-week rent = 28 days, month = 365 ÷ 12 days (average). Actual due
-            dates and billing terms vary by agreement.
+            dates and billing terms vary by agreement. For yearly comparisons,
+            you can also use{" "}
+            <a
+              href={safeHref("/monthly-to-annual-rent-converter")}
+              className="text-sky-700 underline"
+            >
+              monthly to annual
+            </a>
+            .
           </p>
+        </div>
+
+        <div className="md:col-span-6 mt-6">
+          <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4">
+            <div className="text-xs text-slate-500">Key distinction</div>
+            <p className="mt-1 text-sm text-slate-700">
+              Biweekly means every 14 days. Twice per month is a monthly
+              schedule. This page converts a monthly amount to a 14-day
+              equivalent using the same annual basis as the full breakdown.
+            </p>
+          </div>
+
+          <div className="rounded-xl border border-slate-200 bg-white p-4 mt-6">
+            <div className="text-xs text-slate-500">
+              Rounding (display only)
+            </div>
+            <label className="mt-1 flex items-center gap-2 text-sm text-slate-700">
+              <input
+                type="checkbox"
+                checked={roundDisplay}
+                onChange={(e) => setRoundDisplay(e.target.checked)}
+                className="h-4 w-4"
+              />
+              Round displayed values
+            </label>
+
+            <div className="mt-3 flex items-center justify-between gap-3">
+              <div className="text-xs text-slate-500">Displayed decimals</div>
+              <select
+                value={displayDecimals}
+                onChange={(e) => {
+                  const v = Number(e.target.value);
+                  setDisplayDecimals(
+                    v === 0 || v === 2 || v === 4 || v === 6 ? v : 2,
+                  );
+                }}
+                className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
+              >
+                <option value={0}>0</option>
+                <option value={2}>2</option>
+                <option value={4}>4</option>
+                <option value={6}>6</option>
+              </select>
+            </div>
+
+            <p className="mt-2 text-xs text-slate-500">
+              Calculations preserve decimals internally (up to 12). If rounding
+              is enabled, displayed values keep exactly the selected decimals.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -1107,8 +1041,8 @@ export default function MonthlyToBiweeklyRent() {
               not the equivalence basis.
             </li>
             <li>
-              <strong>You can export and print.</strong> Results can be exported
-              to CSV, and printing supports save-as-PDF in the browser.
+              <strong>You can print to save as PDF.</strong> Printing supports
+              save-as-PDF in the browser.
             </li>
           </ol>
 
@@ -1120,7 +1054,7 @@ export default function MonthlyToBiweeklyRent() {
               <li>
                 A clear “biweekly vs twice-monthly” comparison (monthly ÷ 2)
               </li>
-              <li>Export to CSV and print to save as PDF</li>
+              <li>Print layout that supports save-as-PDF</li>
             </ul>
           </div>
         </div>

@@ -458,32 +458,6 @@ function convertScaled(valueScaled: bigint, from: Period, to: Period): bigint {
   return mulDivInt(dailyScaled, dpTo.num, dpTo.den);
 }
 
-function buildCsvRow(cols: string[]): string {
-  return cols
-    .map((c) => {
-      const s = String(c ?? "");
-      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
-      return s;
-    })
-    .join(",");
-}
-
-function downloadTextFile(
-  filename: string,
-  content: string,
-  mime = "text/plain;charset=utf-8",
-) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
 function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   if (raw === null) return fallback;
   try {
@@ -492,6 +466,29 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   } catch {
     return fallback;
   }
+}
+
+function isAllowedDisplayDecimals(n: number): n is 0 | 2 | 4 | 6 {
+  return n === 0 || n === 2 || n === 4 || n === 6;
+}
+
+function hasTrailingAmbiguousDecimal(raw: string): boolean {
+  const s = (raw ?? "").trim();
+  return s.endsWith(".") || s.endsWith(",");
+}
+
+function formatGroupedFromNormalized(normalized: string): string {
+  const s = (normalized ?? "").trim();
+  if (!s) return "";
+
+  const parts = s.split(".");
+  const intPartRaw = parts[0] ?? "0";
+  const fracPart = parts[1] ?? "";
+
+  const intDigits = intPartRaw.replace(/[^\d]/g, "") || "0";
+  const grouped = intDigits.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+  return fracPart.length ? `${grouped}.${fracPart}` : grouped;
 }
 
 export default function RentAfterIncrease() {
@@ -528,6 +525,9 @@ export default function RentAfterIncrease() {
     return isCurrency(saved) ? saved : "USD";
   });
 
+  const [isCurrentFocused, setIsCurrentFocused] = useState(false);
+  const [isIncreaseAmtFocused, setIsIncreaseAmtFocused] = useState(false);
+
   // Display-only rounding
   const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
     if (typeof window === "undefined") return true;
@@ -542,7 +542,8 @@ export default function RentAfterIncrease() {
     const saved = window.localStorage.getItem("rc_rai_display_decimals");
     const n = saved ? Number(saved) : 2;
     if (!Number.isFinite(n)) return 2;
-    return Math.max(0, Math.min(6, Math.trunc(n)));
+    const v = Math.trunc(n);
+    return isAllowedDisplayDecimals(v) ? v : 2;
   });
 
   useEffect(() => {
@@ -589,6 +590,46 @@ export default function RentAfterIncrease() {
     [increasePercent],
   );
 
+  const currentAmbiguous = useMemo(
+    () => hasTrailingAmbiguousDecimal(currentRent),
+    [currentRent],
+  );
+  const amtAmbiguous = useMemo(
+    () => hasTrailingAmbiguousDecimal(increaseAmount),
+    [increaseAmount],
+  );
+
+  const currentDisplayError = !isCurrentFocused && currentAmbiguous;
+  const amtDisplayError = !isIncreaseAmtFocused && amtAmbiguous;
+
+  const currentDisplayValue = useMemo(() => {
+    if (isCurrentFocused) return currentRent;
+    if (currentParsed.ok && !currentAmbiguous && currentParsed.normalized) {
+      return formatGroupedFromNormalized(currentParsed.normalized);
+    }
+    return currentRent;
+  }, [
+    isCurrentFocused,
+    currentRent,
+    currentParsed.ok,
+    currentParsed.normalized,
+    currentAmbiguous,
+  ]);
+
+  const increaseAmountDisplayValue = useMemo(() => {
+    if (isIncreaseAmtFocused) return increaseAmount;
+    if (amtParsed.ok && !amtAmbiguous && amtParsed.normalized) {
+      return formatGroupedFromNormalized(amtParsed.normalized);
+    }
+    return increaseAmount;
+  }, [
+    isIncreaseAmtFocused,
+    increaseAmount,
+    amtParsed.ok,
+    amtParsed.normalized,
+    amtAmbiguous,
+  ]);
+
   const effectiveDisplayDecimals = roundDisplay ? displayDecimals : 12;
   const fmt = (scaled: bigint) =>
     formatCurrencyFromScaled(scaled, currency, effectiveDisplayDecimals);
@@ -600,6 +641,10 @@ export default function RentAfterIncrease() {
     if (!currentParsed.ok)
       errors.push(currentParsed.error ?? "Enter a valid current rent.");
     if (currentParsed.warnings.length) warnings.push(...currentParsed.warnings);
+    if (currentAmbiguous)
+      errors.push(
+        "That rent value is incomplete or ambiguous (trailing decimal separator).",
+      );
 
     if (mode === "percent") {
       if (!pctParsed.ok)
@@ -609,6 +654,10 @@ export default function RentAfterIncrease() {
       if (!amtParsed.ok)
         errors.push(amtParsed.error ?? "Enter a valid increase amount.");
       if (amtParsed.warnings.length) warnings.push(...amtParsed.warnings);
+      if (amtAmbiguous)
+        errors.push(
+          "That increase amount is incomplete or ambiguous (trailing decimal separator).",
+        );
     }
 
     if (errors.length) {
@@ -687,126 +736,17 @@ export default function RentAfterIncrease() {
       avgMonthDays: 365 / 12,
       oldPerSelected,
     };
-  }, [currentParsed, amtParsed, pctParsed, mode, period]);
+  }, [
+    currentParsed,
+    amtParsed,
+    pctParsed,
+    mode,
+    period,
+    currentAmbiguous,
+    amtAmbiguous,
+  ]);
 
   const canShowResults = computed.ok;
-
-  const handleExportCsv = () => {
-    if (!computed.ok) return;
-
-    const rows: string[] = [];
-    rows.push(buildCsvRow(["Rent After Increase Calculator"]));
-    rows.push(buildCsvRow(["Currency", currency]));
-    rows.push(buildCsvRow(["Billing period (input)", PERIOD_LABEL[period]]));
-    rows.push(
-      buildCsvRow([
-        "Current rent (input)",
-        fmt(currentParsed.scaled as bigint),
-      ]),
-    );
-
-    if (mode === "percent") {
-      const pct = pctParsed.scaled ? toNumberSafe(pctParsed.scaled) : 0;
-      rows.push(buildCsvRow(["Increase type", "Percent"]));
-      rows.push(buildCsvRow(["Increase percent (input)", String(pct)]));
-    } else {
-      rows.push(buildCsvRow(["Increase type", "Fixed amount"]));
-      rows.push(
-        buildCsvRow([
-          "Increase amount (input)",
-          fmt(amtParsed.scaled as bigint),
-        ]),
-      );
-    }
-
-    rows.push(
-      buildCsvRow([
-        "Display",
-        roundDisplay
-          ? `Rounded to ${displayDecimals} decimals for display`
-          : "No display rounding (up to 12 decimals)",
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Assumptions",
-        "Year=365 days",
-        "Month=365 ÷ 12 days",
-        "Week=7 days",
-        "Biweekly=14 days",
-        "4-week=28 days",
-        "Day=1",
-        "Hour=1/24 day",
-      ]),
-    );
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Annual totals", "Amount"]));
-    rows.push(
-      buildCsvRow(["Current annual rent", fmt(computed.annualCurrent)]),
-    );
-    rows.push(buildCsvRow(["Annual increase", fmt(computed.annualIncrease)]));
-    rows.push(buildCsvRow(["New annual rent", fmt(computed.annualNew)]));
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Selected period result", "Amount"]));
-    rows.push(
-      buildCsvRow([
-        `New rent per ${PERIOD_LABEL[period]}`,
-        fmt(computed.newPerSelected),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        `Change per ${PERIOD_LABEL[period]}`,
-        fmt(computed.deltaPerSelected),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Estimated percent change",
-        `${computed.effectivePctNum.toFixed(2)}%`,
-      ]),
-    );
-    rows.push(buildCsvRow([""]));
-
-    rows.push(
-      buildCsvRow(["Period breakdown", "Current", "New", "Difference"]),
-    );
-    computed.breakdown.forEach((r) => {
-      rows.push(
-        buildCsvRow([
-          PERIOD_LABEL[r.p],
-          fmt(r.oldVal),
-          fmt(r.newVal),
-          fmt(r.delta),
-        ]),
-      );
-    });
-
-    rows.push(buildCsvRow([""]));
-    rows.push(buildCsvRow(["Monthly vs 4-week context", "Current", "New"]));
-    rows.push(
-      buildCsvRow([
-        "Monthly (average)",
-        fmt(computed.oldMonthlyAvg),
-        fmt(computed.newMonthlyAvg),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Every 4 weeks (28 days)",
-        fmt(computed.old4w),
-        fmt(computed.new4w),
-      ]),
-    );
-
-    downloadTextFile(
-      "rent-after-increase-calculator.csv",
-      rows.join("\n"),
-      "text/csv;charset=utf-8",
-    );
-  };
 
   const handlePrint = () => {
     if (typeof window === "undefined") return;
@@ -911,18 +851,18 @@ export default function RentAfterIncrease() {
     url: "https://rentconverter.com/rent-after-increase-calculator",
   };
 
-  const currentDescribedBy = currentParsed.ok
-    ? "rc-current-help"
-    : "rc-current-help rc-current-error";
+  const currentInvalid = !currentParsed.ok || currentDisplayError;
 
-  const increaseDescribedBy =
-    mode === "percent"
-      ? pctParsed.ok
-        ? "rc-inc-help"
-        : "rc-inc-help rc-inc-error"
-      : amtParsed.ok
-        ? "rc-inc-help"
-        : "rc-inc-help rc-inc-error";
+  const currentDescribedBy = currentInvalid
+    ? "rc-current-help rc-current-error"
+    : "rc-current-help";
+
+  const increaseInvalid =
+    mode === "percent" ? !pctParsed.ok : !amtParsed.ok || amtDisplayError;
+
+  const increaseDescribedBy = increaseInvalid
+    ? "rc-inc-help rc-inc-error"
+    : "rc-inc-help";
 
   return (
     <main className="bg-white text-slate-700 scroll-smooth">
@@ -958,7 +898,7 @@ export default function RentAfterIncrease() {
         <h1 className="text-4xl font-bold text-slate-800 mb-4">
           Rent After Increase Calculator
         </h1>
-        <p className="text-slate-600 max-w-2xl mx-auto text-lg leading-relaxed">
+        <p className="text-slate-600 max-w-5xl mx-auto text-lg leading-relaxed">
           Estimate your new rent after an increase and see the annual impact.
           Results are calculated using annual equivalence so the change remains
           comparable across common billing cycles.
@@ -996,15 +936,28 @@ export default function RentAfterIncrease() {
               </label>
               <input
                 inputMode="decimal"
-                value={currentRent}
-                onChange={(e) => setCurrentRent(e.target.value)}
+                value={currentDisplayValue}
+                onFocus={() => setIsCurrentFocused(true)}
+                onBlur={() => setIsCurrentFocused(false)}
+                onChange={(e) =>
+                  setCurrentRent(e.target.value.replace(/,/g, ""))
+                }
                 placeholder="e.g. 2000 or 2000.00"
                 className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
-                aria-invalid={!currentParsed.ok}
+                aria-invalid={currentInvalid}
                 aria-describedby={currentDescribedBy}
               />
-              
-              {!currentParsed.ok ? (
+
+              {currentDisplayError ? (
+                <p
+                  id="rc-current-error"
+                  className="mt-2 text-sm font-semibold text-rose-700"
+                  role="alert"
+                >
+                  That rent value is incomplete or ambiguous (trailing decimal
+                  separator).
+                </p>
+              ) : !currentParsed.ok ? (
                 <p
                   id="rc-current-error"
                   className="mt-2 text-sm font-semibold text-rose-700"
@@ -1044,52 +997,6 @@ export default function RentAfterIncrease() {
                   </option>
                 ))}
               </select>
-              <p className="mt-2 text-xs text-slate-500 leading-relaxed">
-                Conversions are computed through annual equivalence using a
-                365-day year and an average month length (365 ÷ 12 days).
-              </p>
-
-              <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4">
-                <div className="text-xs text-slate-500">Display</div>
-                <label className="mt-1 flex items-center gap-2 text-sm text-slate-700">
-                  <input
-                    type="checkbox"
-                    checked={roundDisplay}
-                    onChange={(e) => setRoundDisplay(e.target.checked)}
-                    className="h-4 w-4 accent-sky-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded"
-                  />
-                  Round displayed values (display only)
-                </label>
-
-                <div className="mt-3 flex items-center justify-between gap-3">
-                  <div className="text-xs text-slate-500">
-                    Displayed decimals
-                  </div>
-                  <select
-                    value={displayDecimals}
-                    onChange={(e) =>
-                      setDisplayDecimals(
-                        Math.max(
-                          0,
-                          Math.min(6, Math.trunc(Number(e.target.value) || 2)),
-                        ),
-                      )
-                    }
-                    className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
-                    aria-label="Displayed decimals"
-                  >
-                    <option value={0}>0</option>
-                    <option value={2}>2</option>
-                    <option value={4}>4</option>
-                    <option value={6}>6</option>
-                  </select>
-                </div>
-
-                <p className="mt-2 text-xs text-slate-500 leading-relaxed">
-                  Calculations preserve decimals internally (up to 12). If
-                  rounding is enabled, only displayed values are rounded.
-                </p>
-              </div>
             </div>
 
             <div className="md:col-span-6">
@@ -1158,18 +1065,31 @@ export default function RentAfterIncrease() {
                 <>
                   <input
                     inputMode="decimal"
-                    value={increaseAmount}
-                    onChange={(e) => setIncreaseAmount(e.target.value)}
+                    value={increaseAmountDisplayValue}
+                    onFocus={() => setIsIncreaseAmtFocused(true)}
+                    onBlur={() => setIsIncreaseAmtFocused(false)}
+                    onChange={(e) =>
+                      setIncreaseAmount(e.target.value.replace(/,/g, ""))
+                    }
                     placeholder="e.g. 100 or 100.00"
                     className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
-                    aria-invalid={!amtParsed.ok}
+                    aria-invalid={!amtParsed.ok || amtDisplayError}
                     aria-describedby={increaseDescribedBy}
                   />
                   <p id="rc-inc-help" className="mt-2 text-xs text-slate-500">
                     Enter the increase as an amount per the same billing period
                     as the current rent. If invalid, results are not shown.
                   </p>
-                  {!amtParsed.ok ? (
+                  {amtDisplayError ? (
+                    <p
+                      id="rc-inc-error"
+                      className="mt-2 text-sm font-semibold text-rose-700"
+                      role="alert"
+                    >
+                      That increase amount is incomplete or ambiguous (trailing
+                      decimal separator).
+                    </p>
+                  ) : !amtParsed.ok ? (
                     <p
                       id="rc-inc-error"
                       className="mt-2 text-sm font-semibold text-rose-700"
@@ -1467,6 +1387,41 @@ export default function RentAfterIncrease() {
             effective dates.
           </p>
         </div>
+
+        <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4">
+          <label className="mt-1 flex items-center gap-2 text-sm text-slate-700">
+            <input
+              type="checkbox"
+              checked={roundDisplay}
+              onChange={(e) => setRoundDisplay(e.target.checked)}
+              className="h-4 w-4 accent-sky-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded"
+            />
+            Round displayed values (display only)
+          </label>
+
+          <div className="mt-3 flex items-center justify-between gap-3">
+            <div className="text-xs text-slate-500">Displayed decimals</div>
+            <select
+              value={displayDecimals}
+              onChange={(e) => {
+                const v = Number(e.target.value);
+                setDisplayDecimals(isAllowedDisplayDecimals(v) ? v : 2);
+              }}
+              className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
+              aria-label="Displayed decimals"
+            >
+              <option value={0}>0</option>
+              <option value={2}>2</option>
+              <option value={4}>4</option>
+              <option value={6}>6</option>
+            </select>
+          </div>
+
+          <p className="mt-2 text-xs text-slate-500 leading-relaxed">
+            Calculations preserve decimals internally (up to 12). If rounding is
+            enabled, only displayed values are rounded.
+          </p>
+        </div>
       </section>
 
       {/* Required explanation section above FAQ */}
@@ -1509,9 +1464,8 @@ export default function RentAfterIncrease() {
               only the displayed values are rounded.
             </li>
             <li>
-              <strong>Export and print.</strong> You can export a CSV of the
-              breakdown and print the results (including save-as-PDF via the
-              browser print dialog).
+              <strong>Printing.</strong> You can print the results (including
+              save-as-PDF via the browser print dialog).
             </li>
           </ol>
 

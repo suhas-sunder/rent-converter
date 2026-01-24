@@ -1007,7 +1007,7 @@ export default function RentIncreaseCalculator() {
 
       <section className="pb-8 text-center bg-white rc-no-print">
         <h1 className="text-4xl font-bold text-slate-800 mb-4">{pageName}</h1>
-        <p className="text-slate-600 max-w-2xl mx-auto text-lg">
+        <p className="text-slate-600 max-w-5xl mx-auto text-lg">
           Estimate a new rent after an increase and see the annual impact.
           Results are computed on an annual basis so monthly, weekly, and 4-week
           equivalents stay consistent.
