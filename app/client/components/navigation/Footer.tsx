@@ -62,10 +62,18 @@ export default function NavBar() {
               </li>
               <li>
                 <Link
-                  to="/terms"
+                  to="/terms-of-service"
                   className="hover:text-slate-900 hover:underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
                 >
                   Terms
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/contact"
+                  className="hover:text-slate-900 hover:underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
+                >
+                  Contact
                 </Link>
               </li>
             </ul>

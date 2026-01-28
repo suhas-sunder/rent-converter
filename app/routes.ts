@@ -136,4 +136,5 @@ export default [
 
   // Rent vs buy
   route("rent-vs-buy-calculator", "routes/rent-vs-buy-calculator.tsx"),
+  route("contact", "routes/contact.tsx"),
 ] satisfies RouteConfig;
