@@ -885,11 +885,9 @@ export default function Home() {
         <h1 className="text-4xl sm:text-5xl font-bold text-slate-800 mb-4 tracking-tight">
           Rent Converter
         </h1>
-        <p className="text-slate-700 max-w-5xl mx-auto text-base sm:text-lg leading-relaxed">
+        <p className="text-slate-700 px-5 sm:px-0 max-w-5xl mx-auto text-base sm:text-lg leading-relaxed">
           Convert rent between weekly, monthly, every 4 weeks (28 days),
-          biweekly, daily, hourly, and annual amounts. This is a comparison
-          tool: it uses consistent time-length assumptions so you can compare
-          listings fairly.
+          biweekly, daily, hourly, and annual amounts.
         </p>
       </section>
 
@@ -900,34 +898,22 @@ export default function Home() {
               Instant rent conversion
             </h2>
 
-            <div className="flex flex-wrap items-center gap-3">
-              <label className="inline-flex items-center gap-2 text-sm font-medium text-slate-700 select-none">
-                <input
-                  type="checkbox"
-                  checked={roundForDisplay}
-                  onChange={(e) => setRoundForDisplay(e.target.checked)}
-                  className="h-4 w-4 rounded border-slate-300 text-sky-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-                />
-                Round results for display
-              </label>
-
-              <label className="inline-flex items-center gap-2 text-sm font-medium text-slate-700 select-none">
-                <span className="sr-only">Display decimals</span>
-                <select
-                  value={displayDecimals}
-                  onChange={(e) =>
-                    setDisplayDecimals(safeDisplayDecimals(e.target.value, 2))
-                  }
-                  className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-sky-400"
-                  aria-describedby={decimalsHelpId}
-                  aria-label="Display decimals"
+            <div
+              id="export-controls"
+              className="mt-6 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
+            >
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (typeof window === "undefined") return;
+                    window.print();
+                  }}
+                  className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fbff]"
                 >
-                  <option value={0}>0 decimals</option>
-                  <option value={2}>2 decimals</option>
-                  <option value={4}>4 decimals</option>
-                  <option value={6}>6 decimals</option>
-                </select>
-              </label>
+                  Print / Save PDF
+                </button>
+              </div>
             </div>
           </div>
 
@@ -1136,22 +1122,34 @@ export default function Home() {
               </div>
             </div>
 
-            <div
-              id="export-controls"
-              className="mt-6 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
-            >
-              <div className="flex flex-wrap gap-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (typeof window === "undefined") return;
-                    window.print();
-                  }}
-                  className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fbff]"
+            <div className="flex flex-wrap items-center gap-3 mt-10 sm:mt-6">
+              <label className="inline-flex items-center gap-2 text-sm font-medium text-slate-700 select-none">
+                <input
+                  type="checkbox"
+                  checked={roundForDisplay}
+                  onChange={(e) => setRoundForDisplay(e.target.checked)}
+                  className="h-4 w-4 rounded border-slate-300 text-sky-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                />
+                Round results for display
+              </label>
+
+              <label className="inline-flex items-center gap-2 text-sm font-medium text-slate-700 select-none">
+                <span className="sr-only">Display decimals</span>
+                <select
+                  value={displayDecimals}
+                  onChange={(e) =>
+                    setDisplayDecimals(safeDisplayDecimals(e.target.value, 2))
+                  }
+                  className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-sky-400"
+                  aria-describedby={decimalsHelpId}
+                  aria-label="Display decimals"
                 >
-                  Print / Save PDF
-                </button>
-              </div>
+                  <option value={0}>0 decimals</option>
+                  <option value={2}>2 decimals</option>
+                  <option value={4}>4 decimals</option>
+                  <option value={6}>6 decimals</option>
+                </select>
+              </label>
             </div>
           </div>
 
