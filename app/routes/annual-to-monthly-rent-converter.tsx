@@ -5,9 +5,9 @@ import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountr
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Annual to Monthly Rent Converter (Annual ÷ 12)";
+  const title = "Annual to Monthly Rent Converter (Exact ÷ 12 + 28-Day Check)";
   const description =
-    "Convert annual rent to a monthly equivalent (annual ÷ 12) with decimal-safe input. Includes 4-week (28-day) comparison, annualization (12 vs 13 payments), CSV export, and print-to-PDF. Free and private.";
+    "Instantly convert annual rent to a true monthly amount (annual ÷ 12). Compare against 4-week (28-day) rent, 12 vs 13 payments per year, with exact decimals, CSV export, and print-to-PDF. Free and private.";
 
   return [
     { title },
@@ -15,7 +15,7 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "keywords",
       content:
-        "annual to monthly rent, yearly to monthly rent, annual ÷ 12, annual rent to monthly calculator, 4 week rent vs monthly, 28 day rent vs monthly, 13 payments per year, rent converter annual to monthly",
+        "annual to monthly rent, yearly to monthly rent, annual ÷ 12, annual rent to monthly calculator, 4 week rent vs monthly, 28 day rent vs monthly, 12 vs 13 payments per year, rent converter annual to monthly",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },

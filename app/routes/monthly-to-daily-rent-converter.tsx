@@ -5,9 +5,9 @@ import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountr
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Monthly to Daily Rent Converter";
+  const title = "Monthly to Daily Rent Converter (Avg Day vs 30-Day Month)";
   const description =
-    "Convert a monthly rent price into a daily equivalent using annual equivalence (365-day year). See hourly, weekly, biweekly, 4-week (28-day), monthly, and annual breakdowns plus a 4-week vs monthly comparison.";
+    "Instantly convert monthly rent into a daily amount using a true 365-day year. Compare average-day vs 30-day month math, plus see weekly, biweekly, 4-week (28-day), hourly, and annual breakdowns. Free and private.";
 
   return [
     { title },

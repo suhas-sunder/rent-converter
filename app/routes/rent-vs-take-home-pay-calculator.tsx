@@ -5,11 +5,11 @@ import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountr
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 export const meta: Route.MetaFunction = () => [
-  { title: "Rent vs Take-Home Pay Calculator" },
+  { title: "Rent vs Take-Home Pay Calculator (What You Actually Keep)" },
   {
     name: "description",
     content:
-      "Compare rent to take-home pay (after-tax income) using annual equivalence (365-day year). See rent as a percentage of net pay, plus estimated take-home pay left after rent across monthly, weekly, and 4-week cycles.",
+      "Instantly see how much of your take-home pay goes to rent and how much you have left. View rent as a percent of net income with clear monthly, weekly, and 4-week (28-day) breakdowns. Free and private.",
   },
   {
     name: "keywords",
@@ -21,11 +21,14 @@ export const meta: Route.MetaFunction = () => [
   { name: "theme-color", content: "#f8fafc" },
 
   { property: "og:type", content: "website" },
-  { property: "og:title", content: "Rent vs Take-Home Pay Calculator" },
+  {
+    property: "og:title",
+    content: "Rent vs Take-Home Pay Calculator (What You Actually Keep)",
+  },
   {
     property: "og:description",
     content:
-      "Compare rent to take-home pay using annual equivalence. See rent as a percent of net pay and estimated net pay left after rent across pay cycles.",
+      "Calculate rent as a percentage of your take-home pay and see how much income remains after rent across common pay cycles.",
   },
   {
     property: "og:url",
@@ -39,7 +42,7 @@ export const meta: Route.MetaFunction = () => [
   {
     name: "twitter:description",
     content:
-      "Compare rent to take-home pay using annual equivalence. See rent as a percent of net pay and estimated net pay left after rent across pay cycles.",
+      "See how much of your take-home pay goes to rent and what you actually keep.",
   },
   { name: "twitter:image", content: "https://rentconverter.com/og-image.jpg" },
 
@@ -48,6 +51,7 @@ export const meta: Route.MetaFunction = () => [
     href: "https://rentconverter.com/rent-vs-take-home-pay-calculator",
   },
 ];
+
 
 type Period =
   | "hourly"

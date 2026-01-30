@@ -7,17 +7,17 @@ import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 export const meta: Route.MetaFunction = () => [
   {
     title:
-      "Rent Converter Calculator: Weekly, Monthly, 4-Week (28-Day), Biweekly, Daily, Hourly, Annual",
+      "Rent Converter Calculator (Weekly, Monthly, 4-Week, Biweekly, Daily, Hourly)",
   },
   {
     name: "description",
     content:
-      "Convert rent between weekly, monthly, every 4 weeks (28 days), biweekly, daily, hourly, and annual using clear, consistent assumptions. Decimal-safe input and clear breakdown.",
+      "Convert rent between weekly, monthly, every 4 weeks (28 days), biweekly, daily, hourly, and annual using clear, consistent assumptions. Exact decimals, side-by-side comparisons, and transparent math.",
   },
   {
     name: "keywords",
     content:
-      "rent converter, rent calculator, weekly to monthly rent, monthly to weekly rent, 4 week rent, 28 day rent, rent paid every 4 weeks, rent billed every 28 days, biweekly to monthly rent, monthly to annual rent, annual to monthly rent, rent per day, rent per week, rent per hour, rent as percentage of income, how much rent can I afford",
+      "rent converter, rent calculator, weekly to monthly rent, monthly to weekly rent, 4 week rent, 28 day rent, rent paid every 4 weeks, rent billed every 28 days, biweekly to monthly rent, monthly to annual rent, annual to monthly rent, rent per day, rent per week, rent per hour, rent affordability, how much rent can I afford",
   },
   { name: "robots", content: "index,follow" },
   { name: "author", content: "RentConverter.com" },
@@ -28,12 +28,12 @@ export const meta: Route.MetaFunction = () => [
   {
     property: "og:title",
     content:
-      "Rent Converter Calculator: Weekly, Monthly, 4-Week (28-Day), Biweekly, Daily, Hourly, Annual",
+      "Rent Converter Calculator (Weekly, Monthly, 4-Week, Biweekly, Daily, Hourly)",
   },
   {
     property: "og:description",
     content:
-      "Convert rent between weekly, monthly, biweekly, every 4 weeks (28 days), daily, hourly, and annual. Decimal-safe input and clear assumptions.",
+      "Accurate rent conversions across weekly, monthly, 28-day, biweekly, daily, hourly, and annual periods with clear assumptions and exact decimals.",
   },
   { property: "og:url", content: "https://rentconverter.com/" },
   { property: "og:site_name", content: "RentConverter.com" },
@@ -43,13 +43,12 @@ export const meta: Route.MetaFunction = () => [
   { name: "twitter:card", content: "summary_large_image" },
   {
     name: "twitter:title",
-    content:
-      "Rent Converter Calculator: Weekly, Monthly, 4-Week, Biweekly, Daily, Hourly, Annual",
+    content: "Rent Converter Calculator (Weekly, Monthly, 4-Week, Biweekly)",
   },
   {
     name: "twitter:description",
     content:
-      "Accurate rent period conversions with decimal-safe parsing, clear assumptions, and a full breakdown.",
+      "Clear, accurate rent conversions with transparent math and exact decimals.",
   },
   { name: "twitter:image", content: "https://rentconverter.com/og-image.jpg" },
   { rel: "canonical", href: "https://rentconverter.com/" },

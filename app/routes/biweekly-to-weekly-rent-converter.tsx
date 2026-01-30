@@ -9,9 +9,9 @@ const ROUTE_PATH = `/${ROUTE_SLUG}` as const;
 const PAGE_URL = `https://rentconverter.com${ROUTE_PATH}` as const;
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Biweekly to Weekly Rent Converter (14-day basis)";
+  const title = "Biweekly to Weekly Rent Converter (Exact 14-Day Math)";
   const description =
-    "Convert biweekly rent (every 14 days) to a weekly equivalent using a 365-day year. Decimal-safe input and a full breakdown with print-to-PDF support.";
+    "Instantly convert rent paid every 14 days into a weekly amount using a true 365-day year. Exact decimals, clear breakdown, and print-to-PDF. Free, private, no signup.";
 
   return [
     { title },
@@ -43,6 +43,7 @@ export const meta: Route.MetaFunction = () => {
     { rel: "canonical", href: PAGE_URL },
   ];
 };
+
 
 type Period =
   | "hourly"

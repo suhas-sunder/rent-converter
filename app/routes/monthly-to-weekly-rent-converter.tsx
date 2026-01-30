@@ -5,9 +5,9 @@ import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountr
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Monthly to Weekly Rent Converter";
+  const title = "Monthly to Weekly Rent Converter (28-Day vs Monthly)";
   const description =
-    "Convert monthly rent to a weekly equivalent using annual equivalence (365-day year and average month length). Includes full period breakdowns and a monthly vs 28-day (4-week) comparison.";
+    "Instantly convert monthly rent into a weekly amount using a true 365-day year and average month length. Compare monthly vs 4-week (28-day) rent math, with exact decimals and full period breakdowns. Free and private.";
 
   return [
     { title },

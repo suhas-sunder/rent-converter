@@ -5,9 +5,9 @@ import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountr
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Rent After-Tax Income Calculator";
+  const title = "Rent vs Take-Home Pay Calculator (After-Tax Income)";
   const description =
-    "Estimate after-tax (net) income from a pre-tax income and an effective tax rate, then compare rent to net income using annual equivalence (365-day year). Includes net income after rent and pay-cycle comparisons.";
+    "Calculate rent as a percentage of your take-home (after-tax) income. See net income after rent, compare pay cycles, and understand what you actually keep. Clear assumptions, exact decimals. Free and private.";
 
   return [
     { title },

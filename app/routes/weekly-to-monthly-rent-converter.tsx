@@ -5,11 +5,11 @@ import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountr
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 export const meta: Route.MetaFunction = () => [
-  { title: "Weekly to Monthly Rent Converter" },
+  { title: "Weekly to Monthly Rent Converter (28-Day vs Monthly)" },
   {
     name: "description",
     content:
-      "Convert weekly rent to a monthly equivalent using annual equivalence (365-day year). Includes a full breakdown, a 4-week (28-day) comparison, and print-to-PDF.",
+      "Instantly convert weekly rent into a monthly amount and see how weekly math compares to 4-week (28-day) billing. Clear breakdowns, exact decimals, and print-to-PDF. Free and private.",
   },
   {
     name: "keywords",
@@ -21,11 +21,14 @@ export const meta: Route.MetaFunction = () => [
   { name: "theme-color", content: "#f8fafc" },
 
   { property: "og:type", content: "website" },
-  { property: "og:title", content: "Weekly to Monthly Rent Converter" },
+  {
+    property: "og:title",
+    content: "Weekly to Monthly Rent Converter (28-Day vs Monthly)",
+  },
   {
     property: "og:description",
     content:
-      "Convert weekly rent to a monthly equivalent using annual equivalence (365-day year). Includes a full breakdown and a 4-week (28-day) comparison.",
+      "Convert weekly rent to a monthly amount and clearly see the difference between weekly, 4-week (28-day), and monthly billing.",
   },
   {
     property: "og:url",
@@ -39,7 +42,7 @@ export const meta: Route.MetaFunction = () => [
   {
     name: "twitter:description",
     content:
-      "Convert weekly rent to a monthly equivalent using annual equivalence (365-day year). Includes a full breakdown and a 4-week (28-day) comparison.",
+      "See the monthly equivalent of weekly rent and how it compares to 4-week (28-day) billing.",
   },
   { name: "twitter:image", content: "https://rentconverter.com/og-image.jpg" },
 

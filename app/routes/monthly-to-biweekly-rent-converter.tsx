@@ -5,9 +5,10 @@ import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountr
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Monthly to Biweekly Rent Converter";
+  const title =
+    "Monthly to Biweekly Rent Converter (Biweekly vs Twice-Monthly)";
   const description =
-    "Convert monthly rent to a biweekly equivalent using annual equivalence (365-day year). Includes an always-visible breakdown and clear notes on biweekly vs twice-monthly timing.";
+    "Instantly convert monthly rent into a true biweekly (every 14 days) amount using a 365-day year. See the difference between biweekly and twice-monthly timing, with exact decimals and an always-visible breakdown. Free and private.";
 
   return [
     { title },

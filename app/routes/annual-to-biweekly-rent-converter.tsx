@@ -5,9 +5,9 @@ import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountr
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Annual to Biweekly Rent Converter (14-Day Equivalent)";
+  const title = "Annual to Biweekly Rent Converter (Exact 14-Day Pay Cycle)";
   const description =
-    "Convert annual rent to a biweekly (every 14 days) equivalent using a 365-day year. Decimal-safe input, instant breakdown, and print-to-PDF. Free and private (no signup).";
+    "Instantly convert annual rent into a biweekly (14-day) amount using a true 365-day year. Exact decimals, clear breakdown, and print-to-PDF. Free, private, no signup.";
 
   return [
     { title },
@@ -15,7 +15,7 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "keywords",
       content:
-        "annual to biweekly rent, yearly to biweekly rent, 14 day rent equivalent, convert annual rent to every 2 weeks, biweekly rent from annual, annual rent paycheque budgeting, rent converter annual to biweekly",
+        "annual to biweekly rent, yearly to biweekly rent, 14 day rent equivalent, annual rent biweekly calculator, convert annual rent to every 2 weeks, biweekly rent budgeting, rent converter annual to biweekly",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },

@@ -5,9 +5,9 @@ import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountr
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Rent After Increase Calculator";
+  const title = "Rent After Increase Calculator (Percent or Fixed Raise)";
   const description =
-    "Calculate your new rent after an increase (percent or fixed amount) using annual equivalence (365-day year). See updated rent per period, annual impact, and a full breakdown across pay cycles including monthly vs 4-week.";
+    "Instantly calculate your new rent after an increase by percent or fixed amount. See updated rent per period, annual impact, and clear comparisons across monthly, 4-week (28-day), and other pay cycles. Exact decimals, full breakdown. Free and private.";
 
   return [
     { title },

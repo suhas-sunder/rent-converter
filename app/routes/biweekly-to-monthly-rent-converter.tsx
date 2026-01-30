@@ -5,9 +5,9 @@ import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountr
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Biweekly to Monthly Rent Converter (14-day basis)";
+  const title = "Biweekly to Monthly Rent Converter (26-Pay vs Monthly)";
   const description =
-    "Convert rent paid every 14 days (biweekly) into a monthly equivalent using a 365-day year. Decimal-safe input, full breakdown, 26-payments context, CSV export, and print-to-PDF.";
+    "Instantly convert rent paid every 14 days into a monthly amount using a true 365-day year. See the impact of 26 payments per year, compare against monthly and 28-day rent, with exact decimals, CSV export, and print-to-PDF. Free and private.";
 
   return [
     { title },

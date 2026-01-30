@@ -5,9 +5,9 @@ import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountr
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Daily to Monthly Rent Converter (365-day basis)";
+  const title = "Daily to Monthly Rent Converter (30-Day vs Avg Month)";
   const description =
-    "Convert a daily rent price into a monthly equivalent using a 365-day year (annual equivalence). Decimal-safe input, full breakdown, 30-day vs average-month context, and print-to-PDF.";
+    "Instantly convert a daily rent price into a monthly amount using a true 365-day year. Compare 30-day months vs average-month math, with exact decimals, a full breakdown, and print-to-PDF. Free and private.";
 
   return [
     { title },
@@ -15,7 +15,7 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "keywords",
       content:
-        "daily to monthly rent converter, daily rent to monthly equivalent, rent per day to monthly, convert daily rent into monthly, daily rate rent monthly, 28 day rent vs monthly, 4 week vs monthly rent",
+        "daily to monthly rent converter, daily rent to monthly equivalent, rent per day to monthly, convert daily rent into monthly, daily rate rent monthly, 30 day rent vs monthly, average month rent",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
@@ -45,6 +45,7 @@ export const meta: Route.MetaFunction = () => {
     },
   ];
 };
+
 
 type Period =
   | "hourly"

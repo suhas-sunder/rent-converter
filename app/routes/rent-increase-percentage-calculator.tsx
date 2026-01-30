@@ -6,13 +6,12 @@ import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 export const meta: Route.MetaFunction = () => [
   {
-    title:
-      "Rent Increase Percentage Calculator - Old vs New Rent, Annual Impact, and Equivalents",
+    title: "Rent Increase Percentage Calculator (Old vs New Rent)",
   },
   {
     name: "description",
     content:
-      "Calculate the percentage rent increase between an old rent and a new rent using annual equivalence (365-day year). Shows the change per period and the annual impact, with monthly vs 4-week comparisons.",
+      "Instantly calculate the percentage increase between your old rent and new rent. See the annual impact and per-period equivalents, including monthly vs 4-week (28-day) comparisons. Clear math, exact decimals. Free and private.",
   },
   {
     name: "keywords",
@@ -26,13 +25,12 @@ export const meta: Route.MetaFunction = () => [
   { property: "og:type", content: "website" },
   {
     property: "og:title",
-    content:
-      "Rent Increase Percentage Calculator - Old vs New Rent, Annual Impact, and Equivalents",
+    content: "Rent Increase Percentage Calculator (Old vs New Rent)",
   },
   {
     property: "og:description",
     content:
-      "Calculate the percentage rent increase between old and new rent using annual equivalence. Includes per-period equivalents and annual impact.",
+      "Calculate how much your rent increased in percent terms and see the annual impact plus monthly and 28-day equivalents.",
   },
   {
     property: "og:url",
@@ -46,7 +44,7 @@ export const meta: Route.MetaFunction = () => [
   {
     name: "twitter:description",
     content:
-      "Calculate the percentage rent increase between old and new rent using annual equivalence. Includes pay-cycle equivalents and annual impact.",
+      "Find the percentage increase between old and new rent and see the yearly impact.",
   },
   { name: "twitter:image", content: "https://rentconverter.com/og-image.jpg" },
 

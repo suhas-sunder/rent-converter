@@ -5,9 +5,9 @@ import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountr
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Hourly to Monthly Rent Converter (365-day basis)";
+  const title = "Hourly to Monthly Rent Converter (Avg Month vs 30 Days)";
   const description =
-    "Convert hourly rent to a monthly equivalent using annual equivalence (365-day year). Decimal-safe input, full period breakdown, and month-length comparison.";
+    "Instantly convert hourly rent into a monthly amount using true annual equivalence (365-day year). Compare average-month vs 30-day math, with exact decimals and a clear period breakdown. Free, private, no signup.";
 
   return [
     { title },

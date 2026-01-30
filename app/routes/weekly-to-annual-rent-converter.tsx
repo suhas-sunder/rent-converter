@@ -5,11 +5,11 @@ import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountr
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 export const meta: Route.MetaFunction = () => [
-  { title: "Weekly to Annual Rent Converter" },
+  { title: "Weekly to Annual Rent Converter (52 Weeks vs 365 Days)" },
   {
     name: "description",
     content:
-      "Convert weekly rent to an annual total using annual equivalence (365-day year). Includes a full period breakdown, 52 vs 365-day context, 4-week (28-day) context, and print-to-PDF.",
+      "Instantly convert weekly rent into an annual total and see the difference between 52-week math and a true 365-day year. Includes a clear breakdown, 4-week (28-day) context, and print-to-PDF. Free and private.",
   },
   {
     name: "keywords",
@@ -21,11 +21,14 @@ export const meta: Route.MetaFunction = () => [
   { name: "theme-color", content: "#f8fafc" },
 
   { property: "og:type", content: "website" },
-  { property: "og:title", content: "Weekly to Annual Rent Converter" },
+  {
+    property: "og:title",
+    content: "Weekly to Annual Rent Converter (52 Weeks vs 365 Days)",
+  },
   {
     property: "og:description",
     content:
-      "Convert weekly rent to an annual total using annual equivalence (365-day year). Includes breakdowns and 52-payments context.",
+      "Convert weekly rent to an annual amount and clearly see how 52-week totals compare to a true 365-day year.",
   },
   {
     property: "og:url",
@@ -39,7 +42,7 @@ export const meta: Route.MetaFunction = () => [
   {
     name: "twitter:description",
     content:
-      "Convert weekly rent to an annual total using annual equivalence (365-day year). Includes breakdowns and 52-payments context.",
+      "See the annual cost of weekly rent and compare 52-week math vs a true year.",
   },
   { name: "twitter:image", content: "https://rentconverter.com/og-image.jpg" },
 
@@ -941,45 +944,42 @@ export default function WeeklyToAnnualRent() {
             </>
           ) : null}
         </div>
-        
 
-          <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 rc-no-print">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <label className="flex items-center gap-2 text-sm text-slate-700">
-                <input
-                  type="checkbox"
-                  checked={roundDisplay}
-                  onChange={(e) => setRoundDisplay(e.target.checked)}
-                  className="h-4 w-4"
-                />
-                Round displayed values (display only)
-              </label>
+        <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 rc-no-print">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <label className="flex items-center gap-2 text-sm text-slate-700">
+              <input
+                type="checkbox"
+                checked={roundDisplay}
+                onChange={(e) => setRoundDisplay(e.target.checked)}
+                className="h-4 w-4"
+              />
+              Round displayed values (display only)
+            </label>
 
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-slate-500">
-                  Displayed decimals
-                </span>
-                <select
-                  value={displayDecimals}
-                  onChange={(e) =>
-                    setDisplayDecimals(
-                      normalizeDisplayDecimals(Number(e.target.value), 2),
-                    )
-                  }
-                  className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
-                >
-                  <option value={0}>0</option>
-                  <option value={2}>2</option>
-                  <option value={4}>4</option>
-                  <option value={6}>6</option>
-                </select>
-              </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-slate-500">Displayed decimals</span>
+              <select
+                value={displayDecimals}
+                onChange={(e) =>
+                  setDisplayDecimals(
+                    normalizeDisplayDecimals(Number(e.target.value), 2),
+                  )
+                }
+                className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
+              >
+                <option value={0}>0</option>
+                <option value={2}>2</option>
+                <option value={4}>4</option>
+                <option value={6}>6</option>
+              </select>
             </div>
-            <p className="mt-2 text-xs text-slate-500">
-              Internal math is fixed-point up to 12 decimals. This only changes
-              what is displayed.
-            </p>
           </div>
+          <p className="mt-2 text-xs text-slate-500">
+            Internal math is fixed-point up to 12 decimals. This only changes
+            what is displayed.
+          </p>
+        </div>
       </section>
 
       <section id="learn" className="max-w-5xl mx-auto px-6 pt-8 rc-no-print">

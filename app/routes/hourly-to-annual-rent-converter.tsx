@@ -5,9 +5,9 @@ import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountr
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Hourly to Annual Rent Converter (365-day basis)";
+  const title = "Hourly to Annual Rent Converter (Exact 365-Day Math)";
   const description =
-    "Convert an hourly rent or rate into an annual rent equivalent using a 365-day year (annual equivalence). Decimal-safe input, full breakdown, paid-hours scenario, and print-to-PDF.";
+    "Instantly convert an hourly rent or rate into an annual amount using a true 365-day year. Compare paid-hours scenarios, see exact decimals, and get a full breakdown with print-to-PDF. Free, private, no signup.";
 
   return [
     { title },
@@ -990,7 +990,6 @@ export default function HourlyToAnnualRent() {
                       </span>
                     ) : null}
                   </div>
-
                 </div>
 
                 <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

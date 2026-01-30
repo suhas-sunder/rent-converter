@@ -5,9 +5,9 @@ import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountr
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Biweekly to Annual Rent Converter (14-day basis)";
+  const title = "Biweekly to Annual Rent Converter (Exact 14-Day Year)";
   const description =
-    "Convert biweekly rent (every 14 days) to an annual equivalent using a 365-day year. Decimal-safe input, full breakdown, payment-count context (26 vs 365/14), and print-to-PDF.";
+    "Instantly convert biweekly rent (every 14 days) into an annual total using a true 365-day year. Exact decimals, full breakdown, and payment-count context (×26 vs 365/14), plus print-to-PDF. Free, private, no signup.";
 
   return [
     { title },

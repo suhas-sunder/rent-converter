@@ -5,9 +5,9 @@ import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountr
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "How Much Rent Can I Afford? (Income-Based Estimator)";
+  const title = "How Much Rent Can I Afford? Income-Based Calculator";
   const description =
-    "Estimate rent affordability from income using annual equivalence (365-day year). Compare affordable rent across monthly, weekly, and every 4 weeks, and print or save as PDF.";
+    "Instantly estimate how much rent you can afford based on income using clear, consistent assumptions. See affordable rent across monthly, weekly, and 4-week (28-day) pay cycles, with exact breakdowns and print-to-PDF. Free and private.";
 
   return [
     { title },
@@ -894,7 +894,6 @@ export default function HowMuchRentCanIAfford() {
                       </span>
                     ) : null}
                   </div>
-
                 </div>
 
                 <div className="mt-6 grid gap-4 sm:grid-cols-3 rc-print-block">

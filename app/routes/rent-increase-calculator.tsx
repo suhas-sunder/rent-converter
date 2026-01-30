@@ -6,13 +6,12 @@ import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 export const meta: Route.MetaFunction = () => [
   {
-    title:
-      "Rent Increase Calculator - Percent or Fixed Raise, Annual Impact, and Projections",
+    title: "Rent Increase Calculator (Percent or Fixed) + Annual Impact",
   },
   {
     name: "description",
     content:
-      "Calculate a new rent after an increase (percent or fixed amount) using annual equivalence (365-day year). Shows the increase impact across monthly, weekly, and 4-week equivalents and can project multiple increases.",
+      "Instantly calculate your new rent after a percent or fixed increase. See the monthly, weekly, and 4-week (28-day) equivalents, the annual impact, and optional multi-increase projections. Clear assumptions, exact decimals. Free and private.",
   },
   {
     name: "keywords",
@@ -26,13 +25,12 @@ export const meta: Route.MetaFunction = () => [
   { property: "og:type", content: "website" },
   {
     property: "og:title",
-    content:
-      "Rent Increase Calculator - Percent or Fixed Raise, Annual Impact, and Projections",
+    content: "Rent Increase Calculator (Percent or Fixed) + Annual Impact",
   },
   {
     property: "og:description",
     content:
-      "Calculate a new rent after a percent or fixed increase using annual equivalence. See monthly, weekly, and 4-week equivalents and multi-increase projections.",
+      "Calculate your new rent after a percent or fixed increase and see the annual impact plus monthly, weekly, and 28-day equivalents. Includes optional multi-increase projections.",
   },
   {
     property: "og:url",
@@ -46,7 +44,7 @@ export const meta: Route.MetaFunction = () => [
   {
     name: "twitter:description",
     content:
-      "Calculate a new rent after a percent or fixed increase using annual equivalence. Includes pay-cycle equivalents and multi-increase projections.",
+      "Calculate your new rent after a percent or fixed increase and see the annual impact and pay-cycle equivalents.",
   },
   { name: "twitter:image", content: "https://rentconverter.com/og-image.jpg" },
 

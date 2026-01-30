@@ -5,9 +5,9 @@ import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountr
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Rent as Percentage of Income Calculator";
+  const title = "Rent-to-Income Ratio Calculator (Percent of Income)";
   const description =
-    "Calculate rent as a percentage of income using annual equivalence (365-day year). Compare monthly, weekly, 4-week, and annual pay cycles with a clear breakdown of annualized income and rent.";
+    "Instantly calculate what percent of your income goes to rent. Compare monthly, weekly, and 4-week (28-day) pay cycles with clear assumptions and an annualized breakdown of income and rent. Free and private.";
 
   return [
     { title },
@@ -46,6 +46,7 @@ export const meta: Route.MetaFunction = () => {
     },
   ];
 };
+
 
 type Period =
   | "hourly"

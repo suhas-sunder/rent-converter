@@ -6,32 +6,31 @@ import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 export const meta: Route.MetaFunction = () => [
   {
-    title:
-      "Rent Due Date Calculator - Schedule, Monthly Totals, Cumulative Paid, and Multi-Year View",
+    title: "Rent Due Date Calculator (Next Due Date + Payment Schedule)",
   },
   {
     name: "description",
     content:
-      "Calculate the next rent due date and a forward schedule, then see how many payments fall in each calendar month, how much rent is paid by an end date, and totals by year. Supports monthly, weekly, biweekly, every 4 weeks (28 days), and annual cycles.",
+      "Instantly find your next rent due date and see a forward payment schedule. View how many payments fall in each month, how much rent is paid by an end date, and totals by year. Supports monthly, weekly, biweekly, and 4-week (28-day) cycles.",
   },
   {
     name: "keywords",
     content:
-      "rent due date calculator, next rent due date, rent payment schedule, rent paid by end of month, monthly rent totals, rent billed every 28 days, rent paid every 4 weeks, rent due weekly, rent due biweekly, rent payment calendar",
+      "rent due date calculator, next rent due date, rent payment schedule, rent paid by end date, monthly rent totals, rent billed every 28 days, rent paid every 4 weeks, rent due weekly, rent due biweekly, rent payment calendar",
   },
   { name: "robots", content: "index,follow" },
   { name: "author", content: "RentConverter.com" },
   { name: "theme-color", content: "#f8fafc" },
+
   { property: "og:type", content: "website" },
   {
     property: "og:title",
-    content:
-      "Rent Due Date Calculator - Monthly Totals, Cumulative Paid, and Multi-Year View",
+    content: "Rent Due Date Calculator (Next Due Date + Schedule)",
   },
   {
     property: "og:description",
     content:
-      "Estimate rent due dates and see payment counts per month, cumulative paid by an end date, and year totals for monthly, weekly, biweekly, and 28-day rent cycles.",
+      "Find your next rent due date and see monthly payment counts, cumulative rent paid by an end date, and year totals for monthly, weekly, biweekly, and 28-day cycles.",
   },
   {
     property: "og:url",
@@ -39,14 +38,16 @@ export const meta: Route.MetaFunction = () => [
   },
   { property: "og:site_name", content: "RentConverter.com" },
   { property: "og:image", content: "https://rentconverter.com/og-image.jpg" },
+
   { name: "twitter:card", content: "summary_large_image" },
   { name: "twitter:title", content: "Rent Due Date Calculator" },
   {
     name: "twitter:description",
     content:
-      "Calculate rent due dates and see monthly totals, cumulative paid by an end date, and multi-year totals.",
+      "Find your next rent due date and see payment schedules, monthly totals, and cumulative rent paid.",
   },
   { name: "twitter:image", content: "https://rentconverter.com/og-image.jpg" },
+
   {
     rel: "canonical",
     href: "https://rentconverter.com/rent-due-date-calculator",
@@ -1418,7 +1419,6 @@ export default function RentDueDateCalculator() {
             )}
           </div>
 
-
           <section className="mt-10 rounded-2xl border border-slate-200 bg-white p-6 rc-print-block">
             <h3 className="text-xl font-bold text-slate-900 mb-3">
               Disclaimer
@@ -1540,24 +1540,24 @@ export default function RentDueDateCalculator() {
             budgeting comparisons.
           </p>
         </div>
-        
-          <section className="mt-10 rc-no-print">
-            <h3 className="text-2xl font-semibold mb-4 text-slate-900">
-              Related pages
-            </h3>
-            <ul className="list-disc ml-6 text-slate-700">
-              {relatedLinks.map((l) => (
-                <li key={l.href}>
-                  <a
-                    href={safeHref(l.href)}
-                    className="text-sky-700 hover:underline"
-                  >
-                    {l.text}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </section>
+
+        <section className="mt-10 rc-no-print">
+          <h3 className="text-2xl font-semibold mb-4 text-slate-900">
+            Related pages
+          </h3>
+          <ul className="list-disc ml-6 text-slate-700">
+            {relatedLinks.map((l) => (
+              <li key={l.href}>
+                <a
+                  href={safeHref(l.href)}
+                  className="text-sky-700 hover:underline"
+                >
+                  {l.text}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
       </section>
 
       <section id="faq" className="max-w-5xl mx-auto py-16 px-6 rc-no-print">

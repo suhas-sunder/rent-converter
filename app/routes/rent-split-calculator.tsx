@@ -5,11 +5,11 @@ import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountr
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 export const meta: Route.MetaFunction = () => [
-  { title: "Rent Split Calculator - Split Rent by Roommates" },
+  { title: "Rent Split Calculator (How Much Each Roommate Pays)" },
   {
     name: "description",
     content:
-      "Split rent per person (roommates) using annual equivalence on a 365-day basis. See per-person rent by period, annual totals, and a full breakdown including monthly (average) vs every 4 weeks.",
+      "Instantly split rent per roommate and see exactly how much each person pays. View per-person rent by month, week, 4-week (28-day), and year, with clear breakdowns and fair comparisons. Free and private.",
   },
   {
     name: "keywords",
@@ -23,12 +23,12 @@ export const meta: Route.MetaFunction = () => [
   { property: "og:type", content: "website" },
   {
     property: "og:title",
-    content: "Rent Split Calculator - Split Rent by Roommates",
+    content: "Rent Split Calculator (How Much Each Roommate Pays)",
   },
   {
     property: "og:description",
     content:
-      "Split rent per person using annual equivalence. Compare per-person rent across periods, including monthly (average) vs every 4 weeks.",
+      "Split rent fairly between roommates and see per-person costs by month, week, 28-day cycle, and year with clear math.",
   },
   {
     property: "og:url",
@@ -40,12 +40,12 @@ export const meta: Route.MetaFunction = () => [
   { name: "twitter:card", content: "summary_large_image" },
   {
     name: "twitter:title",
-    content: "Rent Split Calculator - Split rent fairly",
+    content: "Rent Split Calculator",
   },
   {
     name: "twitter:description",
     content:
-      "Split rent per person using annual equivalence. Compare per-person rent across periods, including monthly (average) vs every 4 weeks.",
+      "See exactly how much each roommate pays for rent with clear per-person breakdowns.",
   },
   { name: "twitter:image", content: "https://rentconverter.com/og-image.jpg" },
 

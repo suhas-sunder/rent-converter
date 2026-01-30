@@ -6,13 +6,12 @@ import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 export const meta: Route.MetaFunction = () => [
   {
-    title:
-      "Rent Per Paycheck Calculator - Weekly, Biweekly, Semimonthly, Monthly Pay",
+    title: "Rent Per Paycheck Calculator (How Much to Set Aside Each Pay)",
   },
   {
     name: "description",
     content:
-      "Calculate how much rent to set aside from each paycheck. Converts rent to an annual total using a consistent 365-day basis, then divides by pay frequency (weekly, biweekly, semimonthly, monthly). Includes payment counts and comparisons.",
+      "Instantly calculate how much rent to set aside from each paycheck. See rent per weekly, biweekly, semimonthly, or monthly pay using clear assumptions, payment counts, and exact breakdowns. Free and private.",
   },
   {
     name: "keywords",
@@ -26,13 +25,12 @@ export const meta: Route.MetaFunction = () => [
   { property: "og:type", content: "website" },
   {
     property: "og:title",
-    content:
-      "Rent Per Paycheck Calculator - Weekly, Biweekly, Semimonthly, Monthly Pay",
+    content: "Rent Per Paycheck Calculator (How Much to Set Aside)",
   },
   {
     property: "og:description",
     content:
-      "Estimate how much rent to allocate from each paycheck using annual equivalence for consistent comparisons.",
+      "Calculate how much rent to set aside from each paycheck and compare weekly, biweekly, semimonthly, and monthly pay schedules with clear math.",
   },
   {
     property: "og:url",
@@ -44,12 +42,12 @@ export const meta: Route.MetaFunction = () => [
   { name: "twitter:card", content: "summary_large_image" },
   {
     name: "twitter:title",
-    content: "Rent Per Paycheck Calculator - Rent budgeting by pay frequency",
+    content: "Rent Per Paycheck Calculator",
   },
   {
     name: "twitter:description",
     content:
-      "Convert rent to an annual total, then see the estimated rent amount per paycheck for weekly, biweekly, semimonthly, or monthly pay.",
+      "See how much rent to set aside from each paycheck based on your pay frequency.",
   },
   { name: "twitter:image", content: "https://rentconverter.com/og-image.jpg" },
 

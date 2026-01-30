@@ -5,9 +5,9 @@ import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountr
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Monthly to Annual Rent Converter";
+  const title = "Monthly to Annual Rent Converter (12 vs 13 Payments)";
   const description =
-    "Convert monthly rent into an annual total using annual equivalence (365-day year). Compare monthly × 12 vs 4-week schedules and review a full breakdown across billing periods.";
+    "Instantly convert monthly rent into an annual total and see the difference between monthly × 12 and 4-week (13-payment) schedules. Exact decimals, clear comparisons, and a full breakdown across billing periods. Free and private.";
 
   return [
     { title },

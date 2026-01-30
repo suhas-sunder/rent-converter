@@ -5,11 +5,11 @@ import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountr
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 export const meta: Route.MetaFunction = () => [
-  { title: "Weekly to Biweekly Rent Converter" },
+  { title: "Weekly to Biweekly Rent Converter (7-Day vs 14-Day Math)" },
   {
     name: "description",
     content:
-      "Convert weekly rent to a biweekly (14-day) equivalent using annual equivalence (365-day year). Includes a full breakdown and monthly vs 4-week context.",
+      "Instantly convert weekly rent into a biweekly (14-day) amount and see how weekly math carries over across a true 365-day year. Includes a clear breakdown plus monthly vs 4-week (28-day) context. Free and private.",
   },
   {
     name: "keywords",
@@ -21,11 +21,14 @@ export const meta: Route.MetaFunction = () => [
   { name: "theme-color", content: "#f8fafc" },
 
   { property: "og:type", content: "website" },
-  { property: "og:title", content: "Weekly to Biweekly Rent Converter" },
+  {
+    property: "og:title",
+    content: "Weekly to Biweekly Rent Converter (7-Day vs 14-Day Math)",
+  },
   {
     property: "og:description",
     content:
-      "Convert weekly rent to biweekly rent using annual equivalence (365-day year). Includes a full breakdown and monthly vs 4-week context.",
+      "Convert weekly rent to a biweekly amount and clearly see how 7-day and 14-day schedules compare over a full year.",
   },
   {
     property: "og:url",
@@ -39,7 +42,7 @@ export const meta: Route.MetaFunction = () => [
   {
     name: "twitter:description",
     content:
-      "Convert weekly rent to biweekly rent using annual equivalence (365-day year). Includes a full breakdown and monthly vs 4-week context.",
+      "See the biweekly equivalent of weekly rent and how 7-day math translates to 14-day pay cycles.",
   },
   { name: "twitter:image", content: "https://rentconverter.com/og-image.jpg" },
 

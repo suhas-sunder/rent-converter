@@ -6,13 +6,12 @@ import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 export const meta: Route.MetaFunction = () => [
   {
-    title:
-      "Rent Per Day Calculator - Daily Rent From Monthly, Weekly, 4-Week, Biweekly, Annual",
+    title: "Rent Per Day Calculator (Daily Rent From Any Pay Cycle)",
   },
   {
     name: "description",
     content:
-      "Calculate rent per day from monthly, weekly, every 4 weeks (28 days), biweekly, hourly, or annual amounts. Includes a full breakdown and a daily total estimator for a chosen number of days, using a consistent 365-day annual basis.",
+      "Instantly calculate rent per day from monthly, weekly, 4-week (28-day), biweekly, hourly, or annual amounts. Includes clear breakdowns and a daily total estimator for any number of days using consistent math. Free and private.",
   },
   {
     name: "keywords",
@@ -26,12 +25,12 @@ export const meta: Route.MetaFunction = () => [
   { property: "og:type", content: "website" },
   {
     property: "og:title",
-    content: "Rent Per Day Calculator - Daily Equivalent Rent",
+    content: "Rent Per Day Calculator (Daily Rent From Any Pay Cycle)",
   },
   {
     property: "og:description",
     content:
-      "Convert rent to a daily equivalent from monthly, weekly, 4-week (28-day), biweekly, hourly, or annual amounts. Includes breakdowns and a daily total estimator based on a consistent annual basis.",
+      "Convert rent to a daily amount from monthly, weekly, 28-day, biweekly, hourly, or annual pay cycles. See clear breakdowns and daily totals using consistent assumptions.",
   },
   {
     property: "og:url",
@@ -45,7 +44,7 @@ export const meta: Route.MetaFunction = () => [
   {
     name: "twitter:description",
     content:
-      "Calculate daily equivalent rent from monthly, weekly, 4-week (28-day), biweekly, hourly, or annual amounts. Includes breakdowns and a daily total estimator.",
+      "Calculate daily rent from monthly, weekly, 4-week, biweekly, hourly, or annual amounts with clear breakdowns.",
   },
   { name: "twitter:image", content: "https://rentconverter.com/og-image.jpg" },
 

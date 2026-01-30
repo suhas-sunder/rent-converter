@@ -5,9 +5,9 @@ import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountr
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Annual to Hourly Rent Converter (8,760-Hour Equivalent)";
+  const title = "Annual to Hourly Rent Converter (Exact 8,760-Hour Year)";
   const description =
-    "Convert annual rent to an hourly equivalent using a 365-day (8,760-hour) year. Decimal-safe input, full breakdown, optional paid-hours scenario, and print-to-PDF. Free and private (no signup).";
+    "Instantly convert annual rent into an hourly amount using a true 365-day (8,760-hour) year. Exact decimals, full breakdown, optional paid-hours scenario, and print-to-PDF. Free, private, no signup.";
 
   return [
     { title },
@@ -15,7 +15,7 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "keywords",
       content:
-        "annual to hourly rent, yearly to hourly rent, annual rent per hour, 8760 hours per year, annual rent to hourly calculator, yearly cost to hourly rate, rent hourly equivalent",
+        "annual to hourly rent, yearly to hourly rent, annual rent per hour, 8760 hours per year, annual rent to hourly calculator, hourly rent budgeting, rent hourly equivalent",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },

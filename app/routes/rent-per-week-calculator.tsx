@@ -6,13 +6,12 @@ import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 export const meta: Route.MetaFunction = () => [
   {
-    title:
-      "Rent Per Week Calculator – Weekly Rent From Monthly, 4-Week, Biweekly, Daily, Hourly, Annual",
+    title: "Rent Per Week Calculator (Weekly Rent From Any Pay Cycle)",
   },
   {
     name: "description",
     content:
-      "Calculate rent per week from monthly, every 4 weeks (28 days), biweekly, daily, hourly, or annual amounts using annual equivalence (365-day basis). Includes a full breakdown, payment counts, and an optional total estimator for a chosen number of weeks.",
+      "Instantly calculate rent per week from monthly, 4-week (28-day), biweekly, daily, hourly, or annual amounts. See clear breakdowns, payment counts, and optional weekly totals using consistent math. Free and private.",
   },
   {
     name: "keywords",
@@ -26,12 +25,12 @@ export const meta: Route.MetaFunction = () => [
   { property: "og:type", content: "website" },
   {
     property: "og:title",
-    content: "Rent Per Week Calculator – Weekly Equivalent Rent",
+    content: "Rent Per Week Calculator (Weekly Rent From Any Pay Cycle)",
   },
   {
     property: "og:description",
     content:
-      "Convert rent to a weekly equivalent from monthly, 4-week (28-day), biweekly, daily, hourly, or annual amounts. Includes breakdowns and a weekly total estimator based on annual equivalence.",
+      "Convert rent to a weekly amount from monthly, 28-day, biweekly, daily, hourly, or annual pay cycles with clear breakdowns and consistent assumptions.",
   },
   {
     property: "og:url",
@@ -45,7 +44,7 @@ export const meta: Route.MetaFunction = () => [
   {
     name: "twitter:description",
     content:
-      "Calculate weekly equivalent rent from monthly, 4-week (28-day), biweekly, daily, hourly, or annual amounts. Includes breakdowns and a weekly total estimator.",
+      "See your rent per week from monthly, 4-week, biweekly, daily, hourly, or annual amounts.",
   },
   { name: "twitter:image", content: "https://rentconverter.com/og-image.jpg" },
 

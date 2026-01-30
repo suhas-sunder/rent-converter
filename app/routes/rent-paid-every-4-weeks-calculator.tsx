@@ -7,12 +7,12 @@ import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 export const meta: Route.MetaFunction = () => [
   {
     title:
-      "Rent Paid Every 4 Weeks (28 Days) Calculator - Monthly and Annual Equivalents",
+      "Rent Paid Every 4 Weeks (28 Days) Calculator – 13 Payments Explained",
   },
   {
     name: "description",
     content:
-      "Understand rent paid every 4 weeks (28 days). Convert a 4-week rent amount to monthly (average) and annual equivalents using a consistent 365-day annual basis. Includes payment-count context and a 13-payments comparison.",
+      "Instantly convert rent paid every 4 weeks (28 days) to monthly and annual equivalents. See why there are 13 payments per year, how totals differ from monthly billing, and compare everything on a consistent annual basis. Clear math, exact decimals.",
   },
   {
     name: "keywords",
@@ -26,12 +26,13 @@ export const meta: Route.MetaFunction = () => [
   { property: "og:type", content: "website" },
   {
     property: "og:title",
-    content: "Rent Paid Every 4 Weeks (28 Days) Calculator",
+    content:
+      "Rent Paid Every 4 Weeks (28 Days) Calculator – 13 Payments Explained",
   },
   {
     property: "og:description",
     content:
-      "Convert 4-week (28-day) rent to monthly and annual equivalents and see how payment counts differ from monthly billing.",
+      "Convert 4-week (28-day) rent to monthly and annual equivalents and clearly see the impact of 13 payments per year compared to monthly billing.",
   },
   {
     property: "og:url",
@@ -43,12 +44,12 @@ export const meta: Route.MetaFunction = () => [
   { name: "twitter:card", content: "summary_large_image" },
   {
     name: "twitter:title",
-    content: "Rent Paid Every 4 Weeks (28 Days) Calculator",
+    content: "Rent Paid Every 4 Weeks (28 Days) – 13 Payments Explained",
   },
   {
     name: "twitter:description",
     content:
-      "Convert 4-week rent to monthly and annual equivalents and compare totals on the same annual basis.",
+      "See why 4-week rent results in 13 payments per year and how it compares to monthly rent on the same annual basis.",
   },
   { name: "twitter:image", content: "https://rentconverter.com/og-image.jpg" },
 
@@ -66,16 +67,6 @@ type Period =
   | "every_4_weeks"
   | "monthly"
   | "annual";
-
-const PERIOD_LABEL: Record<Period, string> = {
-  hourly: "Hourly",
-  daily: "Daily",
-  weekly: "Weekly",
-  biweekly: "Every 2 weeks",
-  every_4_weeks: "Every 4 weeks (28 days)",
-  monthly: "Monthly (average)",
-  annual: "Annual",
-};
 
 const SUPPORTED_CURRENCIES = [
   "USD",

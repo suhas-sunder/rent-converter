@@ -5,11 +5,11 @@ import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountr
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 export const meta: Route.MetaFunction = () => [
-  { title: "Rent vs Buy Calculator" },
+  { title: "Rent vs Buy Calculator (When Buying Breaks Even)" },
   {
     name: "description",
     content:
-      "Compare renting vs buying using a simple cost model over a chosen time horizon. See total rent cost, total ownership outflow, estimated equity, and an estimated break-even year. Includes a year-by-year table.",
+      "Compare renting vs buying and see when buying breaks even. View total rent paid, total ownership costs, estimated equity, and a year-by-year comparison over your chosen time horizon. Clear assumptions, no fluff.",
   },
   {
     name: "keywords",
@@ -21,11 +21,14 @@ export const meta: Route.MetaFunction = () => [
   { name: "theme-color", content: "#f8fafc" },
 
   { property: "og:type", content: "website" },
-  { property: "og:title", content: "Rent vs Buy Calculator" },
+  {
+    property: "og:title",
+    content: "Rent vs Buy Calculator (Break-Even Analysis)",
+  },
   {
     property: "og:description",
     content:
-      "Compare renting vs buying over time with a clear breakdown of rent costs, ownership costs, and estimated equity.",
+      "See when buying a home breaks even compared to renting, with total costs, estimated equity, and a year-by-year breakdown.",
   },
   {
     property: "og:url",
@@ -39,7 +42,7 @@ export const meta: Route.MetaFunction = () => [
   {
     name: "twitter:description",
     content:
-      "Compare renting vs buying over time with a clear breakdown of rent costs, ownership costs, and estimated equity.",
+      "Find out when buying a home breaks even compared to renting with a clear year-by-year cost comparison.",
   },
   { name: "twitter:image", content: "https://rentconverter.com/og-image.jpg" },
 

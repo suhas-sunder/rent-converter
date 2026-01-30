@@ -5,9 +5,9 @@ import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountr
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Annual to Weekly Rent Converter";
+  const title = "Annual to Weekly Rent Converter (÷ 52 vs 365-Day Week)";
   const description =
-    "Convert an annual rent total to a weekly amount using annual ÷ 52 (weekly budgeting view). Also shows a 365-day-week equivalent (annual × 7 ÷ 365), plus biweekly and 28-day comparisons. Decimal-safe and private.";
+    "Instantly convert annual rent to a weekly amount using annual ÷ 52. Also compare against a true 365-day weekly equivalent (annual × 7 ÷ 365), plus biweekly and 28-day views. Exact decimals, private, no signup.";
 
   const url = "https://rentconverter.com/annual-to-weekly-rent-converter";
   const ogImage = "https://rentconverter.com/og-image.jpg";
@@ -49,17 +49,6 @@ type Period =
   | "every_4_weeks"
   | "monthly"
   | "annual";
-
-const PERIOD_LABEL: Record<Period, string> = {
-  hourly: "Hourly (365-day year)",
-  daily: "Daily (365-day year)",
-  weekly_budget_52: "Weekly (annual ÷ 52)",
-  weekly_365: "Weekly (annual × 7 ÷ 365)",
-  biweekly: "Every 2 weeks (14 days)",
-  every_4_weeks: "Every 4 weeks (28 days)",
-  monthly: "Monthly (annual ÷ 12)",
-  annual: "Annual",
-};
 
 const ROUTE_WHITELIST = new Set<string>([
   // Home
@@ -815,7 +804,6 @@ export default function AnnualToWeeklyRentConverter() {
                       </span>
                     ) : null}
                   </div>
-
                 </div>
 
                 <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
