@@ -4,6 +4,11 @@ import OtherUsefulTools from "~/client/components/navigation/OtherUsefulTools";
 import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountry";
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
+function safeToFixed(n: number, digits: number): string {
+  if (!Number.isFinite(n)) return "—";
+  return n.toFixed(digits);
+}
+
 export const meta: Route.MetaFunction = () => {
   const title = "Rent-to-Income Ratio Calculator (Percent of Income)";
   const description =
@@ -189,31 +194,134 @@ function clampScaled(v: bigint, min: bigint, max: bigint): bigint {
   return v;
 }
 
+const MAX_SAFE_INT_FOR_NUMBER = 9_000_000_000_000_000n; // ~9e15, JS Number integer precision limit
+
+function absBigInt(x: bigint): bigint {
+  return x < 0n ? -x : x;
+}
+
 function toNumberSafe(scaled: bigint): number {
+  const a = absBigInt(scaled);
+  if (a > MAX_SAFE_INT_FOR_NUMBER) return Number.NaN;
   return Number(scaled) / Number(SCALE);
 }
+
+function groupInt(intStr: string, groupSep: string): string {
+  const s = intStr.replace(/^0+(?=\d)/, "");
+  return s.replace(/\B(?=(\d{3})+(?!\d))/g, groupSep);
+}
+
+function getNumberSeparators(): { group: string; decimal: string } {
+  const parts = new Intl.NumberFormat(undefined, { useGrouping: true }).formatToParts(1000.1);
+  const group = parts.find((p) => p.type === "group")?.value ?? ",";
+  const decimal = parts.find((p) => p.type === "decimal")?.value ?? ".";
+  return { group, decimal };
+}
+
+function roundScaledToDecimals(scaled: bigint, decimals: number): bigint {
+  const d = Math.max(0, Math.min(12, decimals));
+  if (d === 12) return scaled;
+  const factor = 10n ** BigInt(12 - d);
+  const sign = scaled < 0n ? -1n : 1n;
+  const a = absBigInt(scaled);
+  const q = a / factor;
+  const r = a % factor;
+  const half = factor / 2n;
+  const qRounded = r >= half ? (q + 1n) : q;
+  return sign * qRounded * factor;
+}
+
+function scaledToDecimalStrings(
+  scaled: bigint,
+  decimals: number,
+  trimTrailingZeros: boolean,
+): { negative: boolean; intStr: string; fracStr: string } {
+  const d = Math.max(0, Math.min(12, decimals));
+  const negative = scaled < 0n;
+  const a = absBigInt(scaled);
+  const intPart = a / SCALE;
+  const fracPart = a % SCALE;
+
+  let fracStr = "";
+  if (d > 0) {
+    fracStr = fracPart.toString().padStart(12, "0").slice(0, d);
+    if (trimTrailingZeros) {
+      fracStr = fracStr.replace(/0+$/g, "");
+    }
+  }
+  return { negative, intStr: intPart.toString(), fracStr };
+}
+
 
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
-  displayDecimals: number,
   roundDisplay: boolean,
+  displayDecimals: number,
 ): string {
-  const n = toNumberSafe(scaled);
-  if (!Number.isFinite(n)) return "—";
+  let digits = 12;
 
-  const allowed = new Set<number>([0, 2, 4, 6]);
-  const dd = allowed.has(displayDecimals) ? displayDecimals : 2;
+  if (roundDisplay) {
+    digits = Math.max(0, Math.min(12, displayDecimals));
+  } else {
+    // Show up to 12 decimals but trim trailing zeros for display.
+    const a = absBigInt(scaled);
+    const fracPart = a % SCALE;
+    if (fracPart === 0n) {
+      digits = 0;
+    } else {
+      const fracFull = fracPart.toString().padStart(12, "0");
+      const trimmed = fracFull.replace(/0+$/g, "");
+      digits = Math.min(12, Math.max(0, trimmed.length));
+    }
+  }
 
-  const maximumFractionDigits = roundDisplay ? dd : 12;
-  const minimumFractionDigits = roundDisplay ? dd : 0;
+  const scaledForDisplay = roundDisplay ? roundScaledToDecimals(scaled, digits) : scaled;
 
-  return new Intl.NumberFormat(undefined, {
+  const { group, decimal } = getNumberSeparators();
+  const { negative, intStr, fracStr } = scaledToDecimalStrings(
+    scaledForDisplay,
+    digits,
+    !roundDisplay, // trim only when not rounding to fixed digits
+  );
+
+  const groupedInt = groupInt(intStr, group);
+
+  const fmt = new Intl.NumberFormat(undefined, {
     style: "currency",
     currency,
-    maximumFractionDigits,
-    minimumFractionDigits,
-  }).format(n);
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+  });
+
+  // Build by parts so we keep locale currency placement and symbols without using floats for the value.
+  const parts = fmt.formatToParts(-1);
+  let out = "";
+  for (const p of parts) {
+    if (p.type === "minusSign") {
+      if (negative) out += p.value;
+      continue;
+    }
+    if (p.type === "integer") {
+      out += groupedInt;
+      continue;
+    }
+    if (p.type === "group") {
+      // We already grouped ourselves.
+      continue;
+    }
+    if (p.type === "decimal") {
+      if (digits > 0 && fracStr.length > 0) out += decimal;
+      continue;
+    }
+    if (p.type === "fraction") {
+      if (digits > 0 && fracStr.length > 0) out += fracStr;
+      continue;
+    }
+    out += p.value;
+  }
+
+  return out || "—";
 }
 
 function parseMoneyInputToScaled(raw: string): ParsedScaled {
@@ -493,7 +601,7 @@ export default function RentAsPercentageOfIncome() {
   );
 
   const fmtMoney = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, displayDecimals, roundDisplay);
+    formatCurrencyFromScaled(scaled, currency, roundDisplay, displayDecimals);
 
   const computed = useMemo(() => {
     const errors: string[] = [];
@@ -950,7 +1058,7 @@ export default function RentAsPercentageOfIncome() {
 
                 <div className="mt-2 flex flex-col gap-2">
                   <div className="text-4xl sm:text-5xl font-extrabold text-sky-800">
-                    {computed.ratioPct.toFixed(2)}%
+                    {safeToFixed(computed.ratioPct, 2)}%
                   </div>
                   <div className="text-sm text-slate-600">
                     Based on annualized totals:{" "}
@@ -970,7 +1078,7 @@ export default function RentAsPercentageOfIncome() {
                             computed.annualRent,
                           )} | Annual income: ${fmtMoney(
                             computed.annualIncome,
-                          )} | Rent %: ${computed.ratioPct.toFixed(2)}%`,
+                          )} | Rent %: ${safeToFixed(computed.ratioPct, 2)}%`,
                         )
                       }
                       className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
@@ -980,7 +1088,7 @@ export default function RentAsPercentageOfIncome() {
                     <button
                       type="button"
                       onClick={() =>
-                        handleCopy("pct", `${computed.ratioPct.toFixed(2)}%`)
+                        handleCopy("pct", `${safeToFixed(computed.ratioPct, 2)}%`)
                       }
                       className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
                     >
@@ -1018,7 +1126,7 @@ export default function RentAsPercentageOfIncome() {
                       Rent share (annual basis)
                     </div>
                     <div className="mt-1 text-lg font-bold text-slate-800">
-                      {computed.ratioPct.toFixed(2)}%
+                      {safeToFixed(computed.ratioPct, 2)}%
                     </div>
                   </div>
 
@@ -1042,13 +1150,13 @@ export default function RentAsPercentageOfIncome() {
                       <div className="text-sm text-slate-700">
                         Ratio on 4-week basis:{" "}
                         <strong className="text-slate-900">
-                          {computed.ratioOn4wBasis.toFixed(2)}%
+                          {safeToFixed(computed.ratioOn4wBasis, 2)}%
                         </strong>
                       </div>
                     </div>
                     <p className="mt-2 text-xs text-slate-500">
                       Every 4 weeks is 28 days. An average month is{" "}
-                      {computed.avgMonthDays.toFixed(2)} days (365 ÷ 12).
+                      {safeToFixed(computed.avgMonthDays, 2)} days (365 ÷ 12).
                     </p>
                   </div>
 
@@ -1196,13 +1304,13 @@ export default function RentAsPercentageOfIncome() {
               </div>
               <div className="mt-2 text-slate-600">
                 Rent period: <strong>{PERIOD_LABEL[rentPeriod]}</strong> (about{" "}
-                <strong>{computed.paymentsPerYearRent.toFixed(2)}</strong>{" "}
+                <strong>{safeToFixed(computed.paymentsPerYearRent, 2)}</strong>{" "}
                 occurrences per year)
               </div>
               <div className="mt-1 text-slate-600">
                 Income period: <strong>{PERIOD_LABEL[incomePeriod]}</strong>{" "}
                 (about{" "}
-                <strong>{computed.paymentsPerYearIncome.toFixed(2)}</strong>{" "}
+                <strong>{safeToFixed(computed.paymentsPerYearIncome, 2)}</strong>{" "}
                 occurrences per year)
               </div>
             </div>

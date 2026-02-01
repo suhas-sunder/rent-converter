@@ -109,46 +109,60 @@ const CURRENCY_OPTIONS: Array<{ code: string; label: string }> = [
  * If a link is not in ROUTE_WHITELIST, it must not appear anywhere in the UI.
  */
 const ROUTE_WHITELIST = new Set<string>([
+  // Home
   "/",
-  "/monthly-to-weekly-rent",
-  "/weekly-to-monthly-rent",
-  "/biweekly-to-monthly-rent",
-  "/monthly-to-annual-rent",
-  "/annual-to-monthly-rent",
-  "/monthly-to-daily-rent",
-  "/daily-to-monthly-rent",
-  "/weekly-to-annual-rent",
-  "/annual-to-weekly-rent",
-  "/hourly-to-monthly-rent",
-  "/monthly-to-hourly-rent",
-  "/hourly-to-annual-rent",
-  "/annual-to-hourly-rent",
-  "/biweekly-to-weekly-rent",
-  "/weekly-to-biweekly-rent",
-  "/monthly-to-biweekly-rent",
-  "/annual-to-biweekly-rent",
-  "/biweekly-to-annual-rent",
-  "/rent-paid-every-4-weeks",
-  "/rent-paid-every-2-weeks",
-  "/rent-billed-every-28-days",
-  "/rent-per-paycheck",
-  "/rent-per-pay-period",
-  "/rent-due-date-calculator",
-  "/true-cost-of-rent-per-day",
-  "/true-cost-of-rent-per-week",
+
+  // Rent converter hub
+  "/rent-converter",
+
+  // Frequency converters
+  "/monthly-to-weekly-rent-converter",
+  "/weekly-to-monthly-rent-converter",
+  "/weekly-to-annual-rent-converter",
+  "/weekly-to-biweekly-rent-converter",
+
+  "/biweekly-to-weekly-rent-converter",
+  "/biweekly-to-monthly-rent-converter",
+  "/biweekly-to-annual-rent-converter",
+
+  "/monthly-to-annual-rent-converter",
+  "/annual-to-monthly-rent-converter",
+
+  "/monthly-to-daily-rent-converter",
+  "/daily-to-monthly-rent-converter",
+
+  "/monthly-to-hourly-rent-converter",
+  "/hourly-to-monthly-rent-converter",
+
+  "/hourly-to-annual-rent-converter",
+  "/annual-to-hourly-rent-converter",
+
+  "/annual-to-weekly-rent-converter",
+  "/annual-to-biweekly-rent-converter",
+  "/monthly-to-biweekly-rent-converter",
+
+  // Rent calculators
+  "/rent-calculator",
   "/rent-per-day-calculator",
   "/rent-per-week-calculator",
-  "/rent-as-percentage-of-income",
-  "/how-much-rent-can-i-afford",
-  "/rent-after-tax-income",
-  "/rent-vs-take-home-pay",
+  "/rent-paid-every-4-weeks-calculator",
+  "/rent-per-paycheck-calculator",
+  "/rent-split-calculator",
+  "/rent-due-date-calculator",
+
+  // Affordability and income
+  "/rent-as-percentage-of-income-calculator",
+  "/how-much-rent-can-i-afford-calculator",
+  "/rent-after-tax-income-calculator",
+  "/rent-vs-take-home-pay-calculator",
+
+  // Rent increases
   "/rent-increase-calculator",
   "/rent-increase-percentage-calculator",
   "/rent-after-increase-calculator",
-  "/rent-split-calculator",
+
+  // Rent vs buy
   "/rent-vs-buy-calculator",
-  "/rent-converter",
-  "/rent-calculator",
 ]);
 
 function SafeLink({

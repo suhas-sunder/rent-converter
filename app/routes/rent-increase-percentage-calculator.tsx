@@ -178,6 +178,12 @@ function clampNum(n: number, min: number, max: number) {
   return Math.min(max, Math.max(min, n));
 }
 
+function safeToFixed(n: number, digits: number): string {
+  if (!Number.isFinite(n)) return "—";
+  return n.toFixed(digits);
+}
+
+
 /** Fixed-point decimals preserved end-to-end (up to 12 decimals). */
 const MAX_DECIMALS = 12n;
 const SCALE = 10n ** MAX_DECIMALS;
@@ -196,9 +202,64 @@ function clampScaled(v: bigint, min: bigint, max: bigint): bigint {
   return v;
 }
 
+const MAX_SAFE_INT_FOR_NUMBER = 9_000_000_000_000_000n; // ~9e15, JS Number integer precision limit
+
+function absBigInt(x: bigint): bigint {
+  return x < 0n ? -x : x;
+}
+
 function toNumberSafe(scaled: bigint): number {
+  const a = absBigInt(scaled);
+  if (a > MAX_SAFE_INT_FOR_NUMBER) return Number.NaN;
   return Number(scaled) / Number(SCALE);
 }
+
+function groupInt(intStr: string, groupSep: string): string {
+  const s = intStr.replace(/^0+(?=\d)/, "");
+  return s.replace(/\B(?=(\d{3})+(?!\d))/g, groupSep);
+}
+
+function getNumberSeparators(): { group: string; decimal: string } {
+  const parts = new Intl.NumberFormat(undefined, { useGrouping: true }).formatToParts(1000.1);
+  const group = parts.find((p) => p.type === "group")?.value ?? ",";
+  const decimal = parts.find((p) => p.type === "decimal")?.value ?? ".";
+  return { group, decimal };
+}
+
+function roundScaledToDecimals(scaled: bigint, decimals: number): bigint {
+  const d = Math.max(0, Math.min(12, decimals));
+  if (d === 12) return scaled;
+  const factor = 10n ** BigInt(12 - d);
+  const sign = scaled < 0n ? -1n : 1n;
+  const a = absBigInt(scaled);
+  const q = a / factor;
+  const r = a % factor;
+  const half = factor / 2n;
+  const qRounded = r >= half ? (q + 1n) : q;
+  return sign * qRounded * factor;
+}
+
+function scaledToDecimalStrings(
+  scaled: bigint,
+  decimals: number,
+  trimTrailingZeros: boolean,
+): { negative: boolean; intStr: string; fracStr: string } {
+  const d = Math.max(0, Math.min(12, decimals));
+  const negative = scaled < 0n;
+  const a = absBigInt(scaled);
+  const intPart = a / SCALE;
+  const fracPart = a % SCALE;
+
+  let fracStr = "";
+  if (d > 0) {
+    fracStr = fracPart.toString().padStart(12, "0").slice(0, d);
+    if (trimTrailingZeros) {
+      fracStr = fracStr.replace(/0+$/g, "");
+    }
+  }
+  return { negative, intStr: intPart.toString(), fracStr };
+}
+
 
 function formatCurrencyFromScaled(
   scaled: bigint,
@@ -206,27 +267,69 @@ function formatCurrencyFromScaled(
   roundDisplay: boolean,
   displayDecimals: number,
 ): string {
-  const n = toNumberSafe(scaled);
-  if (!Number.isFinite(n)) return "—";
-
-  let minimumFractionDigits = 0;
-  let maximumFractionDigits = 12;
+  let digits = 12;
 
   if (roundDisplay) {
-    const digits = Math.max(0, Math.min(12, displayDecimals));
-    minimumFractionDigits = digits;
-    maximumFractionDigits = digits;
+    digits = Math.max(0, Math.min(12, displayDecimals));
   } else {
-    minimumFractionDigits = 0;
-    maximumFractionDigits = 12;
+    // Show up to 12 decimals but trim trailing zeros for display.
+    const a = absBigInt(scaled);
+    const fracPart = a % SCALE;
+    if (fracPart === 0n) {
+      digits = 0;
+    } else {
+      const fracFull = fracPart.toString().padStart(12, "0");
+      const trimmed = fracFull.replace(/0+$/g, "");
+      digits = Math.min(12, Math.max(0, trimmed.length));
+    }
   }
 
-  return new Intl.NumberFormat(undefined, {
+  const scaledForDisplay = roundDisplay ? roundScaledToDecimals(scaled, digits) : scaled;
+
+  const { group, decimal } = getNumberSeparators();
+  const { negative, intStr, fracStr } = scaledToDecimalStrings(
+    scaledForDisplay,
+    digits,
+    !roundDisplay, // trim only when not rounding to fixed digits
+  );
+
+  const groupedInt = groupInt(intStr, group);
+
+  const fmt = new Intl.NumberFormat(undefined, {
     style: "currency",
     currency,
-    minimumFractionDigits,
-    maximumFractionDigits,
-  }).format(n);
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+  });
+
+  // Build by parts so we keep locale currency placement and symbols without using floats for the value.
+  const parts = fmt.formatToParts(-1);
+  let out = "";
+  for (const p of parts) {
+    if (p.type === "minusSign") {
+      if (negative) out += p.value;
+      continue;
+    }
+    if (p.type === "integer") {
+      out += groupedInt;
+      continue;
+    }
+    if (p.type === "group") {
+      // We already grouped ourselves.
+      continue;
+    }
+    if (p.type === "decimal") {
+      if (digits > 0 && fracStr.length > 0) out += decimal;
+      continue;
+    }
+    if (p.type === "fraction") {
+      if (digits > 0 && fracStr.length > 0) out += fracStr;
+      continue;
+    }
+    out += p.value;
+  }
+
+  return out || "—";
 }
 
 function groupIntEnUS(intStr: string): string {
@@ -387,28 +490,35 @@ function parseMoneyInputToScaled(raw: string): ParsedScaled {
 }
 
 function annualizeFromScaled(valueScaled: bigint, period: Period): bigint {
-  if (period === "hourly") {
-    return valueScaled * 24n * 365n;
-  }
-  if (period === "monthly") {
-    return valueScaled * 12n;
-  }
-  if (period === "annual") {
-    return valueScaled;
-  }
+  if (period === "hourly") return valueScaled * 24n * 365n;
   if (period === "daily") return valueScaled * 365n;
-  if (period === "weekly") return (valueScaled * 365n) / 7n;
-  if (period === "biweekly") return (valueScaled * 365n) / 14n;
-  if (period === "every_4_weeks") return (valueScaled * 365n) / 28n;
-  return valueScaled * 12n;
+  if (period === "weekly") return valueScaled * 52n;
+  if (period === "biweekly") return valueScaled * 26n;
+  if (period === "every_4_weeks") return valueScaled * 13n;
+  if (period === "monthly") return valueScaled * 12n;
+  return valueScaled;
+}
+
+function mulDivRound(a: bigint, num: bigint, den: bigint): bigint {
+  if (den === 0n) return 0n;
+  const sign =
+    (a < 0n ? -1n : 1n) * (num < 0n ? -1n : 1n) * (den < 0n ? -1n : 1n);
+  const aa = a < 0n ? -a : a;
+  const nn = num < 0n ? -num : num;
+  const dd = den < 0n ? -den : den;
+
+  const prod = aa * nn;
+  const half = dd / 2n;
+  const q = (prod + half) / dd;
+  return sign < 0n ? -q : q;
 }
 
 function fromAnnualScaled(annualScaled: bigint, to: Period): bigint {
-  if (to === "hourly") return annualScaled / 365n / 24n;
+  if (to === "hourly") return annualScaled / (365n * 24n);
   if (to === "daily") return annualScaled / 365n;
-  if (to === "weekly") return (annualScaled / 365n) * 7n;
-  if (to === "biweekly") return (annualScaled / 365n) * 14n;
-  if (to === "every_4_weeks") return (annualScaled / 365n) * 28n;
+  if (to === "weekly") return mulDivRound(annualScaled, 7n, 365n);
+  if (to === "biweekly") return mulDivRound(annualScaled, 14n, 365n);
+  if (to === "every_4_weeks") return mulDivRound(annualScaled, 28n, 365n);
   if (to === "monthly") return annualScaled / 12n;
   return annualScaled;
 }
@@ -983,7 +1093,7 @@ export default function RentIncreasePercentage() {
                   <div className="text-4xl sm:text-5xl font-extrabold text-sky-800 tabular-nums min-h-[3.6rem] sm:min-h-[4.2rem]">
                     {computed.pct === null
                       ? "N/A"
-                      : `${computed.pct.toFixed(2)}%`}
+                      : `${safeToFixed(computed.pct, 2)}%`}
                   </div>
 
                   <div className="text-sm text-slate-700">
@@ -1011,7 +1121,7 @@ export default function RentIncreasePercentage() {
                       <>
                         is an estimated{" "}
                         <strong className="tabular-nums">
-                          {computed.pct.toFixed(2)}%
+                          {safeToFixed(computed.pct, 2)}%
                         </strong>{" "}
                         change when compared on an annual basis.
                       </>
@@ -1030,7 +1140,7 @@ export default function RentIncreasePercentage() {
                         )}; Annual difference: ${fmtMoney(computed.annualDeltaScaled)}; Percent: ${
                           computed.pct === null
                             ? "N/A"
-                            : `${computed.pct.toFixed(2)}%`
+                            : `${safeToFixed(computed.pct, 2)}%`
                         }`,
                       )
                     }
@@ -1152,7 +1262,7 @@ export default function RentIncreasePercentage() {
                     <p className="mt-2 text-xs text-slate-600">
                       A 4-week period is 28 days. An average month is{" "}
                       <span className="tabular-nums">
-                        {computed.avgMonthDays.toFixed(2)}
+                        {safeToFixed(computed.avgMonthDays, 2)}
                       </span>{" "}
                       days (365 ÷ 12). The difference here is shown explicitly:
                       old{" "}

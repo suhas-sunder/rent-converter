@@ -6,18 +6,8 @@
     <loc>https://www.rentconverter.com/</loc>
     <lastmod>2026-01-30</lastmod>
   </url>
-
-  <!-- Core pages -->
-  <url>
-    <loc>https://www.rentconverter.com/rent-converter</loc>
-    <lastmod>2025-11-01</lastmod>
-  </url>
-  <url>
-    <loc>https://www.rentconverter.com/rent-calculator</loc>
-    <lastmod>2025-11-01</lastmod>
-  </url>
-
-  <!-- Frequency converters -->
+  
+  <!-- Frequency converters (canonical) -->
   <url>
     <loc>https://www.rentconverter.com/monthly-to-weekly-rent-converter</loc>
     <lastmod>2026-01-30</lastmod>
@@ -26,40 +16,25 @@
     <loc>https://www.rentconverter.com/weekly-to-monthly-rent-converter</loc>
     <lastmod>2026-01-30</lastmod>
   </url>
-
   <url>
     <loc>https://www.rentconverter.com/weekly-to-annual-rent-converter</loc>
     <lastmod>2026-01-30</lastmod>
   </url>
   <url>
-    <loc>https://www.rentconverter.com/annual-to-weekly-rent-converter</loc>
-    <lastmod>2026-01-30</lastmod>
-  </url>
-
-  <url>
     <loc>https://www.rentconverter.com/weekly-to-biweekly-rent-converter</loc>
     <lastmod>2026-01-30</lastmod>
   </url>
+
   <url>
     <loc>https://www.rentconverter.com/biweekly-to-weekly-rent-converter</loc>
     <lastmod>2026-01-30</lastmod>
   </url>
-
   <url>
     <loc>https://www.rentconverter.com/biweekly-to-monthly-rent-converter</loc>
     <lastmod>2026-01-30</lastmod>
   </url>
   <url>
-    <loc>https://www.rentconverter.com/monthly-to-biweekly-rent-converter</loc>
-    <lastmod>2026-01-30</lastmod>
-  </url>
-
-  <url>
     <loc>https://www.rentconverter.com/biweekly-to-annual-rent-converter</loc>
-    <lastmod>2026-01-30</lastmod>
-  </url>
-  <url>
-    <loc>https://www.rentconverter.com/annual-to-biweekly-rent-converter</loc>
     <lastmod>2026-01-30</lastmod>
   </url>
 
@@ -99,7 +74,20 @@
     <lastmod>2026-01-30</lastmod>
   </url>
 
-  <!-- Calculators -->
+  <url>
+    <loc>https://www.rentconverter.com/annual-to-weekly-rent-converter</loc>
+    <lastmod>2026-01-30</lastmod>
+  </url>
+  <url>
+    <loc>https://www.rentconverter.com/annual-to-biweekly-rent-converter</loc>
+    <lastmod>2026-01-30</lastmod>
+  </url>
+  <url>
+    <loc>https://www.rentconverter.com/monthly-to-biweekly-rent-converter</loc>
+    <lastmod>2026-01-30</lastmod>
+  </url>
+
+  <!-- Calculators (canonical) -->
   <url>
     <loc>https://www.rentconverter.com/rent-per-day-calculator</loc>
     <lastmod>2026-01-30</lastmod>
@@ -125,7 +113,7 @@
     <lastmod>2026-01-30</lastmod>
   </url>
 
-  <!-- Affordability -->
+  <!-- Affordability and income (canonical) -->
   <url>
     <loc>https://www.rentconverter.com/rent-as-percentage-of-income-calculator</loc>
     <lastmod>2026-01-30</lastmod>
@@ -143,7 +131,7 @@
     <lastmod>2026-01-30</lastmod>
   </url>
 
-  <!-- Rent changes -->
+  <!-- Rent changes (canonical) -->
   <url>
     <loc>https://www.rentconverter.com/rent-increase-calculator</loc>
     <lastmod>2026-01-30</lastmod>
@@ -157,28 +145,28 @@
     <lastmod>2026-01-30</lastmod>
   </url>
 
-  <!-- Rent vs buy -->
+  <!-- Rent vs buy (canonical) -->
   <url>
     <loc>https://www.rentconverter.com/rent-vs-buy-calculator</loc>
     <lastmod>2026-01-30</lastmod>
   </url>
 
-  <!-- Legal -->
+  <!-- Legal / misc -->
   <url>
     <loc>https://www.rentconverter.com/cookies</loc>
-    <lastmod>2025-11-01</lastmod>
+    <lastmod>2026-01-30</lastmod>
   </url>
   <url>
     <loc>https://www.rentconverter.com/terms-of-service</loc>
-    <lastmod>2025-11-01</lastmod>
+    <lastmod>2026-01-30</lastmod>
   </url>
   <url>
     <loc>https://www.rentconverter.com/privacy-policy</loc>
-    <lastmod>2025-11-01</lastmod>
+    <lastmod>2026-01-30</lastmod>
   </url>
   <url>
     <loc>https://www.rentconverter.com/contact</loc>
-    <lastmod>2025-11-01</lastmod>
+    <lastmod>2026-01-30</lastmod>
   </url>
 
 </urlset>

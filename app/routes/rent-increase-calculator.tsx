@@ -204,9 +204,64 @@ function clampScaled(v: bigint, min: bigint, max: bigint): bigint {
   return v;
 }
 
+const MAX_SAFE_INT_FOR_NUMBER = 9_000_000_000_000_000n; // ~9e15, JS Number integer precision limit
+
+function absBigInt(x: bigint): bigint {
+  return x < 0n ? -x : x;
+}
+
 function toNumberSafe(scaled: bigint): number {
+  const a = absBigInt(scaled);
+  if (a > MAX_SAFE_INT_FOR_NUMBER) return Number.NaN;
   return Number(scaled) / Number(SCALE);
 }
+
+function groupInt(intStr: string, groupSep: string): string {
+  const s = intStr.replace(/^0+(?=\d)/, "");
+  return s.replace(/\B(?=(\d{3})+(?!\d))/g, groupSep);
+}
+
+function getNumberSeparators(): { group: string; decimal: string } {
+  const parts = new Intl.NumberFormat(undefined, { useGrouping: true }).formatToParts(1000.1);
+  const group = parts.find((p) => p.type === "group")?.value ?? ",";
+  const decimal = parts.find((p) => p.type === "decimal")?.value ?? ".";
+  return { group, decimal };
+}
+
+function roundScaledToDecimals(scaled: bigint, decimals: number): bigint {
+  const d = Math.max(0, Math.min(12, decimals));
+  if (d === 12) return scaled;
+  const factor = 10n ** BigInt(12 - d);
+  const sign = scaled < 0n ? -1n : 1n;
+  const a = absBigInt(scaled);
+  const q = a / factor;
+  const r = a % factor;
+  const half = factor / 2n;
+  const qRounded = r >= half ? (q + 1n) : q;
+  return sign * qRounded * factor;
+}
+
+function scaledToDecimalStrings(
+  scaled: bigint,
+  decimals: number,
+  trimTrailingZeros: boolean,
+): { negative: boolean; intStr: string; fracStr: string } {
+  const d = Math.max(0, Math.min(12, decimals));
+  const negative = scaled < 0n;
+  const a = absBigInt(scaled);
+  const intPart = a / SCALE;
+  const fracPart = a % SCALE;
+
+  let fracStr = "";
+  if (d > 0) {
+    fracStr = fracPart.toString().padStart(12, "0").slice(0, d);
+    if (trimTrailingZeros) {
+      fracStr = fracStr.replace(/0+$/g, "");
+    }
+  }
+  return { negative, intStr: intPart.toString(), fracStr };
+}
+
 
 function formatCurrencyFromScaled(
   scaled: bigint,
@@ -214,18 +269,69 @@ function formatCurrencyFromScaled(
   roundDisplay: boolean,
   displayDecimals: number,
 ): string {
-  const n = toNumberSafe(scaled);
-  if (!Number.isFinite(n)) return "—";
+  let digits = 12;
 
-  const allowed = new Set([0, 2, 4, 6]);
-  const digits = allowed.has(displayDecimals) ? displayDecimals : 2;
+  if (roundDisplay) {
+    digits = Math.max(0, Math.min(12, displayDecimals));
+  } else {
+    // Show up to 12 decimals but trim trailing zeros for display.
+    const a = absBigInt(scaled);
+    const fracPart = a % SCALE;
+    if (fracPart === 0n) {
+      digits = 0;
+    } else {
+      const fracFull = fracPart.toString().padStart(12, "0");
+      const trimmed = fracFull.replace(/0+$/g, "");
+      digits = Math.min(12, Math.max(0, trimmed.length));
+    }
+  }
 
-  return new Intl.NumberFormat(undefined, {
+  const scaledForDisplay = roundDisplay ? roundScaledToDecimals(scaled, digits) : scaled;
+
+  const { group, decimal } = getNumberSeparators();
+  const { negative, intStr, fracStr } = scaledToDecimalStrings(
+    scaledForDisplay,
+    digits,
+    !roundDisplay, // trim only when not rounding to fixed digits
+  );
+
+  const groupedInt = groupInt(intStr, group);
+
+  const fmt = new Intl.NumberFormat(undefined, {
     style: "currency",
     currency,
-    minimumFractionDigits: roundDisplay ? digits : 0,
-    maximumFractionDigits: roundDisplay ? digits : 12,
-  }).format(n);
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+  });
+
+  // Build by parts so we keep locale currency placement and symbols without using floats for the value.
+  const parts = fmt.formatToParts(-1);
+  let out = "";
+  for (const p of parts) {
+    if (p.type === "minusSign") {
+      if (negative) out += p.value;
+      continue;
+    }
+    if (p.type === "integer") {
+      out += groupedInt;
+      continue;
+    }
+    if (p.type === "group") {
+      // We already grouped ourselves.
+      continue;
+    }
+    if (p.type === "decimal") {
+      if (digits > 0 && fracStr.length > 0) out += decimal;
+      continue;
+    }
+    if (p.type === "fraction") {
+      if (digits > 0 && fracStr.length > 0) out += fracStr;
+      continue;
+    }
+    out += p.value;
+  }
+
+  return out || "—";
 }
 
 function formatPercentValue(
@@ -438,64 +544,36 @@ function divRound(numer: bigint, denom: bigint): bigint {
 }
 
 function annualizeFromScaled(valueScaled: bigint, period: Period): bigint {
-  // Convert "value per <period>" into "value per year" using a 365-day year.
-  if (period === "annual") return valueScaled;
+  if (period === "hourly") return valueScaled * 24n * 365n;
+  if (period === "daily") return valueScaled * 365n;
+  if (period === "weekly") return valueScaled * 52n;
+  if (period === "biweekly") return valueScaled * 26n;
+  if (period === "every_4_weeks") return valueScaled * 13n;
+  if (period === "monthly") return valueScaled * 12n;
+  return valueScaled;
+}
 
-  if (period === "monthly") {
-    // average month model: annual = monthly * 12
-    return valueScaled * 12n;
-  }
+function mulDivRound(a: bigint, num: bigint, den: bigint): bigint {
+  if (den === 0n) return 0n;
+  const sign =
+    (a < 0n ? -1n : 1n) * (num < 0n ? -1n : 1n) * (den < 0n ? -1n : 1n);
+  const aa = a < 0n ? -a : a;
+  const nn = num < 0n ? -num : num;
+  const dd = den < 0n ? -den : den;
 
-  if (period === "hourly") {
-    // hourly -> annual = hourly * 24 * 365
-    return valueScaled * 24n * 365n;
-  }
-
-  const daysPer: Record<
-    Exclude<Period, "hourly" | "monthly" | "annual">,
-    bigint
-  > = {
-    daily: 1n,
-    weekly: 7n,
-    biweekly: 14n,
-    every_4_weeks: 28n,
-  };
-
-  const days =
-    daysPer[period as Exclude<Period, "hourly" | "monthly" | "annual">];
-
-  // annual = value * 365 / days (rounded at SCALE precision)
-  return divRound(valueScaled * 365n, days);
+  const prod = aa * nn;
+  const half = dd / 2n;
+  const q = (prod + half) / dd;
+  return sign < 0n ? -q : q;
 }
 
 function fromAnnualScaled(annualScaled: bigint, to: Period): bigint {
-  // Convert "per year" into "per <to>" using the same 365-day equivalence.
-  if (to === "annual") return annualScaled;
-
-  if (to === "monthly") {
-    return divRound(annualScaled, 12n);
-  }
-
-  if (to === "hourly") {
-    return divRound(annualScaled, 365n * 24n);
-  }
-
-  if (to === "daily") {
-    return divRound(annualScaled, 365n);
-  }
-
-  if (to === "weekly") {
-    return divRound(annualScaled * 7n, 365n);
-  }
-
-  if (to === "biweekly") {
-    return divRound(annualScaled * 14n, 365n);
-  }
-
-  if (to === "every_4_weeks") {
-    return divRound(annualScaled * 28n, 365n);
-  }
-
+  if (to === "hourly") return annualScaled / (365n * 24n);
+  if (to === "daily") return annualScaled / 365n;
+  if (to === "weekly") return mulDivRound(annualScaled, 7n, 365n);
+  if (to === "biweekly") return mulDivRound(annualScaled, 14n, 365n);
+  if (to === "every_4_weeks") return mulDivRound(annualScaled, 28n, 365n);
+  if (to === "monthly") return annualScaled / 12n;
   return annualScaled;
 }
 

@@ -4,6 +4,11 @@ import OtherUsefulTools from "~/client/components/navigation/OtherUsefulTools";
 import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountry";
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
+function safeToFixed(n: number, digits: number): string {
+  if (!Number.isFinite(n)) return "—";
+  return n.toFixed(digits);
+}
+
 export const meta: Route.MetaFunction = () => {
   const title = "Annual to Weekly Rent Converter (÷ 52 vs 365-Day Week)";
   const description =

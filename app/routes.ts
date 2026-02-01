@@ -7,7 +7,7 @@ export default [
   // Rent converter hub
   route("rent-converter", "routes/rent-converter.tsx"),
 
-  // Frequency converters
+  // Frequency converters (canonical)
   route(
     "monthly-to-weekly-rent-converter",
     "routes/monthly-to-weekly-rent-converter.tsx",
@@ -87,7 +87,33 @@ export default [
     "routes/monthly-to-biweekly-rent-converter.tsx",
   ),
 
-  // Rent calculators
+  // Frequency converters (redirect aliases, no "-converter")
+  route("monthly-to-weekly-rent", "routes/monthly-to-weekly-rent.tsx"),
+  route("weekly-to-monthly-rent", "routes/weekly-to-monthly-rent.tsx"),
+  route("weekly-to-annual-rent", "routes/weekly-to-annual-rent.tsx"),
+  route("weekly-to-biweekly-rent", "routes/weekly-to-biweekly-rent.tsx"),
+
+  route("biweekly-to-weekly-rent", "routes/biweekly-to-weekly-rent.tsx"),
+  route("biweekly-to-monthly-rent", "routes/biweekly-to-monthly-rent.tsx"),
+  route("biweekly-to-annual-rent", "routes/biweekly-to-annual-rent.tsx"),
+
+  route("monthly-to-annual-rent", "routes/monthly-to-annual-rent.tsx"),
+  route("annual-to-monthly-rent", "routes/annual-to-monthly-rent.tsx"),
+
+  route("monthly-to-daily-rent", "routes/monthly-to-daily-rent.tsx"),
+  route("daily-to-monthly-rent", "routes/daily-to-monthly-rent.tsx"),
+
+  route("monthly-to-hourly-rent", "routes/monthly-to-hourly-rent.tsx"),
+  route("hourly-to-monthly-rent", "routes/hourly-to-monthly-rent.tsx"),
+
+  route("hourly-to-annual-rent", "routes/hourly-to-annual-rent.tsx"),
+  route("annual-to-hourly-rent", "routes/annual-to-hourly-rent.tsx"),
+
+  route("annual-to-weekly-rent", "routes/annual-to-weekly-rent.tsx"),
+  route("annual-to-biweekly-rent", "routes/annual-to-biweekly-rent.tsx"),
+  route("monthly-to-biweekly-rent", "routes/monthly-to-biweekly-rent.tsx"),
+
+  // Rent calculators (canonical)
   route("rent-calculator", "routes/rent-calculator.tsx"),
   route("rent-per-day-calculator", "routes/rent-per-day-calculator.tsx"),
   route("rent-per-week-calculator", "routes/rent-per-week-calculator.tsx"),
@@ -102,7 +128,15 @@ export default [
   route("rent-split-calculator", "routes/rent-split-calculator.tsx"),
   route("rent-due-date-calculator", "routes/rent-due-date-calculator.tsx"),
 
-  // Affordability and income
+  // Rent calculators (redirect aliases, no "-calculator")
+  route("rent-per-day", "routes/rent-per-day.tsx"),
+  route("rent-per-week", "routes/rent-per-week.tsx"),
+  route("rent-paid-every-4-weeks", "routes/rent-paid-every-4-weeks.tsx"),
+  route("rent-per-paycheck", "routes/rent-per-paycheck.tsx"),
+  route("rent-split", "routes/rent-split.tsx"),
+  route("rent-due-date", "routes/rent-due-date.tsx"),
+
+  // Affordability and income (canonical)
   route(
     "rent-as-percentage-of-income-calculator",
     "routes/rent-as-percentage-of-income-calculator.tsx",
@@ -120,7 +154,19 @@ export default [
     "routes/rent-vs-take-home-pay-calculator.tsx",
   ),
 
-  // Rent increases
+  // Affordability and income (redirect aliases)
+  route(
+    "rent-as-percentage-of-income",
+    "routes/rent-as-percentage-of-income.tsx",
+  ),
+  route(
+    "how-much-rent-can-i-afford",
+    "routes/how-much-rent-can-i-afford.tsx",
+  ),
+  route("rent-after-tax-income", "routes/rent-after-tax-income.tsx"),
+  route("rent-vs-take-home-pay", "routes/rent-vs-take-home-pay.tsx"),
+
+  // Rent increases (canonical)
   route("rent-increase-calculator", "routes/rent-increase-calculator.tsx"),
   route(
     "rent-increase-percentage-calculator",
@@ -130,11 +176,21 @@ export default [
     "rent-after-increase-calculator",
     "routes/rent-after-increase-calculator.tsx",
   ),
+
+  // Rent increases (redirect aliases)
+  route("rent-increase", "routes/rent-increase.tsx"),
+  route("rent-increase-percentage", "routes/rent-increase-percentage.tsx"),
+  route("rent-after-increase", "routes/rent-after-increase.tsx"),
+
+  // Rent vs buy (canonical)
+  route("rent-vs-buy-calculator", "routes/rent-vs-buy-calculator.tsx"),
+
+  // Rent vs buy (redirect alias)
+  route("rent-vs-buy", "routes/rent-vs-buy.tsx"),
+
+  // Legal / misc
   route("terms-of-service", "routes/terms-of-service.tsx"),
   route("privacy-policy", "routes/privacy-policy.tsx"),
   route("cookies", "routes/cookies.tsx"),
-
-  // Rent vs buy
-  route("rent-vs-buy-calculator", "routes/rent-vs-buy-calculator.tsx"),
   route("contact", "routes/contact.tsx"),
 ] satisfies RouteConfig;
