@@ -5,7 +5,7 @@ import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountr
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 function safeToFixed(n: number, digits: number): string {
-  if (!Number.isFinite(n)) return "-";
+  if (!Number.isFinite(n)) return "—";
   return n.toFixed(digits);
 }
 
@@ -278,7 +278,7 @@ function formatCurrencyFromScaled(
     out += p.value;
   }
 
-  return out || "-";
+  return out || "—";
 }
 
 function formatPercent(pct: number, decimals = 2): string {
@@ -535,7 +535,20 @@ type YearRow = {
 
 function roundToScaled(n: number): bigint {
   if (!Number.isFinite(n)) return 0n;
-  return BigInt(Math.round(n * Number(SCALE)));
+
+  const sign = n < 0 ? -1n : 1n;
+  const abs = Math.abs(n);
+
+  // Avoid `n * Number(SCALE)` which can lose precision for large values.
+  // Convert to a fixed-decimal string and scale via bigint math.
+  const fixed = abs.toFixed(Number(MAX_DECIMALS));
+  const [intPart, fracPartRaw = ""] = fixed.split(".");
+  const fracPart = fracPartRaw.padEnd(Number(MAX_DECIMALS), "0").slice(0, Number(MAX_DECIMALS));
+
+  const scaled =
+    BigInt(intPart || "0") * SCALE + BigInt(fracPart.length ? fracPart : "0");
+
+  return sign < 0n ? -scaled : scaled;
 }
 
 function divRound(n: bigint, d: bigint): bigint {
