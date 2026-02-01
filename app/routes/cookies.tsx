@@ -31,8 +31,8 @@ export const meta: Route.MetaFunction = () => [
     content:
       "Learn how RentConverter.com uses cookies and similar technologies, including essential, analytics, and advertising cookies where applicable.",
   },
-  { property: "og:url", content: "https://rentconverter.com/cookies" },
-  { property: "og:image", content: "https://rentconverter.com/og-image.jpg" },
+  { property: "og:url", content: "https://www.rentconverter.com/cookies" },
+  { property: "og:image", content: "https://www.rentconverter.com/og-image.jpg" },
   { property: "og:image:alt", content: "RentConverter.com cookie policy" },
   { property: "og:locale", content: "en_US" },
 
@@ -43,15 +43,50 @@ export const meta: Route.MetaFunction = () => [
     content:
       "Learn how RentConverter.com uses cookies and similar technologies, including essential, analytics, and advertising cookies where applicable.",
   },
-  { name: "twitter:image", content: "https://rentconverter.com/og-image.jpg" },
+  { name: "twitter:image", content: "https://www.rentconverter.com/og-image.jpg" },
 
-  { rel: "canonical", href: "https://rentconverter.com/cookies" },
+  { tagName: "link", rel: "canonical", href: "https://www.rentconverter.com/cookies" },
 ];
 
 export default function CookiesPolicy() {
   const pageName = "Cookie Policy";
 
-  return (
+  
+  const canonicalUrl = "https://www.rentconverter.com/cookies";
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://www.rentconverter.com/",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: pageName,
+        item: canonicalUrl,
+      },
+    ],
+  };
+
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "RentConverter.com",
+    url: "https://www.rentconverter.com/",
+  };
+
+  const webPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: pageName,
+    url: canonicalUrl,
+  };
+return (
     <main className="bg-white text-slate-700 scroll-smooth antialiased">
       <div className="max-w-6xl mx-auto px-6 pt-8 pb-12">
         {/* Header */}
@@ -82,10 +117,10 @@ export default function CookiesPolicy() {
 
           <div className="mt-5 space-y-4 text-slate-700 leading-relaxed">
             <p>
-              This Cookie Policy explains how https://rentconverter.com
+              This Cookie Policy explains how https://www.rentconverter.com
               ("Company", "we", "us", and "our") uses cookies and similar
               technologies to recognize you when you visit our website at
-              https://rentconverter.com ("Website"). It explains what these
+              https://www.rentconverter.com ("Website"). It explains what these
               technologies are and why we use them, as well as your choices to
               control our use of them.
             </p>
@@ -112,7 +147,7 @@ export default function CookiesPolicy() {
               </p>
               <p>
                 Cookies set by the website owner (in this case,
-                https://rentconverter.com) are called "first-party cookies."
+                https://www.rentconverter.com) are called "first-party cookies."
                 Cookies set by parties other than the website owner are called
                 "third-party cookies." Third-party cookies enable third-party
                 features or functionality to be provided on or through the
@@ -296,7 +331,20 @@ export default function CookiesPolicy() {
       <OtherUsefulTools />
       <RenterChecklists />
       <RentToolsByCountry />
-    </main>
+    
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
+      />
+</main>
   );
 }
 

@@ -34,10 +34,10 @@ export const meta: Route.MetaFunction = () => [
   },
   {
     property: "og:url",
-    content: "https://rentconverter.com/rent-per-paycheck-calculator",
+    content: "https://www.rentconverter.com/rent-per-paycheck-calculator",
   },
   { property: "og:site_name", content: "RentConverter.com" },
-  { property: "og:image", content: "https://rentconverter.com/og-image.jpg" },
+  { property: "og:image", content: "https://www.rentconverter.com/og-image.jpg" },
 
   { name: "twitter:card", content: "summary_large_image" },
   {
@@ -49,12 +49,9 @@ export const meta: Route.MetaFunction = () => [
     content:
       "See how much rent to set aside from each paycheck based on your pay frequency.",
   },
-  { name: "twitter:image", content: "https://rentconverter.com/og-image.jpg" },
+  { name: "twitter:image", content: "https://www.rentconverter.com/og-image.jpg" },
 
-  {
-    rel: "canonical",
-    href: "https://rentconverter.com/rent-per-paycheck-calculator",
-  },
+  { tagName: "link", rel: "canonical", href: "https://www.rentconverter.com/rent-per-paycheck-calculator" },
 ];
 
 type RentPeriod =
@@ -537,7 +534,7 @@ function safeParseDisplayDecimals(raw: string | null): number {
 
 export default function RentPerPaycheck() {
   const pageName = "Rent Per Paycheck Calculator";
-  const canonicalUrl = "https://rentconverter.com/rent-per-paycheck-calculator";
+  const canonicalUrl = "https://www.rentconverter.com/rent-per-paycheck-calculator";
 
   const [amount, setAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "2000";
@@ -747,7 +744,7 @@ export default function RentPerPaycheck() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://rentconverter.com/",
+        item: "https://www.rentconverter.com/",
       },
       { "@type": "ListItem", position: 2, name: pageName, item: canonicalUrl },
     ],
@@ -767,7 +764,7 @@ export default function RentPerPaycheck() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "RentConverter.com",
-    url: "https://rentconverter.com/",
+    url: "https://www.rentconverter.com/",
   };
 
   const webPageSchema = {

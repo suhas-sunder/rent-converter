@@ -31,23 +31,20 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:description", content: description },
     {
       property: "og:url",
-      content: "https://rentconverter.com/biweekly-to-annual-rent-converter",
+      content: "https://www.rentconverter.com/biweekly-to-annual-rent-converter",
     },
     { property: "og:site_name", content: "RentConverter.com" },
-    { property: "og:image", content: "https://rentconverter.com/og-image.jpg" },
+    { property: "og:image", content: "https://www.rentconverter.com/og-image.jpg" },
 
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
     {
       name: "twitter:image",
-      content: "https://rentconverter.com/og-image.jpg",
+      content: "https://www.rentconverter.com/og-image.jpg",
     },
 
-    {
-      rel: "canonical",
-      href: "https://rentconverter.com/biweekly-to-annual-rent-converter",
-    },
+    { tagName: "link", rel: "canonical", href: "https://www.rentconverter.com/biweekly-to-annual-rent-converter" },
   ];
 };
 
@@ -676,13 +673,13 @@ export default function BiweeklyToAnnualRent() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://rentconverter.com/",
+        item: "https://www.rentconverter.com/",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Biweekly to Annual Rent Converter",
-        item: "https://rentconverter.com/biweekly-to-annual-rent-converter",
+        item: "https://www.rentconverter.com/biweekly-to-annual-rent-converter",
       },
     ],
   };

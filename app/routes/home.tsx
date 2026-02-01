@@ -35,9 +35,9 @@ export const meta: Route.MetaFunction = () => [
     content:
       "Accurate rent conversions across weekly, monthly, 28-day, biweekly, daily, hourly, and annual periods with clear assumptions and exact decimals.",
   },
-  { property: "og:url", content: "https://rentconverter.com/" },
+  { property: "og:url", content: "https://www.rentconverter.com/" },
   { property: "og:site_name", content: "RentConverter.com" },
-  { property: "og:image", content: "https://rentconverter.com/og-image.jpg" },
+  { property: "og:image", content: "https://www.rentconverter.com/og-image.jpg" },
 
   // Twitter
   { name: "twitter:card", content: "summary_large_image" },
@@ -50,8 +50,8 @@ export const meta: Route.MetaFunction = () => [
     content:
       "Clear, accurate rent conversions with transparent math and exact decimals.",
   },
-  { name: "twitter:image", content: "https://rentconverter.com/og-image.jpg" },
-  { rel: "canonical", href: "https://rentconverter.com/" },
+  { name: "twitter:image", content: "https://www.rentconverter.com/og-image.jpg" },
+  { tagName: "link", rel: "canonical", href: "https://www.rentconverter.com/" },
 ];
 
 type Period =
@@ -809,7 +809,7 @@ export default function Home() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "RentConverter.com",
-    url: "https://rentconverter.com/",
+    url: "https://www.rentconverter.com/",
   };
 
   const webPageSchema = {
@@ -818,7 +818,7 @@ export default function Home() {
     name: "Rent Converter Calculator: Weekly, Monthly, 4-Week (28-Day), Biweekly, Daily, Hourly, Annual",
     description:
       "Convert rent between weekly, monthly, every 4 weeks (28 days), biweekly, daily, hourly, and annual using clear assumptions. Decimal-safe input and a clear breakdown.",
-    url: "https://rentconverter.com/",
+    url: "https://www.rentconverter.com/",
   };
 
   const convertSummaryLine = useMemo(() => {

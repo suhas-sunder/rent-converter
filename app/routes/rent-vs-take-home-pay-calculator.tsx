@@ -37,10 +37,10 @@ export const meta: Route.MetaFunction = () => [
   },
   {
     property: "og:url",
-    content: "https://rentconverter.com/rent-vs-take-home-pay-calculator",
+    content: "https://www.rentconverter.com/rent-vs-take-home-pay-calculator",
   },
   { property: "og:site_name", content: "RentConverter.com" },
-  { property: "og:image", content: "https://rentconverter.com/og-image.jpg" },
+  { property: "og:image", content: "https://www.rentconverter.com/og-image.jpg" },
 
   { name: "twitter:card", content: "summary_large_image" },
   { name: "twitter:title", content: "Rent vs Take-Home Pay Calculator" },
@@ -49,12 +49,9 @@ export const meta: Route.MetaFunction = () => [
     content:
       "See how much of your take-home pay goes to rent and what you actually keep.",
   },
-  { name: "twitter:image", content: "https://rentconverter.com/og-image.jpg" },
+  { name: "twitter:image", content: "https://www.rentconverter.com/og-image.jpg" },
 
-  {
-    rel: "canonical",
-    href: "https://rentconverter.com/rent-vs-take-home-pay-calculator",
-  },
+  { tagName: "link", rel: "canonical", href: "https://www.rentconverter.com/rent-vs-take-home-pay-calculator" },
 ];
 
 
@@ -558,7 +555,7 @@ function formatAmountPreviewFromRaw(raw: string): {
 export default function RentVsTakeHomePay() {
   const pageName = "Rent vs Take-Home Pay Calculator";
   const canonicalUrl =
-    "https://rentconverter.com/rent-vs-take-home-pay-calculator";
+    "https://www.rentconverter.com/rent-vs-take-home-pay-calculator";
 
   const [takeHomePay, setTakeHomePay] = useState<string>(() => {
     if (typeof window === "undefined") return "5000";
@@ -825,7 +822,7 @@ export default function RentVsTakeHomePay() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://rentconverter.com/",
+        item: "https://www.rentconverter.com/",
       },
       {
         "@type": "ListItem",

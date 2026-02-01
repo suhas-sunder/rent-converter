@@ -32,23 +32,20 @@ export const meta: Route.MetaFunction = () => {
     {
       property: "og:url",
       content:
-        "https://rentconverter.com/how-much-rent-can-i-afford-calculator",
+        "https://www.rentconverter.com/how-much-rent-can-i-afford-calculator",
     },
     { property: "og:site_name", content: "RentConverter.com" },
-    { property: "og:image", content: "https://rentconverter.com/og-image.jpg" },
+    { property: "og:image", content: "https://www.rentconverter.com/og-image.jpg" },
 
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
     {
       name: "twitter:image",
-      content: "https://rentconverter.com/og-image.jpg",
+      content: "https://www.rentconverter.com/og-image.jpg",
     },
 
-    {
-      rel: "canonical",
-      href: "https://rentconverter.com/how-much-rent-can-i-afford-calculator",
-    },
+    { tagName: "link", rel: "canonical", href: "https://www.rentconverter.com/how-much-rent-can-i-afford-calculator" },
   ];
 };
 
@@ -721,13 +718,13 @@ export default function HowMuchRentCanIAfford() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://rentconverter.com/",
+        item: "https://www.rentconverter.com/",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "How Much Rent Can I Afford?",
-        item: "https://rentconverter.com/how-much-rent-can-i-afford-calculator",
+        item: "https://www.rentconverter.com/how-much-rent-can-i-afford-calculator",
       },
     ],
   };
@@ -746,7 +743,7 @@ export default function HowMuchRentCanIAfford() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "RentConverter.com",
-    url: "https://rentconverter.com/",
+    url: "https://www.rentconverter.com/",
   };
 
   const webPageSchema = {
@@ -755,7 +752,7 @@ export default function HowMuchRentCanIAfford() {
     name: "How Much Rent Can I Afford?",
     description:
       "Estimate rent affordability from income using annual equivalence (365-day year). Compare affordable rent across monthly, weekly, and every 4 weeks, and print or save as PDF.",
-    url: "https://rentconverter.com/how-much-rent-can-i-afford-calculator",
+    url: "https://www.rentconverter.com/how-much-rent-can-i-afford-calculator",
   };
 
   return (

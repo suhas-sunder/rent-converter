@@ -14,8 +14,8 @@ export const meta: Route.MetaFunction = () => {
   const description =
     "Instantly convert annual rent to a weekly amount using annual ÷ 52. Also compare against a true 365-day weekly equivalent (annual × 7 ÷ 365), plus biweekly and 28-day views. Exact decimals, private, no signup.";
 
-  const url = "https://rentconverter.com/annual-to-weekly-rent-converter";
-  const ogImage = "https://rentconverter.com/og-image.jpg";
+  const url = "https://www.rentconverter.com/annual-to-weekly-rent-converter";
+  const ogImage = "https://www.rentconverter.com/og-image.jpg";
 
   return [
     { title },
@@ -300,31 +300,74 @@ function formatMoneyFromScaled(
   roundDisplay: boolean,
 ): string {
   const d = Math.max(0, Math.min(12, Math.trunc(decimals)));
-  const scaled = roundDisplay
-    ? roundScaledForDisplay(valueScaled, d)
-    : valueScaled;
+  const scaled = roundDisplay ? roundScaledForDisplay(valueScaled, d) : valueScaled;
 
-  const sign = scaled < 0n ? "-" : "";
+  const negative = scaled < 0n;
   const abs = scaled < 0n ? -scaled : scaled;
+
+  // Decide how many decimals to show when not rounding:
+  // show up to 12, trimming trailing zeros.
+  let digits = d;
+  if (!roundDisplay) {
+    const fracPart = abs % SCALE;
+    if (fracPart === 0n) {
+      digits = 0;
+    } else {
+      const fracFull = fracPart.toString().padStart(12, "0");
+      const trimmed = fracFull.replace(/0+$/g, "");
+      digits = Math.min(12, Math.max(0, trimmed.length));
+    }
+  }
 
   const intPart = abs / SCALE;
   const fracPart = abs % SCALE;
 
-  const groupedInt = new Intl.NumberFormat("en-US", {
+  const groupedInt = new Intl.NumberFormat(undefined, {
     useGrouping: true,
     maximumFractionDigits: 0,
   }).format(Number(intPart));
 
-  if (roundDisplay) {
-    if (d === 0) return `${sign}${currency} ${groupedInt}`;
-    const fracStr12 = fracPart.toString().padStart(12, "0");
-    const shown = fracStr12.slice(0, d).padEnd(d, "0");
-    return `${sign}${currency} ${groupedInt}.${shown}`;
+  const fracStrFull = fracPart.toString().padStart(12, "0");
+  const fracShown = digits > 0 ? fracStrFull.slice(0, digits).padEnd(digits, "0") : "";
+
+  const fmt = new Intl.NumberFormat(undefined, {
+    style: "currency",
+    currency,
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+  });
+
+  // Build by parts to preserve locale currency placement without formatting the actual value as a float.
+  const parts = fmt.formatToParts(-1);
+  const decimalPart = parts.find((p) => p.type === "decimal");
+  const decimalSep = decimalPart?.value ?? ".";
+
+  let out = "";
+  for (const p of parts) {
+    if (p.type === "minusSign") {
+      if (negative) out += p.value;
+      continue;
+    }
+    if (p.type === "integer") {
+      out += groupedInt;
+      continue;
+    }
+    if (p.type === "group") {
+      // We already grouped ourselves.
+      continue;
+    }
+    if (p.type === "decimal") {
+      if (digits > 0) out += decimalSep;
+      continue;
+    }
+    if (p.type === "fraction") {
+      if (digits > 0) out += fracShown;
+      continue;
+    }
+    out += p.value;
   }
 
-  const fracStr12 = fracPart.toString().padStart(12, "0").replace(/0+$/, "");
-  if (!fracStr12) return `${sign}${currency} ${groupedInt}`;
-  return `${sign}${currency} ${groupedInt}.${fracStr12}`;
+  return out;
 }
 
 function formatPercent(n: number, displayDecimals: number): string {
@@ -591,13 +634,13 @@ export default function AnnualToWeeklyRentConverter() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://rentconverter.com/",
+        item: "https://www.rentconverter.com/",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Annual to Weekly Rent Converter",
-        item: "https://rentconverter.com/annual-to-weekly-rent-converter",
+        item: "https://www.rentconverter.com/annual-to-weekly-rent-converter",
       },
     ],
   };

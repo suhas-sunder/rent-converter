@@ -9,7 +9,7 @@ export const meta: Route.MetaFunction = () => [
       "Contact RentConverter.com for feedback, corrections, or questions about our rent conversion tools and assumptions.",
   },
   { name: "robots", content: "index,follow" },
-  { rel: "canonical", href: "https://rentconverter.com/contact" },
+  { tagName: "link", rel: "canonical", href: "https://www.rentconverter.com/contact" },
 
   // Open Graph
   { property: "og:type", content: "website" },
@@ -19,7 +19,7 @@ export const meta: Route.MetaFunction = () => [
     content:
       "Send feedback, corrections, or questions about our rent conversion tools and assumptions.",
   },
-  { property: "og:url", content: "https://rentconverter.com/contact" },
+  { property: "og:url", content: "https://www.rentconverter.com/contact" },
   { property: "og:site_name", content: "RentConverter.com" },
 
   // Twitter
@@ -33,7 +33,44 @@ export const meta: Route.MetaFunction = () => [
 ];
 
 export default function Contact() {
+  const pageName = "Contact";
+  const canonicalUrl = "https://www.rentconverter.com/contact";
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://www.rentconverter.com/",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: pageName,
+        item: canonicalUrl,
+      },
+    ],
+  };
+
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "RentConverter.com",
+    url: "https://www.rentconverter.com/",
+  };
+
+  const webPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: pageName,
+    url: canonicalUrl,
+  };
+
   return (
+
     <main className="bg-white text-slate-700 antialiased min-h-screen">
       <section className="max-w-5xl mx-auto px-6 py-12 flex items-center">
         <div className="w-full">
@@ -90,6 +127,19 @@ export default function Contact() {
           </p>
         </div>
       </section>
-    </main>
+    
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
+      />
+</main>
   );
 }

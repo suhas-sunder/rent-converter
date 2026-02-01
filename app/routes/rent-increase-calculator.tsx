@@ -34,10 +34,10 @@ export const meta: Route.MetaFunction = () => [
   },
   {
     property: "og:url",
-    content: "https://rentconverter.com/rent-increase-calculator",
+    content: "https://www.rentconverter.com/rent-increase-calculator",
   },
   { property: "og:site_name", content: "RentConverter.com" },
-  { property: "og:image", content: "https://rentconverter.com/og-image.jpg" },
+  { property: "og:image", content: "https://www.rentconverter.com/og-image.jpg" },
 
   { name: "twitter:card", content: "summary_large_image" },
   { name: "twitter:title", content: "Rent Increase Calculator" },
@@ -46,12 +46,9 @@ export const meta: Route.MetaFunction = () => [
     content:
       "Calculate your new rent after a percent or fixed increase and see the annual impact and pay-cycle equivalents.",
   },
-  { name: "twitter:image", content: "https://rentconverter.com/og-image.jpg" },
+  { name: "twitter:image", content: "https://www.rentconverter.com/og-image.jpg" },
 
-  {
-    rel: "canonical",
-    href: "https://rentconverter.com/rent-increase-calculator",
-  },
+  { tagName: "link", rel: "canonical", href: "https://www.rentconverter.com/rent-increase-calculator" },
 ];
 
 type Period =
@@ -598,7 +595,7 @@ function parseDisplayDecimalsStrict(raw: string | null): number {
 
 export default function RentIncreaseCalculator() {
   const pageName = "Rent Increase Calculator";
-  const canonicalUrl = "https://rentconverter.com/rent-increase-calculator";
+  const canonicalUrl = "https://www.rentconverter.com/rent-increase-calculator";
 
   const [rentAmount, setRentAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "2200";
@@ -933,7 +930,7 @@ export default function RentIncreaseCalculator() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://rentconverter.com/",
+        item: "https://www.rentconverter.com/",
       },
       { "@type": "ListItem", position: 2, name: pageName, item: canonicalUrl },
     ],

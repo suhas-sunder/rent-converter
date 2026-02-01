@@ -35,7 +35,44 @@ export const meta: Route.MetaFunction = () => {
 };
 
 export default function TermsOfService() {
+  const pageName = "Terms of Service";
+  const canonicalUrl = "https://www.rentconverter.com/terms-of-service";
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://www.rentconverter.com/",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: pageName,
+        item: canonicalUrl,
+      },
+    ],
+  };
+
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "RentConverter.com",
+    url: "https://www.rentconverter.com/",
+  };
+
+  const webPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: pageName,
+    url: canonicalUrl,
+  };
+
   return (
+
     <main className="mx-auto max-w-[1200px] px-6 py-10 text-slate-700">
       {/* Breadcrumb */}
       <nav aria-label="Breadcrumb" className="mb-6 text-sm">
@@ -1271,6 +1308,19 @@ export default function TermsOfService() {
           <p>admin@morsewords.com</p>
         </section>
       </div>
-    </main>
+    
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
+      />
+</main>
   );
 }

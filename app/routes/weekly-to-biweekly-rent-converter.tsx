@@ -37,10 +37,10 @@ export const meta: Route.MetaFunction = () => [
   },
   {
     property: "og:url",
-    content: "https://rentconverter.com/weekly-to-biweekly-rent-converter",
+    content: "https://www.rentconverter.com/weekly-to-biweekly-rent-converter",
   },
   { property: "og:site_name", content: "RentConverter.com" },
-  { property: "og:image", content: "https://rentconverter.com/og-image.jpg" },
+  { property: "og:image", content: "https://www.rentconverter.com/og-image.jpg" },
 
   { name: "twitter:card", content: "summary_large_image" },
   { name: "twitter:title", content: "Weekly to Biweekly Rent Converter" },
@@ -49,12 +49,9 @@ export const meta: Route.MetaFunction = () => [
     content:
       "See the biweekly equivalent of weekly rent and how 7-day math translates to 14-day pay cycles.",
   },
-  { name: "twitter:image", content: "https://rentconverter.com/og-image.jpg" },
+  { name: "twitter:image", content: "https://www.rentconverter.com/og-image.jpg" },
 
-  {
-    rel: "canonical",
-    href: "https://rentconverter.com/weekly-to-biweekly-rent-converter",
-  },
+  { tagName: "link", rel: "canonical", href: "https://www.rentconverter.com/weekly-to-biweekly-rent-converter" },
 ];
 
 type Period =
@@ -567,7 +564,7 @@ function safeParseDisplayDecimals(raw: string | null, fallback = 2): number {
 export default function WeeklyToBiweeklyRent() {
   const pageName = "Weekly to Biweekly Rent Converter";
   const canonicalUrl =
-    "https://rentconverter.com/weekly-to-biweekly-rent-converter";
+    "https://www.rentconverter.com/weekly-to-biweekly-rent-converter";
 
   const [amount, setAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "450";
@@ -802,7 +799,7 @@ export default function WeeklyToBiweeklyRent() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://rentconverter.com/",
+        item: "https://www.rentconverter.com/",
       },
       { "@type": "ListItem", position: 2, name: pageName, item: canonicalUrl },
     ],
@@ -812,7 +809,7 @@ export default function WeeklyToBiweeklyRent() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "RentConverter.com",
-    url: "https://rentconverter.com/",
+    url: "https://www.rentconverter.com/",
   };
 
   const webPageSchema = {

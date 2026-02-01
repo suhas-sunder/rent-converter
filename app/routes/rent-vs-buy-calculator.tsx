@@ -37,10 +37,10 @@ export const meta: Route.MetaFunction = () => [
   },
   {
     property: "og:url",
-    content: "https://rentconverter.com/rent-vs-buy-calculator",
+    content: "https://www.rentconverter.com/rent-vs-buy-calculator",
   },
   { property: "og:site_name", content: "RentConverter.com" },
-  { property: "og:image", content: "https://rentconverter.com/og-image.jpg" },
+  { property: "og:image", content: "https://www.rentconverter.com/og-image.jpg" },
 
   { name: "twitter:card", content: "summary_large_image" },
   { name: "twitter:title", content: "Rent vs Buy Calculator" },
@@ -49,12 +49,9 @@ export const meta: Route.MetaFunction = () => [
     content:
       "Find out when buying a home breaks even compared to renting with a clear year-by-year cost comparison.",
   },
-  { name: "twitter:image", content: "https://rentconverter.com/og-image.jpg" },
+  { name: "twitter:image", content: "https://www.rentconverter.com/og-image.jpg" },
 
-  {
-    rel: "canonical",
-    href: "https://rentconverter.com/rent-vs-buy-calculator",
-  },
+  { tagName: "link", rel: "canonical", href: "https://www.rentconverter.com/rent-vs-buy-calculator" },
 ];
 
 const SUPPORTED_CURRENCIES = [
@@ -577,7 +574,7 @@ function scaledMax0(a: bigint): bigint {
 
 export default function RentVsBuyCalculator() {
   const pageName = "Rent vs Buy Calculator";
-  const canonicalUrl = "https://rentconverter.com/rent-vs-buy-calculator";
+  const canonicalUrl = "https://www.rentconverter.com/rent-vs-buy-calculator";
 
   const [currency, setCurrency] = useState<Currency>(() => {
     if (typeof window === "undefined") return "USD";
@@ -1129,7 +1126,7 @@ export default function RentVsBuyCalculator() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://rentconverter.com/",
+        item: "https://www.rentconverter.com/",
       },
       {
         "@type": "ListItem",

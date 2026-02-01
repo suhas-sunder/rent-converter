@@ -28,8 +28,8 @@ export const meta: Route.MetaFunction = () => [
     content:
       "Read the RentConverter.com privacy policy, including what we collect, how we use it, and your privacy choices.",
   },
-  { property: "og:url", content: "https://rentconverter.com/privacy-policy" },
-  { property: "og:image", content: "https://rentconverter.com/og-image.jpg" },
+  { property: "og:url", content: "https://www.rentconverter.com/privacy-policy" },
+  { property: "og:image", content: "https://www.rentconverter.com/og-image.jpg" },
   { property: "og:image:alt", content: "RentConverter.com privacy policy" },
   { property: "og:locale", content: "en_US" },
 
@@ -40,14 +40,14 @@ export const meta: Route.MetaFunction = () => [
     content:
       "Read the RentConverter.com privacy policy, including what we collect, how we use it, and your privacy choices.",
   },
-  { name: "twitter:image", content: "https://rentconverter.com/og-image.jpg" },
+  { name: "twitter:image", content: "https://www.rentconverter.com/og-image.jpg" },
 
-  { rel: "canonical", href: "https://rentconverter.com/privacy-policy" },
+  { tagName: "link", rel: "canonical", href: "https://www.rentconverter.com/privacy-policy" },
 ];
 
 export default function PrivacyPolicy() {
   const pageName = "Privacy Policy";
-  const canonicalUrl = "https://rentconverter.com/privacy-policy";
+  const canonicalUrl = "https://www.rentconverter.com/privacy-policy";
 
   const breadcrumbSchema = {
     "@context": "https://schema.org",
@@ -57,7 +57,7 @@ export default function PrivacyPolicy() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://rentconverter.com/",
+        item: "https://www.rentconverter.com/",
       },
       { "@type": "ListItem", position: 2, name: pageName, item: canonicalUrl },
     ],
@@ -67,7 +67,7 @@ export default function PrivacyPolicy() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "RentConverter.com",
-    url: "https://rentconverter.com/",
+    url: "https://www.rentconverter.com/",
   };
 
   const webPageSchema = {
@@ -108,7 +108,7 @@ export default function PrivacyPolicy() {
 
             <ul className="list-inside list-disc flex flex-col gap-2 pl-5">
               <li>
-                Visit our website at https://rentconverter.com or any page that
+                Visit our website at https://www.rentconverter.com or any page that
                 links to this privacy notice
               </li>
               <li>

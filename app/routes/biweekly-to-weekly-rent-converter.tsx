@@ -11,7 +11,7 @@ function safeToFixed(n: number, digits: number): string {
 
 const ROUTE_SLUG = "biweekly-to-weekly-rent-converter" as const;
 const ROUTE_PATH = `/${ROUTE_SLUG}` as const;
-const PAGE_URL = `https://rentconverter.com${ROUTE_PATH}` as const;
+const PAGE_URL = `https://www.rentconverter.com${ROUTE_PATH}` as const;
 
 export const meta: Route.MetaFunction = () => {
   const title = "Biweekly to Weekly Rent Converter (Exact 14-Day Math)";
@@ -35,17 +35,17 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:description", content: description },
     { property: "og:url", content: PAGE_URL },
     { property: "og:site_name", content: "RentConverter.com" },
-    { property: "og:image", content: "https://rentconverter.com/og-image.jpg" },
+    { property: "og:image", content: "https://www.rentconverter.com/og-image.jpg" },
 
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
     {
       name: "twitter:image",
-      content: "https://rentconverter.com/og-image.jpg",
+      content: "https://www.rentconverter.com/og-image.jpg",
     },
 
-    { rel: "canonical", href: PAGE_URL },
+    { tagName: "link", rel: "canonical", href: PAGE_URL },
   ];
 };
 
@@ -700,7 +700,7 @@ export default function BiweeklyToWeeklyRent() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://rentconverter.com/",
+        item: "https://www.rentconverter.com/",
       },
       {
         "@type": "ListItem",
@@ -715,7 +715,7 @@ export default function BiweeklyToWeeklyRent() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "RentConverter.com",
-    url: "https://rentconverter.com/",
+    url: "https://www.rentconverter.com/",
   };
 
   const webPageSchema = {

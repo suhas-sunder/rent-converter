@@ -34,10 +34,10 @@ export const meta: Route.MetaFunction = () => [
   },
   {
     property: "og:url",
-    content: "https://rentconverter.com/rent-due-date-calculator",
+    content: "https://www.rentconverter.com/rent-due-date-calculator",
   },
   { property: "og:site_name", content: "RentConverter.com" },
-  { property: "og:image", content: "https://rentconverter.com/og-image.jpg" },
+  { property: "og:image", content: "https://www.rentconverter.com/og-image.jpg" },
 
   { name: "twitter:card", content: "summary_large_image" },
   { name: "twitter:title", content: "Rent Due Date Calculator" },
@@ -46,12 +46,9 @@ export const meta: Route.MetaFunction = () => [
     content:
       "Find your next rent due date and see payment schedules, monthly totals, and cumulative rent paid.",
   },
-  { name: "twitter:image", content: "https://rentconverter.com/og-image.jpg" },
+  { name: "twitter:image", content: "https://www.rentconverter.com/og-image.jpg" },
 
-  {
-    rel: "canonical",
-    href: "https://rentconverter.com/rent-due-date-calculator",
-  },
+  { tagName: "link", rel: "canonical", href: "https://www.rentconverter.com/rent-due-date-calculator" },
 ];
 
 type BillingCycle =
@@ -658,7 +655,7 @@ function isBillingCycle(x: string): x is BillingCycle {
 
 export default function RentDueDateCalculator() {
   const pageName = "Rent Due Date Calculator";
-  const canonicalUrl = "https://rentconverter.com/rent-due-date-calculator";
+  const canonicalUrl = "https://www.rentconverter.com/rent-due-date-calculator";
 
   const [cycle, setCycle] = useState<BillingCycle>(() => {
     if (typeof window === "undefined") return "monthly";
@@ -962,7 +959,7 @@ export default function RentDueDateCalculator() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://rentconverter.com/",
+        item: "https://www.rentconverter.com/",
       },
       { "@type": "ListItem", position: 2, name: pageName, item: canonicalUrl },
     ],
