@@ -5,7 +5,7 @@ import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountr
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 function safeToFixed(n: number, digits: number): string {
-  if (!Number.isFinite(n)) return "—";
+  if (!Number.isFinite(n)) return "-";
   return n.toFixed(digits);
 }
 
@@ -283,7 +283,7 @@ function formatCurrencyFromScaled(
     out += p.value;
   }
 
-  return out || "—";
+  return out || "-";
 }
 
 function formatCurrencyFromScaledFlexible(
@@ -291,7 +291,7 @@ function formatCurrencyFromScaledFlexible(
   currency: Currency,
 ): string {
   const n = toNumberSafe(scaled);
-  if (!Number.isFinite(n)) return "—";
+  if (!Number.isFinite(n)) return "-";
   return new Intl.NumberFormat(undefined, {
     style: "currency",
     currency,
@@ -301,7 +301,7 @@ function formatCurrencyFromScaledFlexible(
 }
 
 function formatPercent(n: number, displayDecimals: number): string {
-  if (!Number.isFinite(n)) return "—";
+  if (!Number.isFinite(n)) return "-";
   const d = Math.max(0, Math.min(6, Math.trunc(displayDecimals)));
   return `${(n * 100).toFixed(d)}%`;
 }

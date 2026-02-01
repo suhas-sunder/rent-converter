@@ -5,7 +5,7 @@ import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountr
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 function safeToFixed(n: number, digits: number): string {
-  if (!Number.isFinite(n)) return "—";
+  if (!Number.isFinite(n)) return "-";
   return n.toFixed(digits);
 }
 
@@ -307,16 +307,16 @@ function formatCurrencyFromScaled(
     out += p.value;
   }
 
-  return out || "—";
+  return out || "-";
 }
 
 function formatNumber(n: number, displayDecimals: number): string {
-  if (!Number.isFinite(n)) return "—";
+  if (!Number.isFinite(n)) return "-";
   return n.toFixed(Math.max(0, Math.min(6, displayDecimals)));
 }
 
 function formatPercent(n: number, displayDecimals: number): string {
-  if (!Number.isFinite(n)) return "—";
+  if (!Number.isFinite(n)) return "-";
   return `${(n * 100).toFixed(Math.max(0, Math.min(6, displayDecimals)))}%`;
 }
 
@@ -1168,7 +1168,7 @@ export default function HourlyToAnnualRent() {
                         <div className="mt-1 text-xs text-slate-600 tabular-nums whitespace-nowrap">
                           {parsedPaidHours.ok
                             ? formatNumber(parsedPaidHours.hours, 2)
-                            : "—"}{" "}
+                            : "-"}{" "}
                           hours/week × 52
                         </div>
                       </div>

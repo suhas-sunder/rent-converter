@@ -324,7 +324,7 @@ function formatCurrencyFromScaled(
     out += p.value;
   }
 
-  return out || "—";
+  return out || "-";
 }
 
 function formatMoneyPreviewFromNormalized(normalized: string): string {

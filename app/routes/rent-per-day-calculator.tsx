@@ -5,7 +5,7 @@ import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountr
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 function safeToFixed(n: number, digits: number): string {
-  if (!Number.isFinite(n)) return "—";
+  if (!Number.isFinite(n)) return "-";
   return n.toFixed(digits);
 }
 
@@ -304,7 +304,7 @@ function formatCurrencyFromScaled(
     out += p.value;
   }
 
-  return out || "—";
+  return out || "-";
 }
 
 function formatGroupedPreviewFromNormalized(normalized: string): string {
@@ -1130,7 +1130,7 @@ export default function RentPerDayCalculator() {
                         <div className="mt-1 text-2xl font-extrabold text-slate-900 tabular-nums break-words">
                           {totalForDaysScaled.ok
                             ? fmtMoney(totalForDaysScaled.scaled)
-                            : "—"}
+                            : "-"}
                         </div>
                         <div className="mt-1 text-xs text-slate-600 leading-relaxed">
                           <span className="tabular-nums whitespace-nowrap">

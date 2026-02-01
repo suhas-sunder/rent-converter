@@ -5,7 +5,7 @@ import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountr
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 function safeToFixed(n: number, digits: number): string {
-  if (!Number.isFinite(n)) return "—";
+  if (!Number.isFinite(n)) return "-";
   return n.toFixed(digits);
 }
 
@@ -308,7 +308,7 @@ function formatCurrencyFromScaled(
     out += p.value;
   }
 
-  return out || "—";
+  return out || "-";
 }
 
 function parseMoneyInputToScaled(raw: string, label = "value"): ParsedScaled {
@@ -1050,7 +1050,7 @@ export default function RentVsTakeHomePay() {
                   <div className="text-4xl sm:text-5xl font-extrabold text-sky-800">
                     {Number.isFinite(computed.rentPct)
                       ? safeToFixed(computed.rentPct, 2)
-                      : "—"}
+                      : "-"}
                     %
                   </div>
                   <div className="text-sm text-slate-600">
@@ -1200,7 +1200,7 @@ export default function RentVsTakeHomePay() {
                                 computed.monthMinus4wRentPct * 100,
                                 2,
                               )
-                            : "—"}
+                            : "-"}
                           %
                         </strong>
                       </div>

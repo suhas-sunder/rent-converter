@@ -328,7 +328,7 @@ function formatCurrencyFromScaled(
     out += p.value;
   }
 
-  return out || "—";
+  return out || "-";
 }
 
 function formatPercentValue(
@@ -337,7 +337,7 @@ function formatPercentValue(
   displayDecimals: number,
 ): string {
   const n = Number(value);
-  if (!Number.isFinite(n)) return "—";
+  if (!Number.isFinite(n)) return "-";
 
   const allowed = new Set([0, 2, 4, 6]);
   const digits = allowed.has(displayDecimals) ? displayDecimals : 2;
@@ -1447,7 +1447,7 @@ export default function RentIncreaseCalculator() {
                             </td>
                             <td className="py-2 pr-4 text-slate-800">
                               {s.step === 0
-                                ? "—"
+                                ? "-"
                                 : fmtMoney(s.deltaAnnualFromPrevScaled)}
                             </td>
                           </tr>

@@ -5,7 +5,7 @@ import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountr
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 function safeToFixed(n: number, digits: number): string {
-  if (!Number.isFinite(n)) return "—";
+  if (!Number.isFinite(n)) return "-";
   return n.toFixed(digits);
 }
 
@@ -278,7 +278,7 @@ function formatCurrencyFromScaled(
     out += p.value;
   }
 
-  return out || "—";
+  return out || "-";
 }
 
 function formatPercent(pct: number, decimals = 2): string {
