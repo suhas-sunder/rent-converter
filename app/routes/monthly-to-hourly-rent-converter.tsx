@@ -34,7 +34,10 @@ export const meta: Route.MetaFunction = () => {
       content: "https://www.rentconverter.com/monthly-to-hourly-rent-converter",
     },
     { property: "og:site_name", content: "RentConverter.com" },
-    { property: "og:image", content: "https://www.rentconverter.com/og-image.jpg" },
+    {
+      property: "og:image",
+      content: "https://www.rentconverter.com/og-image.jpg",
+    },
 
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: title },
@@ -44,7 +47,11 @@ export const meta: Route.MetaFunction = () => {
       content: "https://www.rentconverter.com/og-image.jpg",
     },
 
-    { tagName: "link", rel: "canonical", href: "https://www.rentconverter.com/monthly-to-hourly-rent-converter" },
+    {
+      tagName: "link",
+      rel: "canonical",
+      href: "https://www.rentconverter.com/monthly-to-hourly-rent-converter",
+    },
   ];
 };
 
@@ -182,7 +189,9 @@ function groupInt(intStr: string, groupSep: string): string {
 }
 
 function getNumberSeparators(): { group: string; decimal: string } {
-  const parts = new Intl.NumberFormat(undefined, { useGrouping: true }).formatToParts(1000.1);
+  const parts = new Intl.NumberFormat(undefined, {
+    useGrouping: true,
+  }).formatToParts(1000.1);
   const group = parts.find((p) => p.type === "group")?.value ?? ",";
   const decimal = parts.find((p) => p.type === "decimal")?.value ?? ".";
   return { group, decimal };
@@ -197,7 +206,7 @@ function roundScaledToDecimals(scaled: bigint, decimals: number): bigint {
   const q = a / factor;
   const r = a % factor;
   const half = factor / 2n;
-  const qRounded = r >= half ? (q + 1n) : q;
+  const qRounded = r >= half ? q + 1n : q;
   return sign * qRounded * factor;
 }
 
@@ -222,7 +231,6 @@ function scaledToDecimalStrings(
   return { negative, intStr: intPart.toString(), fracStr };
 }
 
-
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
@@ -246,7 +254,9 @@ function formatCurrencyFromScaled(
     }
   }
 
-  const scaledForDisplay = roundDisplay ? roundScaledToDecimals(scaled, digits) : scaled;
+  const scaledForDisplay = roundDisplay
+    ? roundScaledToDecimals(scaled, digits)
+    : scaled;
 
   const { group, decimal } = getNumberSeparators();
   const { negative, intStr, fracStr } = scaledToDecimalStrings(
@@ -725,23 +735,12 @@ export default function MonthlyToHourlyRent() {
         </nav>
       </section>
 
-      <section className="pb-8 text-center bg-white rc-no-print">
-        <h1 className="text-4xl font-bold text-slate-800 mb-4">
-          Monthly to Hourly Rent Converter
-        </h1>
-        <p className="text-slate-600 max-w-3xl mx-auto text-lg leading-relaxed">
-          Convert a monthly rent amount into an hourly equivalent using annual
-          equivalence as the reference. This helps compare monthly prices to
-          time-based rates using consistent time-period assumptions.
-        </p>
-      </section>
-
       <section id="converter" className="mx-auto max-w-6xl px-6 pb-6">
-        <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:p-8 rc-print-block">
+        <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:px-8 rc-print-block">
           <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-            <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
-              Instant monthly to hourly conversion
-            </h2>
+            <h1 className="text-xl sm:text-4xl font-bold capitalize text-sky-800">
+              Instant monthly to hourly rent converter
+            </h1>
 
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
               <button
@@ -829,45 +828,6 @@ export default function MonthlyToHourlyRent() {
                   </div>
                 </div>
               </div>
-
-              <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4">
-                <div className="text-xs text-slate-500">Display</div>
-                <label className="mt-1 flex items-center gap-2 text-sm text-slate-700">
-                  <input
-                    type="checkbox"
-                    checked={roundDisplay}
-                    onChange={(e) => setRoundDisplay(e.target.checked)}
-                    className="h-4 w-4 accent-sky-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded"
-                  />
-                  Round displayed values (display only)
-                </label>
-
-                <div className="mt-3 flex items-center justify-between gap-3">
-                  <div className="text-xs text-slate-500">
-                    Displayed decimals
-                  </div>
-                  <select
-                    value={displayDecimals}
-                    onChange={(e) => {
-                      const allowed = new Set([0, 2, 4, 6]);
-                      const n = Math.trunc(Number(e.target.value));
-                      setDisplayDecimals(allowed.has(n) ? n : 2);
-                    }}
-                    className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
-                    aria-label="Displayed decimals"
-                  >
-                    <option value={0}>0</option>
-                    <option value={2}>2</option>
-                    <option value={4}>4</option>
-                    <option value={6}>6</option>
-                  </select>
-                </div>
-
-                <p className="mt-2 text-xs text-slate-500">
-                  Calculations preserve decimals internally (up to 12). If
-                  rounding is enabled, only the displayed values are rounded.
-                </p>
-              </div>
             </div>
           </div>
 
@@ -889,7 +849,7 @@ export default function MonthlyToHourlyRent() {
                 </div>
 
                 <div className="mt-2 flex flex-col gap-2">
-                  <div className="text-4xl sm:text-5xl font-extrabold text-sky-800 tabular-nums tracking-tight">
+                  <div className="text-4xl sm:text-5xl font-extrabold text-emerald-700 tabular-nums tracking-tight">
                     {fmt(breakdown.hourly)}
                   </div>
                   <div className="text-sm text-slate-600 leading-relaxed">
@@ -1054,123 +1014,486 @@ export default function MonthlyToHourlyRent() {
             dates vary by lease.
           </p>
         </div>
-      </section>
 
-      <section
-        id="how-it-works"
-        className="max-w-5xl mx-auto px-6 pt-8 rc-no-print"
-      >
-        <h2 className="text-3xl font-bold mb-6 text-center text-slate-900">
-          How it works
-        </h2>
+        <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4">
+          <div className="text-xs text-slate-500">Display</div>
+          <label className="mt-1 flex items-center gap-2 text-sm text-slate-700">
+            <input
+              type="checkbox"
+              checked={roundDisplay}
+              onChange={(e) => setRoundDisplay(e.target.checked)}
+              className="h-4 w-4 accent-sky-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded"
+            />
+            Round displayed values (display only)
+          </label>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-6">
-          <ol className="list-decimal pl-5 space-y-3 text-slate-700 leading-relaxed">
-            <li>
-              <strong>You enter a monthly rent amount.</strong> The parser
-              supports commas, currency symbols, and formats like .5, and it
-              avoids showing misleading zero results on invalid input.
-            </li>
-            <li>
-              <strong>The converter uses annual equivalence.</strong> Monthly
-              rent is interpreted using an average month length (365 ÷ 12 days),
-              converted through a 365-day year, then expressed as an hourly
-              equivalent using 24 hours per day.
-            </li>
-            <li>
-              <strong>The breakdown stays consistent.</strong> Hourly, daily,
-              weekly, biweekly, 4-week, monthly, and annual are derived from the
-              same annual basis so you are not mixing assumptions.
-            </li>
-            <li>
-              <strong>Rounding is display-only.</strong> Calculations preserve
-              decimals internally (up to 12). If rounding is enabled, only the
-              displayed values are rounded.
-            </li>
-          </ol>
-
-          <div className="mt-4 rounded-xl border border-slate-100 bg-slate-50 p-4 text-sm text-slate-700">
-            <div className="font-semibold">What you can do</div>
-            <ul className="mt-2 list-disc pl-5 space-y-1 text-slate-600 leading-relaxed">
-              <li>
-                Compare monthly rent to time-based rates without assuming a
-                30-day month
-              </li>
-              <li>
-                Use the month-length comparison to see how big the 30-day
-                shortcut error is
-              </li>
-              <li>Print the page for documentation or budgeting</li>
-            </ul>
+          <div className="mt-3 flex items-center justify-between gap-3">
+            <div className="text-xs text-slate-500">Displayed decimals</div>
+            <select
+              value={displayDecimals}
+              onChange={(e) => {
+                const allowed = new Set([0, 2, 4, 6]);
+                const n = Math.trunc(Number(e.target.value));
+                setDisplayDecimals(allowed.has(n) ? n : 2);
+              }}
+              className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
+              aria-label="Displayed decimals"
+            >
+              <option value={0}>0</option>
+              <option value={2}>2</option>
+              <option value={4}>4</option>
+              <option value={6}>6</option>
+            </select>
           </div>
+
+          <p className="mt-2 text-xs text-slate-500">
+            Calculations preserve decimals internally (up to 12). If rounding is
+            enabled, only the displayed values are rounded.
+          </p>
         </div>
       </section>
 
-      <section id="learn" className="max-w-5xl mx-auto px-6 pt-8">
-        <h2 className="text-3xl font-bold mb-6 text-center text-slate-900">
-          Monthly rent expressed as an hourly equivalent
-        </h2>
-
-        <p className="text-slate-700 mb-4 leading-relaxed">
-          A monthly rent amount is commonly used for leases and long-term
-          rentals, while hourly pricing can appear in short stays or flexible
-          arrangements. Converting monthly to hourly can help compare monthly
-          rent to time-based rates using a consistent annual basis.
-        </p>
-
-        <h3 className="text-2xl font-semibold mt-10 mb-4 text-slate-900">
-          Why annual equivalence matters for monthly-to-hourly conversion
-        </h3>
-        <p className="text-slate-700 mb-4 leading-relaxed">
-          This converter treats annual cost as the reference point. The monthly
-          amount is converted through an average month length (365 ÷ 12) and a
-          365-day year, then translated into an hourly value. This keeps the
-          hourly equivalent aligned with other conversions on the site.
-        </p>
-
-        <h3 className="text-2xl font-semibold mt-10 mb-4 text-slate-900">
-          What the hourly number does and does not mean
-        </h3>
-        <ul className="list-disc ml-6 text-slate-700 mb-4 leading-relaxed">
-          <li>
-            The hourly figure is a comparison value derived from the monthly
-            amount. It does not change how rent is billed under a lease.
-          </li>
-          <li>
-            Short-stay hourly pricing often includes different rules, fees, or
-            minimums. This tool converts the rent amount only.
-          </li>
-          <li>
-            The month-length comparison section shows why using a fixed 30-day
-            month can shift the result.
-          </li>
-        </ul>
-
-        <p className="text-slate-700 mb-4 leading-relaxed">
-          Related tools:{" "}
-          <a
-            href={safeHref("/rent-converter")}
-            className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded"
+      <>
+        {/* HOW IT WORKS */}
+        <section
+          id="how-it-works"
+          className="relative overflow-hidden rounded-3xl bg-white ring-1 ring-slate-200/70 shadow-sm rc-no-print"
+        >
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0"
           >
-            rent converter
-          </a>{" "}
-          ,{" "}
-          <a
-            href={safeHref("/how-much-rent-can-i-afford-calculator")}
-            className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded"
+            <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-sky-100/60 blur-3xl" />
+            <div className="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-slate-100/70 blur-3xl" />
+            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-sky-300/60 to-transparent" />
+          </div>
+
+          <div className="relative p-6 sm:p-10">
+            <div className="mx-auto max-w-4xl">
+              <div className="flex flex-col gap-4 sm:gap-5">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="min-w-0">
+                    <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                      How the monthly to hourly rent converter works
+                    </h2>
+                    <p className="mt-2 text-slate-600 leading-7 max-w-2xl">
+                      This page converts a monthly rent amount into an hourly
+                      equivalent using a time-based model. Monthly is treated as
+                      an average month derived from a 365-day year. The hourly
+                      figure is then derived from the same annual basis using 24
+                      hours per day. The result is a comparison rate, not a
+                      billing schedule.
+                    </p>
+                  </div>
+
+                  <div className="hidden sm:flex flex-col items-end gap-2 shrink-0">
+                    <span className="inline-flex items-center gap-2 rounded-full bg-sky-50 text-sky-700 ring-1 ring-sky-200/70 px-3 py-1 text-xs font-semibold">
+                      <span className="h-2 w-2 rounded-full bg-sky-500" />
+                      Month = 365 ÷ 12 days
+                    </span>
+                    <span className="inline-flex items-center gap-2 rounded-full bg-slate-50 text-slate-700 ring-1 ring-slate-200 px-3 py-1 text-xs font-semibold">
+                      <span className="h-2 w-2 rounded-full bg-slate-500" />
+                      Hour = day ÷ 24
+                    </span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+                    <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                      INPUT
+                    </div>
+                    <div className="mt-2 text-sm font-semibold text-slate-900">
+                      Monthly amount
+                    </div>
+                  </div>
+                  <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+                    <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                      ANNUALIZE
+                    </div>
+                    <div className="mt-2 text-sm font-semibold text-slate-900">
+                      Monthly × 12
+                    </div>
+                  </div>
+                  <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+                    <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                      NORMALIZE
+                    </div>
+                    <div className="mt-2 text-sm font-semibold text-slate-900">
+                      Annual → day
+                    </div>
+                  </div>
+                  <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+                    <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                      DERIVE
+                    </div>
+                    <div className="mt-2 text-sm font-semibold text-slate-900">
+                      Day ÷ 24
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-10 space-y-6 text-base text-slate-700 leading-7">
+                {/* Step card: input parsing */}
+                <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                  <div
+                    aria-hidden="true"
+                    className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+                  />
+                  <div className="p-5 sm:p-6">
+                    <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
+                      Step 1: Enter the monthly rent amount
+                    </h3>
+
+                    <div className="mt-4 space-y-3">
+                      <p>
+                        Enter the rent amount as written and select “monthly.”
+                        The parser accepts currency symbols, grouping commas,
+                        and decimal formats. If the entry is invalid or could be
+                        interpreted in more than one way, the page avoids
+                        producing a “0” or a guess.
+                      </p>
+
+                      <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                        <div className="text-sm font-bold text-slate-900">
+                          Parsing rules
+                        </div>
+                        <ul className="mt-2 list-disc pl-5 space-y-2">
+                          <li>
+                            <strong>1,234</strong> is interpreted as 1234
+                          </li>
+                          <li>
+                            <strong>1.234</strong> is interpreted as 1.234
+                          </li>
+                          <li>
+                            Formats like <strong>.5</strong> and{" "}
+                            <strong>12.</strong> are supported
+                          </li>
+                        </ul>
+                      </div>
+
+                      <p>
+                        This tool converts the rent amount only. It does not add
+                        utilities, fees, deposits, or taxes, and it does not try
+                        to interpret the listing terms beyond the number you
+                        provide.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Step card: conversion path */}
+                <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                  <div
+                    aria-hidden="true"
+                    className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+                  />
+                  <div className="p-5 sm:p-6">
+                    <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
+                      Step 2: Convert monthly into an hourly equivalent
+                      (time-based)
+                    </h3>
+
+                    <div className="mt-4 space-y-3">
+                      <p>
+                        The page anchors the calculation to an annual total so
+                        the hourly figure stays compatible with the rest of the
+                        breakdown. Monthly is treated as one-twelfth of a
+                        365-day year. From that annual basis, a daily rate is
+                        derived, then divided into hours.
+                      </p>
+
+                      <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                        <div className="text-sm font-bold text-slate-900">
+                          Formulas
+                        </div>
+                        <ul className="mt-2 list-disc pl-5 space-y-2">
+                          <li>
+                            <strong>Annual</strong> = monthly × 12
+                          </li>
+                          <li>
+                            <strong>Daily</strong> = annual ÷ 365
+                          </li>
+                          <li>
+                            <strong>Hourly</strong> = daily ÷ 24
+                          </li>
+                          <li>
+                            Combined:{" "}
+                            <strong>Hourly = monthly × 12 ÷ 365 ÷ 24</strong>
+                          </li>
+                        </ul>
+                        <p className="mt-3 text-sm text-slate-600">
+                          Monthly corresponds to an average month length of 365
+                          ÷ 12 days. Hourly is a clock-hour rate derived from
+                          that daily basis.
+                        </p>
+                      </div>
+
+                      <p>
+                        This hourly number is best read as a comparison rate. It
+                        does not imply you can pay rent “by the hour,” and it
+                        does not model minimum stays, cleaning fees, or other
+                        short-stay pricing rules.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Step card: breakdown + rounding */}
+                <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                  <div
+                    aria-hidden="true"
+                    className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+                  />
+                  <div className="p-5 sm:p-6">
+                    <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
+                      Step 3: Keep the breakdown aligned and keep rounding
+                      separate
+                    </h3>
+
+                    <div className="mt-4 space-y-3">
+                      <p>
+                        The page shows hourly alongside daily, weekly, biweekly,
+                        4-week, monthly, and annual values. Every line is
+                        derived from the same annual basis, so comparisons don’t
+                        quietly switch period definitions partway through the
+                        table.
+                      </p>
+
+                      <ul className="list-disc pl-5 space-y-2">
+                        <li>
+                          <strong>Weekly</strong> = daily × 7
+                        </li>
+                        <li>
+                          <strong>Biweekly</strong> = daily × 14
+                        </li>
+                        <li>
+                          <strong>4-week</strong> = daily × 28
+                        </li>
+                        <li>
+                          <strong>Monthly</strong> = annual ÷ 12
+                        </li>
+                      </ul>
+
+                      <p>
+                        Calculations preserve decimals internally (up to 12
+                        places). If rounding is enabled, only the displayed
+                        values are rounded. The underlying numbers are
+                        unchanged.
+                      </p>
+
+                      <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                        <div className="text-sm font-bold text-slate-900">
+                          What you can do here
+                        </div>
+                        <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
+                          <li>
+                            Compare monthly rent to time-based rates without
+                            assuming a 30-day month
+                          </li>
+                          <li>
+                            Use the breakdown to sanity-check what a listing
+                            implies across periods
+                          </li>
+                          <li>
+                            Print or save the results as a PDF for documentation
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Dark callout */}
+                <div className="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-6 sm:p-7">
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0"
+                  >
+                    <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-sky-500 blur-3xl opacity-20" />
+                    <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-slate-500 blur-3xl opacity-30" />
+                  </div>
+
+                  <div className="relative">
+                    <div className="text-sm font-semibold text-sky-300">
+                      Utility note
+                    </div>
+                    <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight">
+                      The hourly result is a baseline, not a lease term
+                    </h3>
+                    <p className="mt-3 text-slate-200 leading-7">
+                      Hourly on this page is a clock-hour equivalent derived
+                      from a monthly amount through a 365-day year. It’s meant
+                      for comparison and consistency across the breakdown, not
+                      for forecasting what any short-stay provider charges per
+                      hour.
+                    </p>
+                  </div>
+                </div>
+
+                <p className="text-slate-700 leading-relaxed">
+                  Related pages:{" "}
+                  <a
+                    href={safeHref("/rent-converter")}
+                    className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                  >
+                    rent converter
+                  </a>
+                  ,{" "}
+                  <a
+                    href={safeHref("/how-much-rent-can-i-afford-calculator")}
+                    className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                  >
+                    how much rent can I afford
+                  </a>
+                  , and{" "}
+                  <a
+                    href={safeHref("/rent-split-calculator")}
+                    className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                  >
+                    rent split calculator
+                  </a>
+                  .
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* LEARN */}
+        <section
+          id="learn"
+          className="relative overflow-hidden rounded-3xl bg-white ring-1 ring-slate-200/70 shadow-sm mt-6 rc-no-print"
+        >
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0"
           >
-            how much rent can I afford
-          </a>{" "}
-          , and{" "}
-          <a
-            href={safeHref("/rent-split-calculator")}
-            className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded"
-          >
-            rent split calculator
-          </a>
-          .
-        </p>
-      </section>
+            <div className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-slate-100/70 blur-3xl" />
+            <div className="absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-sky-100/60 blur-3xl" />
+            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-sky-300/60 to-transparent" />
+          </div>
+
+          <div className="relative p-6 sm:p-10">
+            <div className="mx-auto max-w-4xl">
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight text-center leading-tight">
+                Monthly rent expressed as an hourly equivalent
+              </h2>
+
+              <div className="mt-8 space-y-6 text-base text-slate-700 leading-7">
+                <div className="rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                  <div className="p-5 sm:p-6">
+                    <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
+                      What the hourly number is for
+                    </h3>
+                    <p className="mt-4">
+                      Monthly amounts are common in leases and long-term
+                      rentals. Hourly rates show up in short-stay pricing and
+                      some flexible arrangements. This conversion gives you a
+                      neutral baseline: “what hourly rate would match the same
+                      monthly amount under one consistent set of time
+                      assumptions?”
+                    </p>
+                    <p className="mt-4">
+                      The hourly figure is most useful when you are comparing
+                      two options that present pricing in different formats. You
+                      can convert both options onto the same basis and then
+                      check the breakdown to see how the implied weekly, 14-day,
+                      and 28-day values line up.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                  <div className="p-5 sm:p-6">
+                    <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
+                      Why this page routes through annual first
+                    </h3>
+                    <p className="mt-4">
+                      Hourly looks precise, but it’s only meaningful if the time
+                      basis is fixed. This page anchors everything to an annual
+                      total so the hourly, daily, weekly, and 4-week lines can
+                      all reconcile. Monthly is treated as one-twelfth of a
+                      365-day year, and hourly is derived from that same year by
+                      converting through days and then hours.
+                    </p>
+
+                    <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                      <div className="text-sm font-bold text-slate-900">
+                        Time basis summary
+                      </div>
+                      <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
+                        <li>Year = 365 days</li>
+                        <li>Average month = 365 ÷ 12 days</li>
+                        <li>Day = 24 hours</li>
+                      </ul>
+                    </div>
+
+                    <p className="mt-4">
+                      That’s also why the page can show the “30-day month”
+                      shortcut difference without changing the equivalence
+                      basis. The shortcut is a comparison, not the calculation
+                      backbone.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                  <div className="p-5 sm:p-6">
+                    <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
+                      What the hourly number does and does not mean
+                    </h3>
+                    <ul className="mt-4 list-disc pl-5 space-y-2">
+                      <li>
+                        It is a derived comparison rate. It does not change how
+                        rent is billed under a lease.
+                      </li>
+                      <li>
+                        It does not model short-stay rule sets (minimum nights,
+                        cleaning fees, service fees, time windows). It converts
+                        the rent amount only.
+                      </li>
+                      <li>
+                        It assumes clock hours (24 per day). If your “hourly”
+                        concept is not 24/7, use an hourly route that explicitly
+                        supports a paid-hours scenario instead.
+                      </li>
+                    </ul>
+
+                    <p className="mt-5 text-slate-700 leading-relaxed">
+                      Related tools:{" "}
+                      <a
+                        href={safeHref("/rent-converter")}
+                        className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                      >
+                        rent converter
+                      </a>{" "}
+                      <span className="text-slate-400">·</span>{" "}
+                      <a
+                        href={safeHref(
+                          "/how-much-rent-can-i-afford-calculator",
+                        )}
+                        className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                      >
+                        how much rent can I afford
+                      </a>{" "}
+                      <span className="text-slate-400">·</span>{" "}
+                      <a
+                        href={safeHref("/rent-split-calculator")}
+                        className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                      >
+                        rent split calculator
+                      </a>
+                      .
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </>
 
       <section id="faq" className="max-w-5xl mx-auto py-16 px-6 rc-no-print">
         <h2 className="text-3xl font-bold text-center mb-8 text-slate-800">

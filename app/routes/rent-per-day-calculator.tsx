@@ -42,7 +42,10 @@ export const meta: Route.MetaFunction = () => [
     content: "https://www.rentconverter.com/rent-per-day-calculator",
   },
   { property: "og:site_name", content: "RentConverter.com" },
-  { property: "og:image", content: "https://www.rentconverter.com/og-image.jpg" },
+  {
+    property: "og:image",
+    content: "https://www.rentconverter.com/og-image.jpg",
+  },
 
   { name: "twitter:card", content: "summary_large_image" },
   { name: "twitter:title", content: "Rent Per Day Calculator" },
@@ -51,9 +54,16 @@ export const meta: Route.MetaFunction = () => [
     content:
       "Calculate daily rent from monthly, weekly, 4-week, biweekly, hourly, or annual amounts with clear breakdowns.",
   },
-  { name: "twitter:image", content: "https://www.rentconverter.com/og-image.jpg" },
+  {
+    name: "twitter:image",
+    content: "https://www.rentconverter.com/og-image.jpg",
+  },
 
-  { tagName: "link", rel: "canonical", href: "https://www.rentconverter.com/rent-per-day-calculator" },
+  {
+    tagName: "link",
+    rel: "canonical",
+    href: "https://www.rentconverter.com/rent-per-day-calculator",
+  },
 ];
 
 type Period =
@@ -195,7 +205,9 @@ function groupInt(intStr: string, groupSep: string): string {
 }
 
 function getNumberSeparators(): { group: string; decimal: string } {
-  const parts = new Intl.NumberFormat(undefined, { useGrouping: true }).formatToParts(1000.1);
+  const parts = new Intl.NumberFormat(undefined, {
+    useGrouping: true,
+  }).formatToParts(1000.1);
   const group = parts.find((p) => p.type === "group")?.value ?? ",";
   const decimal = parts.find((p) => p.type === "decimal")?.value ?? ".";
   return { group, decimal };
@@ -210,7 +222,7 @@ function roundScaledToDecimals(scaled: bigint, decimals: number): bigint {
   const q = a / factor;
   const r = a % factor;
   const half = factor / 2n;
-  const qRounded = r >= half ? (q + 1n) : q;
+  const qRounded = r >= half ? q + 1n : q;
   return sign * qRounded * factor;
 }
 
@@ -235,7 +247,6 @@ function scaledToDecimalStrings(
   return { negative, intStr: intPart.toString(), fracStr };
 }
 
-
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
@@ -259,7 +270,9 @@ function formatCurrencyFromScaled(
     }
   }
 
-  const scaledForDisplay = roundDisplay ? roundScaledToDecimals(scaled, digits) : scaled;
+  const scaledForDisplay = roundDisplay
+    ? roundScaledToDecimals(scaled, digits)
+    : scaled;
 
   const { group, decimal } = getNumberSeparators();
   const { negative, intStr, fracStr } = scaledToDecimalStrings(
@@ -801,7 +814,7 @@ export default function RentPerDayCalculator() {
       />
 
       <section className="max-w-6xl mx-auto px-6 rc-no-print">
-        <nav className="text-sm text-slate-600 mb-4" aria-label="Breadcrumb">
+        <nav className="text-sm text-slate-600" aria-label="Breadcrumb">
           <a
             href={safeHref("/")}
             className="inline-flex items-center gap-2 rounded-md text-slate-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
@@ -810,23 +823,15 @@ export default function RentPerDayCalculator() {
           </a>{" "}
           / <span className="text-slate-800">{pageName}</span>
         </nav>
-
-        <h1 className="text-4xl font-bold text-slate-900 mb-4">{pageName}</h1>
-        <p className="text-slate-700 max-w-3xl text-lg leading-relaxed">
-          Convert rent into a daily equivalent from monthly, weekly, every 4
-          weeks (28 days), biweekly, hourly, or annual amounts. The daily figure
-          is derived using a consistent 365-day annual basis so different
-          billing cycles can be compared on the same footing.
-        </p>
       </section>
 
-      <section id="calculator" className="mx-auto max-w-6xl px-6 pb-6 pt-8">
+      <section id="calculator" className="mx-auto max-w-6xl px-6 pb-6 pt-4">
         <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:p-8 rc-print-block">
           <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
-              <h2 className="text-xl sm:text-2xl font-bold text-slate-950">
-                Daily rent equivalent
-              </h2>
+              <h1 className="text-xl sm:text-4xl capitalize font-bold text-sky-800">
+                Daily rent equivalent calculator
+              </h1>
             </div>
 
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
@@ -971,7 +976,7 @@ export default function RentPerDayCalculator() {
                 </div>
 
                 <div className="mt-2 flex flex-col gap-2">
-                  <div className="text-4xl sm:text-5xl font-extrabold text-sky-800 tabular-nums break-words">
+                  <div className="text-4xl sm:text-5xl font-extrabold text-emerald-700 tabular-nums break-words">
                     {fmtMoney(computed.dailyScaled)}
                   </div>
                   <div className="text-sm text-slate-700 leading-relaxed">
@@ -1226,58 +1231,277 @@ export default function RentPerDayCalculator() {
 
       <section
         id="how-it-works"
-        className="max-w-5xl mx-auto px-6 pt-8 rc-no-print"
+        className="relative overflow-hidden rounded-3xl bg-white ring-1 ring-slate-200/70 shadow-sm rc-no-print"
       >
-        <h2 className="text-3xl font-bold mb-6 text-center text-slate-950">
-          How this tool works and what to expect
-        </h2>
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0"
+        >
+          <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-sky-100/60 blur-3xl" />
+          <div className="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-slate-100/70 blur-3xl" />
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-sky-300/60 to-transparent" />
+        </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <p className="text-slate-800 mb-4 leading-relaxed">
-            This page converts your entered rent into a daily equivalent by
-            using an annual total as the common basis. First, the calculator
-            converts the input period to an annual amount using a 365-day year.
-            Then it converts that annual amount into a 1-day value.
-          </p>
+        <div className="relative p-6 sm:p-10">
+          <div className="mx-auto max-w-4xl">
+            <h2 className="text-3xl sm:text-4xl font-extrabold mb-6 text-center text-sky-900 tracking-tight leading-tight">
+              How this rent per day calculator works
+            </h2>
 
-          <p className="text-slate-800 mb-4 leading-relaxed">
-            This approach avoids mixing calendar assumptions. For example,
-            dividing monthly rent by 30 changes the implied annual total. Here,
-            a month is treated as an average month of 365 ÷ 12 days so all
-            periods remain consistent when compared.
-          </p>
+            <p className="text-slate-600 leading-7">
+              This page converts your entered rent amount into a{" "}
+              <strong>daily equivalent</strong>. It does that by using an annual
+              total as the common basis. First, your selected input period is
+              converted into an annual amount using a consistent time-length
+              model. Then that annual amount is converted into a 1-day value.
+              The result is a daily figure that lines up with the rest of the
+              breakdown (weekly, biweekly, 28-day, monthly average, and annual)
+              without switching assumptions mid-stream.
+            </p>
 
-          <p className="text-slate-800 mb-4 leading-relaxed">
-            The “total for a chosen number of days” box is a quick estimator
-            that multiplies the daily equivalent by a day count. It is not a
-            lease proration engine. Real proration depends on how the lease
-            defines a billing month, due dates, partial periods, and fees.
-          </p>
+            <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+                <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  INPUT
+                </div>
+                <div className="mt-2 text-sm font-semibold text-slate-900">
+                  Amount + period
+                </div>
+              </div>
+              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+                <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  NORMALIZE
+                </div>
+                <div className="mt-2 text-sm font-semibold text-slate-900">
+                  Annual total
+                </div>
+              </div>
+              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+                <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  CONVERT
+                </div>
+                <div className="mt-2 text-sm font-semibold text-slate-900">
+                  Daily equivalent
+                </div>
+              </div>
+              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+                <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  EXTRA
+                </div>
+                <div className="mt-2 text-sm font-semibold text-slate-900">
+                  Days total box
+                </div>
+              </div>
+            </div>
 
-          <p className="text-slate-800 mt-6 leading-relaxed">
-            Related tools:{" "}
-            <a
-              href={safeHref("/rent-converter")}
-              className="inline-flex items-center gap-2 text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
-            >
-              rent converter
-            </a>
-            ,{" "}
-            <a
-              href={safeHref("/monthly-to-daily-rent-converter")}
-              className="inline-flex items-center gap-2 text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
-            >
-              monthly to daily
-            </a>
-            ,{" "}
-            <a
-              href={safeHref("/rent-paid-every-4-weeks-calculator")}
-              className="inline-flex items-center gap-2 text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
-            >
-              rent paid every 4 weeks
-            </a>
-            .
-          </p>
+            <div className="mt-10 space-y-6 text-base text-slate-700 leading-7">
+              {/* Card 1 */}
+              <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+                />
+                <div className="p-5 sm:p-6">
+                  <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
+                    1) The daily value is derived from an annual basis
+                  </h3>
+
+                  <p className="mt-4">
+                    The daily equivalent is not computed by taking a shortcut
+                    like “monthly ÷ 30” or “weekly ÷ 7 unless the input was
+                    weekly.” The page uses one consistent basis for all inputs:
+                    <strong>
+                      {" "}
+                      convert the input to an annual total, then divide by 365
+                      to get daily
+                    </strong>
+                    . That way, daily, weekly, 28-day, and monthly outputs
+                    reconcile cleanly because they all come from the same annual
+                    number.
+                  </p>
+
+                  <p className="mt-4">
+                    This matters most when the input is monthly or every 4
+                    weeks. A calendar month is not a fixed number of days, and a
+                    4-week period is exactly 28 days. If you convert monthly to
+                    daily by dividing by 30, you have implicitly changed the
+                    annual total. This page avoids that by mapping monthly
+                    through an average month length (365 ÷ 12 days) and using a
+                    365-day year.
+                  </p>
+                </div>
+              </div>
+
+              {/* Card 2 */}
+              <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+                />
+                <div className="p-5 sm:p-6">
+                  <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
+                    2) Period definitions used on this page
+                  </h3>
+
+                  <p className="mt-4">
+                    The converter treats each period label as a time length.
+                    That prevents mixing calendar-based payment schedules with
+                    fixed-day cycles when you are trying to compare costs.
+                  </p>
+
+                  <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-900">
+                      Assumptions used
+                    </div>
+                    <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
+                      <li>Year = 365 days</li>
+                      <li>Average month = 365 ÷ 12 days</li>
+                      <li>Week = 7 days</li>
+                      <li>Biweekly = 14 days</li>
+                      <li>Every 4 weeks = 28 days</li>
+                      <li>Hourly conversions assume 24 hours per day</li>
+                    </ul>
+                  </div>
+
+                  <p className="mt-4">
+                    If you are comparing listings, the daily equivalent is often
+                    the simplest common unit because it can be scaled into any
+                    other period without switching definitions. It also helps
+                    you see whether a “monthly” listing and a “4-week” listing
+                    that look similar are actually the same annual cost.
+                  </p>
+                </div>
+              </div>
+
+              {/* Card 3 */}
+              <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+                />
+                <div className="p-5 sm:p-6">
+                  <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
+                    3) What the “total for a chosen number of days” box does
+                  </h3>
+
+                  <p className="mt-4">
+                    The days-total box is a quick estimator: it multiplies the
+                    daily equivalent by a day count you choose. That makes it
+                    useful for “what does this difference mean over 10 days, 45
+                    days, or 90 days” comparisons, or for rough planning across
+                    a defined number of days.
+                  </p>
+
+                  <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-900">
+                      Estimator behavior
+                    </div>
+                    <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
+                      <li>
+                        It uses the <strong>computed daily equivalent</strong>{" "}
+                        from this page as the base.
+                      </li>
+                      <li>
+                        It multiplies by your selected day count (no extra
+                        assumptions are added).
+                      </li>
+                      <li>
+                        It is not a proration engine and does not model
+                        lease-specific rules.
+                      </li>
+                    </ul>
+                  </div>
+
+                  <p className="mt-4">
+                    Real proration depends on what the lease defines as a
+                    billing month, due dates, partial periods, and any fees or
+                    minimums. This tool keeps that out of scope and stays
+                    strictly in “equivalence math” territory.
+                  </p>
+                </div>
+              </div>
+
+              {/* Card 4 */}
+              <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+                />
+                <div className="p-5 sm:p-6">
+                  <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
+                    4) Decimals and rounding
+                  </h3>
+
+                  <p className="mt-4">
+                    Inputs are parsed in a decimal-safe way and calculations
+                    preserve precision internally (up to 12 decimals). If
+                    rounding is enabled in the UI, it should be display-only:
+                    formatting what you see without changing the underlying
+                    daily or annual numbers that the breakdown is based on.
+                  </p>
+
+                  <p className="mt-4">
+                    If an input is invalid or ambiguous, the page should avoid
+                    showing a misleading “0” daily result. A daily equivalent is
+                    often used as a base for other calculations on the page, so
+                    hiding results on bad input is the correct behavior.
+                  </p>
+                </div>
+              </div>
+
+              {/* Dark callout */}
+              <div className="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-6 sm:p-7">
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0"
+                >
+                  <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-sky-500 blur-3xl opacity-20" />
+                  <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-slate-500 blur-3xl opacity-30" />
+                </div>
+
+                <div className="relative">
+                  <div className="text-sm font-semibold text-sky-300">
+                    Scope note
+                  </div>
+                  <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-100">
+                    This is an equivalence calculator, not a billing simulator
+                  </h3>
+                  <p className="mt-3 text-slate-200 leading-7">
+                    The outputs are consistent comparisons derived from explicit
+                    time assumptions. They are useful for comparing listings,
+                    sanity-checking implied annual cost, and estimating
+                    day-based totals. They do not model lease-specific
+                    proration, due-date rules, partial periods, or fees.
+                  </p>
+                </div>
+              </div>
+
+              <p className="text-slate-700 leading-relaxed">
+                Related tools:{" "}
+                <a
+                  href={safeHref("/rent-converter")}
+                  className="inline-flex items-center gap-2 text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                >
+                  rent converter
+                </a>
+                ,{" "}
+                <a
+                  href={safeHref("/monthly-to-daily-rent-converter")}
+                  className="inline-flex items-center gap-2 text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                >
+                  monthly to daily
+                </a>
+                ,{" "}
+                <a
+                  href={safeHref("/rent-paid-every-4-weeks-calculator")}
+                  className="inline-flex items-center gap-2 text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                >
+                  rent paid every 4 weeks
+                </a>
+                .
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 

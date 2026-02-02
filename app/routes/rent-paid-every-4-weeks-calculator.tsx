@@ -44,7 +44,10 @@ export const meta: Route.MetaFunction = () => [
     content: "https://www.rentconverter.com/rent-paid-every-4-weeks-calculator",
   },
   { property: "og:site_name", content: "RentConverter.com" },
-  { property: "og:image", content: "https://www.rentconverter.com/og-image.jpg" },
+  {
+    property: "og:image",
+    content: "https://www.rentconverter.com/og-image.jpg",
+  },
 
   { name: "twitter:card", content: "summary_large_image" },
   {
@@ -56,9 +59,16 @@ export const meta: Route.MetaFunction = () => [
     content:
       "See why 4-week rent results in 13 payments per year and how it compares to monthly rent on the same annual basis.",
   },
-  { name: "twitter:image", content: "https://www.rentconverter.com/og-image.jpg" },
+  {
+    name: "twitter:image",
+    content: "https://www.rentconverter.com/og-image.jpg",
+  },
 
-  { tagName: "link", rel: "canonical", href: "https://www.rentconverter.com/rent-paid-every-4-weeks-calculator" },
+  {
+    tagName: "link",
+    rel: "canonical",
+    href: "https://www.rentconverter.com/rent-paid-every-4-weeks-calculator",
+  },
 ];
 
 type Period =
@@ -198,7 +208,9 @@ function groupInt(intStr: string, groupSep: string): string {
 }
 
 function getNumberSeparators(): { group: string; decimal: string } {
-  const parts = new Intl.NumberFormat(undefined, { useGrouping: true }).formatToParts(1000.1);
+  const parts = new Intl.NumberFormat(undefined, {
+    useGrouping: true,
+  }).formatToParts(1000.1);
   const group = parts.find((p) => p.type === "group")?.value ?? ",";
   const decimal = parts.find((p) => p.type === "decimal")?.value ?? ".";
   return { group, decimal };
@@ -213,7 +225,7 @@ function roundScaledToDecimals(scaled: bigint, decimals: number): bigint {
   const q = a / factor;
   const r = a % factor;
   const half = factor / 2n;
-  const qRounded = r >= half ? (q + 1n) : q;
+  const qRounded = r >= half ? q + 1n : q;
   return sign * qRounded * factor;
 }
 
@@ -238,7 +250,6 @@ function scaledToDecimalStrings(
   return { negative, intStr: intPart.toString(), fracStr };
 }
 
-
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
@@ -262,7 +273,9 @@ function formatCurrencyFromScaled(
     }
   }
 
-  const scaledForDisplay = roundDisplay ? roundScaledToDecimals(scaled, digits) : scaled;
+  const scaledForDisplay = roundDisplay
+    ? roundScaledToDecimals(scaled, digits)
+    : scaled;
 
   const { group, decimal } = getNumberSeparators();
   const { negative, intStr, fracStr } = scaledToDecimalStrings(
@@ -765,27 +778,14 @@ export default function RentPaidEvery4Weeks() {
         </nav>
       </section>
 
-      {/* Header */}
-      <section className="pb-8 text-center bg-white rc-no-print">
-        <h1 className="text-4xl sm:text-[2.6rem] leading-tight font-bold text-slate-900 mb-4">
-          {pageName}
-        </h1>
-        <p className="text-slate-600 max-w-5xl mx-auto text-lg leading-relaxed">
-          A 4-week rent schedule is a 28-day cycle, not a calendar month. This
-          page converts a 4-week rent amount into monthly (average) and annual
-          equivalents so you can compare listings and budgets on the same annual
-          basis.
-        </p>
-      </section>
-
       {/* Calculator */}
       <section id="calculator" className="mx-auto max-w-6xl px-6 pb-8">
-        <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:p-8 rc-print-block">
+        <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:px-8 rc-print-block">
           <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
-              <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
+              <h1 className="text-xl sm:text-4xl capitalize font-bold text-sky-800">
                 Convert 4-week rent to monthly and annual
-              </h2>
+              </h1>
             </div>
 
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
@@ -1153,167 +1153,342 @@ export default function RentPaidEvery4Weeks() {
         </div>
       </section>
 
-      {/* Annual payment count table */}
       <section
         id="payment-counts"
-        className="max-w-6xl mx-auto px-6 pt-8 rc-no-print"
+        className="relative overflow-hidden rounded-3xl bg-white ring-1 ring-slate-200/70 shadow-sm rc-no-print"
       >
-        <h2 className="text-3xl font-bold mb-4 text-slate-900">
-          Annual payment counts for common rent schedules
-        </h2>
-        <p className="text-slate-700 mb-6">
-          The confusion usually comes from mixing calendar months with fixed-day
-          cycles. A 4-week schedule is a repeating 28-day period, so it does not
-          line up cleanly with months.
-        </p>
-
-        <div className="overflow-x-auto rounded-2xl border border-slate-200 shadow-sm">
-          <table className="min-w-full bg-white">
-            <thead className="bg-slate-50">
-              <tr>
-                <th className="text-left text-sm font-semibold text-slate-700 px-4 py-3">
-                  Schedule
-                </th>
-                <th className="text-left text-sm font-semibold text-slate-700 px-4 py-3">
-                  Length
-                </th>
-                <th className="text-left text-sm font-semibold text-slate-700 px-4 py-3">
-                  Payments per 52-week year
-                </th>
-                <th className="text-left text-sm font-semibold text-slate-700 px-4 py-3">
-                  Periods per 365-day year (approx.)
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="border-t border-slate-200">
-                <td className="px-4 py-3 text-sm text-slate-900 font-semibold">
-                  Monthly
-                </td>
-                <td className="px-4 py-3 text-sm text-slate-800">
-                  Calendar month
-                </td>
-                <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
-                  12 payments
-                </td>
-                <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
-                  12 months
-                </td>
-              </tr>
-              <tr className="border-t border-slate-200 bg-slate-50/40">
-                <td className="px-4 py-3 text-sm text-slate-900 font-semibold">
-                  Every 4 weeks (28 days)
-                </td>
-                <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
-                  28 days
-                </td>
-                <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
-                  13 payments
-                </td>
-                <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
-                  {safeToFixed(365 / 28, 2)} periods
-                </td>
-              </tr>
-              <tr className="border-t border-slate-200">
-                <td className="px-4 py-3 text-sm text-slate-900 font-semibold">
-                  Biweekly (every 2 weeks)
-                </td>
-                <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
-                  14 days
-                </td>
-                <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
-                  26 payments
-                </td>
-                <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
-                  {safeToFixed(365 / 14, 2)} periods
-                </td>
-              </tr>
-              <tr className="border-t border-slate-200 bg-slate-50/40">
-                <td className="px-4 py-3 text-sm text-slate-900 font-semibold">
-                  Weekly
-                </td>
-                <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
-                  7 days
-                </td>
-                <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
-                  52 payments
-                </td>
-                <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
-                  {safeToFixed(365 / 7, 2)} weeks
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0"
+        >
+          <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-sky-100/60 blur-3xl" />
+          <div className="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-slate-100/70 blur-3xl" />
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-sky-300/60 to-transparent" />
         </div>
 
-        <p className="mt-3 text-xs text-slate-600">
-          These counts are for comparison. Actual billing can depend on the
-          lease start date, due-date rules, prorations, and how partial periods
-          are handled.
-        </p>
+        <div className="relative p-6 sm:p-10">
+          <div className="mx-auto max-w-5xl">
+            <h2 className="text-3xl sm:text-4xl font-extrabold mb-4 text-sky-900 tracking-tight">
+              Annual payment counts for common rent schedules
+            </h2>
+
+            <p className="text-slate-600 leading-7 mb-6">
+              Most “4-week rent” confusion comes from mixing two different
+              concepts: calendar months and fixed-day cycles. A 4-week schedule
+              repeats every <strong>28 days</strong>. Calendar months are not 28
+              days, and they are not a fixed length. The table below shows how
+              many payments each schedule implies in a 52-week framing and how
+              many “periods” each schedule implies in a 365-day year. Those are
+              different yardsticks on purpose.
+            </p>
+
+            <div className="overflow-x-auto rounded-3xl ring-1 ring-slate-200/80 bg-white shadow-sm">
+              <table className="min-w-full bg-white">
+                <thead className="bg-slate-50">
+                  <tr>
+                    <th className="text-left text-sm font-semibold text-slate-700 px-4 py-3">
+                      Schedule
+                    </th>
+                    <th className="text-left text-sm font-semibold text-slate-700 px-4 py-3">
+                      Length
+                    </th>
+                    <th className="text-left text-sm font-semibold text-slate-700 px-4 py-3">
+                      Payments per 52-week year
+                    </th>
+                    <th className="text-left text-sm font-semibold text-slate-700 px-4 py-3">
+                      Periods per 365-day year (approx.)
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="border-t border-slate-200">
+                    <td className="px-4 py-3 text-sm text-slate-900 font-semibold">
+                      Monthly
+                    </td>
+                    <td className="px-4 py-3 text-sm text-slate-800">
+                      Calendar month
+                    </td>
+                    <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
+                      12 payments
+                    </td>
+                    <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
+                      12 months
+                    </td>
+                  </tr>
+
+                  <tr className="border-t border-slate-200 bg-slate-50/40">
+                    <td className="px-4 py-3 text-sm text-slate-900 font-semibold">
+                      Every 4 weeks (28 days)
+                    </td>
+                    <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
+                      28 days
+                    </td>
+                    <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
+                      13 payments
+                    </td>
+                    <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
+                      {safeToFixed(365 / 28, 2)} periods
+                    </td>
+                  </tr>
+
+                  <tr className="border-t border-slate-200">
+                    <td className="px-4 py-3 text-sm text-slate-900 font-semibold">
+                      Biweekly (every 2 weeks)
+                    </td>
+                    <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
+                      14 days
+                    </td>
+                    <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
+                      26 payments
+                    </td>
+                    <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
+                      {safeToFixed(365 / 14, 2)} periods
+                    </td>
+                  </tr>
+
+                  <tr className="border-t border-slate-200 bg-slate-50/40">
+                    <td className="px-4 py-3 text-sm text-slate-900 font-semibold">
+                      Weekly
+                    </td>
+                    <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
+                      7 days
+                    </td>
+                    <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
+                      52 payments
+                    </td>
+                    <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
+                      {safeToFixed(365 / 7, 2)} weeks
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p className="mt-3 text-xs text-slate-600 leading-relaxed">
+              These counts are for comparison. Real billing can depend on lease
+              start date, due-date rules, proration, fees, and how partial
+              periods are handled.
+            </p>
+
+            <div className="mt-8 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+              <div className="text-sm font-bold text-sky-900">
+                What this table is telling you
+              </div>
+              <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700 leading-relaxed">
+                <li>
+                  <strong>
+                    “4-week × 13” is a schedule framing, not a calendar-month
+                    statement.
+                  </strong>{" "}
+                  It describes how many 4-week payments fit inside 52 weeks.
+                </li>
+                <li>
+                  <strong>A 365-day year is a different basis.</strong> Under a
+                  strict time-length model, 365 ÷ 28 is not exactly 13. The tool
+                  surfaces the approximation rather than hiding it.
+                </li>
+                <li>
+                  <strong>Monthly is calendar-based.</strong> It does not have a
+                  fixed day length, so it will never line up perfectly with
+                  28-day blocks.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </section>
 
-      {/* Required explanation section above FAQ */}
       <section
         id="how-it-works"
-        className="max-w-5xl mx-auto px-6 pt-8 rc-no-print"
+        className="relative overflow-hidden rounded-3xl bg-white ring-1 ring-slate-200/70 shadow-sm rc-no-print mt-8"
       >
-        <h2 className="text-3xl font-bold mb-6 text-center text-slate-900">
-          How this tool works and what to expect
-        </h2>
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0"
+        >
+          <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-sky-100/60 blur-3xl" />
+          <div className="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-slate-100/70 blur-3xl" />
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-sky-300/60 to-transparent" />
+        </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <p className="text-slate-700 mb-4">
-            A 4-week rent schedule means rent is due every 28 days. Because
-            calendar months are usually longer than 28 days, the due date moves
-            through the calendar rather than staying on the same day each month.
-          </p>
+        <div className="relative p-6 sm:p-10">
+          <div className="mx-auto max-w-4xl">
+            <h2 className="text-3xl sm:text-4xl font-extrabold mb-6 text-center text-sky-900 tracking-tight leading-tight">
+              How this 4-week rent calculator works
+            </h2>
 
-          <p className="text-slate-700 mb-4">
-            This calculator converts your 28-day rent amount to an annual total
-            first using a 365-day year. It then converts that annual total back
-            into monthly (average), weekly, and other equivalents. Using the
-            annual total as the source of truth keeps comparisons consistent
-            across periods.
-          </p>
+            <div className="space-y-6 text-base text-slate-700 leading-7">
+              <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+                />
+                <div className="p-5 sm:p-6">
+                  <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
+                    A 4-week schedule is a 28-day schedule
+                  </h3>
+                  <p className="mt-4">
+                    “Rent paid every 4 weeks” means the due date repeats every
+                    28 days. Because calendar months are usually longer than 28
+                    days, the due date moves through the calendar rather than
+                    staying anchored on the same month day. This is why people
+                    often experience “extra” payments over a long horizon when
+                    they mentally compare it to a monthly schedule.
+                  </p>
+                  <p className="mt-4">
+                    This tool keeps the 28-day definition explicit. It does not
+                    treat 4 weeks as “basically monthly,” and it does not
+                    replace calendar month behavior with a 28-day shortcut.
+                  </p>
+                </div>
+              </div>
 
-          <p className="text-slate-700 mb-4">
-            The page also compares “4-week × 13” (a common shorthand for a
-            52-week framing) with the 365-day annual equivalence used for the
-            conversions. The difference is small, but it exists, and it can
-            matter for budgeting.
-          </p>
+              <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+                />
+                <div className="p-5 sm:p-6">
+                  <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
+                    Conversions use an annual total as the source of truth
+                  </h3>
+                  <p className="mt-4">
+                    The calculator converts your 28-day rent amount to an annual
+                    total first using a 365-day year. That annual total is the
+                    reference point for the rest of the page. Monthly (average),
+                    weekly, biweekly, daily, and hourly values are derived from
+                    the same annual total so the breakdown does not mix
+                    assumptions.
+                  </p>
 
-          <p className="text-slate-600 text-sm">
-            Outputs are estimates. Exact totals can change based on lease terms,
-            start dates, proration, fees, and what the agreement defines as
-            “rent.”
-          </p>
+                  <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-900">
+                      Assumptions used for equivalence
+                    </div>
+                    <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
+                      <li>Year = 365 days</li>
+                      <li>Average month = 365 ÷ 12 days</li>
+                      <li>Every 4 weeks = 28 days</li>
+                      <li>Week = 7 days</li>
+                      <li>Hourly conversions assume 24 hours/day</li>
+                    </ul>
+                  </div>
 
-          <p className="text-slate-700 mt-6">
-            Related pages:{" "}
-            <a
-              href={safeHref("/rent-converter")}
-              className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded"
-            >
-              rent converter
-            </a>
-            ,{" "}
-            <a
-              href={safeHref("/weekly-to-monthly-rent-converter")}
-              className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded"
-            >
-              weekly to monthly
-            </a>
-            ,{" "}
-            <a
-              href={safeHref("/monthly-to-annual-rent-converter")}
-              className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded"
-            >
-              monthly to annual
-            </a>
-            .
-          </p>
+                  <p className="mt-4">
+                    This is why the page can show a monthly equivalent without
+                    claiming that “4 weeks equals a month.” The tool translates
+                    the annual total into an average-month value (annual ÷ 12)
+                    rather than forcing 28-day blocks to fit calendar months.
+                  </p>
+                </div>
+              </div>
+
+              <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+                />
+                <div className="p-5 sm:p-6">
+                  <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
+                    The “4-week × 13” comparison is shown separately on purpose
+                  </h3>
+
+                  <p className="mt-4">
+                    The page may show a “4-week × 13” figure because it’s a
+                    common shorthand when people think in 52-week blocks. That
+                    framing is useful for schedule intuition, but it is not the
+                    same as the 365-day annual equivalence used for conversions.
+                    The difference is small, but it exists, and the tool keeps
+                    it visible.
+                  </p>
+
+                  <p className="mt-4">
+                    If you want a clean equivalence breakdown across daily,
+                    weekly, biweekly, 4-week, and monthly, the 365-day annual
+                    basis is the consistent model. If you want schedule
+                    intuition (how many payments you might see inside a 52-week
+                    framing), the ×13 line is the quick shorthand. This tool
+                    separates them instead of collapsing them into one number.
+                  </p>
+                </div>
+              </div>
+
+              <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+                />
+                <div className="p-5 sm:p-6">
+                  <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
+                    Decimals and rounding behavior
+                  </h3>
+
+                  <p className="mt-4">
+                    Decimals are preserved end-to-end. Internally, calculations
+                    keep precision (up to 12 decimals). If the UI offers
+                    rounding, rounding is display-only, meaning it formats the
+                    output without changing the computed annual total or the
+                    derived breakdown values.
+                  </p>
+
+                  <p className="mt-4 text-slate-600">
+                    Outputs are estimates. Exact totals can vary based on lease
+                    terms, start dates, proration, fees, and what the agreement
+                    defines as “rent.”
+                  </p>
+                </div>
+              </div>
+
+              <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                <div className="text-sm font-bold text-sky-900">
+                  What you can do here
+                </div>
+                <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700 leading-relaxed">
+                  <li>
+                    Translate a 28-day rent amount into a consistent annual and
+                    monthly (average) basis
+                  </li>
+                  <li>
+                    Compare 4-week, weekly, and monthly equivalents without
+                    treating them as interchangeable
+                  </li>
+                  <li>
+                    See the difference between schedule shorthand (4-week × 13)
+                    and 365-day annual equivalence
+                  </li>
+                  <li>
+                    Copy or print the results for documentation (including
+                    save-as-PDF)
+                  </li>
+                </ul>
+              </div>
+
+              <p className="text-slate-700 leading-relaxed">
+                Related pages:{" "}
+                <a
+                  href={safeHref("/rent-converter")}
+                  className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                >
+                  rent converter
+                </a>
+                ,{" "}
+                <a
+                  href={safeHref("/weekly-to-monthly-rent-converter")}
+                  className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                >
+                  weekly to monthly
+                </a>
+                ,{" "}
+                <a
+                  href={safeHref("/monthly-to-annual-rent-converter")}
+                  className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                >
+                  monthly to annual
+                </a>
+                .
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 

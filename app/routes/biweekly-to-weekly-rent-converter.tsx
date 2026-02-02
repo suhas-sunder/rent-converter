@@ -35,7 +35,10 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:description", content: description },
     { property: "og:url", content: PAGE_URL },
     { property: "og:site_name", content: "RentConverter.com" },
-    { property: "og:image", content: "https://www.rentconverter.com/og-image.jpg" },
+    {
+      property: "og:image",
+      content: "https://www.rentconverter.com/og-image.jpg",
+    },
 
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: title },
@@ -48,7 +51,6 @@ export const meta: Route.MetaFunction = () => {
     { tagName: "link", rel: "canonical", href: PAGE_URL },
   ];
 };
-
 
 type Period =
   | "hourly"
@@ -169,7 +171,9 @@ function groupInt(intStr: string, groupSep: string): string {
 }
 
 function getNumberSeparators(): { group: string; decimal: string } {
-  const parts = new Intl.NumberFormat(undefined, { useGrouping: true }).formatToParts(1000.1);
+  const parts = new Intl.NumberFormat(undefined, {
+    useGrouping: true,
+  }).formatToParts(1000.1);
   const group = parts.find((p) => p.type === "group")?.value ?? ",";
   const decimal = parts.find((p) => p.type === "decimal")?.value ?? ".";
   return { group, decimal };
@@ -184,7 +188,7 @@ function roundScaledToDecimals(scaled: bigint, decimals: number): bigint {
   const q = a / factor;
   const r = a % factor;
   const half = factor / 2n;
-  const qRounded = r >= half ? (q + 1n) : q;
+  const qRounded = r >= half ? q + 1n : q;
   return sign * qRounded * factor;
 }
 
@@ -208,7 +212,6 @@ function scaledToDecimalStrings(
   }
   return { negative, intStr: intPart.toString(), fracStr };
 }
-
 
 /**
  * IMPORTANT:
@@ -238,7 +241,9 @@ function formatCurrencyFromScaled(
     }
   }
 
-  const scaledForDisplay = roundDisplay ? roundScaledToDecimals(scaled, digits) : scaled;
+  const scaledForDisplay = roundDisplay
+    ? roundScaledToDecimals(scaled, digits)
+    : scaled;
 
   const { group, decimal } = getNumberSeparators();
   const { negative, intStr, fracStr } = scaledToDecimalStrings(
@@ -635,7 +640,12 @@ export default function BiweeklyToWeeklyRent() {
     // If rounding is enabled, force exactly displayDecimals digits so decimals show properly.
     // If disabled, show up to 12 decimals without forcing trailing zeros.
     return roundDisplay
-      ? formatCurrencyFromScaled(scaled, currency, roundDisplay, displayDecimals)
+      ? formatCurrencyFromScaled(
+          scaled,
+          currency,
+          roundDisplay,
+          displayDecimals,
+        )
       : formatCurrencyFromScaledFlexible(scaled, currency);
   };
 
@@ -751,23 +761,12 @@ export default function BiweeklyToWeeklyRent() {
         </nav>
       </section>
 
-      <section className="pb-8 text-center bg-white rc-no-print">
-        <h1 className="text-4xl font-bold text-slate-800 mb-4">
-          Biweekly to Weekly Rent Converter
-        </h1>
-        <p className="text-slate-600 max-w-3xl mx-auto text-lg">
-          Convert a biweekly rent amount (every 14 days) into a weekly
-          equivalent using a consistent day-based method. This helps compare
-          listings that quote rent every two weeks against rent quoted per week.
-        </p>
-      </section>
-
       <section id="converter" className="mx-auto max-w-6xl px-6 pb-6">
-        <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:p-8 rc-print-block">
+        <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:px-8 rc-print-block">
           <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-            <h2 className="text-xl sm:text-2xl font-bold">
+            <h1 className="text-xl sm:text-4xl capitalize text-sky-800 font-bold">
               Instant biweekly to weekly conversion
-            </h2>
+            </h1>
 
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
               <button
@@ -872,7 +871,7 @@ export default function BiweeklyToWeeklyRent() {
             ) : (
               <>
                 <div className="mt-2 flex flex-col gap-2">
-                  <div className="text-4xl sm:text-5xl font-extrabold text-sky-800">
+                  <div className="text-4xl sm:text-5xl font-extrabold text-emerald-700">
                     {fmt(weeklyHeadlineScaled)}
                   </div>
                   <div className="text-sm text-slate-600">
@@ -908,7 +907,6 @@ export default function BiweeklyToWeeklyRent() {
                       </span>
                     ) : null}
                   </div>
-
                 </div>
 
                 <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -1096,65 +1094,329 @@ export default function BiweeklyToWeeklyRent() {
         </div>
       </section>
 
-      {/* Required: explanation above FAQ */}
       <section
         id="how-it-works"
-        className="max-w-5xl mx-auto px-6 pt-8 rc-no-print"
+        className="relative overflow-hidden rounded-3xl bg-white ring-1 ring-slate-200/70 shadow-sm rc-no-print"
       >
-        <h2 className="text-3xl font-bold mb-6 text-center text-slate-900">
-          How it works
-        </h2>
-
-        <div className="rounded-2xl border border-slate-200 bg-white p-6">
-          <ol className="list-decimal pl-5 space-y-3 text-slate-700">
-            <li>
-              <strong>You enter a biweekly rent amount.</strong> Biweekly is
-              treated as a 14-day amount.
-            </li>
-            <li>
-              <strong>Weekly is computed directly.</strong> Weekly = biweekly ÷
-              2 (exact under these definitions).
-            </li>
-            <li>
-              <strong>Other periods use one consistent basis.</strong> Daily =
-              biweekly ÷ 14, annual = daily × 365, monthly = annual ÷ 12, 4-week
-              = daily × 28.
-            </li>
-            <li>
-              <strong>Decimals are preserved.</strong> Inputs are parsed into
-              fixed-point integers (up to 12 decimals). If an input is
-              ambiguous, you see a warning or an error instead of a misleading
-              result.
-            </li>
-            <li>
-              <strong>Rounding is display-only.</strong> When enabled, the UI
-              shows exactly your chosen number of decimals. When disabled, it
-              shows up to 12 decimals.
-            </li>
-            <li>
-              <strong>Printing.</strong> Use Print / Save as PDF to keep a copy
-              of the results.
-            </li>
-          </ol>
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0"
+        >
+          <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-sky-100/60 blur-3xl" />
+          <div className="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-slate-100/70 blur-3xl" />
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-sky-300/60 to-transparent" />
         </div>
 
-        <p className="mt-4 text-slate-700">
-          Related pages:{" "}
-          <a
-            href={safeHref("/rent-converter")}
-            className="text-sky-700 hover:underline"
-          >
-            rent converter
-          </a>{" "}
-          and{" "}
-          <a
-            href={safeHref("/rent-affordability-calculator")}
-            className="text-sky-700 hover:underline"
-          >
-            rent affordability calculator
-          </a>
-          .
-        </p>
+        <div className="relative p-6 sm:p-10">
+          <div className="mx-auto max-w-4xl">
+            <div className="flex flex-col gap-4 sm:gap-5">
+              <div className="flex items-start justify-between gap-4">
+                <div className="min-w-0">
+                  <h2 className="text-3xl sm:text-4xl font-extrabold text-sky-800 tracking-tight leading-tight">
+                    How the biweekly to weekly rent converter works
+                  </h2>
+                  <p className="mt-2 text-slate-600 leading-7 max-w-2xl">
+                    This page converts a biweekly rent amount into a weekly
+                    equivalent using fixed time-length definitions. Biweekly is
+                    treated as exactly{" "}
+                    <span className="font-semibold text-slate-900">
+                      14 days
+                    </span>{" "}
+                    and weekly as{" "}
+                    <span className="font-semibold text-slate-900">7 days</span>
+                    . Under those definitions, the weekly result is computed
+                    directly and exactly as half of the biweekly amount.
+                  </p>
+                </div>
+
+                <div className="hidden sm:flex flex-col items-end gap-2 shrink-0">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-sky-50 text-sky-700 ring-1 ring-sky-200/70 px-3 py-1 text-xs font-semibold">
+                    <span className="h-2 w-2 rounded-full bg-sky-500" />
+                    Biweekly = 14 days
+                  </span>
+                  <span className="inline-flex items-center gap-2 rounded-full bg-slate-50 text-slate-700 ring-1 ring-slate-200 px-3 py-1 text-xs font-semibold">
+                    <span className="h-2 w-2 rounded-full bg-slate-500" />
+                    Weekly = 7 days
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+                  <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                    INPUT
+                  </div>
+                  <div className="mt-2 text-sm font-semibold text-slate-900">
+                    Biweekly amount
+                  </div>
+                </div>
+                <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+                  <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                    DIRECT
+                  </div>
+                  <div className="mt-2 text-sm font-semibold text-slate-900">
+                    Weekly = ÷ 2
+                  </div>
+                </div>
+                <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+                  <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                    BASIS
+                  </div>
+                  <div className="mt-2 text-sm font-semibold text-slate-900">
+                    Time-length
+                  </div>
+                </div>
+                <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+                  <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                    EXTRAS
+                  </div>
+                  <div className="mt-2 text-sm font-semibold text-slate-900">
+                    Full breakdown
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-10 space-y-6 text-base text-slate-700 leading-7">
+              {/* SectionCard: direct conversion */}
+              <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+                />
+                <div className="p-5 sm:p-6">
+                  <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
+                    The direct weekly conversion
+                  </h3>
+
+                  <div className="mt-4 space-y-3">
+                    <p>
+                      Because biweekly is defined here as a 14-day amount and
+                      weekly as a 7-day amount, the weekly value is exactly one
+                      half of the biweekly input. No normalization step is
+                      required to compute the headline result.
+                    </p>
+
+                    <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                      <div className="text-sm font-bold text-slate-900">
+                        Primary formula
+                      </div>
+                      <p className="mt-2">
+                        <strong>Weekly</strong> = biweekly ÷ 2
+                      </p>
+                      <p className="mt-2 text-sm text-slate-600">
+                        This is exact under the 14-day / 7-day definitions used
+                        on this page.
+                      </p>
+                    </div>
+
+                    <p>
+                      This is one of the few routes where the direct division is
+                      mathematically exact and does not rely on average month
+                      lengths or annualization. If your biweekly amount doubles,
+                      the weekly amount doubles. If it halves, the weekly
+                      halves.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* SectionCard: why not calendar-based */}
+              <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+                />
+                <div className="p-5 sm:p-6">
+                  <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
+                    Why this conversion does not use calendar weeks
+                  </h3>
+
+                  <div className="mt-4 space-y-3">
+                    <p>
+                      This page does not attempt to model calendar weeks,
+                      paydays, or due dates. It converts strictly by time
+                      length. That means a week is always seven days and a
+                      biweekly period is always fourteen days, regardless of
+                      where those days fall on a calendar.
+                    </p>
+
+                    <p>
+                      This avoids a common problem where “weekly” is interpreted
+                      as “paid on Fridays” or “due every Monday.” Those
+                      schedules belong to a due-date calculator, not a period
+                      equivalence tool.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* SectionCard: breakdown logic */}
+              <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+                />
+                <div className="p-5 sm:p-6">
+                  <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
+                    How the full breakdown is derived
+                  </h3>
+
+                  <div className="mt-4 space-y-3">
+                    <p>
+                      While the weekly headline result is computed directly, the
+                      rest of the breakdown is derived from a single daily basis
+                      so all periods remain consistent with each other.
+                    </p>
+
+                    <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                      <div className="text-sm font-bold text-slate-900">
+                        Derived periods
+                      </div>
+                      <ul className="mt-2 list-disc pl-5 space-y-2">
+                        <li>
+                          <strong>Daily</strong> = biweekly ÷ 14
+                        </li>
+                        <li>
+                          <strong>Annual</strong> = daily × 365
+                        </li>
+                        <li>
+                          <strong>Monthly</strong> = annual ÷ 12 (average month)
+                        </li>
+                        <li>
+                          <strong>4-week</strong> = daily × 28
+                        </li>
+                      </ul>
+                    </div>
+
+                    <p>
+                      The breakdown does not reuse the weekly value to compute
+                      other periods. Everything reconciles back to daily so the
+                      table does not accumulate rounding drift or mix
+                      definitions.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* SectionCard: decimals + rounding */}
+              <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+                />
+                <div className="p-5 sm:p-6">
+                  <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
+                    Precision, rounding, and ambiguity handling
+                  </h3>
+
+                  <div className="mt-4 space-y-3">
+                    <p>
+                      Inputs are parsed as decimal values. Thousands separators
+                      are treated as grouping characters. Currency symbols may
+                      be present and are ignored for numeric parsing.
+                    </p>
+
+                    <ul className="list-disc pl-5 space-y-2">
+                      <li>
+                        <strong>1,234</strong> is interpreted as 1234
+                      </li>
+                      <li>
+                        <strong>1.234</strong> is interpreted as 1.234
+                      </li>
+                      <li>
+                        Edge formats such as <strong>.5</strong> and{" "}
+                        <strong>12.</strong> are accepted
+                      </li>
+                    </ul>
+
+                    <p>
+                      Computation preserves decimals internally. Rounding, if
+                      enabled, affects only how many decimals are displayed.
+                      When rounding is disabled, up to twelve decimal places may
+                      be shown so close comparisons do not collapse into the
+                      same number.
+                    </p>
+
+                    <p>
+                      If an input could reasonably be interpreted more than one
+                      way, the correct behavior is to block or warn instead of
+                      returning a clean-looking but incorrect result.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* SectionCard: printing + related tools */}
+              <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+                />
+                <div className="p-5 sm:p-6">
+                  <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
+                    Printing and related tools
+                  </h3>
+
+                  <div className="mt-4 space-y-3">
+                    <p>
+                      You can print the results or save the page as a PDF using
+                      your browser’s print function. This section is marked
+                      no-print so it does not appear in exported copies.
+                    </p>
+
+                    <p>
+                      If you need to convert between arbitrary periods or check
+                      affordability against income, use the related tools linked
+                      below.
+                    </p>
+
+                    <div className="mt-3 text-sm flex flex-wrap gap-x-5 gap-y-2">
+                      <a
+                        href={safeHref("/rent-converter")}
+                        className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                      >
+                        Rent converter →
+                      </a>
+                      <a
+                        href={safeHref("/rent-affordability-calculator")}
+                        className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                      >
+                        Rent affordability →
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Dark utility callout */}
+              <div className="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-6 sm:p-7">
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0"
+                >
+                  <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-sky-500 blur-3xl opacity-20" />
+                  <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-slate-500 blur-3xl opacity-30" />
+                </div>
+
+                <div className="relative">
+                  <div className="text-sm font-semibold text-sky-300">
+                    Utility note
+                  </div>
+                  <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-800">
+                    This is the simplest conversion on the site
+                  </h3>
+                  <p className="mt-3 text-slate-200 leading-7">
+                    Because biweekly is defined as 14 days and weekly as 7 days,
+                    the weekly result is exactly half of the biweekly amount.
+                    Other routes require normalization through days or annual
+                    totals. This one does not.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section id="faq" className="max-w-5xl mx-auto py-16 px-6 rc-no-print">

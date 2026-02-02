@@ -42,7 +42,10 @@ export const meta: Route.MetaFunction = () => [
     content: "https://www.rentconverter.com/rent-per-week-calculator",
   },
   { property: "og:site_name", content: "RentConverter.com" },
-  { property: "og:image", content: "https://www.rentconverter.com/og-image.jpg" },
+  {
+    property: "og:image",
+    content: "https://www.rentconverter.com/og-image.jpg",
+  },
 
   { name: "twitter:card", content: "summary_large_image" },
   { name: "twitter:title", content: "Rent Per Week Calculator" },
@@ -51,9 +54,16 @@ export const meta: Route.MetaFunction = () => [
     content:
       "See your rent per week from monthly, 4-week, biweekly, daily, hourly, or annual amounts.",
   },
-  { name: "twitter:image", content: "https://www.rentconverter.com/og-image.jpg" },
+  {
+    name: "twitter:image",
+    content: "https://www.rentconverter.com/og-image.jpg",
+  },
 
-  { tagName: "link", rel: "canonical", href: "https://www.rentconverter.com/rent-per-week-calculator" },
+  {
+    tagName: "link",
+    rel: "canonical",
+    href: "https://www.rentconverter.com/rent-per-week-calculator",
+  },
 ];
 
 type Period =
@@ -215,7 +225,9 @@ function groupInt(intStr: string, groupSep: string): string {
 }
 
 function getNumberSeparators(): { group: string; decimal: string } {
-  const parts = new Intl.NumberFormat(undefined, { useGrouping: true }).formatToParts(1000.1);
+  const parts = new Intl.NumberFormat(undefined, {
+    useGrouping: true,
+  }).formatToParts(1000.1);
   const group = parts.find((p) => p.type === "group")?.value ?? ",";
   const decimal = parts.find((p) => p.type === "decimal")?.value ?? ".";
   return { group, decimal };
@@ -230,7 +242,7 @@ function roundScaledToDecimals(scaled: bigint, decimals: number): bigint {
   const q = a / factor;
   const r = a % factor;
   const half = factor / 2n;
-  const qRounded = r >= half ? (q + 1n) : q;
+  const qRounded = r >= half ? q + 1n : q;
   return sign * qRounded * factor;
 }
 
@@ -255,7 +267,6 @@ function scaledToDecimalStrings(
   return { negative, intStr: intPart.toString(), fracStr };
 }
 
-
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
@@ -279,7 +290,9 @@ function formatCurrencyFromScaled(
     }
   }
 
-  const scaledForDisplay = roundDisplay ? roundScaledToDecimals(scaled, digits) : scaled;
+  const scaledForDisplay = roundDisplay
+    ? roundScaledToDecimals(scaled, digits)
+    : scaled;
 
   const { group, decimal } = getNumberSeparators();
   const { negative, intStr, fracStr } = scaledToDecimalStrings(
@@ -788,23 +801,13 @@ export default function RentPerWeekCalculator() {
           </a>{" "}
           / <span className="text-slate-700">{pageName}</span>
         </nav>
-
-        <h1 className="text-4xl font-bold text-center text-slate-800 mb-4">
-          {pageName}
-        </h1>
-        <p className="text-slate-600 max-w-5xl text-center mx-auto text-lg">
-          Convert rent into a weekly equivalent from monthly, every 4 weeks (28
-          days), biweekly, daily, hourly, or annual amounts. The calculator uses
-          annual equivalence on a 365-day basis, then expresses the result as
-          rent per week.
-        </p>
       </section>
 
-      <section id="calculator" className="mx-auto max-w-6xl px-6 pb-6 mt-6">
-        <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:p-8 rc-print-block">
+      <section id="calculator" className="mx-auto max-w-6xl px-6 pb-6 mt-4">
+        <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:px-8 rc-print-block">
           <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
-              <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
+              <h2 className="text-xl capitalize sm:text-4xl font-bold text-sky-800">
                 Weekly rent equivalent
               </h2>
             </div>
@@ -930,7 +933,7 @@ export default function RentPerWeekCalculator() {
                 <div className="text-sm text-slate-600">Rent per week</div>
 
                 <div className="mt-2 flex flex-col gap-2">
-                  <div className="text-4xl sm:text-5xl font-extrabold text-sky-800">
+                  <div className="text-4xl sm:text-5xl font-extrabold text-emerald-700">
                     {fmt(computed.weeklyScaled)}
                   </div>
                   <div className="text-sm text-slate-600">
@@ -1018,7 +1021,8 @@ export default function RentPerWeekCalculator() {
                             {safeToFixed(
                               computed.breakdown.monthlyMinus4wPct * 100,
                               2,
-                            )}%
+                            )}
+                            %
                           </strong>
                         </div>
                       </div>
@@ -1174,81 +1178,301 @@ export default function RentPerWeekCalculator() {
             </p>
           </div>
         </div>
-
-        <section className="mt-10 rc-no-print">
-          <h3 className="text-2xl font-semibold mb-4 text-slate-900">
-            Related pages
-          </h3>
-          <ul className="list-disc ml-6 text-slate-700">
-            <li>
-              <a
-                href={safeHref("/monthly-to-weekly-rent-converter")}
-                className="text-sky-700 hover:underline"
-              >
-                Monthly to weekly rent converter
-              </a>
-            </li>
-            <li>
-              <a
-                href={safeHref("/rent-paid-every-4-weeks-calculator")}
-                className="text-sky-700 hover:underline"
-              >
-                Rent paid every 4 weeks calculator
-              </a>
-            </li>
-            <li>
-              <a
-                href={safeHref("/how-much-rent-can-i-afford-calculator")}
-                className="text-sky-700 hover:underline"
-              >
-                How much rent can I afford calculator
-              </a>
-            </li>
-          </ul>
-        </section>
       </section>
 
-      {/* Required explanation section above FAQ */}
       <section
         id="how-it-works"
-        className="max-w-5xl mx-auto px-6 pt-8 rc-no-print"
+        className="relative overflow-hidden rounded-3xl bg-white ring-1 ring-slate-200/70 shadow-sm rc-no-print"
       >
-        <h2 className="text-3xl font-bold mb-6 text-center text-slate-900">
-          How this tool works and what you can do with it
-        </h2>
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0"
+        >
+          <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-sky-100/60 blur-3xl" />
+          <div className="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-slate-100/70 blur-3xl" />
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-sky-300/60 to-transparent" />
+        </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-6">
-          <p className="text-slate-700 mb-4">
-            This calculator converts the rent amount you enter into an annual
-            total using a 365-day year. It then expresses that same annual total
-            as a weekly equivalent (a 7-day amount). This is the cleanest way to
-            compare rent listings that use different billing cycles.
-          </p>
+        <div className="relative p-6 sm:p-10">
+          <div className="mx-auto max-w-4xl">
+            <h2 className="text-3xl sm:text-4xl font-extrabold mb-6 text-center text-sky-900 tracking-tight leading-tight">
+              How this rent per week calculator works
+            </h2>
 
-          <p className="text-slate-700 mb-4">
-            Use it to compare monthly rent against 4-week rent (28-day billing),
-            biweekly rent, or even hourly and daily rates. The breakdown cards
-            show the same annual rent expressed across multiple periods so you
-            can sanity-check what a listing really costs.
-          </p>
+            <p className="text-slate-600 leading-7">
+              This page converts whatever rent amount you enter into a{" "}
+              <strong>weekly equivalent</strong> (a 7-day amount) using a
+              consistent annual basis. The calculator first translates your
+              input period into an annual total using a 365-day year (and an
+              average month length when monthly is involved). It then expresses
+              that same annual total as a weekly figure. That “annual first”
+              approach is the cleanest way to compare listings that use
+              different billing cycles without quietly switching assumptions
+              between outputs.
+            </p>
 
-          <p className="text-slate-700 mb-4">
-            The “total for a chosen number of weeks” estimator multiplies the
-            weekly equivalent by a week count for quick comparisons. It is not a
-            lease proration engine because proration rules depend on the lease
-            and the landlord’s definition of a billing month.
-          </p>
+            <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+                <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  INPUT
+                </div>
+                <div className="mt-2 text-sm font-semibold text-slate-900">
+                  Amount + period
+                </div>
+              </div>
+              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+                <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  NORMALIZE
+                </div>
+                <div className="mt-2 text-sm font-semibold text-slate-900">
+                  Annual total
+                </div>
+              </div>
+              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+                <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  CONVERT
+                </div>
+                <div className="mt-2 text-sm font-semibold text-slate-900">
+                  Weekly (7 days)
+                </div>
+              </div>
+              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+                <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  EXTRA
+                </div>
+                <div className="mt-2 text-sm font-semibold text-slate-900">
+                  Weeks total box
+                </div>
+              </div>
+            </div>
 
-          <p className="text-slate-700 mt-6">
-            Related page:{" "}
-            <a
-              href={safeHref("/rent-converter")}
-              className="text-sky-700 hover:underline"
-            >
-              rent converter hub
-            </a>
-            .
-          </p>
+            <div className="mt-10 space-y-6 text-base text-slate-700 leading-7">
+              {/* Card 1 */}
+              <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+                />
+                <div className="p-5 sm:p-6">
+                  <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
+                    1) Weekly is computed from a single annual basis
+                  </h3>
+
+                  <p className="mt-4">
+                    The weekly result represents the same underlying cost as
+                    your input, expressed as a 7-day equivalent. The page does
+                    not use “quick conversions” that can change the implied
+                    annual total depending on the input period. Instead, it uses
+                    an annual total as the source of truth and derives
+                    everything from that.
+                  </p>
+
+                  <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-900">
+                      Assumptions used
+                    </div>
+                    <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
+                      <li>Year = 365 days</li>
+                      <li>Week = 7 days</li>
+                      <li>Biweekly = 14 days</li>
+                      <li>Every 4 weeks = 28 days</li>
+                      <li>Average month = 365 ÷ 12 days</li>
+                      <li>Hourly conversions assume 24 hours per day</li>
+                    </ul>
+                  </div>
+
+                  <p className="mt-4">
+                    This is especially helpful when comparing a monthly listing
+                    against a 4-week listing. A 4-week period is always 28 days,
+                    and a month is longer on average. Converting through an
+                    annual total keeps that difference visible across the
+                    breakdown rather than hiding it behind a “close enough”
+                    shortcut.
+                  </p>
+                </div>
+              </div>
+
+              {/* Card 2 */}
+              <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+                />
+                <div className="p-5 sm:p-6">
+                  <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
+                    2) What the breakdown cards are for
+                  </h3>
+
+                  <p className="mt-4">
+                    In addition to the weekly headline number, the page shows a
+                    breakdown across common periods. Those values are not
+                    independent guesses. They are the same annual total
+                    expressed as hourly, daily, weekly, biweekly, every 4 weeks,
+                    monthly (average), and annual equivalents. If the breakdown
+                    looks inconsistent, that’s a signal that the inputs or the
+                    selected period don’t match what you intended.
+                  </p>
+
+                  <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-900">
+                      Common comparisons this supports
+                    </div>
+                    <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
+                      <li>
+                        Monthly vs weekly listings (calendar month vs 7-day
+                        periods)
+                      </li>
+                      <li>
+                        Every-4-weeks vs weekly (28-day periods vs 7-day
+                        periods)
+                      </li>
+                      <li>
+                        Biweekly vs weekly (14-day vs 7-day, useful for pay
+                        cycles)
+                      </li>
+                      <li>
+                        Daily or hourly equivalents for short-window comparisons
+                      </li>
+                    </ul>
+                  </div>
+
+                  <p className="mt-4">
+                    The intent is consistency: once the annual number is fixed,
+                    you can interpret each period view without wondering whether
+                    a different assumption was used for each output.
+                  </p>
+                </div>
+              </div>
+
+              {/* Card 3 */}
+              <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+                />
+                <div className="p-5 sm:p-6">
+                  <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
+                    3) The “total for a chosen number of weeks” estimator
+                  </h3>
+
+                  <p className="mt-4">
+                    The weeks-total box is a quick estimator that multiplies the
+                    computed weekly equivalent by a number of weeks you choose.
+                    It’s useful for “what does this cost over 6 weeks” or “what
+                    is the difference over a 12-week span” comparisons,
+                    especially when you’re comparing two listings that quote
+                    different cycles.
+                  </p>
+
+                  <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-900">
+                      Estimator scope
+                    </div>
+                    <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
+                      <li>
+                        Uses the weekly equivalent computed from the annual
+                        basis
+                      </li>
+                      <li>Multiplies by your chosen number of weeks</li>
+                      <li>
+                        Does not model due dates, proration, partial periods, or
+                        fees
+                      </li>
+                    </ul>
+                  </div>
+
+                  <p className="mt-4">
+                    If you need calendar-accurate totals based on due dates,
+                    month boundaries, or “rent due on the 1st” behavior, that’s
+                    a different type of tool. This one stays in equivalence math
+                    and week-count estimation.
+                  </p>
+                </div>
+              </div>
+
+              {/* Card 4 */}
+              <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+                />
+                <div className="p-5 sm:p-6">
+                  <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
+                    4) Decimals and rounding
+                  </h3>
+
+                  <p className="mt-4">
+                    Decimals are preserved internally (up to 12). If the UI
+                    offers rounding, rounding should be display-only so it
+                    formats what you see without changing the underlying annual
+                    and weekly calculations. The input parser should accept
+                    common formats (currency symbols, commas, .5, 12.) and avoid
+                    producing a misleading “0” result when input is invalid or
+                    ambiguous.
+                  </p>
+                </div>
+              </div>
+
+              {/* Dark callout */}
+              <div className="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-6 sm:p-7">
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0"
+                >
+                  <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-sky-500 blur-3xl opacity-20" />
+                  <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-slate-500 blur-3xl opacity-30" />
+                </div>
+
+                <div className="relative">
+                  <div className="text-sm font-semibold text-sky-300">
+                    Scope note
+                  </div>
+                  <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-100">
+                    Weekly equivalence is a comparison value
+                  </h3>
+                  <p className="mt-3 text-slate-200 leading-7">
+                    The weekly number is the same annual cost expressed as a
+                    7-day equivalent. It does not change how rent is billed
+                    under a lease, and it does not apply proration rules,
+                    due-date logic, or fees. It’s designed for clean comparisons
+                    across billing cycles and quick week-count estimates.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-10 rc-no-print">
+                <h3 className="text-2xl font-semibold mb-4 text-slate-900">
+                  Related pages
+                </h3>
+                <ul className="list-disc ml-6 text-slate-700">
+                  <li>
+                    <a
+                      href={safeHref("/monthly-to-weekly-rent-converter")}
+                      className="text-sky-700 hover:underline"
+                    >
+                      Monthly to weekly rent converter
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href={safeHref("/rent-paid-every-4-weeks-calculator")}
+                      className="text-sky-700 hover:underline"
+                    >
+                      Rent paid every 4 weeks calculator
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href={safeHref("/how-much-rent-can-i-afford-calculator")}
+                      className="text-sky-700 hover:underline"
+                    >
+                      How much rent can I afford calculator
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 

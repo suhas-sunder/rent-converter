@@ -34,7 +34,10 @@ export const meta: Route.MetaFunction = () => {
       content: "https://www.rentconverter.com/annual-to-monthly-rent-converter",
     },
     { property: "og:site_name", content: "RentConverter.com" },
-    { property: "og:image", content: "https://www.rentconverter.com/og-image.jpg" },
+    {
+      property: "og:image",
+      content: "https://www.rentconverter.com/og-image.jpg",
+    },
 
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: title },
@@ -44,7 +47,11 @@ export const meta: Route.MetaFunction = () => {
       content: "https://www.rentconverter.com/og-image.jpg",
     },
 
-    { tagName: "link", rel: "canonical", href: "https://www.rentconverter.com/annual-to-monthly-rent-converter" },
+    {
+      tagName: "link",
+      rel: "canonical",
+      href: "https://www.rentconverter.com/annual-to-monthly-rent-converter",
+    },
   ];
 };
 
@@ -189,7 +196,6 @@ function clampScaled(v: bigint, min: bigint, max: bigint): bigint {
   return v;
 }
 
-
 function roundScaledToDigits(scaled: bigint, digits: number): bigint {
   const d = Math.max(0, Math.min(12, Math.trunc(digits)));
   const drop = 12 - d;
@@ -223,7 +229,9 @@ function groupInt(intStr: string, groupSep: string): string {
 }
 
 function getNumberSeparators(): { group: string; decimal: string } {
-  const parts = new Intl.NumberFormat(undefined, { useGrouping: true }).formatToParts(1000.1);
+  const parts = new Intl.NumberFormat(undefined, {
+    useGrouping: true,
+  }).formatToParts(1000.1);
   const group = parts.find((p) => p.type === "group")?.value ?? ",";
   const decimal = parts.find((p) => p.type === "decimal")?.value ?? ".";
   return { group, decimal };
@@ -238,7 +246,7 @@ function roundScaledToDecimals(scaled: bigint, decimals: number): bigint {
   const q = a / factor;
   const r = a % factor;
   const half = factor / 2n;
-  const qRounded = r >= half ? (q + 1n) : q;
+  const qRounded = r >= half ? q + 1n : q;
   return sign * qRounded * factor;
 }
 
@@ -263,7 +271,6 @@ function scaledToDecimalStrings(
   return { negative, intStr: intPart.toString(), fracStr };
 }
 
-
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
@@ -287,7 +294,9 @@ function formatCurrencyFromScaled(
     }
   }
 
-  const scaledForDisplay = roundDisplay ? roundScaledToDecimals(scaled, digits) : scaled;
+  const scaledForDisplay = roundDisplay
+    ? roundScaledToDecimals(scaled, digits)
+    : scaled;
 
   const { group, decimal } = getNumberSeparators();
   const { negative, intStr, fracStr } = scaledToDecimalStrings(
@@ -866,23 +875,11 @@ export default function AnnualToMonthlyRent() {
         </nav>
       </section>
 
-      <section className="pb-8 text-center bg-white rc-no-print">
-        <h1 className="text-4xl font-bold text-slate-800 mb-4">
-          Annual to Monthly Rent Converter
-        </h1>
-        <p className="text-slate-600 max-w-5xl mx-auto text-lg">
-          Convert an annual rent total into a monthly budgeting equivalent. This
-          page defines monthly as <strong>annual ÷ 12</strong> and shows how
-          that differs from 28-day (every 4 weeks) billing that often implies 13
-          payments per year.
-        </p>
-      </section>
-
       <section id="converter" className="mx-auto max-w-6xl px-6 pb-6">
-        <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:p-8 rc-print-block">
+        <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:px-8 rc-print-block">
           <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-            <h2 className="text-xl sm:text-2xl font-bold">
-              Instant annual to monthly conversion
+            <h2 className="text-xl capitalize sm:text-4xl text-sky-800 font-bold">
+              Instant annual to monthly converter
             </h2>
 
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
@@ -1006,7 +1003,7 @@ export default function AnnualToMonthlyRent() {
             ) : (
               <>
                 <div className="mt-2 flex flex-col gap-2">
-                  <div className="text-4xl sm:text-5xl font-extrabold text-sky-800">
+                  <div className="text-4xl sm:text-5xl font-extrabold text-emerald-700">
                     {fmt(monthlyHeadlineScaled)}
                   </div>
                   <div className="text-sm text-slate-600">
@@ -1241,102 +1238,452 @@ export default function AnnualToMonthlyRent() {
         </div>
       </section>
 
-      <section id="learn" className="max-w-5xl mx-auto px-6 pt-8 rc-no-print">
-        <h2 className="text-3xl font-bold mb-6 text-center text-slate-900">
-          Annual to monthly conversion for budgeting
-        </h2>
-
-        <p className="text-slate-700 mb-4">
-          This page is built for a simple monthly budgeting question: “If my
-          rent total is X per year, what is the monthly equivalent?” The
-          definition used is <strong>annual ÷ 12</strong>. You also get a
-          breakdown so you can compare against weekly, biweekly, and 28-day
-          pricing.
-        </p>
-
-        <h3 className="text-2xl font-semibold mt-10 mb-4 text-slate-900">
-          Why “every 4 weeks” often surprises people
-        </h3>
-        <p className="text-slate-700 mb-4">
-          A 28-day cycle can land on a 13-payment year, while monthly is usually
-          12 payments. The 4-week vs monthly comparison and annualization panel
-          exist to keep that difference visible instead of hiding it.
-        </p>
-
-        <h3 className="text-2xl font-semibold mt-10 mb-4 text-slate-900">
-          Examples
-        </h3>
-        <ul className="text-slate-700 mb-4 list-disc pl-5 space-y-2">
-          <li>
-            If annual rent is <strong>$24,000</strong>, monthly budgeting
-            equivalent is <strong>$24,000 ÷ 12 = $2,000</strong>.
-          </li>
-          <li>
-            If a listing says <strong>$2,000 every 4 weeks</strong>, the implied
-            annual can be about <strong>$2,000 × 13 = $26,000</strong> (not
-            $24,000).
-          </li>
-          <li>
-            If you type <strong>1,234</strong>, this tool treats the comma as
-            thousands grouping (1234). If you meant a decimal, type{" "}
-            <strong>1.234</strong>.
-          </li>
-        </ul>
-
-        <p className="text-slate-700 mb-4">
-          Related tools{" "}
-          <SafeLink
-            href="/rent-converter"
-            className="text-sky-700 hover:underline"
-          >
-            rent converter
-          </SafeLink>
-          .
-        </p>
-      </section>
-
-      {/* RentConverter.com layout rule: add a “How it works” explanation section above the FAQ. */}
       <section
         id="how-it-works"
-        className="max-w-5xl mx-auto px-6 pt-8 rc-no-print"
+        className="relative overflow-hidden rounded-3xl bg-white ring-1 ring-slate-200/70 shadow-sm rc-no-print"
       >
-        <h2 className="text-3xl font-bold text-center mb-6 text-slate-900">
-          How it works
-        </h2>
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0"
+        >
+          <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-sky-100/60 blur-3xl" />
+          <div className="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-slate-100/70 blur-3xl" />
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-sky-300/60 to-transparent" />
+        </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-6">
-          <ol className="list-decimal pl-5 space-y-3 text-slate-700">
-            <li>
-              <strong>You enter an annual rent total.</strong> “Annual rent”
-              means the total you want to treat as rent for budgeting. This tool
-              does not guess inclusions like utilities, taxes, fees, or
-              deposits.
-            </li>
-            <li>
-              <strong>Monthly is computed as annual ÷ 12.</strong> This is the
-              monthly budgeting equivalent and matches the route intent.
-            </li>
-            <li>
-              <strong>
-                Other periods are derived from the same annual total.
-              </strong>{" "}
-              Weekly, biweekly, daily, and hourly equivalents use a 365-day year
-              so comparisons remain consistent.
-            </li>
-            <li>
-              <strong>
-                4-week (28-day) equivalents are shown for clarity.
-              </strong>{" "}
-              A 28-day billing schedule often implies 13 payments per year,
-              which can differ from 12-month schedules.
-            </li>
-            <li>
-              <strong>Decimals are preserved.</strong> Inputs are parsed into
-              fixed-point integers (up to 12 decimals). If an input is
-              ambiguous, you’ll see a warning or an error instead of a
-              misleading result.
-            </li>
-          </ol>
+        <div className="relative p-6 sm:p-10">
+          <div className="mx-auto max-w-4xl">
+            <div className="flex flex-col gap-4 sm:gap-5">
+              <div className="flex items-start justify-between gap-4">
+                <div className="min-w-0">
+                  <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                    How the annual to monthly rent converter works
+                  </h2>
+                  <p className="mt-2 text-slate-600 leading-7 max-w-2xl">
+                    This page answers one simple input-to-output question: you
+                    enter an annual rent total and get the monthly budgeting
+                    equivalent using{" "}
+                    <span className="font-semibold text-slate-900">
+                      annual ÷ 12
+                    </span>
+                    . A full breakdown is also shown so you can compare the same
+                    annual basis against weekly, biweekly, daily, hourly, and a
+                    4-week (28-day) schedule without switching tools.
+                  </p>
+                </div>
+
+                <div className="hidden sm:flex flex-col items-end gap-2 shrink-0">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-sky-50 text-sky-700 ring-1 ring-sky-200/70 px-3 py-1 text-xs font-semibold">
+                    <span className="h-2 w-2 rounded-full bg-sky-500" />
+                    Monthly = annual ÷ 12
+                  </span>
+                  <span className="inline-flex items-center gap-2 rounded-full bg-slate-50 text-slate-700 ring-1 ring-slate-200 px-3 py-1 text-xs font-semibold">
+                    <span className="h-2 w-2 rounded-full bg-slate-500" />
+                    28-day comparison shown
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+                  <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                    INPUT
+                  </div>
+                  <div className="mt-2 text-sm font-semibold text-slate-900">
+                    Annual total
+                  </div>
+                </div>
+                <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+                  <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                    PRIMARY
+                  </div>
+                  <div className="mt-2 text-sm font-semibold text-slate-900">
+                    Annual ÷ 12
+                  </div>
+                </div>
+                <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+                  <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                    BREAKDOWN
+                  </div>
+                  <div className="mt-2 text-sm font-semibold text-slate-900">
+                    Same annual basis
+                  </div>
+                </div>
+                <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+                  <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                    EXTRA
+                  </div>
+                  <div className="mt-2 text-sm font-semibold text-slate-900">
+                    28-day schedule line
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-10 space-y-6 text-base text-slate-700 leading-7">
+              {/* SectionCard: what it does */}
+              <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+                />
+                <div className="p-5 sm:p-6">
+                  <div className="flex items-start gap-3">
+                    <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
+                      <svg
+                        aria-hidden="true"
+                        viewBox="0 0 24 24"
+                        className="h-5 w-5 text-sky-600"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M4 7h16M4 12h12M4 17h14"
+                        />
+                      </svg>
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
+                        What the monthly result represents
+                      </h3>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 space-y-3">
+                    <p>
+                      The monthly number on this route is the simplest budgeting
+                      interpretation: the annual total divided into twelve equal
+                      parts. If you enter{" "}
+                      <span className="font-semibold text-slate-900">
+                        $24,000
+                      </span>
+                      , the monthly equivalent is{" "}
+                      <span className="font-semibold text-slate-900">
+                        $24,000 ÷ 12 = $2,000
+                      </span>
+                      .
+                    </p>
+
+                    <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                      <div className="text-sm font-bold text-slate-900">
+                        Primary formula
+                      </div>
+                      <p className="mt-2">
+                        <span className="font-semibold text-slate-900">
+                          Monthly equivalent
+                        </span>{" "}
+                        = annual rent ÷ 12
+                      </p>
+                      <p className="mt-2 text-sm text-slate-600">
+                        This is the primary result on this page. It is a
+                        budgeting split, not a day-based equivalence.
+                      </p>
+                    </div>
+
+                    <p>
+                      The breakdown is there so you can compare the same annual
+                      basis against other listing periods. Weekly, daily, and
+                      hourly lines are shown as time-length equivalents derived
+                      from a 365-day year so the breakdown stays internally
+                      consistent.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* SectionCard: 28-day clarification */}
+              <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+                />
+                <div className="p-5 sm:p-6">
+                  <div className="flex items-start gap-3">
+                    <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
+                      <svg
+                        aria-hidden="true"
+                        viewBox="0 0 24 24"
+                        className="h-5 w-5 text-sky-600"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M5 12h14M12 5v14"
+                        />
+                      </svg>
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
+                        4-week (28-day) versus monthly, kept visible on purpose
+                      </h3>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 space-y-3">
+                    <p>
+                      If a listing is billed “every 4 weeks” or “every 28 days,”
+                      it is not a monthly schedule. A 28-day cycle repeats 13
+                      times in a year. That can produce a different implied
+                      annual total than a monthly price that looks similar at a
+                      glance.
+                    </p>
+
+                    <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                      <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
+                        <div className="text-sm font-bold text-slate-900">
+                          Example annualization
+                        </div>
+                        <p className="mt-2">
+                          If a listing says{" "}
+                          <span className="font-semibold text-slate-900">
+                            $2,000 every 4 weeks
+                          </span>
+                          , a simple annualization is{" "}
+                          <span className="font-semibold text-slate-900">
+                            $2,000 × 13 = $26,000
+                          </span>
+                          .
+                        </p>
+                      </div>
+                      <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
+                        <div className="text-sm font-bold text-slate-900">
+                          Why it’s separate
+                        </div>
+                        <p className="mt-2">
+                          The 4-week line is labeled explicitly so it is not
+                          confused with the monthly budgeting split (annual ÷
+                          12).
+                        </p>
+                      </div>
+                    </div>
+
+                    <p>
+                      This page does not try to pick the “right” schedule. It
+                      keeps the 28-day interval visible so comparisons stay
+                      honest.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* SectionCard: parsing + decimals */}
+              <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+                />
+                <div className="p-5 sm:p-6">
+                  <div className="flex items-start gap-3">
+                    <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
+                      <svg
+                        aria-hidden="true"
+                        viewBox="0 0 24 24"
+                        className="h-5 w-5 text-sky-600"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M7 7h10v10H7z"
+                        />
+                      </svg>
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
+                        Input parsing rules and precision behavior
+                      </h3>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 space-y-3">
+                    <p>
+                      Inputs are treated as numeric amounts. Thousands
+                      separators (commas) are interpreted as grouping, not
+                      decimals. If you type{" "}
+                      <span className="font-semibold text-slate-900">
+                        1,234
+                      </span>
+                      , it is interpreted as 1234. If you meant one point two
+                      three four, type{" "}
+                      <span className="font-semibold text-slate-900">
+                        1.234
+                      </span>
+                      .
+                    </p>
+
+                    <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                      <div className="text-sm font-bold text-slate-900">
+                        Accepted numeric formats
+                      </div>
+                      <ul className="mt-2 list-disc pl-5 space-y-2">
+                        <li>
+                          Decimals:{" "}
+                          <span className="font-semibold text-slate-900">
+                            1200.50
+                          </span>
+                          ,{" "}
+                          <span className="font-semibold text-slate-900">
+                            .5
+                          </span>
+                          ,{" "}
+                          <span className="font-semibold text-slate-900">
+                            12.
+                          </span>
+                        </li>
+                        <li>
+                          Grouping:{" "}
+                          <span className="font-semibold text-slate-900">
+                            1,200
+                          </span>
+                          ,{" "}
+                          <span className="font-semibold text-slate-900">
+                            1,200.50
+                          </span>
+                        </li>
+                        <li>
+                          Currency symbols may be present and ignored for
+                          parsing:{" "}
+                          <span className="font-semibold text-slate-900">
+                            $1,200.50
+                          </span>
+                        </li>
+                      </ul>
+                      <p className="mt-3 text-sm text-slate-600">
+                        If an input format is ambiguous, the correct behavior is
+                        a warning or error instead of a guessed value.
+                      </p>
+                    </div>
+
+                    <p>
+                      Decimals are preserved through the calculation. Any
+                      rounding you see should be display-only so comparisons do
+                      not collapse into identical results.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* SectionCard: step-by-step + related tool */}
+              <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+                />
+                <div className="p-5 sm:p-6">
+                  <div className="flex items-start gap-3">
+                    <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
+                      <svg
+                        aria-hidden="true"
+                        viewBox="0 0 24 24"
+                        className="h-5 w-5 text-sky-600"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M4 6h16M9 6v12m6-12v12"
+                        />
+                      </svg>
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
+                        How it works on this route
+                      </h3>
+                    </div>
+                  </div>
+
+                  <div className="mt-4">
+                    <ol className="list-decimal pl-5 space-y-3">
+                      <li>
+                        <strong className="text-slate-900">
+                          Enter an annual rent total.
+                        </strong>{" "}
+                        The tool treats your number as the single source value
+                        and does not add or remove anything.
+                      </li>
+                      <li>
+                        <strong className="text-slate-900">
+                          Compute monthly as annual ÷ 12.
+                        </strong>{" "}
+                        This is the primary output and matches the page title
+                        and intent.
+                      </li>
+                      <li>
+                        <strong className="text-slate-900">
+                          Compute breakdown lines from the same annual basis.
+                        </strong>{" "}
+                        Time-length equivalents use a 365-day model so daily,
+                        weekly, and hourly reconcile back to the same annual
+                        number.
+                      </li>
+                      <li>
+                        <strong className="text-slate-900">
+                          Show 4-week (28-day) explicitly.
+                        </strong>{" "}
+                        A 28-day schedule is a different interval and is not
+                        merged into “monthly.”
+                      </li>
+                    </ol>
+
+                    <div className="mt-5 rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
+                      <div className="text-sm font-bold text-slate-900">
+                        Related tool
+                      </div>
+                      <p className="mt-2">
+                        If you need conversions in other directions, use the
+                        general converter.
+                      </p>
+                      <div className="mt-3 text-sm">
+                        <SafeLink
+                          href="/rent-converter"
+                          className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                        >
+                          Rent converter →
+                        </SafeLink>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Dark utility callout */}
+              <div className="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-6 sm:p-7">
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0"
+                >
+                  <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-sky-500 blur-3xl opacity-20" />
+                  <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-slate-500 blur-3xl opacity-30" />
+                </div>
+
+                <div className="relative">
+                  <div className="text-sm font-semibold text-sky-300">
+                    Utility note
+                  </div>
+                  <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight">
+                    Monthly here is a budgeting split, not a 30-day assumption
+                  </h3>
+                  <p className="mt-3 text-slate-200 leading-7">
+                    The monthly headline result is annual ÷ 12. Day-based
+                    equivalents in the breakdown use a 365-day model for
+                    consistency. A 4-week (28-day) schedule is shown separately
+                    because it is a different billing interval and often
+                    annualizes differently.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 

@@ -5,7 +5,7 @@ import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountr
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 function safeToFixed(n: number, digits: number): string {
-  if (!Number.isFinite(n)) return "—";
+  if (!Number.isFinite(n)) return "-";
   return n.toFixed(digits);
 }
 
@@ -40,7 +40,10 @@ export const meta: Route.MetaFunction = () => [
     content: "https://www.rentconverter.com/weekly-to-annual-rent-converter",
   },
   { property: "og:site_name", content: "RentConverter.com" },
-  { property: "og:image", content: "https://www.rentconverter.com/og-image.jpg" },
+  {
+    property: "og:image",
+    content: "https://www.rentconverter.com/og-image.jpg",
+  },
 
   { name: "twitter:card", content: "summary_large_image" },
   { name: "twitter:title", content: "Weekly to Annual Rent Converter" },
@@ -49,9 +52,16 @@ export const meta: Route.MetaFunction = () => [
     content:
       "See the annual cost of weekly rent and compare 52-week math vs a true year.",
   },
-  { name: "twitter:image", content: "https://www.rentconverter.com/og-image.jpg" },
+  {
+    name: "twitter:image",
+    content: "https://www.rentconverter.com/og-image.jpg",
+  },
 
-  { tagName: "link", rel: "canonical", href: "https://www.rentconverter.com/weekly-to-annual-rent-converter" },
+  {
+    tagName: "link",
+    rel: "canonical",
+    href: "https://www.rentconverter.com/weekly-to-annual-rent-converter",
+  },
 ];
 
 type Period =
@@ -205,7 +215,9 @@ function groupInt(intStr: string, groupSep: string): string {
 }
 
 function getNumberSeparators(): { group: string; decimal: string } {
-  const parts = new Intl.NumberFormat(undefined, { useGrouping: true }).formatToParts(1000.1);
+  const parts = new Intl.NumberFormat(undefined, {
+    useGrouping: true,
+  }).formatToParts(1000.1);
   const group = parts.find((p) => p.type === "group")?.value ?? ",";
   const decimal = parts.find((p) => p.type === "decimal")?.value ?? ".";
   return { group, decimal };
@@ -220,7 +232,7 @@ function roundScaledToDecimals(scaled: bigint, decimals: number): bigint {
   const q = a / factor;
   const r = a % factor;
   const half = factor / 2n;
-  const qRounded = r >= half ? (q + 1n) : q;
+  const qRounded = r >= half ? q + 1n : q;
   return sign * qRounded * factor;
 }
 
@@ -245,7 +257,6 @@ function scaledToDecimalStrings(
   return { negative, intStr: intPart.toString(), fracStr };
 }
 
-
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
@@ -269,7 +280,9 @@ function formatCurrencyFromScaled(
     }
   }
 
-  const scaledForDisplay = roundDisplay ? roundScaledToDecimals(scaled, digits) : scaled;
+  const scaledForDisplay = roundDisplay
+    ? roundScaledToDecimals(scaled, digits)
+    : scaled;
 
   const { group, decimal } = getNumberSeparators();
   const { negative, intStr, fracStr } = scaledToDecimalStrings(
@@ -314,7 +327,7 @@ function formatCurrencyFromScaled(
     out += p.value;
   }
 
-  return out || "—";
+  return out || "-";
 }
 
 function formatPreviewFromParsedScaled(p: ParsedScaled): string {
@@ -748,19 +761,13 @@ export default function WeeklyToAnnualRent() {
         </nav>
       </section>
 
-      <section className="pb-8 text-center bg-white rc-no-print">
-        <h1 className="text-4xl font-bold text-slate-800 mb-4">
-          Weekly to Annual Rent Converter
-        </h1>
-      </section>
-
       <section id="converter" className="mx-auto max-w-6xl px-6 pb-6">
-        <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:p-8 rc-print-block">
+        <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:px-8 rc-print-block">
           <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
-              <h2 className="text-xl sm:text-2xl font-bold">
-                Instant weekly to annual conversion
-              </h2>
+              <h1 className="text-xl sm:text-4xl capitalize text-sky-800 font-bold">
+                Instant weekly to annual converter
+              </h1>
             </div>
 
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
@@ -867,21 +874,13 @@ export default function WeeklyToAnnualRent() {
                 <div className="text-sm text-slate-600">Annual equivalent</div>
 
                 <div className="mt-2 flex flex-col gap-2">
-                  <div className="text-4xl sm:text-5xl font-extrabold text-sky-800">
+                  <div className="text-4xl sm:text-5xl font-extrabold text-emerald-700">
                     {money(computed.annual)}
                   </div>
                   <div className="text-sm text-slate-600">
                     {money(computed.weekly)} weekly ≈{" "}
                     <strong>{money(computed.annual)}</strong> annual (365-day
                     annual equivalence)
-                  </div>
-                  <div className="text-xs text-slate-500">
-                    Implied weeks per 365-day year:{" "}
-                    <strong className="text-slate-800">
-                      {Number.isFinite(computed.impliedWeeksPerYear)
-                        ? safeToFixed(computed.impliedWeeksPerYear, 4)
-                        : "—"}
-                    </strong>
                   </div>
                 </div>
 
@@ -955,7 +954,7 @@ export default function WeeklyToAnnualRent() {
                           (
                           {Number.isFinite(computed.pct52)
                             ? safeToFixed(computed.pct52 * 100, 2)
-                            : "—"}
+                            : "-"}
                           %)
                         </div>
                       </div>
@@ -975,7 +974,7 @@ export default function WeeklyToAnnualRent() {
                           (
                           {Number.isFinite(computed.pct53)
                             ? safeToFixed(computed.pct53 * 100, 2)
-                            : "—"}
+                            : "-"}
                           %)
                         </div>
                       </div>
@@ -1018,7 +1017,7 @@ export default function WeeklyToAnnualRent() {
                         <strong className="text-slate-900">
                           {Number.isFinite(computed.monthlyMinus4wPct)
                             ? safeToFixed(computed.monthlyMinus4wPct * 100, 2)
-                            : "—"}
+                            : "-"}
                           %
                         </strong>
                       </div>
@@ -1078,146 +1077,405 @@ export default function WeeklyToAnnualRent() {
         </div>
       </section>
 
-      <section id="learn" className="max-w-5xl mx-auto px-6 pt-8 rc-no-print">
-        <h2 className="text-3xl font-bold mb-6 text-center text-slate-900">
-          Weekly vs annual totals
-        </h2>
+      <section
+        id="how-it-works"
+        className="relative overflow-hidden rounded-3xl bg-white ring-1 ring-slate-200/70 shadow-sm rc-no-print"
+      >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0"
+        >
+          <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-sky-100/60 blur-3xl" />
+          <div className="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-slate-100/70 blur-3xl" />
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-sky-300/60 to-transparent" />
+        </div>
 
-        <p className="text-slate-700 mb-4">
-          Weekly rent is often listed as a weekly price, while budgets and
-          affordability discussions often reference yearly totals. Converting
-          weekly rent to an annual amount helps compare listings that use
-          different billing periods. This page uses annual equivalence (365-day
-          year) so the results line up across the full breakdown.
-        </p>
+        <div className="relative p-6 sm:p-10">
+          <div className="mx-auto max-w-4xl">
+            <div className="flex flex-col gap-4 sm:gap-5">
+              <div className="flex items-start justify-between gap-4">
+                <div className="min-w-0">
+                  <h2 className="text-3xl sm:text-4xl font-extrabold text-sky-900 tracking-tight leading-tight">
+                    Weekly to annual rent conversion
+                  </h2>
+                  <p className="mt-2 text-slate-600 leading-7 max-w-2xl">
+                    This page converts a weekly rent amount into an annual total
+                    so you can compare listings and budget on a yearly basis. It
+                    supports two common framings that people mix up:{" "}
+                    <span className="font-semibold text-slate-900">
+                      a time-based 365-day equivalence
+                    </span>{" "}
+                    and{" "}
+                    <span className="font-semibold text-slate-900">
+                      a 52-payment schedule shortcut
+                    </span>
+                    . The tool keeps both visible so you can choose the one that
+                    matches what you are trying to compare.
+                  </p>
+                </div>
 
-        <h3 className="text-2xl font-semibold mt-10 mb-4 text-slate-900">
-          Why weekly to annual can produce multiple reasonable answers
-        </h3>
-        <p className="text-slate-700 mb-4">
-          Two interpretations are common: one treats weekly rent as a payment
-          schedule (for example, 52 weekly payments), and another treats it as a
-          time-based rate that can be expressed over a 365-day year. The
-          difference is small in many cases, but it can matter when comparing
-          offers or building a consistent budget.
-        </p>
+                <div className="hidden sm:flex flex-col items-end gap-2 shrink-0">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-sky-50 text-sky-700 ring-1 ring-sky-200/70 px-3 py-1 text-xs font-semibold">
+                    <span className="h-2 w-2 rounded-full bg-sky-500" />
+                    Weekly = 7 days
+                  </span>
+                  <span className="inline-flex items-center gap-2 rounded-full bg-slate-50 text-slate-700 ring-1 ring-slate-200 px-3 py-1 text-xs font-semibold">
+                    <span className="h-2 w-2 rounded-full bg-slate-500" />
+                    Annual basis shown
+                  </span>
+                </div>
+              </div>
 
-        <h3 className="text-2xl font-semibold mt-10 mb-4 text-slate-900">
-          Payments per year and what they imply
-        </h3>
-        <ul className="list-disc ml-6 text-slate-700 mb-4">
-          <li>
-            Weekly payments: often framed as 52 payments, but a 365-day year is
-            about 52.14 weeks.
-          </li>
-          <li>
-            Biweekly payments: typically framed as 26 payments (every 14 days).
-          </li>
-          <li>
-            Every 4 weeks: 13 periods per year because 365 days is more than 28
-            × 13.
-          </li>
-          <li>
-            Monthly: commonly framed as 12 payments, but month lengths vary, so
-            an average month is used for time-based comparisons.
-          </li>
-        </ul>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+                  <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                    INPUT
+                  </div>
+                  <div className="mt-2 text-sm font-semibold text-slate-900">
+                    Weekly rent amount
+                  </div>
+                </div>
+                <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+                  <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                    BASIS
+                  </div>
+                  <div className="mt-2 text-sm font-semibold text-slate-900">
+                    365-day equivalence
+                  </div>
+                </div>
+                <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+                  <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                    CONTEXT
+                  </div>
+                  <div className="mt-2 text-sm font-semibold text-slate-900">
+                    Weekly × 52 (schedule)
+                  </div>
+                </div>
+                <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+                  <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                    OUTPUT
+                  </div>
+                  <div className="mt-2 text-sm font-semibold text-slate-900">
+                    Annual total + breakdown
+                  </div>
+                </div>
+              </div>
+            </div>
 
-        <h3 className="text-2xl font-semibold mt-10 mb-4 text-slate-900">
-          Common misunderstandings specific to weekly-to-annual conversion
-        </h3>
-        <ul className="list-disc ml-6 text-slate-700 mb-4">
-          <li>
-            Weekly × 52 is a payment-count shortcut, not a universal rule for
-            yearly totals.
-          </li>
-          <li>
-            A 4-week amount is not a monthly amount. They represent different
-            period lengths.
-          </li>
-          <li>
-            The yearly figure is an estimate for comparison. Lease start dates,
-            proration, and included charges can change the real total.
-          </li>
-        </ul>
+            <div className="mt-10 space-y-6 text-base text-slate-700 leading-7">
+              {/* SectionCard: what it returns */}
+              <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+                />
+                <div className="p-5 sm:p-6">
+                  <div className="flex items-start gap-3">
+                    <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
+                      <svg
+                        aria-hidden="true"
+                        viewBox="0 0 24 24"
+                        className="h-5 w-5 text-sky-600"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M4 7h16M4 12h12M4 17h14"
+                        />
+                      </svg>
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="text-xl font-extrabold text-sky-900 tracking-tight">
+                        What this converter returns
+                      </h3>
+                    </div>
+                  </div>
 
-        <p className="text-slate-700 mb-4">
-          Related pages:{" "}
-          <a
-            href={safeHref("/rent-paid-weekly-vs-monthly")}
-            className="text-sky-700 hover:underline"
-          >
-            weekly vs monthly rent
-          </a>
-          ,{" "}
-          <a
-            href={safeHref("/rent-converter")}
-            className="text-sky-700 hover:underline"
-          >
-            rent converter
-          </a>
-          , and{" "}
-          <a
-            href={safeHref("/rent-affordability-calculator")}
-            className="text-sky-700 hover:underline"
-          >
-            rent affordability calculator
-          </a>
-          .
-        </p>
-      </section>
+                  <div className="mt-4 space-y-3">
+                    <p>
+                      You enter a weekly rent amount and the page produces an
+                      annual figure in a way that stays consistent with the rest
+                      of the breakdown. The primary annual number is computed
+                      using a{" "}
+                      <span className="font-semibold text-slate-900">
+                        365-day model
+                      </span>{" "}
+                      where a week is treated as{" "}
+                      <span className="font-semibold text-slate-900">
+                        7 days
+                      </span>
+                      .
+                    </p>
 
-      {/* Required explanation section above FAQ */}
-      <section className="max-w-5xl mx-auto px-6 pt-8 rc-no-print">
-        <h2 className="text-3xl font-bold mb-6 text-center text-slate-900">
-          How this tool works and what to expect
-        </h2>
+                    <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                      <div className="text-sm font-bold text-slate-900">
+                        Core rule
+                      </div>
+                      <p className="mt-2">
+                        <span className="font-semibold text-slate-900">
+                          Annual (time-based)
+                        </span>{" "}
+                        = weekly × 7 × 365 ÷ 7 = weekly × 365 ÷ 7
+                      </p>
+                      <p className="mt-2 text-sm text-slate-600">
+                        Equivalent form: daily = weekly ÷ 7, then annual = daily
+                        × 365.
+                      </p>
+                    </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-6">
-          <p className="text-slate-700 mb-4">
-            Enter a weekly rent amount and choose a currency for formatting. The
-            calculator converts your weekly rent into an annual total using
-            annual equivalence as the source of truth.
-          </p>
+                    <p>
+                      You may also see{" "}
+                      <span className="font-semibold text-slate-900">
+                        weekly × 52
+                      </span>{" "}
+                      shown as a separate line. That is a schedule shortcut that
+                      matches how some leases and budgets are framed, but it is
+                      not the same as a 365-day equivalence. The tool keeps them
+                      separate so you do not accidentally mix schedule counting
+                      with time-length conversion.
+                    </p>
+                  </div>
+                </div>
+              </div>
 
-          <p className="text-slate-700 mb-4">
-            The annual total is computed using a 365-day year (so 1 week = 7
-            days). Once the annual total is established, the page derives daily,
-            monthly, and 4-week equivalents from that same annual number to keep
-            the breakdown consistent.
-          </p>
+              {/* SectionCard: why there are two answers */}
+              <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+                />
+                <div className="p-5 sm:p-6">
+                  <div className="flex items-start gap-3">
+                    <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
+                      <svg
+                        aria-hidden="true"
+                        viewBox="0 0 24 24"
+                        className="h-5 w-5 text-sky-600"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M5 12h14M12 5v14"
+                        />
+                      </svg>
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="text-xl font-extrabold text-sky-900 tracking-tight">
+                        Why weekly to annual can yield two reasonable numbers
+                      </h3>
+                    </div>
+                  </div>
 
-          <p className="text-slate-600 text-sm">
-            The result is an estimate intended for comparison. If your lease is
-            literally billed as a fixed number of weekly payments, the “weekly ×
-            52” context may match your real total better than a 365-day
-            equivalence.
-          </p>
+                  <div className="mt-4 space-y-3">
+                    <p>
+                      Weekly rent is sometimes treated as a pure rate (a 7-day
+                      price), and sometimes treated as a payment schedule (52
+                      weekly payments). Both are used in real conversations, and
+                      the gap between them is small but real because{" "}
+                      <span className="font-semibold text-slate-900">
+                        365 days is about 52.14 weeks
+                      </span>
+                      .
+                    </p>
 
-          <p className="text-slate-700 mt-6">
-            Related pages:{" "}
-            <a
-              href={safeHref("/rent-paid-weekly-vs-monthly")}
-              className="text-sky-700 hover:underline"
-            >
-              weekly vs monthly rent
-            </a>
-            ,{" "}
-            <a
-              href={safeHref("/monthly-to-annual-rent-converter")}
-              className="text-sky-700 hover:underline"
-            >
-              monthly to annual rent
-            </a>
-            ,{" "}
-            <a
-              href={safeHref("/rent-converter")}
-              className="text-sky-700 hover:underline"
-            >
-              rent converter
-            </a>
-            .
-          </p>
+                    <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                      <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
+                        <div className="text-sm font-bold text-slate-900">
+                          Time-based equivalence
+                        </div>
+                        <p className="mt-2">
+                          Uses days as the source of truth. Weekly is converted
+                          through daily, then scaled to a 365-day year. Best for
+                          comparisons across periods in the breakdown.
+                        </p>
+                      </div>
+                      <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
+                        <div className="text-sm font-bold text-slate-900">
+                          Payment schedule shortcut
+                        </div>
+                        <p className="mt-2">
+                          Assumes 52 payments. Useful when a lease literally
+                          collects a fixed number of weekly payments in a
+                          defined year frame.
+                        </p>
+                      </div>
+                    </div>
+
+                    <p>
+                      The converter is built to keep the breakdown internally
+                      consistent. That means it prefers time-length conversion
+                      for the annual basis, and then derives monthly (average),
+                      4-week (28-day), biweekly (14-day), and daily views from
+                      the same annual number.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* SectionCard: examples + input formats */}
+              <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+                />
+                <div className="p-5 sm:p-6">
+                  <div className="flex items-start gap-3">
+                    <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
+                      <svg
+                        aria-hidden="true"
+                        viewBox="0 0 24 24"
+                        className="h-5 w-5 text-sky-600"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M7 7h10v10H7z"
+                        />
+                      </svg>
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="text-xl font-extrabold text-sky-900 tracking-tight">
+                        Examples you can cross-check
+                      </h3>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 space-y-3">
+                    <p>
+                      These examples match the tool’s intent: compute an annual
+                      total on a 365-day basis, then show consistent
+                      equivalents. Display rounding can change the last few
+                      digits, but the math rule is the same.
+                    </p>
+
+                    <ul className="list-disc pl-5 space-y-2">
+                      <li>
+                        Weekly rent{" "}
+                        <strong className="text-slate-900">$500</strong> →
+                        time-based annual{" "}
+                        <strong className="text-slate-900">
+                          $500 × 365 ÷ 7 ≈ $26,071.43
+                        </strong>
+                      </li>
+                      <li>
+                        Weekly rent{" "}
+                        <strong className="text-slate-900">$500</strong> →
+                        schedule annual{" "}
+                        <strong className="text-slate-900">
+                          $500 × 52 = $26,000
+                        </strong>
+                      </li>
+                      <li>
+                        Input <strong className="text-slate-900">1,234</strong>{" "}
+                        → comma is treated as thousands grouping (1234). If you
+                        meant a decimal, use{" "}
+                        <strong className="text-slate-900">1.234</strong>.
+                      </li>
+                    </ul>
+
+                    <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                      <div className="text-sm font-bold text-slate-900">
+                        Input formats supported
+                      </div>
+                      <ul className="mt-2 list-disc pl-5 space-y-2">
+                        <li>
+                          Decimals:{" "}
+                          <strong className="text-slate-900">1200.50</strong>,{" "}
+                          <strong className="text-slate-900">.5</strong>,{" "}
+                          <strong className="text-slate-900">12.</strong>
+                        </li>
+                        <li>
+                          Thousands grouping:{" "}
+                          <strong className="text-slate-900">1,200</strong>,{" "}
+                          <strong className="text-slate-900">1,200.50</strong>
+                        </li>
+                        <li>
+                          Currency symbols are ignored for parsing:{" "}
+                          <strong className="text-slate-900">$1,200.50</strong>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <p>
+                      If an input could reasonably be interpreted more than one
+                      way, the correct behavior is to warn or block instead of
+                      guessing and returning a clean-looking but incorrect
+                      result.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Dark utility callout */}
+              <div className="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-6 sm:p-7">
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0"
+                >
+                  <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-sky-500 blur-3xl opacity-20" />
+                  <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-slate-500 blur-3xl opacity-30" />
+                </div>
+
+                <div className="relative">
+                  <div className="text-sm font-semibold text-sky-300">
+                    Utility note
+                  </div>
+                  <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight">
+                    Equivalent conversion is not a lease billing engine
+                  </h3>
+                  <p className="mt-3 text-slate-200 leading-7">
+                    This page is designed for consistent comparisons across
+                    periods. If you need calendar due dates or want to count
+                    actual weekly payments over a specific date range, use a
+                    due-date schedule tool instead of relying on annual
+                    equivalents.
+                  </p>
+                  <div className="mt-4">
+                    <a
+                      href={safeHref("/rent-due-date-calculator")}
+                      className="cursor-pointer inline-flex items-center font-semibold text-white hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 rounded-sm"
+                    >
+                      Rent due date calculator →
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <p className="text-slate-700 leading-relaxed">
+                Related pages:{" "}
+                <a
+                  href={safeHref("/rent-paid-weekly-vs-monthly")}
+                  className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                >
+                  weekly vs monthly rent
+                </a>
+                ,{" "}
+                <a
+                  href={safeHref("/monthly-to-annual-rent-converter")}
+                  className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                >
+                  monthly to annual rent
+                </a>
+                , and{" "}
+                <a
+                  href={safeHref("/rent-converter")}
+                  className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                >
+                  rent converter
+                </a>
+                .
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 

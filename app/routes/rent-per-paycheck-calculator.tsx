@@ -37,7 +37,10 @@ export const meta: Route.MetaFunction = () => [
     content: "https://www.rentconverter.com/rent-per-paycheck-calculator",
   },
   { property: "og:site_name", content: "RentConverter.com" },
-  { property: "og:image", content: "https://www.rentconverter.com/og-image.jpg" },
+  {
+    property: "og:image",
+    content: "https://www.rentconverter.com/og-image.jpg",
+  },
 
   { name: "twitter:card", content: "summary_large_image" },
   {
@@ -49,9 +52,16 @@ export const meta: Route.MetaFunction = () => [
     content:
       "See how much rent to set aside from each paycheck based on your pay frequency.",
   },
-  { name: "twitter:image", content: "https://www.rentconverter.com/og-image.jpg" },
+  {
+    name: "twitter:image",
+    content: "https://www.rentconverter.com/og-image.jpg",
+  },
 
-  { tagName: "link", rel: "canonical", href: "https://www.rentconverter.com/rent-per-paycheck-calculator" },
+  {
+    tagName: "link",
+    rel: "canonical",
+    href: "https://www.rentconverter.com/rent-per-paycheck-calculator",
+  },
 ];
 
 type RentPeriod =
@@ -215,7 +225,9 @@ function groupInt(intStr: string, groupSep: string): string {
 }
 
 function getNumberSeparators(): { group: string; decimal: string } {
-  const parts = new Intl.NumberFormat(undefined, { useGrouping: true }).formatToParts(1000.1);
+  const parts = new Intl.NumberFormat(undefined, {
+    useGrouping: true,
+  }).formatToParts(1000.1);
   const group = parts.find((p) => p.type === "group")?.value ?? ",";
   const decimal = parts.find((p) => p.type === "decimal")?.value ?? ".";
   return { group, decimal };
@@ -230,7 +242,7 @@ function roundScaledToDecimals(scaled: bigint, decimals: number): bigint {
   const q = a / factor;
   const r = a % factor;
   const half = factor / 2n;
-  const qRounded = r >= half ? (q + 1n) : q;
+  const qRounded = r >= half ? q + 1n : q;
   return sign * qRounded * factor;
 }
 
@@ -255,7 +267,6 @@ function scaledToDecimalStrings(
   return { negative, intStr: intPart.toString(), fracStr };
 }
 
-
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
@@ -279,7 +290,9 @@ function formatCurrencyFromScaled(
     }
   }
 
-  const scaledForDisplay = roundDisplay ? roundScaledToDecimals(scaled, digits) : scaled;
+  const scaledForDisplay = roundDisplay
+    ? roundScaledToDecimals(scaled, digits)
+    : scaled;
 
   const { group, decimal } = getNumberSeparators();
   const { negative, intStr, fracStr } = scaledToDecimalStrings(
@@ -463,12 +476,6 @@ function parseMoneyInputToScaled(raw: string): ParsedScaled {
  * 1) convert input to annual using the above payment counts
  * 2) derive any other period from annual using the same conventions
  */
-const DAYS_PER_YEAR = 365n;
-const MONTHS_PER_YEAR = 12n;
-const WEEKS_PER_YEAR = 52n;
-const BIWEEKS_PER_YEAR = 26n;
-const FOURWEEKS_PER_YEAR = 13n;
-const WORK_HOURS_PER_YEAR = 2080n;
 
 function annualizeFromScaled(valueScaled: bigint, period: RentPeriod): bigint {
   if (period === "hourly") return valueScaled * 24n * 365n;
@@ -534,7 +541,8 @@ function safeParseDisplayDecimals(raw: string | null): number {
 
 export default function RentPerPaycheck() {
   const pageName = "Rent Per Paycheck Calculator";
-  const canonicalUrl = "https://www.rentconverter.com/rent-per-paycheck-calculator";
+  const canonicalUrl =
+    "https://www.rentconverter.com/rent-per-paycheck-calculator";
 
   const [amount, setAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "2000";
@@ -800,7 +808,7 @@ export default function RentPerPaycheck() {
       />
 
       <section className="max-w-6xl mx-auto px-6  rc-no-print">
-        <nav className="text-sm text-slate-600 mb-4" aria-label="Breadcrumb">
+        <nav className="text-sm text-slate-600" aria-label="Breadcrumb">
           <a
             href={safeHref("/")}
             className="inline-flex items-center gap-2 rounded-md text-slate-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
@@ -809,24 +817,14 @@ export default function RentPerPaycheck() {
           </a>{" "}
           / <span className="text-slate-800">{pageName}</span>
         </nav>
-
-        <h1 className="text-4xl font-bold text-slate-900 mb-4 text-center">
-          {pageName}
-        </h1>
-        <p className="text-slate-700 max-w-5xl text-center text-lg leading-relaxed mx-auto">
-          Estimate how much rent to set aside from each paycheck when rent and
-          pay cycles do not match. This calculator converts the rent amount to
-          an annual total first (365-day basis), then divides by your pay
-          frequency for consistent comparison.
-        </p>
       </section>
 
-      <section id="calculator" className="mx-auto max-w-6xl px-6 pb-6 mt-6">
-        <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:p-8 rc-print-block">
+      <section id="calculator" className="mx-auto max-w-6xl px-6 pb-6 mt-4">
+        <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:px-8 rc-print-block">
           <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
-              <h2 className="text-xl sm:text-2xl font-bold text-slate-950">
-                Rent allocation per paycheck
+              <h2 className="text-xl sm:text-4xl capitalize font-bold text-sky-800">
+                Rent allocation per paycheck Calculator
               </h2>
             </div>
 
@@ -989,7 +987,7 @@ export default function RentPerPaycheck() {
                 </div>
 
                 <div className="mt-2 flex flex-col gap-2">
-                  <div className="text-4xl sm:text-5xl font-extrabold text-sky-800 tabular-nums break-words">
+                  <div className="text-4xl sm:text-5xl font-extrabold text-emerald-700 tabular-nums break-words">
                     {fmtMoney(computed.perPaycheckScaled)}
                   </div>
                   <div className="text-sm text-slate-700 leading-relaxed">
@@ -1333,85 +1331,340 @@ export default function RentPerPaycheck() {
             </p>
           </div>
         </div>
-
-        <section className="mt-10 rc-no-print">
-          <h3 className="text-2xl font-semibold mb-4 text-slate-950">
-            Links to related tools
-          </h3>
-          <ul className="list-disc ml-6 text-slate-800">
-            <li>
-              <a
-                href={safeHref("/rent-converter")}
-                className="inline-flex items-center gap-2 text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
-              >
-                Rent converter hub
-              </a>
-            </li>
-            <li>
-              <a
-                href={safeHref("/how-much-rent-can-i-afford-calculator")}
-                className="inline-flex items-center gap-2 text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
-              >
-                How much rent can I afford?
-              </a>
-            </li>
-            <li>
-              <a
-                href={safeHref("/rent-after-tax-income-calculator")}
-                className="inline-flex items-center gap-2 text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
-              >
-                Rent after tax income calculator
-              </a>
-            </li>
-          </ul>
-        </section>
       </section>
 
       <section
         id="how-it-works"
-        className="max-w-5xl mx-auto px-6 pt-8 rc-no-print"
+        className="relative overflow-hidden rounded-3xl bg-white ring-1 ring-slate-200/70 shadow-sm rc-no-print"
       >
-        <h2 className="text-3xl font-bold mb-6 text-center text-slate-950">
-          How this tool works and what to expect
-        </h2>
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0"
+        >
+          <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-sky-100/60 blur-3xl" />
+          <div className="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-slate-100/70 blur-3xl" />
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-sky-300/60 to-transparent" />
+        </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <p className="text-slate-800 mb-4 leading-relaxed">
-            This calculator is a budgeting allocator. It estimates how much rent
-            to set aside from each paycheck by converting your rent into an
-            annual total on a consistent 365-day basis, then dividing that
-            annual total by the number of paychecks per year for the pay
-            frequency you select.
-          </p>
+        <div className="relative p-6 sm:p-10">
+          <div className="mx-auto max-w-4xl">
+            <h2 className="text-3xl sm:text-4xl font-extrabold mb-6 text-center text-sky-900 tracking-tight leading-tight">
+              How this rent per paycheck calculator works and what to expect
+            </h2>
 
-          <p className="text-slate-800 mb-4 leading-relaxed">
-            The output does not change your lease due dates. If rent is due
-            monthly and you are paid biweekly or semimonthly, this number helps
-            you spread the same yearly rent across paychecks in a consistent
-            way.
-          </p>
+            <p className="text-slate-600 leading-7">
+              This calculator is a budgeting allocator. It estimates how much
+              rent to set aside from each paycheck by treating your rent as a
+              yearly cost and spreading that cost across the paychecks implied
+              by the pay frequency you select. The goal is not to predict your
+              due dates or simulate your landlord’s billing rules. The goal is
+              to give you a stable “per pay” set-aside number that stays
+              consistent across pay cycles that don’t line up cleanly with
+              calendar months.
+            </p>
 
-          <p className="text-slate-800 mb-4 leading-relaxed">
-            Expect small differences versus simple month math (like dividing by
-            30) when rent is billed every 4 weeks or when payroll schedules do
-            not line up with calendar months. Use the annual total shown in the
-            calculator as the source of truth.
-          </p>
+            <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+                <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  INPUT
+                </div>
+                <div className="mt-2 text-sm font-semibold text-slate-900">
+                  Rent + rent period
+                </div>
+              </div>
+              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+                <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  SELECT
+                </div>
+                <div className="mt-2 text-sm font-semibold text-slate-900">
+                  Pay frequency
+                </div>
+              </div>
+              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+                <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  NORMALIZE
+                </div>
+                <div className="mt-2 text-sm font-semibold text-slate-900">
+                  Annual total
+                </div>
+              </div>
+              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+                <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  OUTPUT
+                </div>
+                <div className="mt-2 text-sm font-semibold text-slate-900">
+                  Rent per paycheck
+                </div>
+              </div>
+            </div>
 
-          <p className="text-slate-800 mt-6 leading-relaxed">
-            Related tool:{" "}
-            <a
-              href={safeHref("/rent-converter")}
-              className="inline-flex items-center gap-2 text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
-            >
-              <span
-                aria-hidden="true"
-                className="inline-block h-1.5 w-1.5 rounded-full bg-sky-500"
-              />
-              rent converter
-            </a>
-            .
-          </p>
+            <div className="mt-10 space-y-6 text-base text-slate-700 leading-7">
+              {/* Card 1 */}
+              <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+                />
+                <div className="p-5 sm:p-6">
+                  <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
+                    1) Rent is converted to an annual total first
+                  </h3>
+
+                  <p className="mt-4">
+                    The calculator starts by converting your rent into an annual
+                    total using a consistent time-length model. This is the same
+                    “one source of truth” approach used across the site. Once
+                    rent is annualized, it can be split across paychecks without
+                    mixing calendar-month assumptions with fixed-day cycles.
+                  </p>
+
+                  <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-900">
+                      Assumptions used
+                    </div>
+                    <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
+                      <li>Year = 365 days</li>
+                      <li>Average month = 365 ÷ 12 days</li>
+                      <li>Week = 7 days</li>
+                      <li>Biweekly = 14 days</li>
+                      <li>Every 4 weeks = 28 days</li>
+                    </ul>
+                    <p className="mt-3 text-sm text-slate-600">
+                      These assumptions are for equivalence math. Your lease can
+                      still be due on specific dates.
+                    </p>
+                  </div>
+
+                  <p className="mt-4">
+                    This step is where small differences versus “month math”
+                    come from. If you divide a monthly amount by 2 and call it
+                    “biweekly rent,” you have implicitly assumed a calendar
+                    structure that may not match a 14-day pay cycle. Using an
+                    annual basis keeps the allocator stable across pay
+                    frequencies.
+                  </p>
+                </div>
+              </div>
+
+              {/* Card 2 */}
+              <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+                />
+                <div className="p-5 sm:p-6">
+                  <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
+                    2) Annual rent is divided by paychecks per year
+                  </h3>
+
+                  <p className="mt-4">
+                    After rent is annualized, the calculator divides that annual
+                    total by the number of paychecks implied by your selected
+                    pay frequency. The result is the amount to set aside from
+                    each paycheck so that, over time, you have allocated the
+                    same annual rent.
+                  </p>
+
+                  <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-900">
+                      Why this avoids drift
+                    </div>
+                    <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
+                      <li>
+                        If pay cycles and rent cycles don’t match, “set aside
+                        per pay” should still sum to the same annual rent.
+                      </li>
+                      <li>
+                        Using a single annual basis prevents hidden switching
+                        between 52-week framing and calendar months.
+                      </li>
+                      <li>
+                        You can change the pay frequency and see a consistent
+                        re-allocation, not a different implied rent.
+                      </li>
+                    </ul>
+                  </div>
+
+                  <p className="mt-4">
+                    The output is meant to be used as a budgeting habit:
+                    allocate the rent-per-paycheck amount each pay period,
+                    regardless of when rent is actually due. When the rent due
+                    date arrives, the accumulated set-aside is the intended
+                    funding source.
+                  </p>
+                </div>
+              </div>
+
+              {/* Card 3 */}
+              <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+                />
+                <div className="p-5 sm:p-6">
+                  <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
+                    3) The result does not change your lease schedule
+                  </h3>
+
+                  <p className="mt-4">
+                    This is not a due-date tool. If rent is due monthly and you
+                    are paid biweekly or semimonthly, the rent-per-paycheck
+                    number is still useful, but it does not claim that rent is
+                    “really due” every paycheck. It only spreads the annual rent
+                    across pay periods for budgeting consistency.
+                  </p>
+
+                  <p className="mt-4">
+                    If you need a forward schedule of actual due dates and
+                    calendar-month totals, use a due-date schedule tool. If you
+                    need conversions between cycles for listing comparisons, use
+                    a converter. This page is specifically “how much to set
+                    aside per pay” given a rent amount and a pay frequency.
+                  </p>
+                </div>
+              </div>
+
+              {/* Card 4 */}
+              <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+                />
+                <div className="p-5 sm:p-6">
+                  <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
+                    4) Where “monthly vs 4-week vs pay cycle” mismatches show up
+                  </h3>
+
+                  <p className="mt-4">
+                    The biggest budgeting surprises happen when a rent listing
+                    uses a fixed-day cycle (every 4 weeks) while your mental
+                    model is monthly, or when pay is biweekly while expenses are
+                    monthly. A 28-day schedule drifts through the calendar, and
+                    a biweekly schedule yields a different cadence than “twice
+                    per month.”
+                  </p>
+
+                  <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-900">
+                      Practical interpretation
+                    </div>
+                    <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
+                      <li>
+                        <strong>Biweekly</strong> means every 14 days. It is not
+                        “twice a month.”
+                      </li>
+                      <li>
+                        <strong>Every 4 weeks</strong> means every 28 days. It
+                        is not “monthly.”
+                      </li>
+                      <li>
+                        A stable allocation strategy starts from annual rent,
+                        then spreads across paychecks.
+                      </li>
+                    </ul>
+                  </div>
+
+                  <p className="mt-4">
+                    This calculator’s annual basis is the anchor that keeps the
+                    per-pay set-aside stable even when rent due dates and
+                    paycheck dates don’t align neatly month-to-month.
+                  </p>
+                </div>
+              </div>
+
+              {/* Card 5 */}
+              <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+                />
+                <div className="p-5 sm:p-6">
+                  <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
+                    5) Decimals and rounding
+                  </h3>
+
+                  <p className="mt-4">
+                    Decimals are preserved end-to-end. Internally, calculations
+                    keep precision (up to 12 decimals). If rounding is enabled
+                    in the UI, rounding should be display-only so it formats
+                    what you see without changing the underlying annual basis
+                    used for the allocation.
+                  </p>
+
+                  <p className="mt-4">
+                    If an input is invalid or ambiguous, the page should avoid
+                    producing a misleading per-pay value. A budgeting allocator
+                    becomes counterproductive if it quietly converts bad input
+                    into a confident-looking result.
+                  </p>
+                </div>
+              </div>
+
+              {/* Dark callout */}
+              <div className="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-6 sm:p-7">
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0"
+                >
+                  <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-sky-500 blur-3xl opacity-20" />
+                  <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-slate-500 blur-3xl opacity-30" />
+                </div>
+
+                <div className="relative">
+                  <div className="text-sm font-semibold text-sky-300">
+                    Scope note
+                  </div>
+                  <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-100">
+                    What this tool includes and excludes
+                  </h3>
+                  <p className="mt-3 text-slate-200 leading-7">
+                    This is a per-pay allocation calculator based on annualized
+                    rent and paycheck count. It does not model due dates,
+                    proration, partial periods, late fees, utilities, taxes, or
+                    deposits. It is designed for stable budgeting across pay
+                    frequencies that don’t match rent billing cycles.
+                  </p>
+                </div>
+              </div>
+
+              <section className="mt-10">
+                <h3 className="text-2xl font-extrabold mb-4 text-sky-900 tracking-tight">
+                  Links to related tools
+                </h3>
+
+                <div className="rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm p-5 sm:p-6">
+                  <ul className="list-disc ml-6 text-slate-700 space-y-2">
+                    <li>
+                      <a
+                        href={safeHref("/rent-converter")}
+                        className="inline-flex items-center gap-2 text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                      >
+                        Rent converter
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href={safeHref(
+                          "/how-much-rent-can-i-afford-calculator",
+                        )}
+                        className="inline-flex items-center gap-2 text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                      >
+                        How much rent can I afford?
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href={safeHref("/rent-after-tax-income-calculator")}
+                        className="inline-flex items-center gap-2 text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                      >
+                        Rent after tax income calculator
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </section>
+            </div>
+          </div>
         </div>
       </section>
 

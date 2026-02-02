@@ -478,59 +478,60 @@ export default function OtherUsefulTools(props: { id?: string }) {
       : "related-tools");
 
   return (
-    <section id={sectionId} className="max-w-6xl mx-auto px-6 pt-6 mb-6">
-      <h2 className="text-2xl sm:text-3xl font-bold text-center text-slate-800">
-        {normalizePathname(pathname) === "/rent-converter"
-          ? "Rent calculators and tools"
-          : "Related tools"}
-      </h2>
+    <></>
+    // <section id={sectionId} className="max-w-6xl mx-auto px-6 pt-6 mb-6">
+    //   <h2 className="text-2xl sm:text-3xl font-bold text-center text-slate-800">
+    //     {normalizePathname(pathname) === "/rent-converter"
+    //       ? "Rent calculators and tools"
+    //       : "Related tools"}
+    //   </h2>
 
-      <p className="mt-3 text-slate-600 text-center max-w-3xl mx-auto">
-        {normalizePathname(pathname) === "/rent-converter"
-          ? "Choose the calculator that matches how your rent is listed and how you budget."
-          : "Based on this page, here are the most relevant tools people use next."}
-      </p>
+    //   <p className="mt-3 text-slate-600 text-center max-w-3xl mx-auto">
+    //     {normalizePathname(pathname) === "/rent-converter"
+    //       ? "Choose the calculator that matches how your rent is listed and how you budget."
+    //       : "Based on this page, here are the most relevant tools people use next."}
+    //   </p>
 
-      <div className="mt-8 space-y-10">
-        {sections.map((section) => (
-          <div key={section.title}>
-            <div className="flex flex-col items-center text-center">
-              <h3 className="text-lg sm:text-xl font-bold text-slate-900">
-                {section.title}
-              </h3>
-              <p className="mt-2 text-sm text-slate-600 max-w-3xl">
-                {section.blurb}
-              </p>
-            </div>
+    //   <div className="mt-8 space-y-10">
+    //     {sections.map((section) => (
+    //       <div key={section.title}>
+    //         <div className="flex flex-col items-center text-center">
+    //           <h3 className="text-lg sm:text-xl font-bold text-slate-900">
+    //             {section.title}
+    //           </h3>
+    //           <p className="mt-2 text-sm text-slate-600 max-w-3xl">
+    //             {section.blurb}
+    //           </p>
+    //         </div>
 
-            <div className="mt-5 grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-              {section.items.map((x) => (
-                <a
-                  key={x.href}
-                  href={x.href}
-                  className="cursor-pointer block border border-slate-200 rounded-2xl p-6 hover:shadow-md transition bg-white"
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="text-base font-semibold text-slate-900">
-                      {x.label}
-                    </div>
-                    {x.badge ? (
-                      <span className="shrink-0 text-[11px] font-semibold rounded-full px-2 py-1 bg-slate-100 text-slate-700 border border-slate-200">
-                        {x.badge}
-                      </span>
-                    ) : null}
-                  </div>
+    //         <div className="mt-5 grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+    //           {section.items.map((x) => (
+    //             <a
+    //               key={x.href}
+    //               href={x.href}
+    //               className="cursor-pointer block border border-slate-200 rounded-2xl p-6 hover:shadow-md transition bg-white"
+    //             >
+    //               <div className="flex items-start justify-between gap-3">
+    //                 <div className="text-base font-semibold text-slate-900">
+    //                   {x.label}
+    //                 </div>
+    //                 {x.badge ? (
+    //                   <span className="shrink-0 text-[11px] font-semibold rounded-full px-2 py-1 bg-slate-100 text-slate-700 border border-slate-200">
+    //                     {x.badge}
+    //                   </span>
+    //                 ) : null}
+    //               </div>
 
-                  <p className="mt-2 text-sm text-slate-600">{x.desc}</p>
-                  <div className="mt-4 text-sm font-semibold text-sky-700">
-                    Open calculator →
-                  </div>
-                </a>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-    </section>
+    //               <p className="mt-2 text-sm text-slate-600">{x.desc}</p>
+    //               <div className="mt-4 text-sm font-semibold text-sky-700">
+    //                 Open calculator →
+    //               </div>
+    //             </a>
+    //           ))}
+    //         </div>
+    //       </div>
+    //     ))}
+    //   </div>
+    // </section>
   );
 }
