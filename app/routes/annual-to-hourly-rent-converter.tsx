@@ -1161,7 +1161,7 @@ export default function AnnualToHourlyRent() {
                     </div>
                   ) : null}
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-3">
                     <div className="text-xs text-slate-500">
                       4-week vs monthly context
                     </div>
@@ -1185,16 +1185,6 @@ export default function AnnualToHourlyRent() {
                       produce different equivalents.
                     </p>
                   </div>
-
-                  <div className="rc-no-print flex-col sm:flex-row gap-2 hidden sm:flex">
-                    <button
-                      type="button"
-                      onClick={handlePrint}
-                      className="rounded-xl cursor-pointer border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-                    >
-                      Print / Save as PDF
-                    </button>
-                  </div>
                 </div>
               </>
             )}
@@ -1216,6 +1206,15 @@ export default function AnnualToHourlyRent() {
         </div>
 
         <div className="mt-3 rounded-xl border border-slate-200 bg-white p-4">
+          <div className="rc-no-print mb-4 flex-col sm:flex-row gap-2 hidden sm:flex">
+            <button
+              type="button"
+              onClick={handlePrint}
+              className="rounded-xl cursor-pointer border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+            >
+              Print / Save as PDF
+            </button>
+          </div>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
               <div className="text-xs text-slate-500">

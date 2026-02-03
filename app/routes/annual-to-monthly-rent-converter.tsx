@@ -882,7 +882,7 @@ export default function AnnualToMonthlyRent() {
               Instant annual to monthly converter
             </h1>
 
-            <div className="rc-no-print flex-col sm:flex-row gap-2 hidden sm:flex">
+            <div className="rc-no-print flex-col sm:flex-row gap-2 hidden md:flex">
               <button
                 type="button"
                 onClick={handlePrint}
@@ -1006,7 +1006,7 @@ export default function AnnualToMonthlyRent() {
                     </div>
                   ))}
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-3">
                     <div className="text-xs text-slate-500">
                       4-week vs monthly comparison
                     </div>
@@ -1030,57 +1030,6 @@ export default function AnnualToMonthlyRent() {
                       change annual totals.
                     </p>
                   </div>
-
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
-                    <div className="text-xs text-slate-500">
-                      Annualization context (12 vs 13 payments)
-                    </div>
-
-                    <div className="mt-2 grid gap-2 sm:grid-cols-3">
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
-                        <div className="text-xs text-slate-500">
-                          Monthly × 12
-                        </div>
-                        <div className="mt-1 text-sm font-bold text-slate-800">
-                          {fmt(breakdownScaled!.annualFromMonthly12)}
-                        </div>
-                        <div className="mt-1 text-xs text-slate-500">
-                          Typical monthly schedule
-                        </div>
-                      </div>
-
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
-                        <div className="text-xs text-slate-500">
-                          4-week × 13
-                        </div>
-                        <div className="mt-1 text-sm font-bold text-slate-800">
-                          {fmt(breakdownScaled!.annualFrom4w13)}
-                        </div>
-                        <div className="mt-1 text-xs text-slate-500">
-                          Common 28-day schedule
-                        </div>
-                      </div>
-
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
-                        <div className="text-xs text-slate-500">Difference</div>
-                        <div className="mt-1 text-sm font-bold text-slate-800">
-                          {fmt(breakdownScaled!.annualDiff_13vs12)}
-                        </div>
-                        <div className="mt-1 text-xs text-slate-500">
-                          {formatPercent(
-                            breakdownScaled!.annualDiff_13vs12Pct,
-                            2,
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
-                    <p className="mt-3 text-xs text-slate-500">
-                      This panel is illustrative. It shows how “monthly” (12)
-                      and “every 4 weeks” (13) schedules can imply different
-                      annual totals even when a listing feels similar.
-                    </p>
-                  </div>
                 </div>
               </>
             )}
@@ -1102,6 +1051,15 @@ export default function AnnualToMonthlyRent() {
         </div>
 
         <div className="mt-3 rounded-xl border border-slate-200 bg-white p-4 rc-no-print">
+          <div className="rc-no-print md:hidden flex flex-col sm:flex-row gap-2 mb-4">
+            <button
+              type="button"
+              onClick={handlePrint}
+              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+            >
+              Print / Save as PDF
+            </button>
+          </div>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
               <div className="text-xs text-slate-500">

@@ -740,7 +740,7 @@ export default function BiweeklyToAnnualRent() {
               Instant biweekly to annual conversion
             </h1>
 
-            <div className="rc-no-print flex-col sm:flex-row gap-2 hidden sm:flex">
+            <div className="rc-no-print flex-col sm:flex-row gap-2 hidden md:flex">
               <button
                 type="button"
                 onClick={handlePrint}
@@ -854,7 +854,7 @@ export default function BiweeklyToAnnualRent() {
                 </div>
               ) : (
                 <>
-                  <div className="mt-3 flex flex-col gap-2">
+                  <div className="flex flex-col gap-2">
                     <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700 rc-tabular leading-none min-h-[3.25rem] sm:min-h-[4rem]">
                       <span className="rc-amount">
                         {fmt(annualHeadlineScaled)}
@@ -932,13 +932,13 @@ export default function BiweeklyToAnnualRent() {
                       </div>
                     ))}
 
-                    <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3.5 shadow-sm">
+                    <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-3.5 shadow-sm">
                       <div className="text-xs text-slate-600">
                         Payment-count context (26 vs 365 ÷ 14)
                       </div>
 
                       <div className="mt-3 grid gap-2 sm:grid-cols-3">
-                        <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-[0_1px_0_rgba(15,23,42,0.02)]">
+                        <div className="rounded-xl border border-slate-200 bg-emerald-50 px-4 py-3 shadow-[0_1px_0_rgba(15,23,42,0.02)]">
                           <div className="text-xs text-slate-600">
                             Biweekly × 26 (common shortcut)
                           </div>
@@ -952,7 +952,7 @@ export default function BiweeklyToAnnualRent() {
                           </div>
                         </div>
 
-                        <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-[0_1px_0_rgba(15,23,42,0.02)]">
+                        <div className="rounded-xl border border-slate-200 bg-emerald-50 px-4 py-3 shadow-[0_1px_0_rgba(15,23,42,0.02)]">
                           <div className="text-xs text-slate-600">
                             365-day annual equivalence (this tool)
                           </div>
@@ -967,7 +967,7 @@ export default function BiweeklyToAnnualRent() {
                           </div>
                         </div>
 
-                        <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-[0_1px_0_rgba(15,23,42,0.02)]">
+                        <div className="rounded-xl border border-slate-200 bg-emerald-50 px-4 py-3 shadow-[0_1px_0_rgba(15,23,42,0.02)]">
                           <div className="text-xs text-slate-600">
                             Difference (365-day minus 26x)
                           </div>
@@ -989,34 +989,6 @@ export default function BiweeklyToAnnualRent() {
                       <p className="mt-3 text-xs sm:text-sm text-slate-600 leading-relaxed">
                         This comparison is illustrative. Leases may define
                         schedule counts, proration rules, and due-date handling.
-                      </p>
-                    </div>
-
-                    <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3.5 shadow-sm">
-                      <div className="text-xs text-slate-600">
-                        Monthly vs 4-week comparison
-                      </div>
-                      <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                        <div className="text-sm sm:text-[0.95rem] text-slate-800">
-                          Monthly minus 4-week ={" "}
-                          <strong className="text-slate-900 rc-amount rc-tabular">
-                            {fmt(breakdownScaled!.monthlyMinus4w)}
-                          </strong>
-                        </div>
-                        <div className="text-sm sm:text-[0.95rem] text-slate-800">
-                          Difference ≈{" "}
-                          <strong className="text-slate-900 rc-amount rc-tabular">
-                            {formatPercent(
-                              breakdownScaled!.monthlyMinus4wPct,
-                              2,
-                            )}
-                          </strong>
-                        </div>
-                      </div>
-                      <p className="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
-                        4-week is 28 days. An average month is about 30.42 days
-                        (365 ÷ 12). Different lengths lead to different annual
-                        equivalents.
                       </p>
                     </div>
                   </div>
@@ -1041,6 +1013,15 @@ export default function BiweeklyToAnnualRent() {
         </div>
 
         <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4 sm:p-5">
+          <div className="rc-no-print md:hidden flex flex-col sm:flex-row gap-2 mb-4">
+            <button
+              type="button"
+              onClick={handlePrint}
+              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+            >
+              Print / Save as PDF
+            </button>
+          </div>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="min-w-0">
               <div className="text-xs text-slate-600">

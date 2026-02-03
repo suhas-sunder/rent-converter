@@ -832,7 +832,7 @@ export default function HourlyToAnnualRent() {
             <h1 className="text-2xl sm:text-left text-center capitalize sm:text-4xl text-sky-800 font-bold">
               Instant hourly to annual conversion
             </h1>
-            <div className="ml-auto max-w-xl rounded-xl border border-slate-200 bg-white p-4">
+            <div className="lg:ml-auto lg:max-w-xl rounded-xl border border-slate-200 bg-blue-50 p-4">
               <div className="text-sm font-semibold text-slate-800 mb-2">
                 Hour interpretation
               </div>
@@ -1011,68 +1011,15 @@ export default function HourlyToAnnualRent() {
               </div>
             ) : (
               <>
-                <div className="mt-3 flex flex-col gap-2">
+                <div className="flex flex-col gap-2">
                   <div className="min-h-[3.5rem] sm:min-h-[4rem]">
                     <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700 tabular-nums whitespace-nowrap">
                       {fmt(displayedAnnualScaled)}
                     </div>
                   </div>
-                  <div className="text-sm text-slate-700 leading-relaxed">
-                    <span className="tabular-nums whitespace-nowrap">
-                      {fmt(hourlyScaled)}
-                    </span>{" "}
-                    hourly ≈{" "}
-                    <strong className="text-slate-900 tabular-nums whitespace-nowrap">
-                      {fmt(displayedAnnualScaled)}
-                    </strong>{" "}
-                    annual{" "}
-                    {hourMode === "clock"
-                      ? "(24/7 equivalence)"
-                      : "(paid-hours scenario)"}
-                  </div>
-                  <div className="text-sm text-slate-700 leading-relaxed">
-                    Implied monthly equivalent:{" "}
-                    <strong className="text-slate-900 tabular-nums whitespace-nowrap">
-                      {fmt(displayedMonthlyScaled)}
-                    </strong>{" "}
-                    monthly (annual ÷ 12)
-                  </div>
-
-                  <div className="rc-no-print mt-2 flex flex-wrap gap-2">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleCopy("annual", fmt(displayedAnnualScaled))
-                      }
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
-                    >
-                      {copiedKey === "annual" ? "Copied" : "Copy annual amount"}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleCopy(
-                          "summary",
-                          `Hourly: ${fmt(hourlyScaled)} | Annual: ${fmt(displayedAnnualScaled)} | Mode: ${
-                            hourMode === "clock"
-                              ? "24/7 (365×24)"
-                              : `paid-hours (${formatNumber(parsedPaidHours.ok ? parsedPaidHours.hours : 0, 2)} hrs/week × 52)`
-                          }`,
-                        )
-                      }
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
-                    >
-                      {copiedKey === "summary" ? "Copied" : "Copy summary"}
-                    </button>
-                    {copiedKey === "copy_failed" ? (
-                      <span className="self-center text-sm font-semibold text-rose-700">
-                        Copy failed
-                      </span>
-                    ) : null}
-                  </div>
                 </div>
 
-                <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                   {(
                     [
                       ["Hourly", breakdownScaled!.hourly, "hourly"],
@@ -1113,71 +1060,7 @@ export default function HourlyToAnnualRent() {
                     </div>
                   ))}
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
-                    <div className="flex items-center gap-2">
-                      <div
-                        className="h-2 w-2 rounded-full bg-sky-600"
-                        aria-hidden="true"
-                      />
-                      <div className="text-xs font-medium text-slate-600">
-                        Paid-hours scenario comparison (annual totals)
-                      </div>
-                    </div>
-
-                    <div className="mt-3 grid gap-2 sm:grid-cols-3">
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
-                        <div className="text-xs font-medium text-slate-600">
-                          24/7 equivalence
-                        </div>
-                        <div className="mt-1 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
-                          {fmt(breakdownScaled!.annualClock)}
-                        </div>
-                        <div className="mt-1 text-xs text-slate-600 tabular-nums whitespace-nowrap">
-                          {breakdownScaled!.hoursPerYear} hours/year
-                        </div>
-                      </div>
-
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
-                        <div className="text-xs font-medium text-slate-600">
-                          Paid-hours annualized
-                        </div>
-                        <div className="mt-1 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
-                          {fmt(breakdownScaled!.annualPaidScaled)}
-                        </div>
-                        <div className="mt-1 text-xs text-slate-600 tabular-nums whitespace-nowrap">
-                          {parsedPaidHours.ok
-                            ? formatNumber(parsedPaidHours.hours, 2)
-                            : "-"}{" "}
-                          hours/week × 52
-                        </div>
-                      </div>
-
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
-                        <div className="text-xs font-medium text-slate-600">
-                          Difference
-                        </div>
-                        <div className="mt-1 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
-                          {fmt(breakdownScaled!.annualPaidMinusClock)}
-                        </div>
-                        <div className="mt-1 text-xs text-slate-600 tabular-nums whitespace-nowrap">
-                          ≈{" "}
-                          {formatPercent(
-                            breakdownScaled!.annualPaidMinusClockPct,
-                            2,
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
-                    <p className="mt-3 text-sm text-slate-600 leading-relaxed">
-                      Clock-hour conversion is the consistent time-based
-                      equivalence across this site. Paid-hours mode is a
-                      scenario illustration for cases where the hourly amount
-                      applies only to certain hours.
-                    </p>
-                  </div>
-
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-3 shadow-sm">
                     <div className="flex items-center gap-2">
                       <div
                         className="h-2 w-2 rounded-full bg-sky-600"
@@ -1208,7 +1091,7 @@ export default function HourlyToAnnualRent() {
                     </p>
                   </div>
 
-                  <div className="rc-no-print mt-5 flex flex-col sm:flex-row gap-2 mb-auto">
+                  <div className="rc-no-print mt-5 hidden md:flex flex-col sm:flex-row gap-2 mb-auto">
                     <button
                       type="button"
                       onClick={handlePrint}
@@ -1221,13 +1104,6 @@ export default function HourlyToAnnualRent() {
               </>
             )}
           </div>
-
-          <div className="mt-3 text-sm text-slate-600 leading-relaxed">
-            24/7 hours uses a pure time-based equivalence. Paid hours shows a
-            scenario where the hourly amount applies only to a chosen number of
-            hours per week.
-          </div>
-
           <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
             <div className="font-semibold">Assumptions used on this page</div>
             <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
@@ -1244,6 +1120,15 @@ export default function HourlyToAnnualRent() {
         </div>
 
         <div className="mt-3 rounded-xl border border-slate-200 bg-white p-4">
+          <div className="rc-no-print md:hidden flex flex-col sm:flex-row gap-2 mb-4">
+            <button
+              type="button"
+              onClick={handlePrint}
+              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+            >
+              Print / Save as PDF
+            </button>
+          </div>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
               <div className="text-xs text-slate-600">
@@ -1283,14 +1168,6 @@ export default function HourlyToAnnualRent() {
                 <option value={6}>6</option>
               </select>
             </div>
-          </div>
-
-          <div className="mt-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-800">
-            <div className="font-semibold">Math basis</div>
-            <p className="mt-1 text-sm text-slate-700 leading-relaxed">
-              Clock-hour equivalence uses 365 days × 24 hours. Paid-hours mode
-              uses hours/week × 52 as a scenario illustration.
-            </p>
           </div>
         </div>
       </section>

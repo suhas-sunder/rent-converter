@@ -768,7 +768,7 @@ export default function BiweeklyToWeeklyRent() {
               Instant biweekly to weekly conversion
             </h1>
 
-            <div className="rc-no-print flex-col sm:flex-row gap-2 hidden sm:flex">
+            <div className="rc-no-print flex-col sm:flex-row gap-2 hidden md:flex">
               <button
                 type="button"
                 onClick={handlePrint}
@@ -910,7 +910,7 @@ export default function BiweeklyToWeeklyRent() {
                     </div>
                   ))}
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-3">
                     <div className="text-xs text-slate-500">
                       Monthly vs 4-week context
                     </div>
@@ -934,61 +934,6 @@ export default function BiweeklyToWeeklyRent() {
                       equivalents.
                     </p>
                   </div>
-
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
-                    <div className="text-xs text-slate-500">
-                      Payment-count comparison (illustrative)
-                    </div>
-
-                    <div className="mt-3 grid gap-2 sm:grid-cols-3">
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
-                        <div className="text-xs text-slate-500">
-                          Weekly × 52 (calendar count)
-                        </div>
-                        <div className="mt-1 text-sm font-bold text-slate-800">
-                          {fmt(breakdownScaled!.annualFromWeekly52)}
-                        </div>
-                        <div className="mt-1 text-xs text-slate-500">
-                          Delta vs day-based:{" "}
-                          {fmt(breakdownScaled!.annualDiffVs52)}
-                        </div>
-                      </div>
-
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
-                        <div className="text-xs text-slate-500">
-                          Biweekly × 26 (calendar count)
-                        </div>
-                        <div className="mt-1 text-sm font-bold text-slate-800">
-                          {fmt(breakdownScaled!.annualFromBiweekly26)}
-                        </div>
-                        <div className="mt-1 text-xs text-slate-500">
-                          Delta vs day-based:{" "}
-                          {fmt(breakdownScaled!.annualDiffVs26)}
-                        </div>
-                      </div>
-
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
-                        <div className="text-xs text-slate-500">
-                          Annual (day-based, 365-day)
-                        </div>
-                        <div className="mt-1 text-sm font-bold text-slate-800">
-                          {fmt(breakdownScaled!.annual)}
-                        </div>
-                        <div className="mt-1 text-xs text-slate-500">
-                          vs weekly×52:{" "}
-                          {formatPercent(breakdownScaled!.pctVs52, 2)} | vs
-                          biweekly×26:{" "}
-                          {formatPercent(breakdownScaled!.pctVs26, 2)}
-                        </div>
-                      </div>
-                    </div>
-
-                    <p className="mt-3 text-xs text-slate-500">
-                      These comparisons show calendar counts (52, 26) versus
-                      day-based equivalence (365 days). Leases can follow one
-                      interpretation more closely than the other.
-                    </p>
-                  </div>
                 </div>
               </>
             )}
@@ -1010,6 +955,15 @@ export default function BiweeklyToWeeklyRent() {
         </div>
 
         <div className="mt-3 rounded-xl border border-slate-200 bg-white p-4">
+          <div className="rc-no-print md:hidden flex flex-col sm:flex-row gap-2 mb-4">
+            <button
+              type="button"
+              onClick={handlePrint}
+              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+            >
+              Print / Save as PDF
+            </button>
+          </div>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
               <div className="text-xs text-slate-500">

@@ -730,7 +730,7 @@ export default function MonthlyToWeeklyRent() {
               Instant Monthly to Weekly Rent Converter
             </h1>
 
-            <div className="rc-no-print flex-col sm:flex-row gap-2 hidden sm:flex">
+            <div className="rc-no-print flex-col sm:flex-row gap-2 hidden md:flex">
               <button
                 type="button"
                 onClick={handlePrint}
@@ -1005,6 +1005,15 @@ export default function MonthlyToWeeklyRent() {
         </div>
 
         <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4">
+          <div className="rc-no-print md:hidden flex flex-col sm:flex-row gap-2 mb-4">
+            <button
+              type="button"
+              onClick={handlePrint}
+              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+            >
+              Print / Save as PDF
+            </button>
+          </div>
           <label className="mt-1 flex items-center gap-2 text-sm text-slate-700">
             <input
               type="checkbox"

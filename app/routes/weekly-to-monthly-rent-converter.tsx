@@ -774,7 +774,7 @@ export default function WeeklyToMonthlyRent() {
               </h1>
             </div>
 
-            <div className="rc-no-print flex-col sm:flex-row gap-2 hidden sm:flex">
+            <div className="rc-no-print flex-col sm:flex-row gap-2 hidden md:flex">
               <button
                 type="button"
                 onClick={handlePrint}
@@ -1047,7 +1047,7 @@ export default function WeeklyToMonthlyRent() {
           ) : null}
         </div>
         <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 rc-no-print">
-          <div className="rc-no-print sm:hidden flex flex-col sm:flex-row gap-2 mb-4">
+          <div className="rc-no-print md:hidden flex flex-col sm:flex-row gap-2 mb-4">
             <button
               type="button"
               onClick={handlePrint}
