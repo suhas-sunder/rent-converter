@@ -592,8 +592,6 @@ export default function MonthlyToBiweeklyRent() {
       ? amountPreviewValue
       : amount;
 
-  const maxDecimals = roundDisplay ? displayDecimals : 12;
-  const minDecimals = roundDisplay ? displayDecimals : 0;
   const fmt = (scaled: bigint) =>
     formatCurrencyFromScaled(scaled, currency, roundDisplay, displayDecimals);
 
@@ -767,11 +765,11 @@ export default function MonthlyToBiweeklyRent() {
       </section>
 
       <section id="converter" className="mx-auto max-w-6xl px-6 pb-6 mt-4">
-        <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:px-8 rc-print-block">
+        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block">
           <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-            <h2 className="text-xl sm:text-4xl capitalize text-sky-800 font-bold">
+            <h1 className="text-xl sm:text-4xl capitalize text-sky-800 font-bold">
               Instant monthly to biweekly converter
-            </h2>
+            </h1>
 
             <div className="rc-no-print flex flex-col sm:flex-row gap-2">
               <button

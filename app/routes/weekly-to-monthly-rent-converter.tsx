@@ -766,7 +766,7 @@ export default function WeeklyToMonthlyRent() {
       </section>
 
       <section id="converter" className="mx-auto max-w-6xl px-6 pb-6 mt-4">
-        <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:px-8 rc-print-block">
+        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block">
           <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
               <h1 className="text-xl sm:text-4xl capitalize text-sky-800 font-bold">
@@ -774,7 +774,7 @@ export default function WeeklyToMonthlyRent() {
               </h1>
             </div>
 
-            <div className="rc-no-print flex flex-col sm:flex-row gap-2">
+            <div className="rc-no-print hidden sm:flex flex-col sm:flex-row gap-2">
               <button
                 type="button"
                 onClick={handlePrint}
@@ -1045,6 +1045,15 @@ export default function WeeklyToMonthlyRent() {
           ) : null}
         </div>
         <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 rc-no-print">
+          <div className="rc-no-print sm:hidden flex flex-col sm:flex-row gap-2 mb-4">
+            <button
+              type="button"
+              onClick={handlePrint}
+              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+            >
+              Print / Save as PDF
+            </button>
+          </div>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <label className="flex items-center gap-2 text-sm text-slate-700">
               <input

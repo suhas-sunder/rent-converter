@@ -826,9 +826,9 @@ export default function RentPerPaycheck() {
         <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block">
           <div className="mb-2 sm:mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
-              <h2 className="text-center sm:text-left text-2xl sm:text-4xl capitalize font-bold text-sky-800">
+              <h1 className="text-center sm:text-left text-2xl sm:text-4xl capitalize font-bold text-sky-800">
                 Rent allocation per paycheck Calculator
-              </h2>
+              </h1>
             </div>
 
             <div className="rc-no-print hidden sm:flex flex-col sm:flex-row gap-2">

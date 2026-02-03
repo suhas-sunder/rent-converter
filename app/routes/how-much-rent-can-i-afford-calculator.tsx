@@ -792,7 +792,7 @@ export default function HowMuchRentCanIAfford() {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 pb-6 mt-4" id="calculator">
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:px-8 shadow-sm rc-print-block">
+        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block">
           <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <h1 className="text-xl sm:text-4xl capitalize font-bold text-sky-800">
               Income and affordability estimates

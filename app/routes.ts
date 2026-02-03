@@ -159,10 +159,7 @@ export default [
     "rent-as-percentage-of-income",
     "routes/rent-as-percentage-of-income.tsx",
   ),
-  route(
-    "how-much-rent-can-i-afford",
-    "routes/how-much-rent-can-i-afford.tsx",
-  ),
+  route("how-much-rent-can-i-afford", "routes/how-much-rent-can-i-afford.tsx"),
   route("rent-after-tax-income", "routes/rent-after-tax-income.tsx"),
   route("rent-vs-take-home-pay", "routes/rent-vs-take-home-pay.tsx"),
 
