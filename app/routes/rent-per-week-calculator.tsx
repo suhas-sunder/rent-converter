@@ -794,7 +794,7 @@ export default function RentPerWeekCalculator() {
         }}
       />
 
-      <section className="max-w-6xl mx-auto px-6 rc-no-print">
+      <section className="max-w-6xl mx-auto px-6 rc-no-print mt-4 sm:block hidden">
         <nav className="text-sm text-slate-500 mb-4">
           <a href={safeHref("/")} className="hover:underline text-slate-600">
             Home

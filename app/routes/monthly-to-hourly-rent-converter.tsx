@@ -720,7 +720,7 @@ export default function MonthlyToHourlyRent() {
         }}
       />
 
-      <section className="pb-4 rc-no-print">
+      <section className="mt-4 rc-no-print hidden sm:block">
         <nav
           className="max-w-6xl mx-auto px-6 text-sm text-slate-500"
           aria-label="Breadcrumb"

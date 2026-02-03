@@ -663,7 +663,7 @@ export default function AnnualToWeeklyRentConverter() {
         }}
       />
 
-      <section className=" pb-4 rc-no-print">
+      <section className=" mt-4 rc-no-print hidden sm:block">
         <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-500">
           <a href={safeHref("/")} className="hover:underline">
             Home

@@ -766,7 +766,7 @@ export default function RentPaidEvery4Weeks() {
       />
 
       {/* Breadcrumbs */}
-      <section className="pb-4 rc-no-print">
+      <section className="mt-4 rc-no-print hidden sm:block">
         <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-600">
           <a
             href={safeHref("/")}

@@ -813,7 +813,7 @@ export default function RentPerDayCalculator() {
         }}
       />
 
-      <section className="max-w-6xl mx-auto px-6 rc-no-print">
+      <section className="max-w-6xl mx-auto px-6 rc-no-print mt-4 hidden sm:block">
         <nav className="text-sm text-slate-600" aria-label="Breadcrumb">
           <a
             href={safeHref("/")}

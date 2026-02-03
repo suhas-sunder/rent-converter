@@ -1030,7 +1030,7 @@ export default function RentDueDateCalculator() {
         }}
       />
 
-      <section className="max-w-6xl mx-auto px-6">
+      <section className="max-w-6xl mx-auto px-6 mt-4 hidden sm:block">
         <nav className="text-sm text-slate-500 rc-no-print">
           <a href={safeHref("/")} className="hover:underline text-slate-600">
             Home

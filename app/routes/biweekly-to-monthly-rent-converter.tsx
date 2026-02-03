@@ -847,7 +847,7 @@ export default function BiweeklyToMonthlyRent() {
         }}
       />
 
-      <section className="pb-5 rc-no-print">
+      <section className="mt-4 rc-no-print hidden sm:block">
         <nav className="max-w-6xl mx-auto px-6 text-sm sm:text-[0.95rem] text-slate-600">
           <a
             href={safeHref("/")}
