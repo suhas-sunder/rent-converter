@@ -1025,7 +1025,15 @@ export default function AnnualToHourlyRent() {
           </div>
 
           <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
-            <div className="text-sm text-slate-600">Hourly equivalent</div>
+            <div className="flex items-center gap-2">
+              <div
+                className="h-2 w-2 rounded-full bg-sky-600"
+                aria-hidden="true"
+              />
+              <div className="text-sm font-semibold text-slate-800">
+                Hourly equivalent
+              </div>
+            </div>
 
             {!canShowAnnualResults ? (
               <div className="mt-2 rounded-xl border border-slate-200 bg-white px-4 py-4 text-slate-700">
@@ -1043,7 +1051,7 @@ export default function AnnualToHourlyRent() {
                   </div>
                 </div>
 
-                <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                   {(
                     [
                       ["Hourly", breakdownScaled!.hourly, "hourly"],
@@ -1192,7 +1200,7 @@ export default function AnnualToHourlyRent() {
             )}
           </div>
 
-          <div className="mt-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+          <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
             <div className="font-semibold">Assumptions used on this page</div>
             <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
               <li>1 year = 365 days</li>
@@ -1247,19 +1255,6 @@ export default function AnnualToHourlyRent() {
                 <option value={6}>6</option>
               </select>
             </div>
-          </div>
-
-          <div className="mt-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
-            <div className="font-semibold">Assumptions used on this page</div>
-            <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
-              <li>1 year = 365 days</li>
-              <li>24 hours per day (so 8,760 hours per year)</li>
-              <li>Month = 365 ÷ 12 days (average)</li>
-              <li>
-                This tool does not assume what is included in “rent” (fees,
-                utilities, taxes). Enter the total you want to budget with.
-              </li>
-            </ul>
           </div>
         </div>
       </section>

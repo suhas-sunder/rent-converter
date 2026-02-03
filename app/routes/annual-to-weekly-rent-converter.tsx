@@ -764,7 +764,15 @@ export default function AnnualToWeeklyRentConverter() {
           </div>
 
           <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
-            <div className="text-sm text-slate-600">Weekly equivalent</div>
+            <div className="flex items-center gap-2">
+              <div
+                className="h-2 w-2 rounded-full bg-sky-600"
+                aria-hidden="true"
+              />
+              <div className="text-sm font-semibold text-slate-800">
+                Weekly equivalent
+              </div>
+            </div>
 
             {!canShowResults ? (
               <div className="mt-2 rounded-xl border border-slate-200 bg-white px-4 py-4 text-slate-700">
@@ -782,7 +790,7 @@ export default function AnnualToWeeklyRentConverter() {
                   </div>
                 </div>
 
-                <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                   {(
                     [
                       [
@@ -914,7 +922,7 @@ export default function AnnualToWeeklyRentConverter() {
             )}
           </div>
 
-          <div className="mt-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+          <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
             <div className="font-semibold">Assumptions used on this page</div>
             <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
               <li>1 year = 365 days</li>

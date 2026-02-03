@@ -1184,7 +1184,7 @@ export default function RentAfterTaxIncome() {
                   </div>
                 </div>
 
-                <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                   <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
                     <div className="text-xs text-slate-500">
                       Annual pre-tax income (annualized)
@@ -1332,26 +1332,21 @@ export default function RentAfterTaxIncome() {
                   </tbody>
                 </table>
               </div>
-
-              <p className="mt-4 text-xs text-slate-500">
-                Assumptions: 1 year = 365 days, 1 week = 7 days, every 4 weeks =
-                28 days, and month = 365 ÷ 12 days (average). Exact pay dates
-                and billing rules vary.
-              </p>
             </div>
           ) : null}
-
-          <p className="my-6 text-sm text-slate-500">
-            Assumptions: 1 year = 365 days, 1 week = 7 days, every 4 weeks = 28
-            days, and month = 365 ÷ 12 days (average). The tax rate is an input
-            estimate and does not model brackets, deductions, or credits.
-          </p>
-
-          <p className="mt-4 text-sm text-slate-600">
-            Income and rent are annualized first (365-day year). After-tax
-            income is estimated using your effective tax rate. Rent share and
-            "income left after rent" are computed from those annual totals.
-          </p>
+          <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+            <div className="font-semibold">Assumptions used on this page</div>
+            <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
+              <li>1 year = 365 days</li>
+              <li>Biweekly = 14 days</li>
+              <li>4-week rent = 28 days</li>
+              <li>Month = 365 ÷ 12 days (average)</li>
+              <li>
+                This tool does not assume what is included in “rent” (fees,
+                utilities, taxes). Enter the total you want to budget with.
+              </li>
+            </ul>
+          </div>
         </div>
 
         <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4">

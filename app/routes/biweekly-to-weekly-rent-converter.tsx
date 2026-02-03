@@ -849,7 +849,15 @@ export default function BiweeklyToWeeklyRent() {
           </div>
 
           <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
-            <div className="text-sm text-slate-600">Weekly equivalent</div>
+            <div className="flex items-center gap-2">
+              <div
+                className="h-2 w-2 rounded-full bg-sky-600"
+                aria-hidden="true"
+              />
+              <div className="text-sm font-semibold text-slate-800">
+                Weekly equivalent
+              </div>
+            </div>
 
             {!canShowResults ? (
               <div className="mt-2 rounded-xl border border-slate-200 bg-white px-4 py-4 text-slate-700">
@@ -865,42 +873,9 @@ export default function BiweeklyToWeeklyRent() {
                   <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700">
                     {fmt(weeklyHeadlineScaled)}
                   </div>
-                  <div className="text-sm text-slate-600">
-                    {fmt(biweeklyScaled)} biweekly ≈{" "}
-                    <strong>{fmt(weeklyHeadlineScaled)}</strong> weekly
-                  </div>
-
-                  <div className="rc-no-print mt-2 flex flex-wrap gap-2">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleCopy("weekly", fmt(weeklyHeadlineScaled))
-                      }
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-                    >
-                      {copiedKey === "weekly" ? "Copied" : "Copy weekly amount"}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleCopy(
-                          "summary",
-                          `Biweekly: ${fmt(biweeklyScaled)} | Weekly: ${fmt(weeklyHeadlineScaled)} | Assumptions: biweekly=14 days, week=7 days, year=365 days`,
-                        )
-                      }
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-                    >
-                      {copiedKey === "summary" ? "Copied" : "Copy summary"}
-                    </button>
-                    {copiedKey === "copy_failed" ? (
-                      <span className="self-center text-sm font-semibold text-rose-700">
-                        Copy failed
-                      </span>
-                    ) : null}
-                  </div>
                 </div>
 
-                <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                   {(
                     [
                       ["Hourly", breakdownScaled!.hourly, "hourly"],
@@ -1019,11 +994,19 @@ export default function BiweeklyToWeeklyRent() {
             )}
           </div>
 
-          <p className="my-6 text-sm text-slate-500">
-            Assumptions: year = 365 days, week = 7 days, biweekly = 14 days,
-            4-week = 28 days, month = 365 ÷ 12 days (average). Actual due dates
-            and billing terms vary by agreement.
-          </p>
+          <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+            <div className="font-semibold">Assumptions used on this page</div>
+            <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
+              <li>1 year = 365 days</li>
+              <li>Biweekly = 14 days</li>
+              <li>4-week rent = 28 days</li>
+              <li>Month = 365 ÷ 12 days (average)</li>
+              <li>
+                This tool does not assume what is included in “rent” (fees,
+                utilities, taxes). Enter the total you want to budget with.
+              </li>
+            </ul>
+          </div>
         </div>
 
         <div className="mt-3 rounded-xl border border-slate-200 bg-white p-4">

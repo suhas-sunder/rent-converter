@@ -819,10 +819,7 @@ export default function RentPerPaycheck() {
         </nav>
       </section>
 
-      <section
-        id="calculator"
-        className="mx-auto max-w-6xl px-6 pb-6 mt-4"
-      >
+      <section id="calculator" className="mx-auto max-w-6xl px-6 pb-6 mt-4">
         <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block sm:pt-6">
           <div className="mb-3 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
@@ -1251,14 +1248,19 @@ export default function RentPerPaycheck() {
             </section>
           ) : null}
 
-          <p className="my-6 text-sm text-slate-500">
-            Assumptions: 1 calendar year = 365 days. Rent-period counts use
-            standard payment definitions (monthly = 12, weekly = 52, every 2
-            weeks = 26, every 4 weeks = 13, daily = 365). Hourly uses a standard
-            2,080-hour work year. Paycheck counts use standard definitions
-            (weekly = 52, biweekly = 26, semimonthly = 24, monthly = 12). Actual
-            calendars and payroll schedules vary.
-          </p>
+          <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+            <div className="font-semibold">Assumptions used on this page</div>
+            <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
+              <li>1 year = 365 days</li>
+              <li>Biweekly = 14 days</li>
+              <li>4-week rent = 28 days</li>
+              <li>Month = 365 ÷ 12 days (average)</li>
+              <li>
+                This tool does not assume what is included in “rent” (fees,
+                utilities, taxes). Enter the total you want to budget with.
+              </li>
+            </ul>
+          </div>
         </div>
 
         <div className="md:col-span-12 mt-6">
@@ -1644,29 +1646,28 @@ export default function RentPerPaycheck() {
         </div>
       </section>
 
-<section id="faq" className="max-w-5xl mx-auto py-16 px-6">
-  <h2 className="text-3xl font-bold text-center mb-3 text-sky-800 tracking-tight">
-    Frequently Asked Questions
-  </h2>
+      <section id="faq" className="max-w-5xl mx-auto py-16 px-6">
+        <h2 className="text-3xl font-bold text-center mb-3 text-sky-800 tracking-tight">
+          Frequently Asked Questions
+        </h2>
 
-  <div className="divide-y divide-slate-200">
-    {faqData.map((f, i) => (
-      <details key={i} className="group py-4">
-        <summary className="cursor-pointer list-none font-semibold text-lg text-sky-800 flex items-center justify-between hover:text-sky-900">
-          <span>{f.q}</span>
-          <span className="ml-4 text-slate-400 transition-transform group-open:rotate-180">
-            ▾
-          </span>
-        </summary>
+        <div className="divide-y divide-slate-200">
+          {faqData.map((f, i) => (
+            <details key={i} className="group py-4">
+              <summary className="cursor-pointer list-none font-semibold text-lg text-sky-800 flex items-center justify-between hover:text-sky-900">
+                <span>{f.q}</span>
+                <span className="ml-4 text-slate-400 transition-transform group-open:rotate-180">
+                  ▾
+                </span>
+              </summary>
 
-        <div className="mt-2 text-slate-700 leading-relaxed max-w-prose">
-          {f.a}
+              <div className="mt-2 text-slate-700 leading-relaxed max-w-prose">
+                {f.a}
+              </div>
+            </details>
+          ))}
         </div>
-      </details>
-    ))}
-  </div>
-</section>
-
+      </section>
 
       <OtherUsefulTools />
       <RenterChecklists />

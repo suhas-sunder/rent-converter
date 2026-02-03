@@ -959,7 +959,7 @@ export default function BiweeklyToMonthlyRent() {
           </div>
 
           <div
-            className="mt-7 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block shadow-[0_1px_0_rgba(2,132,199,0.06)] relative overflow-hidden"
+            className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block shadow-[0_1px_0_rgba(2,132,199,0.06)] relative overflow-hidden"
             role="status"
             aria-live="polite"
             aria-atomic="true"
@@ -967,8 +967,14 @@ export default function BiweeklyToMonthlyRent() {
             <div className="absolute inset-y-0 left-0 w-1.5 bg-sky-200/80" />
             <div className="absolute top-0 left-0 right-0 h-px bg-sky-200/80" />
             <div className="relative">
-              <div className="text-sm sm:text-[0.95rem] text-slate-700">
-                Monthly equivalent
+              <div className="flex items-center gap-2">
+                <div
+                  className="h-2 w-2 rounded-full bg-sky-600"
+                  aria-hidden="true"
+                />
+                <div className="text-sm font-semibold text-slate-800">
+                  Monthly equivalent
+                </div>
               </div>
 
               {!canShowResults ? (
@@ -987,58 +993,9 @@ export default function BiweeklyToMonthlyRent() {
                         {fmt(monthlyHeadlineScaled)}
                       </span>
                     </div>
-
-                    <div className="text-sm sm:text-[0.95rem] text-slate-700 leading-relaxed">
-                      <span className="rc-amount">{fmt(biweeklyScaled)}</span>{" "}
-                      biweekly ≈{" "}
-                      <strong className="text-slate-900 rc-amount">
-                        {fmt(monthlyHeadlineScaled)}
-                      </strong>{" "}
-                      monthly (365-day annual equivalence, then ÷ 12)
-                    </div>
-
-                    <div className="rc-no-print mt-2 flex flex-wrap gap-2">
-                      <button
-                        type="button"
-                        onClick={() =>
-                          handleCopy("monthly", fmt(monthlyHeadlineScaled))
-                        }
-                        className="rounded-xl border border-slate-200 bg-sky-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-sky-700 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fbff]"
-                      >
-                        {copiedKey === "monthly"
-                          ? "Copied"
-                          : "Copy monthly amount"}
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() =>
-                          handleCopy(
-                            "summary",
-                            `Biweekly: ${fmt(biweeklyScaled)} | Monthly: ${fmt(
-                              monthlyHeadlineScaled,
-                            )} | Assumptions: biweekly=14 days, year=365 days, month=365/12`,
-                          )
-                        }
-                        className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fbff]"
-                      >
-                        {copiedKey === "summary" ? "Copied" : "Copy summary"}
-                      </button>
-
-                      <span
-                        className={`self-center text-sm font-semibold ${
-                          copiedKey === "copy_failed"
-                            ? "text-rose-700"
-                            : "sr-only"
-                        }`}
-                        role={copiedKey === "copy_failed" ? "alert" : undefined}
-                      >
-                        Copy failed
-                      </span>
-                    </div>
                   </div>
 
-                  <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  <div className=" grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                     {(
                       [
                         ["Hourly", breakdownScaled!.hourly, "hourly"],
@@ -1166,11 +1123,19 @@ export default function BiweeklyToMonthlyRent() {
             </div>
           </div>
 
-          <p className="my-6 text-sm text-slate-500">
-            Assumptions: year = 365 days, week = 7 days, biweekly = 14 days,
-            4-week = 28 days, month = 365 ÷ 12 days (average). Actual due dates
-            and proration rules vary by lease.
-          </p>
+          <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+            <div className="font-semibold">Assumptions used on this page</div>
+            <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
+              <li>1 year = 365 days</li>
+              <li>Biweekly = 14 days</li>
+              <li>4-week rent = 28 days</li>
+              <li>Month = 365 ÷ 12 days (average)</li>
+              <li>
+                This tool does not assume what is included in “rent” (fees,
+                utilities, taxes). Enter the total you want to budget with.
+              </li>
+            </ul>
+          </div>
         </div>
 
         <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4 sm:p-5">

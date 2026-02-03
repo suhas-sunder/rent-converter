@@ -1501,14 +1501,19 @@ export default function RentDueDateCalculator() {
             )}
           </div>
 
-          <p className="my-6 text-sm text-slate-500 rc-print-block">
-            Assumptions: Weekly uses 7-day intervals, biweekly uses 14-day
-            intervals, and every 4 weeks uses 28-day intervals. Monthly
-            schedules are estimated using calendar months, with shorter months
-            using the last day when a selected due day does not exist. Annual
-            repeats on the anchor month/day each year. Actual due dates, grace
-            periods, and lease terms vary.
-          </p>
+          <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+            <div className="font-semibold">Assumptions used on this page</div>
+            <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
+              <li>1 year = 365 days</li>
+              <li>Biweekly = 14 days</li>
+              <li>4-week rent = 28 days</li>
+              <li>Month = 365 ÷ 12 days (average)</li>
+              <li>
+                This tool does not assume what is included in “rent” (fees,
+                utilities, taxes). Enter the total you want to budget with.
+              </li>
+            </ul>
+          </div>
         </div>
 
         <div className="md:col-span-12 mt-6">

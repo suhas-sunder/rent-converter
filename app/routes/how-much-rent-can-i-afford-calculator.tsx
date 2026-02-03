@@ -1045,31 +1045,18 @@ export default function HowMuchRentCanIAfford() {
               </>
             )}
           </div>
-
-          <div className="flex my-6 w-full mx-auto ">
-            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-              <div className="flex items-start gap-3">
-                <div className="mt-0.5 flex h-9 items-center justify-center rounded-xl bg-slate-50 text-slate-700">
-                  i
-                </div>
-
-                <div className="min-w-0">
-                  <div className="text-sm font-semibold text-slate-900">
-                    Annualization basis
-                  </div>
-
-                  <p className="mt-1 text-sm text-slate-600 leading-relaxed">
-                    Income is annualized using a 365-day year so monthly,
-                    weekly, and every-4-weeks comparisons stay consistent.
-                  </p>
-
-                  <p className="mt-2 text-sm text-slate-700 leading-relaxed">
-                    Annualized income is computed using daily equivalence on a
-                    365-day year. Monthly uses 365 ÷ 12 days per month.
-                  </p>
-                </div>
-              </div>
-            </div>
+          <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+            <div className="font-semibold">Assumptions used on this page</div>
+            <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
+              <li>1 year = 365 days</li>
+              <li>Biweekly = 14 days</li>
+              <li>4-week rent = 28 days</li>
+              <li>Month = 365 ÷ 12 days (average)</li>
+              <li>
+                This tool does not assume what is included in “rent” (fees,
+                utilities, taxes). Enter the total you want to budget with.
+              </li>
+            </ul>
           </div>
         </div>
 

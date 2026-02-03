@@ -825,7 +825,10 @@ export default function RentPerDayCalculator() {
         </nav>
       </section>
 
-      <section id="calculator" className="mx-auto max-w-6xl px-6 pb-6 mt-4 pt-4">
+      <section
+        id="calculator"
+        className="mx-auto max-w-6xl px-6 pb-6 mt-4 pt-4"
+      >
         <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block sm:pt-6">
           <div className="mb-3 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
@@ -1154,11 +1157,19 @@ export default function RentPerDayCalculator() {
               </>
             )}
           </div>
-          <p className="my-6 text-sm text-slate-500">
-            Assumptions: 1 year = 365 days, 1 week = 7 days, biweekly = 14 days,
-            every 4 weeks = 28 days, and month = 365 ÷ 12 days (average). Exact
-            due dates and lease terms vary.
-          </p>
+          <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+            <div className="font-semibold">Assumptions used on this page</div>
+            <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
+              <li>1 year = 365 days</li>
+              <li>Biweekly = 14 days</li>
+              <li>4-week rent = 28 days</li>
+              <li>Month = 365 ÷ 12 days (average)</li>
+              <li>
+                This tool does not assume what is included in “rent” (fees,
+                utilities, taxes). Enter the total you want to budget with.
+              </li>
+            </ul>
+          </div>
         </div>
 
         <div className="md:col-span-12 mt-6">

@@ -1123,19 +1123,6 @@ export default function RentPaidEvery4Weeks() {
                       specific payment counts or date rules.
                     </p>
                   </div>
-
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3.5 shadow-sm">
-                    <div className="text-xs text-slate-600">
-                      Avoid misleading comparisons
-                    </div>
-                    <p className="mt-1 text-sm text-slate-700">
-                      This tool compares time periods by converting through the
-                      same annual basis. It does not guess what is included in
-                      rent (fees, utilities, taxes) or your lease’s due dates.
-                      If your rent amount includes extras, your monthly
-                      budgeting should include the same extras too.
-                    </p>
-                  </div>
                 </div>
 
                 {computed.warnings.length ? (
@@ -1150,6 +1137,19 @@ export default function RentPaidEvery4Weeks() {
                 ) : null}
               </>
             )}
+          </div>
+          <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+            <div className="font-semibold">Assumptions used on this page</div>
+            <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
+              <li>1 year = 365 days</li>
+              <li>Biweekly = 14 days</li>
+              <li>4-week rent = 28 days</li>
+              <li>Month = 365 ÷ 12 days (average)</li>
+              <li>
+                This tool does not assume what is included in “rent” (fees,
+                utilities, taxes). Enter the total you want to budget with.
+              </li>
+            </ul>
           </div>
         </div>
 
@@ -1192,20 +1192,6 @@ export default function RentPaidEvery4Weeks() {
               Calculations preserve decimals internally (up to 12). Only display
               rounding changes.
             </p>
-
-            <div className="mt-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
-              <div className="font-semibold">Assumptions used on this page</div>
-              <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
-                <li>1 year = 365 days</li>
-                <li>Week = 7 days</li>
-                <li>4-week rent = 28 days</li>
-                <li>Month = 365 ÷ 12 days (average)</li>
-                <li>
-                  This tool does not assume what is included in rent (fees,
-                  utilities, taxes). Enter the total you want to budget with.
-                </li>
-              </ul>
-            </div>
           </div>
         </div>
       </section>

@@ -834,8 +834,14 @@ export default function BiweeklyToAnnualRent() {
             <div className="absolute inset-y-0 left-0 w-1.5 bg-sky-200/80" />
             <div className="absolute top-0 left-0 right-0 h-px bg-sky-200/80" />
             <div className="relative">
-              <div className="text-sm sm:text-[0.95rem] text-slate-700">
-                Annual equivalent
+              <div className="flex items-center gap-2">
+                <div
+                  className="h-2 w-2 rounded-full bg-sky-600"
+                  aria-hidden="true"
+                />
+                <div className="text-sm font-semibold text-slate-800">
+                  Annual equivalent
+                </div>
               </div>
 
               {!canShowResults ? (
@@ -891,7 +897,7 @@ export default function BiweeklyToAnnualRent() {
                     </div>
                   </div>
 
-                  <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                     {(
                       [
                         ["Hourly", breakdownScaled!.hourly, "hourly"],
@@ -1019,11 +1025,19 @@ export default function BiweeklyToAnnualRent() {
             </div>
           </div>
 
-          <p className="my-6 text-sm text-slate-500">
-            Assumptions: year = 365 days, week = 7 days, biweekly = 14 days,
-            4-week = 28 days, month = 365 ÷ 12 days (average). Actual due dates
-            and billing terms vary by agreement.
-          </p>
+          <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+            <div className="font-semibold">Assumptions used on this page</div>
+            <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
+              <li>1 year = 365 days</li>
+              <li>Biweekly = 14 days</li>
+              <li>4-week rent = 28 days</li>
+              <li>Month = 365 ÷ 12 days (average)</li>
+              <li>
+                This tool does not assume what is included in “rent” (fees,
+                utilities, taxes). Enter the total you want to budget with.
+              </li>
+            </ul>
+          </div>
         </div>
 
         <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4 sm:p-5">
@@ -1068,18 +1082,6 @@ export default function BiweeklyToAnnualRent() {
                 <option value={6}>6</option>
               </select>
             </div>
-          </div>
-
-          <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm text-slate-800">
-            <div className="font-semibold">
-              What the annual result represents
-            </div>
-            <p className="mt-1 text-xs sm:text-sm text-slate-700 leading-relaxed">
-              Biweekly is treated as a 14-day amount. This tool converts to a
-              daily equivalent (biweekly ÷ 14) and multiplies by 365 to produce
-              an annual equivalence. A separate panel shows the common shortcut
-              biweekly × 26 so you can see the difference.
-            </p>
           </div>
         </div>
       </section>

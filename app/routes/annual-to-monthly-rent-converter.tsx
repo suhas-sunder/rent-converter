@@ -945,7 +945,15 @@ export default function AnnualToMonthlyRent() {
           </div>
 
           <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
-            <div className="text-sm text-slate-600">Monthly equivalent</div>
+            <div className="flex items-center gap-2">
+              <div
+                className="h-2 w-2 rounded-full bg-sky-600"
+                aria-hidden="true"
+              />
+              <div className="text-sm font-semibold text-slate-800">
+                Monthly equivalent
+              </div>
+            </div>
 
             {!canShowResults ? (
               <div className="mt-2 rounded-xl border border-slate-200 bg-white px-4 py-4 text-slate-700">
@@ -963,7 +971,7 @@ export default function AnnualToMonthlyRent() {
                   </div>
                 </div>
 
-                <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                   {(
                     [
                       ["Hourly", breakdownScaled!.hourly, "hourly"],
@@ -1078,7 +1086,7 @@ export default function AnnualToMonthlyRent() {
             )}
           </div>
 
-          <div className="mt-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+          <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
             <div className="font-semibold">Assumptions used on this page</div>
             <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
               <li>1 year = 365 days</li>
@@ -1133,19 +1141,6 @@ export default function AnnualToMonthlyRent() {
                 <option value={6}>6</option>
               </select>
             </div>
-          </div>
-
-          <div className="mt-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
-            <div className="font-semibold">
-              What “monthly” means on this page
-            </div>
-            <p className="mt-1 text-xs text-slate-600">
-              This route is a monthly budgeting view{" "}
-              <strong>monthly = annual ÷ 12</strong>. It is not a calendar-date
-              proration tool. If your lease charges every 28 days (4-week
-              cycle), the annual total can differ because that schedule usually
-              has 13 payments per year.
-            </p>
           </div>
         </div>
       </section>
