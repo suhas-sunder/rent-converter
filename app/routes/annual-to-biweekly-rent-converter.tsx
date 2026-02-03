@@ -739,13 +739,13 @@ export default function AnnualToBiweeklyRent() {
       </section>
 
       <section id="converter" className="mx-auto max-w-6xl px-6 pb-6 mt-4">
-        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block">
-          <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <h1 className="text-xl capitalize sm:text-4xl text-sky-800 font-bold">
+        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block sm:pt-6">
+          <div className="mb-3 sm:mb-3 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <h1 className="text-2xl sm:text-left text-center capitalize sm:text-4xl text-sky-800 font-bold">
               Instant annual to biweekly converter
             </h1>
 
-            <div className="rc-no-print flex flex-col sm:flex-row gap-2">
+            <div className="rc-no-print flex-col sm:flex-row gap-2 hidden sm:flex">
               <button
                 type="button"
                 onClick={handlePrint}
@@ -756,8 +756,8 @@ export default function AnnualToBiweeklyRent() {
             </div>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-12">
-            <div className="md:col-span-6">
+          <div className="grid gap-5">
+            <div>
               <label className="block text-sm font-semibold text-slate-700 mb-2">
                 Annual rent total
               </label>
@@ -769,7 +769,7 @@ export default function AnnualToBiweeklyRent() {
                   onFocus={() => setAmountFocused(true)}
                   onBlur={() => setAmountFocused(false)}
                   placeholder="e.g. 24000 or 24000.50"
-                  className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="w-full rounded-xl border border-slate-300 px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!parsed.ok}
                   aria-describedby="rc-amount-help rc-amount-error"
                 />
@@ -810,49 +810,19 @@ export default function AnnualToBiweeklyRent() {
                   </ul>
                 </div>
               ) : null}
-
-              {parsed.ok ? (
-                <p className="mt-2 text-xs text-slate-600">
-                  Interpreting your annual total as:{" "}
-                  <span className="font-semibold text-slate-800">
-                    {interpretationLine}
-                  </span>
-                </p>
-              ) : null}
-
-              {!amountFocused && parsed.ok && amountPreview ? (
-                <p className="mt-1 text-xs text-slate-500">
-                  Preview (grouped):{" "}
-                  <span className="font-semibold text-slate-700">
-                    {amountPreview}
-                  </span>
-                </p>
-              ) : null}
-            </div>
-
-            <div className="md:col-span-6">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
-                Display settings
-              </label>
-
-              <div className="grid gap-3 sm:grid-cols-2">
-                <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
-                  <div className="text-xs text-slate-500">From</div>
-                  <div className="mt-1 text-base font-bold text-slate-800">
+              <div className="md:col-span-6 mt-2">
+                <div className="flex items-center justify-between px-1">
+                  <span className="text-sm font-semibold text-slate-800">
                     {PERIOD_LABEL.annual}
-                  </div>
-                </div>
-                <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
-                  <div className="text-xs text-slate-500">To</div>
-                  <div className="mt-1 text-base font-bold text-slate-800">
+                    <span className="mx-2 text-slate-400">→</span>
                     {PERIOD_LABEL.biweekly}
-                  </div>
+                  </span>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="mt-6 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
+          <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
             <div className="text-sm text-slate-600">
               Biweekly 14-day equivalent
             </div>
@@ -868,7 +838,7 @@ export default function AnnualToBiweeklyRent() {
             ) : (
               <>
                 <div className="mt-2 flex flex-col gap-2">
-                  <div className="text-4xl sm:text-5xl font-extrabold text-emerald-700">
+                  <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700">
                     {fmt(headlineBiweeklyScaled)}
                   </div>
                   <div className="text-sm text-slate-600">
@@ -910,7 +880,7 @@ export default function AnnualToBiweeklyRent() {
                   </div>
                 </div>
 
-                <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                   {(
                     [
                       ["Hourly", breakdownScaled!.hourly, "hourly"],
@@ -1020,29 +990,23 @@ export default function AnnualToBiweeklyRent() {
                     </p>
                   </div>
                 </div>
-
-                <div className="mt-6 rounded-xl border border-slate-200 bg-white px-4 py-3">
-                  <div className="text-xs text-slate-500">
-                    Avoid misleading comparisons
-                  </div>
-                  <p className="mt-1 text-sm text-slate-700">
-                    This tool compares time periods by converting through the
-                    same annual basis. It does not guess what is included in
-                    rent (fees, utilities, taxes) or your lease’s due dates. If
-                    your annual figure includes extras, your biweekly budgeting
-                    should include the same extras too.
-                  </p>
-                </div>
               </>
             )}
           </div>
 
-          <p className="mt-6 text-sm text-slate-500">
-            Assumptions (used consistently across outputs): year = 365 days,
-            week = 7 days, biweekly = 14 days, 4-week = 28 days, month = 365 ÷
-            12 days (average). Exact amounts due can differ by lease schedule,
-            prorations, fees, and what is included in rent.
-          </p>
+          <div className="mt-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+            <div className="font-semibold">Assumptions used on this page</div>
+            <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
+              <li>1 year = 365 days</li>
+              <li>Biweekly = 14 days</li>
+              <li>4-week rent = 28 days</li>
+              <li>Month = 365 ÷ 12 days (average)</li>
+              <li>
+                This tool does not assume what is included in “rent” (fees,
+                utilities, taxes). Enter the total you want to budget with.
+              </li>
+            </ul>
+          </div>
         </div>
 
         <div className="mt-3 rounded-xl border border-slate-200 bg-white p-4">
@@ -1085,20 +1049,6 @@ export default function AnnualToBiweeklyRent() {
                 <option value={6}>6</option>
               </select>
             </div>
-          </div>
-
-          <div className="mt-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
-            <div className="font-semibold">Assumptions used on this page</div>
-            <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
-              <li>1 year = 365 days</li>
-              <li>Biweekly = 14 days</li>
-              <li>4-week rent = 28 days</li>
-              <li>Month = 365 ÷ 12 days (average)</li>
-              <li>
-                This tool does not assume what is included in “rent” (fees,
-                utilities, taxes). Enter the total you want to budget with.
-              </li>
-            </ul>
           </div>
         </div>
       </section>
@@ -1601,27 +1551,6 @@ export default function AnnualToBiweeklyRent() {
               </div>
             </details>
           ))}
-        </div>
-      </section>
-
-      <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
-        <div className="rounded-2xl border border-slate-200 bg-white p-6">
-          <p className="text-xs text-slate-600 leading-relaxed">
-            <strong>Disclaimer:</strong>
-            <br />
-            Tools on this site are provided for informational, budgeting, and
-            comparison purposes only. Calculations are based on standard
-            time-period assumptions (including a 365-day year and average month
-            length) and simplified models. Results are estimates, not
-            guarantees.
-            <br />
-            <br />
-            This website does not provide financial, legal, or tax advice.
-            Rental costs, affordability, payment schedules, and obligations vary
-            by location, landlord, lease terms, and individual circumstances.
-            Always review your lease agreement and consult qualified
-            professionals before making financial decisions.
-          </p>
         </div>
       </section>
 

@@ -734,13 +734,13 @@ export default function BiweeklyToAnnualRent() {
       </section>
 
       <section id="converter" className="mx-auto max-w-6xl px-6 pb-6 mt-4">
-        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block">
-          <div className="mb-7 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-            <h1 className="text-xl capitalize sm:text-4xl font-bold text-sky-800">
+        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block sm:pt-6">
+          <div className="mb-3 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <h1 className="text-2xl sm:text-left text-center capitalize sm:text-4xl text-sky-800 font-bold">
               Instant biweekly to annual conversion
             </h1>
 
-            <div className="rc-no-print flex flex-col sm:flex-row gap-2">
+            <div className="rc-no-print flex-col sm:flex-row gap-2 hidden sm:flex">
               <button
                 type="button"
                 onClick={handlePrint}
@@ -751,14 +751,15 @@ export default function BiweeklyToAnnualRent() {
             </div>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-12">
-            <div className="md:col-span-6 min-w-0">
+          <div className="grid gap-5">
+            <div>
               <label
                 htmlFor={amountInputId}
-                className="block text-sm sm:text-[0.95rem] font-semibold text-slate-800 mb-2"
+                className="block text-sm font-semibold text-slate-700 mb-2"
               >
                 Biweekly rent amount (every 14 days)
               </label>
+
               <div className="flex gap-2">
                 <input
                   id={amountInputId}
@@ -768,10 +769,11 @@ export default function BiweeklyToAnnualRent() {
                   onBlur={() => setAmountFocused(false)}
                   onChange={(e) => setAmount(e.target.value)}
                   placeholder="e.g. 900 or 900.50"
-                  className="w-full rounded-xl border border-slate-300 px-4 py-3.5 text-base sm:text-[1.05rem] leading-6 outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus-visible:border-sky-500"
+                  className="w-full rounded-xl border border-slate-300 px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={amount.trim().length > 0 && !parsedBiweekly.ok}
                   aria-describedby="rc-amount-help rc-amount-error"
                 />
+
                 <select
                   value={currency}
                   onChange={(e) =>
@@ -781,7 +783,7 @@ export default function BiweeklyToAnnualRent() {
                         : "USD",
                     )
                   }
-                  className="rounded-xl border border-slate-300 bg-white px-3 py-3.5 text-sm sm:text-base font-semibold outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus-visible:border-sky-500"
+                  className="rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-label="Currency"
                 >
                   {SUPPORTED_CURRENCIES.map((c) => (
@@ -801,11 +803,7 @@ export default function BiweeklyToAnnualRent() {
                   {parsedBiweekly.error}
                 </p>
               ) : parsedBiweekly.warnings.length ? (
-                <div
-                  className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3.5 text-sm text-amber-950"
-                  role="status"
-                  aria-live="polite"
-                >
+                <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
                   <div className="font-semibold">Input interpretation note</div>
                   <ul className="mt-1 list-disc pl-5 space-y-1">
                     {parsedBiweekly.warnings.map((w, i) => (
@@ -814,25 +812,14 @@ export default function BiweeklyToAnnualRent() {
                   </ul>
                 </div>
               ) : null}
-            </div>
 
-            <div className="md:col-span-6 min-w-0">
-              <label className="block text-sm sm:text-[0.95rem] font-semibold text-slate-800 mb-2">
-                Display settings
-              </label>
-
-              <div className="grid gap-3 sm:grid-cols-2">
-                <div className="rounded-xl border border-slate-200 bg-white px-4 py-3.5 shadow-[0_1px_0_rgba(15,23,42,0.02)]">
-                  <div className="text-xs text-slate-600">From</div>
-                  <div className="mt-1 text-base font-bold text-slate-900">
+              <div className="mt-2">
+                <div className="flex items-center justify-between  px-1">
+                  <span className="text-sm font-semibold text-slate-800">
                     {PERIOD_LABEL.biweekly}
-                  </div>
-                </div>
-                <div className="rounded-xl border border-slate-200 bg-white px-4 py-3.5 shadow-[0_1px_0_rgba(15,23,42,0.02)]">
-                  <div className="text-xs text-slate-600">To</div>
-                  <div className="mt-1 text-base font-bold text-slate-900">
+                    <span className="mx-2 text-slate-400">→</span>
                     {PERIOD_LABEL.annual}
-                  </div>
+                  </span>
                 </div>
               </div>
             </div>
@@ -862,7 +849,7 @@ export default function BiweeklyToAnnualRent() {
               ) : (
                 <>
                   <div className="mt-3 flex flex-col gap-2">
-                    <div className="text-4xl sm:text-5xl font-extrabold text-emerald-700 rc-tabular leading-none min-h-[3.25rem] sm:min-h-[4rem]">
+                    <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700 rc-tabular leading-none min-h-[3.25rem] sm:min-h-[4rem]">
                       <span className="rc-amount">
                         {fmt(annualHeadlineScaled)}
                       </span>
@@ -877,17 +864,6 @@ export default function BiweeklyToAnnualRent() {
                     </div>
 
                     <div className="rc-no-print mt-2 flex flex-wrap gap-2">
-                      <button
-                        type="button"
-                        onClick={() =>
-                          handleCopy("annual", fmt(annualHeadlineScaled))
-                        }
-                        className="rounded-xl border border-slate-200 bg-sky-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-sky-700 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fbff]"
-                      >
-                        {copiedKey === "annual"
-                          ? "Copied"
-                          : "Copy annual amount"}
-                      </button>
                       <button
                         type="button"
                         onClick={() =>
@@ -915,7 +891,7 @@ export default function BiweeklyToAnnualRent() {
                     </div>
                   </div>
 
-                  <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                     {(
                       [
                         ["Hourly", breakdownScaled!.hourly, "hourly"],
@@ -1043,7 +1019,7 @@ export default function BiweeklyToAnnualRent() {
             </div>
           </div>
 
-          <p className="mt-6 text-sm sm:text-[0.95rem] text-slate-600 leading-relaxed">
+          <p className="my-6 text-sm text-slate-500">
             Assumptions: year = 365 days, week = 7 days, biweekly = 14 days,
             4-week = 28 days, month = 365 ÷ 12 days (average). Actual due dates
             and billing terms vary by agreement.
@@ -1483,26 +1459,6 @@ export default function BiweeklyToAnnualRent() {
               </div>
             </details>
           ))}
-        </div>
-      </section>
-
-      <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
-            <strong>Disclaimer:</strong>
-            <br />
-            Tools on this site are provided for informational, budgeting, and
-            comparison purposes only. Calculations are based on standard
-            time-period assumptions (including a 365-day year and simplified
-            models). Results are estimates, not guarantees.
-            <br />
-            <br />
-            This website does not provide financial, legal, or tax advice.
-            Rental costs, affordability, payment schedules, and obligations vary
-            by location, landlord, lease terms, and individual circumstances.
-            Always review your lease agreement and consult qualified
-            professionals before making financial decisions.
-          </p>
         </div>
       </section>
 

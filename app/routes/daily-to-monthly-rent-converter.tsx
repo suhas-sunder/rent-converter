@@ -741,13 +741,13 @@ export default function DailyToMonthlyRent() {
       </section>
 
       <section id="converter" className="mx-auto max-w-6xl px-6 pb-6 mt-4">
-        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block">
-          <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-            <h1 className="text-xl capitalize sm:text-4xl font-bold text-sky-800">
+        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block sm:pt-6">
+          <div className="mb-3 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <h1 className="text-2xl sm:text-left text-center capitalize sm:text-4xl text-sky-800 font-bold">
               Convert a daily rate into a monthly equivalent
             </h1>
 
-            <div className="rc-no-print flex flex-col sm:flex-row gap-2">
+            <div className="rc-no-print flex-col sm:flex-row gap-2 hidden sm:flex">
               <button
                 type="button"
                 onClick={handlePrint}
@@ -758,11 +758,12 @@ export default function DailyToMonthlyRent() {
             </div>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-12">
-            <div className="md:col-span-6">
+          <div className="grid gap-5">
+            <div>
               <label className="block text-sm font-semibold text-slate-800 mb-2">
                 Daily rent amount
               </label>
+
               <div className="flex gap-2">
                 <input
                   inputMode="decimal"
@@ -771,10 +772,11 @@ export default function DailyToMonthlyRent() {
                   onFocus={() => setIsAmountFocused(true)}
                   onBlur={() => setIsAmountFocused(false)}
                   placeholder="e.g. 70 or 70.50"
-                  className="w-full rounded-xl border border-slate-300 px-4 py-3.5 text-base text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus:border-sky-500"
+                  className="w-full rounded-xl border border-slate-300 px-4 py-3.5 text-lg text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus:border-sky-500"
                   aria-invalid={!parsedDaily.ok}
                   aria-describedby="rc-amount-help rc-amount-error"
                 />
+
                 <select
                   value={currency}
                   onChange={(e) =>
@@ -818,32 +820,21 @@ export default function DailyToMonthlyRent() {
                   </ul>
                 </div>
               ) : null}
-            </div>
 
-            <div className="md:col-span-6">
-              <label className="block text-sm font-semibold text-slate-800 mb-2">
-                Display settings
-              </label>
-
-              <div className="grid gap-3 sm:grid-cols-2">
-                <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
-                  <div className="text-xs text-slate-600">From</div>
-                  <div className="mt-1 text-base font-bold text-slate-900">
+              <div className="mt-2">
+                <div className="flex items-center justify-between px-1">
+                  <span className="text-sm font-semibold text-slate-800">
                     {PERIOD_LABEL.daily}
-                  </div>
-                </div>
-                <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
-                  <div className="text-xs text-slate-600">To</div>
-                  <div className="mt-1 text-base font-bold text-slate-900">
+                    <span className="mx-2 text-slate-400">→</span>
                     {PERIOD_LABEL.monthly}
-                  </div>
+                  </span>
                 </div>
               </div>
             </div>
           </div>
 
           <div
-            className="mt-6 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block border-l-4 border-l-sky-200"
+            className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block border-l-4 border-l-sky-200"
             aria-live="polite"
             role="region"
             aria-label="Monthly equivalent results"
@@ -870,7 +861,7 @@ export default function DailyToMonthlyRent() {
               <>
                 <div className="mt-3 flex flex-col gap-2">
                   <div className="min-h-[3.5rem] sm:min-h-[4rem]">
-                    <div className="text-4xl sm:text-5xl font-extrabold text-emerald-700 tabular-nums whitespace-nowrap">
+                    <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700 tabular-nums whitespace-nowrap">
                       {fmt(monthlyHeadlineScaled)}
                     </div>
                   </div>
@@ -920,7 +911,7 @@ export default function DailyToMonthlyRent() {
                   </div>
                 </div>
 
-                <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                   {(
                     [
                       ["Hourly", breakdownScaled!.hourly, "hourly"],
@@ -1065,7 +1056,7 @@ export default function DailyToMonthlyRent() {
             )}
           </div>
 
-          <p className="mt-6 text-sm text-slate-600 leading-relaxed">
+          <p className="my-6 text-sm text-slate-500">
             Assumptions: year = 365 days, week = 7 days, biweekly = 14 days,
             4-week = 28 days, month = 365 ÷ 12 days (average). Exact billing
             depends on the agreement.
@@ -1479,26 +1470,6 @@ export default function DailyToMonthlyRent() {
               </div>
             </details>
           ))}
-        </div>
-      </section>
-
-      <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
-        <div className="rounded-2xl border border-slate-200 bg-white p-6">
-          <p className="text-xs text-slate-700 leading-relaxed">
-            <strong>Disclaimer:</strong>
-            <br />
-            Tools on this site are for informational, budgeting, and comparison
-            use. Calculations rely on standard time-period assumptions
-            (including a 365-day year and an average month length) and
-            simplified models. Outputs are estimates intended to illustrate
-            equivalents, not to predict exact lease billing outcomes.
-            <br />
-            <br />
-            This website does not provide financial, legal, or tax advice. Rent,
-            fees, proration, taxes, and obligations vary by location, landlord,
-            and contract terms. Review your agreement for the rules that apply
-            to you.
-          </p>
         </div>
       </section>
 

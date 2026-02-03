@@ -916,15 +916,15 @@ export default function RentVsTakeHomePay() {
       </section>
 
       <section id="calculator" className="mx-auto max-w-6xl px-6 pb-6 mt-4">
-        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block">
-          <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block sm:pt-6">
+          <div className="mb-3 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div className="flex flex-col gap-2">
-              <h1 className="text-xl sm:text-4xl capitalize text-sky-800 font-bold">
+              <h1 className="text-2xl sm:text-left text-center capitalize sm:text-4xl text-sky-800 font-bold">
                 Compare rent to take-home pay
               </h1>
             </div>
 
-            <div className="rc-no-print flex flex-col sm:flex-row gap-2">
+            <div className="rc-no-print flex-col sm:flex-row gap-2 hidden sm:flex">
               <button
                 type="button"
                 onClick={handlePrint}
@@ -958,7 +958,7 @@ export default function RentVsTakeHomePay() {
                   }}
                   onChange={(e) => setTakeHomePay(stripCommas(e.target.value))}
                   placeholder="e.g. 5000"
-                  className="col-span-7 rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="col-span-7 rounded-xl border border-slate-300 px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!parsed.takeHome.ok}
                 />
                 <select
@@ -1007,7 +1007,7 @@ export default function RentVsTakeHomePay() {
                   }}
                   onChange={(e) => setRentAmount(stripCommas(e.target.value))}
                   placeholder="e.g. 1800"
-                  className="col-span-7 rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="col-span-7 rounded-xl border border-slate-300 px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!parsed.rent.ok}
                 />
                 <select
@@ -1034,7 +1034,7 @@ export default function RentVsTakeHomePay() {
               ) : null}
             </div>
 
-            <div className="md:col-span-6">
+            <div className="md:col-span-12">
               <label className="block text-sm font-semibold text-slate-700 mb-2">
                 Currency
               </label>
@@ -1058,7 +1058,7 @@ export default function RentVsTakeHomePay() {
           </div>
 
           {!parsed.ok ? (
-            <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6">
+            <div className="mt-3 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6">
               <div className="font-semibold text-slate-900">
                 No results to show
               </div>
@@ -1081,7 +1081,7 @@ export default function RentVsTakeHomePay() {
           ) : computed.ok ? (
             <>
               {computed.warnings.length ? (
-                <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+                <div className="mt-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
                   <ul className="list-disc pl-5 space-y-1">
                     {computed.warnings.map((w, i) => (
                       <li key={i}>{w}</li>
@@ -1090,13 +1090,13 @@ export default function RentVsTakeHomePay() {
                 </div>
               ) : null}
 
-              <div className="mt-6 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
+              <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
                 <div className="text-sm text-slate-600">
                   Rent share of take-home pay
                 </div>
 
                 <div className="mt-2 flex flex-col gap-2">
-                  <div className="text-4xl sm:text-5xl font-extrabold text-emerald-700">
+                  <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700">
                     {computed.rentPctText}%
                   </div>
 
@@ -1130,7 +1130,7 @@ export default function RentVsTakeHomePay() {
                   ) : null}
                 </div>
 
-                <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                   <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
                     <div className="text-xs text-slate-500">
                       Take-home pay (annualized)
@@ -1248,7 +1248,7 @@ export default function RentVsTakeHomePay() {
                 </div>
               </div>
 
-              <p className="mt-6 text-sm text-slate-500 rc-print-block">
+              <p className="my-6 text-sm text-slate-500">
                 Assumptions: 1 year = 365 days, 1 week = 7 days, every 4 weeks =
                 28 days, and month = 365 ÷ 12 days (average). Exact pay dates
                 and rent due dates vary by employer and agreement.
@@ -1257,7 +1257,7 @@ export default function RentVsTakeHomePay() {
           ) : null}
         </div>
 
-        <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 rc-no-print">
+        <div className="mt-3 rounded-2xl border border-slate-200 bg-white p-5 rc-no-print">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <label className="flex items-center gap-2 text-sm text-slate-700">
               <input
@@ -1377,7 +1377,7 @@ export default function RentVsTakeHomePay() {
               </div>
             </div>
 
-            <div className="mt-10 space-y-6 text-base text-slate-700 leading-7">
+            <div className="mt-10 space-y-6 text-lg text-slate-700 leading-7">
               {/* SectionCard: what it does */}
               <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
                 <div
@@ -1771,27 +1771,6 @@ export default function RentVsTakeHomePay() {
               </div>
             </details>
           ))}
-        </div>
-      </section>
-
-      <section className="max-w-6xl mx-auto px-6 pb-8 rc-print-block">
-        <div className="rounded-2xl border border-slate-200 bg-white p-6">
-          <p className="text-xs text-slate-600 leading-relaxed">
-            <strong>Disclaimer:</strong>
-            <br />
-            Tools on this site are provided for informational, budgeting, and
-            comparison purposes only. Calculations are based on standard
-            time-period assumptions (including a 365-day year and average month
-            length) and simplified models. Results are estimates, not
-            guarantees.
-            <br />
-            <br />
-            This website does not provide financial, legal, or tax advice.
-            Rental costs, affordability, payment schedules, and obligations vary
-            by location, landlord, lease terms, and individual circumstances.
-            Always review your lease agreement and consult qualified
-            professionals before making financial decisions.
-          </p>
         </div>
       </section>
 

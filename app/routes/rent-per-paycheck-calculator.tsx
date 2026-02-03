@@ -823,15 +823,15 @@ export default function RentPerPaycheck() {
         id="calculator"
         className="mx-auto max-w-6xl px-6 pb-6 mt-4"
       >
-        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block">
-          <div className="mb-2 sm:mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block sm:pt-6">
+          <div className="mb-3 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
-              <h1 className="text-center sm:text-left text-2xl sm:text-4xl capitalize font-bold text-sky-800">
+              <h1 className="text-2xl sm:text-left text-center capitalize sm:text-4xl text-sky-800 font-bold">
                 Rent allocation per paycheck Calculator
               </h1>
             </div>
 
-            <div className="rc-no-print hidden sm:flex flex-col sm:flex-row gap-2">
+            <div className="rc-no-print flex-col sm:flex-row gap-2 hidden sm:flex">
               <button
                 type="button"
                 onClick={handlePrint}
@@ -876,7 +876,7 @@ export default function RentPerPaycheck() {
                     setAmount(nextRaw);
                   }}
                   placeholder="e.g. 2000 or 2000.00"
-                  className="w-full min-w-0 rounded-xl border border-slate-300 px-4 py-3 text-base text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
+                  className="w-full min-w-0 rounded-xl border border-slate-300 px-4 py-3 text-lg text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
                   aria-invalid={!parsedAmount.ok}
                   aria-describedby={`${amountHelpId}${!parsedAmount.ok ? ` ${amountErrorId}` : ""}`}
                 />
@@ -924,7 +924,7 @@ export default function RentPerPaycheck() {
                     isRentPeriod(e.target.value) ? e.target.value : "monthly",
                   )
                 }
-                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
+                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-lg text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
               >
                 {(Object.keys(RENT_PERIOD_LABEL) as RentPeriod[]).map((p) => (
                   <option key={p} value={p}>
@@ -951,7 +951,7 @@ export default function RentPerPaycheck() {
                       : "biweekly",
                   )
                 }
-                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
+                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-lg text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
               >
                 {(Object.keys(PAY_LABEL) as PayFrequency[]).map((p) => (
                   <option key={p} value={p}>
@@ -963,7 +963,7 @@ export default function RentPerPaycheck() {
           </div>
 
           <div
-            className="mt-6 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block"
+            className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block"
             role="region"
             aria-label="Results"
             aria-live="polite"
@@ -990,7 +990,7 @@ export default function RentPerPaycheck() {
                 </div>
 
                 <div className="mt-2 flex flex-col gap-2">
-                  <div className="text-4xl sm:text-5xl font-extrabold text-emerald-700 tabular-nums break-words">
+                  <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700 tabular-nums break-words">
                     {fmtMoney(computed.perPaycheckScaled)}
                   </div>
                   <div className="text-sm text-slate-700 leading-relaxed">
@@ -1058,7 +1058,7 @@ export default function RentPerPaycheck() {
                   ))}
                 </div>
 
-                <div className="mt-6 grid gap-3 sm:grid-cols-3">
+                <div className="mt-3 grid gap-3 sm:grid-cols-3">
                   <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
                     <div className="text-xs text-slate-600">
                       Equivalent monthly cost
@@ -1251,7 +1251,7 @@ export default function RentPerPaycheck() {
             </section>
           ) : null}
 
-          <p className="mt-6 text-sm text-slate-600 leading-relaxed">
+          <p className="my-6 text-sm text-slate-500">
             Assumptions: 1 calendar year = 365 days. Rent-period counts use
             standard payment definitions (monthly = 12, weekly = 52, every 2
             weeks = 26, every 4 weeks = 13, daily = 365). Hourly uses a standard
@@ -1374,7 +1374,7 @@ export default function RentPerPaycheck() {
               </div>
             </div>
 
-            <div className="mt-10 space-y-6 text-base text-slate-700 leading-7">
+            <div className="mt-10 space-y-6 text-lg text-slate-700 leading-7">
               {/* Card 1 */}
               <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
                 <div

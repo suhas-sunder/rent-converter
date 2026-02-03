@@ -852,7 +852,7 @@ export default function RentIncreasePercentage() {
   const newErrorId = "rc-rip-new-error";
 
   return (
-    <main className="bg-white text-slate-700 scroll-smooth text-[15px] sm:text-base leading-relaxed">
+    <main className="bg-white text-slate-700 scroll-smooth text-[15px] sm:text-lg leading-relaxed">
       <style
         dangerouslySetInnerHTML={{
           __html: `
@@ -879,15 +879,15 @@ export default function RentIncreasePercentage() {
       </section>
 
       <section id="calculator" className="mx-auto max-w-6xl px-6 pb-6 mt-4">
-        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block">
-          <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block sm:pt-6">
+          <div className="mb-3 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div className="flex flex-col gap-2">
-              <h1 className="text-xl sm:text-4xl capitalize font-bold text-sky-800">
+              <h1 className="text-2xl sm:text-left text-center capitalize sm:text-4xl text-sky-800 font-bold">
                 Calculate the percentage increase in rent
               </h1>
             </div>
 
-            <div className="rc-no-print flex flex-col sm:flex-row gap-2">
+            <div className="rc-no-print flex-col sm:flex-row gap-2 hidden sm:flex">
               <button
                 type="button"
                 onClick={handlePrint}
@@ -922,7 +922,7 @@ export default function RentIncreasePercentage() {
                   );
                 }}
                 placeholder="e.g. 2000 or 2000.00"
-                className={`w-full rounded-xl border px-4 py-3.5 text-base outline-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
+                className={`w-full rounded-xl border px-4 py-3.5 text-lg outline-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
                   oldParsed.ok
                     ? "border-slate-300 focus:border-sky-600"
                     : "border-rose-300 focus:border-rose-500"
@@ -966,7 +966,7 @@ export default function RentIncreasePercentage() {
                   );
                 }}
                 placeholder="e.g. 2100 or 2100.00"
-                className={`w-full rounded-xl border px-4 py-3.5 text-base outline-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
+                className={`w-full rounded-xl border px-4 py-3.5 text-lg outline-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
                   newParsed.ok
                     ? "border-slate-300 focus:border-sky-600"
                     : "border-rose-300 focus:border-rose-500"
@@ -976,10 +976,6 @@ export default function RentIncreasePercentage() {
                   newParsed.ok ? newHelpId : `${newHelpId} ${newErrorId}`
                 }
               />
-              <p id={newHelpId} className="mt-2 text-xs text-slate-600">
-                Use the same period as the old rent for a like-for-like
-                comparison.
-              </p>
               {!newParsed.ok ? (
                 <p
                   id={newErrorId}
@@ -995,7 +991,7 @@ export default function RentIncreasePercentage() {
                 htmlFor="rc-rip-period"
                 className="block text-sm font-semibold text-slate-800 mb-2"
               >
-                Billing period (applies to both amounts)
+                Billing period (Applies to both amounts)
               </label>
               <select
                 id="rc-rip-period"
@@ -1014,10 +1010,6 @@ export default function RentIncreasePercentage() {
                   </option>
                 ))}
               </select>
-              <p className="mt-2 text-xs text-slate-600">
-                The period selection affects the annualization and the per-cycle
-                differences shown below.
-              </p>
             </div>
 
             <div className="md:col-span-6">
@@ -1048,7 +1040,7 @@ export default function RentIncreasePercentage() {
           </div>
 
           <div
-            className="mt-6 rounded-2xl border border-slate-200 border-l-4 border-l-sky-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block"
+            className="mt-3 rounded-2xl border border-slate-200 border-l-4 border-l-sky-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block"
             role="region"
             aria-label="Results"
             aria-live="polite"
@@ -1084,7 +1076,7 @@ export default function RentIncreasePercentage() {
                 </div>
 
                 <div className="mt-2 flex flex-col gap-2">
-                  <div className="text-4xl sm:text-5xl font-extrabold text-emerald-700 tabular-nums min-h-[3.6rem] sm:min-h-[4.2rem]">
+                  <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700 tabular-nums min-h-[3.6rem] sm:min-h-[4.2rem]">
                     {computed.pct === null
                       ? "N/A"
                       : `${safeToFixed(computed.pct, 2)}%`}
@@ -1158,7 +1150,7 @@ export default function RentIncreasePercentage() {
                   ) : null}
                 </div>
 
-                <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                   <div className="rounded-xl border border-slate-200 border-t-2 border-t-sky-100 bg-white px-4 py-3.5 shadow-sm">
                     <div className="text-xs text-slate-600">
                       Change per selected period
@@ -1272,7 +1264,7 @@ export default function RentIncreasePercentage() {
                   </div>
                 </div>
 
-                <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 rc-print-block shadow-sm">
+                <div className="mt-3 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 rc-print-block shadow-sm">
                   <h3 className="text-lg font-bold text-slate-900 mb-3">
                     Full breakdown across periods (annual-equivalent)
                   </h3>
@@ -1341,7 +1333,7 @@ export default function RentIncreasePercentage() {
             )}
           </div>
 
-          <p className="mt-6 text-sm text-slate-600 rc-print-block">
+          <p className="my-6 text-sm text-slate-500">
             Assumptions: 1 year = 365 days, 1 week = 7 days, every 4 weeks = 28
             days, and month = 365 ÷ 12 days (average). This page compares full
             period equivalents and does not model fees, proration, or effective
@@ -1457,7 +1449,7 @@ export default function RentIncreasePercentage() {
               </div>
             </div>
 
-            <div className="mt-10 space-y-6 text-base text-slate-700 leading-7">
+            <div className="mt-10 space-y-6 text-lg text-slate-700 leading-7">
               {/* Card 1 */}
               <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
                 <div
@@ -1750,26 +1742,6 @@ export default function RentIncreasePercentage() {
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-6 pb-8 rc-print-block">
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <p className="text-xs text-slate-700 leading-relaxed">
-            <strong>Disclaimer:</strong>
-            <br />
-            Tools on this site are provided for informational, budgeting, and
-            comparison purposes only. Calculations are based on standard
-            time-period assumptions (including a 365-day year and average month
-            length) and simplified models. Results are estimates, not
-            guarantees.
-            <br />
-            <br />
-            This website does not provide financial, legal, or tax advice.
-            Rental costs, affordability, payment schedules, and obligations vary
-            by location, landlord, lease terms, and individual circumstances.
-            Always review your lease agreement and consult qualified
-            professionals before making financial decisions.
-          </p>
-        </div>
-      </section>
 
       <OtherUsefulTools />
       <RenterChecklists />

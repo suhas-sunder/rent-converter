@@ -876,13 +876,13 @@ export default function AnnualToMonthlyRent() {
       </section>
 
       <section id="converter" className="mx-auto max-w-6xl px-6 pb-6 mt-4">
-        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block">
-          <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-            <h1 className="text-xl capitalize sm:text-4xl text-sky-800 font-bold">
+        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block sm:pt-6">
+          <div className="mb-3 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <h1 className="text-2xl sm:text-left text-center capitalize sm:text-4xl text-sky-800 font-bold">
               Instant annual to monthly converter
             </h1>
 
-            <div className="rc-no-print flex flex-col sm:flex-row gap-2">
+            <div className="rc-no-print flex-col sm:flex-row gap-2 hidden sm:flex">
               <button
                 type="button"
                 onClick={handlePrint}
@@ -893,11 +893,12 @@ export default function AnnualToMonthlyRent() {
             </div>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-12">
-            <div className="md:col-span-6">
+          <div className="grid gap-5">
+            <div>
               <label className="block text-sm font-semibold text-slate-700 mb-2">
                 Annual rent total
               </label>
+
               <div className="flex gap-2">
                 <input
                   inputMode="decimal"
@@ -906,10 +907,11 @@ export default function AnnualToMonthlyRent() {
                   onFocus={() => setAmountFocused(true)}
                   onBlur={() => setAmountFocused(false)}
                   placeholder="e.g. 24000 or 24000.50"
-                  className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="w-full rounded-xl border border-slate-300 px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!parsedAnnual.ok}
                   aria-describedby="rc-amount-help rc-amount-error"
                 />
+
                 <select
                   value={currency}
                   onChange={(e) =>
@@ -930,66 +932,19 @@ export default function AnnualToMonthlyRent() {
                 </select>
               </div>
 
-              {!parsedAnnual.ok ? (
-                <p
-                  id="rc-amount-error"
-                  className="mt-2 text-sm font-semibold text-rose-700"
-                >
-                  {parsedAnnual.error}
-                </p>
-              ) : parsedAnnual.warnings.length ? (
-                <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-                  <div className="font-semibold">Input interpretation note</div>
-                  <ul className="mt-1 list-disc pl-5 space-y-1">
-                    {parsedAnnual.warnings.map((w, i) => (
-                      <li key={i}>{w}</li>
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
-
-              {parsedAnnual.ok && annualInterpreted ? (
-                <p className="mt-2 text-xs text-slate-600">
-                  Interpreting your annual total as{" "}
-                  <span className="font-semibold text-slate-800">
-                    {annualInterpreted}
-                  </span>
-                </p>
-              ) : null}
-
-              {!amountFocused && parsedAnnual.ok && amountPreview ? (
-                <p className="mt-1 text-xs text-slate-500">
-                  Preview (grouped){" "}
-                  <span className="font-semibold text-slate-700">
-                    {amountPreview}
-                  </span>
-                </p>
-              ) : null}
-            </div>
-
-            <div className="md:col-span-6">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
-                Display settings
-              </label>
-
-              <div className="grid gap-3 sm:grid-cols-2">
-                <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
-                  <div className="text-xs text-slate-500">From</div>
-                  <div className="mt-1 text-base font-bold text-slate-800">
+              <div className="mt-2">
+                <div className="flex items-center justify-between px-1">
+                  <span className="text-sm font-semibold text-slate-800">
                     {PERIOD_LABEL.annual}
-                  </div>
-                </div>
-                <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
-                  <div className="text-xs text-slate-500">To</div>
-                  <div className="mt-1 text-base font-bold text-slate-800">
+                    <span className="mx-2 text-slate-400">→</span>
                     {PERIOD_LABEL.monthly}
-                  </div>
+                  </span>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="mt-6 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
+          <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
             <div className="text-sm text-slate-600">Monthly equivalent</div>
 
             {!canShowResults ? (
@@ -1003,50 +958,12 @@ export default function AnnualToMonthlyRent() {
             ) : (
               <>
                 <div className="mt-2 flex flex-col gap-2">
-                  <div className="text-4xl sm:text-5xl font-extrabold text-emerald-700">
+                  <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700">
                     {fmt(monthlyHeadlineScaled)}
-                  </div>
-                  <div className="text-sm text-slate-600">
-                    {fmt(annualScaled)} annual ≈{" "}
-                    <strong>{fmt(monthlyHeadlineScaled)}</strong> per month
-                    (annual ÷ 12)
-                  </div>
-
-                  <div className="rc-no-print mt-2 flex flex-wrap gap-2">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleCopy("monthly", fmt(monthlyHeadlineScaled))
-                      }
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-                    >
-                      {copiedKey === "monthly"
-                        ? "Copied"
-                        : "Copy monthly amount"}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleCopy(
-                          "summary",
-                          `Annual: ${fmt(annualScaled)} | Monthly (annual ÷ 12): ${fmt(
-                            monthlyHeadlineScaled,
-                          )} | Assumptions: 365-day year, monthly=annual/12`,
-                        )
-                      }
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-                    >
-                      {copiedKey === "summary" ? "Copied" : "Copy summary"}
-                    </button>
-                    {copiedKey === "copy_failed" ? (
-                      <span className="self-center text-sm font-semibold text-rose-700">
-                        Copy failed
-                      </span>
-                    ) : null}
                   </div>
                 </div>
 
-                <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                   {(
                     [
                       ["Hourly", breakdownScaled!.hourly, "hourly"],
@@ -1156,29 +1073,24 @@ export default function AnnualToMonthlyRent() {
                       annual totals even when a listing feels similar.
                     </p>
                   </div>
-
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
-                    <div className="text-xs text-slate-500">
-                      Avoid misleading interpretations
-                    </div>
-                    <p className="mt-1 text-sm text-slate-700">
-                      This tool shows equivalents for budgeting and comparison.
-                      It does not predict your lease due dates, prorations, or
-                      what is included in rent. If your annual total includes
-                      fees or utilities, the equivalents include them too.
-                    </p>
-                  </div>
                 </div>
               </>
             )}
           </div>
 
-          <p className="mt-6 text-sm text-slate-500">
-            Assumptions: year = 365 days, week = 7 days, biweekly = 14 days,
-            4-week = 28 days. This page defines monthly as annual ÷ 12
-            (budgeting equivalent). Actual due dates and totals can differ by
-            lease schedule, proration rules, fees, and what is included in rent.
-          </p>
+          <div className="mt-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+            <div className="font-semibold">Assumptions used on this page</div>
+            <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
+              <li>1 year = 365 days</li>
+              <li>Biweekly = 14 days</li>
+              <li>4-week rent = 28 days</li>
+              <li>Month = 365 ÷ 12 days (average)</li>
+              <li>
+                This tool does not assume what is included in “rent” (fees,
+                utilities, taxes). Enter the total you want to budget with.
+              </li>
+            </ul>
+          </div>
         </div>
 
         <div className="mt-3 rounded-xl border border-slate-200 bg-white p-4 rc-no-print">
@@ -1707,26 +1619,6 @@ export default function AnnualToMonthlyRent() {
               </div>
             </details>
           ))}
-        </div>
-      </section>
-
-      <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
-        <div className="rounded-2xl border border-slate-200 bg-white p-6">
-          <p className="text-xs text-slate-600 leading-relaxed">
-            <strong>Disclaimer:</strong>
-            <br />
-            Tools on this site are provided for informational, budgeting, and
-            comparison purposes only. Calculations are based on standard
-            time-period assumptions (including a 365-day year and simplified
-            models). Results are estimates, not guarantees.
-            <br />
-            <br />
-            This website does not provide financial, legal, or tax advice.
-            Rental costs, affordability, payment schedules, and obligations vary
-            by location, landlord, lease terms, and individual circumstances.
-            Always review your lease agreement and consult qualified
-            professionals before making financial decisions.
-          </p>
         </div>
       </section>
 

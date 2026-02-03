@@ -1019,15 +1019,15 @@ export default function RentAfterIncrease() {
       </section>
 
       <section id="calculator" className="mx-auto max-w-6xl px-6 pb-6 mt-4">
-        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block">
-          <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block sm:pt-6">
+          <div className="mb-3 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
-              <h1 className="text-xl sm:text-4xl font-bold capitalize text-sky-800">
+              <h1 className="text-2xl sm:text-left text-center capitalize sm:text-4xl text-sky-800 font-bold">
                 Calculate the new rent after an increase
               </h1>
             </div>
 
-            <div className="rc-no-print flex flex-col sm:flex-row gap-2">
+            <div className="rc-no-print flex-col sm:flex-row gap-2 hidden sm:flex">
               <button
                 type="button"
                 onClick={handlePrint}
@@ -1052,7 +1052,7 @@ export default function RentAfterIncrease() {
                   setCurrentRent(e.target.value.replace(/,/g, ""))
                 }
                 placeholder="e.g. 2000 or 2000.00"
-                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
+                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-lg outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
                 aria-invalid={currentInvalid}
                 aria-describedby={currentDescribedBy}
               />
@@ -1141,7 +1141,7 @@ export default function RentAfterIncrease() {
                     value={increasePercent}
                     onChange={(e) => setIncreasePercent(e.target.value)}
                     placeholder="e.g. 5 or 2.5"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
+                    className="w-full rounded-xl border border-slate-300 px-4 py-3 text-lg outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
                     aria-invalid={!pctParsed.ok}
                     aria-describedby={increaseDescribedBy}
                   />
@@ -1181,7 +1181,7 @@ export default function RentAfterIncrease() {
                       setIncreaseAmount(e.target.value.replace(/,/g, ""))
                     }
                     placeholder="e.g. 100 or 100.00"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
+                    className="w-full rounded-xl border border-slate-300 px-4 py-3 text-lg outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
                     aria-invalid={!amtParsed.ok || amtDisplayError}
                     aria-describedby={increaseDescribedBy}
                   />
@@ -1247,7 +1247,7 @@ export default function RentAfterIncrease() {
             <div className="md:col-span-6" />
           </div>
 
-          <div className="mt-6 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
+          <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
             {!computed.ok ? (
               <div className="rounded-xl border border-slate-200 bg-white p-4">
                 <div className="font-semibold text-slate-800">
@@ -1280,7 +1280,7 @@ export default function RentAfterIncrease() {
                 </div>
 
                 <div className="mt-2 flex flex-col gap-2">
-                  <div className="text-4xl sm:text-5xl font-extrabold text-emerald-700 tabular-nums tracking-tight">
+                  <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700 tabular-nums tracking-tight">
                     {fmt(computed.newPerSelected)}
                   </div>
                   <div className="text-sm text-slate-600 leading-relaxed">
@@ -1332,7 +1332,7 @@ export default function RentAfterIncrease() {
                   </div>
                 </div>
 
-                <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                   <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
                     <div className="text-xs text-slate-500">
                       Estimated percent change
@@ -1436,7 +1436,7 @@ export default function RentAfterIncrease() {
           </div>
 
           {computed.ok ? (
-            <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 rc-print-block">
+            <div className="mt-3 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 rc-print-block">
               <h3 className="text-lg font-bold text-slate-900 mb-3">
                 Full breakdown across periods (annual-equivalent)
               </h3>
@@ -1486,7 +1486,7 @@ export default function RentAfterIncrease() {
             </div>
           ) : null}
 
-          <p className="mt-6 text-sm text-slate-500 leading-relaxed">
+          <p className="my-6 text-sm text-slate-500 leading-relaxed">
             Assumptions: 1 year = 365 days, 1 week = 7 days, every 4 weeks = 28
             days, and month = 365 ÷ 12 days (average). This page estimates
             full-period equivalents and does not model fees, proration, or
@@ -1608,7 +1608,7 @@ export default function RentAfterIncrease() {
               </div>
             </div>
 
-            <div className="mt-10 space-y-6 text-base text-slate-700 leading-7">
+            <div className="mt-10 space-y-6 text-lg text-slate-700 leading-7">
               {/* Card 1 */}
               <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
                 <div
@@ -1864,27 +1864,6 @@ export default function RentAfterIncrease() {
               </div>
             </details>
           ))}
-        </div>
-      </section>
-
-      <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
-        <div className="rounded-2xl border border-slate-200 bg-white p-6">
-          <p className="text-xs text-slate-600 leading-relaxed">
-            <strong>Disclaimer:</strong>
-            <br />
-            Tools on this site are provided for informational, budgeting, and
-            comparison purposes only. Calculations are based on standard
-            time-period assumptions (including a 365-day year and average month
-            length) and simplified models. Results are estimates, not
-            guarantees.
-            <br />
-            <br />
-            This website does not provide financial, legal, or tax advice.
-            Rental costs, affordability, payment schedules, and obligations vary
-            by location, landlord, lease terms, and individual circumstances.
-            Always review your lease agreement and consult qualified
-            professionals before making financial decisions.
-          </p>
         </div>
       </section>
 

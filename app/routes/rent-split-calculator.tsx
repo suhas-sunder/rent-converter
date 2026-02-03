@@ -873,15 +873,15 @@ export default function RentPerPerson() {
       </section>
 
       <section id="calculator" className="mx-auto max-w-6xl px-6 pb-6 mt-4">
-        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block">
-          <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block sm:pt-6">
+          <div className="mb-3 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
-              <h1 className="text-xl sm:text-4xl capitalize font-bold text-sky-800">
+              <h1 className="text-2xl sm:text-left text-center capitalize sm:text-4xl text-sky-800 font-bold">
                 Split rent equally
               </h1>
             </div>
 
-            <div className="rc-no-print flex flex-col sm:flex-row gap-2">
+            <div className="rc-no-print flex-col sm:flex-row gap-2 hidden sm:flex">
               <button
                 type="button"
                 onClick={handlePrint}
@@ -909,7 +909,7 @@ export default function RentPerPerson() {
                 onBlur={() => setIsTotalRentFocused(false)}
                 onChange={(e) => handleTotalRentChange(e.target.value)}
                 placeholder="e.g. 2400 or 2400.00"
-                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
+                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-lg text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
                 aria-invalid={!parsedRent.ok}
                 aria-describedby={`${totalRentHelpId}${!parsedRent.ok ? ` ${totalRentErrorId}` : ""}`}
               />
@@ -940,7 +940,7 @@ export default function RentPerPerson() {
                     isPeriod(e.target.value) ? e.target.value : "monthly",
                   )
                 }
-                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
+                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-lg text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
               >
                 {(Object.keys(PERIOD_LABEL) as Period[]).map((p) => (
                   <option key={p} value={p}>
@@ -963,7 +963,7 @@ export default function RentPerPerson() {
                 value={people}
                 onChange={(e) => setPeople(e.target.value)}
                 placeholder="e.g. 3"
-                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
+                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-lg text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
                 aria-invalid={!parsedPeople.ok}
                 aria-describedby={`${peopleHelpId}${!parsedPeople.ok ? ` ${peopleErrorId}` : ""}`}
               />
@@ -993,7 +993,7 @@ export default function RentPerPerson() {
                     isCurrency(e.target.value) ? e.target.value : "USD",
                   )
                 }
-                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base font-semibold text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
+                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-lg font-semibold text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
                 aria-label="Currency"
               >
                 {SUPPORTED_CURRENCIES.map((c) => (
@@ -1006,7 +1006,7 @@ export default function RentPerPerson() {
           </div>
 
           <div
-            className="mt-6 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block"
+            className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block"
             role="region"
             aria-label="Results"
             aria-live="polite"
@@ -1050,7 +1050,7 @@ export default function RentPerPerson() {
                 </div>
 
                 <div className="mt-2 flex flex-col gap-2">
-                  <div className="text-4xl sm:text-5xl font-extrabold text-emerald-700 tabular-nums break-words">
+                  <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700 tabular-nums break-words">
                     {fmtMoney(computed.perSelectedPeriodScaled)}
                   </div>
                   <div className="text-sm text-slate-700 leading-relaxed">
@@ -1095,7 +1095,7 @@ export default function RentPerPerson() {
                   ) : null}
                 </div>
 
-                <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                   <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
                     <div className="text-xs text-slate-600">
                       Annual per person (annualized)
@@ -1151,7 +1151,7 @@ export default function RentPerPerson() {
                   </div>
                 </div>
 
-                <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 rc-print-block shadow-sm">
+                <div className="mt-3 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 rc-print-block shadow-sm">
                   <h3 className="text-lg font-bold text-slate-950 mb-3">
                     Full breakdown (annual-equivalent totals and per person)
                   </h3>
@@ -1194,7 +1194,7 @@ export default function RentPerPerson() {
                     </table>
                   </div>
 
-                  <p className="mt-4 text-xs text-slate-600 leading-relaxed">
+                  <p className="my-6 text-sm text-slate-500">
                     Assumptions: 1 year = 365 days, 1 week = 7 days, every 4
                     weeks = 28 days, and month = 365 ÷ 12 days (average). Exact
                     billing and due dates vary by agreement.
@@ -1203,28 +1203,6 @@ export default function RentPerPerson() {
               </>
             )}
           </div>
-
-          <section className="mt-10 rounded-2xl border border-slate-200 bg-white p-6 rc-print-block">
-            <h3 className="text-xl font-bold text-slate-950 mb-3">
-              Disclaimer
-            </h3>
-            <p className="text-sm text-slate-800 leading-relaxed">
-              <strong>Disclaimer:</strong>
-              <br />
-              Tools on this site are provided for informational, budgeting, and
-              comparison purposes only. Calculations are based on standard
-              time-period assumptions (including a 365-day year and average
-              month length) and simplified models. Results are estimates, not
-              guarantees.
-              <br />
-              <br />
-              This website does not provide financial, legal, or tax advice.
-              Rental costs, affordability, payment schedules, and obligations
-              vary by location, landlord, lease terms, and individual
-              circumstances. Always review your lease agreement and consult
-              qualified professionals before making financial decisions.
-            </p>
-          </section>
 
           <p className="mt-6 text-sm text-slate-600 leading-relaxed">
             Assumptions: 1 year = 365 days, 1 week = 7 days, biweekly = 14 days,
@@ -1345,7 +1323,7 @@ export default function RentPerPerson() {
               </div>
             </div>
 
-            <div className="mt-10 space-y-6 text-base text-slate-700 leading-7">
+            <div className="mt-10 space-y-6 text-lg text-slate-700 leading-7">
               {/* Card 1 */}
               <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
                 <div

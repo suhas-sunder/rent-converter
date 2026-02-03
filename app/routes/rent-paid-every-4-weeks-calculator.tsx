@@ -751,7 +751,7 @@ export default function RentPaidEvery4Weeks() {
   const amountErrorId = "rc-4w-amount-error";
 
   return (
-    <main className="bg-white text-slate-700 scroll-smooth text-[15px] sm:text-base leading-relaxed">
+    <main className="bg-white text-slate-700 scroll-smooth text-[15px] sm:text-lg leading-relaxed">
       <style
         dangerouslySetInnerHTML={{
           __html: `
@@ -778,29 +778,28 @@ export default function RentPaidEvery4Weeks() {
         </nav>
       </section>
 
-      {/* Calculator */}
       <section id="calculator" className="mx-auto max-w-6xl px-6 pb-6 mt-4">
-        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block">
-          <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block sm:pt-6">
+          <div className="mb-3 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
-              <h1 className="text-xl sm:text-4xl capitalize font-bold text-sky-800">
+              <h1 className="text-2xl sm:text-left text-center capitalize sm:text-4xl text-sky-800 font-bold">
                 Convert 4-week rent to monthly and annual
               </h1>
             </div>
 
-            <div className="rc-no-print flex flex-col sm:flex-row gap-2">
+            <div className="rc-no-print flex-col sm:flex-row gap-2 hidden sm:flex">
               <button
                 type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
               >
                 Print / Save as PDF
               </button>
             </div>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-12">
-            <div className="md:col-span-6">
+          <div className="grid gap-5">
+            <div>
               <label
                 htmlFor="rc-4w-amount"
                 className="block text-sm font-semibold text-slate-800 mb-2"
@@ -836,7 +835,7 @@ export default function RentPaidEvery4Weeks() {
                     }
                   }}
                   placeholder="e.g. 650 or 650.00"
-                  className={`w-full rounded-xl border px-4 py-3.5 text-base outline-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
+                  className={`w-full rounded-xl border px-4 py-3.5 text-lg outline-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
                     parsed.ok
                       ? "border-slate-300 focus:border-sky-600"
                       : "border-rose-300 focus:border-rose-500"
@@ -860,7 +859,7 @@ export default function RentPaidEvery4Weeks() {
                       isCurrency(e.target.value) ? e.target.value : "USD",
                     )
                   }
-                  className="rounded-xl border border-slate-300 bg-white px-3.5 py-3.5 text-sm font-semibold outline-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus:border-sky-600"
+                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3.5 py-3.5 text-sm font-semibold outline-none transition hover:bg-sky-50 hover:border-sky-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus:border-sky-600"
                   aria-label="Currency"
                 >
                   {SUPPORTED_CURRENCIES.map((c) => (
@@ -878,13 +877,32 @@ export default function RentPaidEvery4Weeks() {
                 >
                   {parsed.error}
                 </p>
+              ) : (parsed as any).warnings?.length ? (
+                <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                  <div className="font-semibold">Input interpretation note</div>
+                  <ul className="mt-1 list-disc pl-5 space-y-1">
+                    {(parsed as any).warnings.map((w: string, i: number) => (
+                      <li key={i}>{w}</li>
+                    ))}
+                  </ul>
+                </div>
               ) : null}
+
+              <div className="md:col-span-6 mt-2">
+                <div className="flex items-center justify-between px-1">
+                  <span className="text-sm font-semibold text-slate-800">
+                    Every 4 weeks (28 days)
+                    <span className="mx-2 text-slate-400">→</span>
+                    Monthly (average, 365 ÷ 12)
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
 
           {/* Results */}
           <div
-            className="mt-6 rounded-2xl border border-slate-200 border-l-4 border-l-sky-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block"
+            className="mb-6 mt-3 rounded-2xl border border-slate-200 border-l-4 border-l-sky-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block"
             role="region"
             aria-label="Results"
             aria-live="polite"
@@ -915,30 +933,58 @@ export default function RentPaidEvery4Weeks() {
               </div>
             ) : (
               <>
-                <div className="text-sm text-slate-700">
-                  4-week rent equivalents (annual basis)
+                <div className="text-sm text-slate-600">Monthly equivalent</div>
+
+                <div className="mt-2 flex flex-col gap-2">
+                  <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700 tabular-nums whitespace-nowrap">
+                    {fmtMoney(computed.monthlyScaled)}
+                  </div>
+
+                  <div className="text-sm text-slate-700">
+                    {fmtMoney(computed.every4wScaled)} every 4 weeks ≈{" "}
+                    <strong>{fmtMoney(computed.monthlyScaled)}</strong> monthly
+                    (average month, 365 ÷ 12)
+                  </div>
+
+                  <div className="text-sm text-slate-700">
+                    Implied annual equivalent:{" "}
+                    <strong className="text-slate-900">
+                      {fmtMoney(computed.annualScaled)}
+                    </strong>{" "}
+                    annual (365-day basis)
+                  </div>
                 </div>
 
                 <div className="rc-no-print mt-4 flex flex-wrap gap-2 items-center">
                   <button
                     type="button"
                     onClick={() =>
+                      handleCopy("monthly", fmtMoney(computed.monthlyScaled))
+                    }
+                    className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                  >
+                    {copiedKey === "monthly" ? "Copied" : "Copy monthly amount"}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() =>
                       handleCopy(
                         "summary",
-                        `Every 4 weeks: ${fmtMoney(computed.every4wScaled)}; Weekly: ${fmtMoney(
-                          computed.weeklyScaled,
-                        )}; Monthly: ${fmtMoney(computed.monthlyScaled)}; Annual: ${fmtMoney(
-                          computed.annualScaled,
-                        )} (365-day basis)`,
+                        `Every 4 weeks: ${fmtMoney(
+                          computed.every4wScaled,
+                        )}; Weekly: ${fmtMoney(computed.weeklyScaled)}; Monthly: ${fmtMoney(
+                          computed.monthlyScaled,
+                        )}; Annual: ${fmtMoney(computed.annualScaled)} (365-day basis)`,
                       )
                     }
-                    className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                    className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                   >
                     {copiedKey === "summary" ? "Copied" : "Copy summary"}
                   </button>
 
                   <span className="sr-only" aria-live="polite">
-                    {copiedKey === "summary"
+                    {copiedKey === "summary" || copiedKey === "monthly"
                       ? "Copied"
                       : copiedKey === "copy_failed"
                         ? "Copy failed"
@@ -950,6 +996,10 @@ export default function RentPaidEvery4Weeks() {
                       Copy failed
                     </span>
                   ) : null}
+                </div>
+
+                <div className="mt-5 text-sm text-slate-700">
+                  4-week rent equivalents (annual basis)
                 </div>
 
                 <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -1027,7 +1077,7 @@ export default function RentPaidEvery4Weeks() {
                     </p>
                   </div>
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3.5 shadow-sm">
+                  <div className="sm:col-span-2  lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3.5 shadow-sm">
                     <div className="text-xs text-slate-600">
                       Annual comparison: 13 payments vs 365-day equivalence
                     </div>
@@ -1073,6 +1123,19 @@ export default function RentPaidEvery4Weeks() {
                       specific payment counts or date rules.
                     </p>
                   </div>
+
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3.5 shadow-sm">
+                    <div className="text-xs text-slate-600">
+                      Avoid misleading comparisons
+                    </div>
+                    <p className="mt-1 text-sm text-slate-700">
+                      This tool compares time periods by converting through the
+                      same annual basis. It does not guess what is included in
+                      rent (fees, utilities, taxes) or your lease’s due dates.
+                      If your rent amount includes extras, your monthly
+                      budgeting should include the same extras too.
+                    </p>
+                  </div>
                 </div>
 
                 {computed.warnings.length ? (
@@ -1088,37 +1151,17 @@ export default function RentPaidEvery4Weeks() {
               </>
             )}
           </div>
-
-          {/* Disclaimer */}
-          <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 rc-print-block shadow-sm">
-            <p className="text-xs text-slate-700 leading-relaxed">
-              <strong>Disclaimer:</strong>
-              <br />
-              Tools on this site are provided for informational, budgeting, and
-              comparison purposes only. Calculations are based on standard
-              time-period assumptions (including a 365-day year and average
-              month length) and simplified models. Results are estimates, not
-              guarantees.
-              <br />
-              <br />
-              This website does not provide financial, legal, or tax advice.
-              Rental costs, affordability, payment schedules, and obligations
-              vary by location, landlord, lease terms, and individual
-              circumstances. Always review your lease agreement and consult
-              qualified professionals before making financial decisions.
-            </p>
-          </div>
         </div>
 
         <div className="md:col-span-6 mt-6">
           <div className="rounded-xl border border-slate-200 bg-white p-4">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <label className="flex items-center gap-2 text-sm text-slate-800">
+              <label className="flex items-center gap-2 text-sm text-slate-800 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={roundDisplay}
                   onChange={(e) => setRoundDisplay(e.target.checked)}
-                  className="h-4 w-4 rounded border-slate-300 text-sky-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                  className="cursor-pointer h-4 w-4 rounded border-slate-300 text-sky-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                 />
                 Round displayed values (display only)
               </label>
@@ -1134,7 +1177,7 @@ export default function RentPaidEvery4Weeks() {
                       coerceDisplayDecimalsFromStorage(e.target.value),
                     )
                   }
-                  className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus:border-sky-600"
+                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none transition hover:bg-sky-50 hover:border-sky-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus:border-sky-600"
                   aria-label="Displayed decimals"
                 >
                   <option value={0}>0</option>
@@ -1149,6 +1192,20 @@ export default function RentPaidEvery4Weeks() {
               Calculations preserve decimals internally (up to 12). Only display
               rounding changes.
             </p>
+
+            <div className="mt-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+              <div className="font-semibold">Assumptions used on this page</div>
+              <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
+                <li>1 year = 365 days</li>
+                <li>Week = 7 days</li>
+                <li>4-week rent = 28 days</li>
+                <li>Month = 365 ÷ 12 days (average)</li>
+                <li>
+                  This tool does not assume what is included in rent (fees,
+                  utilities, taxes). Enter the total you want to budget with.
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </section>
@@ -1317,7 +1374,7 @@ export default function RentPaidEvery4Weeks() {
               How this 4-week rent calculator works
             </h2>
 
-            <div className="space-y-6 text-base text-slate-700 leading-7">
+            <div className="space-y-6 text-lg text-slate-700 leading-7">
               <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
                 <div
                   aria-hidden="true"

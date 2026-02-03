@@ -765,13 +765,13 @@ export default function MonthlyToBiweeklyRent() {
       </section>
 
       <section id="converter" className="mx-auto max-w-6xl px-6 pb-6 mt-4">
-        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block">
-          <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-            <h1 className="text-xl sm:text-4xl capitalize text-sky-800 font-bold">
+        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block sm:pt-6">
+          <div className="mb-3 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <h1 className="text-2xl sm:text-left text-center capitalize sm:text-4xl text-sky-800 font-bold">
               Instant monthly to biweekly converter
             </h1>
 
-            <div className="rc-no-print flex flex-col sm:flex-row gap-2">
+            <div className="rc-no-print flex-col sm:flex-row gap-2 hidden sm:flex">
               <button
                 type="button"
                 onClick={handlePrint}
@@ -782,8 +782,8 @@ export default function MonthlyToBiweeklyRent() {
             </div>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-12">
-            <div className="md:col-span-6">
+          <div className="grid gap-5">
+            <div>
               <label className="block text-sm font-semibold text-slate-700 mb-2">
                 Monthly rent amount
               </label>
@@ -795,7 +795,7 @@ export default function MonthlyToBiweeklyRent() {
                   onFocus={() => setIsAmountFocused(true)}
                   onBlur={() => setIsAmountFocused(false)}
                   placeholder="e.g. 2000 or 2000.00"
-                  className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="w-full rounded-xl border border-slate-300 px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!parsedAmount.ok}
                   aria-describedby="rc-amt-help rc-amt-error"
                 />
@@ -839,7 +839,7 @@ export default function MonthlyToBiweeklyRent() {
             </div>
           </div>
 
-          <div className="mt-6 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
+          <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
             {!canShowResults || !breakdown ? (
               <div className="rounded-xl border border-slate-200 bg-white p-4">
                 <div className="font-semibold text-slate-800">
@@ -857,7 +857,7 @@ export default function MonthlyToBiweeklyRent() {
                 </div>
 
                 <div className="mt-2 flex flex-col gap-2">
-                  <div className="text-4xl sm:text-5xl font-extrabold text-emerald-700">
+                  <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700">
                     {fmt(breakdown.biweekly)}
                   </div>
                   <div className="text-sm text-slate-600">
@@ -898,7 +898,7 @@ export default function MonthlyToBiweeklyRent() {
                   </div>
                 </div>
 
-                <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                   {(
                     [
                       ["Hourly", breakdown.hourly, "hourly"],
@@ -1036,7 +1036,7 @@ export default function MonthlyToBiweeklyRent() {
             )}
           </div>
 
-          <p className="mt-6 text-sm text-slate-500">
+          <p className="my-6 text-sm text-slate-500">
             Assumptions: 1 year = 365 days, 1 week = 7 days, biweekly = 14 days,
             4-week rent = 28 days, month = 365 ÷ 12 days (average). Actual due
             dates and billing terms vary by agreement. For yearly comparisons,
@@ -1181,7 +1181,7 @@ export default function MonthlyToBiweeklyRent() {
               </div>
             </div>
 
-            <div className="mt-10 space-y-6 text-base text-slate-700 leading-7">
+            <div className="mt-10 space-y-6 text-lg text-slate-700 leading-7">
               <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
                 <div
                   aria-hidden="true"
@@ -1430,26 +1430,6 @@ export default function MonthlyToBiweeklyRent() {
               </div>
             </details>
           ))}
-        </div>
-      </section>
-
-      <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
-        <div className="rounded-2xl border border-slate-200 bg-white p-6">
-          <p className="text-xs text-slate-600 leading-relaxed">
-            <strong>Disclaimer:</strong>
-            <br />
-            Tools on this site are for informational, budgeting, and comparison
-            use. Calculations rely on standard time-period assumptions
-            (including a 365-day year and an average month length) and
-            simplified models. Outputs are estimates intended to illustrate
-            equivalents, not to predict exact lease billing outcomes.
-            <br />
-            <br />
-            This website does not provide financial, legal, or tax advice. Rent,
-            payment schedules, proration, fees, and obligations vary by
-            location, landlord, and lease terms. Review your rental agreement
-            for the rules that apply to you.
-          </p>
         </div>
       </section>
 

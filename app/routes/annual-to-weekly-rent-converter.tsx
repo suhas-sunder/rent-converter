@@ -677,13 +677,13 @@ export default function AnnualToWeeklyRentConverter() {
       </section>
 
       <section id="converter" className="mx-auto max-w-6xl px-6 pb-6 mt-4">
-        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block">
-          <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-            <h1 className="text-xl capitalize sm:text-4xl font-bold text-sky-800">
+        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block sm:pt-6">
+          <div className="mb-3 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <h1 className="text-2xl sm:text-left text-center capitalize sm:text-4xl text-sky-800 font-bold">
               Annual to weekly converter
             </h1>
 
-            <div className="rc-no-print flex flex-col sm:flex-row gap-2">
+            <div className="rc-no-print flex-col sm:flex-row gap-2 hidden sm:flex">
               <button
                 type="button"
                 onClick={handlePrint}
@@ -694,11 +694,12 @@ export default function AnnualToWeeklyRentConverter() {
             </div>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-12">
-            <div className="md:col-span-6">
+          <div className="grid gap-5">
+            <div>
               <label className="block text-sm font-semibold text-slate-700 mb-2">
                 Annual rent total
               </label>
+
               <div className="flex gap-2">
                 <input
                   inputMode="decimal"
@@ -707,10 +708,11 @@ export default function AnnualToWeeklyRentConverter() {
                   onBlur={() => setAmountFocused(false)}
                   onChange={(e) => setAmount(e.target.value)}
                   placeholder="e.g. 24000 or 24000.50"
-                  className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="w-full rounded-xl border border-slate-300 px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!parsedAnnual.ok}
                   aria-describedby="rc-amount-help rc-amount-error"
                 />
+
                 <select
                   value={currency}
                   onChange={(e) =>
@@ -748,31 +750,20 @@ export default function AnnualToWeeklyRentConverter() {
                   </ul>
                 </div>
               ) : null}
-            </div>
 
-            <div className="md:col-span-6">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
-                Display settings
-              </label>
-
-              <div className="grid gap-3 sm:grid-cols-2">
-                <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
-                  <div className="text-xs text-slate-500">From</div>
-                  <div className="mt-1 text-base font-bold text-slate-800">
+              <div className="mt-2">
+                <div className="flex items-center justify-between  px-1">
+                  <span className="text-sm font-semibold text-slate-800">
                     Annual
-                  </div>
-                </div>
-                <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
-                  <div className="text-xs text-slate-500">To</div>
-                  <div className="mt-1 text-base font-bold text-slate-800">
+                    <span className="mx-2 text-slate-400">→</span>
                     Weekly (annual ÷ 52)
-                  </div>
+                  </span>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="mt-6 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
+          <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
             <div className="text-sm text-slate-600">Weekly equivalent</div>
 
             {!canShowResults ? (
@@ -786,48 +777,12 @@ export default function AnnualToWeeklyRentConverter() {
             ) : (
               <>
                 <div className="mt-2 flex flex-col gap-2">
-                  <div className="text-4xl sm:text-5xl font-extrabold text-emerald-700">
+                  <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700">
                     {fmt(weeklyHeadlineScaled)}
-                  </div>
-                  <div className="text-sm text-slate-600">
-                    {fmt(annualScaled)} annual ≈{" "}
-                    <strong>{fmt(weeklyHeadlineScaled)}</strong> per week
-                    (annual ÷ 52)
-                  </div>
-
-                  <div className="rc-no-print mt-2 flex flex-wrap gap-2">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleCopy("weekly", fmt(weeklyHeadlineScaled))
-                      }
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-                    >
-                      {copiedKey === "weekly" ? "Copied" : "Copy weekly amount"}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleCopy(
-                          "summary",
-                          `Annual: ${fmt(annualScaled)} | Weekly (annual ÷ 52): ${fmt(
-                            weeklyHeadlineScaled,
-                          )} | Also shown: Weekly (annual × 7 ÷ 365): ${fmt(breakdownScaled!.weekly365)}`,
-                        )
-                      }
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-                    >
-                      {copiedKey === "summary" ? "Copied" : "Copy summary"}
-                    </button>
-                    {copiedKey === "copy_failed" ? (
-                      <span className="self-center text-sm font-semibold text-rose-700">
-                        Copy failed
-                      </span>
-                    ) : null}
                   </div>
                 </div>
 
-                <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                   {(
                     [
                       [
@@ -954,48 +909,24 @@ export default function AnnualToWeeklyRentConverter() {
                       because 28-day billing commonly lands on 13 payments.
                     </p>
                   </div>
-
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
-                    <div className="text-xs text-slate-500">
-                      Precision note (fixed-point math)
-                    </div>
-                    <p className="mt-2 text-xs text-slate-600">
-                      Dividing by 52 or by 365/7 can produce a repeating
-                      decimal. This tool keeps up to 12 decimals internally and
-                      does not round during computation. If you reconstruct an
-                      annual total by multiplying a weekly figure back, you can
-                      see a small remainder due to truncation at 12 decimals.
-                    </p>
-                    <div className="mt-2 grid gap-2 sm:grid-cols-2">
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
-                        <div className="text-xs text-slate-500">
-                          Input annual minus (weekly ÷ 52) × 52
-                        </div>
-                        <div className="mt-1 text-sm font-bold text-slate-800">
-                          {fmt(breakdownScaled!.reconstructionGapWeekly52)}
-                        </div>
-                      </div>
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
-                        <div className="text-xs text-slate-500">
-                          Input annual minus (weekly 365-day) × 365 ÷ 7
-                        </div>
-                        <div className="mt-1 text-sm font-bold text-slate-800">
-                          {fmt(breakdownScaled!.reconstructionGapWeekly365)}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </>
             )}
           </div>
 
-          <p className="mt-6 text-sm text-slate-500">
-            Definitions: weekly (headline) = annual ÷ 52. Day-based conversions
-            use a 365-day year. Biweekly = 14 days and 4-week = 28 days. Results
-            are for budgeting and comparison, not a promise of exact due dates
-            or billed totals.
-          </p>
+          <div className="mt-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+            <div className="font-semibold">Assumptions used on this page</div>
+            <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
+              <li>1 year = 365 days</li>
+              <li>Biweekly = 14 days</li>
+              <li>4-week rent = 28 days</li>
+              <li>Month = 365 ÷ 12 days (average)</li>
+              <li>
+                This tool does not assume what is included in “rent” (fees,
+                utilities, taxes). Enter the total you want to budget with.
+              </li>
+            </ul>
+          </div>
         </div>
 
         <div className="mt-3 rounded-xl border border-slate-200 bg-white p-4">
@@ -1039,18 +970,6 @@ export default function AnnualToWeeklyRentConverter() {
                 <option value={6}>6</option>
               </select>
             </div>
-          </div>
-
-          <div className="mt-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
-            <div className="font-semibold">
-              What “weekly” means on this page
-            </div>
-            <p className="mt-1 text-xs text-slate-600">
-              The headline weekly result is <strong>annual ÷ 52</strong>{" "}
-              (budgeting view). For comparison, the tool also shows{" "}
-              <strong>annual × 7 ÷ 365</strong> (365-day-year weekly) so you can
-              see the difference.
-            </p>
           </div>
         </div>
       </section>
@@ -1484,26 +1403,6 @@ export default function AnnualToWeeklyRentConverter() {
               </div>
             </details>
           ))}
-        </div>
-      </section>
-
-      <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
-        <div className="rounded-2xl border border-slate-200 bg-white p-6">
-          <p className="text-xs text-slate-600 leading-relaxed">
-            <strong>Disclaimer:</strong>
-            <br />
-            Tools on this site are provided for informational, budgeting, and
-            comparison purposes only. Calculations are based on standard
-            time-period assumptions (including a 365-day year and simplified
-            models). Results are estimates, not guarantees.
-            <br />
-            <br />
-            This website does not provide financial, legal, or tax advice.
-            Rental costs, affordability, payment schedules, and obligations vary
-            by location, landlord, lease terms, and individual circumstances.
-            Always review your lease agreement and consult qualified
-            professionals before making financial decisions.
-          </p>
         </div>
       </section>
 

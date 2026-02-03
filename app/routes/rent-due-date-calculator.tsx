@@ -1039,14 +1039,17 @@ export default function RentDueDateCalculator() {
         </nav>
       </section>
 
-      <section id="calculator" className="mx-auto max-w-6xl px-6 pb-6 mt-4 pt-4">
-        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block">
-          <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-            <h1 className="text-xl sm:text-4xl font-bold capitalize text-sky-800">
+      <section
+        id="calculator"
+        className="mx-auto max-w-6xl px-6 pb-6 mt-4 pt-4"
+      >
+        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block sm:pt-6">
+          <div className="mb-3 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <h1 className="text-2xl sm:text-left text-center capitalize sm:text-4xl text-sky-800 font-bold">
               Rent due date schedule and totals
             </h1>
 
-            <div className="rc-no-print flex flex-col sm:flex-row gap-2">
+            <div className="rc-no-print flex-col sm:flex-row gap-2 hidden sm:flex">
               <button
                 type="button"
                 onClick={handlePrint}
@@ -1070,7 +1073,7 @@ export default function RentDueDateCalculator() {
                   onBlur={() => setAmountFocused(false)}
                   onChange={(e) => setAmount(e.target.value)}
                   placeholder="e.g. 2000 or 2000.00"
-                  className="col-span-7 rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="col-span-7 rounded-xl border border-slate-300 px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!parsedAmount.ok}
                 />
                 <select
@@ -1118,7 +1121,7 @@ export default function RentDueDateCalculator() {
                     isBillingCycle(e.target.value) ? e.target.value : "monthly",
                   )
                 }
-                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
               >
                 {(
                   [
@@ -1134,26 +1137,18 @@ export default function RentDueDateCalculator() {
                   </option>
                 ))}
               </select>
-              <p className="mt-2 text-xs text-slate-500">
-                Weekly, biweekly, and 28-day cycles repeat by fixed-day
-                intervals. Monthly repeats by calendar months.
-              </p>
             </div>
 
             <div className="md:col-span-4">
               <label className="block text-sm font-semibold text-slate-700 mb-2">
-                As-of date
+                As-of date (First Due Date)
               </label>
               <input
                 type="date"
                 value={asOfDate}
                 onChange={(e) => setAsOfDate(e.target.value)}
-                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
               />
-              <p className="mt-2 text-xs text-slate-500">
-                The next due date is the first scheduled due date on or after
-                this date.
-              </p>
             </div>
 
             <div className="md:col-span-6">
@@ -1168,7 +1163,7 @@ export default function RentDueDateCalculator() {
                       e.target.value === "end_date" ? "end_date" : "years",
                     )
                   }
-                  className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                 >
                   <option value="years">Years ahead</option>
                   <option value="end_date">End date</option>
@@ -1178,7 +1173,7 @@ export default function RentDueDateCalculator() {
                   <select
                     value={yearsAhead}
                     onChange={(e) => setYearsAhead(e.target.value)}
-                    className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   >
                     {["1", "2", "3", "5"].map((y) => (
                       <option key={y} value={y}>
@@ -1191,14 +1186,10 @@ export default function RentDueDateCalculator() {
                     type="date"
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
-                    className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   />
                 )}
               </div>
-              <p className="mt-2 text-xs text-slate-500">
-                Monthly totals are shown for the calendar months that fall
-                inside the selected horizon.
-              </p>
             </div>
 
             <div className="md:col-span-6">
@@ -1212,7 +1203,7 @@ export default function RentDueDateCalculator() {
                   value={dueDayMonthly}
                   onChange={(e) => setDueDayMonthly(e.target.value)}
                   placeholder="e.g. 1"
-                  className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-label="Monthly due day"
                 />
               ) : (
@@ -1220,19 +1211,13 @@ export default function RentDueDateCalculator() {
                   type="date"
                   value={anchorDate}
                   onChange={(e) => setAnchorDate(e.target.value)}
-                  className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                 />
               )}
-
-              <p className="mt-2 text-xs text-slate-500">
-                {cycle === "monthly"
-                  ? "If the selected day does not exist in a month, the estimate uses that month’s last day."
-                  : "The anchor date is the reference point for weekly, biweekly, and 28-day repeats."}
-              </p>
             </div>
           </div>
 
-          <div className="mt-6 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
+          <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
             {!computed.ok ? (
               <div className="rounded-xl border border-slate-200 bg-white p-4">
                 <div className="font-semibold text-slate-800">
@@ -1315,7 +1300,7 @@ export default function RentDueDateCalculator() {
                   ) : null}
                 </div>
 
-                <div className="mt-6 rounded-2xl border border-slate-200 bg-white overflow-hidden rc-print-block">
+                <div className="mt-3 rounded-2xl border border-slate-200 bg-white overflow-hidden rc-print-block">
                   <div className="px-4 py-3 border-b border-slate-200">
                     <div className="text-sm font-semibold text-slate-800">
                       Upcoming due dates
@@ -1516,29 +1501,7 @@ export default function RentDueDateCalculator() {
             )}
           </div>
 
-          <section className="mt-10 rounded-2xl border border-slate-200 bg-white p-6 rc-print-block">
-            <h3 className="text-xl font-bold text-slate-900 mb-3">
-              Disclaimer
-            </h3>
-            <p className="text-sm text-slate-700 leading-relaxed">
-              <strong>Disclaimer:</strong>
-              <br />
-              Tools on this site are provided for informational, budgeting, and
-              comparison purposes only. Calculations are based on standard
-              time-period assumptions (including a 365-day year and average
-              month length) and simplified models. Results are estimates, not
-              guarantees.
-              <br />
-              <br />
-              This website does not provide financial, legal, or tax advice.
-              Rental costs, affordability, payment schedules, and obligations
-              vary by location, landlord, lease terms, and individual
-              circumstances. Always review your lease agreement and consult
-              qualified professionals before making financial decisions.
-            </p>
-          </section>
-
-          <p className="mt-6 text-sm text-slate-500 rc-print-block">
+          <p className="my-6 text-sm text-slate-500 rc-print-block">
             Assumptions: Weekly uses 7-day intervals, biweekly uses 14-day
             intervals, and every 4 weeks uses 28-day intervals. Monthly
             schedules are estimated using calendar months, with shorter months
@@ -1651,7 +1614,7 @@ export default function RentDueDateCalculator() {
               </div>
             </div>
 
-            <div className="mt-10 space-y-6 text-base text-slate-700 leading-7">
+            <div className="mt-10 space-y-6 text-lg text-slate-700 leading-7">
               {/* Card 1 */}
               <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
                 <div

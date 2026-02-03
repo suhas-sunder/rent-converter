@@ -126,8 +126,8 @@ export default function Footer() {
       <div className="mx-auto max-w-6xl px-4 py-10">
         <div className="rounded-2xl border border-sky-900/60 bg-sky-950/30 p-6">
           <div className="flex items-start justify-between gap-3">
-            <h2 className="text-sm font-bold text-white">All Rental Tools</h2>
-            <span className="text-xs text-slate-400">
+            <h2 className="text-base font-bold text-white">All Rental Tools</h2>
+            <span className="text-base text-slate-400">
               Browse utilities by category
             </span>
           </div>
@@ -142,13 +142,13 @@ export default function Footer() {
                   cat.cardClassName || "",
                 ].join(" ")}
               >
-                <div className="text-xs font-bold uppercase tracking-wide text-slate-200">
+                <div className="text-base font-bold uppercase tracking-wide text-slate-200">
                   {cat.title}
                 </div>
 
                 <ul
                   className={[
-                    "mt-3 text-sm leading-snug",
+                    "mt-3 text-lg leading-snug",
                     cat.listClassName || "space-y-1",
                   ].join(" ")}
                 >
@@ -169,7 +169,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-6 flex flex-col items-center justify-center gap-3 text-center">
-          <nav aria-label="Footer links" className="text-sm">
+          <nav aria-label="Footer links" className="text-base">
             <ul className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
               <li>
                 <Link
@@ -206,11 +206,11 @@ export default function Footer() {
             </ul>
           </nav>
 
-          <p className="text-xs text-slate-400">
+          <p className="text-base text-slate-400">
             © {year} RentConverter.com • Rent conversion and renter tools
           </p>
 
-          <p className="max-w-3xl text-xs text-slate-400/90">
+          <p className=" text-sm text-slate-400/90">
             Tools on this site are for informational, budgeting, and comparison
             purposes only. Always confirm payment schedules and lease terms in
             your rental agreement. This website does not provide financial,

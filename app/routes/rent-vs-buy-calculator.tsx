@@ -1226,15 +1226,15 @@ export default function RentVsBuyCalculator() {
       </section>
 
       <section id="calculator" className="mx-auto max-w-6xl px-6 pb-6 mt-4">
-        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block">
-          <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block sm:pt-6">
+          <div className="mb-3 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
-              <h1 className="text-xl sm:text-4xl capitalize font-bold text-sky-800">
+              <h1 className="text-2xl sm:text-left text-center capitalize sm:text-4xl text-sky-800 font-bold">
                 Compare costs over time
               </h1>
             </div>
 
-            <div className="rc-no-print flex flex-col sm:flex-row gap-2">
+            <div className="rc-no-print flex-col sm:flex-row gap-2 hidden sm:flex">
               <button
                 type="button"
                 onClick={handlePrint}
@@ -1247,7 +1247,7 @@ export default function RentVsBuyCalculator() {
 
           <div className="grid gap-6 lg:grid-cols-12">
             <div className="lg:col-span-4 rounded-2xl border border-slate-200 bg-white p-5">
-              <h3 className="text-base font-bold text-slate-900 mb-3">
+              <h3 className="text-lg font-bold text-slate-900 mb-3">
                 Rent assumptions
               </h3>
 
@@ -1264,7 +1264,7 @@ export default function RentVsBuyCalculator() {
                   setRentTouched(true);
                 }}
                 placeholder="e.g. 2200"
-                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                 aria-invalid={!parsed.rent.ok}
               />
               {rentTouched && !rentFocused && !parsed.rent.ok ? (
@@ -1287,7 +1287,7 @@ export default function RentVsBuyCalculator() {
                   value={rentIncreasePct}
                   onChange={(e) => setRentIncreasePct(e.target.value)}
                   placeholder="e.g. 3"
-                  className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="w-full rounded-xl border border-slate-300 px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!parsed.rentIncrease.ok}
                 />
                 <p className="mt-2 text-xs text-slate-500">
@@ -1319,7 +1319,7 @@ export default function RentVsBuyCalculator() {
             </div>
 
             <div className="lg:col-span-5 rounded-2xl border border-slate-200 bg-white p-5">
-              <h3 className="text-base font-bold text-slate-900 mb-3">
+              <h3 className="text-lg font-bold text-slate-900 mb-3">
                 Buy assumptions
               </h3>
 
@@ -1336,7 +1336,7 @@ export default function RentVsBuyCalculator() {
                   setHomePriceTouched(true);
                 }}
                 placeholder="e.g. 550000"
-                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                 aria-invalid={!parsed.price.ok}
               />
               {homePriceTouched && !homePriceFocused && !parsed.price.ok ? (
@@ -1355,7 +1355,7 @@ export default function RentVsBuyCalculator() {
                     value={downPaymentPct}
                     onChange={(e) => setDownPaymentPct(e.target.value)}
                     placeholder="e.g. 20"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className="w-full rounded-xl border border-slate-300 px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                     aria-invalid={!parsed.downPct.ok}
                   />
                 </div>
@@ -1368,7 +1368,7 @@ export default function RentVsBuyCalculator() {
                     value={mortgageRatePct}
                     onChange={(e) => setMortgageRatePct(e.target.value)}
                     placeholder="e.g. 5.5"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className="w-full rounded-xl border border-slate-300 px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                     aria-invalid={!parsed.ratePct.ok}
                   />
                 </div>
@@ -1384,7 +1384,7 @@ export default function RentVsBuyCalculator() {
                     value={mortgageTermYears}
                     onChange={(e) => setMortgageTermYears(e.target.value)}
                     placeholder="e.g. 25"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className="w-full rounded-xl border border-slate-300 px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                     aria-invalid={!parsed.termYears.ok}
                   />
                 </div>
@@ -1397,7 +1397,7 @@ export default function RentVsBuyCalculator() {
                     value={homeAppreciationPct}
                     onChange={(e) => setHomeAppreciationPct(e.target.value)}
                     placeholder="e.g. 3"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className="w-full rounded-xl border border-slate-300 px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                     aria-invalid={!parsed.appPct.ok}
                   />
                 </div>
@@ -1413,7 +1413,7 @@ export default function RentVsBuyCalculator() {
                     value={propertyTaxPct}
                     onChange={(e) => setPropertyTaxPct(e.target.value)}
                     placeholder="e.g. 1.0"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className="w-full rounded-xl border border-slate-300 px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                     aria-invalid={!parsed.propTax.ok}
                   />
                 </div>
@@ -1426,7 +1426,7 @@ export default function RentVsBuyCalculator() {
                     value={maintenancePct}
                     onChange={(e) => setMaintenancePct(e.target.value)}
                     placeholder="e.g. 1.0"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className="w-full rounded-xl border border-slate-300 px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                     aria-invalid={!parsed.maint.ok}
                   />
                 </div>
@@ -1447,7 +1447,7 @@ export default function RentVsBuyCalculator() {
                       setHomeInsuranceTouched(true);
                     }}
                     placeholder="e.g. 1200"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className="w-full rounded-xl border border-slate-300 px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                     aria-invalid={!parsed.insAnnual.ok}
                   />
                   {homeInsuranceTouched &&
@@ -1472,7 +1472,7 @@ export default function RentVsBuyCalculator() {
                       setHoaTouched(true);
                     }}
                     placeholder="e.g. 0"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className="w-full rounded-xl border border-slate-300 px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                     aria-invalid={!parsed.hoa.ok}
                   />
                   {hoaTouched && !hoaFocused && !parsed.hoa.ok ? (
@@ -1498,7 +1498,7 @@ export default function RentVsBuyCalculator() {
                       setBuyClosingTouched(true);
                     }}
                     placeholder="e.g. 8000"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className="w-full rounded-xl border border-slate-300 px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                     aria-invalid={!parsed.buyClose.ok}
                   />
                   {buyClosingTouched &&
@@ -1518,7 +1518,7 @@ export default function RentVsBuyCalculator() {
                     value={sellCostPct}
                     onChange={(e) => setSellCostPct(e.target.value)}
                     placeholder="e.g. 5"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className="w-full rounded-xl border border-slate-300 px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                     aria-invalid={!parsed.sellPct.ok}
                   />
                 </div>
@@ -1526,7 +1526,7 @@ export default function RentVsBuyCalculator() {
             </div>
 
             <div className="lg:col-span-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5">
-              <h3 className="text-base font-bold text-slate-900 mb-3">
+              <h3 className="text-lg font-bold text-slate-900 mb-3">
                 Time horizon
               </h3>
 
@@ -1538,7 +1538,7 @@ export default function RentVsBuyCalculator() {
                 value={horizonYears}
                 onChange={(e) => setHorizonYears(e.target.value)}
                 placeholder="e.g. 7"
-                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                 aria-invalid={!parsed.years.ok}
               />
               <p className="mt-2 text-xs text-slate-500">
@@ -1581,7 +1581,7 @@ export default function RentVsBuyCalculator() {
           </div>
 
           {!parsed.ok ? (
-            <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6">
+            <div className="mt-3 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6">
               <div className="font-semibold text-slate-900">
                 No results to show
               </div>
@@ -1604,7 +1604,7 @@ export default function RentVsBuyCalculator() {
           ) : (
             <>
               {computed.ok && computed.warnings.length ? (
-                <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+                <div className="mt-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
                   <ul className="list-disc pl-5 space-y-1">
                     {computed.warnings.map((w, i) => (
                       <li key={i}>{w}</li>
@@ -1735,7 +1735,7 @@ export default function RentVsBuyCalculator() {
                     </p>
                   </div>
 
-                  <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 rc-print-block">
+                  <div className="my-6 rounded-2xl border border-slate-200 bg-white p-5 rc-print-block">
                     <h3 className="text-lg font-bold text-slate-900 mb-3">
                       Year-by-year comparison
                     </h3>
@@ -1820,30 +1820,9 @@ export default function RentVsBuyCalculator() {
               ) : null}
             </>
           )}
-
-          <section className="mt-10 rounded-2xl border border-slate-200 bg-white p-6 rc-print-block">
-            <h3 className="text-xl font-bold text-slate-900 mb-3">
-              Disclaimer
-            </h3>
-            <p className="text-sm text-slate-700 leading-relaxed">
-              <strong>Disclaimer:</strong>
-              <br />
-              Tools on this site are provided for informational, budgeting, and
-              comparison purposes only. Calculations are based on standard
-              time-period assumptions and simplified models. Results are
-              estimates, not guarantees.
-              <br />
-              <br />
-              This website does not provide financial, legal, or tax advice.
-              Rental costs, affordability, payment schedules, and obligations
-              vary by location, landlord, lease terms, and individual
-              circumstances. Always review your agreement and consult qualified
-              professionals before making financial decisions.
-            </p>
-          </section>
         </div>
 
-        <div className="mb-6 rounded-2xl border border-slate-200 bg-white p-5 rc-no-print mt-6">
+        <div className="mb-6  rounded-2xl border border-slate-200 bg-white p-5 rc-no-print mt-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <label className="flex items-center gap-2 text-sm text-slate-700">
               <input
@@ -1963,7 +1942,7 @@ export default function RentVsBuyCalculator() {
               </div>
             </div>
 
-            <div className="mt-10 space-y-6 text-base text-slate-700 leading-7">
+            <div className="mt-10 space-y-6 text-lg text-slate-700 leading-7">
               {/* SectionCard: what it returns */}
               <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
                 <div

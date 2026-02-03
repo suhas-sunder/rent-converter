@@ -867,13 +867,13 @@ export default function BiweeklyToMonthlyRent() {
       </section>
 
       <section id="converter" className="mx-auto max-w-6xl px-6 pb-6 mt-4">
-        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block">
-          <div className="mb-7 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-            <h1 className="text-xl capitalize sm:text-4xl font-bold text-sky-800">
+        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block sm:pt-6">
+          <div className="mb-3 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <h1 className="text-2xl sm:text-left text-center capitalize sm:text-4xl text-sky-800 font-bold">
               Instant biweekly to monthly conversion
             </h1>
 
-            <div className="rc-no-print flex flex-col sm:flex-row gap-2">
+            <div className="rc-no-print flex-col sm:flex-row gap-2 hidden sm:flex">
               <button
                 type="button"
                 onClick={handlePrint}
@@ -884,14 +884,15 @@ export default function BiweeklyToMonthlyRent() {
             </div>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-12">
-            <div className="md:col-span-6 min-w-0">
+          <div className="grid gap-5">
+            <div>
               <label
                 htmlFor={amountInputId}
-                className="block text-sm sm:text-[0.95rem] font-semibold text-slate-800 mb-2"
+                className="block text-sm font-semibold text-slate-700 mb-2"
               >
                 Biweekly rent amount (every 14 days)
               </label>
+
               <div className="flex gap-2">
                 <input
                   id={amountInputId}
@@ -901,10 +902,11 @@ export default function BiweeklyToMonthlyRent() {
                   onBlur={() => setAmountFocused(false)}
                   onChange={(e) => setAmount(e.target.value)}
                   placeholder="e.g. 1000 or 1000.50"
-                  className="w-full rounded-xl border border-slate-300 px-4 py-3.5 text-base sm:text-[1.05rem] leading-6 outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus-visible:border-sky-500"
+                  className="w-full rounded-xl border border-slate-300 px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={amount.trim().length > 0 && !parsedBiweekly.ok}
                   aria-describedby="rc-amount-help rc-amount-error"
                 />
+
                 <select
                   value={currency}
                   onChange={(e) =>
@@ -914,7 +916,7 @@ export default function BiweeklyToMonthlyRent() {
                         : "USD",
                     )
                   }
-                  className="rounded-xl border border-slate-300 bg-white px-3 py-3.5 text-sm sm:text-base font-semibold outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus-visible:border-sky-500"
+                  className="rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-label="Currency"
                 >
                   {SUPPORTED_CURRENCIES.map((c) => (
@@ -934,11 +936,7 @@ export default function BiweeklyToMonthlyRent() {
                   {parsedBiweekly.error}
                 </p>
               ) : parsedBiweekly.warnings.length ? (
-                <div
-                  className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3.5 text-sm text-amber-950"
-                  role="status"
-                  aria-live="polite"
-                >
+                <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
                   <div className="font-semibold">Input interpretation note</div>
                   <ul className="mt-1 list-disc pl-5 space-y-1">
                     {parsedBiweekly.warnings.map((w, i) => (
@@ -947,25 +945,14 @@ export default function BiweeklyToMonthlyRent() {
                   </ul>
                 </div>
               ) : null}
-            </div>
 
-            <div className="md:col-span-6 min-w-0">
-              <label className="block text-sm sm:text-[0.95rem] font-semibold text-slate-800 mb-2">
-                Display settings
-              </label>
-
-              <div className="grid gap-3 sm:grid-cols-3">
-                <div className="rounded-xl border col-span-1 border-slate-200 bg-white px-4 py-3.5 shadow-[0_1px_0_rgba(15,23,42,0.02)]">
-                  <div className="text-xs text-slate-600">From</div>
-                  <div className="mt-1 text-base font-bold text-slate-900">
+              <div className="mt-2">
+                <div className="flex items-center justify-between  px-1">
+                  <span className="text-sm font-semibold text-slate-800">
                     {PERIOD_LABEL.biweekly}
-                  </div>
-                </div>
-                <div className="rounded-xl col-span-1 sm:col-span-2 border border-slate-200 bg-white px-4 py-3.5 shadow-[0_1px_0_rgba(15,23,42,0.02)]">
-                  <div className="text-xs text-slate-600">To</div>
-                  <div className="mt-1 text-base font-bold text-slate-900">
+                    <span className="mx-2 text-slate-400">→</span>
                     {PERIOD_LABEL.monthly}
-                  </div>
+                  </span>
                 </div>
               </div>
             </div>
@@ -995,7 +982,7 @@ export default function BiweeklyToMonthlyRent() {
               ) : (
                 <>
                   <div className="mt-3 flex flex-col gap-2">
-                    <div className="text-4xl sm:text-5xl font-extrabold text-emerald-700 rc-tabular leading-none min-h-[3.25rem] sm:min-h-[4rem]">
+                    <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700 rc-tabular leading-none min-h-[3.25rem] sm:min-h-[4rem]">
                       <span className="rc-amount">
                         {fmt(monthlyHeadlineScaled)}
                       </span>
@@ -1051,7 +1038,7 @@ export default function BiweeklyToMonthlyRent() {
                     </div>
                   </div>
 
-                  <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                     {(
                       [
                         ["Hourly", breakdownScaled!.hourly, "hourly"],
@@ -1179,7 +1166,7 @@ export default function BiweeklyToMonthlyRent() {
             </div>
           </div>
 
-          <p className="mt-6 text-sm sm:text-[0.95rem] text-slate-600 leading-relaxed">
+          <p className="my-6 text-sm text-slate-500">
             Assumptions: year = 365 days, week = 7 days, biweekly = 14 days,
             4-week = 28 days, month = 365 ÷ 12 days (average). Actual due dates
             and proration rules vary by lease.
@@ -1557,26 +1544,6 @@ export default function BiweeklyToMonthlyRent() {
               </div>
             </details>
           ))}
-        </div>
-      </section>
-
-      <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
-            <strong>Disclaimer:</strong>
-            <br />
-            Tools on this site are for informational, budgeting, and comparison
-            use. Calculations rely on standard time-period assumptions
-            (including a 365-day year and an average month length) and
-            simplified models. Outputs are estimates intended to illustrate
-            equivalents, not to predict exact lease billing outcomes.
-            <br />
-            <br />
-            This website does not provide financial, legal, or tax advice. Rent,
-            payment schedules, proration, fees, and obligations vary by
-            location, landlord, and contract terms. Review your agreement for
-            the rules that apply to you.
-          </p>
         </div>
       </section>
 
