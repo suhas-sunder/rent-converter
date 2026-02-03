@@ -856,46 +856,19 @@ export default function MonthlyToDailyRent() {
               </div>
             ) : (
               <>
-                <div className="text-sm text-slate-600">
-                  Daily equivalent (365-day basis)
+                <div className="flex items-center gap-2">
+                  <div
+                    className="h-2 w-2 rounded-full bg-sky-600"
+                    aria-hidden="true"
+                  />
+                  <div className="text-sm font-semibold text-slate-800">
+                    Daily equivalent (365-day basis)
+                  </div>
                 </div>
 
                 <div className="mt-2 flex flex-col gap-2">
                   <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700">
                     {fmt(breakdown.daily)}
-                  </div>
-                  <div className="text-sm text-slate-600">
-                    {fmt(breakdown.monthly)}{" "}
-                    {PERIOD_LABEL.monthly.toLowerCase()} is approximately{" "}
-                    <strong>{fmt(breakdown.daily)}</strong>{" "}
-                    {PERIOD_LABEL.daily.toLowerCase()} using annual equivalence
-                  </div>
-
-                  <div className="rc-no-print mt-2 flex flex-wrap gap-2">
-                    <button
-                      type="button"
-                      onClick={() => handleCopy("daily", fmt(breakdown.daily))}
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-                    >
-                      {copiedKey === "daily" ? "Copied" : "Copy daily"}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleCopy(
-                          "summary",
-                          `Monthly: ${fmt(breakdown.monthly)} | Daily: ${fmt(breakdown.daily)} | Annual equiv: ${fmt(breakdown.annualEquiv)}`,
-                        )
-                      }
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-                    >
-                      {copiedKey === "summary" ? "Copied" : "Copy summary"}
-                    </button>
-                    {copiedKey === "copy_failed" ? (
-                      <span className="self-center text-sm font-semibold text-rose-700">
-                        Copy failed
-                      </span>
-                    ) : null}
                   </div>
                 </div>
 
@@ -930,7 +903,7 @@ export default function MonthlyToDailyRent() {
                     </div>
                   ))}
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3 rc-print-block">
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-3 rc-print-block">
                     <div className="text-xs text-slate-500">
                       4-week (28-day) and monthly comparison
                     </div>
@@ -951,31 +924,6 @@ export default function MonthlyToDailyRent() {
                     <p className="mt-2 text-xs text-slate-500">
                       This uses an average month length (365 ÷ 12 days). A
                       4-week period is 28 days, so the totals diverge over time.
-                    </p>
-                  </div>
-
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3 rc-print-block">
-                    <div className="text-xs text-slate-500">
-                      Context (schedule-style totals)
-                    </div>
-                    <div className="mt-2 grid gap-2 sm:grid-cols-2">
-                      <div className="text-sm text-slate-700">
-                        Monthly × 12:{" "}
-                        <strong className="text-slate-900">
-                          {fmt(breakdown.annualFromMonthly12)}
-                        </strong>
-                      </div>
-                      <div className="text-sm text-slate-700">
-                        Weekly × 52:{" "}
-                        <strong className="text-slate-900">
-                          {fmt(breakdown.annualFromWeekly52)}
-                        </strong>
-                      </div>
-                    </div>
-                    <p className="mt-2 text-xs text-slate-500">
-                      These are illustrative payment-count multiplications. The
-                      conversion breakdown uses day-based annual equivalence
-                      (365-day year, average month length).
                     </p>
                   </div>
                 </div>

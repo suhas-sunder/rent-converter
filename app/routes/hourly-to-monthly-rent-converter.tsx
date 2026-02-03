@@ -933,63 +933,7 @@ export default function HourlyToMonthlyRent() {
                     </div>
                   ))}
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
-                    <div className="flex items-center gap-2">
-                      <div
-                        className="h-2 w-2 rounded-full bg-sky-600"
-                        aria-hidden="true"
-                      />
-                      <div className="text-xs font-medium text-slate-600">
-                        Month length comparison (average month vs 30-day month)
-                      </div>
-                    </div>
-
-                    <div className="mt-3 grid gap-2 sm:grid-cols-3">
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
-                        <div className="text-xs font-medium text-slate-600">
-                          30-day month estimate
-                        </div>
-                        <div className="mt-1 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
-                          {fmt(breakdownScaled!.monthly30Day)}
-                        </div>
-                        <div className="mt-1 text-xs text-slate-600">
-                          Computed as hourly × 24 × 30
-                        </div>
-                      </div>
-
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
-                        <div className="text-xs font-medium text-slate-600">
-                          Average-month equivalence
-                        </div>
-                        <div className="mt-1 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
-                          {fmt(breakdownScaled!.monthlyAvg)}
-                        </div>
-                        <div className="mt-1 text-xs text-slate-600">
-                          Uses 365 ÷ 12 days per month
-                        </div>
-                      </div>
-
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
-                        <div className="text-xs font-medium text-slate-600">
-                          Difference
-                        </div>
-                        <div className="mt-1 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
-                          {fmt(breakdownScaled!.monthDelta)}
-                        </div>
-                        <div className="mt-1 text-xs text-slate-600 tabular-nums whitespace-nowrap">
-                          ≈ {formatPercent(breakdownScaled!.monthDeltaPct, 2)}
-                        </div>
-                      </div>
-                    </div>
-
-                    <p className="mt-3 text-sm text-slate-600 leading-relaxed">
-                      This page uses the average-month approach so the monthly
-                      amount aligns with annual equivalence. A fixed 30-day
-                      month is shorter than an average month and can drift.
-                    </p>
-                  </div>
-
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-3 shadow-sm">
                     <div className="flex items-center gap-2">
                       <div
                         className="h-2 w-2 rounded-full bg-sky-600"
@@ -1092,14 +1036,6 @@ export default function HourlyToMonthlyRent() {
                 <option value={6}>6</option>
               </select>
             </div>
-          </div>
-
-          <div className="mt-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-800">
-            <div className="font-semibold">Math basis</div>
-            <p className="mt-1 text-sm text-slate-700 leading-relaxed">
-              Monthly = (hourly × 24 × 365) ÷ 12 using a 365-day year and an
-              average month length.
-            </p>
           </div>
         </div>
       </section>

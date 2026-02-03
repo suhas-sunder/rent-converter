@@ -836,58 +836,19 @@ export default function MonthlyToHourlyRent() {
               </div>
             ) : (
               <>
-                <div className="text-sm text-slate-600">
-                  Hourly equivalent (365-day basis)
+                <div className="flex items-center gap-2">
+                  <div
+                    className="h-2 w-2 rounded-full bg-sky-600"
+                    aria-hidden="true"
+                  />
+                  <div className="text-sm font-semibold text-slate-800">
+                    Hourly equivalent (365-day basis)
+                  </div>
                 </div>
 
                 <div className="mt-2 flex flex-col gap-2">
                   <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700 tabular-nums tracking-tight">
                     {fmt(breakdown.hourly)}
-                  </div>
-                  <div className="text-sm text-slate-600 leading-relaxed">
-                    <span className="tabular-nums">
-                      {fmt(breakdown.monthly)}
-                    </span>{" "}
-                    {PERIOD_LABEL.monthly.toLowerCase()} is approximately{" "}
-                    <strong className="tabular-nums">
-                      {fmt(breakdown.hourly)}
-                    </strong>{" "}
-                    {PERIOD_LABEL.hourly.toLowerCase()} using annual equivalence
-                  </div>
-
-                  <div className="rc-no-print mt-2 flex flex-wrap gap-2">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleCopy("hourly", fmt(breakdown.hourly))
-                      }
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-                    >
-                      {copiedKey === "hourly" ? "Copied" : "Copy hourly"}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleCopy(
-                          "summary",
-                          `Monthly: ${fmt(breakdown.monthly)} | Hourly: ${fmt(
-                            breakdown.hourly,
-                          )} | Annual equiv: ${fmt(breakdown.annualEquiv)}`,
-                        )
-                      }
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-                    >
-                      {copiedKey === "summary" ? "Copied" : "Copy summary"}
-                    </button>
-                    {copiedKey === "copy_failed" ? (
-                      <span
-                        className="self-center text-sm font-semibold text-rose-700"
-                        role="status"
-                        aria-live="polite"
-                      >
-                        Copy failed
-                      </span>
-                    ) : null}
                   </div>
                 </div>
 
@@ -922,56 +883,7 @@ export default function MonthlyToHourlyRent() {
                     </div>
                   ))}
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3 rc-print-block">
-                    <div className="text-xs text-slate-500">
-                      Month length comparison (average month vs 30-day month)
-                    </div>
-
-                    <div className="mt-2 grid gap-2 sm:grid-cols-3">
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
-                        <div className="text-xs text-slate-500">
-                          30-day month estimate
-                        </div>
-                        <div className="mt-1 text-sm font-bold text-slate-800 tabular-nums">
-                          {fmt(breakdown.hourly30Day)}
-                        </div>
-                        <div className="mt-1 text-xs text-slate-500">
-                          Computed as monthly ÷ (30 × 24)
-                        </div>
-                      </div>
-
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
-                        <div className="text-xs text-slate-500">
-                          Average-month equivalence
-                        </div>
-                        <div className="mt-1 text-sm font-bold text-slate-800 tabular-nums">
-                          {fmt(breakdown.hourlyAvgMonth)}
-                        </div>
-                        <div className="mt-1 text-xs text-slate-500">
-                          Uses (365 ÷ 12) days per month
-                        </div>
-                      </div>
-
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
-                        <div className="text-xs text-slate-500">Difference</div>
-                        <div className="mt-1 text-sm font-bold text-slate-800 tabular-nums">
-                          {fmt(breakdown.hourDelta)}
-                        </div>
-                        <div className="mt-1 text-xs text-slate-500 tabular-nums">
-                          ≈ {safeToFixed(breakdown.hourDeltaPct * 100, 2)}%
-                        </div>
-                      </div>
-                    </div>
-
-                    <p className="mt-3 text-xs text-slate-500 leading-relaxed">
-                      This page uses the average-month approach so monthly
-                      amounts convert into hourly values that remain consistent
-                      with a 365-day annual basis. A fixed 30-day month can
-                      shift the hourly equivalent.
-                    </p>
-                  </div>
-
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3 rc-print-block">
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-3 rc-print-block">
                     <div className="text-xs text-slate-500">
                       Monthly vs 4-week context
                     </div>

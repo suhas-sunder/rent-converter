@@ -824,58 +824,19 @@ export default function MonthlyToWeeklyRent() {
               </div>
             ) : (
               <>
-                <div className="text-sm text-slate-600">
-                  Weekly equivalent (365-day basis)
+                <div className="flex items-center gap-2">
+                  <div
+                    className="h-2 w-2 rounded-full bg-sky-600"
+                    aria-hidden="true"
+                  />
+                  <div className="text-sm font-semibold text-slate-800">
+                    Weekly equivalent (365-day basis)
+                  </div>
                 </div>
 
                 <div className="mt-2 flex flex-col gap-2">
                   <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700 tabular-nums tracking-tight">
                     {fmt(breakdown.weekly)}
-                  </div>
-                  <div className="text-sm text-slate-600 leading-relaxed">
-                    <span className="tabular-nums">
-                      {fmt(breakdown.monthly)}
-                    </span>{" "}
-                    {PERIOD_LABEL.monthly.toLowerCase()} is approximately{" "}
-                    <strong className="tabular-nums">
-                      {fmt(breakdown.weekly)}
-                    </strong>{" "}
-                    {PERIOD_LABEL.weekly.toLowerCase()} using annual equivalence
-                  </div>
-
-                  <div className="rc-no-print mt-2 flex flex-wrap gap-2">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleCopy("weekly", fmt(breakdown.weekly))
-                      }
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-                    >
-                      {copiedKey === "weekly" ? "Copied" : "Copy weekly"}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleCopy(
-                          "summary",
-                          `Monthly: ${fmt(breakdown.monthly)} | Weekly: ${fmt(
-                            breakdown.weekly,
-                          )} | Annual equiv: ${fmt(breakdown.annualEquiv)}`,
-                        )
-                      }
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-                    >
-                      {copiedKey === "summary" ? "Copied" : "Copy summary"}
-                    </button>
-                    {copiedKey === "copy_failed" ? (
-                      <span
-                        className="self-center text-sm font-semibold text-rose-700"
-                        role="status"
-                        aria-live="polite"
-                      >
-                        Copy failed
-                      </span>
-                    ) : null}
                   </div>
                 </div>
 
@@ -910,7 +871,7 @@ export default function MonthlyToWeeklyRent() {
                     </div>
                   ))}
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3 rc-print-block">
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-3 rc-print-block">
                     <div className="text-xs text-slate-500">
                       Monthly vs 4-week (28-day) comparison
                     </div>
@@ -932,56 +893,6 @@ export default function MonthlyToWeeklyRent() {
                       A 4-week period is 28 days. An average month is about
                       30.42 days (365 ÷ 12). Different periods can produce
                       different annual totals.
-                    </p>
-                  </div>
-
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3 rc-print-block">
-                    <div className="text-xs text-slate-500">
-                      Annual payment-count context (illustrative)
-                    </div>
-                    <div className="mt-2 grid gap-2 sm:grid-cols-3">
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
-                        <div className="text-xs text-slate-500">
-                          Monthly × 12
-                        </div>
-                        <div className="mt-1 text-sm font-bold text-slate-800 tabular-nums">
-                          {fmt(breakdown.annualFromMonthly12)}
-                        </div>
-                        <div className="mt-1 text-xs text-slate-500">
-                          Common schedule count (12 payments)
-                        </div>
-                      </div>
-
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
-                        <div className="text-xs text-slate-500">
-                          Weekly × 52
-                        </div>
-                        <div className="mt-1 text-sm font-bold text-slate-800 tabular-nums">
-                          {fmt(breakdown.annualFromWeekly52)}
-                        </div>
-                        <div className="mt-1 text-xs text-slate-500">
-                          Calendar week count (52 weeks)
-                        </div>
-                      </div>
-
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
-                        <div className="text-xs text-slate-500">
-                          4-week × 13
-                        </div>
-                        <div className="mt-1 text-sm font-bold text-slate-800 tabular-nums">
-                          {fmt(breakdown.annualFrom4w13)}
-                        </div>
-                        <div className="mt-1 text-xs text-slate-500">
-                          Calendar cycle count (13 payments)
-                        </div>
-                      </div>
-                    </div>
-
-                    <p className="mt-3 text-xs text-slate-500 leading-relaxed">
-                      This illustrates how common schedule counts relate to
-                      annual totals. The breakdown itself uses a day-based
-                      annual equivalence (365-day year) so periods remain
-                      comparable.
                     </p>
                   </div>
                 </div>

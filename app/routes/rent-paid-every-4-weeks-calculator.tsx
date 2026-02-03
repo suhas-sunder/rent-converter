@@ -798,7 +798,7 @@ export default function RentPaidEvery4Weeks() {
             </div>
           </div>
 
-          <div className="grid gap-5">
+          <div className="grid gap-x-5 gap-y-3">
             <div>
               <label
                 htmlFor="rc-4w-amount"

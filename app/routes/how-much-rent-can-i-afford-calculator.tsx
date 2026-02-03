@@ -939,7 +939,9 @@ export default function HowMuchRentCanIAfford() {
                 Affordability results
               </div>
             </div>
-
+            <div className="mt-1 text-4xl sm:text-6xl font-extrabold text-emerald-700 tabular-nums whitespace-nowrap">
+              {fmt(annualIncomeScaled!)}
+            </div>
             {!canShowResults ? (
               <div className="mt-3 rounded-xl border border-slate-200 bg-white px-4 py-4 text-slate-800">
                 <div className="font-semibold">No results to show</div>
@@ -949,56 +951,6 @@ export default function HowMuchRentCanIAfford() {
               </div>
             ) : (
               <>
-                <div className="mt-3 rounded-xl border border-slate-200 bg-white p-4">
-                  <div className="text-sm text-slate-600">
-                    Annualized income (365-day basis)
-                  </div>
-                  <div className="mt-1 text-4xl sm:text-6xl font-extrabold text-emerald-700 tabular-nums whitespace-nowrap">
-                    {fmt(annualIncomeScaled!)}
-                  </div>
-
-                  <div className="mt-2 text-sm text-slate-700 leading-relaxed">
-                    Income input:{" "}
-                    <strong className="text-slate-900 tabular-nums whitespace-nowrap">
-                      {fmt(incomeScaled)}
-                    </strong>{" "}
-                    ({PERIOD_LABEL[period]})
-                  </div>
-
-                  <div className="rc-no-print mt-3 flex flex-wrap gap-2">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleCopy("annualIncome", fmt(annualIncomeScaled!))
-                      }
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
-                    >
-                      {copiedKey === "annualIncome"
-                        ? "Copied"
-                        : "Copy annualized income"}
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleCopy(
-                          "summary",
-                          `Income: ${fmt(incomeScaled)} (${PERIOD_LABEL[period]}) | Annualized: ${fmt(annualIncomeScaled!)}`,
-                        )
-                      }
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
-                    >
-                      {copiedKey === "summary" ? "Copied" : "Copy summary"}
-                    </button>
-
-                    {copiedKey === "copy_failed" ? (
-                      <span className="self-center text-sm font-semibold text-rose-700">
-                        Copy failed
-                      </span>
-                    ) : null}
-                  </div>
-                </div>
-
                 <div className="mt-6 grid gap-4 sm:grid-cols-3 rc-print-block">
                   {affordability!.map((row) => (
                     <div
@@ -1037,11 +989,13 @@ export default function HowMuchRentCanIAfford() {
                   ))}
                 </div>
 
-                <p className="mt-4 text-sm text-slate-600 leading-relaxed">
-                  These are income-share targets, not guarantees. Real
-                  affordability depends on utilities, debt, savings, insurance,
-                  location, and lease terms.
-                </p>
+                <div className="mt-4 sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-3 shadow-sm">
+                  <p className="text-sm text-slate-600 leading-relaxed">
+                    These are income-share targets, not guarantees. Real
+                    affordability depends on utilities, debt, savings,
+                    insurance, location, and lease terms.
+                  </p>
+                </div>
               </>
             )}
           </div>

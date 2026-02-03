@@ -852,49 +852,18 @@ export default function MonthlyToBiweeklyRent() {
               </div>
             ) : (
               <>
-                <div className="text-sm text-slate-600">
-                  Biweekly equivalent (14-day basis)
+                <div className="flex items-center gap-2">
+                  <div
+                    className="h-2 w-2 rounded-full bg-sky-600"
+                    aria-hidden="true"
+                  />
+                  <div className="text-sm font-semibold text-slate-800">
+                    Biweekly equivalent (14-day basis)
+                  </div>
                 </div>
-
                 <div className="mt-2 flex flex-col gap-2">
                   <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700">
                     {fmt(breakdown.biweekly)}
-                  </div>
-                  <div className="text-sm text-slate-600">
-                    {fmt(breakdown.monthly)}{" "}
-                    {PERIOD_LABEL.monthly.toLowerCase()} ≈{" "}
-                    <strong>{fmt(breakdown.biweekly)}</strong>{" "}
-                    {PERIOD_LABEL.biweekly.toLowerCase()} using annual
-                    equivalence
-                  </div>
-
-                  <div className="rc-no-print mt-2 flex flex-wrap gap-2">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleCopy("biweekly", fmt(breakdown.biweekly))
-                      }
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-                    >
-                      {copiedKey === "biweekly" ? "Copied" : "Copy biweekly"}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleCopy(
-                          "summary",
-                          `Monthly: ${fmt(breakdown.monthly)} | Biweekly: ${fmt(breakdown.biweekly)} | Annual equiv: ${fmt(breakdown.annualEquiv)} | Monthly×12: ${fmt(breakdown.annualFromMonthly12)}`,
-                        )
-                      }
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-                    >
-                      {copiedKey === "summary" ? "Copied" : "Copy summary"}
-                    </button>
-                    {copiedKey === "copy_failed" ? (
-                      <span className="self-center text-sm font-semibold text-rose-700">
-                        Copy failed
-                      </span>
-                    ) : null}
                   </div>
                 </div>
 
@@ -929,7 +898,7 @@ export default function MonthlyToBiweeklyRent() {
                     </div>
                   ))}
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3 rc-print-block">
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-3 rc-print-block">
                     <div className="text-xs text-slate-500">
                       Monthly vs 4-week context
                     </div>
@@ -953,84 +922,6 @@ export default function MonthlyToBiweeklyRent() {
                       their equivalents can diverge.
                     </p>
                   </div>
-
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3 rc-print-block">
-                    <div className="text-xs text-slate-500">
-                      Payment-count context (illustrative)
-                    </div>
-
-                    <div className="mt-2 grid gap-2 sm:grid-cols-3">
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
-                        <div className="text-xs text-slate-500">
-                          Monthly × 12
-                        </div>
-                        <div className="mt-1 text-sm font-bold text-slate-800">
-                          {fmt(breakdown.annualFromMonthly12)}
-                        </div>
-                        <div className="mt-1 text-xs text-slate-500">
-                          Common schedule framing
-                        </div>
-                      </div>
-
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
-                        <div className="text-xs text-slate-500">
-                          Biweekly × 26
-                        </div>
-                        <div className="mt-1 text-sm font-bold text-slate-800">
-                          {fmt(breakdown.annualFromBiweekly26)}
-                        </div>
-                        <div className="mt-1 text-xs text-slate-500">
-                          Common schedule framing
-                        </div>
-                      </div>
-
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
-                        <div className="text-xs text-slate-500">
-                          4-week × 13
-                        </div>
-                        <div className="mt-1 text-sm font-bold text-slate-800">
-                          {fmt(breakdown.annualFrom4w13)}
-                        </div>
-                        <div className="mt-1 text-xs text-slate-500">
-                          Illustrative 13-payment framing
-                        </div>
-                      </div>
-                    </div>
-
-                    <p className="mt-3 text-xs text-slate-500">
-                      These are schedule-style multiplications shown for
-                      context. The breakdown uses day-based annual equivalence
-                      (365-day year, average month length).
-                    </p>
-                  </div>
-
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3 rc-print-block">
-                    <div className="text-xs text-slate-500">
-                      Why monthly ÷ 2 can be misleading
-                    </div>
-                    <p className="mt-2 text-sm text-slate-700">
-                      Monthly ÷ 2 produces a half-month number, not a 14-day
-                      number. This page shows both so the difference is visible.
-                    </p>
-                    <div className="mt-2 grid gap-2 sm:grid-cols-2">
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
-                        <div className="text-xs text-slate-500">
-                          Monthly ÷ 2 (half-month)
-                        </div>
-                        <div className="mt-1 text-sm font-bold text-slate-800">
-                          {fmt(breakdown.monthlyDiv2)}
-                        </div>
-                      </div>
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
-                        <div className="text-xs text-slate-500">
-                          Biweekly equivalent (14 days)
-                        </div>
-                        <div className="mt-1 text-sm font-bold text-slate-800">
-                          {fmt(breakdown.biweekly)}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </>
             )}
@@ -1051,16 +942,7 @@ export default function MonthlyToBiweeklyRent() {
           </div>
         </div>
 
-        <div className="md:col-span-6 mt-6">
-          <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4">
-            <div className="text-xs text-slate-500">Key distinction</div>
-            <p className="mt-1 text-sm text-slate-700">
-              Biweekly means every 14 days. Twice per month is a monthly
-              schedule. This page converts a monthly amount to a 14-day
-              equivalent using the same annual basis as the full breakdown.
-            </p>
-          </div>
-
+        <div className="md:col-span-6 ">
           <div className="rounded-xl border border-slate-200 bg-white p-4 mt-6">
             <div className="rc-no-print md:hidden flex flex-col sm:flex-row gap-2 mb-4">
               <button

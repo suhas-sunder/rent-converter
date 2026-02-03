@@ -1038,7 +1038,7 @@ export default function RentAfterIncrease() {
             </div>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-12">
+          <div className="grid gap-x-5 gap-y-4 md:grid-cols-12">
             <div className="md:col-span-6">
               <label className="block text-sm font-semibold text-slate-700 mb-2">
                 Current rent
@@ -1052,7 +1052,7 @@ export default function RentAfterIncrease() {
                   setCurrentRent(e.target.value.replace(/,/g, ""))
                 }
                 placeholder="e.g. 2000 or 2000.00"
-                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-lg outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
+                className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
                 aria-invalid={currentInvalid}
                 aria-describedby={currentDescribedBy}
               />
@@ -1110,7 +1110,7 @@ export default function RentAfterIncrease() {
 
             <div className="md:col-span-6">
               <label className="block text-sm font-semibold text-slate-700 mb-2">
-                Increase type
+                Increase type (% applies to annualized rent)
               </label>
               <select
                 value={mode}
@@ -1123,15 +1123,12 @@ export default function RentAfterIncrease() {
                 <option value="percent">Percent increase</option>
                 <option value="amount">Fixed amount increase</option>
               </select>
-              <p className="mt-2 text-xs text-slate-500 leading-relaxed">
-                Percent applies to annualized rent. Fixed amount is treated as
-                an add-on per the selected billing period.
-              </p>
             </div>
 
             <div className="md:col-span-6">
               <label className="block text-sm font-semibold text-slate-700 mb-2">
-                {mode === "percent" ? "Increase percent" : "Increase amount"}
+                {mode === "percent" ? "Increase percent" : "Increase amount"}{" "}
+                (Enter a %: eg. 2.5)
               </label>
 
               {mode === "percent" ? (
@@ -1141,14 +1138,10 @@ export default function RentAfterIncrease() {
                     value={increasePercent}
                     onChange={(e) => setIncreasePercent(e.target.value)}
                     placeholder="e.g. 5 or 2.5"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-3 text-lg outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
+                    className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
                     aria-invalid={!pctParsed.ok}
                     aria-describedby={increaseDescribedBy}
                   />
-                  <p id="rc-inc-help" className="mt-2 text-xs text-slate-500">
-                    Enter a percent like 5, 2.5, or 5%. If invalid, results are
-                    not shown.
-                  </p>
                   {!pctParsed.ok ? (
                     <p
                       id="rc-inc-error"
@@ -1222,7 +1215,7 @@ export default function RentAfterIncrease() {
               )}
             </div>
 
-            <div className="md:col-span-6">
+            <div className="md:col-span-12">
               <label className="block text-sm font-semibold text-slate-700 mb-2">
                 Currency
               </label>
@@ -1243,8 +1236,6 @@ export default function RentAfterIncrease() {
                 ))}
               </select>
             </div>
-
-            <div className="md:col-span-6" />
           </div>
 
           <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
@@ -1275,60 +1266,19 @@ export default function RentAfterIncrease() {
               </div>
             ) : (
               <>
-                <div className="text-sm text-slate-600">
-                  New rent after increase
+                <div className="flex items-center gap-2">
+                  <div
+                    className="h-2 w-2 rounded-full bg-sky-600"
+                    aria-hidden="true"
+                  />
+                  <div className="text-sm font-semibold text-slate-800">
+                    New rent after increase
+                  </div>
                 </div>
 
                 <div className="mt-2 flex flex-col gap-2">
                   <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700 tabular-nums tracking-tight">
                     {fmt(computed.newPerSelected)}
-                  </div>
-                  <div className="text-sm text-slate-600 leading-relaxed">
-                    <span className="tabular-nums">
-                      {fmt(computed.oldPerSelected)}
-                    </span>{" "}
-                    per {PERIOD_LABEL[period].toLowerCase()} becomes{" "}
-                    <strong className="tabular-nums">
-                      {fmt(computed.newPerSelected)}
-                    </strong>{" "}
-                    per {PERIOD_LABEL[period].toLowerCase()} using annual
-                    equivalence.
-                  </div>
-
-                  <div className="rc-no-print mt-2 flex flex-wrap gap-2">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleCopy("new", fmt(computed.newPerSelected))
-                      }
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-                    >
-                      {copiedKey === "new" ? "Copied" : "Copy new rent"}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleCopy(
-                          "summary",
-                          `New per ${PERIOD_LABEL[period]}: ${fmt(
-                            computed.newPerSelected,
-                          )} | Annual increase: ${fmt(computed.annualIncrease)} | New annual: ${fmt(
-                            computed.annualNew,
-                          )}`,
-                        )
-                      }
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-                    >
-                      {copiedKey === "summary" ? "Copied" : "Copy summary"}
-                    </button>
-                    {copiedKey === "copy_failed" ? (
-                      <span
-                        className="self-center text-sm font-semibold text-rose-700"
-                        role="status"
-                      >
-                        Copy failed
-                      </span>
-                    ) : null}
                   </div>
                 </div>
 
@@ -1384,7 +1334,7 @@ export default function RentAfterIncrease() {
                     </div>
                   </div>
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3 rc-print-block">
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-3 rc-print-block">
                     <div className="text-xs text-slate-500">
                       Monthly vs every 4 weeks (before and after)
                     </div>

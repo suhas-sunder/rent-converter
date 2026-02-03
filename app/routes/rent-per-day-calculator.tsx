@@ -848,7 +848,7 @@ export default function RentPerDayCalculator() {
             </div>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-12">
+          <div className="grid gap-x-5 gap-y-3 md:grid-cols-12">
             <div className="md:col-span-6">
               <label
                 htmlFor={amountInputId}

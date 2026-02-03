@@ -1899,7 +1899,7 @@ export default function RentVsBuyCalculator() {
 
         <div className="relative p-6 sm:p-10">
           <div className="mx-auto max-w-4xl">
-            <div className="flex flex-col gap-4 sm:gap-5">
+            <div className="flex flex-col gap-4 sm:gap-x-5 gap-y-3">
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0">
                   <h2 className="text-3xl sm:text-4xl font-extrabold text-sky-900 tracking-tight leading-tight">
