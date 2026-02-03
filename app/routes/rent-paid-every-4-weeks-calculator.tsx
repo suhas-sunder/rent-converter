@@ -835,7 +835,7 @@ export default function RentPaidEvery4Weeks() {
                     }
                   }}
                   placeholder="e.g. 650 or 650.00"
-                  className={`w-full rounded-xl border px-4 py-3.5 text-lg outline-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
+                  className={`w-full rounded-xl border px-4 py-2.5 text-lg outline-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
                     parsed.ok
                       ? "border-slate-300 focus:border-sky-600"
                       : "border-rose-300 focus:border-rose-500"
@@ -859,7 +859,7 @@ export default function RentPaidEvery4Weeks() {
                       isCurrency(e.target.value) ? e.target.value : "USD",
                     )
                   }
-                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3.5 py-3.5 text-sm font-semibold outline-none transition hover:bg-sky-50 hover:border-sky-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus:border-sky-600"
+                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm font-semibold outline-none transition hover:bg-sky-50 hover:border-sky-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus:border-sky-600"
                   aria-label="Currency"
                 >
                   {SUPPORTED_CURRENCIES.map((c) => (
@@ -878,7 +878,7 @@ export default function RentPaidEvery4Weeks() {
                   {parsed.error}
                 </p>
               ) : (parsed as any).warnings?.length ? (
-                <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
                   <div className="font-semibold">Input interpretation note</div>
                   <ul className="mt-1 list-disc pl-5 space-y-1">
                     {(parsed as any).warnings.map((w: string, i: number) => (
@@ -921,7 +921,7 @@ export default function RentPaidEvery4Weeks() {
                   ))}
                 </ul>
                 {computed.warnings.length ? (
-                  <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                  <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
                     <div className="font-semibold">Notes</div>
                     <ul className="mt-1 list-disc pl-5 space-y-1">
                       {computed.warnings.map((w, i) => (
@@ -1020,7 +1020,7 @@ export default function RentPaidEvery4Weeks() {
                   ).map(([label, val, key]) => (
                     <div
                       key={key}
-                      className="rounded-xl border border-slate-200 border-t-2 border-t-sky-100 bg-white px-4 py-3.5 shadow-sm"
+                      className="rounded-xl border border-slate-200 border-t-2 border-t-sky-100 bg-white px-4 py-2.5 shadow-sm"
                     >
                       <div className="text-xs text-slate-600">{label}</div>
                       <div className="mt-1 text-lg font-bold text-slate-900 tabular-nums whitespace-nowrap">
@@ -1029,12 +1029,12 @@ export default function RentPaidEvery4Weeks() {
                     </div>
                   ))}
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3.5 shadow-sm">
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-2.5 shadow-sm">
                     <div className="text-xs text-slate-600">
                       4-week vs monthly (same annual basis)
                     </div>
                     <div className="mt-2 grid gap-2 sm:grid-cols-3">
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
+                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-2">
                         <div className="text-xs text-slate-600">
                           4-week amount
                         </div>
@@ -1046,7 +1046,7 @@ export default function RentPaidEvery4Weeks() {
                         </div>
                       </div>
 
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
+                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-2">
                         <div className="text-xs text-slate-600">
                           Monthly equivalent
                         </div>
@@ -1058,7 +1058,7 @@ export default function RentPaidEvery4Weeks() {
                         </div>
                       </div>
 
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
+                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-2">
                         <div className="text-xs text-slate-600">Difference</div>
                         <div className="mt-1 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
                           {fmtMoney(computed.monthlyMinus4wScaled)}
@@ -1077,12 +1077,12 @@ export default function RentPaidEvery4Weeks() {
                     </p>
                   </div>
 
-                  <div className="sm:col-span-2  lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3.5 shadow-sm">
+                  <div className="sm:col-span-2  lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-2.5 shadow-sm">
                     <div className="text-xs text-slate-600">
                       Annual comparison: 13 payments vs 365-day equivalence
                     </div>
                     <div className="mt-2 grid gap-2 sm:grid-cols-3">
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
+                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-2">
                         <div className="text-xs text-slate-600">
                           4-week × 13
                         </div>
@@ -1094,7 +1094,7 @@ export default function RentPaidEvery4Weeks() {
                         </div>
                       </div>
 
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
+                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-2">
                         <div className="text-xs text-slate-600">
                           Annual (365-day basis)
                         </div>
@@ -1106,7 +1106,7 @@ export default function RentPaidEvery4Weeks() {
                         </div>
                       </div>
 
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
+                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-2">
                         <div className="text-xs text-slate-600">Difference</div>
                         <div className="mt-1 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
                           {fmtMoney(computed.diffAnnualScaled)}
@@ -1126,7 +1126,7 @@ export default function RentPaidEvery4Weeks() {
                 </div>
 
                 {computed.warnings.length ? (
-                  <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 rc-no-print">
+                  <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900 rc-no-print">
                     <div className="font-semibold">Notes</div>
                     <ul className="mt-1 list-disc pl-5 space-y-1">
                       {computed.warnings.map((w, i) => (
@@ -1138,7 +1138,7 @@ export default function RentPaidEvery4Weeks() {
               </>
             )}
           </div>
-          <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+          <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-2 text-sm text-slate-700">
             <div className="font-semibold">Assumptions used on this page</div>
             <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
               <li>1 year = 365 days</li>
@@ -1238,77 +1238,77 @@ export default function RentPaidEvery4Weeks() {
               <table className="min-w-full bg-white">
                 <thead className="bg-slate-50">
                   <tr>
-                    <th className="text-left text-sm font-semibold text-slate-700 px-4 py-3">
+                    <th className="text-left text-sm font-semibold text-slate-700 px-4 py-2">
                       Schedule
                     </th>
-                    <th className="text-left text-sm font-semibold text-slate-700 px-4 py-3">
+                    <th className="text-left text-sm font-semibold text-slate-700 px-4 py-2">
                       Length
                     </th>
-                    <th className="text-left text-sm font-semibold text-slate-700 px-4 py-3">
+                    <th className="text-left text-sm font-semibold text-slate-700 px-4 py-2">
                       Payments per 52-week year
                     </th>
-                    <th className="text-left text-sm font-semibold text-slate-700 px-4 py-3">
+                    <th className="text-left text-sm font-semibold text-slate-700 px-4 py-2">
                       Periods per 365-day year (approx.)
                     </th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr className="border-t border-slate-200">
-                    <td className="px-4 py-3 text-sm text-slate-900 font-semibold">
+                    <td className="px-4 py-2 text-sm text-slate-900 font-semibold">
                       Monthly
                     </td>
-                    <td className="px-4 py-3 text-sm text-slate-800">
+                    <td className="px-4 py-2 text-sm text-slate-800">
                       Calendar month
                     </td>
-                    <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
+                    <td className="px-4 py-2 text-sm text-slate-800 tabular-nums">
                       12 payments
                     </td>
-                    <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
+                    <td className="px-4 py-2 text-sm text-slate-800 tabular-nums">
                       12 months
                     </td>
                   </tr>
 
                   <tr className="border-t border-slate-200 bg-slate-50/40">
-                    <td className="px-4 py-3 text-sm text-slate-900 font-semibold">
+                    <td className="px-4 py-2 text-sm text-slate-900 font-semibold">
                       Every 4 weeks (28 days)
                     </td>
-                    <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
+                    <td className="px-4 py-2 text-sm text-slate-800 tabular-nums">
                       28 days
                     </td>
-                    <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
+                    <td className="px-4 py-2 text-sm text-slate-800 tabular-nums">
                       13 payments
                     </td>
-                    <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
+                    <td className="px-4 py-2 text-sm text-slate-800 tabular-nums">
                       {safeToFixed(365 / 28, 2)} periods
                     </td>
                   </tr>
 
                   <tr className="border-t border-slate-200">
-                    <td className="px-4 py-3 text-sm text-slate-900 font-semibold">
+                    <td className="px-4 py-2 text-sm text-slate-900 font-semibold">
                       Biweekly (every 2 weeks)
                     </td>
-                    <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
+                    <td className="px-4 py-2 text-sm text-slate-800 tabular-nums">
                       14 days
                     </td>
-                    <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
+                    <td className="px-4 py-2 text-sm text-slate-800 tabular-nums">
                       26 payments
                     </td>
-                    <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
+                    <td className="px-4 py-2 text-sm text-slate-800 tabular-nums">
                       {safeToFixed(365 / 14, 2)} periods
                     </td>
                   </tr>
 
                   <tr className="border-t border-slate-200 bg-slate-50/40">
-                    <td className="px-4 py-3 text-sm text-slate-900 font-semibold">
+                    <td className="px-4 py-2 text-sm text-slate-900 font-semibold">
                       Weekly
                     </td>
-                    <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
+                    <td className="px-4 py-2 text-sm text-slate-800 tabular-nums">
                       7 days
                     </td>
-                    <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
+                    <td className="px-4 py-2 text-sm text-slate-800 tabular-nums">
                       52 payments
                     </td>
-                    <td className="px-4 py-3 text-sm text-slate-800 tabular-nums">
+                    <td className="px-4 py-2 text-sm text-slate-800 tabular-nums">
                       {safeToFixed(365 / 7, 2)} weeks
                     </td>
                   </tr>

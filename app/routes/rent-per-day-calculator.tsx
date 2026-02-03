@@ -888,7 +888,7 @@ export default function RentPerDayCalculator() {
                     setAmount(sanitized);
                   }}
                   placeholder="e.g. 2000 or 2000.00"
-                  className="w-full min-w-0 rounded-xl border border-slate-300 px-4 py-3 text-lg text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
+                  className="w-full min-w-0 rounded-xl border border-slate-300 px-4 py-2 text-lg text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
                   aria-invalid={!parsedAmount.ok}
                   aria-describedby={`${amountHelpId}${!parsedAmount.ok ? ` ${amountErrorId}` : ""}`}
                 />
@@ -899,7 +899,7 @@ export default function RentPerDayCalculator() {
                       isCurrency(e.target.value) ? e.target.value : "USD",
                     )
                   }
-                  className="rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
+                  className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
                   aria-label="Currency"
                 >
                   {SUPPORTED_CURRENCIES.map((c) => (
@@ -934,7 +934,7 @@ export default function RentPerDayCalculator() {
                 onChange={(e) =>
                   setFrom(isPeriod(e.target.value) ? e.target.value : "monthly")
                 }
-                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-lg text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
+                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
               >
                 <option value="hourly">{PERIOD_LABEL.hourly}</option>
                 <option value="daily">{PERIOD_LABEL.daily}</option>
@@ -1056,7 +1056,7 @@ export default function RentPerDayCalculator() {
                       ).map(([label, val, key]) => (
                         <div
                           key={key}
-                          className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm"
+                          className="rounded-xl border border-slate-200 bg-white px-4 py-2 shadow-sm"
                         >
                           <div className="text-xs text-slate-600">{label}</div>
                           <div className="mt-1 text-lg font-bold text-slate-900 tabular-nums whitespace-nowrap">
@@ -1066,7 +1066,7 @@ export default function RentPerDayCalculator() {
                       ))}
                     </div>
 
-                    <div className="mt-4 rounded-xl border border-slate-200 bg-[#f7fbff] px-4 py-3">
+                    <div className="mt-4 rounded-xl border border-slate-200 bg-[#f7fbff] px-4 py-2">
                       <div className="text-xs text-slate-700">
                         Monthly vs every 4-week (same annual basis)
                       </div>
@@ -1115,7 +1115,7 @@ export default function RentPerDayCalculator() {
                         value={daysCount}
                         onChange={(e) => setDaysCount(e.target.value)}
                         placeholder="e.g. 30"
-                        className="w-full rounded-xl border border-slate-300 px-4 py-3 text-lg text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
+                        className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
                         aria-invalid={!parsedDays.ok}
                         aria-describedby={
                           !parsedDays.ok ? daysErrorId : undefined
@@ -1131,7 +1131,7 @@ export default function RentPerDayCalculator() {
                         </p>
                       ) : null}
 
-                      <div className="mt-4 rounded-xl border border-slate-200 bg-[#f7fbff] px-4 py-3">
+                      <div className="mt-4 rounded-xl border border-slate-200 bg-[#f7fbff] px-4 py-2">
                         <div className="text-xs text-slate-700">
                           Estimated total
                         </div>
@@ -1157,7 +1157,7 @@ export default function RentPerDayCalculator() {
               </>
             )}
           </div>
-          <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+          <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-2 text-sm text-slate-700">
             <div className="font-semibold">Assumptions used on this page</div>
             <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
               <li>1 year = 365 days</li>

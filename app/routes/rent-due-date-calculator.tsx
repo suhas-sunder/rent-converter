@@ -1073,7 +1073,7 @@ export default function RentDueDateCalculator() {
                   onBlur={() => setAmountFocused(false)}
                   onChange={(e) => setAmount(e.target.value)}
                   placeholder="e.g. 2000 or 2000.00"
-                  className="col-span-7 rounded-xl border border-slate-300 px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="col-span-7 rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!parsedAmount.ok}
                 />
                 <select
@@ -1083,7 +1083,7 @@ export default function RentDueDateCalculator() {
                       isCurrency(e.target.value) ? e.target.value : "USD",
                     )
                   }
-                  className="col-span-5 rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="col-span-5 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-label="Currency"
                 >
                   {SUPPORTED_CURRENCIES.map((c) => (
@@ -1099,7 +1099,7 @@ export default function RentDueDateCalculator() {
                   {parsedAmount.error}
                 </p>
               ) : parsedAmount.warnings.length ? (
-                <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
                   <div className="font-semibold">Input interpretation note</div>
                   <ul className="mt-1 list-disc pl-5 space-y-1">
                     {parsedAmount.warnings.map((w, i) => (
@@ -1121,7 +1121,7 @@ export default function RentDueDateCalculator() {
                     isBillingCycle(e.target.value) ? e.target.value : "monthly",
                   )
                 }
-                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
               >
                 {(
                   [
@@ -1147,7 +1147,7 @@ export default function RentDueDateCalculator() {
                 type="date"
                 value={asOfDate}
                 onChange={(e) => setAsOfDate(e.target.value)}
-                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
               />
             </div>
 
@@ -1163,7 +1163,7 @@ export default function RentDueDateCalculator() {
                       e.target.value === "end_date" ? "end_date" : "years",
                     )
                   }
-                  className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                 >
                   <option value="years">Years ahead</option>
                   <option value="end_date">End date</option>
@@ -1173,7 +1173,7 @@ export default function RentDueDateCalculator() {
                   <select
                     value={yearsAhead}
                     onChange={(e) => setYearsAhead(e.target.value)}
-                    className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   >
                     {["1", "2", "3", "5"].map((y) => (
                       <option key={y} value={y}>
@@ -1186,7 +1186,7 @@ export default function RentDueDateCalculator() {
                     type="date"
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
-                    className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   />
                 )}
               </div>
@@ -1203,7 +1203,7 @@ export default function RentDueDateCalculator() {
                   value={dueDayMonthly}
                   onChange={(e) => setDueDayMonthly(e.target.value)}
                   placeholder="e.g. 1"
-                  className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-label="Monthly due day"
                 />
               ) : (
@@ -1211,7 +1211,7 @@ export default function RentDueDateCalculator() {
                   type="date"
                   value={anchorDate}
                   onChange={(e) => setAnchorDate(e.target.value)}
-                  className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                 />
               )}
             </div>
@@ -1232,7 +1232,7 @@ export default function RentDueDateCalculator() {
                   ))}
                 </ul>
                 {computed.warnings.length ? (
-                  <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                  <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
                     <div className="font-semibold">Notes</div>
                     <ul className="mt-1 list-disc pl-5 space-y-1">
                       {computed.warnings.map((w, i) => (
@@ -1245,7 +1245,7 @@ export default function RentDueDateCalculator() {
             ) : (
               <>
                 <div className="grid gap-4 lg:grid-cols-3">
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
+                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2">
                     <div className="text-xs text-slate-500">
                       Next estimated due date
                     </div>
@@ -1254,7 +1254,7 @@ export default function RentDueDateCalculator() {
                     </div>
                   </div>
 
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
+                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2">
                     <div className="text-xs text-slate-500">
                       Payments in horizon
                     </div>
@@ -1263,7 +1263,7 @@ export default function RentDueDateCalculator() {
                     </div>
                   </div>
 
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
+                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2">
                     <div className="text-xs text-slate-500">
                       Total rent paid by end date
                     </div>
@@ -1301,7 +1301,7 @@ export default function RentDueDateCalculator() {
                 </div>
 
                 <div className="mt-3 rounded-2xl border border-slate-200 bg-white overflow-hidden rc-print-block">
-                  <div className="px-4 py-3 border-b border-slate-200">
+                  <div className="px-4 py-2 border-b border-slate-200">
                     <div className="text-sm font-semibold text-slate-800">
                       Upcoming due dates
                     </div>
@@ -1312,14 +1312,14 @@ export default function RentDueDateCalculator() {
                   </div>
                   <ul className="divide-y divide-slate-200 max-h-[360px] overflow-auto">
                     {schedule.length === 0 ? (
-                      <li className="px-4 py-3 text-sm text-slate-600">
+                      <li className="px-4 py-2 text-sm text-slate-600">
                         No due dates in the selected range.
                       </li>
                     ) : (
                       schedule.map((d, idx) => (
                         <li
                           key={idx}
-                          className="flex items-center justify-between px-4 py-3"
+                          className="flex items-center justify-between px-4 py-2"
                         >
                           <div className="text-sm text-slate-700">
                             Payment {idx + 1}
@@ -1347,13 +1347,13 @@ export default function RentDueDateCalculator() {
                     <table className="w-full text-sm">
                       <thead className="bg-slate-50 text-slate-700">
                         <tr>
-                          <th className="text-left px-4 py-3 font-semibold">
+                          <th className="text-left px-4 py-2 font-semibold">
                             Month
                           </th>
-                          <th className="text-right px-4 py-3 font-semibold">
+                          <th className="text-right px-4 py-2 font-semibold">
                             Payments in month
                           </th>
-                          <th className="text-right px-4 py-3 font-semibold">
+                          <th className="text-right px-4 py-2 font-semibold">
                             Total paid in month
                           </th>
                         </tr>
@@ -1361,13 +1361,13 @@ export default function RentDueDateCalculator() {
                       <tbody className="divide-y divide-slate-200">
                         {computed.monthRows.map((r) => (
                           <tr key={r.key}>
-                            <td className="px-4 py-3 text-slate-700">
+                            <td className="px-4 py-2 text-slate-700">
                               {r.label}
                             </td>
-                            <td className="px-4 py-3 text-right font-semibold text-slate-800">
+                            <td className="px-4 py-2 text-right font-semibold text-slate-800">
                               {r.payments}
                             </td>
-                            <td className="px-4 py-3 text-right font-semibold text-slate-800">
+                            <td className="px-4 py-2 text-right font-semibold text-slate-800">
                               {fmtMoney(r.totalScaled)}
                             </td>
                           </tr>
@@ -1390,13 +1390,13 @@ export default function RentDueDateCalculator() {
                     <table className="w-full text-sm">
                       <thead className="bg-slate-50 text-slate-700">
                         <tr>
-                          <th className="text-left px-4 py-3 font-semibold">
+                          <th className="text-left px-4 py-2 font-semibold">
                             Year
                           </th>
-                          <th className="text-right px-4 py-3 font-semibold">
+                          <th className="text-right px-4 py-2 font-semibold">
                             Payments
                           </th>
-                          <th className="text-right px-4 py-3 font-semibold">
+                          <th className="text-right px-4 py-2 font-semibold">
                             Total
                           </th>
                         </tr>
@@ -1405,7 +1405,7 @@ export default function RentDueDateCalculator() {
                         {computed.yearTotals.length === 0 ? (
                           <tr>
                             <td
-                              className="px-4 py-3 text-slate-600"
+                              className="px-4 py-2 text-slate-600"
                               colSpan={3}
                             >
                               No payments in the selected range.
@@ -1414,13 +1414,13 @@ export default function RentDueDateCalculator() {
                         ) : (
                           computed.yearTotals.map((r) => (
                             <tr key={r.year}>
-                              <td className="px-4 py-3 text-slate-700">
+                              <td className="px-4 py-2 text-slate-700">
                                 {r.year}
                               </td>
-                              <td className="px-4 py-3 text-right font-semibold text-slate-800">
+                              <td className="px-4 py-2 text-right font-semibold text-slate-800">
                                 {r.payments}
                               </td>
-                              <td className="px-4 py-3 text-right font-semibold text-slate-800">
+                              <td className="px-4 py-2 text-right font-semibold text-slate-800">
                                 {fmtMoney(r.totalScaled)}
                               </td>
                             </tr>
@@ -1444,13 +1444,13 @@ export default function RentDueDateCalculator() {
                     <table className="w-full text-sm">
                       <thead className="bg-slate-50 text-slate-700">
                         <tr>
-                          <th className="text-left px-4 py-3 font-semibold">
+                          <th className="text-left px-4 py-2 font-semibold">
                             Billing cycle
                           </th>
-                          <th className="text-right px-4 py-3 font-semibold">
+                          <th className="text-right px-4 py-2 font-semibold">
                             Payments per year
                           </th>
-                          <th className="text-right px-4 py-3 font-semibold">
+                          <th className="text-right px-4 py-2 font-semibold">
                             Standard annual total
                           </th>
                         </tr>
@@ -1458,13 +1458,13 @@ export default function RentDueDateCalculator() {
                       <tbody className="divide-y divide-slate-200">
                         {computed.standardAnnualTotals.map((r) => (
                           <tr key={r.key}>
-                            <td className="px-4 py-3 text-slate-700">
+                            <td className="px-4 py-2 text-slate-700">
                               {r.label}
                             </td>
-                            <td className="px-4 py-3 text-right font-semibold text-slate-800">
+                            <td className="px-4 py-2 text-right font-semibold text-slate-800">
                               {r.paymentsPerYear}
                             </td>
-                            <td className="px-4 py-3 text-right font-semibold text-slate-800">
+                            <td className="px-4 py-2 text-right font-semibold text-slate-800">
                               {fmtMoney(r.annualScaled)}
                             </td>
                           </tr>
@@ -1473,7 +1473,7 @@ export default function RentDueDateCalculator() {
                     </table>
                   </div>
 
-                  <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+                  <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2">
                     <div className="text-xs text-slate-500">
                       Selected cycle (standard annual total)
                     </div>
@@ -1488,7 +1488,7 @@ export default function RentDueDateCalculator() {
                 </section>
 
                 {computed.warnings.length ? (
-                  <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 rc-no-print">
+                  <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900 rc-no-print">
                     <div className="font-semibold">Notes</div>
                     <ul className="mt-1 list-disc pl-5 space-y-1">
                       {computed.warnings.map((w, i) => (
@@ -1501,7 +1501,7 @@ export default function RentDueDateCalculator() {
             )}
           </div>
 
-          <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+          <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-2 text-sm text-slate-700">
             <div className="font-semibold">Assumptions used on this page</div>
             <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
               <li>1 year = 365 days</li>

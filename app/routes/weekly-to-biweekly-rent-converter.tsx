@@ -895,7 +895,7 @@ export default function WeeklyToBiweeklyRent() {
                     setAmountBlurred(true);
                   }}
                   placeholder="e.g. 450"
-                  className="w-full rounded-xl border border-slate-300 px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={amountBlurred && !!amountBlurError}
                 />
 
@@ -908,7 +908,7 @@ export default function WeeklyToBiweeklyRent() {
                         : "USD",
                     )
                   }
-                  className="rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-label="Currency"
                 >
                   {SUPPORTED_CURRENCIES.map((c) => (
@@ -1029,7 +1029,7 @@ export default function WeeklyToBiweeklyRent() {
                   ).map(([label, val, key]) => (
                     <div
                       key={key}
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-3"
+                      className="rounded-xl border border-slate-200 bg-white px-4 py-2"
                     >
                       <div className="text-xs text-slate-500">{label}</div>
                       <div className="mt-1 text-lg font-bold text-slate-800">
@@ -1038,7 +1038,7 @@ export default function WeeklyToBiweeklyRent() {
                     </div>
                   ))}
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-2">
                     <div className="text-xs text-slate-500">
                       Monthly vs 4-week context (same annual basis)
                     </div>
@@ -1066,12 +1066,12 @@ export default function WeeklyToBiweeklyRent() {
                     </p>
                   </div>
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-2">
                     <div className="text-xs text-slate-500">
                       Payment-count illustrations (calendar counts)
                     </div>
                     <div className="mt-2 grid gap-2 sm:grid-cols-2">
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
+                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-2">
                         <div className="text-xs text-slate-500">
                           Weekly x 52
                         </div>
@@ -1082,7 +1082,7 @@ export default function WeeklyToBiweeklyRent() {
                           Common count (52 payments)
                         </div>
                       </div>
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
+                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-2">
                         <div className="text-xs text-slate-500">
                           Biweekly x 26
                         </div>
@@ -1103,7 +1103,7 @@ export default function WeeklyToBiweeklyRent() {
                 </div>
               </div>
 
-              <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+              <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-2 text-sm text-slate-700">
                 <div className="font-semibold">
                   Assumptions used on this page
                 </div>

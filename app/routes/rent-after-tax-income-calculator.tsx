@@ -980,7 +980,7 @@ export default function RentAfterTaxIncome() {
                   {grossParsed.error}
                 </p>
               ) : grossParsed.warnings.length ? (
-                <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
                   <div className="font-semibold">Input interpretation note</div>
                   <ul className="mt-1 list-disc pl-5 space-y-1">
                     {grossParsed.warnings.map((w, i) => (
@@ -1048,7 +1048,7 @@ export default function RentAfterTaxIncome() {
                       isPeriod(e.target.value) ? e.target.value : "monthly",
                     )
                   }
-                  className="col-span-5 rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="col-span-5 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-label="Rent period"
                 >
                   {Object.entries(PERIOD_LABEL).map(([k, v]) => (
@@ -1063,7 +1063,7 @@ export default function RentAfterTaxIncome() {
                   {rentParsed.error}
                 </p>
               ) : rentParsed.warnings.length ? (
-                <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
                   <div className="font-semibold">Input interpretation note</div>
                   <ul className="mt-1 list-disc pl-5 space-y-1">
                     {rentParsed.warnings.map((w, i) => (
@@ -1085,7 +1085,7 @@ export default function RentAfterTaxIncome() {
                     isCurrency(e.target.value) ? e.target.value : "USD",
                   )
                 }
-                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                 aria-label="Currency"
               >
                 {SUPPORTED_CURRENCIES.map((c) => (
@@ -1113,7 +1113,7 @@ export default function RentAfterTaxIncome() {
                   ))}
                 </ul>
                 {computed.warnings.length ? (
-                  <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                  <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
                     <div className="font-semibold">Notes</div>
                     <ul className="mt-1 list-disc pl-5 space-y-1">
                       {computed.warnings.map((w, i) => (
@@ -1142,7 +1142,7 @@ export default function RentAfterTaxIncome() {
                 </div>
 
                 <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
+                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2">
                     <div className="text-xs text-slate-500">
                       Annual pre-tax income (annualized)
                     </div>
@@ -1151,7 +1151,7 @@ export default function RentAfterTaxIncome() {
                     </div>
                   </div>
 
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
+                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2">
                     <div className="text-xs text-slate-500">
                       Annual after-tax income (estimated)
                     </div>
@@ -1160,7 +1160,7 @@ export default function RentAfterTaxIncome() {
                     </div>
                   </div>
 
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
+                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2">
                     <div className="text-xs text-slate-500">
                       Annual after-tax income left after rent
                     </div>
@@ -1169,7 +1169,7 @@ export default function RentAfterTaxIncome() {
                     </div>
                   </div>
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-3 rc-print-block">
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-2 rc-print-block">
                     <div className="text-xs text-slate-500">
                       Monthly vs every 4 weeks (derived from annual totals)
                     </div>
@@ -1231,7 +1231,7 @@ export default function RentAfterTaxIncome() {
                 </div>
 
                 {computed.warnings.length ? (
-                  <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                  <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
                     <div className="font-semibold">Notes</div>
                     <ul className="mt-1 list-disc pl-5 space-y-1">
                       {computed.warnings.map((w, i) => (
@@ -1291,7 +1291,7 @@ export default function RentAfterTaxIncome() {
               </div>
             </div>
           ) : null}
-          <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+          <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-2 text-sm text-slate-700">
             <div className="font-semibold">Assumptions used on this page</div>
             <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
               <li>1 year = 365 days</li>

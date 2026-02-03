@@ -909,7 +909,7 @@ export default function RentPerPerson() {
                 onBlur={() => setIsTotalRentFocused(false)}
                 onChange={(e) => handleTotalRentChange(e.target.value)}
                 placeholder="e.g. 2400 or 2400.00"
-                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-lg text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
+                className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
                 aria-invalid={!parsedRent.ok}
                 aria-describedby={`${totalRentHelpId}${!parsedRent.ok ? ` ${totalRentErrorId}` : ""}`}
               />
@@ -940,7 +940,7 @@ export default function RentPerPerson() {
                     isPeriod(e.target.value) ? e.target.value : "monthly",
                   )
                 }
-                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-lg text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
+                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
               >
                 {(Object.keys(PERIOD_LABEL) as Period[]).map((p) => (
                   <option key={p} value={p}>
@@ -963,7 +963,7 @@ export default function RentPerPerson() {
                 value={people}
                 onChange={(e) => setPeople(e.target.value)}
                 placeholder="e.g. 3"
-                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-lg text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
+                className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
                 aria-invalid={!parsedPeople.ok}
                 aria-describedby={`${peopleHelpId}${!parsedPeople.ok ? ` ${peopleErrorId}` : ""}`}
               />
@@ -993,7 +993,7 @@ export default function RentPerPerson() {
                     isCurrency(e.target.value) ? e.target.value : "USD",
                   )
                 }
-                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-lg font-semibold text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
+                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg font-semibold text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
                 aria-label="Currency"
               >
                 {SUPPORTED_CURRENCIES.map((c) => (
@@ -1096,7 +1096,7 @@ export default function RentPerPerson() {
                 </div>
 
                 <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2 shadow-sm">
                     <div className="text-xs text-slate-600">
                       Annual per person (annualized)
                     </div>
@@ -1105,7 +1105,7 @@ export default function RentPerPerson() {
                     </div>
                   </div>
 
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2 shadow-sm">
                     <div className="text-xs text-slate-600">
                       Annual total (annualized)
                     </div>
@@ -1114,7 +1114,7 @@ export default function RentPerPerson() {
                     </div>
                   </div>
 
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2 shadow-sm">
                     <div className="text-xs text-slate-600">
                       Cents remainder for the split
                     </div>
@@ -1126,7 +1126,7 @@ export default function RentPerPerson() {
                     </div>
                   </div>
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-2 shadow-sm">
                     <div className="text-xs text-slate-600">
                       Monthly (average) vs every 4 weeks (per person)
                     </div>
@@ -1198,7 +1198,7 @@ export default function RentPerPerson() {
             )}
           </div>
 
-          <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+          <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-2 text-sm text-slate-700">
             <div className="font-semibold">Assumptions used on this page</div>
             <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
               <li>1 year = 365 days</li>

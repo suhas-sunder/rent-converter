@@ -873,7 +873,7 @@ export default function RentPerPaycheck() {
                     setAmount(nextRaw);
                   }}
                   placeholder="e.g. 2000 or 2000.00"
-                  className="w-full min-w-0 rounded-xl border border-slate-300 px-4 py-3 text-lg text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
+                  className="w-full min-w-0 rounded-xl border border-slate-300 px-4 py-2 text-lg text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
                   aria-invalid={!parsedAmount.ok}
                   aria-describedby={`${amountHelpId}${!parsedAmount.ok ? ` ${amountErrorId}` : ""}`}
                 />
@@ -884,7 +884,7 @@ export default function RentPerPaycheck() {
                       isCurrency(e.target.value) ? e.target.value : "USD",
                     )
                   }
-                  className="rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
+                  className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
                   aria-label="Currency"
                 >
                   {SUPPORTED_CURRENCIES.map((c) => (
@@ -921,7 +921,7 @@ export default function RentPerPaycheck() {
                     isRentPeriod(e.target.value) ? e.target.value : "monthly",
                   )
                 }
-                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-lg text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
+                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
               >
                 {(Object.keys(RENT_PERIOD_LABEL) as RentPeriod[]).map((p) => (
                   <option key={p} value={p}>
@@ -948,7 +948,7 @@ export default function RentPerPaycheck() {
                       : "biweekly",
                   )
                 }
-                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-lg text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
+                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
               >
                 {(Object.keys(PAY_LABEL) as PayFrequency[]).map((p) => (
                   <option key={p} value={p}>
@@ -1045,7 +1045,7 @@ export default function RentPerPaycheck() {
                   ).map(([label, val, key]) => (
                     <div
                       key={key}
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm"
+                      className="rounded-xl border border-slate-200 bg-white px-4 py-2 shadow-sm"
                     >
                       <div className="text-xs text-slate-600">{label}</div>
                       <div className="mt-1 text-lg font-bold text-slate-900 tabular-nums whitespace-nowrap">
@@ -1056,7 +1056,7 @@ export default function RentPerPaycheck() {
                 </div>
 
                 <div className="mt-3 grid gap-3 sm:grid-cols-3">
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2 shadow-sm">
                     <div className="text-xs text-slate-600">
                       Equivalent monthly cost
                     </div>
@@ -1067,7 +1067,7 @@ export default function RentPerPaycheck() {
                       Annual total divided by 12 months.
                     </div>
                   </div>
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2 shadow-sm">
                     <div className="text-xs text-slate-600">
                       Equivalent 4-week cost
                     </div>
@@ -1078,7 +1078,7 @@ export default function RentPerPaycheck() {
                       Annual total divided by 13 four-week periods.
                     </div>
                   </div>
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2 shadow-sm">
                     <div className="text-xs text-slate-600">Annual total</div>
                     <div className="mt-1 text-lg font-bold text-slate-900 tabular-nums whitespace-nowrap">
                       {fmtMoney(computed.annualRentScaled)}
@@ -1114,82 +1114,82 @@ export default function RentPerPaycheck() {
               <table className="w-full text-sm">
                 <thead className="bg-slate-50 text-slate-800">
                   <tr>
-                    <th className="text-left px-4 py-3 font-semibold">Type</th>
-                    <th className="text-left px-4 py-3 font-semibold">Cycle</th>
-                    <th className="text-right px-4 py-3 font-semibold">
+                    <th className="text-left px-4 py-2 font-semibold">Type</th>
+                    <th className="text-left px-4 py-2 font-semibold">Cycle</th>
+                    <th className="text-right px-4 py-2 font-semibold">
                       Payments per year
                     </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200">
                   <tr className="odd:bg-white even:bg-slate-50/50">
-                    <td className="px-4 py-3 text-slate-800">Rent</td>
-                    <td className="px-4 py-3 text-slate-800">Monthly</td>
-                    <td className="px-4 py-3 text-right font-semibold text-slate-900 tabular-nums whitespace-nowrap">
+                    <td className="px-4 py-2 text-slate-800">Rent</td>
+                    <td className="px-4 py-2 text-slate-800">Monthly</td>
+                    <td className="px-4 py-2 text-right font-semibold text-slate-900 tabular-nums whitespace-nowrap">
                       {computed.ok
                         ? computed.annualCounts.rentPayments.monthly
                         : 12}
                     </td>
                   </tr>
                   <tr className="odd:bg-white even:bg-slate-50/50">
-                    <td className="px-4 py-3 text-slate-800">Rent</td>
-                    <td className="px-4 py-3 text-slate-800">
+                    <td className="px-4 py-2 text-slate-800">Rent</td>
+                    <td className="px-4 py-2 text-slate-800">
                       Every 4 weeks (28 days)
                     </td>
-                    <td className="px-4 py-3 text-right font-semibold text-slate-900 tabular-nums whitespace-nowrap">
+                    <td className="px-4 py-2 text-right font-semibold text-slate-900 tabular-nums whitespace-nowrap">
                       {computed.ok
                         ? computed.annualCounts.rentPayments.every_4_weeks
                         : 13}
                     </td>
                   </tr>
                   <tr className="odd:bg-white even:bg-slate-50/50">
-                    <td className="px-4 py-3 text-slate-800">Rent</td>
-                    <td className="px-4 py-3 text-slate-800">Weekly</td>
-                    <td className="px-4 py-3 text-right font-semibold text-slate-900 tabular-nums whitespace-nowrap">
+                    <td className="px-4 py-2 text-slate-800">Rent</td>
+                    <td className="px-4 py-2 text-slate-800">Weekly</td>
+                    <td className="px-4 py-2 text-right font-semibold text-slate-900 tabular-nums whitespace-nowrap">
                       {computed.ok
                         ? computed.annualCounts.rentPayments.weekly
                         : 52}
                     </td>
                   </tr>
                   <tr className="odd:bg-white even:bg-slate-50/50">
-                    <td className="px-4 py-3 text-slate-800">Pay</td>
-                    <td className="px-4 py-3 text-slate-800">
+                    <td className="px-4 py-2 text-slate-800">Pay</td>
+                    <td className="px-4 py-2 text-slate-800">
                       Weekly paycheck
                     </td>
-                    <td className="px-4 py-3 text-right font-semibold text-slate-900 tabular-nums whitespace-nowrap">
+                    <td className="px-4 py-2 text-right font-semibold text-slate-900 tabular-nums whitespace-nowrap">
                       {computed.ok
                         ? computed.annualCounts.paychecks.weekly
                         : 52}
                     </td>
                   </tr>
                   <tr className="odd:bg-white even:bg-slate-50/50">
-                    <td className="px-4 py-3 text-slate-800">Pay</td>
-                    <td className="px-4 py-3 text-slate-800">
+                    <td className="px-4 py-2 text-slate-800">Pay</td>
+                    <td className="px-4 py-2 text-slate-800">
                       Biweekly paycheck
                     </td>
-                    <td className="px-4 py-3 text-right font-semibold text-slate-900 tabular-nums whitespace-nowrap">
+                    <td className="px-4 py-2 text-right font-semibold text-slate-900 tabular-nums whitespace-nowrap">
                       {computed.ok
                         ? computed.annualCounts.paychecks.biweekly
                         : 26}
                     </td>
                   </tr>
                   <tr className="odd:bg-white even:bg-slate-50/50">
-                    <td className="px-4 py-3 text-slate-800">Pay</td>
-                    <td className="px-4 py-3 text-slate-800">
+                    <td className="px-4 py-2 text-slate-800">Pay</td>
+                    <td className="px-4 py-2 text-slate-800">
                       Semimonthly paycheck
                     </td>
-                    <td className="px-4 py-3 text-right font-semibold text-slate-900 tabular-nums whitespace-nowrap">
+                    <td className="px-4 py-2 text-right font-semibold text-slate-900 tabular-nums whitespace-nowrap">
                       {computed.ok
                         ? computed.annualCounts.paychecks.semimonthly
                         : 24}
                     </td>
                   </tr>
                   <tr className="odd:bg-white even:bg-slate-50/50">
-                    <td className="px-4 py-3 text-slate-800">Pay</td>
-                    <td className="px-4 py-3 text-slate-800">
+                    <td className="px-4 py-2 text-slate-800">Pay</td>
+                    <td className="px-4 py-2 text-slate-800">
                       Monthly paycheck
                     </td>
-                    <td className="px-4 py-3 text-right font-semibold text-slate-900 tabular-nums whitespace-nowrap">
+                    <td className="px-4 py-2 text-right font-semibold text-slate-900 tabular-nums whitespace-nowrap">
                       {computed.ok
                         ? computed.annualCounts.paychecks.monthly
                         : 12}
@@ -1236,7 +1236,7 @@ export default function RentPerPaycheck() {
                 ).map(([label, val, key]) => (
                   <div
                     key={key}
-                    className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm"
+                    className="rounded-xl border border-slate-200 bg-white px-4 py-2 shadow-sm"
                   >
                     <div className="text-xs text-slate-600">{label}</div>
                     <div className="mt-1 text-lg font-bold text-slate-900 tabular-nums whitespace-nowrap">
@@ -1248,7 +1248,7 @@ export default function RentPerPaycheck() {
             </section>
           ) : null}
 
-          <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+          <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-2 text-sm text-slate-700">
             <div className="font-semibold">Assumptions used on this page</div>
             <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
               <li>1 year = 365 days</li>

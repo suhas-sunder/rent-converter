@@ -836,7 +836,7 @@ export default function RentPerWeekCalculator() {
                   onFocus={() => setIsAmountFocused(true)}
                   onBlur={() => setIsAmountFocused(false)}
                   placeholder="e.g. 2000"
-                  className="w-full rounded-xl border border-slate-300 px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!parsedRent.ok}
                 />
                 <select
@@ -846,7 +846,7 @@ export default function RentPerWeekCalculator() {
                       isCurrency(e.target.value) ? e.target.value : "USD",
                     )
                   }
-                  className="rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-label="Currency"
                 >
                   {SUPPORTED_CURRENCIES.map((c) => (
@@ -876,7 +876,7 @@ export default function RentPerWeekCalculator() {
                     >,
                   );
                 }}
-                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
               >
                 {(
                   [
@@ -994,7 +994,7 @@ export default function RentPerWeekCalculator() {
                       ).map(([label, val, key]) => (
                         <div
                           key={key}
-                          className="rounded-xl border border-slate-200 bg-white px-4 py-3"
+                          className="rounded-xl border border-slate-200 bg-white px-4 py-2"
                         >
                           <div className="text-xs text-slate-500">{label}</div>
                           <div className="mt-1 text-lg font-bold text-slate-800">
@@ -1004,7 +1004,7 @@ export default function RentPerWeekCalculator() {
                       ))}
                     </div>
 
-                    <div className="mt-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
+                    <div className="mt-3 rounded-xl border border-slate-200 bg-white px-4 py-2">
                       <div className="text-xs text-slate-500">
                         4-week vs monthly comparison
                       </div>
@@ -1052,11 +1052,11 @@ export default function RentPerWeekCalculator() {
                         value={weeksCount}
                         onChange={(e) => setWeeksCount(e.target.value)}
                         placeholder="e.g. 4"
-                        className="w-full rounded-xl border border-slate-300 px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                        className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                         aria-invalid={!parsedWeeks.ok}
                       />
 
-                      <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+                      <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2">
                         <div className="text-xs text-slate-500">
                           Estimated total
                         </div>
@@ -1069,7 +1069,7 @@ export default function RentPerWeekCalculator() {
                         </div>
                       </div>
 
-                      <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+                      <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2">
                         <div className="text-xs text-slate-500">
                           Annual total (source of truth)
                         </div>
@@ -1108,7 +1108,7 @@ export default function RentPerWeekCalculator() {
             </>
           )}
 
-          <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+          <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-2 text-sm text-slate-700">
             <div className="font-semibold">Assumptions used on this page</div>
             <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
               <li>1 year = 365 days</li>

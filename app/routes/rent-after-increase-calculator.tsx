@@ -1075,7 +1075,7 @@ export default function RentAfterIncrease() {
                   {currentParsed.error}
                 </p>
               ) : currentParsed.warnings.length ? (
-                <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
                   <div className="font-semibold">Input interpretation note</div>
                   <ul className="mt-1 list-disc pl-5 space-y-1">
                     {currentParsed.warnings.map((w, i) => (
@@ -1097,7 +1097,7 @@ export default function RentAfterIncrease() {
                     isPeriod(e.target.value) ? e.target.value : "monthly",
                   )
                 }
-                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
+                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
                 aria-label="Billing period"
               >
                 {Object.entries(PERIOD_LABEL).map(([k, v]) => (
@@ -1117,7 +1117,7 @@ export default function RentAfterIncrease() {
                 onChange={(e) =>
                   setMode(isMode(e.target.value) ? e.target.value : "percent")
                 }
-                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
+                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
                 aria-label="Increase type"
               >
                 <option value="percent">Percent increase</option>
@@ -1151,7 +1151,7 @@ export default function RentAfterIncrease() {
                       {pctParsed.error}
                     </p>
                   ) : pctParsed.warnings.length ? (
-                    <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                    <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
                       <div className="font-semibold">
                         Input interpretation note
                       </div>
@@ -1174,7 +1174,7 @@ export default function RentAfterIncrease() {
                       setIncreaseAmount(e.target.value.replace(/,/g, ""))
                     }
                     placeholder="e.g. 100 or 100.00"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-3 text-lg outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
+                    className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
                     aria-invalid={!amtParsed.ok || amtDisplayError}
                     aria-describedby={increaseDescribedBy}
                   />
@@ -1200,7 +1200,7 @@ export default function RentAfterIncrease() {
                       {amtParsed.error}
                     </p>
                   ) : amtParsed.warnings.length ? (
-                    <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                    <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
                       <div className="font-semibold">
                         Input interpretation note
                       </div>
@@ -1226,7 +1226,7 @@ export default function RentAfterIncrease() {
                     isCurrency(e.target.value) ? e.target.value : "USD",
                   )
                 }
-                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
+                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
                 aria-label="Currency"
               >
                 {SUPPORTED_CURRENCIES.map((c) => (
@@ -1254,7 +1254,7 @@ export default function RentAfterIncrease() {
                   ))}
                 </ul>
                 {computed.warnings.length ? (
-                  <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                  <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
                     <div className="font-semibold">Notes</div>
                     <ul className="mt-1 list-disc pl-5 space-y-1">
                       {computed.warnings.map((w, i) => (
@@ -1283,7 +1283,7 @@ export default function RentAfterIncrease() {
                 </div>
 
                 <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
+                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2">
                     <div className="text-xs text-slate-500">
                       Estimated percent change
                     </div>
@@ -1292,7 +1292,7 @@ export default function RentAfterIncrease() {
                     </div>
                   </div>
 
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
+                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2">
                     <div className="text-xs text-slate-500">
                       Change per selected period
                     </div>
@@ -1301,7 +1301,7 @@ export default function RentAfterIncrease() {
                     </div>
                   </div>
 
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
+                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2">
                     <div className="text-xs text-slate-500">
                       Annual increase (annualized)
                     </div>
@@ -1310,7 +1310,7 @@ export default function RentAfterIncrease() {
                     </div>
                   </div>
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3 rc-print-block">
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-2 rc-print-block">
                     <div className="text-xs text-slate-500">Annual totals</div>
                     <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                       <div className="text-sm text-slate-700">
@@ -1334,7 +1334,7 @@ export default function RentAfterIncrease() {
                     </div>
                   </div>
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-3 rc-print-block">
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-2 rc-print-block">
                     <div className="text-xs text-slate-500">
                       Monthly vs every 4 weeks (before and after)
                     </div>
@@ -1372,7 +1372,7 @@ export default function RentAfterIncrease() {
                 </div>
 
                 {computed.warnings.length ? (
-                  <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                  <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
                     <div className="font-semibold">Notes</div>
                     <ul className="mt-1 list-disc pl-5 space-y-1">
                       {computed.warnings.map((w, i) => (
@@ -1430,7 +1430,7 @@ export default function RentAfterIncrease() {
             </div>
           ) : null}
 
-          <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+          <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-2 text-sm text-slate-700">
             <div className="font-semibold">Assumptions used on this page</div>
             <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
               <li>1 year = 365 days</li>

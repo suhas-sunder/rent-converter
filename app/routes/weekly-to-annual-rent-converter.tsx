@@ -795,7 +795,7 @@ export default function WeeklyToAnnualRent() {
                   onFocus={() => setIsAmountFocused(true)}
                   onBlur={() => setIsAmountFocused(false)}
                   placeholder="e.g. 550"
-                  className="w-full rounded-xl border border-slate-300 px-4 py-3 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!parsed.ok}
                 />
 
@@ -806,7 +806,7 @@ export default function WeeklyToAnnualRent() {
                       isCurrency(e.target.value) ? e.target.value : "USD",
                     )
                   }
-                  className="rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-label="Currency"
                 >
                   {SUPPORTED_CURRENCIES.map((c) => (
@@ -916,7 +916,7 @@ export default function WeeklyToAnnualRent() {
                   ).map(([label, val, key]) => (
                     <div
                       key={key}
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-3"
+                      className="rounded-xl border border-slate-200 bg-white px-4 py-2"
                     >
                       <div className="text-xs text-slate-500">{label}</div>
                       <div className="mt-1 text-lg font-bold text-slate-800">
@@ -925,13 +925,13 @@ export default function WeeklyToAnnualRent() {
                     </div>
                   ))}
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-2">
                     <div className="text-xs text-slate-500">
                       Weekly-to-year interpretation comparison
                     </div>
 
                     <div className="mt-2 grid gap-2 sm:grid-cols-3">
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
+                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-2">
                         <div className="text-xs text-slate-500">
                           52 weekly payments
                         </div>
@@ -951,7 +951,7 @@ export default function WeeklyToAnnualRent() {
                         </div>
                       </div>
 
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
+                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-2">
                         <div className="text-xs text-slate-500">
                           53 weekly payments
                         </div>
@@ -971,7 +971,7 @@ export default function WeeklyToAnnualRent() {
                         </div>
                       </div>
 
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
+                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-2">
                         <div className="text-xs text-slate-500">
                           365-day annual equivalence
                         </div>
@@ -993,7 +993,7 @@ export default function WeeklyToAnnualRent() {
                     </p>
                   </div>
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-2">
                     <div className="text-xs text-slate-500">
                       4-week vs monthly context
                     </div>
@@ -1023,7 +1023,7 @@ export default function WeeklyToAnnualRent() {
                 </div>
               </div>
 
-              <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+              <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-2 text-sm text-slate-700">
                 <div className="font-semibold">
                   Assumptions used on this page
                 </div>

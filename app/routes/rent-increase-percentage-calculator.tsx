@@ -922,7 +922,7 @@ export default function RentIncreasePercentage() {
                   );
                 }}
                 placeholder="e.g. 2000 or 2000.00"
-                className={`w-full rounded-xl border px-4 py-3.5 text-lg outline-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
+                className={`w-full rounded-xl border px-4 py-2.5 text-lg outline-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
                   oldParsed.ok
                     ? "border-slate-300 focus:border-sky-600"
                     : "border-rose-300 focus:border-rose-500"
@@ -966,7 +966,7 @@ export default function RentIncreasePercentage() {
                   );
                 }}
                 placeholder="e.g. 2100 or 2100.00"
-                className={`w-full rounded-xl border px-4 py-3.5 text-lg outline-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
+                className={`w-full rounded-xl border px-4 py-2.5 text-lg outline-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
                   newParsed.ok
                     ? "border-slate-300 focus:border-sky-600"
                     : "border-rose-300 focus:border-rose-500"
@@ -1001,7 +1001,7 @@ export default function RentIncreasePercentage() {
                     isPeriod(e.target.value) ? e.target.value : "monthly",
                   )
                 }
-                className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3.5 text-sm font-semibold outline-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus:border-sky-600"
+                className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm font-semibold outline-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus:border-sky-600"
                 aria-label="Billing period"
               >
                 {Object.entries(PERIOD_LABEL).map(([k, v]) => (
@@ -1027,7 +1027,7 @@ export default function RentIncreasePercentage() {
                     isCurrency(e.target.value) ? e.target.value : "USD",
                   )
                 }
-                className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3.5 text-sm font-semibold outline-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus:border-sky-600"
+                className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm font-semibold outline-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus:border-sky-600"
                 aria-label="Currency"
               >
                 {SUPPORTED_CURRENCIES.map((c) => (
@@ -1059,7 +1059,7 @@ export default function RentIncreasePercentage() {
                   ))}
                 </ul>
                 {computed.warnings.length ? (
-                  <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                  <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
                     <div className="font-semibold">Notes</div>
                     <ul className="mt-1 list-disc pl-5 space-y-1">
                       {computed.warnings.map((w, i) => (
@@ -1151,7 +1151,7 @@ export default function RentIncreasePercentage() {
                 </div>
 
                 <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                  <div className="rounded-xl border border-slate-200 border-t-2 border-t-sky-100 bg-white px-4 py-3.5 shadow-sm">
+                  <div className="rounded-xl border border-slate-200 border-t-2 border-t-sky-100 bg-white px-4 py-2.5 shadow-sm">
                     <div className="text-xs text-slate-600">
                       Change per selected period
                     </div>
@@ -1160,7 +1160,7 @@ export default function RentIncreasePercentage() {
                     </div>
                   </div>
 
-                  <div className="rounded-xl border border-slate-200 border-t-2 border-t-sky-100 bg-white px-4 py-3.5 shadow-sm">
+                  <div className="rounded-xl border border-slate-200 border-t-2 border-t-sky-100 bg-white px-4 py-2.5 shadow-sm">
                     <div className="text-xs text-slate-600">
                       Annual rent (old, annualized)
                     </div>
@@ -1169,7 +1169,7 @@ export default function RentIncreasePercentage() {
                     </div>
                   </div>
 
-                  <div className="rounded-xl border border-slate-200 border-t-2 border-t-sky-100 bg-white px-4 py-3.5 shadow-sm">
+                  <div className="rounded-xl border border-slate-200 border-t-2 border-t-sky-100 bg-white px-4 py-2.5 shadow-sm">
                     <div className="text-xs text-slate-600">
                       Annual rent (new, annualized)
                     </div>
@@ -1178,7 +1178,7 @@ export default function RentIncreasePercentage() {
                     </div>
                   </div>
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3.5 shadow-sm">
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-2.5 shadow-sm">
                     <div className="text-xs text-slate-600">Annual impact</div>
                     <div className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
                       <div className="text-sm text-slate-800">
@@ -1214,7 +1214,7 @@ export default function RentIncreasePercentage() {
                     </div>
                   </div>
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3.5 shadow-sm">
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-2.5 shadow-sm">
                     <div className="text-xs text-slate-600">
                       Monthly vs every 4 weeks (old and new)
                     </div>
@@ -1320,7 +1320,7 @@ export default function RentIncreasePercentage() {
                 </div>
 
                 {computed.warnings.length ? (
-                  <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 rc-no-print">
+                  <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900 rc-no-print">
                     <div className="font-semibold">Notes</div>
                     <ul className="mt-1 list-disc pl-5 space-y-1">
                       {computed.warnings.map((w, i) => (
@@ -1333,7 +1333,7 @@ export default function RentIncreasePercentage() {
             )}
           </div>
 
-          <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+          <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-2 text-sm text-slate-700">
             <div className="font-semibold">Assumptions used on this page</div>
             <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
               <li>1 year = 365 days</li>
