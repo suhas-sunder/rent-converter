@@ -860,44 +860,9 @@ export default function BiweeklyToAnnualRent() {
                         {fmt(annualHeadlineScaled)}
                       </span>
                     </div>
-                    <div className="text-sm sm:text-[0.95rem] text-slate-700 leading-relaxed">
-                      <span className="rc-amount">{fmt(biweeklyScaled)}</span>{" "}
-                      biweekly ≈{" "}
-                      <strong className="text-slate-900 rc-amount">
-                        {fmt(annualHeadlineScaled)}
-                      </strong>{" "}
-                      annual (365-day equivalence)
-                    </div>
-
-                    <div className="rc-no-print mt-2 flex flex-wrap gap-2">
-                      <button
-                        type="button"
-                        onClick={() =>
-                          handleCopy(
-                            "summary",
-                            `Biweekly: ${fmt(biweeklyScaled)} | Annual (365-day): ${fmt(
-                              annualHeadlineScaled,
-                            )} | Assumptions: biweekly=14 days, year=365 days`,
-                          )
-                        }
-                        className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fbff]"
-                      >
-                        {copiedKey === "summary" ? "Copied" : "Copy summary"}
-                      </button>
-                      <span
-                        className={`self-center text-sm font-semibold ${
-                          copiedKey === "copy_failed"
-                            ? "text-rose-700"
-                            : "sr-only"
-                        }`}
-                        role={copiedKey === "copy_failed" ? "alert" : undefined}
-                      >
-                        Copy failed
-                      </span>
-                    </div>
                   </div>
 
-                  <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  <div className=" grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                     {(
                       [
                         ["Hourly", breakdownScaled!.hourly, "hourly"],
@@ -918,7 +883,6 @@ export default function BiweeklyToAnnualRent() {
                           breakdownScaled!.monthly,
                           "monthly",
                         ],
-                        ["Annual", breakdownScaled!.annual, "annual"],
                       ] as const
                     ).map(([label, val, key]) => (
                       <div
@@ -1448,17 +1412,6 @@ export default function BiweeklyToAnnualRent() {
       <OtherUsefulTools />
       <RenterChecklists />
       <RentToolsByCountry />
-
-      <section className="max-w-6xl mx-auto px-6 pb-10 rc-no-print">
-        <p className="text-xs sm:text-sm text-slate-600 text-center leading-relaxed">
-          <em>
-            Tools on this site are for budgeting and comparison. Calculations
-            use standard time-period assumptions, including a 365-day year and
-            average month length. Always confirm payment schedules and lease
-            terms in your rental agreement.
-          </em>
-        </p>
-      </section>
 
       <script
         type="application/ld+json"

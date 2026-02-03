@@ -1011,11 +1011,6 @@ export default function BiweeklyToMonthlyRent() {
                           breakdownScaled!.every4w,
                           "every_4_weeks",
                         ],
-                        [
-                          "Monthly (average, 365 ÷ 12)",
-                          breakdownScaled!.monthly,
-                          "monthly",
-                        ],
                         ["Annual", breakdownScaled!.annual, "annual"],
                       ] as const
                     ).map(([label, val, key]) => (
@@ -1497,15 +1492,6 @@ export default function BiweeklyToMonthlyRent() {
       <OtherUsefulTools />
       <RenterChecklists />
       <RentToolsByCountry />
-
-      <section className="max-w-6xl mx-auto px-6 pb-10 rc-no-print">
-        <p className="text-xs sm:text-sm text-slate-600 text-center leading-relaxed">
-          <em>
-            Use these calculators for comparisons and budgeting. Confirm your
-            real payment schedule, due dates, and fees in your agreement.
-          </em>
-        </p>
-      </section>
 
       <script
         type="application/ld+json"

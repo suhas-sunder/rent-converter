@@ -876,7 +876,6 @@ export default function MonthlyToDailyRent() {
                   {(
                     [
                       ["Hourly", breakdown.hourly, "hourly"],
-                      ["Daily", breakdown.daily, "daily"],
                       ["Weekly", breakdown.weekly, "weekly"],
                       [
                         "Every 2 weeks (14 days)",
@@ -1453,16 +1452,6 @@ export default function MonthlyToDailyRent() {
       <OtherUsefulTools />
       <RenterChecklists />
       <RentToolsByCountry />
-
-      <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
-        <p className="text-xs text-slate-500 text-center leading-relaxed">
-          <em>
-            These tools support budgeting and comparison. Calculations use a
-            365-day year and average month length. Confirm your payment dates
-            and lease terms in your rental agreement.
-          </em>
-        </p>
-      </section>
 
       <script
         type="application/ld+json"

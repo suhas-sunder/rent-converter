@@ -1040,11 +1040,6 @@ export default function HourlyToAnnualRent() {
                         breakdownScaled!.monthly,
                         "monthly",
                       ],
-                      [
-                        "Annual (24/7 equivalence)",
-                        breakdownScaled!.annualClock,
-                        "annual",
-                      ],
                     ] as const
                   ).map(([label, val, key]) => (
                     <div
@@ -1553,15 +1548,6 @@ export default function HourlyToAnnualRent() {
       <OtherUsefulTools />
       <RenterChecklists />
       <RentToolsByCountry />
-
-      <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
-        <p className="text-xs text-slate-600 text-center leading-relaxed">
-          <em>
-            Use these calculators for comparisons and budgeting. Confirm your
-            real payment schedule, due dates, and fees in your agreement.
-          </em>
-        </p>
-      </section>
 
       <script
         type="application/ld+json"

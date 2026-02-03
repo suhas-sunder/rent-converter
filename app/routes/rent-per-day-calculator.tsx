@@ -825,10 +825,7 @@ export default function RentPerDayCalculator() {
         </nav>
       </section>
 
-      <section
-        id="calculator"
-        className="mx-auto max-w-6xl px-6 pb-6 mt-4 pt-4"
-      >
+      <section id="calculator" className="mx-auto max-w-6xl px-6 pb-6 mt-4">
         <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block sm:pt-6">
           <div className="mb-3 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
@@ -974,62 +971,24 @@ export default function RentPerDayCalculator() {
               </div>
             ) : (
               <>
-                <div className="text-sm text-slate-700">
-                  Rent per day (annual-basis)
+                <div className="flex items-center gap-2">
+                  <div
+                    className="h-2 w-2 rounded-full bg-sky-600"
+                    aria-hidden="true"
+                  />
+                  <div className="text-sm font-semibold text-slate-800">
+                    Rent per day (annual-basis)
+                  </div>
                 </div>
 
                 <div className="mt-2 flex flex-col gap-2">
                   <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700 tabular-nums break-words">
                     {fmtMoney(computed.dailyScaled)}
                   </div>
-                  <div className="text-sm text-slate-700 leading-relaxed">
-                    <span className="tabular-nums whitespace-nowrap">
-                      {fmtMoney(computed.amountScaled)}
-                    </span>{" "}
-                    per {PERIOD_LABEL[from].toLowerCase()} ≈{" "}
-                    <strong className="tabular-nums whitespace-nowrap">
-                      {fmtMoney(computed.dailyScaled)}
-                    </strong>{" "}
-                    per day
-                  </div>
-                </div>
-
-                <div className="rc-no-print mt-4 flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      handleCopy(
-                        "summary",
-                        `Daily: ${fmtMoney(computed.dailyScaled)}; Weekly: ${fmtMoney(
-                          computed.weeklyScaled,
-                        )}; Monthly: ${fmtMoney(
-                          computed.monthlyScaled,
-                        )}; Annual: ${fmtMoney(
-                          computed.annualScaled,
-                        )} (365-day basis)`,
-                      )
-                    }
-                    className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
-                  >
-                    {copiedKey === "summary" ? "Copied" : "Copy summary"}
-                  </button>
-
-                  {copiedKey === "copy_failed" ? (
-                    <span
-                      className="self-center text-sm font-semibold text-rose-700"
-                      role="alert"
-                    >
-                      Copy failed
-                    </span>
-                  ) : null}
                 </div>
 
                 <div className="mt-6 grid gap-4 lg:grid-cols-12">
                   <div className="lg:col-span-7">
-                    <h3 className="text-lg font-bold text-slate-950 mb-3">
-                      Full breakdown across periods
-                    </h3>
-
                     <div className="grid gap-3 sm:grid-cols-2">
                       {(
                         [
@@ -1064,31 +1023,6 @@ export default function RentPerDayCalculator() {
                           </div>
                         </div>
                       ))}
-                    </div>
-
-                    <div className="mt-4 rounded-xl border border-slate-200 bg-[#f7fbff] px-4 py-2">
-                      <div className="text-xs text-slate-700">
-                        Monthly vs every 4-week (same annual basis)
-                      </div>
-                      <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                        <div className="text-sm text-slate-800 leading-relaxed">
-                          Monthly minus 4-week:{" "}
-                          <strong className="text-slate-950 tabular-nums whitespace-nowrap">
-                            {fmtMoney(computed.monthlyMinus4wScaled)}
-                          </strong>
-                        </div>
-                        <div className="text-sm text-slate-800 leading-relaxed">
-                          Difference:{" "}
-                          <strong className="text-slate-950 tabular-nums whitespace-nowrap">
-                            {safeToFixed(computed.monthlyMinus4wPct, 2)}%
-                          </strong>
-                        </div>
-                      </div>
-                      <p className="mt-2 text-xs text-slate-600 leading-relaxed">
-                        A 4-week period is 28 days. An average month is about
-                        30.42 days (365 ÷ 12). The gap is period length, not a
-                        special rule.
-                      </p>
                     </div>
                   </div>
 
@@ -1157,6 +1091,28 @@ export default function RentPerDayCalculator() {
               </>
             )}
           </div>
+
+          {computed.ok ? (
+            <div className="mt-4 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-2">
+              <div className="text-xs text-slate-700">
+                Monthly vs every 4-week (same annual basis)
+              </div>
+              <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                <div className="text-sm text-slate-800 leading-relaxed">
+                  Monthly minus 4-week:{" "}
+                  <strong className="text-slate-950 tabular-nums whitespace-nowrap">
+                    {fmtMoney(computed.monthlyMinus4wScaled)}
+                  </strong>
+                </div>
+                <div className="text-sm text-slate-800 leading-relaxed">
+                  Difference:{" "}
+                  <strong className="text-slate-950 tabular-nums whitespace-nowrap">
+                    {safeToFixed(computed.monthlyMinus4wPct, 2)}%
+                  </strong>
+                </div>
+              </div>
+            </div>
+          ) : null}
           <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-2 text-sm text-slate-700">
             <div className="font-semibold">Assumptions used on this page</div>
             <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
@@ -1531,17 +1487,6 @@ export default function RentPerDayCalculator() {
       <OtherUsefulTools />
       <RenterChecklists />
       <RentToolsByCountry />
-
-      <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
-        <p className="text-xs text-slate-600 text-center leading-relaxed">
-          <em>
-            Tools on this site are for budgeting and comparison. Calculations
-            use standard time-period assumptions, including a 365-day year and
-            average month length. Always confirm payment schedules and lease
-            terms in your rental agreement.
-          </em>
-        </p>
-      </section>
 
       <script
         type="application/ld+json"

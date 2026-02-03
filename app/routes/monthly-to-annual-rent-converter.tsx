@@ -910,14 +910,13 @@ export default function MonthlyToAnnualRent() {
                       ["Hourly", breakdown.hourly, "hourly"],
                       ["Daily", breakdown.daily, "daily"],
                       ["Weekly", breakdown.weekly, "weekly"],
-                      ["Every 2 weeks", breakdown.biweekly, "biweekly"],
+                      ["Every 2 weeks (14 days)", breakdown.biweekly, "biweekly"], // TODO: rename to "Every 2 weeks", breakdown.biweekly, "biweekly"],
                       [
                         "Every 4 weeks (28 days)",
                         breakdown.every4w,
                         "every_4_weeks",
                       ],
                       ["Monthly", breakdown.monthly, "monthly"],
-                      ["Annual (equivalence)", breakdown.annualEquiv, "annual"],
                     ] as const
                   ).map(([label, val, key]) => (
                     <div

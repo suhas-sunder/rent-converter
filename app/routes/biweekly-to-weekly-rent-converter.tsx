@@ -880,7 +880,6 @@ export default function BiweeklyToWeeklyRent() {
                     [
                       ["Hourly", breakdownScaled!.hourly, "hourly"],
                       ["Daily", breakdownScaled!.daily, "daily"],
-                      ["Weekly (7 days)", breakdownScaled!.weekly, "weekly"],
                       [
                         "Every 2 weeks (14 days)",
                         breakdownScaled!.biweekly,
@@ -1373,15 +1372,6 @@ export default function BiweeklyToWeeklyRent() {
       <OtherUsefulTools />
       <RenterChecklists />
       <RentToolsByCountry />
-
-      <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
-        <p className="text-xs text-slate-500 text-center leading-relaxed">
-          <em>
-            Use these calculators for comparisons and budgeting. Confirm your
-            real payment schedule, due dates, and fees in your agreement.
-          </em>
-        </p>
-      </section>
 
       <script
         type="application/ld+json"

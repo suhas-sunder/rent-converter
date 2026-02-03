@@ -1247,9 +1247,17 @@ export default function RentDueDateCalculator() {
                 <div className="grid gap-4 lg:grid-cols-3">
                   <div className="rounded-xl border border-slate-200 bg-white px-4 py-2">
                     <div className="text-xs text-slate-500">
-                      Next estimated due date
+                      Total rent paid by end date
                     </div>
                     <div className="mt-1 text-2xl font-bold text-emerald-700">
+                      {fmtMoney(computed.totalPaidScaled)}
+                    </div>
+                  </div>
+                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2">
+                    <div className="text-xs text-slate-500">
+                      Next estimated due date
+                    </div>
+                    <div className="mt-1 text-2xl font-bold">
                       {formatDate(computed.nextDue)}
                     </div>
                   </div>
@@ -1258,21 +1266,8 @@ export default function RentDueDateCalculator() {
                     <div className="text-xs text-slate-500">
                       Payments in horizon
                     </div>
-                    <div className="mt-1 text-2xl font-bold text-emerald-700">
+                    <div className="mt-1 text-2xl font-bold">
                       {computed.paymentsTotal}
-                    </div>
-                  </div>
-
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2">
-                    <div className="text-xs text-slate-500">
-                      Total rent paid by end date
-                    </div>
-                    <div className="mt-1 text-2xl font-bold text-emerald-700">
-                      {fmtMoney(computed.totalPaidScaled)}
-                    </div>
-                    <div className="mt-1 text-xs text-sky-900">
-                      {computed.paymentsTotal} payments ×{" "}
-                      {fmtMoney(computed.rentPerPaymentScaled)}
                     </div>
                   </div>
                 </div>
@@ -1473,7 +1468,7 @@ export default function RentDueDateCalculator() {
                     </table>
                   </div>
 
-                  <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2">
+                  <div className="mt-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-2">
                     <div className="text-xs text-slate-500">
                       Selected cycle (standard annual total)
                     </div>
@@ -1920,16 +1915,6 @@ export default function RentDueDateCalculator() {
       <OtherUsefulTools />
       <RenterChecklists />
       <RentToolsByCountry />
-
-      <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
-        <p className="text-xs text-slate-500 text-center leading-relaxed">
-          <em>
-            Tools on this site are for budgeting and comparison. Calculations
-            use standard time-period assumptions. Always confirm payment
-            schedules and lease terms in your rental agreement.
-          </em>
-        </p>
-      </section>
 
       <script
         type="application/ld+json"

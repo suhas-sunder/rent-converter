@@ -1071,83 +1071,22 @@ export default function RentIncreasePercentage() {
               </div>
             ) : (
               <>
-                <div className="text-sm text-slate-700">
-                  Rent increase percentage
+                <div className="flex items-center gap-2">
+                  <div
+                    className="h-2 w-2 rounded-full bg-sky-600"
+                    aria-hidden="true"
+                  />
+                  <div className="text-sm font-semibold text-slate-800">
+                    Rent increase percentage
+                  </div>
                 </div>
 
                 <div className="mt-2 flex flex-col gap-2">
-                  <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700 tabular-nums min-h-[3.6rem] sm:min-h-[4.2rem]">
+                  <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700 tabular-nums ">
                     {computed.pct === null
                       ? "N/A"
                       : `${safeToFixed(computed.pct, 2)}%`}
                   </div>
-
-                  <div className="text-sm text-slate-700">
-                    <span className="tabular-nums">
-                      {fmtMoney(
-                        fromAnnualScaled(computed.annualOldScaled, period),
-                      )}
-                    </span>{" "}
-                    to{" "}
-                    <span className="tabular-nums">
-                      {fmtMoney(
-                        fromAnnualScaled(computed.annualNewScaled, period),
-                      )}
-                    </span>{" "}
-                    per {PERIOD_LABEL[period].toLowerCase()}{" "}
-                    {computed.pct === null ? (
-                      <>
-                        shows an absolute change (percent is not meaningful from
-                        0).{" "}
-                        <span className="font-semibold">
-                          {computed.pctNote}
-                        </span>
-                      </>
-                    ) : (
-                      <>
-                        is an estimated{" "}
-                        <strong className="tabular-nums">
-                          {safeToFixed(computed.pct, 2)}%
-                        </strong>{" "}
-                        change when compared on an annual basis.
-                      </>
-                    )}
-                  </div>
-                </div>
-
-                <div className="rc-no-print mt-4 flex flex-wrap gap-2 items-center">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      handleCopy(
-                        "summary",
-                        `Old: ${fmtMoney(fromAnnualScaled(computed.annualOldScaled, period))} (${PERIOD_LABEL[period]}); New: ${fmtMoney(
-                          fromAnnualScaled(computed.annualNewScaled, period),
-                        )}; Annual difference: ${fmtMoney(computed.annualDeltaScaled)}; Percent: ${
-                          computed.pct === null
-                            ? "N/A"
-                            : `${safeToFixed(computed.pct, 2)}%`
-                        }`,
-                      )
-                    }
-                    className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-                  >
-                    {copiedKey === "summary" ? "Copied" : "Copy summary"}
-                  </button>
-
-                  <span className="sr-only" aria-live="polite">
-                    {copiedKey === "summary"
-                      ? "Copied"
-                      : copiedKey === "copy_failed"
-                        ? "Copy failed"
-                        : ""}
-                  </span>
-
-                  {copiedKey === "copy_failed" ? (
-                    <span className="self-center text-sm font-semibold text-rose-700">
-                      Copy failed
-                    </span>
-                  ) : null}
                 </div>
 
                 <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -1179,8 +1118,7 @@ export default function RentIncreasePercentage() {
                   </div>
 
                   <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-2.5 shadow-sm">
-                    <div className="text-xs text-slate-600">Annual impact</div>
-                    <div className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                    <div className=" grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
                       <div className="text-sm text-slate-800">
                         Annual difference:{" "}
                         <strong className="text-slate-900 tabular-nums">
@@ -1214,7 +1152,7 @@ export default function RentIncreasePercentage() {
                     </div>
                   </div>
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-2.5 shadow-sm">
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-2.5 shadow-sm">
                     <div className="text-xs text-slate-600">
                       Monthly vs every 4 weeks (old and new)
                     </div>
@@ -1311,12 +1249,6 @@ export default function RentIncreasePercentage() {
                       </tbody>
                     </table>
                   </div>
-
-                  <p className="mt-4 text-xs text-slate-600">
-                    Assumptions used for conversions: 1 year = 365 days, 1 week
-                    = 7 days, every 4 weeks = 28 days, and month = 365 ÷ 12 days
-                    (average). Exact billing and due dates vary by agreement.
-                  </p>
                 </div>
 
                 {computed.warnings.length ? (
@@ -1761,17 +1693,6 @@ export default function RentIncreasePercentage() {
       <OtherUsefulTools />
       <RenterChecklists />
       <RentToolsByCountry />
-
-      <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
-        <p className="text-xs text-slate-600 text-center leading-relaxed">
-          <em>
-            Tools on this site are for budgeting and comparison. Calculations
-            use standard time-period assumptions, including a 365-day year and
-            average month length. Always confirm payment schedules and lease
-            terms in your rental agreement.
-          </em>
-        </p>
-      </section>
 
       <script
         type="application/ld+json"

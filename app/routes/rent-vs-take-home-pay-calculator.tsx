@@ -1091,43 +1091,20 @@ export default function RentVsTakeHomePay() {
               ) : null}
 
               <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
-                <div className="text-sm text-slate-600">
-                  Rent share of take-home pay
+                <div className="flex items-center gap-2">
+                  <div
+                    className="h-2 w-2 rounded-full bg-sky-600"
+                    aria-hidden="true"
+                  />
+                  <div className="text-sm font-semibold text-slate-800">
+                    Rent share of take-home pay
+                  </div>
                 </div>
 
                 <div className="mt-2 flex flex-col gap-2">
                   <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700">
                     {computed.rentPctText}%
                   </div>
-
-                  <div className="text-sm text-slate-600">
-                    Annualized rent:{" "}
-                    <strong>{money(computed.annualRent)}</strong> and annualized
-                    take-home pay:{" "}
-                    <strong>{money(computed.annualTakeHome)}</strong>.
-                  </div>
-                </div>
-
-                <div className="rc-no-print mt-4 flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      handleCopy(
-                        "headline",
-                        `Rent share: ${computed.rentPctText}%; Annual rent: ${money(computed.annualRent)}; Annual take-home: ${money(
-                          computed.annualTakeHome,
-                        )}; Left after rent: ${money(computed.annualLeft)}`,
-                      )
-                    }
-                    className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-                  >
-                    {copiedKey === "headline" ? "Copied" : "Copy results"}
-                  </button>
-                  {copiedKey === "copy_failed" ? (
-                    <span className="self-center text-sm font-semibold text-rose-700">
-                      Copy failed
-                    </span>
-                  ) : null}
                 </div>
 
                 <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -1224,7 +1201,7 @@ export default function RentVsTakeHomePay() {
                     </div>
                   </div>
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-2">
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-2">
                     <div className="text-xs text-slate-500">
                       Monthly vs every 4 weeks (rent)
                     </div>
@@ -1239,11 +1216,6 @@ export default function RentVsTakeHomePay() {
                         {computed.monthMinus4wRentPctText}%
                       </strong>
                     </div>
-                    <p className="mt-2 text-xs text-slate-500">
-                      A 4-week period is 28 days. An average month is{" "}
-                      {safeToFixed(computed.avgMonthDays, 2)} days (365 ÷ 12),
-                      so these are not interchangeable.
-                    </p>
                   </div>
                 </div>
               </div>
@@ -1796,17 +1768,6 @@ export default function RentVsTakeHomePay() {
       <OtherUsefulTools />
       <RenterChecklists />
       <RentToolsByCountry />
-
-      <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
-        <p className="text-xs text-slate-500 text-center leading-relaxed">
-          <em>
-            Tools on this site are for budgeting and comparison. Calculations
-            use standard time-period assumptions, including a 365-day year and
-            average month length. Always confirm payment schedules and lease
-            terms in your rental agreement.
-          </em>
-        </p>
-      </section>
 
       <script
         type="application/ld+json"

@@ -930,40 +930,20 @@ export default function RentPerWeekCalculator() {
               ) : null}
 
               <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
-                <div className="text-sm text-slate-600">Rent per week</div>
+                <div className="flex items-center gap-2">
+                  <div
+                    className="h-2 w-2 rounded-full bg-sky-600"
+                    aria-hidden="true"
+                  />
+                  <div className="text-sm font-semibold text-slate-800">
+                    Rent per week
+                  </div>
+                </div>
 
                 <div className="mt-2 flex flex-col gap-2">
                   <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700">
                     {fmt(computed.weeklyScaled)}
                   </div>
-                  <div className="text-sm text-slate-600">
-                    {fmt(computed.rentScaled)}{" "}
-                    {PERIOD_LABEL[from].toLowerCase()} converts to{" "}
-                    <strong>{fmt(computed.weeklyScaled)}</strong> weekly (annual
-                    equivalence basis).
-                  </div>
-                </div>
-
-                <div className="rc-no-print mt-4 flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      handleCopy(
-                        "weekly",
-                        `Weekly equivalent: ${fmt(computed.weeklyScaled)} (${currency}); Annual total: ${fmt(
-                          computed.annualScaled,
-                        )} (365-day basis)`,
-                      )
-                    }
-                    className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-                  >
-                    {copiedKey === "weekly" ? "Copied" : "Copy result"}
-                  </button>
-                  {copiedKey === "copy_failed" ? (
-                    <span className="self-center text-sm font-semibold text-rose-700">
-                      Copy failed
-                    </span>
-                  ) : null}
                 </div>
 
                 <div className="mt-6 grid gap-4 lg:grid-cols-12">
@@ -1002,34 +982,6 @@ export default function RentPerWeekCalculator() {
                           </div>
                         </div>
                       ))}
-                    </div>
-
-                    <div className="mt-3 rounded-xl border border-slate-200 bg-white px-4 py-2">
-                      <div className="text-xs text-slate-500">
-                        4-week vs monthly comparison
-                      </div>
-                      <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                        <div className="text-sm text-slate-700">
-                          Monthly minus 4-week ={" "}
-                          <strong className="text-slate-900">
-                            {fmt(computed.breakdown.monthlyMinus4w)}
-                          </strong>
-                        </div>
-                        <div className="text-sm text-slate-700">
-                          Difference ≈{" "}
-                          <strong className="text-slate-900">
-                            {safeToFixed(
-                              computed.breakdown.monthlyMinus4wPct * 100,
-                              2,
-                            )}
-                            %
-                          </strong>
-                        </div>
-                      </div>
-                      <p className="mt-2 text-xs text-slate-500">
-                        A 4-week period is 28 days. A month averages about 30.42
-                        days (365 ÷ 12). The gap changes annual totals.
-                      </p>
                     </div>
                   </div>
 
@@ -1085,7 +1037,30 @@ export default function RentPerWeekCalculator() {
                 </div>
               </div>
 
-              <section className="mt-10 rc-no-print">
+              <div className="mt-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-2">
+                <div className="text-xs text-slate-500">
+                  4-week vs monthly comparison
+                </div>
+                <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                  <div className="text-sm text-slate-700">
+                    Monthly minus 4-week ={" "}
+                    <strong className="text-slate-900">
+                      {fmt(computed.breakdown.monthlyMinus4w)}
+                    </strong>
+                  </div>
+                  <div className="text-sm text-slate-700">
+                    Difference ≈{" "}
+                    <strong className="text-slate-900">
+                      {safeToFixed(
+                        computed.breakdown.monthlyMinus4wPct * 100,
+                        2,
+                      )}
+                      %
+                    </strong>
+                  </div>
+                </div>
+              </div>
+              <section className="mt-2 rc-no-print">
                 <h3 className="text-2xl font-semibold mb-4 text-slate-900">
                   Payment counts per year (for comparison)
                 </h3>

@@ -873,11 +873,7 @@ export default function MonthlyToBiweeklyRent() {
                       ["Hourly", breakdown.hourly, "hourly"],
                       ["Daily", breakdown.daily, "daily"],
                       ["Weekly", breakdown.weekly, "weekly"],
-                      [
-                        "Every 2 weeks (14 days)",
-                        breakdown.biweekly,
-                        "biweekly",
-                      ],
+
                       [
                         "Every 4 weeks (28 days)",
                         breakdown.every4w,
@@ -1327,16 +1323,6 @@ export default function MonthlyToBiweeklyRent() {
       <OtherUsefulTools />
       <RenterChecklists />
       <RentToolsByCountry />
-
-      <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
-        <p className="text-xs text-slate-500 text-center leading-relaxed">
-          <em>
-            Use these calculators for comparisons and budgeting. Confirm your
-            actual payment schedule, due dates, and proration rules in your
-            lease.
-          </em>
-        </p>
-      </section>
 
       <script
         type="application/ld+json"

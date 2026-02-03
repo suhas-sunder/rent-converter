@@ -970,45 +970,21 @@ export default function WeeklyToBiweeklyRent() {
                 </div>
               ) : null}
 
-              <div className="mt-6 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
-                <div className="text-sm text-slate-600">
-                  Biweekly equivalent
+              <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
+                <div className="flex items-center gap-2">
+                  <div
+                    className="h-2 w-2 rounded-full bg-sky-600"
+                    aria-hidden="true"
+                  />
+                  <div className="text-sm font-semibold text-slate-800">
+                    Biweekly equivalent
+                  </div>
                 </div>
 
                 <div className="mt-2 flex flex-col gap-2">
                   <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700">
                     {money(computed.biweekly)}
                   </div>
-                  <div className="text-sm text-slate-600">
-                    {money(computed.weekly)} weekly ≈{" "}
-                    <strong>{money(computed.biweekly)}</strong> every 2 weeks
-                  </div>
-                  <div className="text-xs text-slate-500">
-                    Delta vs exactly 2x weekly:{" "}
-                    <strong className="text-slate-800">
-                      {money(computed.biweeklyDelta)}
-                    </strong>
-                  </div>
-                </div>
-
-                <div className="rc-no-print mt-4 flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      handleCopy(
-                        "headline",
-                        `Weekly rent: ${money(computed.weekly)} (${currency}) ≈ Biweekly: ${money(computed.biweekly)} (14-day equivalent, derived from 365-day annual equivalence).`,
-                      )
-                    }
-                    className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-                  >
-                    {copiedKey === "headline" ? "Copied" : "Copy result"}
-                  </button>
-                  {copiedKey === "copy_failed" ? (
-                    <span className="self-center text-sm font-semibold text-rose-700">
-                      Copy failed
-                    </span>
-                  ) : null}
                 </div>
 
                 <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -1024,7 +1000,6 @@ export default function WeeklyToBiweeklyRent() {
                         "every_4_weeks",
                       ],
                       ["Monthly (average)", computed.monthly, "monthly"],
-                      ["Annual", computed.annual, "annual"],
                     ] as const
                   ).map(([label, val, key]) => (
                     <div
@@ -1038,7 +1013,7 @@ export default function WeeklyToBiweeklyRent() {
                     </div>
                   ))}
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-2">
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-2">
                     <div className="text-xs text-slate-500">
                       Monthly vs 4-week context (same annual basis)
                     </div>
@@ -1059,46 +1034,6 @@ export default function WeeklyToBiweeklyRent() {
                         </strong>
                       </div>
                     </div>
-                    <p className="mt-2 text-xs text-slate-500">
-                      A 4-week period is 28 days. An average month is about
-                      30.42 days (365 divided by 12). These are different
-                      lengths, so the equivalents diverge.
-                    </p>
-                  </div>
-
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-2">
-                    <div className="text-xs text-slate-500">
-                      Payment-count illustrations (calendar counts)
-                    </div>
-                    <div className="mt-2 grid gap-2 sm:grid-cols-2">
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-2">
-                        <div className="text-xs text-slate-500">
-                          Weekly x 52
-                        </div>
-                        <div className="mt-1 text-sm font-bold text-slate-800">
-                          {money(computed.annualFromWeekly52)}
-                        </div>
-                        <div className="mt-1 text-xs text-slate-500">
-                          Common count (52 payments)
-                        </div>
-                      </div>
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-2">
-                        <div className="text-xs text-slate-500">
-                          Biweekly x 26
-                        </div>
-                        <div className="mt-1 text-sm font-bold text-slate-800">
-                          {money(computed.annualFromBiweekly26)}
-                        </div>
-                        <div className="mt-1 text-xs text-slate-500">
-                          Common count (26 payments)
-                        </div>
-                      </div>
-                    </div>
-                    <p className="mt-3 text-xs text-slate-500">
-                      These are illustrative calendar shortcuts. The main
-                      conversion on this page uses day-based annual equivalence
-                      (365-day year).
-                    </p>
                   </div>
                 </div>
               </div>
@@ -1123,7 +1058,7 @@ export default function WeeklyToBiweeklyRent() {
         </div>
 
         <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 rc-no-print">
-                <div className="rc-no-print md:hidden flex flex-col sm:flex-row gap-2 mb-4">
+          <div className="rc-no-print md:hidden flex flex-col sm:flex-row gap-2 mb-4">
             <button
               type="button"
               onClick={handlePrint}
@@ -1587,17 +1522,6 @@ export default function WeeklyToBiweeklyRent() {
       <OtherUsefulTools />
       <RenterChecklists />
       <RentToolsByCountry />
-
-      <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
-        <p className="text-xs text-slate-500 text-center leading-relaxed">
-          <em>
-            Tools on this site are for budgeting and comparison. Calculations
-            use standard time-period assumptions, including a 365-day year and
-            average month length. Always confirm payment schedules and lease
-            terms in your rental agreement.
-          </em>
-        </p>
-      </section>
 
       <script
         type="application/ld+json"

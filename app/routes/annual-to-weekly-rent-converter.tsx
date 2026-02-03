@@ -800,16 +800,6 @@ export default function AnnualToWeeklyRentConverter() {
                       ],
                       ["Daily (365-day year)", breakdownScaled!.daily, "daily"],
                       [
-                        "Weekly (annual ÷ 52)",
-                        breakdownScaled!.weeklyBudget,
-                        "weekly_budget_52",
-                      ],
-                      [
-                        "Weekly (annual × 7 ÷ 365)",
-                        breakdownScaled!.weekly365,
-                        "weekly_365",
-                      ],
-                      [
                         "Every 2 weeks (14 days)",
                         breakdownScaled!.biweekly,
                         "biweekly",
@@ -1374,15 +1364,6 @@ export default function AnnualToWeeklyRentConverter() {
       <OtherUsefulTools />
       <RenterChecklists />
       <RentToolsByCountry />
-
-      <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
-        <p className="text-xs text-slate-500 text-center leading-relaxed">
-          <em>
-            Tools on this site are for budgeting and comparison. Always confirm
-            payment schedules and lease terms in your rental agreement.
-          </em>
-        </p>
-      </section>
 
       <script
         type="application/ld+json"

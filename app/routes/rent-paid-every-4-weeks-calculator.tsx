@@ -933,75 +933,21 @@ export default function RentPaidEvery4Weeks() {
               </div>
             ) : (
               <>
-                <div className="text-sm text-slate-600">Monthly equivalent</div>
+                <div className="flex items-center gap-2">
+                  <div
+                    className="h-2 w-2 rounded-full bg-sky-600"
+                    aria-hidden="true"
+                  />
+                  <div className="text-sm font-semibold text-slate-800">
+                    Monthly equivalent
+                  </div>
+                </div>
 
                 <div className="mt-2 flex flex-col gap-2">
                   <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700 tabular-nums whitespace-nowrap">
                     {fmtMoney(computed.monthlyScaled)}
                   </div>
-
-                  <div className="text-sm text-slate-700">
-                    {fmtMoney(computed.every4wScaled)} every 4 weeks ≈{" "}
-                    <strong>{fmtMoney(computed.monthlyScaled)}</strong> monthly
-                    (average month, 365 ÷ 12)
-                  </div>
-
-                  <div className="text-sm text-slate-700">
-                    Implied annual equivalent:{" "}
-                    <strong className="text-slate-900">
-                      {fmtMoney(computed.annualScaled)}
-                    </strong>{" "}
-                    annual (365-day basis)
-                  </div>
                 </div>
-
-                <div className="rc-no-print mt-4 flex flex-wrap gap-2 items-center">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      handleCopy("monthly", fmtMoney(computed.monthlyScaled))
-                    }
-                    className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-                  >
-                    {copiedKey === "monthly" ? "Copied" : "Copy monthly amount"}
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() =>
-                      handleCopy(
-                        "summary",
-                        `Every 4 weeks: ${fmtMoney(
-                          computed.every4wScaled,
-                        )}; Weekly: ${fmtMoney(computed.weeklyScaled)}; Monthly: ${fmtMoney(
-                          computed.monthlyScaled,
-                        )}; Annual: ${fmtMoney(computed.annualScaled)} (365-day basis)`,
-                      )
-                    }
-                    className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-                  >
-                    {copiedKey === "summary" ? "Copied" : "Copy summary"}
-                  </button>
-
-                  <span className="sr-only" aria-live="polite">
-                    {copiedKey === "summary" || copiedKey === "monthly"
-                      ? "Copied"
-                      : copiedKey === "copy_failed"
-                        ? "Copy failed"
-                        : ""}
-                  </span>
-
-                  {copiedKey === "copy_failed" ? (
-                    <span className="self-center text-sm font-semibold text-rose-700">
-                      Copy failed
-                    </span>
-                  ) : null}
-                </div>
-
-                <div className="mt-5 text-sm text-slate-700">
-                  4-week rent equivalents (annual basis)
-                </div>
-
                 <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                   {(
                     [
@@ -1014,7 +960,6 @@ export default function RentPaidEvery4Weeks() {
                         computed.every4wScaled,
                         "every_4_weeks",
                       ],
-                      ["Monthly (average)", computed.monthlyScaled, "monthly"],
                       ["Annual", computed.annualScaled, "annual"],
                     ] as const
                   ).map(([label, val, key]) => (
@@ -1029,12 +974,12 @@ export default function RentPaidEvery4Weeks() {
                     </div>
                   ))}
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-2.5 shadow-sm">
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-2.5 shadow-sm">
                     <div className="text-xs text-slate-600">
                       4-week vs monthly (same annual basis)
                     </div>
                     <div className="mt-2 grid gap-2 sm:grid-cols-3">
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-2">
+                      <div className="rounded-xl border border-slate-100 bg-emerald-50 px-4 py-2">
                         <div className="text-xs text-slate-600">
                           4-week amount
                         </div>
@@ -1046,7 +991,7 @@ export default function RentPaidEvery4Weeks() {
                         </div>
                       </div>
 
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-2">
+                      <div className="rounded-xl border border-slate-100 bg-emerald-50 px-4 py-2">
                         <div className="text-xs text-slate-600">
                           Monthly equivalent
                         </div>
@@ -1058,7 +1003,7 @@ export default function RentPaidEvery4Weeks() {
                         </div>
                       </div>
 
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-2">
+                      <div className="rounded-xl border border-slate-100 bg-emerald-50 px-4 py-2">
                         <div className="text-xs text-slate-600">Difference</div>
                         <div className="mt-1 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
                           {fmtMoney(computed.monthlyMinus4wScaled)}
@@ -1069,59 +1014,6 @@ export default function RentPaidEvery4Weeks() {
                         </div>
                       </div>
                     </div>
-
-                    <p className="mt-3 text-xs text-slate-600">
-                      A 4-week period is 28 days. An average month is about
-                      30.42 days (365 ÷ 12). The difference comes from period
-                      length.
-                    </p>
-                  </div>
-
-                  <div className="sm:col-span-2  lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-2.5 shadow-sm">
-                    <div className="text-xs text-slate-600">
-                      Annual comparison: 13 payments vs 365-day equivalence
-                    </div>
-                    <div className="mt-2 grid gap-2 sm:grid-cols-3">
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-2">
-                        <div className="text-xs text-slate-600">
-                          4-week × 13
-                        </div>
-                        <div className="mt-1 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
-                          {fmtMoney(computed.annualVia13Scaled)}
-                        </div>
-                        <div className="mt-1 text-xs text-slate-600">
-                          52-week framing
-                        </div>
-                      </div>
-
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-2">
-                        <div className="text-xs text-slate-600">
-                          Annual (365-day basis)
-                        </div>
-                        <div className="mt-1 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
-                          {fmtMoney(computed.annualScaled)}
-                        </div>
-                        <div className="mt-1 text-xs text-slate-600">
-                          This tool’s basis
-                        </div>
-                      </div>
-
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-2">
-                        <div className="text-xs text-slate-600">Difference</div>
-                        <div className="mt-1 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
-                          {fmtMoney(computed.diffAnnualScaled)}
-                        </div>
-                        <div className="mt-1 text-xs text-slate-600 tabular-nums">
-                          ≈ {safeToFixed(computed.diffAnnualPct, 2)}% vs the 13x
-                          framing
-                        </div>
-                      </div>
-                    </div>
-
-                    <p className="mt-3 text-xs text-slate-600">
-                      This comparison is illustrative. Lease terms can define
-                      specific payment counts or date rules.
-                    </p>
                   </div>
                 </div>
 
@@ -1570,17 +1462,6 @@ export default function RentPaidEvery4Weeks() {
       <OtherUsefulTools />
       <RenterChecklists />
       <RentToolsByCountry />
-
-      <section className="max-w-6xl mx-auto px-6 pb-10 rc-no-print">
-        <p className="text-xs text-slate-600 text-center leading-relaxed">
-          <em>
-            Tools on this site are for budgeting and comparison. Calculations
-            use standard time-period assumptions, including a 365-day year and
-            average month length. Always confirm payment schedules and lease
-            terms in your rental agreement.
-          </em>
-        </p>
-      </section>
 
       {/* JSON-LD */}
       <script

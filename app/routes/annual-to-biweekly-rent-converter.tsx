@@ -856,11 +856,6 @@ export default function AnnualToBiweeklyRent() {
                       ["Daily", breakdownScaled!.daily, "daily"],
                       ["Weekly", breakdownScaled!.weekly, "weekly"],
                       [
-                        "Every 2 weeks (14 days)",
-                        breakdownScaled!.biweekly,
-                        "biweekly",
-                      ],
-                      [
                         "Every 4 weeks (28 days)",
                         breakdownScaled!.every4w,
                         "every_4_weeks",
@@ -1485,17 +1480,6 @@ export default function AnnualToBiweeklyRent() {
       <OtherUsefulTools />
       <RenterChecklists />
       <RentToolsByCountry />
-
-      <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
-        <p className="text-xs text-slate-500 text-center leading-relaxed">
-          <em>
-            Tools on this site are for budgeting and comparison. Calculations
-            use standard time-period assumptions, including a 365-day year and
-            average month length. Always confirm payment schedules and lease
-            terms in your rental agreement.
-          </em>
-        </p>
-      </section>
 
       <script
         type="application/ld+json"

@@ -882,48 +882,21 @@ export default function WeeklyToMonthlyRent() {
                 </div>
               ) : null}
 
-              <div className="mt-6 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
-                <div className="text-sm text-slate-600">Monthly equivalent</div>
+              <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
+                <div className="flex items-center gap-2">
+                  <div
+                    className="h-2 w-2 rounded-full bg-sky-600"
+                    aria-hidden="true"
+                  />
+                  <div className="text-sm font-semibold text-slate-800">
+                    Monthly equivalent
+                  </div>
+                </div>
 
                 <div className="mt-2 flex flex-col gap-2">
                   <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700">
                     {money(computed.monthly)}
                   </div>
-                  <div className="text-sm text-slate-600">
-                    {money(computed.weekly)} weekly ≈{" "}
-                    <strong>{money(computed.monthly)}</strong> monthly
-                  </div>
-                  <div className="text-xs text-slate-500">
-                    Weekly x 4 (28 days):{" "}
-                    <strong className="text-slate-800">
-                      {money(computed.weeklyTimes4)}
-                    </strong>{" "}
-                    (delta to monthly:{" "}
-                    <strong className="text-slate-800">
-                      {money(computed.weeklyTimes4Delta)}
-                    </strong>
-                    )
-                  </div>
-                </div>
-
-                <div className="rc-no-print mt-4 flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      handleCopy(
-                        "headline",
-                        `Weekly rent: ${money(computed.weekly)} (${currency}) ≈ Monthly: ${money(computed.monthly)} (derived from 365-day annual equivalence).`,
-                      )
-                    }
-                    className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-                  >
-                    {copiedKey === "headline" ? "Copied" : "Copy result"}
-                  </button>
-                  {copiedKey === "copy_failed" ? (
-                    <span className="self-center text-sm font-semibold text-rose-700">
-                      Copy failed
-                    </span>
-                  ) : null}
                 </div>
 
                 <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -939,7 +912,6 @@ export default function WeeklyToMonthlyRent() {
                         "every_4_weeks",
                       ],
                       ["Monthly (average)", computed.monthly, "monthly"],
-                      ["Annual", computed.annual, "annual"],
                     ] as const
                   ).map(([label, val, key]) => (
                     <div
@@ -953,7 +925,7 @@ export default function WeeklyToMonthlyRent() {
                     </div>
                   ))}
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-2">
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-2">
                     <div className="text-xs text-slate-500">
                       4-week (28-day) vs monthly comparison
                     </div>
@@ -974,56 +946,6 @@ export default function WeeklyToMonthlyRent() {
                         </strong>
                       </div>
                     </div>
-                    <p className="mt-2 text-xs text-slate-500">
-                      Monthly uses an average month (365 ÷ 12). A 4-week period
-                      is 28 days. That gap changes annual totals.
-                    </p>
-                  </div>
-
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-2">
-                    <div className="text-xs text-slate-500">
-                      Calendar payment-count illustrations
-                    </div>
-                    <div className="mt-2 grid gap-2 sm:grid-cols-3">
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-2">
-                        <div className="text-xs text-slate-500">
-                          Weekly x 52
-                        </div>
-                        <div className="mt-1 text-sm font-bold text-slate-800">
-                          {money(computed.annualFromWeekly52)}
-                        </div>
-                        <div className="mt-1 text-xs text-slate-500">
-                          Common shortcut (52 payments)
-                        </div>
-                      </div>
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-2">
-                        <div className="text-xs text-slate-500">
-                          Monthly x 12
-                        </div>
-                        <div className="mt-1 text-sm font-bold text-slate-800">
-                          {money(computed.annualFromMonthly12)}
-                        </div>
-                        <div className="mt-1 text-xs text-slate-500">
-                          Common shortcut (12 payments)
-                        </div>
-                      </div>
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-2">
-                        <div className="text-xs text-slate-500">
-                          Annual (day-based)
-                        </div>
-                        <div className="mt-1 text-sm font-bold text-slate-800">
-                          {money(computed.annual)}
-                        </div>
-                        <div className="mt-1 text-xs text-slate-500">
-                          365-day annual equivalence
-                        </div>
-                      </div>
-                    </div>
-                    <p className="mt-3 text-xs text-slate-500">
-                      The main conversion on this page uses day-based annual
-                      equivalence. Payment-count shortcuts are shown for context
-                      only.
-                    </p>
                   </div>
                 </div>
               </div>
@@ -1636,17 +1558,6 @@ export default function WeeklyToMonthlyRent() {
       <OtherUsefulTools />
       <RenterChecklists />
       <RentToolsByCountry />
-
-      <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
-        <p className="text-xs text-slate-500 text-center leading-relaxed">
-          <em>
-            Tools on this site are for budgeting and comparison. Calculations
-            use standard time-period assumptions, including a 365-day year and
-            average month length. Always confirm payment schedules and lease
-            terms in your rental agreement.
-          </em>
-        </p>
-      </section>
 
       <script
         type="application/ld+json"

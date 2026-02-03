@@ -982,28 +982,19 @@ export default function RentPerPaycheck() {
               </div>
             ) : (
               <>
-                <div className="text-sm text-slate-700">
-                  Estimated rent to set aside per paycheck
+                <div className="flex items-center gap-2">
+                  <div
+                    className="h-2 w-2 rounded-full bg-sky-600"
+                    aria-hidden="true"
+                  />
+                  <div className="text-sm font-semibold text-slate-800">
+                    Estimated rent to set aside per paycheck
+                  </div>
                 </div>
 
                 <div className="mt-2 flex flex-col gap-2">
                   <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700 tabular-nums break-words">
                     {fmtMoney(computed.perPaycheckScaled)}
-                  </div>
-                  <div className="text-sm text-slate-700 leading-relaxed">
-                    <span className="tabular-nums whitespace-nowrap">
-                      {fmtMoney(computed.amountScaled)}
-                    </span>{" "}
-                    per {RENT_PERIOD_LABEL[rentPeriod].toLowerCase()} converts
-                    to{" "}
-                    <strong className="tabular-nums whitespace-nowrap">
-                      {fmtMoney(computed.annualRentScaled)}
-                    </strong>{" "}
-                    per year, then divides by{" "}
-                    <strong className="tabular-nums whitespace-nowrap">
-                      {String(PAY_PERIODS_PER_YEAR[payFreq])}
-                    </strong>{" "}
-                    paychecks per year.
                   </div>
                 </div>
 
@@ -1063,9 +1054,6 @@ export default function RentPerPaycheck() {
                     <div className="mt-1 text-lg font-bold text-slate-900 tabular-nums whitespace-nowrap">
                       {fmtMoney(computed.annualRentScaled / 12n)}
                     </div>
-                    <div className="mt-1 text-xs text-slate-600 leading-relaxed">
-                      Annual total divided by 12 months.
-                    </div>
                   </div>
                   <div className="rounded-xl border border-slate-200 bg-white px-4 py-2 shadow-sm">
                     <div className="text-xs text-slate-600">
@@ -1074,17 +1062,11 @@ export default function RentPerPaycheck() {
                     <div className="mt-1 text-lg font-bold text-slate-900 tabular-nums whitespace-nowrap">
                       {fmtMoney(computed.annualRentScaled / 13n)}
                     </div>
-                    <div className="mt-1 text-xs text-slate-600 leading-relaxed">
-                      Annual total divided by 13 four-week periods.
-                    </div>
                   </div>
                   <div className="rounded-xl border border-slate-200 bg-white px-4 py-2 shadow-sm">
                     <div className="text-xs text-slate-600">Annual total</div>
                     <div className="mt-1 text-lg font-bold text-slate-900 tabular-nums whitespace-nowrap">
                       {fmtMoney(computed.annualRentScaled)}
-                    </div>
-                    <div className="mt-1 text-xs text-slate-600 leading-relaxed">
-                      Source of truth for all comparisons.
                     </div>
                   </div>
                 </div>

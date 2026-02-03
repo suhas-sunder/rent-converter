@@ -909,11 +909,6 @@ export default function HourlyToMonthlyRent() {
                         "every_4_weeks",
                       ],
                       [
-                        "Monthly (average, 365 ÷ 12)",
-                        breakdownScaled!.monthly,
-                        "monthly",
-                      ],
-                      [
                         "Annual (365-day basis)",
                         breakdownScaled!.annual,
                         "annual",
@@ -935,10 +930,6 @@ export default function HourlyToMonthlyRent() {
 
                   <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-2 shadow-sm">
                     <div className="flex items-center gap-2">
-                      <div
-                        className="h-2 w-2 rounded-full bg-sky-600"
-                        aria-hidden="true"
-                      />
                       <div className="text-xs font-medium text-slate-600">
                         4-week vs monthly context
                       </div>
@@ -1392,15 +1383,6 @@ export default function HourlyToMonthlyRent() {
       <OtherUsefulTools />
       <RenterChecklists />
       <RentToolsByCountry />
-
-      <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
-        <p className="text-xs text-slate-600 text-center leading-relaxed">
-          <em>
-            Use these calculators for comparisons and budgeting. Confirm your
-            real payment schedule, due dates, and fees in your agreement.
-          </em>
-        </p>
-      </section>
 
       <script
         type="application/ld+json"

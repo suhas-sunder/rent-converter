@@ -1318,7 +1318,7 @@ export default function RentVsBuyCalculator() {
               </div>
             </div>
 
-            <div className="lg:col-span-5 rounded-2xl border border-slate-200 bg-white p-5">
+            <div className="lg:col-span-8 rounded-2xl border border-slate-200 bg-white p-5">
               <h3 className="text-lg font-bold text-slate-900 mb-3">
                 Buy assumptions
               </h3>
@@ -1524,60 +1524,6 @@ export default function RentVsBuyCalculator() {
                 </div>
               </div>
             </div>
-
-            <div className="lg:col-span-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5">
-              <h3 className="text-lg font-bold text-slate-900 mb-3">
-                Time horizon
-              </h3>
-
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
-                Compare over (years)
-              </label>
-              <input
-                inputMode="numeric"
-                value={horizonYears}
-                onChange={(e) => setHorizonYears(e.target.value)}
-                placeholder="e.g. 7"
-                className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
-                aria-invalid={!parsed.years.ok}
-              />
-              <p className="mt-2 text-xs text-slate-500">
-                Used for totals and the year-by-year table.
-              </p>
-
-              {computed.ok ? (
-                <>
-                  <div className="mt-5 rounded-xl border border-slate-200 bg-white p-4">
-                    <div className="text-xs text-slate-500">
-                      Estimated mortgage payment (monthly)
-                    </div>
-                    <div className="mt-1 text-lg font-extrabold text-slate-900">
-                      {money(computed.monthlyMortgagePaymentScaled)}
-                    </div>
-                    <p className="mt-2 text-xs text-slate-500">
-                      Principal + interest only.
-                    </p>
-                  </div>
-
-                  <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4">
-                    <div className="text-xs text-slate-500">
-                      Upfront cash at purchase
-                    </div>
-                    <div className="mt-1 text-lg font-extrabold text-slate-900">
-                      {money(
-                        scaledAdd(
-                          computed.downPaymentScaled,
-                          computed.buyCloseScaled,
-                        ),
-                      )}
-                    </div>
-                    <p className="mt-2 text-xs text-slate-500">
-                      Down payment + buy closing costs.
-                    </p>
-                  </div>
-                </>
-              ) : null}
-            </div>
           </div>
 
           {!parsed.ok ? (
@@ -1686,53 +1632,6 @@ export default function RentVsBuyCalculator() {
                         Copy failed
                       </span>
                     ) : null}
-                  </div>
-
-                  <div className="mt-5 rounded-2xl border border-slate-200 bg-white p-5 rc-print-block">
-                    <h3 className="text-lg font-bold text-slate-900 mb-2">
-                      What the comparison is doing
-                    </h3>
-                    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 text-sm">
-                      <div className="rounded-xl border border-slate-200 bg-white p-4">
-                        <div className="text-xs text-slate-500">
-                          Ownership outflow (total)
-                        </div>
-                        <div className="mt-1 font-bold text-slate-800">
-                          {money(computed.totalOwnershipOutflowScaled)}
-                        </div>
-                      </div>
-                      <div className="rounded-xl border border-slate-200 bg-white p-4">
-                        <div className="text-xs text-slate-500">
-                          Estimated net sale proceeds
-                        </div>
-                        <div className="mt-1 font-bold text-slate-800">
-                          {money(computed.estimatedNetSaleProceedsScaled)}
-                        </div>
-                      </div>
-                      <div className="rounded-xl border border-slate-200 bg-white p-4">
-                        <div className="text-xs text-slate-500">
-                          Ending home value (modeled)
-                        </div>
-                        <div className="mt-1 font-bold text-slate-800">
-                          {money(computed.endingHomeValueScaled)}
-                        </div>
-                      </div>
-                      <div className="rounded-xl border border-slate-200 bg-white p-4">
-                        <div className="text-xs text-slate-500">
-                          Ending mortgage balance (modeled)
-                        </div>
-                        <div className="mt-1 font-bold text-slate-800">
-                          {money(computed.endingBalanceScaled)}
-                        </div>
-                      </div>
-                    </div>
-
-                    <p className="mt-3 text-xs text-slate-500">
-                      Notes: Rent grows once per year. Home value grows once per
-                      year. Mortgage amortization uses a standard monthly
-                      payment formula. Property tax and maintenance are modeled
-                      as percentages of home value.
-                    </p>
                   </div>
 
                   <div className="my-6 rounded-2xl border border-slate-200 bg-white p-5 rc-print-block">
@@ -2313,16 +2212,6 @@ export default function RentVsBuyCalculator() {
       <OtherUsefulTools />
       <RenterChecklists />
       <RentToolsByCountry />
-
-      <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
-        <p className="text-xs text-slate-500 text-center leading-relaxed">
-          <em>
-            Tools on this site are for budgeting and comparison. Calculations
-            use simplified assumptions. Always confirm payment schedules and
-            terms in your agreements.
-          </em>
-        </p>
-      </section>
 
       <script
         type="application/ld+json"

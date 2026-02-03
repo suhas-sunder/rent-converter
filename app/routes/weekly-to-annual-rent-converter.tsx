@@ -197,6 +197,31 @@ function clampScaled(v: bigint, min: bigint, max: bigint): bigint {
   return v;
 }
 
+function formatPercentFromRatioScaled(
+  deltaScaled: bigint,
+  baseScaled: bigint,
+  decimals: number,
+): string {
+  if (baseScaled === 0n) return "-";
+
+  const d = Math.max(0, Math.min(6, Math.trunc(decimals)));
+  const factor = 10n ** BigInt(d);
+
+  // percent = (delta/base)*100
+  // scaledInt = percent * factor, rounded
+  const scaledInt = mulDivRound(deltaScaled * 100n * factor, 1n, baseScaled);
+
+  const negative = scaledInt < 0n;
+  const a = absBigInt(scaledInt);
+  const intPart = a / factor;
+  const fracPart = a % factor;
+
+  if (d === 0) return `${negative ? "-" : ""}${intPart.toString()}`;
+  return `${negative ? "-" : ""}${intPart.toString()}.${fracPart
+    .toString()
+    .padStart(d, "0")}`;
+}
+
 const MAX_SAFE_INT_FOR_NUMBER = 9_000_000_000_000_000n; // ~9e15, JS Number integer precision limit
 
 function absBigInt(x: bigint): bigint {
@@ -624,10 +649,6 @@ export default function WeeklyToAnnualRent() {
         : Number.NaN;
 
     const monthlyMinus4w = monthly - fourWeeks;
-    const monthlyMinus4wPct =
-      fourWeeks !== 0n
-        ? toNumberSafe(monthlyMinus4w) / toNumberSafe(fourWeeks)
-        : Number.NaN;
 
     const impliedWeeksPerYear =
       toNumberSafe(weekly) > 0
@@ -651,7 +672,6 @@ export default function WeeklyToAnnualRent() {
       delta53,
       pct53,
       monthlyMinus4w,
-      monthlyMinus4wPct,
       impliedWeeksPerYear,
     };
   }, [parsed]);
@@ -862,40 +882,21 @@ export default function WeeklyToAnnualRent() {
                 </div>
               ) : null}
 
-              <div className="mt-6 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
-                <div className="text-sm text-slate-600">Annual equivalent</div>
+              <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
+                <div className="flex items-center gap-2">
+                  <div
+                    className="h-2 w-2 rounded-full bg-sky-600"
+                    aria-hidden="true"
+                  />
+                  <div className="text-sm font-semibold text-slate-800">
+                    Annual equivalent
+                  </div>
+                </div>
 
                 <div className="mt-2 flex flex-col gap-2">
                   <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700">
                     {money(computed.annual)}
                   </div>
-                  <div className="text-sm text-slate-600">
-                    {money(computed.weekly)} weekly ≈{" "}
-                    <strong>{money(computed.annual)}</strong> annual (365-day
-                    annual equivalence)
-                  </div>
-                </div>
-
-                <div className="rc-no-print mt-4 flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      handleCopy(
-                        "headline",
-                        `Weekly rent: ${money(computed.weekly)} (${currency}) ≈ Annual: ${money(
-                          computed.annual,
-                        )} (365-day annual equivalence).`,
-                      )
-                    }
-                    className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-                  >
-                    {copiedKey === "headline" ? "Copied" : "Copy result"}
-                  </button>
-                  {copiedKey === "copy_failed" ? (
-                    <span className="self-center text-sm font-semibold text-rose-700">
-                      Copy failed
-                    </span>
-                  ) : null}
                 </div>
 
                 <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -911,7 +912,6 @@ export default function WeeklyToAnnualRent() {
                         "every_4_weeks",
                       ],
                       ["Monthly (average)", computed.monthly, "monthly"],
-                      ["Annual", computed.annual, "annual"],
                     ] as const
                   ).map(([label, val, key]) => (
                     <div
@@ -925,75 +925,7 @@ export default function WeeklyToAnnualRent() {
                     </div>
                   ))}
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-2">
-                    <div className="text-xs text-slate-500">
-                      Weekly-to-year interpretation comparison
-                    </div>
-
-                    <div className="mt-2 grid gap-2 sm:grid-cols-3">
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-2">
-                        <div className="text-xs text-slate-500">
-                          52 weekly payments
-                        </div>
-                        <div className="mt-1 text-sm font-bold text-slate-800">
-                          {money(computed.annualIf52Payments)}
-                        </div>
-                        <div className="mt-1 text-xs text-slate-500">
-                          Difference to 365-day basis:{" "}
-                          <span className="font-semibold text-slate-800">
-                            {money(computed.delta52)}
-                          </span>{" "}
-                          (
-                          {Number.isFinite(computed.pct52)
-                            ? safeToFixed(computed.pct52 * 100, 2)
-                            : "-"}
-                          %)
-                        </div>
-                      </div>
-
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-2">
-                        <div className="text-xs text-slate-500">
-                          53 weekly payments
-                        </div>
-                        <div className="mt-1 text-sm font-bold text-slate-800">
-                          {money(computed.annualIf53Payments)}
-                        </div>
-                        <div className="mt-1 text-xs text-slate-500">
-                          Difference to 365-day basis:{" "}
-                          <span className="font-semibold text-slate-800">
-                            {money(computed.delta53)}
-                          </span>{" "}
-                          (
-                          {Number.isFinite(computed.pct53)
-                            ? safeToFixed(computed.pct53 * 100, 2)
-                            : "-"}
-                          %)
-                        </div>
-                      </div>
-
-                      <div className="rounded-xl border border-slate-100 bg-white px-4 py-2">
-                        <div className="text-xs text-slate-500">
-                          365-day annual equivalence
-                        </div>
-                        <div className="mt-1 text-sm font-bold text-slate-800">
-                          {money(computed.annual)}
-                        </div>
-                        <div className="mt-1 text-xs text-slate-500">
-                          Used across all periods on this page
-                        </div>
-                      </div>
-                    </div>
-
-                    <p className="mt-3 text-xs text-slate-500">
-                      Weekly rent can be interpreted as a payment schedule (a
-                      set number of weekly payments) or as a time-based rate.
-                      This page converts through a 365-day year so the breakdown
-                      stays consistent across daily, monthly, and 4-week
-                      equivalents.
-                    </p>
-                  </div>
-
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-2">
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-2">
                     <div className="text-xs text-slate-500">
                       4-week vs monthly context
                     </div>
@@ -1007,18 +939,15 @@ export default function WeeklyToAnnualRent() {
                       <div className="text-sm text-slate-700">
                         Difference ≈{" "}
                         <strong className="text-slate-900">
-                          {Number.isFinite(computed.monthlyMinus4wPct)
-                            ? safeToFixed(computed.monthlyMinus4wPct * 100, 2)
-                            : "-"}
+                          {formatPercentFromRatioScaled(
+                            computed.monthlyMinus4w,
+                            computed.fourWeeks,
+                            2,
+                          )}
                           %
                         </strong>
                       </div>
                     </div>
-                    <p className="mt-2 text-xs text-slate-500">
-                      A 4-week period is 28 days. A calendar month averages
-                      about 30.42 days (365 ÷ 12). Converting both through an
-                      annual total keeps comparisons consistent.
-                    </p>
                   </div>
                 </div>
               </div>
@@ -1516,17 +1445,6 @@ export default function WeeklyToAnnualRent() {
       <OtherUsefulTools />
       <RenterChecklists />
       <RentToolsByCountry />
-
-      <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
-        <p className="text-xs text-slate-500 text-center leading-relaxed">
-          <em>
-            Tools on this site are for budgeting and comparison. Calculations
-            use standard time-period assumptions, including a 365-day year and
-            average month length. Always confirm payment schedules and lease
-            terms in your rental agreement.
-          </em>
-        </p>
-      </section>
 
       <script
         type="application/ld+json"

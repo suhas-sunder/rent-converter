@@ -1043,56 +1043,19 @@ export default function RentAsPercentageOfIncome() {
               </div>
             ) : (
               <>
-                <div className="text-sm text-slate-600">
-                  Estimated rent share
+                <div className="flex items-center gap-2">
+                  <div
+                    className="h-2 w-2 rounded-full bg-sky-600"
+                    aria-hidden="true"
+                  />
+                  <div className="text-sm font-semibold text-slate-800">
+                    Estimated rent share
+                  </div>
                 </div>
 
                 <div className="mt-2 flex flex-col gap-2">
                   <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700">
                     {safeToFixed(computed.ratioPct, 2)}%
-                  </div>
-                  <div className="text-sm text-slate-600">
-                    Based on annualized totals:{" "}
-                    <strong>{fmtMoney(computed.annualRent)}</strong> rent per
-                    year compared with{" "}
-                    <strong>{fmtMoney(computed.annualIncome)}</strong> income
-                    per year.
-                  </div>
-
-                  <div className="rc-no-print mt-2 flex flex-wrap gap-2">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleCopy(
-                          "summary",
-                          `Annual rent: ${fmtMoney(
-                            computed.annualRent,
-                          )} | Annual income: ${fmtMoney(
-                            computed.annualIncome,
-                          )} | Rent %: ${safeToFixed(computed.ratioPct, 2)}%`,
-                        )
-                      }
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-                    >
-                      {copiedKey === "summary" ? "Copied" : "Copy summary"}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleCopy(
-                          "pct",
-                          `${safeToFixed(computed.ratioPct, 2)}%`,
-                        )
-                      }
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-                    >
-                      {copiedKey === "pct" ? "Copied" : "Copy percent"}
-                    </button>
-                    {copiedKey === "copy_failed" ? (
-                      <span className="self-center text-sm font-semibold text-rose-700">
-                        Copy failed
-                      </span>
-                    ) : null}
                   </div>
                 </div>
 
@@ -1125,40 +1088,7 @@ export default function RentAsPercentageOfIncome() {
                   </div>
 
                   <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-2 rc-print-block">
-                    <div className="text-xs text-slate-500">
-                      Monthly vs every 4 weeks (derived from annual totals)
-                    </div>
-                    <div className="mt-2 grid gap-2 lg:grid-cols-3">
-                      <div className="text-sm text-slate-700">
-                        Rent per month (avg):{" "}
-                        <strong className="text-slate-900">
-                          {fmtMoney(computed.rentMonthly)}
-                        </strong>
-                      </div>
-                      <div className="text-sm text-slate-700">
-                        Rent per 4 weeks:{" "}
-                        <strong className="text-slate-900">
-                          {fmtMoney(computed.rent4w)}
-                        </strong>
-                      </div>
-                      <div className="text-sm text-slate-700">
-                        Ratio on 4-week basis:{" "}
-                        <strong className="text-slate-900">
-                          {safeToFixed(computed.ratioOn4wBasis, 2)}%
-                        </strong>
-                      </div>
-                    </div>
-                    <p className="mt-2 text-xs text-slate-500">
-                      Every 4 weeks is 28 days. An average month is{" "}
-                      {safeToFixed(computed.avgMonthDays, 2)} days (365 ÷ 12).
-                    </p>
-                  </div>
-
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-2 rc-print-block">
-                    <div className="text-xs text-slate-500">
-                      Quick breakdown (annualized, then converted)
-                    </div>
-                    <div className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+                    <div className=" grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
                       <div className="text-sm text-slate-700">
                         Rent per week:{" "}
                         <strong className="text-slate-900">
@@ -1184,10 +1114,32 @@ export default function RentAsPercentageOfIncome() {
                         </strong>
                       </div>
                     </div>
-                    <p className="mt-2 text-xs text-slate-500">
-                      These figures are derived from the same annual totals to
-                      keep comparisons consistent.
-                    </p>
+                  </div>
+
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-2 rc-print-block">
+                    <div className="text-xs text-slate-500">
+                      Monthly vs every 4 weeks (derived from annual totals)
+                    </div>
+                    <div className="mt-2 grid gap-2 lg:grid-cols-3">
+                      <div className="text-sm text-slate-700">
+                        Rent per month (avg):{" "}
+                        <strong className="text-slate-900">
+                          {fmtMoney(computed.rentMonthly)}
+                        </strong>
+                      </div>
+                      <div className="text-sm text-slate-700">
+                        Rent per 4 weeks:{" "}
+                        <strong className="text-slate-900">
+                          {fmtMoney(computed.rent4w)}
+                        </strong>
+                      </div>
+                      <div className="text-sm text-slate-700">
+                        Ratio on 4-week basis:{" "}
+                        <strong className="text-slate-900">
+                          {safeToFixed(computed.ratioOn4wBasis, 2)}%
+                        </strong>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -1639,17 +1591,6 @@ export default function RentAsPercentageOfIncome() {
       <OtherUsefulTools />
       <RenterChecklists />
       <RentToolsByCountry />
-
-      <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
-        <p className="text-xs text-slate-500 text-center leading-relaxed">
-          <em>
-            Tools on this site are for budgeting and comparison. Calculations
-            use standard time-period assumptions, including a 365-day year and
-            average month length. Always confirm payment schedules and lease
-            terms in your rental agreement.
-          </em>
-        </p>
-      </section>
 
       <script
         type="application/ld+json"
