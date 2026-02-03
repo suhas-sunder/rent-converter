@@ -1751,18 +1751,25 @@ export default function RentVsTakeHomePay() {
         </div>
       </section>
 
-      <section id="faq" className="max-w-5xl mx-auto py-16 px-6 rc-no-print">
-        <h2 className="text-3xl font-bold text-center mb-8 text-slate-800">
+      <section id="faq" className="max-w-5xl mx-auto py-16 px-6">
+        <h2 className="text-3xl font-bold text-center mb-10 text-sky-800 tracking-tight">
           Frequently Asked Questions
         </h2>
-        <div className="space-y-8">
+
+        <div className="divide-y divide-slate-200">
           {faqData.map((f, i) => (
-            <div key={i}>
-              <h3 className="font-semibold text-lg text-slate-800 mb-1">
-                {f.q}
-              </h3>
-              <p className="text-slate-600">{f.a}</p>
-            </div>
+            <details key={i} className="group py-4">
+              <summary className="cursor-pointer list-none font-semibold text-lg text-sky-800 flex items-center justify-between hover:text-sky-900">
+                <span>{f.q}</span>
+                <span className="ml-4 text-slate-400 transition-transform group-open:rotate-180">
+                  ▾
+                </span>
+              </summary>
+
+              <div className="mt-2 text-slate-700 leading-relaxed max-w-prose">
+                {f.a}
+              </div>
+            </details>
           ))}
         </div>
       </section>

@@ -213,7 +213,11 @@ export default function Footer() {
           <p className="max-w-3xl text-xs text-slate-400/90">
             Tools on this site are for informational, budgeting, and comparison
             purposes only. Always confirm payment schedules and lease terms in
-            your rental agreement.
+            your rental agreement. This website does not provide financial,
+            legal, or tax advice. Rental costs, affordability, payment
+            schedules, and obligations vary by location, landlord, lease terms,
+            and individual circumstances. Always review your lease agreement and
+            consult qualified professionals before making financial decisions.
           </p>
         </div>
       </div>

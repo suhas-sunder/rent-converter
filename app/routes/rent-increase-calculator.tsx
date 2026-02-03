@@ -37,7 +37,10 @@ export const meta: Route.MetaFunction = () => [
     content: "https://www.rentconverter.com/rent-increase-calculator",
   },
   { property: "og:site_name", content: "RentConverter.com" },
-  { property: "og:image", content: "https://www.rentconverter.com/og-image.jpg" },
+  {
+    property: "og:image",
+    content: "https://www.rentconverter.com/og-image.jpg",
+  },
 
   { name: "twitter:card", content: "summary_large_image" },
   { name: "twitter:title", content: "Rent Increase Calculator" },
@@ -46,9 +49,16 @@ export const meta: Route.MetaFunction = () => [
     content:
       "Calculate your new rent after a percent or fixed increase and see the annual impact and pay-cycle equivalents.",
   },
-  { name: "twitter:image", content: "https://www.rentconverter.com/og-image.jpg" },
+  {
+    name: "twitter:image",
+    content: "https://www.rentconverter.com/og-image.jpg",
+  },
 
-  { tagName: "link", rel: "canonical", href: "https://www.rentconverter.com/rent-increase-calculator" },
+  {
+    tagName: "link",
+    rel: "canonical",
+    href: "https://www.rentconverter.com/rent-increase-calculator",
+  },
 ];
 
 type Period =
@@ -219,7 +229,9 @@ function groupInt(intStr: string, groupSep: string): string {
 }
 
 function getNumberSeparators(): { group: string; decimal: string } {
-  const parts = new Intl.NumberFormat(undefined, { useGrouping: true }).formatToParts(1000.1);
+  const parts = new Intl.NumberFormat(undefined, {
+    useGrouping: true,
+  }).formatToParts(1000.1);
   const group = parts.find((p) => p.type === "group")?.value ?? ",";
   const decimal = parts.find((p) => p.type === "decimal")?.value ?? ".";
   return { group, decimal };
@@ -234,7 +246,7 @@ function roundScaledToDecimals(scaled: bigint, decimals: number): bigint {
   const q = a / factor;
   const r = a % factor;
   const half = factor / 2n;
-  const qRounded = r >= half ? (q + 1n) : q;
+  const qRounded = r >= half ? q + 1n : q;
   return sign * qRounded * factor;
 }
 
@@ -259,7 +271,6 @@ function scaledToDecimalStrings(
   return { negative, intStr: intPart.toString(), fracStr };
 }
 
-
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
@@ -283,7 +294,9 @@ function formatCurrencyFromScaled(
     }
   }
 
-  const scaledForDisplay = roundDisplay ? roundScaledToDecimals(scaled, digits) : scaled;
+  const scaledForDisplay = roundDisplay
+    ? roundScaledToDecimals(scaled, digits)
+    : scaled;
 
   const { group, decimal } = getNumberSeparators();
   const { negative, intStr, fracStr } = scaledToDecimalStrings(
@@ -1617,18 +1630,25 @@ export default function RentIncreaseCalculator() {
         </div>
       </section>
 
-      <section id="faq" className="max-w-5xl mx-auto py-16 px-6 rc-no-print">
-        <h2 className="text-3xl font-bold text-center mb-8 text-slate-800">
+      <section id="faq" className="max-w-5xl mx-auto py-16 px-6">
+        <h2 className="text-3xl font-bold text-center mb-10 text-sky-800 tracking-tight">
           Frequently Asked Questions
         </h2>
-        <div className="space-y-8">
+
+        <div className="divide-y divide-slate-200">
           {faqData.map((f, i) => (
-            <div key={i}>
-              <h3 className="font-semibold text-lg text-slate-800 mb-1">
-                {f.q}
-              </h3>
-              <p className="text-slate-600">{f.a}</p>
-            </div>
+            <details key={i} className="group py-4">
+              <summary className="cursor-pointer list-none font-semibold text-lg text-sky-800 flex items-center justify-between hover:text-sky-900">
+                <span>{f.q}</span>
+                <span className="ml-4 text-slate-400 transition-transform group-open:rotate-180">
+                  ▾
+                </span>
+              </summary>
+
+              <div className="mt-2 text-slate-700 leading-relaxed max-w-prose">
+                {f.a}
+              </div>
+            </details>
           ))}
         </div>
       </section>

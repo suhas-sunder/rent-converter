@@ -900,16 +900,19 @@ export default function Home() {
         }}
       />
 
-      <section id="converter" className="mx-auto max-w-6xl px-6 pb-8">
-        <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:px-8">
-          <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <h1 className="text-xl sm:text-4xl capitalize font-bold text-sky-800 tracking-tight">
+      <section
+        id="converter"
+        className="mx-auto max-w-6xl px-6 pb-8 mt-4 sm:mt-8 sm:pb-12"
+      >
+        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8">
+          <div className="mb-2 sm:mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <h1 className="text-center sm:text-left text-2xl sm:text-4xl capitalize font-bold text-sky-800 tracking-tight">
               Instant rent converter
             </h1>
 
             <div
               id="export-controls"
-              className="mt-6 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
+              className="mt-6 hidden sm:flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
             >
               <div className="flex flex-wrap gap-2">
                 <button
@@ -1055,19 +1058,14 @@ export default function Home() {
               Converted rent
             </div>
 
-            <div className="mt-2 flex flex-col gap-2">
-              <div className="text-4xl sm:text-5xl font-extrabold text-emerald-700 tabular-nums leading-none min-h-[3.25rem] sm:min-h-[4rem]">
+            <div className="mt-2 flex flex-col">
+              <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700 tabular-nums leading-none min-h-[3.25rem] sm:min-h-[4rem]">
                 {validation.ok ? displayMoney : "—"}
               </div>
 
               <div className="text-sm text-slate-700 leading-relaxed">
                 {validation.ok ? (
-                  <>
-                    {convertSummaryLine}{" "}
-                    <span className="ml-2 text-xs text-slate-600">
-                      ({roundingNote})
-                    </span>
-                  </>
+                  <>{convertSummaryLine} </>
                 ) : (
                   "Enter a valid amount to see results."
                 )}
@@ -1131,7 +1129,24 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3 mt-10 sm:mt-6">
+            <div className="flex flex-wrap items-center gap-3 mt-6 sm:mt-6">
+              <div
+                id="export-controls"
+                className="mb-3 sm:hidden flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
+              >
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (typeof window === "undefined") return;
+                      window.print();
+                    }}
+                    className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fbff]"
+                  >
+                    Print / Save PDF
+                  </button>
+                </div>
+              </div>
               <label className="inline-flex items-center gap-2 text-sm font-medium text-slate-700 select-none">
                 <input
                   type="checkbox"
@@ -1197,10 +1212,10 @@ export default function Home() {
             <div className="flex flex-col gap-4 sm:gap-5">
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0">
-                  <h2 className="text-3xl sm:text-4xl font-extrabold text-sky-800 tracking-tight leading-tight">
+                  <h2 className="text-center sm:text-left text-3xl sm:text-4xl font-extrabold text-sky-800 tracking-tight leading-tight">
                     How the rent conversion calculator works
                   </h2>
-                  <p className="mt-2 text-slate-600 leading-7 max-w-2xl">
+                  <p className="text-center sm:text-left mt-2 text-slate-600 leading-7 max-w-2xl">
                     This tool converts a rent amount from one billing period
                     into equivalent amounts for other periods using a consistent
                     day-based model. It is designed for direct comparison. You
@@ -1606,17 +1621,24 @@ export default function Home() {
       </section>
 
       <section id="faq" className="max-w-5xl mx-auto py-16 px-6">
-        <h2 className="text-3xl font-bold text-center mb-8 text-slate-800 tracking-tight">
+        <h2 className="text-3xl font-bold text-center mb-10 text-sky-800 tracking-tight">
           Frequently Asked Questions
         </h2>
-        <div className="space-y-8">
+
+        <div className="divide-y divide-slate-200">
           {faqData.map((f, i) => (
-            <div key={i}>
-              <h3 className="font-semibold text-lg text-slate-800 mb-1">
-                {f.q}
-              </h3>
-              <p className="text-slate-700 leading-relaxed">{f.a}</p>
-            </div>
+            <details key={i} className="group py-4">
+              <summary className="cursor-pointer list-none font-semibold text-lg text-sky-800 flex items-center justify-between hover:text-sky-900">
+                <span>{f.q}</span>
+                <span className="ml-4 text-slate-400 transition-transform group-open:rotate-180">
+                  ▾
+                </span>
+              </summary>
+
+              <div className="mt-2 text-slate-700 leading-relaxed max-w-prose">
+                {f.a}
+              </div>
+            </details>
           ))}
         </div>
       </section>
@@ -1626,17 +1648,6 @@ export default function Home() {
         <RenterChecklists />
         <RentToolsByCountry />
       </div>
-
-      <section className="max-w-6xl mx-auto px-6 pb-8">
-        <p className="text-xs text-slate-600 text-center leading-relaxed">
-          <em>
-            Tools on this site are for budgeting and comparison. They use
-            standard time-length assumptions (365-day year and average month
-            length). Always confirm payment schedules and lease terms in your
-            agreement.
-          </em>
-        </p>
-      </section>
 
       <script
         type="application/ld+json"

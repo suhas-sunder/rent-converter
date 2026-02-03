@@ -807,7 +807,7 @@ export default function RentPerPaycheck() {
         }}
       />
 
-      <section className="max-w-6xl mx-auto px-6  rc-no-print">
+      <section className=" hidden sm:flex max-w-6xl mx-auto px-6 mt-4 rc-no-print">
         <nav className="text-sm text-slate-600" aria-label="Breadcrumb">
           <a
             href={safeHref("/")}
@@ -819,16 +819,19 @@ export default function RentPerPaycheck() {
         </nav>
       </section>
 
-      <section id="calculator" className="mx-auto max-w-6xl px-6 pb-6 mt-4">
-        <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:px-8 rc-print-block">
-          <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+      <section
+        id="calculator"
+        className="mx-auto max-w-6xl px-6 pb-6 mt-6 sm:mt-4"
+      >
+        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block">
+          <div className="mb-2 sm:mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
-              <h2 className="text-xl sm:text-4xl capitalize font-bold text-sky-800">
+              <h2 className="text-center sm:text-left text-2xl sm:text-4xl capitalize font-bold text-sky-800">
                 Rent allocation per paycheck Calculator
               </h2>
             </div>
 
-            <div className="rc-no-print flex flex-col sm:flex-row gap-2">
+            <div className="rc-no-print hidden sm:flex flex-col sm:flex-row gap-2">
               <button
                 type="button"
                 onClick={handlePrint}
@@ -1008,20 +1011,6 @@ export default function RentPerPaycheck() {
                 </div>
 
                 <div className="rc-no-print mt-4 flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      handleCopy(
-                        "summary",
-                        `Per paycheck (${payFreq}): ${fmtMoney(computed.perPaycheckScaled)}; Annual: ${fmtMoney(
-                          computed.annualRentScaled,
-                        )} (365-day basis)`,
-                      )
-                    }
-                    className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
-                  >
-                    {copiedKey === "summary" ? "Copied" : "Copy summary"}
-                  </button>
                   {copiedKey === "copy_failed" ? (
                     <span
                       className="self-center text-sm font-semibold text-rose-700"
@@ -1032,7 +1021,7 @@ export default function RentPerPaycheck() {
                   ) : null}
                 </div>
 
-                <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                <div className=" grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                   {(
                     [
                       [
@@ -1104,13 +1093,22 @@ export default function RentPerPaycheck() {
                 </div>
               </>
             )}
+            <div className="rc-no-print sm:hidden flex flex-col mt-4 sm:flex-row gap-2">
+              <button
+                type="button"
+                onClick={handlePrint}
+                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
+              >
+                Print / Save as PDF
+              </button>
+            </div>
           </div>
 
           <section className="mt-10 rc-print-block">
-            <h3 className="text-2xl font-semibold mb-4 text-slate-950">
+            <h3 className="text-center sm:text-left text-2xl font-semibold mb-4 text-slate-950">
               Annual payment counts
             </h3>
-            <p className="text-slate-700 mb-4 leading-relaxed">
+            <p className="text-center sm:text-left text-slate-700 mb-4 leading-relaxed">
               Rent listings and pay schedules often use different cycles. This
               table shows the standard counts per year used for comparison.
             </p>
@@ -1207,10 +1205,10 @@ export default function RentPerPaycheck() {
 
           {computed.ok ? (
             <section className="mt-10 rc-print-block">
-              <h3 className="text-2xl font-semibold mb-4 text-slate-950">
+              <h3 className="text-center sm:text-left text-2xl font-semibold mb-4 text-slate-950">
                 Rent period breakdown for the entered amount
               </h3>
-              <p className="text-slate-700 mb-4 leading-relaxed">
+              <p className="text-center sm:text-left text-slate-700 mb-4 leading-relaxed">
                 This breakdown expresses the entered rent in other time periods
                 using the same annual equivalence and standard assumptions.
               </p>
@@ -1252,28 +1250,6 @@ export default function RentPerPaycheck() {
               </div>
             </section>
           ) : null}
-
-          <section className="mt-10 rounded-2xl border border-slate-200 bg-white p-6 rc-print-block">
-            <h3 className="text-xl font-bold text-slate-950 mb-3">
-              Disclaimer
-            </h3>
-            <p className="text-sm text-slate-800 leading-relaxed">
-              <strong>Disclaimer:</strong>
-              <br />
-              Tools on this site are provided for informational, budgeting, and
-              comparison purposes only. Calculations are based on standard
-              time-period assumptions (including a 365-day year and average
-              month length) and simplified models. Results are estimates, not
-              guarantees.
-              <br />
-              <br />
-              This website does not provide financial, legal, or tax advice.
-              Rental costs, affordability, payment schedules, and obligations
-              vary by location, landlord, lease terms, and individual
-              circumstances. Always review your lease agreement and consult
-              qualified professionals before making financial decisions.
-            </p>
-          </section>
 
           <p className="mt-6 text-sm text-slate-600 leading-relaxed">
             Assumptions: 1 calendar year = 365 days. Rent-period counts use
@@ -1348,11 +1324,11 @@ export default function RentPerPaycheck() {
 
         <div className="relative p-6 sm:p-10">
           <div className="mx-auto max-w-4xl">
-            <h2 className="text-3xl sm:text-4xl font-extrabold mb-6 text-center text-sky-900 tracking-tight leading-tight">
+            <h2 className="text-3xl sm:text-4xl font-extrabold mb-6 text-center sm:text-left  text-sky-900 tracking-tight leading-tight">
               How this rent per paycheck calculator works and what to expect
             </h2>
 
-            <p className="text-slate-600 leading-7">
+            <p className="text-center sm:text-left text-slate-600 leading-7">
               This calculator is a budgeting allocator. It estimates how much
               rent to set aside from each paycheck by treating your rent as a
               yearly cost and spreading that cost across the paychecks implied
@@ -1668,36 +1644,33 @@ export default function RentPerPaycheck() {
         </div>
       </section>
 
-      <section id="faq" className="max-w-5xl mx-auto py-16 px-6 rc-no-print">
-        <h2 className="text-3xl font-bold text-center mb-8 text-slate-900">
-          Frequently Asked Questions
-        </h2>
-        <div className="space-y-8">
-          {faqData.map((f, i) => (
-            <div key={i}>
-              <h3 className="font-semibold text-lg text-slate-900 mb-1">
-                {f.q}
-              </h3>
-              <p className="text-slate-700 leading-relaxed">{f.a}</p>
-            </div>
-          ))}
+<section id="faq" className="max-w-5xl mx-auto py-16 px-6">
+  <h2 className="text-3xl font-bold text-center mb-10 text-sky-800 tracking-tight">
+    Frequently Asked Questions
+  </h2>
+
+  <div className="divide-y divide-slate-200">
+    {faqData.map((f, i) => (
+      <details key={i} className="group py-4">
+        <summary className="cursor-pointer list-none font-semibold text-lg text-sky-800 flex items-center justify-between hover:text-sky-900">
+          <span>{f.q}</span>
+          <span className="ml-4 text-slate-400 transition-transform group-open:rotate-180">
+            ▾
+          </span>
+        </summary>
+
+        <div className="mt-2 text-slate-700 leading-relaxed max-w-prose">
+          {f.a}
         </div>
-      </section>
+      </details>
+    ))}
+  </div>
+</section>
+
 
       <OtherUsefulTools />
       <RenterChecklists />
       <RentToolsByCountry />
-
-      <section className="max-w-6xl mx-auto px-6 pb-8 rc-no-print">
-        <p className="text-xs text-slate-600 text-center leading-relaxed">
-          <em>
-            Tools on this site are for budgeting and comparison. Calculations
-            use standard time-period assumptions, including a 365-day year and
-            average month length. Always confirm payment schedules and lease
-            terms in your rental agreement.
-          </em>
-        </p>
-      </section>
 
       <script
         type="application/ld+json"
