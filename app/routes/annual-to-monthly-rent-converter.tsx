@@ -875,7 +875,7 @@ export default function AnnualToMonthlyRent() {
         </nav>
       </section>
 
-      <section id="converter" className="mx-auto max-w-6xl px-6 pb-6">
+      <section id="converter" className="mx-auto max-w-6xl px-6 pb-6 mt-4">
         <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:px-8 rc-print-block">
           <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <h2 className="text-xl capitalize sm:text-4xl text-sky-800 font-bold">

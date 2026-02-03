@@ -821,7 +821,7 @@ export default function RentPerPaycheck() {
 
       <section
         id="calculator"
-        className="mx-auto max-w-6xl px-6 pb-6 mt-6 sm:mt-4"
+        className="mx-auto max-w-6xl px-6 pb-6 mt-4"
       >
         <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block">
           <div className="mb-2 sm:mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
