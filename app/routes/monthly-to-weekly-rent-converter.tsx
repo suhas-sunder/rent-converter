@@ -31,12 +31,12 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:description", content: description },
     {
       property: "og:url",
-      content: "https://www.rentconverter.com/monthly-to-weekly-rent-converter",
+      content: "https://www.rentconverter.commonthly-to-weekly-rent-converter",
     },
     { property: "og:site_name", content: "RentConverter.com" },
     {
       property: "og:image",
-      content: "https://www.rentconverter.com/og-image.jpg",
+      content: "https://www.rentconverter.comog-image.jpg",
     },
 
     { name: "twitter:card", content: "summary_large_image" },
@@ -44,13 +44,13 @@ export const meta: Route.MetaFunction = () => {
     { name: "twitter:description", content: description },
     {
       name: "twitter:image",
-      content: "https://www.rentconverter.com/og-image.jpg",
+      content: "https://www.rentconverter.comog-image.jpg",
     },
 
     {
       tagName: "link",
       rel: "canonical",
-      href: "https://www.rentconverter.com/monthly-to-weekly-rent-converter",
+      href: "https://www.rentconverter.commonthly-to-weekly-rent-converter",
     },
   ];
 };
@@ -655,13 +655,13 @@ export default function MonthlyToWeeklyRent() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.rentconverter.com/",
+        item: "https://www.rentconverter.com",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Monthly to Weekly Rent Converter",
-        item: "https://www.rentconverter.com/monthly-to-weekly-rent-converter",
+        item: "https://www.rentconverter.commonthly-to-weekly-rent-converter",
       },
     ],
   };
@@ -670,7 +670,7 @@ export default function MonthlyToWeeklyRent() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "RentConverter.com",
-    url: "https://www.rentconverter.com/",
+    url: "https://www.rentconverter.com",
   };
 
   const webPageSchema = {
@@ -679,7 +679,7 @@ export default function MonthlyToWeeklyRent() {
     name: "Monthly to Weekly Rent Converter",
     description:
       "Convert monthly rent to a weekly equivalent using annual equivalence (365-day year and average month length). Includes period breakdowns and 4-week (28-day) comparisons.",
-    url: "https://www.rentconverter.com/monthly-to-weekly-rent-converter",
+    url: "https://www.rentconverter.commonthly-to-weekly-rent-converter",
   };
 
   const amountDescribedBy = parsedAmount.ok

@@ -37,12 +37,12 @@ export const meta: Route.MetaFunction = () => [
   },
   {
     property: "og:url",
-    content: "https://www.rentconverter.com/rent-vs-buy-calculator",
+    content: "https://www.rentconverter.comrent-vs-buy-calculator",
   },
   { property: "og:site_name", content: "RentConverter.com" },
   {
     property: "og:image",
-    content: "https://www.rentconverter.com/og-image.jpg",
+    content: "https://www.rentconverter.comog-image.jpg",
   },
 
   { name: "twitter:card", content: "summary_large_image" },
@@ -54,13 +54,13 @@ export const meta: Route.MetaFunction = () => [
   },
   {
     name: "twitter:image",
-    content: "https://www.rentconverter.com/og-image.jpg",
+    content: "https://www.rentconverter.comog-image.jpg",
   },
 
   {
     tagName: "link",
     rel: "canonical",
-    href: "https://www.rentconverter.com/rent-vs-buy-calculator",
+    href: "https://www.rentconverter.comrent-vs-buy-calculator",
   },
 ];
 
@@ -602,7 +602,7 @@ function scaledMax0(a: bigint): bigint {
 
 export default function RentVsBuyCalculator() {
   const pageName = "Rent vs Buy Calculator";
-  const canonicalUrl = "https://www.rentconverter.com/rent-vs-buy-calculator";
+  const canonicalUrl = "https://www.rentconverter.comrent-vs-buy-calculator";
 
   const [currency, setCurrency] = useState<Currency>(() => {
     if (typeof window === "undefined") return "USD";
@@ -1154,7 +1154,7 @@ export default function RentVsBuyCalculator() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.rentconverter.com/",
+        item: "https://www.rentconverter.com",
       },
       {
         "@type": "ListItem",

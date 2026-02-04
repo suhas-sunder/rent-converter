@@ -9,10 +9,16 @@ function safeToFixed(n: number, digits: number): string {
   return n.toFixed(digits);
 }
 
+const SITE_URL = "https://www.rentconverter.com";
+const PAGE_PATH = "/biweekly-to-annual-rent-converter";
+
 export const meta: Route.MetaFunction = () => {
   const title = "Biweekly to Annual Rent Converter (Exact 14-Day Year)";
   const description =
     "Instantly convert biweekly rent (every 14 days) into an annual total using a true 365-day year. Exact decimals, full breakdown, and payment-count context (×26 vs 365/14), plus print-to-PDF. Free, private, no signup.";
+
+  const url = `${SITE_URL}${PAGE_PATH}`;
+  const ogImage = `${SITE_URL}/og-image.jpg`;
 
   return [
     { title },
@@ -29,30 +35,16 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:type", content: "website" },
     { property: "og:title", content: title },
     { property: "og:description", content: description },
-    {
-      property: "og:url",
-      content:
-        "https://www.rentconverter.com/biweekly-to-annual-rent-converter",
-    },
+    { property: "og:url", content: url },
     { property: "og:site_name", content: "RentConverter.com" },
-    {
-      property: "og:image",
-      content: "https://www.rentconverter.com/og-image.jpg",
-    },
+    { property: "og:image", content: ogImage },
 
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
-    {
-      name: "twitter:image",
-      content: "https://www.rentconverter.com/og-image.jpg",
-    },
+    { name: "twitter:image", content: ogImage },
 
-    {
-      tagName: "link",
-      rel: "canonical",
-      href: "https://www.rentconverter.com/biweekly-to-annual-rent-converter",
-    },
+    { tagName: "link", rel: "canonical", href: url },
   ];
 };
 
@@ -584,17 +576,27 @@ export default function BiweeklyToAnnualRent() {
     const monthly = biweeklyToPeriodScaled(biweeklyScaled, "monthly");
     const annual = biweeklyToPeriodScaled(biweeklyScaled, "annual");
 
+    function ratioToNumber(
+      numer: bigint,
+      denom: bigint,
+      precision = 8,
+    ): number {
+      if (denom === 0n) return 0;
+      const p = Math.max(0, Math.min(12, Math.trunc(precision)));
+      const factor = 10n ** BigInt(p);
+      const scaled = (numer * factor) / denom;
+      return Number(scaled) / 10 ** p;
+    }
+
     // Payment-count context: 26 vs 365/14
     const annualVia26 = biweeklyScaled * 26n;
     const annualVia365Day = annual;
 
     const annualDiff = annualVia365Day - annualVia26;
-    const annualDiffPct =
-      annualVia26 === 0n ? 0 : Number(annualDiff) / Number(annualVia26);
+    const annualDiffPct = ratioToNumber(annualDiff, annualVia26, 8);
 
     const monthlyMinus4w = monthly - every4w;
-    const monthlyMinus4wPct =
-      every4w === 0n ? 0 : Number(monthlyMinus4w) / Number(every4w);
+    const monthlyMinus4wPct = ratioToNumber(monthlyMinus4w, every4w, 8);
 
     return {
       hourly,
@@ -684,13 +686,13 @@ export default function BiweeklyToAnnualRent() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.rentconverter.com/",
+        item: "https://www.rentconverter.com",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Biweekly to Annual Rent Converter",
-        item: "https://www.rentconverter.com/biweekly-to-annual-rent-converter",
+        item: "https://www.rentconverter.combiweekly-to-annual-rent-converter",
       },
     ],
   };
@@ -744,7 +746,7 @@ export default function BiweeklyToAnnualRent() {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
               >
                 Print / Save as PDF
               </button>
@@ -981,7 +983,7 @@ export default function BiweeklyToAnnualRent() {
             <button
               type="button"
               onClick={handlePrint}
-              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+              className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
             >
               Print / Save as PDF
             </button>
@@ -996,7 +998,7 @@ export default function BiweeklyToAnnualRent() {
                   type="checkbox"
                   checked={roundDisplay}
                   onChange={(e) => setRoundDisplay(e.target.checked)}
-                  className="h-4 w-4 rounded border-slate-300 text-sky-600 focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                  className="cursor-pointer h-4 w-4 rounded border-slate-300 text-sky-600 focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                 />
                 Round displayed values
               </label>

@@ -37,12 +37,12 @@ export const meta: Route.MetaFunction = () => [
   },
   {
     property: "og:url",
-    content: "https://www.rentconverter.com/rent-vs-take-home-pay-calculator",
+    content: "https://www.rentconverter.comrent-vs-take-home-pay-calculator",
   },
   { property: "og:site_name", content: "RentConverter.com" },
   {
     property: "og:image",
-    content: "https://www.rentconverter.com/og-image.jpg",
+    content: "https://www.rentconverter.comog-image.jpg",
   },
 
   { name: "twitter:card", content: "summary_large_image" },
@@ -54,13 +54,13 @@ export const meta: Route.MetaFunction = () => [
   },
   {
     name: "twitter:image",
-    content: "https://www.rentconverter.com/og-image.jpg",
+    content: "https://www.rentconverter.comog-image.jpg",
   },
 
   {
     tagName: "link",
     rel: "canonical",
-    href: "https://www.rentconverter.com/rent-vs-take-home-pay-calculator",
+    href: "https://www.rentconverter.comrent-vs-take-home-pay-calculator",
   },
 ];
 
@@ -615,7 +615,7 @@ function formatAmountPreviewFromRaw(raw: string): {
 export default function RentVsTakeHomePay() {
   const pageName = "Rent vs Take-Home Pay Calculator";
   const canonicalUrl =
-    "https://www.rentconverter.com/rent-vs-take-home-pay-calculator";
+    "https://www.rentconverter.comrent-vs-take-home-pay-calculator";
 
   const [takeHomePay, setTakeHomePay] = useState<string>(() => {
     if (typeof window === "undefined") return "5000";
@@ -880,7 +880,7 @@ export default function RentVsTakeHomePay() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.rentconverter.com/",
+        item: "https://www.rentconverter.com",
       },
       {
         "@type": "ListItem",

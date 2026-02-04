@@ -37,7 +37,7 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:site_name", content: "RentConverter.com" },
     {
       property: "og:image",
-      content: "https://www.rentconverter.com/og-image.jpg",
+      content: "https://www.rentconverter.comog-image.jpg",
     },
 
     { name: "twitter:card", content: "summary_large_image" },
@@ -45,7 +45,7 @@ export const meta: Route.MetaFunction = () => {
     { name: "twitter:description", content: description },
     {
       name: "twitter:image",
-      content: "https://www.rentconverter.com/og-image.jpg",
+      content: "https://www.rentconverter.comog-image.jpg",
     },
 
     { tagName: "link", rel: "canonical", href: PAGE_URL },
@@ -71,17 +71,19 @@ const PERIOD_LABEL: Record<Period, string> = {
   annual: "Annual",
 };
 
-// Internal link whitelist (only known routes)
 const ROUTE_WHITELIST = new Set<string>([
   "/",
   "/rent-converter",
-  "/rent-affordability-calculator",
-  "/rent-paid-every-4-weeks",
 
+  // Frequency converters
   "/monthly-to-weekly-rent-converter",
   "/weekly-to-monthly-rent-converter",
+  "/weekly-to-annual-rent-converter",
+  "/weekly-to-biweekly-rent-converter",
+
+  "/biweekly-to-weekly-rent-converter",
   "/biweekly-to-monthly-rent-converter",
-  "/monthly-to-biweekly-rent-converter",
+  "/biweekly-to-annual-rent-converter",
 
   "/monthly-to-annual-rent-converter",
   "/annual-to-monthly-rent-converter",
@@ -89,19 +91,38 @@ const ROUTE_WHITELIST = new Set<string>([
   "/monthly-to-daily-rent-converter",
   "/daily-to-monthly-rent-converter",
 
-  "/weekly-to-annual-rent-converter",
-  "/annual-to-weekly-rent-converter",
-
-  "/biweekly-to-weekly-rent-converter",
-  "/weekly-to-biweekly-rent-converter",
-
-  "/annual-to-biweekly-rent-converter",
-  "/biweekly-to-annual-rent-converter",
-
-  "/hourly-to-monthly-rent-converter",
   "/monthly-to-hourly-rent-converter",
+  "/hourly-to-monthly-rent-converter",
+
   "/hourly-to-annual-rent-converter",
   "/annual-to-hourly-rent-converter",
+
+  "/annual-to-weekly-rent-converter",
+  "/annual-to-biweekly-rent-converter",
+  "/monthly-to-biweekly-rent-converter",
+
+  // Rent calculators
+  "/rent-calculator",
+  "/rent-per-day-calculator",
+  "/rent-per-week-calculator",
+  "/rent-paid-every-4-weeks-calculator",
+  "/rent-per-paycheck-calculator",
+  "/rent-split-calculator",
+  "/rent-due-date-calculator",
+
+  // Affordability and income
+  "/rent-as-percentage-of-income-calculator",
+  "/how-much-rent-can-i-afford-calculator",
+  "/rent-after-tax-income-calculator",
+  "/rent-vs-take-home-pay-calculator",
+
+  // Rent increases
+  "/rent-increase-calculator",
+  "/rent-increase-percentage-calculator",
+  "/rent-after-increase-calculator",
+
+  // Rent vs buy
+  "/rent-vs-buy-calculator",
 ]);
 
 function safeHref(path: string): string {
@@ -395,6 +416,8 @@ function parseMoneyInputToScaled(raw: string): ParsedAmount {
     fracPart = split[1] ?? "";
   }
 
+  if (decimalSep && intPart === "") intPart = "0";
+
   if (decimalSep === ".") intPart = intPart.replace(/,/g, "");
   else if (decimalSep === ",") intPart = intPart.replace(/\./g, "");
   else intPart = intPart.replace(/[.,]/g, "");
@@ -597,9 +620,20 @@ export default function BiweeklyToWeeklyRent() {
     const monthly = biweeklyToPeriodScaled(biweeklyScaled, "monthly");
     const annual = biweeklyToPeriodScaled(biweeklyScaled, "annual");
 
+    function ratioToNumber(
+      numer: bigint,
+      denom: bigint,
+      precision = 8,
+    ): number {
+      if (denom === 0n) return 0;
+      const p = Math.max(0, Math.min(12, Math.trunc(precision)));
+      const factor = 10n ** BigInt(p);
+      const scaled = (numer * factor) / denom;
+      return Number(scaled) / 10 ** p;
+    }
+
     const monthlyMinus4w = monthly - every4w;
-    const monthlyMinus4wPct =
-      every4w === 0n ? 0 : Number(monthlyMinus4w) / Number(every4w);
+    const monthlyMinus4wPct = ratioToNumber(monthlyMinus4w, every4w, 8);
 
     // Illustrative payment counts (calendar style)
     const annualFromWeekly52 = weekly * 52n;
@@ -608,14 +642,8 @@ export default function BiweeklyToWeeklyRent() {
     const annualDiffVs52 = annual - annualFromWeekly52;
     const annualDiffVs26 = annual - annualFromBiweekly26;
 
-    const pctVs52 =
-      annualFromWeekly52 === 0n
-        ? 0
-        : Number(annualDiffVs52) / Number(annualFromWeekly52);
-    const pctVs26 =
-      annualFromBiweekly26 === 0n
-        ? 0
-        : Number(annualDiffVs26) / Number(annualFromBiweekly26);
+    const pctVs52 = ratioToNumber(annualDiffVs52, annualFromWeekly52, 8);
+    const pctVs26 = ratioToNumber(annualDiffVs26, annualFromBiweekly26, 8);
 
     return {
       hourly,
@@ -710,7 +738,7 @@ export default function BiweeklyToWeeklyRent() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.rentconverter.com/",
+        item: "https://www.rentconverter.com",
       },
       {
         "@type": "ListItem",
@@ -725,7 +753,7 @@ export default function BiweeklyToWeeklyRent() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "RentConverter.com",
-    url: "https://www.rentconverter.com/",
+    url: "https://www.rentconverter.com",
   };
 
   const webPageSchema = {
@@ -772,7 +800,7 @@ export default function BiweeklyToWeeklyRent() {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
               >
                 Print / Save as PDF
               </button>
@@ -793,7 +821,7 @@ export default function BiweeklyToWeeklyRent() {
                   onFocus={() => setIsAmountFocused(true)}
                   onBlur={() => setIsAmountFocused(false)}
                   placeholder="e.g. 900 or 900.50"
-                  className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!parsedBiweekly.ok}
                   aria-describedby="rc-amount-help rc-amount-error"
                 />
@@ -958,7 +986,7 @@ export default function BiweeklyToWeeklyRent() {
             <button
               type="button"
               onClick={handlePrint}
-              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+              className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
             >
               Print / Save as PDF
             </button>
@@ -973,7 +1001,7 @@ export default function BiweeklyToWeeklyRent() {
                   type="checkbox"
                   checked={roundDisplay}
                   onChange={(e) => setRoundDisplay(e.target.checked)}
-                  className="h-4 w-4"
+                  className="cursor-pointer h-4 w-4"
                 />
                 Round displayed values
               </label>

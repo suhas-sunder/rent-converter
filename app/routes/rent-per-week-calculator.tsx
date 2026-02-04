@@ -39,12 +39,12 @@ export const meta: Route.MetaFunction = () => [
   },
   {
     property: "og:url",
-    content: "https://www.rentconverter.com/rent-per-week-calculator",
+    content: "https://www.rentconverter.comrent-per-week-calculator",
   },
   { property: "og:site_name", content: "RentConverter.com" },
   {
     property: "og:image",
-    content: "https://www.rentconverter.com/og-image.jpg",
+    content: "https://www.rentconverter.comog-image.jpg",
   },
 
   { name: "twitter:card", content: "summary_large_image" },
@@ -56,13 +56,13 @@ export const meta: Route.MetaFunction = () => [
   },
   {
     name: "twitter:image",
-    content: "https://www.rentconverter.com/og-image.jpg",
+    content: "https://www.rentconverter.comog-image.jpg",
   },
 
   {
     tagName: "link",
     rel: "canonical",
-    href: "https://www.rentconverter.com/rent-per-week-calculator",
+    href: "https://www.rentconverter.comrent-per-week-calculator",
   },
 ];
 
@@ -542,7 +542,7 @@ function formatPreviewFromNormalized(normalized: string): string {
 
 export default function RentPerWeekCalculator() {
   const pageName = "Rent Per Week Calculator";
-  const canonicalUrl = "https://www.rentconverter.com/rent-per-week-calculator";
+  const canonicalUrl = "https://www.rentconverter.comrent-per-week-calculator";
 
   const [amount, setAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "2000";
@@ -747,7 +747,7 @@ export default function RentPerWeekCalculator() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.rentconverter.com/",
+        item: "https://www.rentconverter.com",
       },
       { "@type": "ListItem", position: 2, name: pageName, item: canonicalUrl },
     ],
@@ -767,7 +767,7 @@ export default function RentPerWeekCalculator() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "RentConverter.com",
-    url: "https://www.rentconverter.com/",
+    url: "https://www.rentconverter.com",
   };
 
   const webPageSchema = {

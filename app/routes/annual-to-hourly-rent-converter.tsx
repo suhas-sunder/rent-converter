@@ -4,15 +4,15 @@ import OtherUsefulTools from "~/client/components/navigation/OtherUsefulTools";
 import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountry";
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
-function safeToFixed(n: number, digits: number): string {
-  if (!Number.isFinite(n)) return "-";
-  return n.toFixed(digits);
-}
+const SITE_URL = "https://www.rentconverter.com";
+const PAGE_PATH = "/annual-to-hourly-rent-converter";
 
 export const meta: Route.MetaFunction = () => {
   const title = "Annual to Hourly Rent Converter (Exact 8,760-Hour Year)";
   const description =
     "Instantly convert annual rent into an hourly amount using a true 365-day (8,760-hour) year. Exact decimals, full breakdown, optional paid-hours scenario, and print-to-PDF. Free, private, no signup.";
+
+  const url = `${SITE_URL}${PAGE_PATH}`;
 
   return [
     { title },
@@ -26,32 +26,22 @@ export const meta: Route.MetaFunction = () => {
     { name: "author", content: "RentConverter.com" },
     { name: "theme-color", content: "#f8fafc" },
 
+    // Open Graph
     { property: "og:type", content: "website" },
     { property: "og:title", content: title },
     { property: "og:description", content: description },
-    {
-      property: "og:url",
-      content: "https://www.rentconverter.com/annual-to-hourly-rent-converter",
-    },
+    { property: "og:url", content: url },
     { property: "og:site_name", content: "RentConverter.com" },
-    {
-      property: "og:image",
-      content: "https://www.rentconverter.com/og-image.jpg",
-    },
+    { property: "og:image", content: `${SITE_URL}/og-image.jpg` },
 
+    // Twitter
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
-    {
-      name: "twitter:image",
-      content: "https://www.rentconverter.com/og-image.jpg",
-    },
+    { name: "twitter:image", content: `${SITE_URL}/og-image.jpg` },
 
-    {
-      tagName: "link",
-      rel: "canonical",
-      href: "https://www.rentconverter.com/annual-to-hourly-rent-converter",
-    },
+    // Canonical
+    { tagName: "link", rel: "canonical", href: url },
   ];
 };
 
@@ -864,13 +854,13 @@ export default function AnnualToHourlyRent() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.rentconverter.com/",
+        item: SITE_URL, // no trailing slash
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Annual to Hourly Rent Converter",
-        item: "https://www.rentconverter.com/annual-to-hourly-rent-converter",
+        item: `${SITE_URL}${PAGE_PATH}`,
       },
     ],
   };
@@ -923,7 +913,7 @@ export default function AnnualToHourlyRent() {
                   aria-label="Toggle paid-hours scenario"
                 >
                   <span
-                    className={`absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white shadow transition ${
+                    className={`cursor-pointer absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white shadow transition ${
                       showPaidHoursScenario ? "translate-x-5" : ""
                     }`}
                   />
@@ -942,7 +932,7 @@ export default function AnnualToHourlyRent() {
                     onFocus={() => setPaidHoursFocused(true)}
                     onBlur={() => setPaidHoursFocused(false)}
                     placeholder="e.g. 40 or 37.5"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-2 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                     aria-invalid={Boolean(parsedHours && !parsedHours.ok)}
                     aria-describedby="rc-hours-help rc-hours-error"
                   />
@@ -987,7 +977,7 @@ export default function AnnualToHourlyRent() {
                   onFocus={() => setAmountFocused(true)}
                   onBlur={() => setAmountFocused(false)}
                   placeholder="e.g. 30000 or 30000.50"
-                  className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!parsedAnnual.ok}
                   aria-describedby="rc-amount-help rc-amount-error"
                 />
@@ -1209,7 +1199,7 @@ export default function AnnualToHourlyRent() {
             <button
               type="button"
               onClick={handlePrint}
-              className="rounded-xl cursor-pointer border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+              className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
             >
               Print / Save as PDF
             </button>
@@ -1224,7 +1214,7 @@ export default function AnnualToHourlyRent() {
                   type="checkbox"
                   checked={roundDisplay}
                   onChange={(e) => setRoundDisplay(e.target.checked)}
-                  className="h-4 w-4"
+                  className="cursor-pointer h-4 w-4"
                 />
                 Round displayed values
               </label>

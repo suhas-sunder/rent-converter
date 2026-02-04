@@ -31,12 +31,12 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:description", content: description },
     {
       property: "og:url",
-      content: "https://www.rentconverter.com/daily-to-monthly-rent-converter",
+      content: "https://www.rentconverter.comdaily-to-monthly-rent-converter",
     },
     { property: "og:site_name", content: "RentConverter.com" },
     {
       property: "og:image",
-      content: "https://www.rentconverter.com/og-image.jpg",
+      content: "https://www.rentconverter.comog-image.jpg",
     },
 
     { name: "twitter:card", content: "summary_large_image" },
@@ -44,13 +44,13 @@ export const meta: Route.MetaFunction = () => {
     { name: "twitter:description", content: description },
     {
       name: "twitter:image",
-      content: "https://www.rentconverter.com/og-image.jpg",
+      content: "https://www.rentconverter.comog-image.jpg",
     },
 
     {
       tagName: "link",
       rel: "canonical",
-      href: "https://www.rentconverter.com/daily-to-monthly-rent-converter",
+      href: "https://www.rentconverter.comdaily-to-monthly-rent-converter",
     },
   ];
 };
@@ -686,13 +686,13 @@ export default function DailyToMonthlyRent() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.rentconverter.com/",
+        item: "https://www.rentconverter.com",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Daily to Monthly Rent Converter",
-        item: "https://www.rentconverter.com/daily-to-monthly-rent-converter",
+        item: "https://www.rentconverter.comdaily-to-monthly-rent-converter",
       },
     ],
   };
@@ -701,7 +701,7 @@ export default function DailyToMonthlyRent() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "RentConverter.com",
-    url: "https://www.rentconverter.com/",
+    url: "https://www.rentconverter.com",
   };
 
   const webPageSchema = {
@@ -710,7 +710,7 @@ export default function DailyToMonthlyRent() {
     name: "Daily to Monthly Rent Converter",
     description:
       "Convert a daily rent price into a monthly equivalent using a 365-day year (annual equivalence). Decimal-safe input, full breakdown, 30-day vs average-month context, and print-to-PDF.",
-    url: "https://www.rentconverter.com/daily-to-monthly-rent-converter",
+    url: "https://www.rentconverter.comdaily-to-monthly-rent-converter",
   };
 
   return (

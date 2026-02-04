@@ -34,12 +34,12 @@ export const meta: Route.MetaFunction = () => [
   },
   {
     property: "og:url",
-    content: "https://www.rentconverter.com/rent-due-date-calculator",
+    content: "https://www.rentconverter.comrent-due-date-calculator",
   },
   { property: "og:site_name", content: "RentConverter.com" },
   {
     property: "og:image",
-    content: "https://www.rentconverter.com/og-image.jpg",
+    content: "https://www.rentconverter.comog-image.jpg",
   },
 
   { name: "twitter:card", content: "summary_large_image" },
@@ -51,13 +51,13 @@ export const meta: Route.MetaFunction = () => [
   },
   {
     name: "twitter:image",
-    content: "https://www.rentconverter.com/og-image.jpg",
+    content: "https://www.rentconverter.comog-image.jpg",
   },
 
   {
     tagName: "link",
     rel: "canonical",
-    href: "https://www.rentconverter.com/rent-due-date-calculator",
+    href: "https://www.rentconverter.comrent-due-date-calculator",
   },
 ];
 
@@ -668,7 +668,7 @@ function isBillingCycle(x: string): x is BillingCycle {
 
 export default function RentDueDateCalculator() {
   const pageName = "Rent Due Date Calculator";
-  const canonicalUrl = "https://www.rentconverter.com/rent-due-date-calculator";
+  const canonicalUrl = "https://www.rentconverter.comrent-due-date-calculator";
 
   const [cycle, setCycle] = useState<BillingCycle>(() => {
     if (typeof window === "undefined") return "monthly";
@@ -972,7 +972,7 @@ export default function RentDueDateCalculator() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.rentconverter.com/",
+        item: "https://www.rentconverter.com",
       },
       { "@type": "ListItem", position: 2, name: pageName, item: canonicalUrl },
     ],

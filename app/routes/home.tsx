@@ -4,6 +4,8 @@ import OtherUsefulTools from "~/client/components/navigation/OtherUsefulTools";
 import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountry";
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
+const SITE_URL = "https://www.rentconverter.com";
+
 export const meta: Route.MetaFunction = () => [
   {
     title:
@@ -14,14 +16,6 @@ export const meta: Route.MetaFunction = () => [
     content:
       "Convert rent between weekly, monthly, every 4 weeks (28 days), biweekly, daily, hourly, and annual using clear, consistent assumptions. Exact decimals, side-by-side comparisons, and transparent math.",
   },
-  {
-    name: "keywords",
-    content:
-      "rent converter, rent calculator, weekly to monthly rent, monthly to weekly rent, 4 week rent, 28 day rent, rent paid every 4 weeks, rent billed every 28 days, biweekly to monthly rent, monthly to annual rent, annual to monthly rent, rent per day, rent per week, rent per hour, rent affordability, how much rent can I afford",
-  },
-  { name: "robots", content: "index,follow" },
-  { name: "author", content: "RentConverter.com" },
-  { name: "theme-color", content: "#f8fafc" },
 
   // Open Graph
   { property: "og:type", content: "website" },
@@ -35,12 +29,9 @@ export const meta: Route.MetaFunction = () => [
     content:
       "Accurate rent conversions across weekly, monthly, 28-day, biweekly, daily, hourly, and annual periods with clear assumptions and exact decimals.",
   },
-  { property: "og:url", content: "https://www.rentconverter.com/" },
+  { property: "og:url", content: SITE_URL },
   { property: "og:site_name", content: "RentConverter.com" },
-  {
-    property: "og:image",
-    content: "https://www.rentconverter.com/og-image.jpg",
-  },
+  { property: "og:image", content: `${SITE_URL}/og-image.jpg` },
 
   // Twitter
   { name: "twitter:card", content: "summary_large_image" },
@@ -53,11 +44,10 @@ export const meta: Route.MetaFunction = () => [
     content:
       "Clear, accurate rent conversions with transparent math and exact decimals.",
   },
-  {
-    name: "twitter:image",
-    content: "https://www.rentconverter.com/og-image.jpg",
-  },
-  { tagName: "link", rel: "canonical", href: "https://www.rentconverter.com/" },
+  { name: "twitter:image", content: `${SITE_URL}/og-image.jpg` },
+
+  // Canonical
+  { tagName: "link", rel: "canonical", href: SITE_URL },
 ];
 
 type Period =
@@ -815,7 +805,7 @@ export default function Home() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "RentConverter.com",
-    url: "https://www.rentconverter.com/",
+    url: SITE_URL,
   };
 
   const webPageSchema = {
@@ -824,7 +814,7 @@ export default function Home() {
     name: "Rent Converter Calculator: Weekly, Monthly, 4-Week (28-Day), Biweekly, Daily, Hourly, Annual",
     description:
       "Convert rent between weekly, monthly, every 4 weeks (28 days), biweekly, daily, hourly, and annual using clear assumptions. Decimal-safe input and a clear breakdown.",
-    url: "https://www.rentconverter.com/",
+    url: SITE_URL,
   };
 
   const convertSummaryLine = useMemo(() => {
@@ -902,10 +892,10 @@ export default function Home() {
 
       <section
         id="converter"
-        className="mx-auto max-w-6xl px-6 pb-8 mt-4 sm:mt-8 sm:pb-12"
+        className="mx-auto max-w-6xl px-6 pb-8 mt-4 sm:mt-6 sm:pb-12"
       >
         <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8">
-          <div className="mb-2 sm:mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className=" flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <h1 className="text-center sm:text-left text-2xl sm:text-4xl capitalize font-bold text-sky-800 tracking-tight">
               Instant rent converter
             </h1>
@@ -921,7 +911,7 @@ export default function Home() {
                     if (typeof window === "undefined") return;
                     window.print();
                   }}
-                  className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fbff]"
+                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fbff]"
                 >
                   Print / Save PDF
                 </button>
@@ -933,7 +923,7 @@ export default function Home() {
             Controls how many decimals to show when rounding is enabled.
           </p>
 
-          <div className="grid gap-5 md:grid-cols-12">
+          <div className="grid gap-y-3 gap-x-5 md:grid-cols-12">
             <div className="md:col-span-5">
               <label className="block text-sm font-semibold text-slate-800 mb-2">
                 Rent amount
@@ -946,7 +936,7 @@ export default function Home() {
                   onBlur={() => setAmountFocused(false)}
                   onChange={(e) => setAmount(e.target.value)}
                   placeholder="e.g. 500 or 1250.50"
-                  className="w-full min-w-0 rounded-xl border border-slate-300 px-4 py-3 text-base text-slate-900 placeholder:text-slate-400 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-sky-400"
+                  className="cursor-pointer w-full min-w-0 rounded-xl border border-slate-300 px-4 py-3 text-base text-slate-900 placeholder:text-slate-400 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-sky-400"
                   aria-invalid={!validation.ok}
                   aria-describedby={`${amountHelpId} ${amountStatusId}`}
                 />
@@ -1001,7 +991,7 @@ export default function Home() {
               <select
                 value={from}
                 onChange={(e) => setFrom(e.target.value as Period)}
-                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base font-medium text-slate-900 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-sky-400"
+                className="cursor-pointer w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base font-medium text-slate-900 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-sky-400"
                 aria-label="From period"
               >
                 {PERIOD_ORDER.map((p) => (
@@ -1019,7 +1009,7 @@ export default function Home() {
               <select
                 value={to}
                 onChange={(e) => setTo(e.target.value as Period)}
-                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base font-medium text-slate-900 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-sky-400"
+                className="cursor-pointer w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base font-medium text-slate-900 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-sky-400"
                 aria-label="To period"
               >
                 {PERIOD_ORDER.map((p) => (
@@ -1037,7 +1027,7 @@ export default function Home() {
                   setFrom(to);
                   setTo(from);
                 }}
-                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                className="cursor-pointer  w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                 aria-label="Swap from and to"
               >
                 ⇄
@@ -1047,32 +1037,29 @@ export default function Home() {
 
           <div
             id={resultRegionId}
-            className="mt-6 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 shadow-sm relative"
+            className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 shadow-sm relative"
             role="region"
             aria-label="Converted rent"
             aria-live="polite"
           >
             <div className="absolute inset-x-0 top-0 h-0.5 bg-sky-200 rounded-t-2xl" />
-
-            <div className="text-sm font-medium text-slate-700">
-              Converted rent
+            <div className="flex items-center gap-2">
+              <div
+                className="h-2 w-2 rounded-full bg-sky-600"
+                aria-hidden="true"
+              />
+              <div className="text-sm font-semibold text-slate-800">
+                Converted rent
+              </div>
             </div>
 
-            <div className="mt-2 flex flex-col">
+            <div className=" flex flex-col">
               <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700 tabular-nums leading-none min-h-[3.25rem] sm:min-h-[4rem]">
                 {validation.ok ? displayMoney : "—"}
               </div>
-
-              <div className="text-sm text-slate-700 leading-relaxed">
-                {validation.ok ? (
-                  <>{convertSummaryLine} </>
-                ) : (
-                  "Enter a valid amount to see results."
-                )}
-              </div>
             </div>
 
-            <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {(
                 [
                   ["Hourly", breakdown.hourly, "hourly"],
@@ -1101,7 +1088,7 @@ export default function Home() {
                 </div>
               ))}
 
-              <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+              <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-3 shadow-sm">
                 <div className="text-xs font-medium text-slate-600">
                   4-week vs monthly comparison (time-length model)
                 </div>
@@ -1129,7 +1116,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3 mt-6 sm:mt-6">
+            <div className="flex flex-wrap items-center gap-3 mt-4">
               <div
                 id="export-controls"
                 className="mb-3 sm:hidden flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
@@ -1141,7 +1128,7 @@ export default function Home() {
                       if (typeof window === "undefined") return;
                       window.print();
                     }}
-                    className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fbff]"
+                    className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fbff]"
                   >
                     Print / Save PDF
                   </button>
@@ -1164,7 +1151,7 @@ export default function Home() {
                   onChange={(e) =>
                     setDisplayDecimals(safeDisplayDecimals(e.target.value, 2))
                   }
-                  className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-sky-400"
+                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-sky-400"
                   aria-describedby={decimalsHelpId}
                   aria-label="Display decimals"
                 >
@@ -1177,20 +1164,19 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="mt-4 text-sm text-slate-600 leading-relaxed">
-            Assumptions used here: year = 365 days; average month = 365 ÷ 12
-            days; week = 7 days; biweekly = 14 days; 4-week = 28 days; hourly =
-            1/24 day. This is for budgeting comparisons, not calendar-exact
-            lease proration.
+          <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-2 text-sm text-slate-700">
+            <div className="font-semibold">Assumptions used on this page</div>
+            <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
+              <li>1 year = 365 days</li>
+              <li>Biweekly = 14 days</li>
+              <li>4-week rent = 28 days</li>
+              <li>Month = 365 ÷ 12 days (average)</li>
+              <li>
+                This tool does not assume what is included in “rent” (fees,
+                utilities, taxes). Enter the total you want to budget with.
+              </li>
+            </ul>
           </div>
-          <div className="mt-3 text-sm text-slate-600 leading-relaxed">
-            What is included: rent only. Utilities, parking, fees, taxes, and
-            deposits are not added unless you include them in your input.
-          </div>
-          <p className="mt-3 text-sm text-slate-600 leading-relaxed">
-            Disclaimer: this tool is for budgeting and comparison. Always
-            confirm payment schedules and lease terms in your agreement.
-          </p>
         </div>
       </section>
 
@@ -1343,13 +1329,13 @@ export default function Home() {
                         </p>
                         <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-sm">
                           <SafeLink
-                            href="/weekly-to-monthly-rent"
+                            href="/weekly-to-monthly-rent-converter"
                             className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
                           >
                             Weekly to monthly →
                           </SafeLink>
                           <SafeLink
-                            href="/rent-billed-every-28-days"
+                            href="/rent-billed-every-4-weeks-calculator"
                             className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
                           >
                             Rent billed every 28 days →

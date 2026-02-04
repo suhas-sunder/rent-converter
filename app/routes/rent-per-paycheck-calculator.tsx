@@ -34,12 +34,12 @@ export const meta: Route.MetaFunction = () => [
   },
   {
     property: "og:url",
-    content: "https://www.rentconverter.com/rent-per-paycheck-calculator",
+    content: "https://www.rentconverter.comrent-per-paycheck-calculator",
   },
   { property: "og:site_name", content: "RentConverter.com" },
   {
     property: "og:image",
-    content: "https://www.rentconverter.com/og-image.jpg",
+    content: "https://www.rentconverter.comog-image.jpg",
   },
 
   { name: "twitter:card", content: "summary_large_image" },
@@ -54,13 +54,13 @@ export const meta: Route.MetaFunction = () => [
   },
   {
     name: "twitter:image",
-    content: "https://www.rentconverter.com/og-image.jpg",
+    content: "https://www.rentconverter.comog-image.jpg",
   },
 
   {
     tagName: "link",
     rel: "canonical",
-    href: "https://www.rentconverter.com/rent-per-paycheck-calculator",
+    href: "https://www.rentconverter.comrent-per-paycheck-calculator",
   },
 ];
 
@@ -542,7 +542,7 @@ function safeParseDisplayDecimals(raw: string | null): number {
 export default function RentPerPaycheck() {
   const pageName = "Rent Per Paycheck Calculator";
   const canonicalUrl =
-    "https://www.rentconverter.com/rent-per-paycheck-calculator";
+    "https://www.rentconverter.comrent-per-paycheck-calculator";
 
   const [amount, setAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "2000";
@@ -752,7 +752,7 @@ export default function RentPerPaycheck() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.rentconverter.com/",
+        item: "https://www.rentconverter.com",
       },
       { "@type": "ListItem", position: 2, name: pageName, item: canonicalUrl },
     ],
@@ -772,7 +772,7 @@ export default function RentPerPaycheck() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "RentConverter.com",
-    url: "https://www.rentconverter.com/",
+    url: "https://www.rentconverter.com",
   };
 
   const webPageSchema = {

@@ -37,12 +37,12 @@ export const meta: Route.MetaFunction = () => [
   },
   {
     property: "og:url",
-    content: "https://www.rentconverter.com/weekly-to-monthly-rent-converter",
+    content: "https://www.rentconverter.comweekly-to-monthly-rent-converter",
   },
   { property: "og:site_name", content: "RentConverter.com" },
   {
     property: "og:image",
-    content: "https://www.rentconverter.com/og-image.jpg",
+    content: "https://www.rentconverter.comog-image.jpg",
   },
 
   { name: "twitter:card", content: "summary_large_image" },
@@ -54,13 +54,13 @@ export const meta: Route.MetaFunction = () => [
   },
   {
     name: "twitter:image",
-    content: "https://www.rentconverter.com/og-image.jpg",
+    content: "https://www.rentconverter.comog-image.jpg",
   },
 
   {
     tagName: "link",
     rel: "canonical",
-    href: "https://www.rentconverter.com/weekly-to-monthly-rent-converter",
+    href: "https://www.rentconverter.comweekly-to-monthly-rent-converter",
   },
 ];
 
@@ -520,7 +520,7 @@ function parseStrictDisplayDecimals(raw: string | null): number {
 export default function WeeklyToMonthlyRent() {
   const pageName = "Weekly to Monthly Rent Converter";
   const canonicalUrl =
-    "https://www.rentconverter.com/weekly-to-monthly-rent-converter";
+    "https://www.rentconverter.comweekly-to-monthly-rent-converter";
 
   const [amount, setAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "500";
@@ -719,7 +719,7 @@ export default function WeeklyToMonthlyRent() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.rentconverter.com/",
+        item: "https://www.rentconverter.com",
       },
       { "@type": "ListItem", position: 2, name: pageName, item: canonicalUrl },
     ],
@@ -729,7 +729,7 @@ export default function WeeklyToMonthlyRent() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "RentConverter.com",
-    url: "https://www.rentconverter.com/",
+    url: "https://www.rentconverter.com",
   };
 
   const webPageSchema = {

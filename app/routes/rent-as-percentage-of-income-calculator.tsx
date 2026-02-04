@@ -32,12 +32,12 @@ export const meta: Route.MetaFunction = () => {
     {
       property: "og:url",
       content:
-        "https://www.rentconverter.com/rent-as-percentage-of-income-calculator",
+        "https://www.rentconverter.comrent-as-percentage-of-income-calculator",
     },
     { property: "og:site_name", content: "RentConverter.com" },
     {
       property: "og:image",
-      content: "https://www.rentconverter.com/og-image.jpg",
+      content: "https://www.rentconverter.comog-image.jpg",
     },
 
     { name: "twitter:card", content: "summary_large_image" },
@@ -45,13 +45,13 @@ export const meta: Route.MetaFunction = () => {
     { name: "twitter:description", content: description },
     {
       name: "twitter:image",
-      content: "https://www.rentconverter.com/og-image.jpg",
+      content: "https://www.rentconverter.comog-image.jpg",
     },
 
     {
       tagName: "link",
       rel: "canonical",
-      href: "https://www.rentconverter.com/rent-as-percentage-of-income-calculator",
+      href: "https://www.rentconverter.comrent-as-percentage-of-income-calculator",
     },
   ];
 };
@@ -815,13 +815,13 @@ export default function RentAsPercentageOfIncome() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.rentconverter.com/",
+        item: "https://www.rentconverter.com",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Rent as Percentage of Income Calculator",
-        item: "https://www.rentconverter.com/rent-as-percentage-of-income-calculator",
+        item: "https://www.rentconverter.comrent-as-percentage-of-income-calculator",
       },
     ],
   };
@@ -830,7 +830,7 @@ export default function RentAsPercentageOfIncome() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "RentConverter.com",
-    url: "https://www.rentconverter.com/",
+    url: "https://www.rentconverter.com",
   };
 
   const webPageSchema = {
@@ -839,7 +839,7 @@ export default function RentAsPercentageOfIncome() {
     name: "Rent as Percentage of Income Calculator",
     description:
       "Calculate rent as a percentage of income using annual equivalence (365-day year). Compare pay cycles with annualized breakdowns.",
-    url: "https://www.rentconverter.com/rent-as-percentage-of-income-calculator",
+    url: "https://www.rentconverter.comrent-as-percentage-of-income-calculator",
   };
 
   return (

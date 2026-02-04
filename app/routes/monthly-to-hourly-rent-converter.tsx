@@ -31,12 +31,12 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:description", content: description },
     {
       property: "og:url",
-      content: "https://www.rentconverter.com/monthly-to-hourly-rent-converter",
+      content: "https://www.rentconverter.commonthly-to-hourly-rent-converter",
     },
     { property: "og:site_name", content: "RentConverter.com" },
     {
       property: "og:image",
-      content: "https://www.rentconverter.com/og-image.jpg",
+      content: "https://www.rentconverter.comog-image.jpg",
     },
 
     { name: "twitter:card", content: "summary_large_image" },
@@ -44,13 +44,13 @@ export const meta: Route.MetaFunction = () => {
     { name: "twitter:description", content: description },
     {
       name: "twitter:image",
-      content: "https://www.rentconverter.com/og-image.jpg",
+      content: "https://www.rentconverter.comog-image.jpg",
     },
 
     {
       tagName: "link",
       rel: "canonical",
-      href: "https://www.rentconverter.com/monthly-to-hourly-rent-converter",
+      href: "https://www.rentconverter.commonthly-to-hourly-rent-converter",
     },
   ];
 };
@@ -674,13 +674,13 @@ export default function MonthlyToHourlyRent() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.rentconverter.com/",
+        item: "https://www.rentconverter.com",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Monthly to Hourly Rent Converter",
-        item: "https://www.rentconverter.com/monthly-to-hourly-rent-converter",
+        item: "https://www.rentconverter.commonthly-to-hourly-rent-converter",
       },
     ],
   };
@@ -689,7 +689,7 @@ export default function MonthlyToHourlyRent() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "RentConverter.com",
-    url: "https://www.rentconverter.com/",
+    url: "https://www.rentconverter.com",
   };
 
   const webPageSchema = {
@@ -698,7 +698,7 @@ export default function MonthlyToHourlyRent() {
     name: "Monthly to Hourly Rent Converter",
     description:
       "Convert monthly rent to an hourly equivalent using annual equivalence (365-day year and average month length). Includes full breakdowns and a month-length comparison.",
-    url: "https://www.rentconverter.com/monthly-to-hourly-rent-converter",
+    url: "https://www.rentconverter.commonthly-to-hourly-rent-converter",
   };
 
   const amountDescribedBy = parsedAmount.ok

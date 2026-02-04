@@ -35,12 +35,12 @@ export const meta: Route.MetaFunction = () => [
   {
     property: "og:url",
     content:
-      "https://www.rentconverter.com/rent-increase-percentage-calculator",
+      "https://www.rentconverter.comrent-increase-percentage-calculator",
   },
   { property: "og:site_name", content: "RentConverter.com" },
   {
     property: "og:image",
-    content: "https://www.rentconverter.com/og-image.jpg",
+    content: "https://www.rentconverter.comog-image.jpg",
   },
 
   { name: "twitter:card", content: "summary_large_image" },
@@ -52,13 +52,13 @@ export const meta: Route.MetaFunction = () => [
   },
   {
     name: "twitter:image",
-    content: "https://www.rentconverter.com/og-image.jpg",
+    content: "https://www.rentconverter.comog-image.jpg",
   },
 
   {
     tagName: "link",
     rel: "canonical",
-    href: "https://www.rentconverter.com/rent-increase-percentage-calculator",
+    href: "https://www.rentconverter.comrent-increase-percentage-calculator",
   },
 ];
 
@@ -557,7 +557,7 @@ function safeParseDisplayDecimals(
 export default function RentIncreasePercentage() {
   const pageName = "Rent Increase Percentage Calculator";
   const canonicalUrl =
-    "https://www.rentconverter.com/rent-increase-percentage-calculator";
+    "https://www.rentconverter.comrent-increase-percentage-calculator";
 
   const [oldRent, setOldRent] = useState<string>(() => {
     if (typeof window === "undefined") return "2000";
@@ -797,7 +797,7 @@ export default function RentIncreasePercentage() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.rentconverter.com/",
+        item: "https://www.rentconverter.com",
       },
       { "@type": "ListItem", position: 2, name: pageName, item: canonicalUrl },
     ],
@@ -807,7 +807,7 @@ export default function RentIncreasePercentage() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "RentConverter.com",
-    url: "https://www.rentconverter.com/",
+    url: "https://www.rentconverter.com",
   };
 
   const webPageSchema = {

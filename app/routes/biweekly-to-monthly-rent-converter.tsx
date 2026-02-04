@@ -4,15 +4,16 @@ import OtherUsefulTools from "~/client/components/navigation/OtherUsefulTools";
 import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountry";
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
-function safeToFixed(n: number, digits: number): string {
-  if (!Number.isFinite(n)) return "-";
-  return n.toFixed(digits);
-}
+const SITE_URL = "https://www.rentconverter.com";
+const PAGE_PATH = "/biweekly-to-monthly-rent-converter";
 
 export const meta: Route.MetaFunction = () => {
   const title = "Biweekly to Monthly Rent Converter (26-Pay vs Monthly)";
   const description =
     "Instantly convert rent paid every 14 days into a monthly amount using a true 365-day year. See the impact of 26 payments per year, compare against monthly and 28-day rent, with exact decimals, CSV export, and print-to-PDF. Free and private.";
+
+  const url = `${SITE_URL}${PAGE_PATH}`;
+  const ogImage = `${SITE_URL}/og-image.jpg`;
 
   return [
     { title },
@@ -29,30 +30,16 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:type", content: "website" },
     { property: "og:title", content: title },
     { property: "og:description", content: description },
-    {
-      property: "og:url",
-      content:
-        "https://www.rentconverter.com/biweekly-to-monthly-rent-converter",
-    },
+    { property: "og:url", content: url },
     { property: "og:site_name", content: "RentConverter.com" },
-    {
-      property: "og:image",
-      content: "https://www.rentconverter.com/og-image.jpg",
-    },
+    { property: "og:image", content: ogImage },
 
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
-    {
-      name: "twitter:image",
-      content: "https://www.rentconverter.com/og-image.jpg",
-    },
+    { name: "twitter:image", content: ogImage },
 
-    {
-      tagName: "link",
-      rel: "canonical",
-      href: "https://www.rentconverter.com/biweekly-to-monthly-rent-converter",
-    },
+    { tagName: "link", rel: "canonical", href: url },
   ];
 };
 
@@ -392,6 +379,9 @@ function parseMoneyInputToScaled(raw: string): ParsedAmount {
   else if (decimalSep === ",") intPart = intPart.replace(/\./g, "");
   else intPart = intPart.replace(/[.,]/g, "");
 
+  // Allow ".5" when a decimal separator exists
+  if (decimalSep && intPart === "") intPart = "0";
+
   if (intPart === "") intPart = "0";
   intPart = intPart.replace(/^0+(?=\d)/, "");
 
@@ -599,9 +589,20 @@ export default function BiweeklyToMonthlyRent() {
     const monthly = biweeklyToPeriodScaled(biweeklyScaled, "monthly");
     const annual = biweeklyToPeriodScaled(biweeklyScaled, "annual");
 
+    function ratioToNumber(
+      numer: bigint,
+      denom: bigint,
+      precision = 8,
+    ): number {
+      if (denom === 0n) return 0;
+      const p = Math.max(0, Math.min(12, Math.trunc(precision)));
+      const factor = 10n ** BigInt(p);
+      const scaled = (numer * factor) / denom;
+      return Number(scaled) / 10 ** p;
+    }
+
     const monthlyMinus4w = monthly - every4w;
-    const monthlyMinus4wPct =
-      every4w === 0n ? 0 : Number(monthlyMinus4w) / Number(every4w);
+    const monthlyMinus4wPct = ratioToNumber(monthlyMinus4w, every4w, 8);
 
     return {
       hourly,
@@ -622,15 +623,24 @@ export default function BiweeklyToMonthlyRent() {
     const paymentsPerYear = 26n;
     const annualFromPayments = biweeklyScaled * paymentsPerYear;
 
+    function ratioToNumber(
+      numer: bigint,
+      denom: bigint,
+      precision = 8,
+    ): number {
+      if (denom === 0n) return 0;
+      const p = Math.max(0, Math.min(12, Math.trunc(precision)));
+      const factor = 10n ** BigInt(p);
+      const scaled = (numer * factor) / denom;
+      return Number(scaled) / 10 ** p;
+    }
+
     // Use mulDiv to avoid any implied rounding beyond integer division.
     const monthlyFromPayments = mulDivScaled(annualFromPayments, 1n, 12n);
 
     const converterMonthly = breakdownScaled.monthly;
     const deltaVsConverter = monthlyFromPayments - converterMonthly;
-    const pctVsConverter =
-      converterMonthly === 0n
-        ? 0
-        : Number(deltaVsConverter) / Number(converterMonthly);
+    const pctVsConverter = ratioToNumber(deltaVsConverter, converterMonthly, 8);
 
     return {
       paymentsPerYear: Number(paymentsPerYear),
@@ -801,13 +811,13 @@ export default function BiweeklyToMonthlyRent() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.rentconverter.com/",
+        item: SITE_URL, // no trailing slash
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Biweekly to Monthly Rent Converter",
-        item: "https://www.rentconverter.com/biweekly-to-monthly-rent-converter",
+        item: `${SITE_URL}${PAGE_PATH}`,
       },
     ],
   };
@@ -816,7 +826,7 @@ export default function BiweeklyToMonthlyRent() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "RentConverter.com",
-    url: "https://www.rentconverter.com/",
+    url: SITE_URL, // no trailing slash
   };
 
   const webPageSchema = {
@@ -825,7 +835,7 @@ export default function BiweeklyToMonthlyRent() {
     name: "Biweekly to Monthly Rent Converter",
     description:
       "Convert rent paid every 14 days (biweekly) into a monthly equivalent using a 365-day year. Includes a full breakdown, 26-payments context, CSV export, and print-to-PDF.",
-    url: "https://www.rentconverter.com/biweekly-to-monthly-rent-converter",
+    url: `${SITE_URL}${PAGE_PATH}`,
   };
 
   const amountInputId = "rc-btm-amount";
@@ -877,7 +887,7 @@ export default function BiweeklyToMonthlyRent() {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
               >
                 Print / Save as PDF
               </button>
@@ -1111,7 +1121,7 @@ export default function BiweeklyToMonthlyRent() {
             <button
               type="button"
               onClick={handlePrint}
-              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+              className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
             >
               Print / Save as PDF
             </button>
@@ -1126,7 +1136,7 @@ export default function BiweeklyToMonthlyRent() {
                   type="checkbox"
                   checked={roundDisplay}
                   onChange={(e) => setRoundDisplay(e.target.checked)}
-                  className="h-4 w-4 rounded border-slate-300 text-sky-600 focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                  className="cursor-pointer h-4 w-4 rounded border-slate-300 text-sky-600 focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                 />
                 Round displayed values
               </label>

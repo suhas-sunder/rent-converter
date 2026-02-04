@@ -4,15 +4,15 @@ import OtherUsefulTools from "~/client/components/navigation/OtherUsefulTools";
 import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountry";
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
-function safeToFixed(n: number, digits: number): string {
-  if (!Number.isFinite(n)) return "-";
-  return n.toFixed(digits);
-}
+const SITE_URL = "https://www.rentconverter.com";
+const PAGE_PATH = "/annual-to-monthly-rent-converter";
 
 export const meta: Route.MetaFunction = () => {
   const title = "Annual to Monthly Rent Converter (Exact ÷ 12 + 28-Day Check)";
   const description =
     "Instantly convert annual rent to a true monthly amount (annual ÷ 12). Compare against 4-week (28-day) rent, 12 vs 13 payments per year, with exact decimals, CSV export, and print-to-PDF. Free and private.";
+
+  const url = `${SITE_URL}${PAGE_PATH}`;
 
   return [
     { title },
@@ -29,29 +29,16 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:type", content: "website" },
     { property: "og:title", content: title },
     { property: "og:description", content: description },
-    {
-      property: "og:url",
-      content: "https://www.rentconverter.com/annual-to-monthly-rent-converter",
-    },
+    { property: "og:url", content: url },
     { property: "og:site_name", content: "RentConverter.com" },
-    {
-      property: "og:image",
-      content: "https://www.rentconverter.com/og-image.jpg",
-    },
+    { property: "og:image", content: `${SITE_URL}/og-image.jpg` },
 
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
-    {
-      name: "twitter:image",
-      content: "https://www.rentconverter.com/og-image.jpg",
-    },
+    { name: "twitter:image", content: `${SITE_URL}/og-image.jpg` },
 
-    {
-      tagName: "link",
-      rel: "canonical",
-      href: "https://www.rentconverter.com/annual-to-monthly-rent-converter",
-    },
+    { tagName: "link", rel: "canonical", href: url },
   ];
 };
 
@@ -835,17 +822,16 @@ export default function AnnualToMonthlyRent() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.rentconverter.com/",
+        item: SITE_URL, // no trailing slash
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Annual to Monthly Rent Converter",
-        item: "https://www.rentconverter.com/annual-to-monthly-rent-converter",
+        item: `${SITE_URL}${PAGE_PATH}`,
       },
     ],
   };
-
   const annualInterpreted = useMemo(() => {
     if (!parsedAnnual.ok) return null;
     return fmt(annualScaled);
@@ -886,7 +872,7 @@ export default function AnnualToMonthlyRent() {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
               >
                 Print / Save as PDF
               </button>
@@ -907,7 +893,7 @@ export default function AnnualToMonthlyRent() {
                   onFocus={() => setAmountFocused(true)}
                   onBlur={() => setAmountFocused(false)}
                   placeholder="e.g. 24000 or 24000.50"
-                  className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!parsedAnnual.ok}
                   aria-describedby="rc-amount-help rc-amount-error"
                 />
@@ -1050,7 +1036,7 @@ export default function AnnualToMonthlyRent() {
             <button
               type="button"
               onClick={handlePrint}
-              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+              className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
             >
               Print / Save as PDF
             </button>
@@ -1065,7 +1051,7 @@ export default function AnnualToMonthlyRent() {
                   type="checkbox"
                   checked={roundDisplay}
                   onChange={(e) => setRoundDisplay(e.target.checked)}
-                  className="h-4 w-4"
+                  className="cursor-pointer h-4 w-4"
                 />
                 Round displayed values
               </label>

@@ -41,12 +41,12 @@ export const meta: Route.MetaFunction = () => [
   },
   {
     property: "og:url",
-    content: "https://www.rentconverter.com/rent-paid-every-4-weeks-calculator",
+    content: "https://www.rentconverter.comrent-paid-every-4-weeks-calculator",
   },
   { property: "og:site_name", content: "RentConverter.com" },
   {
     property: "og:image",
-    content: "https://www.rentconverter.com/og-image.jpg",
+    content: "https://www.rentconverter.comog-image.jpg",
   },
 
   { name: "twitter:card", content: "summary_large_image" },
@@ -61,13 +61,13 @@ export const meta: Route.MetaFunction = () => [
   },
   {
     name: "twitter:image",
-    content: "https://www.rentconverter.com/og-image.jpg",
+    content: "https://www.rentconverter.comog-image.jpg",
   },
 
   {
     tagName: "link",
     rel: "canonical",
-    href: "https://www.rentconverter.com/rent-paid-every-4-weeks-calculator",
+    href: "https://www.rentconverter.comrent-paid-every-4-weeks-calculator",
   },
 ];
 
@@ -522,7 +522,7 @@ function coerceDisplayDecimalsFromStorage(raw: string | null): number {
 export default function RentPaidEvery4Weeks() {
   const pageName = "Rent Paid Every 4 Weeks (28 Days) Calculator";
   const canonicalUrl =
-    "https://www.rentconverter.com/rent-paid-every-4-weeks-calculator";
+    "https://www.rentconverter.comrent-paid-every-4-weeks-calculator";
 
   const [amount, setAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "650";
@@ -698,7 +698,7 @@ export default function RentPaidEvery4Weeks() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.rentconverter.com/",
+        item: "https://www.rentconverter.com",
       },
       { "@type": "ListItem", position: 2, name: pageName, item: canonicalUrl },
     ],
@@ -708,7 +708,7 @@ export default function RentPaidEvery4Weeks() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "RentConverter.com",
-    url: "https://www.rentconverter.com/",
+    url: "https://www.rentconverter.com",
   };
 
   const webPageSchema = {

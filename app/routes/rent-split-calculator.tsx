@@ -37,12 +37,12 @@ export const meta: Route.MetaFunction = () => [
   },
   {
     property: "og:url",
-    content: "https://www.rentconverter.com/rent-split-calculator",
+    content: "https://www.rentconverter.comrent-split-calculator",
   },
   { property: "og:site_name", content: "RentConverter.com" },
   {
     property: "og:image",
-    content: "https://www.rentconverter.com/og-image.jpg",
+    content: "https://www.rentconverter.comog-image.jpg",
   },
 
   { name: "twitter:card", content: "summary_large_image" },
@@ -57,13 +57,13 @@ export const meta: Route.MetaFunction = () => [
   },
   {
     name: "twitter:image",
-    content: "https://www.rentconverter.com/og-image.jpg",
+    content: "https://www.rentconverter.comog-image.jpg",
   },
 
   {
     tagName: "link",
     rel: "canonical",
-    href: "https://www.rentconverter.com/rent-split-calculator",
+    href: "https://www.rentconverter.comrent-split-calculator",
   },
 ];
 
@@ -556,7 +556,7 @@ function safeParseDisplayDecimals(raw: string | null, fallback = 2): number {
 
 export default function RentPerPerson() {
   const pageName = "Rent Split Calculator";
-  const canonicalUrl = "https://www.rentconverter.com/rent-split-calculator";
+  const canonicalUrl = "https://www.rentconverter.comrent-split-calculator";
 
   const totalRentInputRef = useRef<HTMLInputElement | null>(null);
   const [isTotalRentFocused, setIsTotalRentFocused] = useState(false);
@@ -807,7 +807,7 @@ export default function RentPerPerson() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.rentconverter.com/",
+        item: "https://www.rentconverter.com",
       },
       { "@type": "ListItem", position: 2, name: pageName, item: canonicalUrl },
     ],
@@ -817,7 +817,7 @@ export default function RentPerPerson() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "RentConverter.com",
-    url: "https://www.rentconverter.com/",
+    url: "https://www.rentconverter.com",
   };
 
   const webPageSchema = {

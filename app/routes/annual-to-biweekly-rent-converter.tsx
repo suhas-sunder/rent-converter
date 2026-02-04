@@ -4,10 +4,15 @@ import OtherUsefulTools from "~/client/components/navigation/OtherUsefulTools";
 import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountry";
 import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
+const SITE_URL = "https://www.rentconverter.com";
+const PAGE_PATH = "/annual-to-biweekly-rent-converter";
+
 export const meta: Route.MetaFunction = () => {
-  const title = "Annual to Biweekly Rent Converter (Exact 14-Day Pay Cycle)";
+  const title = "Annual to Biweekly Rent Converter (14-Day Equivalent)";
   const description =
-    "Instantly convert annual rent into a biweekly (14-day) amount using a true 365-day year. Exact decimals, clear breakdown, and print-to-PDF. Free, private, no signup.";
+    "Convert annual rent into a biweekly (14-day) equivalent using a 365-day year. Exact decimals, clear breakdown, and print-to-PDF. Free, private, no signup.";
+
+  const url = `${SITE_URL}${PAGE_PATH}`;
 
   return [
     { title },
@@ -21,33 +26,22 @@ export const meta: Route.MetaFunction = () => {
     { name: "author", content: "RentConverter.com" },
     { name: "theme-color", content: "#f8fafc" },
 
+    // Open Graph
     { property: "og:type", content: "website" },
     { property: "og:title", content: title },
     { property: "og:description", content: description },
-    {
-      property: "og:url",
-      content:
-        "https://www.rentconverter.com/annual-to-biweekly-rent-converter",
-    },
+    { property: "og:url", content: url },
     { property: "og:site_name", content: "RentConverter.com" },
-    {
-      property: "og:image",
-      content: "https://www.rentconverter.com/og-image.jpg",
-    },
+    { property: "og:image", content: `${SITE_URL}/og-image.jpg` },
 
+    // Twitter
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
-    {
-      name: "twitter:image",
-      content: "https://www.rentconverter.com/og-image.jpg",
-    },
+    { name: "twitter:image", content: `${SITE_URL}/og-image.jpg` },
 
-    {
-      tagName: "link",
-      rel: "canonical",
-      href: "https://www.rentconverter.com/annual-to-biweekly-rent-converter",
-    },
+    // Canonical
+    { tagName: "link", rel: "canonical", href: url },
   ];
 };
 
@@ -681,13 +675,13 @@ export default function AnnualToBiweeklyRent() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.rentconverter.com/",
+        item: SITE_URL,
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Annual to Biweekly Rent Converter",
-        item: "https://www.rentconverter.com/annual-to-biweekly-rent-converter",
+        item: `${SITE_URL}${PAGE_PATH}`,
       },
     ],
   };
@@ -749,7 +743,7 @@ export default function AnnualToBiweeklyRent() {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
               >
                 Print / Save as PDF
               </button>
@@ -769,7 +763,7 @@ export default function AnnualToBiweeklyRent() {
                   onFocus={() => setAmountFocused(true)}
                   onBlur={() => setAmountFocused(false)}
                   placeholder="e.g. 24000 or 24000.50"
-                  className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!parsed.ok}
                   aria-describedby="rc-amount-help rc-amount-error"
                 />
@@ -928,7 +922,7 @@ export default function AnnualToBiweeklyRent() {
             <button
               type="button"
               onClick={handlePrint}
-              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+              className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
             >
               Print / Save as PDF
             </button>
@@ -938,7 +932,7 @@ export default function AnnualToBiweeklyRent() {
               <div className="text-xs text-slate-500">
                 Rounding (display only)
               </div>
-              <label className="mt-1 flex items-center gap-2 text-sm text-slate-700">
+              <label className="mt-1 flex items-center gap-2 text-sm text-slate-700 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={roundDisplay}

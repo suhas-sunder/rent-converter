@@ -9,13 +9,16 @@ function safeToFixed(n: number, digits: number): string {
   return n.toFixed(digits);
 }
 
+const SITE_URL = "https://www.rentconverter.com";
+const PAGE_PATH = "/annual-to-weekly-rent-converter";
+
 export const meta: Route.MetaFunction = () => {
   const title = "Annual to Weekly Rent Converter (÷ 52 vs 365-Day Week)";
   const description =
     "Instantly convert annual rent to a weekly amount using annual ÷ 52. Also compare against a true 365-day weekly equivalent (annual × 7 ÷ 365), plus biweekly and 28-day views. Exact decimals, private, no signup.";
 
-  const url = "https://www.rentconverter.com/annual-to-weekly-rent-converter";
-  const ogImage = "https://www.rentconverter.com/og-image.jpg";
+  const url = `${SITE_URL}${PAGE_PATH}`;
+  const ogImage = `${SITE_URL}/og-image.jpg`;
 
   return [
     { title },
@@ -637,13 +640,13 @@ export default function AnnualToWeeklyRentConverter() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.rentconverter.com/",
+        item: SITE_URL, // no trailing slash
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Annual to Weekly Rent Converter",
-        item: "https://www.rentconverter.com/annual-to-weekly-rent-converter",
+        item: `${SITE_URL}${PAGE_PATH}`,
       },
     ],
   };
@@ -687,7 +690,7 @@ export default function AnnualToWeeklyRentConverter() {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
               >
                 Print / Save as PDF
               </button>
@@ -708,7 +711,7 @@ export default function AnnualToWeeklyRentConverter() {
                   onBlur={() => setAmountFocused(false)}
                   onChange={(e) => setAmount(e.target.value)}
                   placeholder="e.g. 24000 or 24000.50"
-                  className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!parsedAnnual.ok}
                   aria-describedby="rc-amount-help rc-amount-error"
                 />
@@ -880,7 +883,7 @@ export default function AnnualToWeeklyRentConverter() {
             <button
               type="button"
               onClick={handlePrint}
-              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+              className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
             >
               Print / Save as PDF
             </button>
@@ -899,7 +902,7 @@ export default function AnnualToWeeklyRentConverter() {
                 />
                 Round displayed values
               </label>
-              <p className="mt-1 text-xs text-slate-500">
+              <p className="cursor-pointer mt-1 text-xs text-slate-500">
                 Computation preserves up to 12 decimals internally.
               </p>
             </div>

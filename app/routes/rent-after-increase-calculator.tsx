@@ -31,12 +31,12 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:description", content: description },
     {
       property: "og:url",
-      content: "https://www.rentconverter.com/rent-after-increase-calculator",
+      content: "https://www.rentconverter.comrent-after-increase-calculator",
     },
     { property: "og:site_name", content: "RentConverter.com" },
     {
       property: "og:image",
-      content: "https://www.rentconverter.com/og-image.jpg",
+      content: "https://www.rentconverter.comog-image.jpg",
     },
 
     { name: "twitter:card", content: "summary_large_image" },
@@ -44,13 +44,13 @@ export const meta: Route.MetaFunction = () => {
     { name: "twitter:description", content: description },
     {
       name: "twitter:image",
-      content: "https://www.rentconverter.com/og-image.jpg",
+      content: "https://www.rentconverter.comog-image.jpg",
     },
 
     {
       tagName: "link",
       rel: "canonical",
-      href: "https://www.rentconverter.com/rent-after-increase-calculator",
+      href: "https://www.rentconverter.comrent-after-increase-calculator",
     },
   ];
 };
@@ -948,13 +948,13 @@ export default function RentAfterIncrease() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.rentconverter.com/",
+        item: "https://www.rentconverter.com",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Rent After Increase Calculator",
-        item: "https://www.rentconverter.com/rent-after-increase-calculator",
+        item: "https://www.rentconverter.comrent-after-increase-calculator",
       },
     ],
   };
@@ -963,7 +963,7 @@ export default function RentAfterIncrease() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "RentConverter.com",
-    url: "https://www.rentconverter.com/",
+    url: "https://www.rentconverter.com",
   };
 
   const webPageSchema = {
@@ -972,7 +972,7 @@ export default function RentAfterIncrease() {
     name: "Rent After Increase Calculator",
     description:
       "Calculate your new rent after an increase (percent or fixed amount) using annual equivalence (365-day year). Includes annual impact and pay-cycle breakdowns.",
-    url: "https://www.rentconverter.com/rent-after-increase-calculator",
+    url: "https://www.rentconverter.comrent-after-increase-calculator",
   };
 
   const currentInvalid = !currentParsed.ok || currentDisplayError;
