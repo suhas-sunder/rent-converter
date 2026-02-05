@@ -3,9 +3,6 @@
 import * as React from "react";
 import { Link } from "react-router";
 import type { Route } from "./+types/cookies";
-import OtherUsefulTools from "~/client/components/navigation/OtherUsefulTools";
-import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountry";
-import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 export const meta: Route.MetaFunction = () => [
   { title: "Cookie Policy | RentConverter.com" },
@@ -32,7 +29,10 @@ export const meta: Route.MetaFunction = () => [
       "Learn how RentConverter.com uses cookies and similar technologies, including essential, analytics, and advertising cookies where applicable.",
   },
   { property: "og:url", content: "https://www.rentconverter.com/cookies" },
-  { property: "og:image", content: "https://www.rentconverter.com/og-image.jpg" },
+  {
+    property: "og:image",
+    content: "https://www.rentconverter.com/og-image.jpg",
+  },
   { property: "og:image:alt", content: "RentConverter.com cookie policy" },
   { property: "og:locale", content: "en_US" },
 
@@ -43,15 +43,21 @@ export const meta: Route.MetaFunction = () => [
     content:
       "Learn how RentConverter.com uses cookies and similar technologies, including essential, analytics, and advertising cookies where applicable.",
   },
-  { name: "twitter:image", content: "https://www.rentconverter.com/og-image.jpg" },
+  {
+    name: "twitter:image",
+    content: "https://www.rentconverter.com/og-image.jpg",
+  },
 
-  { tagName: "link", rel: "canonical", href: "https://www.rentconverter.com/cookies" },
+  {
+    tagName: "link",
+    rel: "canonical",
+    href: "https://www.rentconverter.com/cookies",
+  },
 ];
 
 export default function CookiesPolicy() {
   const pageName = "Cookie Policy";
 
-  
   const canonicalUrl = "https://www.rentconverter.com/cookies";
 
   const breadcrumbSchema = {
@@ -86,7 +92,7 @@ export default function CookiesPolicy() {
     name: pageName,
     url: canonicalUrl,
   };
-return (
+  return (
     <main className="bg-white text-slate-700 scroll-smooth antialiased">
       <div className="max-w-6xl mx-auto px-6 pt-8 pb-12">
         {/* Header */}
@@ -328,10 +334,6 @@ return (
         </section>
       </div>
 
-      <OtherUsefulTools />
-      <RenterChecklists />
-      <RentToolsByCountry />
-    
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
@@ -344,7 +346,7 @@ return (
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
       />
-</main>
+    </main>
   );
 }
 

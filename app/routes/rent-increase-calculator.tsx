@@ -1,9 +1,5 @@
 import { useMemo, useEffect, useRef, useState } from "react";
 import type { Route } from "./+types/rent-increase-calculator";
-import OtherUsefulTools from "~/client/components/navigation/OtherUsefulTools";
-import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountry";
-import RenterChecklists from "~/client/components/navigation/RenterChecklists";
-
 export const meta: Route.MetaFunction = () => [
   {
     title: "Rent Increase Calculator (Percent or Fixed) + Annual Impact",
@@ -2029,10 +2025,6 @@ export default function RentIncreaseCalculator() {
           ))}
         </div>
       </section>
-
-      <OtherUsefulTools />
-      <RenterChecklists />
-      <RentToolsByCountry />
 
       <script
         type="application/ld+json"

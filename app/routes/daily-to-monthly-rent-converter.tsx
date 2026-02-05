@@ -6,51 +6,11 @@ function safeToFixed(n: number, digits: number): string {
   return n.toFixed(digits);
 }
 
-export const meta: Route.MetaFunction = () => {
-  const title = "Daily to Monthly Rent Converter (30-Day vs Avg Month)";
-  const description =
-    "Instantly convert a daily rent price into a monthly amount using a true 365-day year. Compare 30-day months vs average-month math, with exact decimals, a full breakdown, and print-to-PDF. Free and private.";
-
-  return [
-    { title },
-    { name: "description", content: description },
-    {
-      name: "keywords",
-      content:
-        "daily to monthly rent converter, daily rent to monthly equivalent, rent per day to monthly, convert daily rent into monthly, daily rate rent monthly, 30 day rent vs monthly, average month rent",
-    },
-    { name: "robots", content: "index,follow" },
-    { name: "author", content: "RentConverter.com" },
-    { name: "theme-color", content: "#f8fafc" },
-
-    { property: "og:type", content: "website" },
-    { property: "og:title", content: title },
-    { property: "og:description", content: description },
-    {
-      property: "og:url",
-      content: "https://www.rentconverter.comdaily-to-monthly-rent-converter",
-    },
-    { property: "og:site_name", content: "RentConverter.com" },
-    {
-      property: "og:image",
-      content: "https://www.rentconverter.comog-image.jpg",
-    },
-
-    { name: "twitter:card", content: "summary_large_image" },
-    { name: "twitter:title", content: title },
-    { name: "twitter:description", content: description },
-    {
-      name: "twitter:image",
-      content: "https://www.rentconverter.comog-image.jpg",
-    },
-
-    {
-      tagName: "link",
-      rel: "canonical",
-      href: "https://www.rentconverter.comdaily-to-monthly-rent-converter",
-    },
-  ];
-};
+const ROUTE_SLUG = "daily-to-monthly-rent-converter" as const;
+const ROUTE_PATH = `/${ROUTE_SLUG}` as const;
+const PAGE_URL = `https://www.rentconverter.com${ROUTE_PATH}` as const;
+const OG_IMAGE_URL = "https://www.rentconverter.com/og-image.jpg" as const;
+const SITE_URL = "https://www.rentconverter.com" as const;
 
 type Period =
   | "hourly"
@@ -397,6 +357,8 @@ function parseMoneyInputToScaled(raw: string): ParsedAmount {
   else if (decimalSep === ",") intPart = intPart.replace(/\./g, "");
   else intPart = intPart.replace(/[.,]/g, "");
 
+  if (decimalSep && intPart === "") intPart = "0";
+
   if (intPart === "") intPart = "0";
   intPart = intPart.replace(/^0+(?=\d)/, "");
 
@@ -567,9 +529,20 @@ export default function DailyToMonthlyRent() {
     const monthly = dailyToPeriodScaled(dailyScaled, "monthly");
     const annual = dailyToPeriodScaled(dailyScaled, "annual");
 
+    function ratioToNumber(
+      numer: bigint,
+      denom: bigint,
+      precision = 8,
+    ): number {
+      if (denom === 0n) return 0;
+      const p = Math.max(0, Math.min(12, Math.trunc(precision)));
+      const factor = 10n ** BigInt(p);
+      const scaled = (numer * factor) / denom;
+      return Number(scaled) / 10 ** p;
+    }
+
     const monthlyMinus4w = monthly - every4w;
-    const monthlyMinus4wPct =
-      every4w === 0n ? 0 : Number(monthlyMinus4w) / Number(every4w);
+    const monthlyMinus4wPct = ratioToNumber(monthlyMinus4w, every4w, 8);
 
     const monthByThirty = mulDivScaled(dailyScaled, 30n, 1n);
     const monthByAverage = monthly;
@@ -578,14 +551,16 @@ export default function DailyToMonthlyRent() {
     const annualFromWeekly52 = weekly * 52n;
     const annualFromMonthly12 = monthly * 12n;
 
-    const pctVsAnnual52 =
-      annualFromWeekly52 === 0n
-        ? 0
-        : Number(annual - annualFromWeekly52) / Number(annualFromWeekly52);
-    const pctVsAnnual12 =
-      annualFromMonthly12 === 0n
-        ? 0
-        : Number(annual - annualFromMonthly12) / Number(annualFromMonthly12);
+    const pctVsAnnual52 = ratioToNumber(
+      annual - annualFromWeekly52,
+      annualFromWeekly52,
+      8,
+    );
+    const pctVsAnnual12 = ratioToNumber(
+      annual - annualFromMonthly12,
+      annualFromMonthly12,
+      8,
+    );
 
     return {
       hourly,
@@ -1353,7 +1328,6 @@ export default function DailyToMonthlyRent() {
           ))}
         </div>
       </section>
-
 
       <script
         type="application/ld+json"
