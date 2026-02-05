@@ -563,7 +563,6 @@ export default function BiweeklyToWeeklyRent() {
     return safeParseBoolean(saved, true);
   });
 
-  const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const copyTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -675,19 +674,6 @@ export default function BiweeklyToWeeklyRent() {
   };
 
   const weeklyHeadlineScaled = breakdownScaled?.weekly ?? 0n;
-
-  const handleCopy = async (key: string, text: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopiedKey(key);
-      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
-      copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
-    } catch {
-      setCopiedKey("copy_failed");
-      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
-      copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
-    }
-  };
 
   const handlePrint = () => {
     if (typeof window === "undefined") return;
@@ -1393,7 +1379,6 @@ export default function BiweeklyToWeeklyRent() {
           ))}
         </div>
       </section>
-
 
       <script
         type="application/ld+json"

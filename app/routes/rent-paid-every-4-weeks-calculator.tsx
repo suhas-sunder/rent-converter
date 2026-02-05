@@ -433,7 +433,6 @@ function parseMoneyInputToScaled(raw: string): ParsedScaled {
   return { ok: true, scaled: clamped, normalized, warnings };
 }
 
-
 /**
  * Source of truth: annual equivalence with fixed day counts.
  * Year = 365 days, week = 7, biweekly = 14, every 4 weeks = 28, month = 365/12 (average).
@@ -703,28 +702,6 @@ export default function RentPaidEvery4Weeks() {
   const handlePrint = () => {
     if (typeof window === "undefined") return;
     window.print();
-  };
-
-  const [copiedKey, setCopiedKey] = useState<string | null>(null);
-  const copyTimerRef = useRef<number | null>(null);
-
-  useEffect(() => {
-    return () => {
-      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
-    };
-  }, []);
-
-  const handleCopy = async (key: string, text: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopiedKey(key);
-      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
-      copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
-    } catch {
-      setCopiedKey("copy_failed");
-      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
-      copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
-    }
   };
 
   const amountHelpId = "rc-4w-amount-help";

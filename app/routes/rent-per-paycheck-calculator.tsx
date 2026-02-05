@@ -676,28 +676,6 @@ export default function RentPerPaycheck() {
     window.print();
   };
 
-  const [copiedKey, setCopiedKey] = useState<string | null>(null);
-  const copyTimerRef = useRef<number | null>(null);
-
-  useEffect(() => {
-    return () => {
-      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
-    };
-  }, []);
-
-  const handleCopy = async (key: string, text: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopiedKey(key);
-      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
-      copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
-    } catch {
-      setCopiedKey("copy_failed");
-      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
-      copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
-    }
-  };
-
   const faqData = [
     {
       q: "What does rent per paycheck mean?",
@@ -985,17 +963,6 @@ export default function RentPerPaycheck() {
                   <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700 tabular-nums break-words">
                     {fmtMoney(computed.perPaycheckScaled)}
                   </div>
-                </div>
-
-                <div className="rc-no-print mt-4 flex flex-wrap gap-2">
-                  {copiedKey === "copy_failed" ? (
-                    <span
-                      className="self-center text-sm font-semibold text-rose-700"
-                      role="alert"
-                    >
-                      Copy failed
-                    </span>
-                  ) : null}
                 </div>
 
                 <div className=" grid gap-3 sm:grid-cols-2 lg:grid-cols-4">

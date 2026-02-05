@@ -569,7 +569,6 @@ export default function AnnualToMonthlyRent() {
     return safeParseBoolean(saved, true);
   });
 
-  const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const copyTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -667,107 +666,6 @@ export default function AnnualToMonthlyRent() {
       : formatCurrencyFromScaled(scaled, currency, false, displayDecimals);
 
   const monthlyHeadlineScaled = breakdownScaled?.monthly ?? 0n;
-
-  const handleCopy = async (key: string, text: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopiedKey(key);
-      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
-      copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
-    } catch {
-      setCopiedKey("copy_failed");
-      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
-      copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
-    }
-  };
-
-  const handleExportCsv = () => {
-    if (!canShowResults || !breakdownScaled) return;
-
-    const rows: string[] = [];
-    rows.push(buildCsvRow(["Annual to Monthly Rent Converter"]));
-    rows.push(
-      buildCsvRow([
-        "Assumptions",
-        "Year=365 days",
-        "Month=annual ÷ 12 (budgeting view)",
-        "4-week=28 days (13 cycles/year)",
-      ]),
-    );
-    rows.push(buildCsvRow(["Currency formatting", currency]));
-    rows.push(
-      buildCsvRow([
-        "Display",
-        roundDisplay
-          ? `Rounded to ${displayDecimals} decimals for display`
-          : "No display rounding (shows up to 12 decimals)",
-      ]),
-    );
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Input (Annual)", fmt(annualScaled)]));
-    rows.push(buildCsvRow(["Headline (Monthly)", fmt(monthlyHeadlineScaled)]));
-    rows.push(buildCsvRow(["Monthly definition", "Annual ÷ 12"]));
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Period", "Amount"]));
-    const items: Array<[Period, bigint]> = [
-      ["hourly", breakdownScaled.hourly],
-      ["daily", breakdownScaled.daily],
-      ["weekly", breakdownScaled.weekly],
-      ["biweekly", breakdownScaled.biweekly],
-      ["every_4_weeks", breakdownScaled.every4w],
-      ["monthly", breakdownScaled.monthly],
-      ["annual", breakdownScaled.annual],
-    ];
-    for (const [p, val] of items) {
-      rows.push(buildCsvRow([PERIOD_LABEL[p], fmt(val)]));
-    }
-
-    rows.push(buildCsvRow([""]));
-    rows.push(
-      buildCsvRow([
-        "Monthly minus 4-week",
-        fmt(breakdownScaled.monthlyMinus4w),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Monthly vs 4-week difference (%)",
-        formatPercent(breakdownScaled.monthlyMinus4wPct, 2),
-      ]),
-    );
-
-    rows.push(buildCsvRow([""]));
-    rows.push(buildCsvRow(["Annualization context (illustrative)"]));
-    rows.push(
-      buildCsvRow(["Monthly × 12", fmt(breakdownScaled.annualFromMonthly12)]),
-    );
-    rows.push(
-      buildCsvRow(["4-week × 13", fmt(breakdownScaled.annualFrom4w13)]),
-    );
-    rows.push(
-      buildCsvRow(["Weekly × 52", fmt(breakdownScaled.annualFromWeekly52)]),
-    );
-    rows.push(
-      buildCsvRow([
-        "13 vs 12 difference",
-        fmt(breakdownScaled.annualDiff_13vs12),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "13 vs 12 difference (%)",
-        formatPercent(breakdownScaled.annualDiff_13vs12Pct, 2),
-      ]),
-    );
-
-    downloadTextFile(
-      "annual-to-monthly-rent-converter.csv",
-      rows.join("\n"),
-      "text/csv;charset=utf-8",
-    );
-  };
 
   const handlePrint = () => {
     if (typeof window === "undefined") return;

@@ -552,7 +552,6 @@ export default function HourlyToAnnualRent() {
   const [amountFocused, setAmountFocused] = useState<boolean>(false);
   const [paidHoursFocused, setPaidHoursFocused] = useState<boolean>(false);
 
-  const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const copyTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -718,19 +717,6 @@ export default function HourlyToAnnualRent() {
       ? breakdownScaled.monthlyClock
       : breakdownScaled.monthlyPaidScaled;
   }, [hourMode, breakdownScaled]);
-
-  const handleCopy = async (key: string, text: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopiedKey(key);
-      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
-      copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
-    } catch {
-      setCopiedKey("copy_failed");
-      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
-      copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
-    }
-  };
 
   const handlePrint = () => {
     if (typeof window === "undefined") return;

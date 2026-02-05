@@ -476,7 +476,6 @@ export default function AnnualToWeeklyRentConverter() {
     return safeParseBoolean(saved, true);
   });
 
-  const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const copyTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -573,19 +572,6 @@ export default function AnnualToWeeklyRentConverter() {
     formatMoneyFromScaled(scaled, currency, displayDecimals, roundDisplay);
 
   const weeklyHeadlineScaled = breakdownScaled?.weeklyBudget ?? 0n;
-
-  const handleCopy = async (key: string, text: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopiedKey(key);
-      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
-      copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
-    } catch {
-      setCopiedKey("copy_failed");
-      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
-      copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
-    }
-  };
 
   const handlePrint = () => {
     if (typeof window === "undefined") return;

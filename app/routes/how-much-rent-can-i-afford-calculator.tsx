@@ -173,7 +173,6 @@ function clampScaled(v: bigint, min: bigint, max: bigint): bigint {
   return v;
 }
 
-
 function absBigInt(x: bigint): bigint {
   return x < 0n ? -x : x;
 }
@@ -565,7 +564,6 @@ export default function HowMuchRentCanIAfford() {
     return normalizeDisplayDecimals(saved ?? 2);
   });
 
-  const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const copyTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -642,19 +640,6 @@ export default function HowMuchRentCanIAfford() {
 
   const fmt = (scaled: bigint) =>
     formatCurrencyFromScaled(scaled, currency, roundDisplay, displayDecimals);
-
-  const handleCopy = async (key: string, text: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopiedKey(key);
-      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
-      copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
-    } catch {
-      setCopiedKey("copy_failed");
-      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
-      copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
-    }
-  };
 
   const canShowResults =
     parsedIncome.ok && !!annualIncomeScaled && !!affordability;

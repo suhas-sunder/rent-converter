@@ -45,7 +45,6 @@ export const meta: Route.MetaFunction = () => {
   ];
 };
 
-
 type Period =
   | "hourly"
   | "daily"
@@ -784,28 +783,6 @@ export default function RentAfterTaxIncome() {
     window.print();
   };
 
-  const [copiedKey, setCopiedKey] = useState<string | null>(null);
-  const copyTimerRef = useRef<number | null>(null);
-
-  useEffect(() => {
-    return () => {
-      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
-    };
-  }, []);
-
-  const handleCopy = async (key: string, text: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopiedKey(key);
-      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
-      copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
-    } catch {
-      setCopiedKey("copy_failed");
-      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
-      copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
-    }
-  };
-
   const faqData = [
     {
       q: "What is an effective tax rate in this calculator?",
@@ -870,7 +847,6 @@ export default function RentAfterTaxIncome() {
     ],
   };
 
-
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -886,7 +862,6 @@ export default function RentAfterTaxIncome() {
       "Estimate take-home income from pre-tax income and an effective tax rate, then compare rent to after-tax income using annual equivalence (365-day year).",
     url: "https://www.rentconverter.com/rent-after-tax-income-calculator",
   };
-
 
   return (
     <main className="bg-white text-slate-700 scroll-smooth">
@@ -1719,7 +1694,6 @@ export default function RentAfterTaxIncome() {
           ))}
         </div>
       </section>
-
 
       <script
         type="application/ld+json"

@@ -981,28 +981,6 @@ export default function RentDueDateCalculator() {
     window.print();
   };
 
-  const [copiedKey, setCopiedKey] = useState<string | null>(null);
-  const copyTimerRef = useRef<number | null>(null);
-
-  useEffect(() => {
-    return () => {
-      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
-    };
-  }, []);
-
-  const handleCopy = async (key: string, text: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopiedKey(key);
-      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
-      copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
-    } catch {
-      setCopiedKey("copy_failed");
-      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
-      copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
-    }
-  };
-
   return (
     <main className="bg-white text-slate-700 scroll-smooth">
       <style
@@ -1258,29 +1236,6 @@ export default function RentDueDateCalculator() {
                       {computed.paymentsTotal}
                     </div>
                   </div>
-                </div>
-
-                <div className="rc-no-print mt-4 flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      handleCopy(
-                        "summary",
-                        `Next due: ${formatDate(computed.nextDue)} | Payments: ${computed.paymentsTotal} | Total paid: ${fmtMoney(
-                          computed.totalPaidScaled,
-                        )}`,
-                      )
-                    }
-                    className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-                  >
-                    {copiedKey === "summary" ? "Copied" : "Copy summary"}
-                  </button>
-
-                  {copiedKey === "copy_failed" ? (
-                    <span className="self-center text-sm font-semibold text-rose-700">
-                      Copy failed
-                    </span>
-                  ) : null}
                 </div>
 
                 <div className="mt-3 rounded-2xl border border-slate-200 bg-white overflow-hidden rc-print-block">

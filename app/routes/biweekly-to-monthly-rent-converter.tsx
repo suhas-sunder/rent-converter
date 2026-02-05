@@ -531,7 +531,6 @@ export default function BiweeklyToMonthlyRent() {
     return safeParseBoolean(saved, true);
   });
 
-  const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const copyTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -652,111 +651,6 @@ export default function BiweeklyToMonthlyRent() {
     formatCurrencyFromScaled(scaled, currency, roundDisplay, displayDecimals);
 
   const monthlyHeadlineScaled = breakdownScaled?.monthly ?? 0n;
-
-  const handleCopy = async (key: string, text: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopiedKey(key);
-      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
-      copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
-    } catch {
-      setCopiedKey("copy_failed");
-      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
-      copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
-    }
-  };
-
-  const handleExportCsv = () => {
-    if (!canShowResults || !breakdownScaled || !paymentMath) return;
-
-    const rows: string[] = [];
-    rows.push(buildCsvRow(["Biweekly to Monthly Rent Converter"]));
-    rows.push(
-      buildCsvRow([
-        "Assumptions",
-        "Year=365 days",
-        "Biweekly=14 days",
-        "Month=365 ÷ 12 days (average)",
-      ]),
-    );
-    rows.push(buildCsvRow(["Currency formatting", currency]));
-    rows.push(
-      buildCsvRow([
-        "Display",
-        roundDisplay
-          ? `Rounded to ${displayDecimals} decimals for display`
-          : "No display rounding (shows up to 12 decimals)",
-      ]),
-    );
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Input (Biweekly)", fmt(biweeklyScaled)]));
-    rows.push(buildCsvRow(["Headline (Monthly)", fmt(monthlyHeadlineScaled)]));
-    rows.push(buildCsvRow([""]));
-
-    rows.push(buildCsvRow(["Period", "Amount"]));
-    const items: Array<[Period, bigint]> = [
-      ["hourly", breakdownScaled.hourly],
-      ["daily", breakdownScaled.daily],
-      ["weekly", breakdownScaled.weekly],
-      ["biweekly", breakdownScaled.biweekly],
-      ["every_4_weeks", breakdownScaled.every4w],
-      ["monthly", breakdownScaled.monthly],
-      ["annual", breakdownScaled.annual],
-    ];
-    for (const [p, val] of items)
-      rows.push(buildCsvRow([PERIOD_LABEL[p], fmt(val)]));
-
-    rows.push(buildCsvRow([""]));
-    rows.push(buildCsvRow(["26-payments context (illustrative)"]));
-    rows.push(
-      buildCsvRow(["Payments per year", String(paymentMath.paymentsPerYear)]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Biweekly × 26 (annual)",
-        fmt(paymentMath.annualFromPayments),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "(Biweekly × 26) ÷ 12 (monthly)",
-        fmt(paymentMath.monthlyFromPayments),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Delta vs converter monthly",
-        fmt(paymentMath.deltaVsConverter),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Delta (%) vs converter monthly",
-        formatPercent(paymentMath.pctVsConverter, 2),
-      ]),
-    );
-
-    rows.push(buildCsvRow([""]));
-    rows.push(
-      buildCsvRow([
-        "Monthly minus 4-week",
-        fmt(breakdownScaled.monthlyMinus4w),
-      ]),
-    );
-    rows.push(
-      buildCsvRow([
-        "Monthly vs 4-week difference (%)",
-        formatPercent(breakdownScaled.monthlyMinus4wPct, 2),
-      ]),
-    );
-
-    downloadTextFile(
-      "biweekly-to-monthly-rent-converter.csv",
-      rows.join("\n"),
-      "text/csv;charset=utf-8",
-    );
-  };
 
   const handlePrint = () => {
     if (typeof window === "undefined") return;

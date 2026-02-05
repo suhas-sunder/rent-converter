@@ -520,7 +520,6 @@ export default function DailyToMonthlyRent() {
     return safeParseBoolean(saved, true);
   });
 
-  const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const copyTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -623,19 +622,6 @@ export default function DailyToMonthlyRent() {
   };
 
   const monthlyHeadlineScaled = breakdownScaled?.monthly ?? 0n;
-
-  const handleCopy = async (key: string, text: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopiedKey(key);
-      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
-      copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
-    } catch {
-      setCopiedKey("copy_failed");
-      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
-      copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
-    }
-  };
 
   const handlePrint = () => {
     if (typeof window === "undefined") return;
@@ -852,22 +838,6 @@ export default function DailyToMonthlyRent() {
                   Monthly equivalent
                 </div>
               </div>
-
-              {canShowResults ? (
-                <button
-                  type="button"
-                  onClick={() =>
-                    handleCopy(
-                      "monthly_headline",
-                      fmt(monthlyHeadlineScaled).toString(),
-                    )
-                  }
-                  className="cursor-pointer rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-                  aria-label="Copy monthly result"
-                >
-                  {copiedKey === "monthly_headline" ? "Copied" : "Copy"}
-                </button>
-              ) : null}
             </div>
 
             {!canShowResults ? (
@@ -913,14 +883,6 @@ export default function DailyToMonthlyRent() {
                         <div className="text-xs font-medium text-slate-600">
                           {label}
                         </div>
-                        <button
-                          type="button"
-                          onClick={() => handleCopy(`card_${key}`, fmt(val))}
-                          className="cursor-pointer rounded-lg border border-slate-200 bg-white px-2 py-1 text-[11px] font-semibold text-slate-700 hover:bg-sky-50 hover:border-sky-200 transition"
-                          aria-label={`Copy ${label}`}
-                        >
-                          {copiedKey === `card_${key}` ? "Copied" : "Copy"}
-                        </button>
                       </div>
                       <div className="mt-1 text-lg font-bold text-slate-900 tabular-nums whitespace-nowrap">
                         {fmt(val)}

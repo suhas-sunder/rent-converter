@@ -1065,28 +1065,6 @@ export default function RentVsBuyCalculator() {
     window.print();
   };
 
-  const [copiedKey, setCopiedKey] = useState<string | null>(null);
-  const copyTimerRef = useRef<number | null>(null);
-
-  useEffect(() => {
-    return () => {
-      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
-    };
-  }, []);
-
-  const handleCopy = async (key: string, text: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopiedKey(key);
-      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
-      copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
-    } catch {
-      setCopiedKey("copy_failed");
-      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
-      copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
-    }
-  };
-
   const faqData = [
     {
       q: "What does this rent vs buy calculator estimate?",
@@ -1590,34 +1568,6 @@ export default function RentVsBuyCalculator() {
                         rent.
                       </p>
                     </div>
-                  </div>
-
-                  <div className="rc-no-print mt-4 flex flex-wrap gap-2">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleCopy(
-                          "headline",
-                          `Rent total: ${money(computed.totalRentCostScaled)}; Ownership net cost: ${money(
-                            computed.ownershipNetCostScaled,
-                          )}; Break-even year: ${
-                            computed.breakEvenYear === null
-                              ? "N/A"
-                              : computed.breakEvenYear
-                          }`,
-                        )
-                      }
-                      className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-                    >
-                      {copiedKey === "headline"
-                        ? "Copied"
-                        : "Copy headline results"}
-                    </button>
-                    {copiedKey === "copy_failed" ? (
-                      <span className="self-center text-sm font-semibold text-rose-700">
-                        Copy failed
-                      </span>
-                    ) : null}
                   </div>
 
                   <div className="my-6 rounded-2xl border border-slate-200 bg-white p-5 rc-print-block">
