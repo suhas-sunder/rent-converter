@@ -1,8 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Route } from "./+types/rent-paid-every-4-weeks-calculator";
-import OtherUsefulTools from "~/client/components/navigation/OtherUsefulTools";
-import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountry";
-import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 function safeToFixed(n: number, digits: number): string {
   if (!Number.isFinite(n)) return "-";
@@ -1458,10 +1455,6 @@ export default function RentPaidEvery4Weeks() {
           ))}
         </div>
       </section>
-
-      <OtherUsefulTools />
-      <RenterChecklists />
-      <RentToolsByCountry />
 
       {/* JSON-LD */}
       <script

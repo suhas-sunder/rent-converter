@@ -1,8 +1,5 @@
 import { useMemo, useEffect, useRef, useState } from "react";
 import type { Route } from "./+types/rent-increase-percentage-calculator";
-import OtherUsefulTools from "~/client/components/navigation/OtherUsefulTools";
-import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountry";
-import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 export const meta: Route.MetaFunction = () => [
   {
@@ -34,8 +31,7 @@ export const meta: Route.MetaFunction = () => [
   },
   {
     property: "og:url",
-    content:
-      "https://www.rentconverter.comrent-increase-percentage-calculator",
+    content: "https://www.rentconverter.comrent-increase-percentage-calculator",
   },
   { property: "og:site_name", content: "RentConverter.com" },
   {
@@ -1689,10 +1685,6 @@ export default function RentIncreasePercentage() {
           ))}
         </div>
       </section>
-
-      <OtherUsefulTools />
-      <RenterChecklists />
-      <RentToolsByCountry />
 
       <script
         type="application/ld+json"

@@ -1,9 +1,5 @@
 import { useMemo, useEffect, useRef, useState } from "react";
 import type { Route } from "./+types/annual-to-biweekly-rent-converter";
-import OtherUsefulTools from "~/client/components/navigation/OtherUsefulTools";
-import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountry";
-import RenterChecklists from "~/client/components/navigation/RenterChecklists";
-
 const SITE_URL = "https://www.rentconverter.com";
 const PAGE_PATH = "/annual-to-biweekly-rent-converter";
 
@@ -1470,10 +1466,6 @@ export default function AnnualToBiweeklyRent() {
           ))}
         </div>
       </section>
-
-      <OtherUsefulTools />
-      <RenterChecklists />
-      <RentToolsByCountry />
 
       <script
         type="application/ld+json"

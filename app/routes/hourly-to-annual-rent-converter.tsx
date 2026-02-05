@@ -1,8 +1,5 @@
 import { useMemo, useEffect, useRef, useState } from "react";
 import type { Route } from "./+types/hourly-to-annual-rent-converter";
-import OtherUsefulTools from "~/client/components/navigation/OtherUsefulTools";
-import RentToolsByCountry from "~/client/components/navigation/RentToolsByCountry";
-import RenterChecklists from "~/client/components/navigation/RenterChecklists";
 
 function safeToFixed(n: number, digits: number): string {
   if (!Number.isFinite(n)) return "-";
@@ -1544,10 +1541,6 @@ export default function HourlyToAnnualRent() {
           ))}
         </div>
       </section>
-
-      <OtherUsefulTools />
-      <RenterChecklists />
-      <RentToolsByCountry />
 
       <script
         type="application/ld+json"
