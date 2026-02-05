@@ -11,6 +11,10 @@ export const meta: Route.MetaFunction = () => {
   const description =
     "Instantly estimate how much rent you can afford based on income using clear, consistent assumptions. See affordable rent across monthly, weekly, and 4-week (28-day) pay cycles, with exact breakdowns and print-to-PDF. Free and private.";
 
+  const url =
+    "https://www.rentconverter.com/how-much-rent-can-i-afford-calculator";
+  const ogImage = "https://www.rentconverter.com/og-image.jpg";
+
   return [
     { title },
     { name: "description", content: description },
@@ -26,30 +30,16 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:type", content: "website" },
     { property: "og:title", content: title },
     { property: "og:description", content: description },
-    {
-      property: "og:url",
-      content:
-        "https://www.rentconverter.comhow-much-rent-can-i-afford-calculator",
-    },
+    { property: "og:url", content: url },
     { property: "og:site_name", content: "RentConverter.com" },
-    {
-      property: "og:image",
-      content: "https://www.rentconverter.comog-image.jpg",
-    },
+    { property: "og:image", content: ogImage },
 
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
-    {
-      name: "twitter:image",
-      content: "https://www.rentconverter.comog-image.jpg",
-    },
+    { name: "twitter:image", content: ogImage },
 
-    {
-      tagName: "link",
-      rel: "canonical",
-      href: "https://www.rentconverter.comhow-much-rent-can-i-afford-calculator",
-    },
+    { tagName: "link", rel: "canonical", href: url },
   ];
 };
 
@@ -183,16 +173,9 @@ function clampScaled(v: bigint, min: bigint, max: bigint): bigint {
   return v;
 }
 
-const MAX_SAFE_INT_FOR_NUMBER = 9_000_000_000_000_000n; // ~9e15, JS Number integer precision limit
 
 function absBigInt(x: bigint): bigint {
   return x < 0n ? -x : x;
-}
-
-function toNumberSafe(scaled: bigint): number {
-  const a = absBigInt(scaled);
-  if (a > MAX_SAFE_INT_FOR_NUMBER) return Number.NaN;
-  return Number(scaled) / Number(SCALE);
 }
 
 function groupInt(intStr: string, groupSep: string): string {
@@ -715,7 +698,6 @@ export default function HowMuchRentCanIAfford() {
       a: "Assumptions: 1 year = 365 days and 1 month = 365 ÷ 12 days (average). Actual pay schedules and billing rules vary.",
     },
   ];
-
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -730,7 +712,7 @@ export default function HowMuchRentCanIAfford() {
         "@type": "ListItem",
         position: 2,
         name: "How Much Rent Can I Afford?",
-        item: "https://www.rentconverter.comhow-much-rent-can-i-afford-calculator",
+        item: "https://www.rentconverter.com/how-much-rent-can-i-afford-calculator",
       },
     ],
   };
@@ -758,7 +740,7 @@ export default function HowMuchRentCanIAfford() {
     name: "How Much Rent Can I Afford?",
     description:
       "Estimate rent affordability from income using annual equivalence (365-day year). Compare affordable rent across monthly, weekly, and every 4 weeks, and print or save as PDF.",
-    url: "https://www.rentconverter.comhow-much-rent-can-i-afford-calculator",
+    url: "https://www.rentconverter.com/how-much-rent-can-i-afford-calculator",
   };
 
   return (
@@ -799,7 +781,7 @@ export default function HowMuchRentCanIAfford() {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
+                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
               >
                 Print / Save as PDF
               </button>
@@ -937,7 +919,7 @@ export default function HowMuchRentCanIAfford() {
               </div>
             </div>
             <div className="mt-1 text-4xl sm:text-6xl font-extrabold text-emerald-700 tabular-nums whitespace-nowrap">
-              {fmt(annualIncomeScaled!)}
+              {canShowResults ? fmt(annualIncomeScaled as bigint) : "-"}
             </div>
             {!canShowResults ? (
               <div className="mt-3 rounded-xl border border-slate-200 bg-white px-4 py-4 text-slate-800">
@@ -1016,7 +998,7 @@ export default function HowMuchRentCanIAfford() {
             <button
               type="button"
               onClick={handlePrint}
-              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+              className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
             >
               Print / Save as PDF
             </button>

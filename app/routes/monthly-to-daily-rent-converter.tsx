@@ -11,6 +11,9 @@ export const meta: Route.MetaFunction = () => {
   const description =
     "Instantly convert monthly rent into a daily amount using a true 365-day year. Compare average-day vs 30-day month math, plus see weekly, biweekly, 4-week (28-day), hourly, and annual breakdowns. Free and private.";
 
+  const url = "https://www.rentconverter.com/monthly-to-daily-rent-converter";
+  const image = "https://www.rentconverter.com/og-image.jpg";
+
   return [
     { title },
     { name: "description", content: description },
@@ -26,28 +29,19 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:type", content: "website" },
     { property: "og:title", content: title },
     { property: "og:description", content: description },
-    {
-      property: "og:url",
-      content: "https://www.rentconverter.commonthly-to-daily-rent-converter",
-    },
+    { property: "og:url", content: url },
     { property: "og:site_name", content: "RentConverter.com" },
-    {
-      property: "og:image",
-      content: "https://www.rentconverter.comog-image.jpg",
-    },
+    { property: "og:image", content: image },
 
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
-    {
-      name: "twitter:image",
-      content: "https://www.rentconverter.comog-image.jpg",
-    },
+    { name: "twitter:image", content: image },
 
     {
       tagName: "link",
       rel: "canonical",
-      href: "https://www.rentconverter.commonthly-to-daily-rent-converter",
+      href: url,
     },
   ];
 };
@@ -183,12 +177,6 @@ const MAX_SAFE_INT_FOR_NUMBER = 9_000_000_000_000_000n; // ~9e15, JS Number inte
 
 function absBigInt(x: bigint): bigint {
   return x < 0n ? -x : x;
-}
-
-function toNumberSafe(scaled: bigint): number {
-  const a = absBigInt(scaled);
-  if (a > MAX_SAFE_INT_FOR_NUMBER) return Number.NaN;
-  return Number(scaled) / Number(SCALE);
 }
 
 function groupInt(intStr: string, groupSep: string): string {
@@ -516,7 +504,8 @@ function strictReadDisplayDecimals(saved: string | null): number {
 export default function MonthlyToDailyRent() {
   const [amount, setAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "2000";
-    return window.localStorage.getItem("rc_mtd_amount") ?? "2000";
+    const saved = window.localStorage.getItem("rc_mtd_amount") ?? "2000";
+    return saved.replace(/,/g, "");
   });
 
   const [currency, setCurrency] = useState<Currency>(() => {
@@ -545,17 +534,14 @@ export default function MonthlyToDailyRent() {
   const monthlyScaled = parsedAmount.ok ? (parsedAmount.scaled as bigint) : 0n;
 
   const [isAmountFocused, setIsAmountFocused] = useState(false);
-  const [amountDisplay, setAmountDisplay] = useState<string>(() => {
-    const initial = typeof window === "undefined" ? "2000" : undefined;
-    const raw =
-      initial ??
-      (typeof window === "undefined"
-        ? "2000"
-        : (window.localStorage.getItem("rc_mtd_amount") ?? "2000"));
-    const p = parseMoneyInputToScaled(raw);
-    if (p.ok && p.normalized) return formatPreviewFromNormalized(p.normalized);
-    return raw;
-  });
+
+  const amountPreviewValue = useMemo(() => {
+    if (!parsedAmount.ok) return amount;
+    const normalized = parsedAmount.normalized ?? "";
+    return normalized ? formatPreviewFromNormalized(normalized) : amount;
+  }, [parsedAmount.ok, parsedAmount.normalized, amount]);
+
+  const amountInputValue = isAmountFocused ? amount : amountPreviewValue;
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -671,7 +657,6 @@ export default function MonthlyToDailyRent() {
       a: "No. It converts the rent amount only. Additional housing costs depend on the lease and the property.",
     },
   ];
-
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -696,7 +681,7 @@ export default function MonthlyToDailyRent() {
         "@type": "ListItem",
         position: 2,
         name: "Monthly to Daily Rent Converter",
-        item: "https://www.rentconverter.commonthly-to-daily-rent-converter",
+        item: "https://www.rentconverter.com/monthly-to-daily-rent-converter",
       },
     ],
   };
@@ -714,7 +699,7 @@ export default function MonthlyToDailyRent() {
     name: "Monthly to Daily Rent Converter",
     description:
       "Convert a monthly rent price into a daily equivalent using annual equivalence (365-day year). Includes breakdowns across billing periods and a 4-week (28-day) comparison.",
-    url: "https://www.rentconverter.commonthly-to-daily-rent-converter",
+    url: "https://www.rentconverter.com/monthly-to-daily-rent-converter",
   };
 
   return (
@@ -768,26 +753,16 @@ export default function MonthlyToDailyRent() {
               <div className="flex gap-2">
                 <input
                   inputMode="decimal"
-                  value={isAmountFocused ? amount : amountDisplay}
-                  onChange={(e) => setAmount(e.target.value)}
-                  onFocus={() => {
-                    setIsAmountFocused(true);
-                    setAmountDisplay(amount);
-                  }}
-                  onBlur={() => {
-                    setIsAmountFocused(false);
-                    if (parsedAmount.ok && parsedAmount.normalized) {
-                      setAmountDisplay(
-                        formatPreviewFromNormalized(parsedAmount.normalized),
-                      );
-                    } else {
-                      setAmountDisplay(amount);
-                    }
-                  }}
+                  value={isAmountFocused ? amount : amountPreviewValue}
+                  onChange={(e) =>
+                    setAmount((e.target.value ?? "").replace(/,/g, ""))
+                  }
+                  onFocus={() => setIsAmountFocused(true)}
+                  onBlur={() => setIsAmountFocused(false)}
                   placeholder="e.g. 2000 or 2000.00"
                   className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!parsedAmount.ok}
-                  aria-describedby="rc-amt-help rc-amt-error"
+                  aria-describedby="rc-amt-error"
                 />
 
                 <select

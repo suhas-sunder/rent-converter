@@ -6,9 +6,12 @@ function safeToFixed(n: number, digits: number): string {
 }
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Rent vs Take-Home Pay Calculator (After-Tax Income)";
+  const title = "Rent After-Tax Income Calculator (Rent vs Take-Home Pay)";
   const description =
     "Calculate rent as a percentage of your take-home (after-tax) income. See net income after rent, compare pay cycles, and understand what you actually keep. Clear assumptions, exact decimals. Free and private.";
+
+  const url = "https://www.rentconverter.com/rent-after-tax-income-calculator";
+  const image = "https://www.rentconverter.com/og-image.jpg";
 
   return [
     { title },
@@ -25,31 +28,23 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:type", content: "website" },
     { property: "og:title", content: title },
     { property: "og:description", content: description },
-    {
-      property: "og:url",
-      content: "https://www.rentconverter.comrent-after-tax-income-calculator",
-    },
+    { property: "og:url", content: url },
     { property: "og:site_name", content: "RentConverter.com" },
-    {
-      property: "og:image",
-      content: "https://www.rentconverter.comog-image.jpg",
-    },
+    { property: "og:image", content: image },
 
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
-    {
-      name: "twitter:image",
-      content: "https://www.rentconverter.comog-image.jpg",
-    },
+    { name: "twitter:image", content: image },
 
     {
       tagName: "link",
       rel: "canonical",
-      href: "https://www.rentconverter.comrent-after-tax-income-calculator",
+      href: url,
     },
   ];
 };
+
 
 type Period =
   | "hourly"
@@ -870,10 +865,11 @@ export default function RentAfterTaxIncome() {
         "@type": "ListItem",
         position: 2,
         name: "Rent After-Tax Income Calculator",
-        item: "https://www.rentconverter.comrent-after-tax-income-calculator",
+        item: "https://www.rentconverter.com/rent-after-tax-income-calculator",
       },
     ],
   };
+
 
   const websiteSchema = {
     "@context": "https://schema.org",
@@ -888,8 +884,9 @@ export default function RentAfterTaxIncome() {
     name: "Rent After-Tax Income Calculator",
     description:
       "Estimate take-home income from pre-tax income and an effective tax rate, then compare rent to after-tax income using annual equivalence (365-day year).",
-    url: "https://www.rentconverter.comrent-after-tax-income-calculator",
+    url: "https://www.rentconverter.com/rent-after-tax-income-calculator",
   };
+
 
   return (
     <main className="bg-white text-slate-700 scroll-smooth">
@@ -907,7 +904,7 @@ export default function RentAfterTaxIncome() {
       />
 
       <section className="mt-4 rc-no-print hidden sm:block">
-        <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-500">
+        <nav className="cursor-pointer max-w-6xl mx-auto px-6 text-sm text-slate-500">
           <a href={safeHref("/")} className="hover:underline">
             Home
           </a>{" "}
@@ -928,7 +925,7 @@ export default function RentAfterTaxIncome() {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
               >
                 Print / Save as PDF
               </button>
@@ -1307,7 +1304,7 @@ export default function RentAfterTaxIncome() {
             <button
               type="button"
               onClick={handlePrint}
-              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+              className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
             >
               Print / Save as PDF
             </button>

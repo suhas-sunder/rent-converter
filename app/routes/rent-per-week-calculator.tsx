@@ -6,62 +6,50 @@ function safeToFixed(n: number, digits: number): string {
   return n.toFixed(digits);
 }
 
-export const meta: Route.MetaFunction = () => [
-  {
-    title: "Rent Per Week Calculator (Weekly Rent From Any Pay Cycle)",
-  },
-  {
-    name: "description",
-    content:
-      "Instantly calculate rent per week from monthly, 4-week (28-day), biweekly, daily, hourly, or annual amounts. See clear breakdowns, payment counts, and optional weekly totals using consistent math. Free and private.",
-  },
-  {
-    name: "keywords",
-    content:
-      "rent per week calculator, weekly rent calculator, rent per week from monthly, weekly equivalent rent, rent per week from 4 week rent, rent per week from biweekly, prorated weekly rent",
-  },
-  { name: "robots", content: "index,follow" },
-  { name: "author", content: "RentConverter.com" },
-  { name: "theme-color", content: "#f8fafc" },
+export const meta: Route.MetaFunction = () => {
+  const title = "Rent Per Week Calculator (Weekly Rent From Any Pay Cycle)";
+  const description =
+    "Instantly calculate rent per week from monthly, 4-week (28-day), biweekly, daily, hourly, or annual amounts. See clear breakdowns, payment counts, and optional weekly totals using consistent math. Free and private.";
 
-  { property: "og:type", content: "website" },
-  {
-    property: "og:title",
-    content: "Rent Per Week Calculator (Weekly Rent From Any Pay Cycle)",
-  },
-  {
-    property: "og:description",
-    content:
-      "Convert rent to a weekly amount from monthly, 28-day, biweekly, daily, hourly, or annual pay cycles with clear breakdowns and consistent assumptions.",
-  },
-  {
-    property: "og:url",
-    content: "https://www.rentconverter.comrent-per-week-calculator",
-  },
-  { property: "og:site_name", content: "RentConverter.com" },
-  {
-    property: "og:image",
-    content: "https://www.rentconverter.comog-image.jpg",
-  },
+  const canonicalUrl = "https://www.rentconverter.com/rent-per-week-calculator";
+  const ogImage = "https://www.rentconverter.com/og-image.jpg";
 
-  { name: "twitter:card", content: "summary_large_image" },
-  { name: "twitter:title", content: "Rent Per Week Calculator" },
-  {
-    name: "twitter:description",
-    content:
-      "See your rent per week from monthly, 4-week, biweekly, daily, hourly, or annual amounts.",
-  },
-  {
-    name: "twitter:image",
-    content: "https://www.rentconverter.comog-image.jpg",
-  },
+  return [
+    { title },
+    { charset: "utf-8" },
+    { name: "viewport", content: "width=device-width,initial-scale=1" },
 
-  {
-    tagName: "link",
-    rel: "canonical",
-    href: "https://www.rentconverter.comrent-per-week-calculator",
-  },
-];
+    { name: "description", content: description },
+    {
+      name: "keywords",
+      content:
+        "rent per week calculator, weekly rent calculator, rent per week from monthly, weekly equivalent rent, rent per week from 4 week rent, rent per week from biweekly, prorated weekly rent",
+    },
+    { name: "robots", content: "index,follow" },
+    { name: "author", content: "RentConverter.com" },
+    { name: "theme-color", content: "#f8fafc" },
+
+    { tagName: "link", rel: "canonical", href: canonicalUrl },
+
+    { property: "og:type", content: "website" },
+    { property: "og:site_name", content: "RentConverter.com" },
+    { property: "og:url", content: canonicalUrl },
+    { property: "og:title", content: title },
+    { property: "og:description", content: description },
+    { property: "og:image", content: ogImage },
+    { property: "og:image:alt", content: "RentConverter.com preview image" },
+
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: "Rent Per Week Calculator" },
+    {
+      name: "twitter:description",
+      content:
+        "See your rent per week from monthly, 4-week, biweekly, daily, hourly, or annual amounts.",
+    },
+    { name: "twitter:image", content: ogImage },
+    { name: "twitter:image:alt", content: "RentConverter.com preview image" },
+  ];
+};
 
 type Period =
   | "hourly"
@@ -539,7 +527,7 @@ function formatPreviewFromNormalized(normalized: string): string {
 
 export default function RentPerWeekCalculator() {
   const pageName = "Rent Per Week Calculator";
-  const canonicalUrl = "https://www.rentconverter.comrent-per-week-calculator";
+  const canonicalUrl = "https://www.rentconverter.com/rent-per-week-calculator";
 
   const [amount, setAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "2000";
@@ -548,23 +536,7 @@ export default function RentPerWeekCalculator() {
 
   const [isAmountFocused, setIsAmountFocused] = useState<boolean>(false);
 
-  const amountIsAmbiguous = useMemo(() => {
-    const t = (amount ?? "").trim();
-    return t.endsWith(".") || t.endsWith(",");
-  }, [amount]);
-
-  const parsedRent = useMemo(() => {
-    const base = parseMoneyInputToScaled(amount);
-    if (base.ok && amountIsAmbiguous) {
-      return {
-        ok: false,
-        warnings: base.warnings,
-        error:
-          "That amount looks incomplete. Finish the decimals or remove the trailing separator.",
-      } satisfies ParsedScaled;
-    }
-    return base;
-  }, [amount, amountIsAmbiguous]);
+  const parsedRent = useMemo(() => parseMoneyInputToScaled(amount), [amount]);
 
   const amountPreviewValue = useMemo(() => {
     if (!parsedRent.ok) return amount;
@@ -653,10 +625,12 @@ export default function RentPerWeekCalculator() {
     const monthlyMinus4w = monthlyScaled - fourWeeksScaled;
 
     // % difference vs 4-week: (monthly - 4w)/4w
+    const num = toNumberSafe(monthlyMinus4w);
+    const den = toNumberSafe(fourWeeksScaled);
     const pct =
-      fourWeeksScaled === 0n
+      den === 0 || !Number.isFinite(num) || !Number.isFinite(den)
         ? 0
-        : Number(monthlyMinus4w) / Number(fourWeeksScaled);
+        : num / den;
 
     const weeksN = parsedWeeks.value as number;
     const totalForWeeksScaled = weeklyScaled * BigInt(weeksN);
@@ -736,30 +710,6 @@ export default function RentPerWeekCalculator() {
     },
   ];
 
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: "https://www.rentconverter.com",
-      },
-      { "@type": "ListItem", position: 2, name: pageName, item: canonicalUrl },
-    ],
-  };
-
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqData.map((f) => ({
-      "@type": "Question",
-      name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.a },
-    })),
-  };
-
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -774,6 +724,34 @@ export default function RentPerWeekCalculator() {
     description:
       "Convert rent to a weekly equivalent from monthly, 4-week, biweekly, daily, hourly, or annual amounts using annual equivalence (365-day basis).",
     url: canonicalUrl,
+    isPartOf: { "@type": "WebSite", url: "https://www.rentconverter.com" },
+    breadcrumb: { "@id": `${canonicalUrl}#breadcrumb` },
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "@id": `${canonicalUrl}#breadcrumb`,
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://www.rentconverter.com",
+      },
+      { "@type": "ListItem", position: 2, name: pageName, item: canonicalUrl },
+    ],
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntityOfPage: canonicalUrl,
+    mainEntity: faqData.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
   };
 
   return (
@@ -813,7 +791,7 @@ export default function RentPerWeekCalculator() {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
               >
                 Print / Save as PDF
               </button>
@@ -1101,7 +1079,7 @@ export default function RentPerWeekCalculator() {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
               >
                 Print / Save as PDF
               </button>

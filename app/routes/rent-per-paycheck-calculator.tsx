@@ -1,65 +1,51 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Route } from "./+types/rent-per-paycheck-calculator";
 
-export const meta: Route.MetaFunction = () => [
-  {
-    title: "Rent Per Paycheck Calculator (How Much to Set Aside Each Pay)",
-  },
-  {
-    name: "description",
-    content:
-      "Instantly calculate how much rent to set aside from each paycheck. See rent per weekly, biweekly, semimonthly, or monthly pay using clear assumptions, payment counts, and exact breakdowns. Free and private.",
-  },
-  {
-    name: "keywords",
-    content:
-      "rent per paycheck, rent per paycheque, rent per paycheck calculator, biweekly paycheck rent, weekly paycheck rent, semimonthly paycheck rent, twice a month pay rent, rent set aside per paycheck, rent budget per paycheck",
-  },
-  { name: "robots", content: "index,follow" },
-  { name: "author", content: "RentConverter.com" },
-  { name: "theme-color", content: "#f8fafc" },
+export const meta: Route.MetaFunction = () => {
+  const title = "Rent Per Paycheck Calculator (How Much to Set Aside Each Pay)";
+  const description =
+    "Instantly calculate how much rent to set aside from each paycheck. See rent per weekly, biweekly, semimonthly, or monthly pay using clear assumptions, payment counts, and exact breakdowns. Free and private.";
 
-  { property: "og:type", content: "website" },
-  {
-    property: "og:title",
-    content: "Rent Per Paycheck Calculator (How Much to Set Aside)",
-  },
-  {
-    property: "og:description",
-    content:
-      "Calculate how much rent to set aside from each paycheck and compare weekly, biweekly, semimonthly, and monthly pay schedules with clear math.",
-  },
-  {
-    property: "og:url",
-    content: "https://www.rentconverter.comrent-per-paycheck-calculator",
-  },
-  { property: "og:site_name", content: "RentConverter.com" },
-  {
-    property: "og:image",
-    content: "https://www.rentconverter.comog-image.jpg",
-  },
+  const canonicalUrl =
+    "https://www.rentconverter.com/rent-per-paycheck-calculator";
+  const ogImage = "https://www.rentconverter.com/og-image.jpg";
 
-  { name: "twitter:card", content: "summary_large_image" },
-  {
-    name: "twitter:title",
-    content: "Rent Per Paycheck Calculator",
-  },
-  {
-    name: "twitter:description",
-    content:
-      "See how much rent to set aside from each paycheck based on your pay frequency.",
-  },
-  {
-    name: "twitter:image",
-    content: "https://www.rentconverter.comog-image.jpg",
-  },
+  return [
+    { title },
+    { charset: "utf-8" },
+    { name: "viewport", content: "width=device-width,initial-scale=1" },
 
-  {
-    tagName: "link",
-    rel: "canonical",
-    href: "https://www.rentconverter.comrent-per-paycheck-calculator",
-  },
-];
+    { name: "description", content: description },
+    {
+      name: "keywords",
+      content:
+        "rent per paycheck, rent per paycheque, rent per paycheck calculator, biweekly paycheck rent, weekly paycheck rent, semimonthly paycheck rent, twice a month pay rent, rent set aside per paycheck, rent budget per paycheck",
+    },
+    { name: "robots", content: "index,follow" },
+    { name: "author", content: "RentConverter.com" },
+    { name: "theme-color", content: "#f8fafc" },
+
+    { tagName: "link", rel: "canonical", href: canonicalUrl },
+
+    { property: "og:type", content: "website" },
+    { property: "og:site_name", content: "RentConverter.com" },
+    { property: "og:url", content: canonicalUrl },
+    { property: "og:title", content: title },
+    { property: "og:description", content: description },
+    { property: "og:image", content: ogImage },
+    { property: "og:image:alt", content: "RentConverter.com preview image" },
+
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: "Rent Per Paycheck Calculator" },
+    {
+      name: "twitter:description",
+      content:
+        "See how much rent to set aside from each paycheck based on your pay frequency.",
+    },
+    { name: "twitter:image", content: ogImage },
+    { name: "twitter:image:alt", content: "RentConverter.com preview image" },
+  ];
+};
 
 type RentPeriod =
   | "hourly"
@@ -395,7 +381,8 @@ function parseMoneyInputToScaled(raw: string): ParsedScaled {
     if (parts.length === 2) {
       const before = parts[0] ?? "";
       const after = parts[1] ?? "";
-      if (/^\d{1,2}$/.test(after)) {
+      if (/^\d{1,2}$/.test(after) || after === "") {
+        // allow "12," (treat as 12)
         decimalSep = ",";
       } else if (/^\d{3}$/.test(after) && /^\d{1,3}$/.test(before)) {
         decimalSep = null;
@@ -429,6 +416,7 @@ function parseMoneyInputToScaled(raw: string): ParsedScaled {
     }
     intPart = split[0] ?? "";
     fracPart = split[1] ?? "";
+    // allow trailing separators like "12." or "12," by treating empty frac as 0
   }
 
   if (decimalSep === ".") intPart = intPart.replace(/,/g, "");
@@ -741,30 +729,6 @@ export default function RentPerPaycheck() {
     },
   ];
 
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: "https://www.rentconverter.com",
-      },
-      { "@type": "ListItem", position: 2, name: pageName, item: canonicalUrl },
-    ],
-  };
-
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqData.map((f) => ({
-      "@type": "Question",
-      name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.a },
-    })),
-  };
-
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -779,6 +743,34 @@ export default function RentPerPaycheck() {
     description:
       "Estimate how much rent to set aside per paycheck by converting rent to an annual total using a 365-day basis, then dividing by pay frequency.",
     url: canonicalUrl,
+    isPartOf: { "@type": "WebSite", url: "https://www.rentconverter.com" },
+    breadcrumb: { "@id": `${canonicalUrl}#breadcrumb` },
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "@id": `${canonicalUrl}#breadcrumb`,
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://www.rentconverter.com",
+      },
+      { "@type": "ListItem", position: 2, name: pageName, item: canonicalUrl },
+    ],
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntityOfPage: canonicalUrl,
+    mainEntity: faqData.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
   };
 
   const amountInputId = "rpc_amount_input";
@@ -829,7 +821,7 @@ export default function RentPerPaycheck() {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
+                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
               >
                 Print / Save as PDF
               </button>
@@ -1073,7 +1065,7 @@ export default function RentPerPaycheck() {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
+                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
               >
                 Print / Save as PDF
               </button>
@@ -1248,7 +1240,7 @@ export default function RentPerPaycheck() {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
               >
                 Print / Save as PDF
               </button>

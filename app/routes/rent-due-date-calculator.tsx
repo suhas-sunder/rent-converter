@@ -1,62 +1,53 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Route } from "./+types/rent-due-date-calculator";
 
-export const meta: Route.MetaFunction = () => [
-  {
-    title: "Rent Due Date Calculator (Next Due Date + Payment Schedule)",
-  },
-  {
-    name: "description",
-    content:
-      "Instantly find your next rent due date and see a forward payment schedule. View how many payments fall in each month, how much rent is paid by an end date, and totals by year. Supports monthly, weekly, biweekly, and 4-week (28-day) cycles.",
-  },
-  {
-    name: "keywords",
-    content:
-      "rent due date calculator, next rent due date, rent payment schedule, rent paid by end date, monthly rent totals, rent billed every 28 days, rent paid every 4 weeks, rent due weekly, rent due biweekly, rent payment calendar",
-  },
-  { name: "robots", content: "index,follow" },
-  { name: "author", content: "RentConverter.com" },
-  { name: "theme-color", content: "#f8fafc" },
+export const meta: Route.MetaFunction = () => {
+  const title = "Rent Due Date Calculator (Next Due Date + Payment Schedule)";
+  const description =
+    "Instantly find your next rent due date and see a forward payment schedule. View how many payments fall in each month, how much rent is paid by an end date, and totals by year. Supports monthly, weekly, biweekly, and 4-week (28-day) cycles.";
 
-  { property: "og:type", content: "website" },
-  {
-    property: "og:title",
-    content: "Rent Due Date Calculator (Next Due Date + Schedule)",
-  },
-  {
-    property: "og:description",
-    content:
-      "Find your next rent due date and see monthly payment counts, cumulative rent paid by an end date, and year totals for monthly, weekly, biweekly, and 28-day cycles.",
-  },
-  {
-    property: "og:url",
-    content: "https://www.rentconverter.comrent-due-date-calculator",
-  },
-  { property: "og:site_name", content: "RentConverter.com" },
-  {
-    property: "og:image",
-    content: "https://www.rentconverter.comog-image.jpg",
-  },
+  const ogTitle = "Rent Due Date Calculator (Next Due Date + Schedule)";
+  const ogDescription =
+    "Find your next rent due date and see monthly payment counts, cumulative rent paid by an end date, and year totals for monthly, weekly, biweekly, and 28-day cycles.";
 
-  { name: "twitter:card", content: "summary_large_image" },
-  { name: "twitter:title", content: "Rent Due Date Calculator" },
-  {
-    name: "twitter:description",
-    content:
-      "Find your next rent due date and see payment schedules, monthly totals, and cumulative rent paid.",
-  },
-  {
-    name: "twitter:image",
-    content: "https://www.rentconverter.comog-image.jpg",
-  },
+  const canonical = "https://www.rentconverter.com/rent-due-date-calculator";
+  const ogImage = "https://www.rentconverter.com/og-image.jpg";
 
-  {
-    tagName: "link",
-    rel: "canonical",
-    href: "https://www.rentconverter.comrent-due-date-calculator",
-  },
-];
+  return [
+    { title },
+    { name: "description", content: description },
+    {
+      name: "keywords",
+      content:
+        "rent due date calculator, next rent due date, rent payment schedule, rent paid by end date, monthly rent totals, rent billed every 28 days, rent paid every 4 weeks, rent due weekly, rent due biweekly, rent payment calendar",
+    },
+    { name: "robots", content: "index,follow" },
+    { name: "author", content: "RentConverter.com" },
+    { name: "theme-color", content: "#f8fafc" },
+
+    { property: "og:type", content: "website" },
+    { property: "og:title", content: ogTitle },
+    { property: "og:description", content: ogDescription },
+    { property: "og:url", content: canonical },
+    { property: "og:site_name", content: "RentConverter.com" },
+    { property: "og:image", content: ogImage },
+
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: "Rent Due Date Calculator" },
+    {
+      name: "twitter:description",
+      content:
+        "Find your next rent due date and see payment schedules, monthly totals, and cumulative rent paid.",
+    },
+    { name: "twitter:image", content: ogImage },
+
+    {
+      tagName: "link",
+      rel: "canonical",
+      href: canonical,
+    },
+  ];
+};
 
 type BillingCycle =
   | "monthly"
@@ -1028,7 +1019,7 @@ export default function RentDueDateCalculator() {
       />
 
       <section className="max-w-6xl mx-auto px-6 mt-4 hidden sm:block">
-        <nav className="text-sm text-slate-500 rc-no-print">
+        <nav className="cursor-pointer text-sm text-slate-500 rc-no-print">
           <a href={safeHref("/")} className="hover:underline text-slate-600">
             Home
           </a>{" "}
@@ -1908,7 +1899,6 @@ export default function RentDueDateCalculator() {
           ))}
         </div>
       </section>
-
 
       <script
         type="application/ld+json"

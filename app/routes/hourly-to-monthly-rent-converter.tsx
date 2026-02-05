@@ -11,6 +11,9 @@ export const meta: Route.MetaFunction = () => {
   const description =
     "Instantly convert hourly rent into a monthly amount using true annual equivalence (365-day year). Compare average-month vs 30-day math, with exact decimals and a clear period breakdown. Free, private, no signup.";
 
+  const url = "https://www.rentconverter.com/hourly-to-monthly-rent-converter";
+  const ogImage = "https://www.rentconverter.com/og-image.jpg";
+
   return [
     { title },
     { name: "description", content: description },
@@ -26,28 +29,19 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:type", content: "website" },
     { property: "og:title", content: title },
     { property: "og:description", content: description },
-    {
-      property: "og:url",
-      content: "https://www.rentconverter.comhourly-to-monthly-rent-converter",
-    },
+    { property: "og:url", content: url },
     { property: "og:site_name", content: "RentConverter.com" },
-    {
-      property: "og:image",
-      content: "https://www.rentconverter.comog-image.jpg",
-    },
+    { property: "og:image", content: ogImage },
 
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
-    {
-      name: "twitter:image",
-      content: "https://www.rentconverter.comog-image.jpg",
-    },
+    { name: "twitter:image", content: ogImage },
 
     {
       tagName: "link",
       rel: "canonical",
-      href: "https://www.rentconverter.comhourly-to-monthly-rent-converter",
+      href: url,
     },
   ];
 };
@@ -185,9 +179,20 @@ function absBigInt(x: bigint): bigint {
 }
 
 function toNumberSafe(scaled: bigint): number {
+  // Convert scaled (1e12) BigInt to a JS number without casting the full scaled
+  // value to Number (which can overflow even when the unscaled value is safe).
+  const sign = scaled < 0n ? -1 : 1;
   const a = absBigInt(scaled);
-  if (a > MAX_SAFE_INT_FOR_NUMBER) return Number.NaN;
-  return Number(scaled) / Number(SCALE);
+
+  const intPart = a / SCALE; // unscaled integer part
+  const fracPart = a % SCALE; // 0..SCALE-1
+
+  if (intPart > MAX_SAFE_INT_FOR_NUMBER) return Number.NaN;
+
+  const intNum = Number(intPart);
+  const fracNum = Number(fracPart) / Number(SCALE);
+
+  return sign * (intNum + fracNum);
 }
 
 function groupInt(intStr: string, groupSep: string): string {
@@ -669,7 +674,6 @@ export default function HourlyToMonthlyRent() {
       a: "It estimates equivalents for comparison. Real totals depend on contract terms, billing rules, minimum charges, and due dates.",
     },
   ];
-
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -694,7 +698,7 @@ export default function HourlyToMonthlyRent() {
         "@type": "ListItem",
         position: 2,
         name: "Hourly to Monthly Rent Converter",
-        item: "https://www.rentconverter.comhourly-to-monthly-rent-converter",
+        item: "https://www.rentconverter.com/hourly-to-monthly-rent-converter",
       },
     ],
   };
@@ -712,7 +716,7 @@ export default function HourlyToMonthlyRent() {
     name: "Hourly to Monthly Rent Converter",
     description:
       "Convert hourly rent to a monthly equivalent using annual equivalence (365-day year). Includes a full period breakdown and a month-length comparison.",
-    url: "https://www.rentconverter.comhourly-to-monthly-rent-converter",
+    url: "https://www.rentconverter.com/hourly-to-monthly-rent-converter",
   };
 
   return (
@@ -753,7 +757,7 @@ export default function HourlyToMonthlyRent() {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
+                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
               >
                 Print / Save as PDF
               </button>
@@ -978,11 +982,12 @@ export default function HourlyToMonthlyRent() {
             <button
               type="button"
               onClick={handlePrint}
-              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+              className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
             >
               Print / Save as PDF
             </button>
           </div>
+
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
               <div className="text-xs text-slate-600">
@@ -1376,7 +1381,6 @@ export default function HourlyToMonthlyRent() {
           ))}
         </div>
       </section>
-
 
       <script
         type="application/ld+json"

@@ -1,61 +1,53 @@
 import { useMemo, useEffect, useRef, useState } from "react";
 import type { Route } from "./+types/rent-increase-calculator";
-export const meta: Route.MetaFunction = () => [
-  {
-    title: "Rent Increase Calculator (Percent or Fixed) + Annual Impact",
-  },
-  {
-    name: "description",
-    content:
-      "Instantly calculate your new rent after a percent or fixed increase. See the monthly, weekly, and 4-week (28-day) equivalents, the annual impact, and optional multi-increase projections. Clear assumptions, exact decimals. Free and private.",
-  },
-  {
-    name: "keywords",
-    content:
-      "rent increase calculator, calculate rent increase, rent increase percentage, rent raise calculator, new rent after increase, rent increase projection",
-  },
-  { name: "robots", content: "index,follow" },
-  { name: "author", content: "RentConverter.com" },
-  { name: "theme-color", content: "#f8fafc" },
+export const meta: Route.MetaFunction = () => {
+  const title = "Rent Increase Calculator (Percent or Fixed) + Annual Impact";
+  const description =
+    "Instantly calculate your new rent after a percent or fixed increase. See the monthly, weekly, and 4-week (28-day) equivalents, the annual impact, and optional multi-increase projections. Clear assumptions, exact decimals. Free and private.";
 
-  { property: "og:type", content: "website" },
-  {
-    property: "og:title",
-    content: "Rent Increase Calculator (Percent or Fixed) + Annual Impact",
-  },
-  {
-    property: "og:description",
-    content:
-      "Calculate your new rent after a percent or fixed increase and see the annual impact plus monthly, weekly, and 28-day equivalents. Includes optional multi-increase projections.",
-  },
-  {
-    property: "og:url",
-    content: "https://www.rentconverter.com/rent-increase-calculator",
-  },
-  { property: "og:site_name", content: "RentConverter.com" },
-  {
-    property: "og:image",
-    content: "https://www.rentconverter.com/og-image.jpg",
-  },
+  const canonicalUrl = "https://www.rentconverter.com/rent-increase-calculator";
+  const ogImage = "https://www.rentconverter.com/og-image.jpg";
 
-  { name: "twitter:card", content: "summary_large_image" },
-  { name: "twitter:title", content: "Rent Increase Calculator" },
-  {
-    name: "twitter:description",
-    content:
-      "Calculate your new rent after a percent or fixed increase and see the annual impact and pay-cycle equivalents.",
-  },
-  {
-    name: "twitter:image",
-    content: "https://www.rentconverter.com/og-image.jpg",
-  },
+  return [
+    // Common “full” meta set (page-level)
+    { title },
+    { charset: "utf-8" },
+    { name: "viewport", content: "width=device-width,initial-scale=1" },
 
-  {
-    tagName: "link",
-    rel: "canonical",
-    href: "https://www.rentconverter.com/rent-increase-calculator",
-  },
-];
+    { name: "description", content: description },
+    {
+      name: "keywords",
+      content:
+        "rent increase calculator, calculate rent increase, rent increase percentage, rent raise calculator, new rent after increase, rent increase projection",
+    },
+    { name: "robots", content: "index,follow" },
+    { name: "author", content: "RentConverter.com" },
+    { name: "theme-color", content: "#f8fafc" },
+
+    // Canonical
+    { tagName: "link", rel: "canonical", href: canonicalUrl },
+
+    // Open Graph
+    { property: "og:type", content: "website" },
+    { property: "og:site_name", content: "RentConverter.com" },
+    { property: "og:url", content: canonicalUrl },
+    { property: "og:title", content: title },
+    { property: "og:description", content: description },
+    { property: "og:image", content: ogImage },
+    { property: "og:image:alt", content: "RentConverter.com preview image" },
+
+    // Twitter
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: "Rent Increase Calculator" },
+    {
+      name: "twitter:description",
+      content:
+        "Calculate your new rent after a percent or fixed increase and see the annual impact and pay-cycle equivalents.",
+    },
+    { name: "twitter:image", content: ogImage },
+    { name: "twitter:image:alt", content: "RentConverter.com preview image" },
+  ];
+};
 
 type Period =
   | "hourly"
@@ -989,16 +981,34 @@ export default function RentIncreaseCalculator() {
       a: "Assumptions: 1 year = 365 days, 1 week = 7 days, every 4 weeks = 28 days, and month = 365 ÷ 12 days (average). Actual due dates and billing schedules vary by agreement.",
     },
   ];
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "RentConverter.com",
+    url: "https://www.rentconverter.com",
+  };
+
+  const webpageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: pageName,
+    url: canonicalUrl,
+    description:
+      "Instantly calculate your new rent after a percent or fixed increase. See the monthly, weekly, and 4-week (28-day) equivalents, the annual impact, and optional multi-increase projections.",
+    isPartOf: { "@type": "WebSite", url: "https://www.rentconverter.com" },
+    breadcrumb: { "@id": `${canonicalUrl}#breadcrumb` },
+  };
 
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
+    "@id": `${canonicalUrl}#breadcrumb`,
     itemListElement: [
       {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.rentconverter.com/",
+        item: "https://www.rentconverter.com",
       },
       { "@type": "ListItem", position: 2, name: pageName, item: canonicalUrl },
     ],
@@ -1007,6 +1017,7 @@ export default function RentIncreaseCalculator() {
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
+    mainEntityOfPage: canonicalUrl,
     mainEntity: faqData.map((f) => ({
       "@type": "Question",
       name: f.q,
@@ -1017,28 +1028,6 @@ export default function RentIncreaseCalculator() {
   const handlePrint = () => {
     if (typeof window === "undefined") return;
     window.print();
-  };
-
-  const [copiedKey, setCopiedKey] = useState<string | null>(null);
-  const copyTimerRef = useRef<number | null>(null);
-
-  useEffect(() => {
-    return () => {
-      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
-    };
-  }, []);
-
-  const handleCopy = async (key: string, text: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopiedKey(key);
-      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
-      copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
-    } catch {
-      setCopiedKey("copy_failed");
-      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
-      copyTimerRef.current = window.setTimeout(() => setCopiedKey(null), 1400);
-    }
   };
 
   return (
@@ -2026,6 +2015,14 @@ export default function RentIncreaseCalculator() {
         </div>
       </section>
 
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webpageSchema) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}

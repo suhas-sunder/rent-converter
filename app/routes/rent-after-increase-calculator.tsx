@@ -11,6 +11,9 @@ export const meta: Route.MetaFunction = () => {
   const description =
     "Instantly calculate your new rent after an increase by percent or fixed amount. See updated rent per period, annual impact, and clear comparisons across monthly, 4-week (28-day), and other pay cycles. Exact decimals, full breakdown. Free and private.";
 
+  const url = "https://www.rentconverter.com/rent-after-increase-calculator";
+  const image = "https://www.rentconverter.com/og-image.jpg";
+
   return [
     { title },
     { name: "description", content: description },
@@ -26,28 +29,19 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:type", content: "website" },
     { property: "og:title", content: title },
     { property: "og:description", content: description },
-    {
-      property: "og:url",
-      content: "https://www.rentconverter.comrent-after-increase-calculator",
-    },
+    { property: "og:url", content: url },
     { property: "og:site_name", content: "RentConverter.com" },
-    {
-      property: "og:image",
-      content: "https://www.rentconverter.comog-image.jpg",
-    },
+    { property: "og:image", content: image },
 
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
-    {
-      name: "twitter:image",
-      content: "https://www.rentconverter.comog-image.jpg",
-    },
+    { name: "twitter:image", content: image },
 
     {
       tagName: "link",
       rel: "canonical",
-      href: "https://www.rentconverter.comrent-after-increase-calculator",
+      href: url,
     },
   ];
 };
@@ -951,7 +945,7 @@ export default function RentAfterIncrease() {
         "@type": "ListItem",
         position: 2,
         name: "Rent After Increase Calculator",
-        item: "https://www.rentconverter.comrent-after-increase-calculator",
+        item: "https://www.rentconverter.com/rent-after-increase-calculator",
       },
     ],
   };
@@ -969,7 +963,7 @@ export default function RentAfterIncrease() {
     name: "Rent After Increase Calculator",
     description:
       "Calculate your new rent after an increase (percent or fixed amount) using annual equivalence (365-day year). Includes annual impact and pay-cycle breakdowns.",
-    url: "https://www.rentconverter.comrent-after-increase-calculator",
+    url: "https://www.rentconverter.com/rent-after-increase-calculator",
   };
 
   const currentInvalid = !currentParsed.ok || currentDisplayError;
@@ -1028,7 +1022,7 @@ export default function RentAfterIncrease() {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
               >
                 Print / Save as PDF
               </button>
@@ -1447,7 +1441,7 @@ export default function RentAfterIncrease() {
             <button
               type="button"
               onClick={handlePrint}
-              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+              className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
             >
               Print / Save as PDF
             </button>
@@ -1823,7 +1817,6 @@ export default function RentAfterIncrease() {
           ))}
         </div>
       </section>
-
 
       <script
         type="application/ld+json"

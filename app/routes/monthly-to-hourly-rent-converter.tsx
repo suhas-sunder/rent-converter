@@ -11,6 +11,9 @@ export const meta: Route.MetaFunction = () => {
   const description =
     "Instantly convert monthly rent into an hourly amount using a true 365-day year and average month length. Compare average-month vs fixed 30-day assumptions, with exact decimals and a full period breakdown. Free and private.";
 
+  const url = "https://www.rentconverter.com/monthly-to-hourly-rent-converter";
+  const image = "https://www.rentconverter.com/og-image.jpg";
+
   return [
     { title },
     { name: "description", content: description },
@@ -26,28 +29,19 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:type", content: "website" },
     { property: "og:title", content: title },
     { property: "og:description", content: description },
-    {
-      property: "og:url",
-      content: "https://www.rentconverter.commonthly-to-hourly-rent-converter",
-    },
+    { property: "og:url", content: url },
     { property: "og:site_name", content: "RentConverter.com" },
-    {
-      property: "og:image",
-      content: "https://www.rentconverter.comog-image.jpg",
-    },
+    { property: "og:image", content: image },
 
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
-    {
-      name: "twitter:image",
-      content: "https://www.rentconverter.comog-image.jpg",
-    },
+    { name: "twitter:image", content: image },
 
     {
       tagName: "link",
       rel: "canonical",
-      href: "https://www.rentconverter.commonthly-to-hourly-rent-converter",
+      href: url,
     },
   ];
 };
@@ -487,7 +481,8 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
 export default function MonthlyToHourlyRent() {
   const [amount, setAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "2000";
-    return window.localStorage.getItem("rc_mth_amount") ?? "2000";
+    const saved = window.localStorage.getItem("rc_mth_amount") ?? "2000";
+    return saved.replace(/,/g, "");
   });
 
   const [isAmountFocused, setIsAmountFocused] = useState<boolean>(false);
@@ -560,7 +555,8 @@ export default function MonthlyToHourlyRent() {
     const every4w = convertScaled(monthly, "monthly", "every_4_weeks");
     const annualEquiv = convertScaled(monthly, "monthly", "annual");
 
-    const hourly30Day = mulDivInt(monthly, SCALE, 30n * 24n * SCALE);
+    const hourly30Day = mulDivInt(monthly, 1n, 30n * 24n);
+
     const hourlyAvgMonth = mulDivInt(monthly, 12n, 365n * 24n);
     const hourDelta = hourlyAvgMonth - hourly30Day;
 
@@ -760,7 +756,9 @@ export default function MonthlyToHourlyRent() {
                 <input
                   inputMode="decimal"
                   value={amountDisplayValue}
-                  onChange={(e) => setAmount(e.target.value)}
+                  onChange={(e) =>
+                    setAmount((e.target.value ?? "").replace(/,/g, ""))
+                  }
                   onFocus={() => setIsAmountFocused(true)}
                   onBlur={() => setIsAmountFocused(false)}
                   placeholder="e.g. 2000 or 2000.00"
@@ -1434,7 +1432,6 @@ export default function MonthlyToHourlyRent() {
           ))}
         </div>
       </section>
-
 
       <script
         type="application/ld+json"

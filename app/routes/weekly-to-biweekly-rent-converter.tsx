@@ -6,60 +6,52 @@ function safeToFixed(n: number, digits: number): string {
   return n.toFixed(digits);
 }
 
-export const meta: Route.MetaFunction = () => [
-  { title: "Weekly to Biweekly Rent Converter (7-Day vs 14-Day Math)" },
-  {
-    name: "description",
-    content:
-      "Instantly convert weekly rent into a biweekly (14-day) amount and see how weekly math carries over across a true 365-day year. Includes a clear breakdown plus monthly vs 4-week (28-day) context. Free and private.",
-  },
-  {
-    name: "keywords",
-    content:
-      "weekly to biweekly rent, convert weekly rent to biweekly, weekly rent biweekly equivalent, weekly to every 2 weeks rent, 7 day rent to 14 day rent, rent converter weekly to biweekly",
-  },
-  { name: "robots", content: "index,follow" },
-  { name: "author", content: "RentConverter.com" },
-  { name: "theme-color", content: "#f8fafc" },
+export const meta: Route.MetaFunction = () => {
+  const url = "https://www.rentconverter.com/weekly-to-biweekly-rent-converter";
+  const ogImage = "https://www.rentconverter.com/og-image.jpg";
 
-  { property: "og:type", content: "website" },
-  {
-    property: "og:title",
-    content: "Weekly to Biweekly Rent Converter (7-Day vs 14-Day Math)",
-  },
-  {
-    property: "og:description",
-    content:
-      "Convert weekly rent to a biweekly amount and clearly see how 7-day and 14-day schedules compare over a full year.",
-  },
-  {
-    property: "og:url",
-    content: "https://www.rentconverter.comweekly-to-biweekly-rent-converter",
-  },
-  { property: "og:site_name", content: "RentConverter.com" },
-  {
-    property: "og:image",
-    content: "https://www.rentconverter.comog-image.jpg",
-  },
+  return [
+    { title: "Weekly to Biweekly Rent Converter (7-Day vs 14-Day Math)" },
+    {
+      name: "description",
+      content:
+        "Instantly convert weekly rent into a biweekly (14-day) amount and see how weekly math carries over across a true 365-day year. Includes a clear breakdown plus monthly vs 4-week (28-day) context. Free and private.",
+    },
+    {
+      name: "keywords",
+      content:
+        "weekly to biweekly rent, convert weekly rent to biweekly, weekly rent biweekly equivalent, weekly to every 2 weeks rent, 7 day rent to 14 day rent, rent converter weekly to biweekly",
+    },
+    { name: "robots", content: "index,follow" },
+    { name: "author", content: "RentConverter.com" },
+    { name: "theme-color", content: "#f8fafc" },
 
-  { name: "twitter:card", content: "summary_large_image" },
-  { name: "twitter:title", content: "Weekly to Biweekly Rent Converter" },
-  {
-    name: "twitter:description",
-    content:
-      "See the biweekly equivalent of weekly rent and how 7-day math translates to 14-day pay cycles.",
-  },
-  {
-    name: "twitter:image",
-    content: "https://www.rentconverter.comog-image.jpg",
-  },
+    { property: "og:type", content: "website" },
+    {
+      property: "og:title",
+      content: "Weekly to Biweekly Rent Converter (7-Day vs 14-Day Math)",
+    },
+    {
+      property: "og:description",
+      content:
+        "Convert weekly rent to a biweekly amount and clearly see how 7-day and 14-day schedules compare over a full year.",
+    },
+    { property: "og:url", content: url },
+    { property: "og:site_name", content: "RentConverter.com" },
+    { property: "og:image", content: ogImage },
 
-  {
-    tagName: "link",
-    rel: "canonical",
-    href: "https://www.rentconverter.comweekly-to-biweekly-rent-converter",
-  },
-];
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: "Weekly to Biweekly Rent Converter" },
+    {
+      name: "twitter:description",
+      content:
+        "See the biweekly equivalent of weekly rent and how 7-day math translates to 14-day pay cycles.",
+    },
+    { name: "twitter:image", content: ogImage },
+
+    { tagName: "link", rel: "canonical", href: url },
+  ];
+};
 
 type Period =
   | "hourly"
@@ -543,12 +535,12 @@ function annualizeScaled(valueScaled: bigint, period: Period): bigint {
 }
 
 function fromAnnualScaled(annualScaled: bigint, to: Period): bigint {
-  if (to === "hourly") return annualScaled / (365n * 24n);
-  if (to === "daily") return annualScaled / 365n;
+  if (to === "hourly") return mulDivRound(annualScaled, 1n, 365n * 24n);
+  if (to === "daily") return mulDivRound(annualScaled, 1n, 365n);
   if (to === "weekly") return mulDivRound(annualScaled, 7n, 365n);
   if (to === "biweekly") return mulDivRound(annualScaled, 14n, 365n);
   if (to === "every_4_weeks") return mulDivRound(annualScaled, 28n, 365n);
-  if (to === "monthly") return annualScaled / 12n;
+  if (to === "monthly") return mulDivRound(annualScaled, 1n, 12n);
   return annualScaled;
 }
 
@@ -574,7 +566,7 @@ function safeParseDisplayDecimals(raw: string | null, fallback = 2): number {
 export default function WeeklyToBiweeklyRent() {
   const pageName = "Weekly to Biweekly Rent Converter";
   const canonicalUrl =
-    "https://www.rentconverter.comweekly-to-biweekly-rent-converter";
+    "https://www.rentconverter.com/weekly-to-biweekly-rent-converter";
 
   const [amount, setAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "450";
@@ -809,7 +801,7 @@ export default function WeeklyToBiweeklyRent() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.rentconverter.com",
+        item: "https://www.rentconverter.com/",
       },
       { "@type": "ListItem", position: 2, name: pageName, item: canonicalUrl },
     ],
@@ -819,7 +811,7 @@ export default function WeeklyToBiweeklyRent() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "RentConverter.com",
-    url: "https://www.rentconverter.com",
+    url: "https://www.rentconverter.com/",
   };
 
   const webPageSchema = {
@@ -868,7 +860,7 @@ export default function WeeklyToBiweeklyRent() {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
               >
                 Print / Save as PDF
               </button>
@@ -894,6 +886,13 @@ export default function WeeklyToBiweeklyRent() {
                   placeholder="e.g. 450"
                   className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={amountBlurred && !!amountBlurError}
+                  aria-describedby={
+                    amountBlurred && amountBlurError
+                      ? "rc-wtbw-amount-error"
+                      : !parsed.ok
+                        ? "rc-wtbw-errors"
+                        : undefined
+                  }
                 />
 
                 <select
@@ -935,7 +934,10 @@ export default function WeeklyToBiweeklyRent() {
           </div>
 
           {!parsed.ok ? (
-            <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6">
+            <div
+              id="rc-wtbw-errors"
+              className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6"
+            >
               <div className="font-semibold text-slate-900">
                 No results to show
               </div>
@@ -1059,7 +1061,7 @@ export default function WeeklyToBiweeklyRent() {
             <button
               type="button"
               onClick={handlePrint}
-              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+              className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
             >
               Print / Save as PDF
             </button>
@@ -1515,7 +1517,6 @@ export default function WeeklyToBiweeklyRent() {
           ))}
         </div>
       </section>
-
 
       <script
         type="application/ld+json"

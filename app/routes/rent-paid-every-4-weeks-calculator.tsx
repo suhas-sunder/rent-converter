@@ -6,67 +6,48 @@ function safeToFixed(n: number, digits: number): string {
   return n.toFixed(digits);
 }
 
-export const meta: Route.MetaFunction = () => [
-  {
-    title:
-      "Rent Paid Every 4 Weeks (28 Days) Calculator – 13 Payments Explained",
-  },
-  {
-    name: "description",
-    content:
-      "Instantly convert rent paid every 4 weeks (28 days) to monthly and annual equivalents. See why there are 13 payments per year, how totals differ from monthly billing, and compare everything on a consistent annual basis. Clear math, exact decimals.",
-  },
-  {
-    name: "keywords",
-    content:
-      "rent paid every 4 weeks, 28 day rent, 4 week rent calculator, rent every 28 days, 4 week rent vs monthly, convert 4 week rent to monthly, convert 4 week rent to annual",
-  },
-  { name: "robots", content: "index,follow" },
-  { name: "author", content: "RentConverter.com" },
-  { name: "theme-color", content: "#f8fafc" },
+export const meta: Route.MetaFunction = () => {
+  const title =
+    "Rent Paid Every 4 Weeks (28 Days) Calculator – 13 Payments Explained";
+  const description =
+    "Instantly convert rent paid every 4 weeks (28 days) to monthly and annual equivalents. See why there are 13 payments per year, how totals differ from monthly billing, and compare everything on a consistent annual basis. Clear math, exact decimals.";
 
-  { property: "og:type", content: "website" },
-  {
-    property: "og:title",
-    content:
-      "Rent Paid Every 4 Weeks (28 Days) Calculator – 13 Payments Explained",
-  },
-  {
-    property: "og:description",
-    content:
-      "Convert 4-week (28-day) rent to monthly and annual equivalents and clearly see the impact of 13 payments per year compared to monthly billing.",
-  },
-  {
-    property: "og:url",
-    content: "https://www.rentconverter.comrent-paid-every-4-weeks-calculator",
-  },
-  { property: "og:site_name", content: "RentConverter.com" },
-  {
-    property: "og:image",
-    content: "https://www.rentconverter.comog-image.jpg",
-  },
+  const canonicalUrl =
+    "https://www.rentconverter.com/rent-paid-every-4-weeks-calculator";
+  const ogImage = "https://www.rentconverter.com/og-image.jpg";
 
-  { name: "twitter:card", content: "summary_large_image" },
-  {
-    name: "twitter:title",
-    content: "Rent Paid Every 4 Weeks (28 Days) – 13 Payments Explained",
-  },
-  {
-    name: "twitter:description",
-    content:
-      "See why 4-week rent results in 13 payments per year and how it compares to monthly rent on the same annual basis.",
-  },
-  {
-    name: "twitter:image",
-    content: "https://www.rentconverter.comog-image.jpg",
-  },
+  return [
+    { title },
+    { charset: "utf-8" },
+    { name: "viewport", content: "width=device-width,initial-scale=1" },
 
-  {
-    tagName: "link",
-    rel: "canonical",
-    href: "https://www.rentconverter.comrent-paid-every-4-weeks-calculator",
-  },
-];
+    { name: "description", content: description },
+    {
+      name: "keywords",
+      content:
+        "rent paid every 4 weeks, 28 day rent, 4 week rent calculator, rent every 28 days, 4 week rent vs monthly, convert 4 week rent to monthly, convert 4 week rent to annual",
+    },
+    { name: "robots", content: "index,follow" },
+    { name: "author", content: "RentConverter.com" },
+    { name: "theme-color", content: "#f8fafc" },
+
+    { tagName: "link", rel: "canonical", href: canonicalUrl },
+
+    { property: "og:type", content: "website" },
+    { property: "og:site_name", content: "RentConverter.com" },
+    { property: "og:url", content: canonicalUrl },
+    { property: "og:title", content: title },
+    { property: "og:description", content: description },
+    { property: "og:image", content: ogImage },
+    { property: "og:image:alt", content: "RentConverter.com preview image" },
+
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: description },
+    { name: "twitter:image", content: ogImage },
+    { name: "twitter:image:alt", content: "RentConverter.com preview image" },
+  ];
+};
 
 type Period =
   | "hourly"
@@ -419,6 +400,7 @@ function parseMoneyInputToScaled(raw: string): ParsedScaled {
     }
     intPart = split[0] ?? "";
     fracPart = split[1] ?? "";
+    // Allow trailing separators like "12." or "12," (treat as 12)
   }
 
   if (decimalSep === ".") intPart = intPart.replace(/,/g, "");
@@ -450,6 +432,7 @@ function parseMoneyInputToScaled(raw: string): ParsedScaled {
   const normalized = fracRaw.length ? `${intPart}.${fracCapped}` : `${intPart}`;
   return { ok: true, scaled: clamped, normalized, warnings };
 }
+
 
 /**
  * Source of truth: annual equivalence with fixed day counts.
@@ -519,7 +502,7 @@ function coerceDisplayDecimalsFromStorage(raw: string | null): number {
 export default function RentPaidEvery4Weeks() {
   const pageName = "Rent Paid Every 4 Weeks (28 Days) Calculator";
   const canonicalUrl =
-    "https://www.rentconverter.comrent-paid-every-4-weeks-calculator";
+    "https://www.rentconverter.com/rent-paid-every-4-weeks-calculator";
 
   const [amount, setAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "650";
@@ -767,7 +750,7 @@ export default function RentPaidEvery4Weeks() {
         <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-600">
           <a
             href={safeHref("/")}
-            className="hover:underline rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+            className="cursor-pointer hover:underline rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
           >
             Home
           </a>{" "}
@@ -1048,7 +1031,7 @@ export default function RentPaidEvery4Weeks() {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
               >
                 Print / Save as PDF
               </button>

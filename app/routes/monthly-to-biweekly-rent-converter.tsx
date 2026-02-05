@@ -12,6 +12,10 @@ export const meta: Route.MetaFunction = () => {
   const description =
     "Instantly convert monthly rent into a true biweekly (every 14 days) amount using a 365-day year. See the difference between biweekly and twice-monthly timing, with exact decimals and an always-visible breakdown. Free and private.";
 
+  const url =
+    "https://www.rentconverter.com/monthly-to-biweekly-rent-converter";
+  const image = "https://www.rentconverter.com/og-image.jpg";
+
   return [
     { title },
     { name: "description", content: description },
@@ -27,29 +31,19 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:type", content: "website" },
     { property: "og:title", content: title },
     { property: "og:description", content: description },
-    {
-      property: "og:url",
-      content:
-        "https://www.rentconverter.commonthly-to-biweekly-rent-converter",
-    },
+    { property: "og:url", content: url },
     { property: "og:site_name", content: "RentConverter.com" },
-    {
-      property: "og:image",
-      content: "https://www.rentconverter.comog-image.jpg",
-    },
+    { property: "og:image", content: image },
 
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
-    {
-      name: "twitter:image",
-      content: "https://www.rentconverter.comog-image.jpg",
-    },
+    { name: "twitter:image", content: image },
 
     {
       tagName: "link",
       rel: "canonical",
-      href: "https://www.rentconverter.commonthly-to-biweekly-rent-converter",
+      href: url,
     },
   ];
 };
@@ -180,16 +174,8 @@ function clampScaled(v: bigint, min: bigint, max: bigint): bigint {
   return v;
 }
 
-const MAX_SAFE_INT_FOR_NUMBER = 9_000_000_000_000_000n; // ~9e15, JS Number integer precision limit
-
 function absBigInt(x: bigint): bigint {
   return x < 0n ? -x : x;
-}
-
-function toNumberSafe(scaled: bigint): number {
-  const a = absBigInt(scaled);
-  if (a > MAX_SAFE_INT_FOR_NUMBER) return Number.NaN;
-  return Number(scaled) / Number(SCALE);
 }
 
 function groupInt(intStr: string, groupSep: string): string {
@@ -691,7 +677,6 @@ export default function MonthlyToBiweeklyRent() {
       a: "The converter uses an average month length of 365 ÷ 12 days. This keeps conversions consistent across periods, even though actual months vary.",
     },
   ];
-
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -716,7 +701,7 @@ export default function MonthlyToBiweeklyRent() {
         "@type": "ListItem",
         position: 2,
         name: "Monthly to Biweekly Rent Converter",
-        item: "https://www.rentconverter.commonthly-to-biweekly-rent-converter",
+        item: "https://www.rentconverter.com/monthly-to-biweekly-rent-converter",
       },
     ],
   };
@@ -734,7 +719,7 @@ export default function MonthlyToBiweeklyRent() {
     name: "Monthly to Biweekly Rent Converter",
     description:
       "Convert monthly rent to biweekly rent using annual equivalence. Includes an always-visible breakdown and clear notes on biweekly vs twice-monthly timing.",
-    url: "https://www.rentconverter.commonthly-to-biweekly-rent-converter",
+    url: "https://www.rentconverter.com/monthly-to-biweekly-rent-converter",
   };
 
   return (
@@ -772,7 +757,7 @@ export default function MonthlyToBiweeklyRent() {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
               >
                 Print / Save as PDF
               </button>
@@ -794,8 +779,9 @@ export default function MonthlyToBiweeklyRent() {
                   placeholder="e.g. 2000 or 2000.00"
                   className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!parsedAmount.ok}
-                  aria-describedby="rc-amt-help rc-amt-error"
+                  aria-describedby="rc-amt-error"
                 />
+
                 <select
                   value={currency}
                   onChange={(e) =>
@@ -941,7 +927,7 @@ export default function MonthlyToBiweeklyRent() {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
               >
                 Print / Save as PDF
               </button>

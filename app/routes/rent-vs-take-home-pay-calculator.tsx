@@ -877,13 +877,13 @@ export default function RentVsTakeHomePay() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.rentconverter.com",
+        item: "https://www.rentconverter.com/",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: pageName,
-        item: canonicalUrl,
+        item: "https://www.rentconverter.com/rent-vs-take-home-pay-calculator",
       },
     ],
   };

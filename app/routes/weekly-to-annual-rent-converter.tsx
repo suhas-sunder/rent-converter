@@ -6,60 +6,52 @@ function safeToFixed(n: number, digits: number): string {
   return n.toFixed(digits);
 }
 
-export const meta: Route.MetaFunction = () => [
-  { title: "Weekly to Annual Rent Converter (52 Weeks vs 365 Days)" },
-  {
-    name: "description",
-    content:
-      "Instantly convert weekly rent into an annual total and see the difference between 52-week math and a true 365-day year. Includes a clear breakdown, 4-week (28-day) context, and print-to-PDF. Free and private.",
-  },
-  {
-    name: "keywords",
-    content:
-      "weekly to annual rent, weekly to yearly rent, convert weekly rent to annual, weekly rent annual total, weekly rent 52 weeks vs 365 days, rent converter weekly to annual",
-  },
-  { name: "robots", content: "index,follow" },
-  { name: "author", content: "RentConverter.com" },
-  { name: "theme-color", content: "#f8fafc" },
+export const meta: Route.MetaFunction = () => {
+  const url = "https://www.rentconverter.com/weekly-to-annual-rent-converter";
+  const ogImage = "https://www.rentconverter.com/og-image.jpg";
 
-  { property: "og:type", content: "website" },
-  {
-    property: "og:title",
-    content: "Weekly to Annual Rent Converter (52 Weeks vs 365 Days)",
-  },
-  {
-    property: "og:description",
-    content:
-      "Convert weekly rent to an annual amount and clearly see how 52-week totals compare to a true 365-day year.",
-  },
-  {
-    property: "og:url",
-    content: "https://www.rentconverter.comweekly-to-annual-rent-converter",
-  },
-  { property: "og:site_name", content: "RentConverter.com" },
-  {
-    property: "og:image",
-    content: "https://www.rentconverter.comog-image.jpg",
-  },
+  return [
+    { title: "Weekly to Annual Rent Converter (52 Weeks vs 365 Days)" },
+    {
+      name: "description",
+      content:
+        "Instantly convert weekly rent into an annual total and see the difference between 52-week math and a true 365-day year. Includes a clear breakdown, 4-week (28-day) context, and print-to-PDF. Free and private.",
+    },
+    {
+      name: "keywords",
+      content:
+        "weekly to annual rent, weekly to yearly rent, convert weekly rent to annual, weekly rent annual total, weekly rent 52 weeks vs 365 days, rent converter weekly to annual",
+    },
+    { name: "robots", content: "index,follow" },
+    { name: "author", content: "RentConverter.com" },
+    { name: "theme-color", content: "#f8fafc" },
 
-  { name: "twitter:card", content: "summary_large_image" },
-  { name: "twitter:title", content: "Weekly to Annual Rent Converter" },
-  {
-    name: "twitter:description",
-    content:
-      "See the annual cost of weekly rent and compare 52-week math vs a true year.",
-  },
-  {
-    name: "twitter:image",
-    content: "https://www.rentconverter.comog-image.jpg",
-  },
+    { property: "og:type", content: "website" },
+    {
+      property: "og:title",
+      content: "Weekly to Annual Rent Converter (52 Weeks vs 365 Days)",
+    },
+    {
+      property: "og:description",
+      content:
+        "Convert weekly rent to an annual amount and clearly see how 52-week totals compare to a true 365-day year.",
+    },
+    { property: "og:url", content: url },
+    { property: "og:site_name", content: "RentConverter.com" },
+    { property: "og:image", content: ogImage },
 
-  {
-    tagName: "link",
-    rel: "canonical",
-    href: "https://www.rentconverter.comweekly-to-annual-rent-converter",
-  },
-];
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: "Weekly to Annual Rent Converter" },
+    {
+      name: "twitter:description",
+      content:
+        "See the annual cost of weekly rent and compare 52-week math vs a true year.",
+    },
+    { name: "twitter:image", content: ogImage },
+
+    { tagName: "link", rel: "canonical", href: url },
+  ];
+};
 
 type Period =
   | "hourly"
@@ -545,7 +537,7 @@ function normalizeDisplayDecimals(n: number, fallback: number): number {
 export default function WeeklyToAnnualRent() {
   const pageName = "Weekly to Annual Rent Converter";
   const canonicalUrl =
-    "https://www.rentconverter.comweekly-to-annual-rent-converter";
+    "https://www.rentconverter.com/weekly-to-annual-rent-converter";
 
   const [amount, setAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "550";
@@ -748,7 +740,7 @@ export default function WeeklyToAnnualRent() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.rentconverter.com",
+        item: "https://www.rentconverter.com/",
       },
       { "@type": "ListItem", position: 2, name: pageName, item: canonicalUrl },
     ],
@@ -791,7 +783,7 @@ export default function WeeklyToAnnualRent() {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
               >
                 Print / Save as PDF
               </button>
@@ -814,6 +806,7 @@ export default function WeeklyToAnnualRent() {
                   placeholder="e.g. 550"
                   className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!parsed.ok}
+                  aria-describedby={!parsed.ok ? "rc-wta-errors" : undefined}
                 />
 
                 <select
@@ -847,7 +840,10 @@ export default function WeeklyToAnnualRent() {
           </div>
 
           {!parsed.ok ? (
-            <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6">
+            <div
+              id="rc-wta-errors"
+              className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6"
+            >
               <div className="font-semibold text-slate-900">
                 No results to show
               </div>
@@ -973,7 +969,7 @@ export default function WeeklyToAnnualRent() {
             <button
               type="button"
               onClick={handlePrint}
-              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+              className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
             >
               Print / Save as PDF
             </button>
@@ -1438,7 +1434,6 @@ export default function WeeklyToAnnualRent() {
           ))}
         </div>
       </section>
-
 
       <script
         type="application/ld+json"

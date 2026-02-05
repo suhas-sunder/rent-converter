@@ -6,60 +6,52 @@ function safeToFixed(n: number, digits: number): string {
   return n.toFixed(digits);
 }
 
-export const meta: Route.MetaFunction = () => [
-  { title: "Weekly to Monthly Rent Converter (28-Day vs Monthly)" },
-  {
-    name: "description",
-    content:
-      "Instantly convert weekly rent into a monthly amount and see how weekly math compares to 4-week (28-day) billing. Clear breakdowns, exact decimals, and print-to-PDF. Free and private.",
-  },
-  {
-    name: "keywords",
-    content:
-      "weekly to monthly rent, weekly rent to monthly, rent converter weekly to monthly, convert weekly rent to monthly, weekly to monthly rent calculator, 4 week rent vs monthly, 28 day rent vs monthly",
-  },
-  { name: "robots", content: "index,follow" },
-  { name: "author", content: "RentConverter.com" },
-  { name: "theme-color", content: "#f8fafc" },
+export const meta: Route.MetaFunction = () => {
+  const url = "https://www.rentconverter.com/weekly-to-monthly-rent-converter";
+  const ogImage = "https://www.rentconverter.com/og-image.jpg";
 
-  { property: "og:type", content: "website" },
-  {
-    property: "og:title",
-    content: "Weekly to Monthly Rent Converter (28-Day vs Monthly)",
-  },
-  {
-    property: "og:description",
-    content:
-      "Convert weekly rent to a monthly amount and clearly see the difference between weekly, 4-week (28-day), and monthly billing.",
-  },
-  {
-    property: "og:url",
-    content: "https://www.rentconverter.comweekly-to-monthly-rent-converter",
-  },
-  { property: "og:site_name", content: "RentConverter.com" },
-  {
-    property: "og:image",
-    content: "https://www.rentconverter.comog-image.jpg",
-  },
+  return [
+    { title: "Weekly to Monthly Rent Converter (28-Day vs Monthly)" },
+    {
+      name: "description",
+      content:
+        "Instantly convert weekly rent into a monthly amount and see how weekly math compares to 4-week (28-day) billing. Clear breakdowns, exact decimals, and print-to-PDF. Free and private.",
+    },
+    {
+      name: "keywords",
+      content:
+        "weekly to monthly rent, weekly rent to monthly, rent converter weekly to monthly, convert weekly rent to monthly, weekly to monthly rent calculator, 4 week rent vs monthly, 28 day rent vs monthly",
+    },
+    { name: "robots", content: "index,follow" },
+    { name: "author", content: "RentConverter.com" },
+    { name: "theme-color", content: "#f8fafc" },
 
-  { name: "twitter:card", content: "summary_large_image" },
-  { name: "twitter:title", content: "Weekly to Monthly Rent Converter" },
-  {
-    name: "twitter:description",
-    content:
-      "See the monthly equivalent of weekly rent and how it compares to 4-week (28-day) billing.",
-  },
-  {
-    name: "twitter:image",
-    content: "https://www.rentconverter.comog-image.jpg",
-  },
+    { property: "og:type", content: "website" },
+    {
+      property: "og:title",
+      content: "Weekly to Monthly Rent Converter (28-Day vs Monthly)",
+    },
+    {
+      property: "og:description",
+      content:
+        "Convert weekly rent to a monthly amount and clearly see the difference between weekly, 4-week (28-day), and monthly billing.",
+    },
+    { property: "og:url", content: url },
+    { property: "og:site_name", content: "RentConverter.com" },
+    { property: "og:image", content: ogImage },
 
-  {
-    tagName: "link",
-    rel: "canonical",
-    href: "https://www.rentconverter.comweekly-to-monthly-rent-converter",
-  },
-];
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: "Weekly to Monthly Rent Converter" },
+    {
+      name: "twitter:description",
+      content:
+        "See the monthly equivalent of weekly rent and how it compares to 4-week (28-day) billing.",
+    },
+    { name: "twitter:image", content: ogImage },
+
+    { tagName: "link", rel: "canonical", href: url },
+  ];
+};
 
 type Period =
   | "hourly"
@@ -487,12 +479,12 @@ function annualizeScaled(valueScaled: bigint, period: Period): bigint {
 }
 
 function fromAnnualScaled(annualScaled: bigint, to: Period): bigint {
-  if (to === "hourly") return annualScaled / (365n * 24n);
-  if (to === "daily") return annualScaled / 365n;
+  if (to === "hourly") return mulDivRound(annualScaled, 1n, 365n * 24n);
+  if (to === "daily") return mulDivRound(annualScaled, 1n, 365n);
   if (to === "weekly") return mulDivRound(annualScaled, 7n, 365n);
   if (to === "biweekly") return mulDivRound(annualScaled, 14n, 365n);
   if (to === "every_4_weeks") return mulDivRound(annualScaled, 28n, 365n);
-  if (to === "monthly") return annualScaled / 12n;
+  if (to === "monthly") return mulDivRound(annualScaled, 1n, 12n);
   return annualScaled;
 }
 
@@ -517,7 +509,7 @@ function parseStrictDisplayDecimals(raw: string | null): number {
 export default function WeeklyToMonthlyRent() {
   const pageName = "Weekly to Monthly Rent Converter";
   const canonicalUrl =
-    "https://www.rentconverter.comweekly-to-monthly-rent-converter";
+    "https://www.rentconverter.com/weekly-to-monthly-rent-converter";
 
   const [amount, setAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "500";
@@ -716,7 +708,7 @@ export default function WeeklyToMonthlyRent() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.rentconverter.com",
+        item: "https://www.rentconverter.com/",
       },
       { "@type": "ListItem", position: 2, name: pageName, item: canonicalUrl },
     ],
@@ -726,7 +718,7 @@ export default function WeeklyToMonthlyRent() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "RentConverter.com",
-    url: "https://www.rentconverter.com",
+    url: "https://www.rentconverter.com/",
   };
 
   const webPageSchema = {
@@ -775,7 +767,7 @@ export default function WeeklyToMonthlyRent() {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
               >
                 Print / Save as PDF
               </button>
@@ -970,7 +962,7 @@ export default function WeeklyToMonthlyRent() {
             <button
               type="button"
               onClick={handlePrint}
-              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+              className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
             >
               Print / Save as PDF
             </button>

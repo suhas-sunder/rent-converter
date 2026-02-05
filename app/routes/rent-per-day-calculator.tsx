@@ -5,62 +5,50 @@ function safeToFixed(n: number, digits: number): string {
   return n.toFixed(digits);
 }
 
-export const meta: Route.MetaFunction = () => [
-  {
-    title: "Rent Per Day Calculator (Daily Rent From Any Pay Cycle)",
-  },
-  {
-    name: "description",
-    content:
-      "Instantly calculate rent per day from monthly, weekly, 4-week (28-day), biweekly, hourly, or annual amounts. Includes clear breakdowns and a daily total estimator for any number of days using consistent math. Free and private.",
-  },
-  {
-    name: "keywords",
-    content:
-      "rent per day calculator, daily rent calculator, rent per day from monthly, daily equivalent rent, rent per day from weekly, rent per day from 4 week rent, 28 day rent per day, prorated rent per day",
-  },
-  { name: "robots", content: "index,follow" },
-  { name: "author", content: "RentConverter.com" },
-  { name: "theme-color", content: "#f8fafc" },
+export const meta: Route.MetaFunction = () => {
+  const title = "Rent Per Day Calculator (Daily Rent From Any Pay Cycle)";
+  const description =
+    "Instantly calculate rent per day from monthly, weekly, 4-week (28-day), biweekly, hourly, or annual amounts. Includes clear breakdowns and a daily total estimator for any number of days using consistent math. Free and private.";
 
-  { property: "og:type", content: "website" },
-  {
-    property: "og:title",
-    content: "Rent Per Day Calculator (Daily Rent From Any Pay Cycle)",
-  },
-  {
-    property: "og:description",
-    content:
-      "Convert rent to a daily amount from monthly, weekly, 28-day, biweekly, hourly, or annual pay cycles. See clear breakdowns and daily totals using consistent assumptions.",
-  },
-  {
-    property: "og:url",
-    content: "https://www.rentconverter.comrent-per-day-calculator",
-  },
-  { property: "og:site_name", content: "RentConverter.com" },
-  {
-    property: "og:image",
-    content: "https://www.rentconverter.comog-image.jpg",
-  },
+  const canonicalUrl = "https://www.rentconverter.com/rent-per-day-calculator";
+  const ogImage = "https://www.rentconverter.com/og-image.jpg";
 
-  { name: "twitter:card", content: "summary_large_image" },
-  { name: "twitter:title", content: "Rent Per Day Calculator" },
-  {
-    name: "twitter:description",
-    content:
-      "Calculate daily rent from monthly, weekly, 4-week, biweekly, hourly, or annual amounts with clear breakdowns.",
-  },
-  {
-    name: "twitter:image",
-    content: "https://www.rentconverter.comog-image.jpg",
-  },
+  return [
+    { title },
+    { charset: "utf-8" },
+    { name: "viewport", content: "width=device-width,initial-scale=1" },
 
-  {
-    tagName: "link",
-    rel: "canonical",
-    href: "https://www.rentconverter.comrent-per-day-calculator",
-  },
-];
+    { name: "description", content: description },
+    {
+      name: "keywords",
+      content:
+        "rent per day calculator, daily rent calculator, rent per day from monthly, daily equivalent rent, rent per day from weekly, rent per day from 4 week rent, 28 day rent per day, prorated rent per day",
+    },
+    { name: "robots", content: "index,follow" },
+    { name: "author", content: "RentConverter.com" },
+    { name: "theme-color", content: "#f8fafc" },
+
+    { tagName: "link", rel: "canonical", href: canonicalUrl },
+
+    { property: "og:type", content: "website" },
+    { property: "og:site_name", content: "RentConverter.com" },
+    { property: "og:url", content: canonicalUrl },
+    { property: "og:title", content: title },
+    { property: "og:description", content: description },
+    { property: "og:image", content: ogImage },
+    { property: "og:image:alt", content: "RentConverter.com preview image" },
+
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: "Rent Per Day Calculator" },
+    {
+      name: "twitter:description",
+      content:
+        "Calculate daily rent from monthly, weekly, 4-week, biweekly, hourly, or annual amounts with clear breakdowns.",
+    },
+    { name: "twitter:image", content: ogImage },
+    { name: "twitter:image:alt", content: "RentConverter.com preview image" },
+  ];
+};
 
 type Period =
   | "hourly"
@@ -369,7 +357,8 @@ function parseMoneyInputToScaled(raw: string): ParsedScaled {
     if (parts.length === 2) {
       const before = parts[0] ?? "";
       const after = parts[1] ?? "";
-      if (/^\d{1,2}$/.test(after)) {
+      if (/^\d{1,2}$/.test(after) || after === "") {
+        // allow "12," (treat as 12)
         decimalSep = ",";
       } else if (/^\d{3}$/.test(after) && /^\d{1,3}$/.test(before)) {
         decimalSep = null;
@@ -403,6 +392,7 @@ function parseMoneyInputToScaled(raw: string): ParsedScaled {
     }
     intPart = split[0] ?? "";
     fracPart = split[1] ?? "";
+    // allow trailing separators like "12." or "12," by treating empty frac as 0
   }
 
   if (decimalSep === ".") intPart = intPart.replace(/,/g, "");
@@ -511,7 +501,7 @@ function safeParseDisplayDecimals(raw: string | null): number {
 
 export default function RentPerDayCalculator() {
   const pageName = "Rent Per Day Calculator";
-  const canonicalUrl = "https://www.rentconverter.comrent-per-day-calculator";
+  const canonicalUrl = "https://www.rentconverter.com/rent-per-day-calculator";
 
   const [amount, setAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "2000";
@@ -741,10 +731,28 @@ export default function RentPerDayCalculator() {
       a: "It uses a 365-day year, a month length of 365 ÷ 12 days (average), and fixed day counts for weekly (7), biweekly (14), and every 4 weeks (28).",
     },
   ];
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "RentConverter.com",
+    url: "https://www.rentconverter.com",
+  };
+
+  const webPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: pageName,
+    description:
+      "Instantly calculate rent per day from monthly, weekly, 4-week (28-day), biweekly, hourly, or annual amounts using a consistent 365-day annual basis. Includes a full breakdown and a day-count total estimator.",
+    url: canonicalUrl,
+    isPartOf: { "@type": "WebSite", url: "https://www.rentconverter.com" },
+    breadcrumb: { "@id": `${canonicalUrl}#breadcrumb` },
+  };
 
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
+    "@id": `${canonicalUrl}#breadcrumb`,
     itemListElement: [
       {
         "@type": "ListItem",
@@ -759,27 +767,12 @@ export default function RentPerDayCalculator() {
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
+    mainEntityOfPage: canonicalUrl,
     mainEntity: faqData.map((f) => ({
       "@type": "Question",
       name: f.q,
       acceptedAnswer: { "@type": "Answer", text: f.a },
     })),
-  };
-
-  const websiteSchema = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: "RentConverter.com",
-    url: "https://www.rentconverter.com",
-  };
-
-  const webPageSchema = {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    name: pageName,
-    description:
-      "Convert rent into a daily equivalent from common billing periods using a consistent 365-day annual basis. Includes a full breakdown and a total estimator by day count.",
-    url: canonicalUrl,
   };
 
   const amountInputId = "rpdc_amount_input";
@@ -834,7 +827,7 @@ export default function RentPerDayCalculator() {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
+                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
               >
                 Print / Save as PDF
               </button>
@@ -1130,7 +1123,7 @@ export default function RentPerDayCalculator() {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
               >
                 Print / Save as PDF
               </button>

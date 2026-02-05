@@ -1,62 +1,47 @@
 import { useMemo, useEffect, useRef, useState } from "react";
 import type { Route } from "./+types/rent-increase-percentage-calculator";
 
-export const meta: Route.MetaFunction = () => [
-  {
-    title: "Rent Increase Percentage Calculator (Old vs New Rent)",
-  },
-  {
-    name: "description",
-    content:
-      "Instantly calculate the percentage increase between your old rent and new rent. See the annual impact and per-period equivalents, including monthly vs 4-week (28-day) comparisons. Clear math, exact decimals. Free and private.",
-  },
-  {
-    name: "keywords",
-    content:
-      "rent increase percentage, rent increase percent calculator, percentage increase in rent, calculate rent raise percentage, old rent vs new rent percent increase",
-  },
-  { name: "robots", content: "index,follow" },
-  { name: "author", content: "RentConverter.com" },
-  { name: "theme-color", content: "#f8fafc" },
+export const meta: Route.MetaFunction = () => {
+  const title = "Rent Increase Percentage Calculator (Old vs New Rent)";
+  const description =
+    "Instantly calculate the percentage increase between your old rent and new rent. See the annual impact and per-period equivalents, including monthly vs 4-week (28-day) comparisons. Clear math, exact decimals. Free and private.";
 
-  { property: "og:type", content: "website" },
-  {
-    property: "og:title",
-    content: "Rent Increase Percentage Calculator (Old vs New Rent)",
-  },
-  {
-    property: "og:description",
-    content:
-      "Calculate how much your rent increased in percent terms and see the annual impact plus monthly and 28-day equivalents.",
-  },
-  {
-    property: "og:url",
-    content: "https://www.rentconverter.comrent-increase-percentage-calculator",
-  },
-  { property: "og:site_name", content: "RentConverter.com" },
-  {
-    property: "og:image",
-    content: "https://www.rentconverter.comog-image.jpg",
-  },
+  const canonicalUrl =
+    "https://www.rentconverter.com/rent-increase-percentage-calculator";
+  const ogImage = "https://www.rentconverter.com/og-image.jpg";
 
-  { name: "twitter:card", content: "summary_large_image" },
-  { name: "twitter:title", content: "Rent Increase Percentage Calculator" },
-  {
-    name: "twitter:description",
-    content:
-      "Find the percentage increase between old and new rent and see the yearly impact.",
-  },
-  {
-    name: "twitter:image",
-    content: "https://www.rentconverter.comog-image.jpg",
-  },
+  return [
+    { title },
+    { charset: "utf-8" },
+    { name: "viewport", content: "width=device-width,initial-scale=1" },
 
-  {
-    tagName: "link",
-    rel: "canonical",
-    href: "https://www.rentconverter.comrent-increase-percentage-calculator",
-  },
-];
+    { name: "description", content: description },
+    {
+      name: "keywords",
+      content:
+        "rent increase percentage, rent increase percent calculator, percentage increase in rent, calculate rent raise percentage, old rent vs new rent percent increase",
+    },
+    { name: "robots", content: "index,follow" },
+    { name: "author", content: "RentConverter.com" },
+    { name: "theme-color", content: "#f8fafc" },
+
+    { tagName: "link", rel: "canonical", href: canonicalUrl },
+
+    { property: "og:type", content: "website" },
+    { property: "og:site_name", content: "RentConverter.com" },
+    { property: "og:url", content: canonicalUrl },
+    { property: "og:title", content: title },
+    { property: "og:description", content: description },
+    { property: "og:image", content: ogImage },
+    { property: "og:image:alt", content: "RentConverter.com preview image" },
+
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: description },
+    { name: "twitter:image", content: ogImage },
+    { name: "twitter:image:alt", content: "RentConverter.com preview image" },
+  ];
+};
 
 type Period =
   | "hourly"
@@ -448,21 +433,7 @@ function parseMoneyInputToScaled(raw: string): ParsedScaled {
     }
     intPart = split[0] ?? "";
     fracPart = split[1] ?? "";
-
-    if (decimalSep === "." && s.endsWith(".")) {
-      return {
-        ok: false,
-        error: "That number is incomplete (ends with a decimal point).",
-        warnings,
-      };
-    }
-    if (decimalSep === "," && s.endsWith(",")) {
-      return {
-        ok: false,
-        error: "That number is incomplete (ends with a decimal separator).",
-        warnings,
-      };
-    }
+    // Important: allow trailing separators like "12." or "12," (treat as 12)
   }
 
   if (decimalSep === ".") intPart = intPart.replace(/,/g, "");
@@ -553,7 +524,7 @@ function safeParseDisplayDecimals(
 export default function RentIncreasePercentage() {
   const pageName = "Rent Increase Percentage Calculator";
   const canonicalUrl =
-    "https://www.rentconverter.comrent-increase-percentage-calculator";
+    "https://www.rentconverter.com/rent-increase-percentage-calculator";
 
   const [oldRent, setOldRent] = useState<string>(() => {
     if (typeof window === "undefined") return "2000";
@@ -774,31 +745,6 @@ export default function RentIncreasePercentage() {
       a: "Assumptions: 1 year = 365 days, 1 week = 7 days, every 4 weeks = 28 days, and month = 365 ÷ 12 days (average). Actual due dates and billing schedules vary by agreement.",
     },
   ];
-
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqData.map((f) => ({
-      "@type": "Question",
-      name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.a },
-    })),
-  };
-
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: "https://www.rentconverter.com",
-      },
-      { "@type": "ListItem", position: 2, name: pageName, item: canonicalUrl },
-    ],
-  };
-
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -811,8 +757,36 @@ export default function RentIncreasePercentage() {
     "@type": "WebPage",
     name: pageName,
     description:
-      "Calculate the percentage rent increase between an old rent and a new rent using annual equivalence (365-day year). Includes per-period equivalents and annual impact.",
+      "Instantly calculate the percentage increase between your old rent and new rent. See the annual impact and per-period equivalents, including monthly vs 4-week (28-day) comparisons.",
     url: canonicalUrl,
+    isPartOf: { "@type": "WebSite", url: "https://www.rentconverter.com" },
+    breadcrumb: { "@id": `${canonicalUrl}#breadcrumb` },
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "@id": `${canonicalUrl}#breadcrumb`,
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://www.rentconverter.com",
+      },
+      { "@type": "ListItem", position: 2, name: pageName, item: canonicalUrl },
+    ],
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntityOfPage: canonicalUrl,
+    mainEntity: faqData.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
   };
 
   const handlePrint = () => {
@@ -887,7 +861,7 @@ export default function RentIncreasePercentage() {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
               >
                 Print / Save as PDF
               </button>
@@ -1282,7 +1256,7 @@ export default function RentIncreasePercentage() {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
               >
                 Print / Save as PDF
               </button>

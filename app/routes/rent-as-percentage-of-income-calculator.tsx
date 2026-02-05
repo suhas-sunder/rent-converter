@@ -817,7 +817,7 @@ export default function RentAsPercentageOfIncome() {
         "@type": "ListItem",
         position: 2,
         name: "Rent as Percentage of Income Calculator",
-        item: "https://www.rentconverter.comrent-as-percentage-of-income-calculator",
+        item: "https://www.rentconverter.com/rent-as-percentage-of-income-calculator",
       },
     ],
   };
@@ -835,7 +835,7 @@ export default function RentAsPercentageOfIncome() {
     name: "Rent as Percentage of Income Calculator",
     description:
       "Calculate rent as a percentage of income using annual equivalence (365-day year). Compare pay cycles with annualized breakdowns.",
-    url: "https://www.rentconverter.comrent-as-percentage-of-income-calculator",
+    url: "https://www.rentconverter.com/rent-as-percentage-of-income-calculator",
   };
 
   return (
@@ -854,7 +854,7 @@ export default function RentAsPercentageOfIncome() {
       />
 
       <section className="mt-4 rc-no-print hidden sm:block">
-        <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-500">
+        <nav className="cursor-pointer max-w-6xl mx-auto px-6 text-sm text-slate-500">
           <a href={safeHref("/")} className="hover:underline">
             Home
           </a>{" "}
@@ -875,7 +875,7 @@ export default function RentAsPercentageOfIncome() {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
               >
                 Print / Save as PDF
               </button>
@@ -1173,7 +1173,7 @@ export default function RentAsPercentageOfIncome() {
             <button
               type="button"
               onClick={handlePrint}
-              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+              className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
             >
               Print / Save as PDF
             </button>
@@ -1583,7 +1583,6 @@ export default function RentAsPercentageOfIncome() {
           ))}
         </div>
       </section>
-
 
       <script
         type="application/ld+json"

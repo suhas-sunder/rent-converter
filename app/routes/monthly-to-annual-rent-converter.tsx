@@ -11,6 +11,9 @@ export const meta: Route.MetaFunction = () => {
   const description =
     "Instantly convert monthly rent into an annual total and see the difference between monthly × 12 and 4-week (13-payment) schedules. Exact decimals, clear comparisons, and a full breakdown across billing periods. Free and private.";
 
+  const url = "https://www.rentconverter.com/monthly-to-annual-rent-converter";
+  const image = "https://www.rentconverter.com/og-image.jpg";
+
   return [
     { title },
     { name: "description", content: description },
@@ -26,29 +29,16 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:type", content: "website" },
     { property: "og:title", content: title },
     { property: "og:description", content: description },
-    {
-      property: "og:url",
-      content: "https://www.rentconverter.commonthly-to-annual-rent-converter",
-    },
+    { property: "og:url", content: url },
     { property: "og:site_name", content: "RentConverter.com" },
-    {
-      property: "og:image",
-      content: "https://www.rentconverter.comog-image.jpg",
-    },
+    { property: "og:image", content: image },
 
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
-    {
-      name: "twitter:image",
-      content: "https://www.rentconverter.comog-image.jpg",
-    },
+    { name: "twitter:image", content: image },
 
-    {
-      tagName: "link",
-      rel: "canonical",
-      href: "https://www.rentconverter.commonthly-to-annual-rent-converter",
-    },
+    { tagName: "link", rel: "canonical", href: url },
   ];
 };
 
@@ -718,7 +708,6 @@ export default function MonthlyToAnnualRent() {
       a: "It shows the same rent expressed hourly, daily, weekly, biweekly, every 4 weeks, monthly, and annually. That makes it easier to compare ads that use different price formats and to sanity-check what a rate implies over a year.",
     },
   ];
-
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -743,7 +732,7 @@ export default function MonthlyToAnnualRent() {
         "@type": "ListItem",
         position: 2,
         name: "Monthly to Annual Rent Converter",
-        item: "https://www.rentconverter.commonthly-to-annual-rent-converter",
+        item: "https://www.rentconverter.com/monthly-to-annual-rent-converter",
       },
     ],
   };
@@ -761,7 +750,7 @@ export default function MonthlyToAnnualRent() {
     name: "Monthly to Annual Rent Converter",
     description:
       "Convert monthly rent into an annual rent total using annual equivalence. Includes a full period breakdown and a 4-week (28-day) schedule comparison.",
-    url: "https://www.rentconverter.commonthly-to-annual-rent-converter",
+    url: "https://www.rentconverter.com/monthly-to-annual-rent-converter",
   };
 
   return (
@@ -790,7 +779,7 @@ export default function MonthlyToAnnualRent() {
 
       <section id="converter" className="mx-auto max-w-6xl px-6 pb-6 mt-4">
         <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block sm:pt-6">
-          <div className="mb-3 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <div className="mb-1 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <h1 className="text-2xl sm:text-left text-center capitalize sm:text-4xl text-sky-800 font-bold">
               Convert monthly rent to an annual total
             </h1>
@@ -799,78 +788,76 @@ export default function MonthlyToAnnualRent() {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
               >
                 Print / Save as PDF
               </button>
             </div>
           </div>
 
-          <div className="grid gap-5">
-            <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
-                Monthly rent amount
-              </label>
+          <div>
+            <label className="block text-sm font-semibold text-slate-700 mb-2">
+              Monthly rent amount
+            </label>
 
-              <div className="flex gap-2">
-                <input
-                  ref={amountInputRef}
-                  inputMode="decimal"
-                  value={amountDisplayValue}
-                  onFocus={() => setIsAmountFocused(true)}
-                  onBlur={() => setIsAmountFocused(false)}
-                  onChange={(e) => {
-                    const el = e.currentTarget;
-                    const nextRaw = el.value ?? "";
-                    const { sanitized, nextCaret } =
-                      sanitizeAmountInputPreserveCaret(el, nextRaw);
-                    if (nextCaret !== null) pendingCaretRef.current = nextCaret;
-                    setAmount(sanitized);
-                  }}
-                  placeholder="e.g. 2000 or 2000.00"
-                  className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
-                  aria-invalid={!parsedAmount.ok}
-                  aria-describedby="rc-amt-help rc-amt-error"
-                />
+            <div className="flex gap-2">
+              <input
+                ref={amountInputRef}
+                inputMode="decimal"
+                value={amountDisplayValue}
+                onFocus={() => setIsAmountFocused(true)}
+                onBlur={() => setIsAmountFocused(false)}
+                onChange={(e) => {
+                  const el = e.currentTarget;
+                  const nextRaw = el.value ?? "";
+                  const { sanitized, nextCaret } =
+                    sanitizeAmountInputPreserveCaret(el, nextRaw);
+                  if (nextCaret !== null) pendingCaretRef.current = nextCaret;
+                  setAmount(sanitized);
+                }}
+                placeholder="e.g. 2000 or 2000.00"
+                className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2 focus:border-sky-500"
+                aria-invalid={!parsedAmount.ok}
+                aria-describedby="rc-amt-help rc-amt-error"
+              />
 
-                <select
-                  value={currency}
-                  onChange={(e) =>
-                    setCurrency(
-                      isCurrency(e.target.value)
-                        ? (e.target.value as Currency)
-                        : "USD",
-                    )
-                  }
-                  className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
-                  aria-label="Currency"
-                >
-                  {SUPPORTED_CURRENCIES.map((c) => (
-                    <option key={c} value={c}>
-                      {c}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {!parsedAmount.ok ? (
-                <p
-                  id="rc-amt-error"
-                  className="mt-2 text-sm font-semibold text-rose-700"
-                >
-                  {parsedAmount.error}
-                </p>
-              ) : parsedAmount.warnings.length ? (
-                <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
-                  <div className="font-semibold">Input interpretation note</div>
-                  <ul className="mt-1 list-disc pl-5 space-y-1">
-                    {parsedAmount.warnings.map((w, i) => (
-                      <li key={i}>{w}</li>
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
+              <select
+                value={currency}
+                onChange={(e) =>
+                  setCurrency(
+                    isCurrency(e.target.value)
+                      ? (e.target.value as Currency)
+                      : "USD",
+                  )
+                }
+                className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2 focus:border-sky-500 cursor-pointer hover:bg-sky-50"
+                aria-label="Currency"
+              >
+                {SUPPORTED_CURRENCIES.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
+              </select>
             </div>
+
+            {!parsedAmount.ok ? (
+              <p
+                id="rc-amt-error"
+                className="mt-2 text-sm font-semibold text-rose-700"
+              >
+                {parsedAmount.error}
+              </p>
+            ) : parsedAmount.warnings.length ? (
+              <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                <div className="font-semibold">Input interpretation note</div>
+                <ul className="mt-1 list-disc pl-5 space-y-1">
+                  {parsedAmount.warnings.map((w, i) => (
+                    <li key={i}>{w}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
           </div>
 
           <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
@@ -907,7 +894,11 @@ export default function MonthlyToAnnualRent() {
                       ["Hourly", breakdown.hourly, "hourly"],
                       ["Daily", breakdown.daily, "daily"],
                       ["Weekly", breakdown.weekly, "weekly"],
-                      ["Every 2 weeks (14 days)", breakdown.biweekly, "biweekly"], // TODO: rename to "Every 2 weeks", breakdown.biweekly, "biweekly"],
+                      [
+                        "Every 2 weeks (14 days)",
+                        breakdown.biweekly,
+                        "biweekly",
+                      ], // TODO: rename to "Every 2 weeks", breakdown.biweekly, "biweekly"],
                       [
                         "Every 4 weeks (28 days)",
                         breakdown.every4w,
@@ -977,7 +968,7 @@ export default function MonthlyToAnnualRent() {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
               >
                 Print / Save as PDF
               </button>
@@ -1361,7 +1352,6 @@ export default function MonthlyToAnnualRent() {
           ))}
         </div>
       </section>
-
 
       <script
         type="application/ld+json"

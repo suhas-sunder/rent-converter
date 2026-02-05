@@ -6,63 +6,50 @@ function safeToFixed(n: number, digits: number): string {
   return n.toFixed(digits);
 }
 
-export const meta: Route.MetaFunction = () => [
-  { title: "Rent Split Calculator (How Much Each Roommate Pays)" },
-  {
-    name: "description",
-    content:
-      "Instantly split rent per roommate and see exactly how much each person pays. View per-person rent by month, week, 4-week (28-day), and year, with clear breakdowns and fair comparisons. Free and private.",
-  },
-  {
-    name: "keywords",
-    content:
-      "rent split calculator, split rent per roommate, rent split equally, rent per roommate, divide rent",
-  },
-  { name: "robots", content: "index,follow" },
-  { name: "author", content: "RentConverter.com" },
-  { name: "theme-color", content: "#f8fafc" },
+export const meta: Route.MetaFunction = () => {
+  const title = "Rent Split Calculator (How Much Each Roommate Pays)";
+  const description =
+    "Instantly split rent per roommate and see exactly how much each person pays. View per-person rent by month, week, 4-week (28-day), and year, with clear breakdowns and fair comparisons. Free and private.";
 
-  { property: "og:type", content: "website" },
-  {
-    property: "og:title",
-    content: "Rent Split Calculator (How Much Each Roommate Pays)",
-  },
-  {
-    property: "og:description",
-    content:
-      "Split rent fairly between roommates and see per-person costs by month, week, 28-day cycle, and year with clear math.",
-  },
-  {
-    property: "og:url",
-    content: "https://www.rentconverter.comrent-split-calculator",
-  },
-  { property: "og:site_name", content: "RentConverter.com" },
-  {
-    property: "og:image",
-    content: "https://www.rentconverter.comog-image.jpg",
-  },
+  const canonicalUrl = "https://www.rentconverter.com/rent-split-calculator";
+  const ogImage = "https://www.rentconverter.com/og-image.jpg";
 
-  { name: "twitter:card", content: "summary_large_image" },
-  {
-    name: "twitter:title",
-    content: "Rent Split Calculator",
-  },
-  {
-    name: "twitter:description",
-    content:
-      "See exactly how much each roommate pays for rent with clear per-person breakdowns.",
-  },
-  {
-    name: "twitter:image",
-    content: "https://www.rentconverter.comog-image.jpg",
-  },
+  return [
+    { title },
+    { charset: "utf-8" },
+    { name: "viewport", content: "width=device-width,initial-scale=1" },
 
-  {
-    tagName: "link",
-    rel: "canonical",
-    href: "https://www.rentconverter.comrent-split-calculator",
-  },
-];
+    { name: "description", content: description },
+    {
+      name: "keywords",
+      content:
+        "rent split calculator, split rent per roommate, rent split equally, rent per roommate, divide rent",
+    },
+    { name: "robots", content: "index,follow" },
+    { name: "author", content: "RentConverter.com" },
+    { name: "theme-color", content: "#f8fafc" },
+
+    { tagName: "link", rel: "canonical", href: canonicalUrl },
+
+    { property: "og:type", content: "website" },
+    { property: "og:site_name", content: "RentConverter.com" },
+    { property: "og:url", content: canonicalUrl },
+    { property: "og:title", content: title },
+    { property: "og:description", content: description },
+    { property: "og:image", content: ogImage },
+    { property: "og:image:alt", content: "RentConverter.com preview image" },
+
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: "Rent Split Calculator" },
+    {
+      name: "twitter:description",
+      content:
+        "See exactly how much each roommate pays for rent with clear per-person breakdowns.",
+    },
+    { name: "twitter:image", content: ogImage },
+    { name: "twitter:image:alt", content: "RentConverter.com preview image" },
+  ];
+};
 
 type Period =
   | "hourly"
@@ -553,7 +540,7 @@ function safeParseDisplayDecimals(raw: string | null, fallback = 2): number {
 
 export default function RentPerPerson() {
   const pageName = "Rent Split Calculator";
-  const canonicalUrl = "https://www.rentconverter.comrent-split-calculator";
+  const canonicalUrl = "https://www.rentconverter.com/rent-split-calculator";
 
   const totalRentInputRef = useRef<HTMLInputElement | null>(null);
   const [isTotalRentFocused, setIsTotalRentFocused] = useState(false);
@@ -668,10 +655,11 @@ export default function RentPerPerson() {
     // remainder (in cents) when splitting the selected-period rent into cents
     const centsScale = SCALE / 100n;
     const totalCents = rentScaled / centsScale;
-    const perCents = (perSelectedPeriodScaled / centsScale) * BigInt(peopleN);
-    const diff = totalCents - perCents;
+    const peopleB = BigInt(peopleN);
 
-    const leftoverCents = Number(diff); // safe (<= 1e11 for max input)
+    const remainderCents = totalCents % peopleB; // this is the real remainder (0..peopleN-1)
+
+    const leftoverCents = Number(remainderCents);
 
     return {
       ok: true as const,
@@ -785,20 +773,17 @@ export default function RentPerPerson() {
       a: "Assumptions: 1 year = 365 days, 1 week = 7 days, every 4 weeks = 28 days, and month = 365 ÷ 12 days (average). Actual due dates and billing schedules vary by agreement.",
     },
   ];
-
-  const faqSchema = {
+  const websiteSchema = {
     "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqData.map((f) => ({
-      "@type": "Question",
-      name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.a },
-    })),
+    "@type": "WebSite",
+    name: "RentConverter.com",
+    url: "https://www.rentconverter.com",
   };
 
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
+    "@id": `${canonicalUrl}#breadcrumb`,
     itemListElement: [
       {
         "@type": "ListItem",
@@ -810,13 +795,6 @@ export default function RentPerPerson() {
     ],
   };
 
-  const websiteSchema = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: "RentConverter.com",
-    url: "https://www.rentconverter.com",
-  };
-
   const webPageSchema = {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -824,6 +802,19 @@ export default function RentPerPerson() {
     description:
       "Split rent per person using annual equivalence on a 365-day basis and compare monthly (average) vs every 4 weeks.",
     url: canonicalUrl,
+    isPartOf: { "@type": "WebSite", url: "https://www.rentconverter.com" },
+    breadcrumb: { "@id": `${canonicalUrl}#breadcrumb` },
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntityOfPage: canonicalUrl,
+    mainEntity: faqData.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
   };
 
   const totalRentId = "rpp_total_rent";
@@ -882,7 +873,7 @@ export default function RentPerPerson() {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
+                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
               >
                 Print / Save as PDF
               </button>
@@ -1177,7 +1168,7 @@ export default function RentPerPerson() {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
               >
                 Print / Save as PDF
               </button>

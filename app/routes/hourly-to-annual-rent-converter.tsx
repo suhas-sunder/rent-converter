@@ -1,15 +1,13 @@
 import { useMemo, useEffect, useRef, useState } from "react";
 import type { Route } from "./+types/hourly-to-annual-rent-converter";
 
-function safeToFixed(n: number, digits: number): string {
-  if (!Number.isFinite(n)) return "-";
-  return n.toFixed(digits);
-}
-
 export const meta: Route.MetaFunction = () => {
   const title = "Hourly to Annual Rent Converter (Exact 365-Day Math)";
   const description =
     "Instantly convert an hourly rent or rate into an annual amount using a true 365-day year. Compare paid-hours scenarios, see exact decimals, and get a full breakdown with print-to-PDF. Free, private, no signup.";
+
+  const url = "https://www.rentconverter.com/hourly-to-annual-rent-converter";
+  const ogImage = "https://www.rentconverter.com/og-image.jpg";
 
   return [
     { title },
@@ -26,28 +24,19 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:type", content: "website" },
     { property: "og:title", content: title },
     { property: "og:description", content: description },
-    {
-      property: "og:url",
-      content: "https://www.rentconverter.comhourly-to-annual-rent-converter",
-    },
+    { property: "og:url", content: url },
     { property: "og:site_name", content: "RentConverter.com" },
-    {
-      property: "og:image",
-      content: "https://www.rentconverter.comog-image.jpg",
-    },
+    { property: "og:image", content: ogImage },
 
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
-    {
-      name: "twitter:image",
-      content: "https://www.rentconverter.comog-image.jpg",
-    },
+    { name: "twitter:image", content: ogImage },
 
     {
       tagName: "link",
       rel: "canonical",
-      href: "https://www.rentconverter.comhourly-to-annual-rent-converter",
+      href: url,
     },
   ];
 };
@@ -175,9 +164,21 @@ function absBigInt(x: bigint): bigint {
 }
 
 function toNumberSafe(scaled: bigint): number {
+  // Convert scaled (1e12) BigInt to a JS number without casting the full scaled
+  // value to Number (which can overflow even when the unscaled value is safe).
+  const sign = scaled < 0n ? -1 : 1;
   const a = absBigInt(scaled);
-  if (a > MAX_SAFE_INT_FOR_NUMBER) return Number.NaN;
-  return Number(scaled) / Number(SCALE);
+
+  const intPart = a / SCALE; // unscaled integer part
+  const fracPart = a % SCALE; // 0..SCALE-1
+
+  // intPart must fit in JS safe integer to keep integer precision.
+  if (intPart > MAX_SAFE_INT_FOR_NUMBER) return Number.NaN;
+
+  const intNum = Number(intPart);
+  const fracNum = Number(fracPart) / Number(SCALE);
+
+  return sign * (intNum + fracNum);
 }
 
 function groupInt(intStr: string, groupSep: string): string {
@@ -591,28 +592,38 @@ export default function HourlyToAnnualRent() {
 
   const parsedPaidHours = useMemo(() => {
     const out = parseMoneyInputToScaled(paidHoursPerWeek);
-    if (!out.ok)
+    if (!out.ok) {
       return {
         ok: false,
         hours: 0,
+        scaled: 0n,
         error: "Enter paid hours per week (0 to 168).",
       };
-    const h = toNumberSafe(out.scaled as bigint);
-    if (!Number.isFinite(h))
-      return {
-        ok: false,
-        hours: 0,
-        error: "Enter paid hours per week (0 to 168).",
-      };
-    if (h < 0)
-      return { ok: false, hours: 0, error: "Paid hours must be 0 or greater." };
-    if (h > 168)
+    }
+
+    const scaled = out.scaled as bigint;
+
+    const maxScaled = 168n * SCALE;
+    if (scaled > maxScaled) {
       return {
         ok: false,
         hours: 168,
+        scaled: maxScaled,
         error: "Paid hours must be 168 or less.",
       };
-    return { ok: true, hours: h, error: "" };
+    }
+
+    const h = toNumberSafe(scaled);
+    if (!Number.isFinite(h) || h < 0) {
+      return {
+        ok: false,
+        hours: 0,
+        scaled: 0n,
+        error: "Enter paid hours per week (0 to 168).",
+      };
+    }
+
+    return { ok: true, hours: h, scaled, error: "" };
   }, [paidHoursPerWeek]);
 
   const canShowResults =
@@ -645,10 +656,12 @@ export default function HourlyToAnnualRent() {
     const monthly = hourlyToPeriodScaled(hourlyScaled, "monthly");
     const annualClock = hourlyToPeriodScaled(hourlyScaled, "annual");
 
-    const annualPaid = parsedPaidHours.ok
-      ? Number(toNumberSafe(hourlyScaled)) * parsedPaidHours.hours * 52
-      : 0;
-    const annualPaidScaled = BigInt(Math.round(annualPaid * Number(SCALE)));
+    // Paid-hours annual: hourly * (hours/week) * 52, fully in scaled BigInt.
+    // (hourlyScaled * hoursScaled) is scaled^2, so divide by SCALE to return scaled.
+    const annualPaidScaled =
+      parsedPaidHours.ok && parsedPaidHours.scaled
+        ? (hourlyScaled * (parsedPaidHours.scaled as bigint) * 52n) / SCALE
+        : 0n;
 
     const monthlyClock = mulDivScaled(annualClock, 1n, 12n);
     const monthlyPaidScaled = mulDivScaled(annualPaidScaled, 1n, 12n);
@@ -686,7 +699,7 @@ export default function HourlyToAnnualRent() {
     parsedHourly.ok,
     hourlyScaled,
     parsedPaidHours.ok,
-    parsedPaidHours.hours,
+    parsedPaidHours.scaled,
   ]);
 
   const fmt = (scaled: bigint) =>
@@ -750,7 +763,6 @@ export default function HourlyToAnnualRent() {
       a: "It uses a 365-day year, 7-day weeks, and an average month length of 365 ÷ 12 days. This keeps the math consistent for budgeting comparisons.",
     },
   ];
-
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -775,7 +787,7 @@ export default function HourlyToAnnualRent() {
         "@type": "ListItem",
         position: 2,
         name: "Hourly to Annual Rent Converter",
-        item: "https://www.rentconverter.comhourly-to-annual-rent-converter",
+        item: "https://www.rentconverter.com/hourly-to-annual-rent-converter",
       },
     ],
   };
@@ -793,7 +805,7 @@ export default function HourlyToAnnualRent() {
     name: "Hourly to Annual Rent Converter",
     description:
       "Convert an hourly rent or rate into an annual rent equivalent using a 365-day year (annual equivalence). Includes a full breakdown and a paid-hours scenario comparison, plus printing.",
-    url: "https://www.rentconverter.comhourly-to-annual-rent-converter",
+    url: "https://www.rentconverter.com/hourly-to-annual-rent-converter",
   };
 
   return (
@@ -825,16 +837,13 @@ export default function HourlyToAnnualRent() {
 
       <section id="converter" className="mx-auto max-w-6xl px-6 pb-6 mt-4">
         <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block sm:pt-6">
-          <div className="mb-3 sm:mb-none flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-            <h1 className="text-2xl sm:text-left text-center capitalize sm:text-4xl text-sky-800 font-bold">
+          <div className="mb-3 md:mb-none sm:mb-none flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <h1 className="flex w-full text-2xl sm:text-left text-center capitalize sm:text-4xl text-sky-800 font-bold">
               Instant hourly to annual conversion
             </h1>
-            <div className="lg:ml-auto lg:max-w-xl rounded-xl border border-slate-200 bg-blue-50 p-4">
-              <div className="text-sm font-semibold text-slate-800 mb-2">
-                Hour interpretation
-              </div>
+            <div className="flex flex-col w-full sm:ml-auto sm:max-w-[15em] rounded-xl border border-slate-200 bg-blue-50 p-4">
               <div
-                className="inline-flex rounded-xl border border-slate-200 bg-white p-1"
+                className="inline-flex rounded-xl border border-slate-200 bg-white"
                 role="tablist"
                 aria-label="Hour interpretation"
               >
@@ -1116,11 +1125,12 @@ export default function HourlyToAnnualRent() {
             <button
               type="button"
               onClick={handlePrint}
-              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+              className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
             >
               Print / Save as PDF
             </button>
           </div>
+
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
               <div className="text-xs text-slate-600">

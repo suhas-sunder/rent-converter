@@ -6,60 +6,49 @@ function safeToFixed(n: number, digits: number): string {
   return n.toFixed(digits);
 }
 
-export const meta: Route.MetaFunction = () => [
-  { title: "Rent vs Buy Calculator (When Buying Breaks Even)" },
-  {
-    name: "description",
-    content:
-      "Compare renting vs buying and see when buying breaks even. View total rent paid, total ownership costs, estimated equity, and a year-by-year comparison over your chosen time horizon. Clear assumptions, no fluff.",
-  },
-  {
-    name: "keywords",
-    content:
-      "rent vs buy calculator, renting vs buying, rent or buy, break even rent vs buy, home ownership cost calculator, total cost of owning",
-  },
-  { name: "robots", content: "index,follow" },
-  { name: "author", content: "RentConverter.com" },
-  { name: "theme-color", content: "#f8fafc" },
+export const meta: Route.MetaFunction = () => {
+  const title = "Rent vs Buy Calculator (When Buying Breaks Even)";
+  const description =
+    "Compare renting vs buying and see when buying breaks even. View total rent paid, total ownership costs, estimated equity, and a year-by-year comparison over your chosen time horizon. Clear assumptions, no fluff.";
 
-  { property: "og:type", content: "website" },
-  {
-    property: "og:title",
-    content: "Rent vs Buy Calculator (Break-Even Analysis)",
-  },
-  {
-    property: "og:description",
-    content:
-      "See when buying a home breaks even compared to renting, with total costs, estimated equity, and a year-by-year breakdown.",
-  },
-  {
-    property: "og:url",
-    content: "https://www.rentconverter.comrent-vs-buy-calculator",
-  },
-  { property: "og:site_name", content: "RentConverter.com" },
-  {
-    property: "og:image",
-    content: "https://www.rentconverter.comog-image.jpg",
-  },
+  const canonicalUrl = "https://www.rentconverter.com/rent-vs-buy-calculator";
+  const ogImage = "https://www.rentconverter.com/og-image.jpg";
 
-  { name: "twitter:card", content: "summary_large_image" },
-  { name: "twitter:title", content: "Rent vs Buy Calculator" },
-  {
-    name: "twitter:description",
-    content:
-      "Find out when buying a home breaks even compared to renting with a clear year-by-year cost comparison.",
-  },
-  {
-    name: "twitter:image",
-    content: "https://www.rentconverter.comog-image.jpg",
-  },
+  return [
+    { title },
+    { charset: "utf-8" },
+    { name: "viewport", content: "width=device-width,initial-scale=1" },
 
-  {
-    tagName: "link",
-    rel: "canonical",
-    href: "https://www.rentconverter.comrent-vs-buy-calculator",
-  },
-];
+    { name: "description", content: description },
+    {
+      name: "keywords",
+      content:
+        "rent vs buy calculator, renting vs buying, rent or buy, break even rent vs buy, home ownership cost calculator, total cost of owning",
+    },
+    { name: "robots", content: "index,follow" },
+    { name: "author", content: "RentConverter.com" },
+    { name: "theme-color", content: "#f8fafc" },
+
+    { tagName: "link", rel: "canonical", href: canonicalUrl },
+
+    { property: "og:type", content: "website" },
+    { property: "og:site_name", content: "RentConverter.com" },
+    { property: "og:url", content: canonicalUrl },
+    {
+      property: "og:title",
+      content: "Rent vs Buy Calculator (Break-Even Analysis)",
+    },
+    { property: "og:description", content: description },
+    { property: "og:image", content: ogImage },
+    { property: "og:image:alt", content: "RentConverter.com preview image" },
+
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: "Rent vs Buy Calculator" },
+    { name: "twitter:description", content: description },
+    { name: "twitter:image", content: ogImage },
+    { name: "twitter:image:alt", content: "RentConverter.com preview image" },
+  ];
+};
 
 const SUPPORTED_CURRENCIES = [
   "USD",
@@ -599,7 +588,7 @@ function scaledMax0(a: bigint): bigint {
 
 export default function RentVsBuyCalculator() {
   const pageName = "Rent vs Buy Calculator";
-  const canonicalUrl = "https://www.rentconverter.comrent-vs-buy-calculator";
+  const canonicalUrl = "https://www.rentconverter.com/rent-vs-buy-calculator";
 
   const [currency, setCurrency] = useState<Currency>(() => {
     if (typeof window === "undefined") return "USD";
@@ -1215,7 +1204,7 @@ export default function RentVsBuyCalculator() {
 
       <section className="mt-4 rc-no-print hidden sm:block">
         <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-500">
-          <a href={safeHref("/")} className="hover:underline">
+          <a href={safeHref("/")} className="cursor-pointer hover:underline">
             Home
           </a>{" "}
           / {pageName}
@@ -1235,7 +1224,7 @@ export default function RentVsBuyCalculator() {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
               >
                 Print / Save as PDF
               </button>
@@ -1618,7 +1607,7 @@ export default function RentVsBuyCalculator() {
                           }`,
                         )
                       }
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                      className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
                     >
                       {copiedKey === "headline"
                         ? "Copied"
@@ -1736,7 +1725,7 @@ export default function RentVsBuyCalculator() {
             <button
               type="button"
               onClick={handlePrint}
-              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+              className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
             >
               Print / Save as PDF
             </button>
@@ -2205,7 +2194,6 @@ export default function RentVsBuyCalculator() {
           ))}
         </div>
       </section>
-
 
       <script
         type="application/ld+json"
