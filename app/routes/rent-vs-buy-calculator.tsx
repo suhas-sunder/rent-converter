@@ -1228,7 +1228,7 @@ export default function RentVsBuyCalculator() {
                   setRentTouched(true);
                 }}
                 placeholder="e.g. 2200"
-                className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                 aria-invalid={!parsed.rent.ok}
               />
               {rentTouched && !rentFocused && !parsed.rent.ok ? (
@@ -1251,7 +1251,7 @@ export default function RentVsBuyCalculator() {
                   value={rentIncreasePct}
                   onChange={(e) => setRentIncreasePct(e.target.value)}
                   placeholder="e.g. 3"
-                  className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!parsed.rentIncrease.ok}
                 />
                 <p className="mt-2 text-xs text-slate-500">
@@ -1300,7 +1300,7 @@ export default function RentVsBuyCalculator() {
                   setHomePriceTouched(true);
                 }}
                 placeholder="e.g. 550000"
-                className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                 aria-invalid={!parsed.price.ok}
               />
               {homePriceTouched && !homePriceFocused && !parsed.price.ok ? (
@@ -1319,7 +1319,7 @@ export default function RentVsBuyCalculator() {
                     value={downPaymentPct}
                     onChange={(e) => setDownPaymentPct(e.target.value)}
                     placeholder="e.g. 20"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                     aria-invalid={!parsed.downPct.ok}
                   />
                 </div>
@@ -1332,7 +1332,7 @@ export default function RentVsBuyCalculator() {
                     value={mortgageRatePct}
                     onChange={(e) => setMortgageRatePct(e.target.value)}
                     placeholder="e.g. 5.5"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                     aria-invalid={!parsed.ratePct.ok}
                   />
                 </div>
@@ -1348,7 +1348,7 @@ export default function RentVsBuyCalculator() {
                     value={mortgageTermYears}
                     onChange={(e) => setMortgageTermYears(e.target.value)}
                     placeholder="e.g. 25"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                     aria-invalid={!parsed.termYears.ok}
                   />
                 </div>
@@ -1361,7 +1361,7 @@ export default function RentVsBuyCalculator() {
                     value={homeAppreciationPct}
                     onChange={(e) => setHomeAppreciationPct(e.target.value)}
                     placeholder="e.g. 3"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                     aria-invalid={!parsed.appPct.ok}
                   />
                 </div>
@@ -1377,7 +1377,7 @@ export default function RentVsBuyCalculator() {
                     value={propertyTaxPct}
                     onChange={(e) => setPropertyTaxPct(e.target.value)}
                     placeholder="e.g. 1.0"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                     aria-invalid={!parsed.propTax.ok}
                   />
                 </div>
@@ -1390,7 +1390,7 @@ export default function RentVsBuyCalculator() {
                     value={maintenancePct}
                     onChange={(e) => setMaintenancePct(e.target.value)}
                     placeholder="e.g. 1.0"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                     aria-invalid={!parsed.maint.ok}
                   />
                 </div>
@@ -1411,7 +1411,7 @@ export default function RentVsBuyCalculator() {
                       setHomeInsuranceTouched(true);
                     }}
                     placeholder="e.g. 1200"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                     aria-invalid={!parsed.insAnnual.ok}
                   />
                   {homeInsuranceTouched &&
@@ -1436,7 +1436,7 @@ export default function RentVsBuyCalculator() {
                       setHoaTouched(true);
                     }}
                     placeholder="e.g. 0"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                     aria-invalid={!parsed.hoa.ok}
                   />
                   {hoaTouched && !hoaFocused && !parsed.hoa.ok ? (
@@ -1462,7 +1462,7 @@ export default function RentVsBuyCalculator() {
                       setBuyClosingTouched(true);
                     }}
                     placeholder="e.g. 8000"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                     aria-invalid={!parsed.buyClose.ok}
                   />
                   {buyClosingTouched &&
@@ -1482,7 +1482,7 @@ export default function RentVsBuyCalculator() {
                     value={sellCostPct}
                     onChange={(e) => setSellCostPct(e.target.value)}
                     placeholder="e.g. 5"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                     aria-invalid={!parsed.sellPct.ok}
                   />
                 </div>
@@ -1686,7 +1686,7 @@ export default function RentVsBuyCalculator() {
                 type="checkbox"
                 checked={roundDisplay}
                 onChange={(e) => setRoundDisplay(e.target.checked)}
-                className="h-4 w-4"
+                className="cursor-pointer h-4 w-4"
               />
               Round displayed values (display only)
             </label>

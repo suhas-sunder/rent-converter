@@ -1021,7 +1021,7 @@ export default function RentAfterIncrease() {
                   setCurrentRent(e.target.value.replace(/,/g, ""))
                 }
                 placeholder="e.g. 2000 or 2000.00"
-                className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
+                className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
                 aria-invalid={currentInvalid}
                 aria-describedby={currentDescribedBy}
               />
@@ -1107,7 +1107,7 @@ export default function RentAfterIncrease() {
                     value={increasePercent}
                     onChange={(e) => setIncreasePercent(e.target.value)}
                     placeholder="e.g. 5 or 2.5"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
+                    className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
                     aria-invalid={!pctParsed.ok}
                     aria-describedby={increaseDescribedBy}
                   />
@@ -1143,7 +1143,7 @@ export default function RentAfterIncrease() {
                       setIncreaseAmount(e.target.value.replace(/,/g, ""))
                     }
                     placeholder="e.g. 100 or 100.00"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
+                    className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
                     aria-invalid={!amtParsed.ok || amtDisplayError}
                     aria-describedby={increaseDescribedBy}
                   />
@@ -1429,7 +1429,7 @@ export default function RentAfterIncrease() {
               type="checkbox"
               checked={roundDisplay}
               onChange={(e) => setRoundDisplay(e.target.checked)}
-              className="h-4 w-4 accent-sky-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded"
+              className="cursor-pointer h-4 w-4 accent-sky-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded"
             />
             Round displayed values (display only)
           </label>

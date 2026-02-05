@@ -802,7 +802,7 @@ export default function MonthlyToAnnualRent() {
                   setAmount(sanitized);
                 }}
                 placeholder="e.g. 2000 or 2000.00"
-                className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2 focus:border-sky-500"
+                className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2 focus:border-sky-500"
                 aria-invalid={!parsedAmount.ok}
                 aria-describedby="rc-amt-help rc-amt-error"
               />
@@ -967,7 +967,7 @@ export default function MonthlyToAnnualRent() {
                 type="checkbox"
                 checked={roundDisplay}
                 onChange={(e) => setRoundDisplay(e.target.checked)}
-                className="h-4 w-4"
+                className="cursor-pointer h-4 w-4"
               />
               Round displayed values
             </label>

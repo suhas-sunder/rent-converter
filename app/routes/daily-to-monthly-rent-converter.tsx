@@ -761,7 +761,7 @@ export default function DailyToMonthlyRent() {
                   onFocus={() => setIsAmountFocused(true)}
                   onBlur={() => setIsAmountFocused(false)}
                   placeholder="e.g. 70 or 70.50"
-                  className="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-lg text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus:border-sky-500"
+                  className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2.5 text-lg text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus:border-sky-500"
                   aria-invalid={!parsedDaily.ok}
                   aria-describedby="rc-amount-help rc-amount-error"
                 />

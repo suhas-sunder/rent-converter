@@ -711,12 +711,6 @@ export default function HourlyToAnnualRent() {
       : breakdownScaled.annualPaidScaled;
   }, [hourMode, breakdownScaled]);
 
-  const displayedMonthlyScaled = useMemo(() => {
-    if (!breakdownScaled) return 0n;
-    return hourMode === "clock"
-      ? breakdownScaled.monthlyClock
-      : breakdownScaled.monthlyPaidScaled;
-  }, [hourMode, breakdownScaled]);
 
   const handlePrint = () => {
     if (typeof window === "undefined") return;
@@ -877,7 +871,7 @@ export default function HourlyToAnnualRent() {
                       setPaidHoursPerWeek(e.target.value.replace(/,/g, ""))
                     }
                     placeholder="e.g. 40"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-base text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus:border-sky-500"
+                    className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2.5 text-base text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus:border-sky-500"
                     aria-invalid={!parsedPaidHours.ok}
                     aria-describedby="rc-paid-hours-help rc-paid-hours-error"
                   />
@@ -916,7 +910,7 @@ export default function HourlyToAnnualRent() {
                   onBlur={() => setAmountFocused(false)}
                   onChange={(e) => setAmount(e.target.value.replace(/,/g, ""))}
                   placeholder="e.g. 25 or 25.50"
-                  className="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-lg text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus:border-sky-500"
+                  className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2.5 text-lg text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus:border-sky-500"
                   aria-invalid={!parsedHourly.ok}
                   aria-describedby="rc-hourly-help rc-hourly-error"
                 />
@@ -1127,7 +1121,7 @@ export default function HourlyToAnnualRent() {
                   type="checkbox"
                   checked={roundDisplay}
                   onChange={(e) => setRoundDisplay(e.target.checked)}
-                  className="h-4 w-4 accent-sky-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
+                  className="cursor-pointer h-4 w-4 accent-sky-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
                 />
                 Round displayed values
               </label>

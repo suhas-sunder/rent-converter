@@ -862,7 +862,7 @@ export default function WeeklyToBiweeklyRent() {
                     setAmountBlurred(true);
                   }}
                   placeholder="e.g. 450"
-                  className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={amountBlurred && !!amountBlurError}
                   aria-describedby={
                     amountBlurred && amountBlurError
@@ -1050,7 +1050,7 @@ export default function WeeklyToBiweeklyRent() {
                 type="checkbox"
                 checked={roundDisplay}
                 onChange={(e) => setRoundDisplay(e.target.checked)}
-                className="h-4 w-4"
+                className="cursor-pointer h-4 w-4"
               />
               Round displayed values (display only)
             </label>

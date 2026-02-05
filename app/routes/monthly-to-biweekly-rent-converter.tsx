@@ -763,7 +763,7 @@ export default function MonthlyToBiweeklyRent() {
                   onFocus={() => setIsAmountFocused(true)}
                   onBlur={() => setIsAmountFocused(false)}
                   placeholder="e.g. 2000 or 2000.00"
-                  className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!parsedAmount.ok}
                   aria-describedby="rc-amt-error"
                 />
@@ -926,7 +926,7 @@ export default function MonthlyToBiweeklyRent() {
                 type="checkbox"
                 checked={roundDisplay}
                 onChange={(e) => setRoundDisplay(e.target.checked)}
-                className="h-4 w-4"
+                className="cursor-pointer h-4 w-4"
               />
               Round displayed values
             </label>

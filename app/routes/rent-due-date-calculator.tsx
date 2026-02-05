@@ -656,7 +656,7 @@ function isBillingCycle(x: string): x is BillingCycle {
 
 export default function RentDueDateCalculator() {
   const pageName = "Rent Due Date Calculator";
-  const canonicalUrl = "https://www.rentconverter.comrent-due-date-calculator";
+  const canonicalUrl = "https://www.rentconverter.com/rent-due-date-calculator";
 
   const [cycle, setCycle] = useState<BillingCycle>(() => {
     if (typeof window === "undefined") return "monthly";
@@ -1039,7 +1039,7 @@ export default function RentDueDateCalculator() {
                   onBlur={() => setAmountFocused(false)}
                   onChange={(e) => setAmount(e.target.value)}
                   placeholder="e.g. 2000 or 2000.00"
-                  className="col-span-7 rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="cursor-pointer col-span-7 rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!parsedAmount.ok}
                 />
                 <select
@@ -1113,7 +1113,7 @@ export default function RentDueDateCalculator() {
                 type="date"
                 value={asOfDate}
                 onChange={(e) => setAsOfDate(e.target.value)}
-                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                className="cursor-pointer w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
               />
             </div>
 
@@ -1129,7 +1129,7 @@ export default function RentDueDateCalculator() {
                       e.target.value === "end_date" ? "end_date" : "years",
                     )
                   }
-                  className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="cursor-pointer w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                 >
                   <option value="years">Years ahead</option>
                   <option value="end_date">End date</option>
@@ -1152,7 +1152,7 @@ export default function RentDueDateCalculator() {
                     type="date"
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
-                    className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className="cursor-pointer w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   />
                 )}
               </div>
@@ -1169,7 +1169,7 @@ export default function RentDueDateCalculator() {
                   value={dueDayMonthly}
                   onChange={(e) => setDueDayMonthly(e.target.value)}
                   placeholder="e.g. 1"
-                  className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="cursor-pointer w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-label="Monthly due day"
                 />
               ) : (
@@ -1177,7 +1177,7 @@ export default function RentDueDateCalculator() {
                   type="date"
                   value={anchorDate}
                   onChange={(e) => setAnchorDate(e.target.value)}
-                  className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="cursor-pointer w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                 />
               )}
             </div>
@@ -1471,7 +1471,7 @@ export default function RentDueDateCalculator() {
                   type="checkbox"
                   checked={roundDisplay}
                   onChange={(e) => setRoundDisplay(e.target.checked)}
-                  className="h-4 w-4"
+                  className="cursor-pointer h-4 w-4"
                 />
                 Round displayed values (display only)
               </label>

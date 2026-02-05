@@ -740,7 +740,7 @@ export default function MonthlyToHourlyRent() {
                   onFocus={() => setIsAmountFocused(true)}
                   onBlur={() => setIsAmountFocused(false)}
                   placeholder="e.g. 2000 or 2000.00"
-                  className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg leading-6 outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
+                  className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg leading-6 outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
                   aria-invalid={!parsedAmount.ok}
                   aria-describedby={amountDescribedBy}
                 />
@@ -915,7 +915,7 @@ export default function MonthlyToHourlyRent() {
               type="checkbox"
               checked={roundDisplay}
               onChange={(e) => setRoundDisplay(e.target.checked)}
-              className="h-4 w-4 accent-sky-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded"
+              className="cursor-pointer h-4 w-4 accent-sky-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded"
             />
             Round displayed values (display only)
           </label>

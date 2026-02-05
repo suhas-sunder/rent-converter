@@ -875,7 +875,7 @@ export default function RentPerPerson() {
                 onBlur={() => setIsTotalRentFocused(false)}
                 onChange={(e) => handleTotalRentChange(e.target.value)}
                 placeholder="e.g. 2400 or 2400.00"
-                className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
+                className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
                 aria-invalid={!parsedRent.ok}
                 aria-describedby={`${totalRentHelpId}${!parsedRent.ok ? ` ${totalRentErrorId}` : ""}`}
               />
@@ -929,7 +929,7 @@ export default function RentPerPerson() {
                 value={people}
                 onChange={(e) => setPeople(e.target.value)}
                 placeholder="e.g. 3"
-                className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
+                className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
                 aria-invalid={!parsedPeople.ok}
                 aria-describedby={`${peopleHelpId}${!parsedPeople.ok ? ` ${peopleErrorId}` : ""}`}
               />
@@ -1161,7 +1161,7 @@ export default function RentPerPerson() {
                   type="checkbox"
                   checked={roundDisplay}
                   onChange={(e) => setRoundDisplay(e.target.checked)}
-                  className="h-5 w-5 accent-sky-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2 rounded"
+                  className="cursor-pointer h-5 w-5 accent-sky-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2 rounded"
                 />
                 Round displayed values (display only)
               </label>

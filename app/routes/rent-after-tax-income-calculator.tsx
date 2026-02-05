@@ -922,7 +922,7 @@ export default function RentAfterTaxIncome() {
                   onFocus={() => setIsGrossFocused(true)}
                   onBlur={() => setIsGrossFocused(false)}
                   placeholder="e.g. 60000 or 5000.50"
-                  className="col-span-7 rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="cursor-pointer col-span-7 rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!grossParsed.ok}
                 />
                 <select
@@ -972,7 +972,7 @@ export default function RentAfterTaxIncome() {
                   className="col-span-7 rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!taxParsed.ok}
                 />
-                <div className="col-span-5 rounded-xl border border-slate-200 bg-white px-4 py-2 flex items-center text-sm font-semibold text-slate-700">
+                <div className="cursor-pointer col-span-5 rounded-xl border border-slate-200 bg-white px-4 py-2 flex items-center text-sm font-semibold text-slate-700">
                   %
                 </div>
               </div>
@@ -1006,7 +1006,7 @@ export default function RentAfterTaxIncome() {
                   onFocus={() => setIsRentFocused(true)}
                   onBlur={() => setIsRentFocused(false)}
                   placeholder="e.g. 2200 or 2200.00"
-                  className="col-span-7 rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="cursor-pointer col-span-7 rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!rentParsed.ok}
                 />
                 <select
@@ -1290,7 +1290,7 @@ export default function RentAfterTaxIncome() {
               type="checkbox"
               checked={roundDisplay}
               onChange={(e) => setRoundDisplay(e.target.checked)}
-              className="h-4 w-4"
+              className="cursor-pointer h-4 w-4"
             />
             Round displayed values (display only)
           </label>

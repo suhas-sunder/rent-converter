@@ -870,7 +870,7 @@ export default function RentIncreasePercentage() {
                   );
                 }}
                 placeholder="e.g. 2000 or 2000.00"
-                className={`w-full rounded-xl border px-4 py-2.5 text-lg outline-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
+                className={`cursor-pointer w-full rounded-xl border px-4 py-2.5 text-lg outline-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
                   oldParsed.ok
                     ? "border-slate-300 focus:border-sky-600"
                     : "border-rose-300 focus:border-rose-500"
@@ -914,7 +914,7 @@ export default function RentIncreasePercentage() {
                   );
                 }}
                 placeholder="e.g. 2100 or 2100.00"
-                className={`w-full rounded-xl border px-4 py-2.5 text-lg outline-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
+                className={`cursor-pointer w-full rounded-xl border px-4 py-2.5 text-lg outline-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
                   newParsed.ok
                     ? "border-slate-300 focus:border-sky-600"
                     : "border-rose-300 focus:border-rose-500"
@@ -1245,7 +1245,7 @@ export default function RentIncreasePercentage() {
                   type="checkbox"
                   checked={roundDisplay}
                   onChange={(e) => setRoundDisplay(e.target.checked)}
-                  className="h-4 w-4 rounded border-slate-300 text-sky-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                  className="cursor-pointer h-4 w-4 rounded border-slate-300 text-sky-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                 />
                 Round displayed values (display only)
               </label>

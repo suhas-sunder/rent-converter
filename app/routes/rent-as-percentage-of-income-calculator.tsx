@@ -876,7 +876,7 @@ export default function RentAsPercentageOfIncome() {
                     handleAmountChange(e, setRentAmount, rentInputRef)
                   }
                   placeholder="e.g. 2200 or 2200.00"
-                  className="col-span-7 rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="cursor-pointer col-span-7 rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!rentParsed.ok}
                 />
                 <select
@@ -928,7 +928,7 @@ export default function RentAsPercentageOfIncome() {
                     handleAmountChange(e, setIncomeAmount, incomeInputRef)
                   }
                   placeholder="e.g. 6500 or 6500.00"
-                  className="col-span-7 rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="cursor-pointer col-span-7 rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!incomeParsed.ok}
                 />
                 <select
@@ -1162,7 +1162,7 @@ export default function RentAsPercentageOfIncome() {
               type="checkbox"
               checked={roundDisplay}
               onChange={(e) => setRoundDisplay(e.target.checked)}
-              className="h-4 w-4"
+              className="cursor-pointer h-4 w-4"
             />
             Round displayed values (display only)
           </label>

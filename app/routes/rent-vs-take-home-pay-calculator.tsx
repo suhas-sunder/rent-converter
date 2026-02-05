@@ -933,7 +933,7 @@ export default function RentVsTakeHomePay() {
                   }}
                   onChange={(e) => setTakeHomePay(stripCommas(e.target.value))}
                   placeholder="e.g. 5000"
-                  className="col-span-7 rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="cursor-pointer col-span-7 rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!parsed.takeHome.ok}
                 />
                 <select
@@ -982,7 +982,7 @@ export default function RentVsTakeHomePay() {
                   }}
                   onChange={(e) => setRentAmount(stripCommas(e.target.value))}
                   placeholder="e.g. 1800"
-                  className="col-span-7 rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="cursor-pointer col-span-7 rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!parsed.rent.ok}
                 />
                 <select
@@ -1245,7 +1245,7 @@ export default function RentVsTakeHomePay() {
                     v === 0 || v === 2 || v === 4 || v === 6 ? v : 2,
                   );
                 }}
-                className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
+                className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
               >
                 <option value={0}>0</option>
                 <option value={2}>2</option>

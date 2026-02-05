@@ -803,7 +803,7 @@ export default function BiweeklyToMonthlyRent() {
                   onBlur={() => setAmountFocused(false)}
                   onChange={(e) => setAmount(e.target.value)}
                   placeholder="e.g. 1000 or 1000.50"
-                  className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={amount.trim().length > 0 && !parsedBiweekly.ok}
                   aria-describedby="rc-amount-help rc-amount-error"
                 />

@@ -919,7 +919,7 @@ export default function AnnualToBiweeklyRent() {
                   type="checkbox"
                   checked={roundDisplay}
                   onChange={(e) => setRoundDisplay(e.target.checked)}
-                  className="h-4 w-4"
+                  className="cursor-pointer h-4 w-4"
                 />
                 Round displayed values
               </label>

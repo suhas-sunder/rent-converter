@@ -809,7 +809,7 @@ export default function HowMuchRentCanIAfford() {
 
                   setIncome(next);
                 }}
-                className="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-base text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus:border-sky-500"
+                className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2.5 text-base text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus:border-sky-500"
                 placeholder="e.g. 6000 or 6000.00"
                 aria-invalid={!parsedIncome.ok}
                 aria-describedby="rc-income-help rc-income-error"
@@ -995,7 +995,7 @@ export default function HowMuchRentCanIAfford() {
               type="checkbox"
               checked={roundDisplay}
               onChange={(e) => setRoundDisplay(e.target.checked)}
-              className="h-4 w-4 accent-sky-600 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
+              className="cursor-pointer h-4 w-4 accent-sky-600 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
             />
             Round displayed values
           </label>

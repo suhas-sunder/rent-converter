@@ -792,7 +792,7 @@ export default function RentPaidEvery4Weeks() {
                     }
                   }}
                   placeholder="e.g. 650 or 650.00"
-                  className={`w-full rounded-xl border px-4 py-2.5 text-lg outline-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
+                  className={`cursor-pointer w-full rounded-xl border px-4 py-2.5 text-lg outline-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
                     parsed.ok
                       ? "border-slate-300 focus:border-sky-600"
                       : "border-rose-300 focus:border-rose-500"
