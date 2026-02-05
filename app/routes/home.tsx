@@ -1,7 +1,7 @@
 import { useMemo, useEffect, useState } from "react";
 import type { Route } from "./+types/home";
 
-const SITE_URL = "https://www.rentconverter.com";
+const SITE_URL = "https://www.rentconverter.com/";
 
 export const meta: Route.MetaFunction = () => [
   {
@@ -28,7 +28,7 @@ export const meta: Route.MetaFunction = () => [
   },
   { property: "og:url", content: SITE_URL },
   { property: "og:site_name", content: "RentConverter.com" },
-  { property: "og:image", content: `${SITE_URL}/og-image.jpg` },
+  { property: "og:image", content: `${SITE_URL}og-image.jpg` },
 
   // Twitter
   { name: "twitter:card", content: "summary_large_image" },
@@ -41,7 +41,7 @@ export const meta: Route.MetaFunction = () => [
     content:
       "Clear, accurate rent conversions with transparent math and exact decimals.",
   },
-  { name: "twitter:image", content: `${SITE_URL}/og-image.jpg` },
+  { name: "twitter:image", content: `${SITE_URL}og-image.jpg` },
 
   // Canonical
   { tagName: "link", rel: "canonical", href: SITE_URL },
