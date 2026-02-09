@@ -61,8 +61,8 @@ const RENT_PERIOD_LABEL: Record<RentPeriod, string> = {
   hourly: "Hourly",
   daily: "Daily",
   weekly: "Weekly",
-  biweekly: "Every 2 weeks",
-  every_4_weeks: "Every 4 weeks (28 days)",
+  biweekly: "2 weeks",
+  every_4_weeks: "4 weeks (28 days)",
   monthly: "Monthly (average)",
   annual: "Annual",
 };
@@ -1144,12 +1144,12 @@ export default function RentPerPaycheck() {
                     ["Daily", computed.rentBreakdown.daily, "daily"],
                     ["Weekly", computed.rentBreakdown.weekly, "weekly"],
                     [
-                      "Every 2 weeks",
+                      "2 weeks",
                       computed.rentBreakdown.biweekly,
                       "biweekly",
                     ],
                     [
-                      "Every 4 weeks (28 days)",
+                      "4 weeks (28 days)",
                       computed.rentBreakdown.every_4_weeks,
                       "every_4_weeks",
                     ],

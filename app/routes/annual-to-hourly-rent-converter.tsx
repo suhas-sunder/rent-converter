@@ -56,8 +56,8 @@ const PERIOD_LABEL: Record<Period, string> = {
   hourly: "Hourly",
   daily: "Daily",
   weekly: "Weekly",
-  biweekly: "Every 2 weeks (14 days)",
-  every_4_weeks: "Every 4 weeks (28 days)",
+  biweekly: "2 weeks (14 days)",
+  every_4_weeks: "4 weeks (28 days)",
   monthly: "Monthly (average)",
   annual: "Annual",
 };
@@ -1022,12 +1022,12 @@ export default function AnnualToHourlyRent() {
                       ["Daily", breakdownScaled!.daily, "daily"],
                       ["Weekly", breakdownScaled!.weekly, "weekly"],
                       [
-                        "Every 2 weeks (14 days)",
+                        "2 weeks (14 days)",
                         breakdownScaled!.biweekly,
                         "biweekly",
                       ],
                       [
-                        "Every 4 weeks (28 days)",
+                        "4 weeks (28 days)",
                         breakdownScaled!.every4w,
                         "every_4_weeks",
                       ],

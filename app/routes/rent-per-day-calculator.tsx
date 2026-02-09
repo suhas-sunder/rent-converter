@@ -64,8 +64,8 @@ const PERIOD_LABEL: Record<Period, string> = {
   hourly: "Hourly",
   daily: "Daily",
   weekly: "Weekly",
-  biweekly: "Every 2 weeks",
-  every_4_weeks: "Every 4 weeks (28 days)",
+  biweekly: "2 weeks",
+  every_4_weeks: "4 weeks (28 days)",
   monthly: "Monthly (average)",
   annual: "Annual",
 };
@@ -952,12 +952,12 @@ export default function RentPerDayCalculator() {
                           ["Daily", computed.dailyScaled, "daily"],
                           ["Weekly", computed.weeklyScaled, "weekly"],
                           [
-                            "Every 2 weeks",
+                            "2 weeks",
                             computed.biweeklyScaled,
                             "biweekly",
                           ],
                           [
-                            "Every 4 weeks (28 days)",
+                            "4 weeks (28 days)",
                             computed.every4wScaled,
                             "every_4_weeks",
                           ],

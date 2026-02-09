@@ -774,12 +774,12 @@ export default function AnnualToWeeklyRentConverter() {
                       ],
                       ["Daily (365-day year)", breakdownScaled!.daily, "daily"],
                       [
-                        "Every 2 weeks (14 days)",
+                        "2 weeks (14 days)",
                         breakdownScaled!.biweekly,
                         "biweekly",
                       ],
                       [
-                        "Every 4 weeks (28 days)",
+                        "4 weeks (28 days)",
                         breakdownScaled!.every4w,
                         "every_4_weeks",
                       ],

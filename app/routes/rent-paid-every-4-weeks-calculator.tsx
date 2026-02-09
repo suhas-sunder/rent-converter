@@ -899,9 +899,9 @@ export default function RentPaidEvery4Weeks() {
                       ["Hourly", computed.hourlyScaled, "hourly"],
                       ["Daily", computed.dailyScaled, "daily"],
                       ["Weekly", computed.weeklyScaled, "weekly"],
-                      ["Every 2 weeks", computed.biweeklyScaled, "biweekly"],
+                      ["2 weeks", computed.biweeklyScaled, "biweekly"],
                       [
-                        "Every 4 weeks (28 days)",
+                        "4 weeks (28 days)",
                         computed.every4wScaled,
                         "every_4_weeks",
                       ],

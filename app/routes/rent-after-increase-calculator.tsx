@@ -62,8 +62,8 @@ const PERIOD_LABEL: Record<Period, string> = {
   hourly: "Hourly",
   daily: "Daily",
   weekly: "Weekly",
-  biweekly: "Every 2 weeks",
-  every_4_weeks: "Every 4 weeks (28 days)",
+  biweekly: "2 weeks",
+  every_4_weeks: "4 weeks (28 days)",
   monthly: "Monthly",
   annual: "Annual",
 };
@@ -884,7 +884,7 @@ export default function RentAfterIncrease() {
     },
     {
       q: "Why does the page show monthly and every 4 weeks separately?",
-      a: "Every 4 weeks is always 28 days. A calendar month is longer on average (365 ÷ 12 days). Showing both avoids treating them as interchangeable when comparing costs.",
+      a: "4 weeks is always 28 days. A calendar month is longer on average (365 ÷ 12 days). Showing both avoids treating them as interchangeable when comparing costs.",
     },
     {
       q: "Does this include utilities, fees, or taxes?",

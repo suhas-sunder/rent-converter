@@ -60,8 +60,8 @@ type BillingCycle =
 const BILLING_LABEL: Record<BillingCycle, string> = {
   monthly: "Monthly",
   weekly: "Weekly",
-  biweekly: "Every 2 weeks",
-  every_4_weeks: "Every 4 weeks (28 days)",
+  biweekly: "2 weeks",
+  every_4_weeks: "4 weeks (28 days)",
   annual: "Annual",
 };
 

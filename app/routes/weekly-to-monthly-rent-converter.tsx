@@ -67,8 +67,8 @@ const PERIOD_LABEL: Record<Period, string> = {
   hourly: "Hourly",
   daily: "Daily",
   weekly: "Weekly",
-  biweekly: "Every 2 weeks",
-  every_4_weeks: "Every 4 weeks (28 days)",
+  biweekly: "2 weeks",
+  every_4_weeks: "4 weeks (28 days)",
   monthly: "Monthly",
   annual: "Annual",
 };
@@ -653,7 +653,7 @@ export default function WeeklyToMonthlyRent() {
     },
     {
       q: "How is every-4-weeks rent different from monthly rent?",
-      a: "Every 4 weeks is 28 days and is commonly associated with 13 periods per year. Monthly billing is 12 periods per year. Even if the per-payment amounts look similar, annual totals can differ.",
+      a: "4 weeks is 28 days and is commonly associated with 13 periods per year. Monthly billing is 12 periods per year. Even if the per-payment amounts look similar, annual totals can differ.",
     },
     {
       q: "Can weekly rent look cheaper but cost more over a year?",
@@ -864,9 +864,9 @@ export default function WeeklyToMonthlyRent() {
                       ["Hourly", computed.hourly, "hourly"],
                       ["Daily", computed.daily, "daily"],
                       ["Weekly", computed.weekly, "weekly"],
-                      ["Every 2 weeks", computed.biweekly, "biweekly"],
+                      ["2 weeks", computed.biweekly, "biweekly"],
                       [
-                        "Every 4 weeks (28 days)",
+                        "4 weeks (28 days)",
                         computed.every_4_weeks,
                         "every_4_weeks",
                       ],

@@ -75,8 +75,8 @@ const PERIOD_LABEL: Record<Period, string> = {
   hourly: "Hourly",
   daily: "Daily",
   weekly: "Weekly",
-  biweekly: "Every 2 weeks",
-  every_4_weeks: "Every 4 weeks (28 days)",
+  biweekly: "2 weeks",
+  every_4_weeks: "4 weeks (28 days)",
   monthly: "Monthly",
   annual: "Annual",
 };
@@ -822,7 +822,7 @@ export default function RentVsTakeHomePay() {
     },
     {
       q: "Why do monthly and every-4-weeks amounts differ?",
-      a: "Every 4 weeks is always 28 days. An average month is about 30.42 days (365 ÷ 12). Over a year, that difference changes totals.",
+      a: "4 weeks is always 28 days. An average month is about 30.42 days (365 ÷ 12). Over a year, that difference changes totals.",
     },
     {
       q: "If my rent is monthly, can I enter take-home pay weekly or biweekly?",

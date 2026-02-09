@@ -65,8 +65,8 @@ const PERIOD_LABEL: Record<Period, string> = {
   hourly: "Hourly",
   daily: "Daily",
   weekly: "Weekly",
-  biweekly: "Every 2 weeks",
-  every_4_weeks: "Every 4 weeks (28 days)",
+  biweekly: "2 weeks",
+  every_4_weeks: "4 weeks (28 days)",
   monthly: "Monthly",
   annual: "Annual",
 };
@@ -677,7 +677,7 @@ export default function RentPerWeekCalculator() {
     },
     {
       q: "How does every 4 weeks (28 days) compare to weekly rent?",
-      a: "Every 4 weeks is exactly 28 days, which corresponds to 4 weeks. Many 4-week billing schedules imply about 13 payments per year, which can differ from monthly (12 payments per year).",
+      a: "4 weeks is exactly 28 days, which corresponds to 4 weeks. Many 4-week billing schedules imply about 13 payments per year, which can differ from monthly (12 payments per year).",
     },
     {
       q: "Is this the same as prorated rent for a partial month?",
@@ -900,12 +900,12 @@ export default function RentPerWeekCalculator() {
                           ["Daily", computed.breakdown.dailyScaled, "daily"],
                           ["Weekly", computed.breakdown.weeklyScaled, "weekly"],
                           [
-                            "Every 2 weeks",
+                            "2 weeks",
                             computed.breakdown.biweeklyScaled,
                             "biweekly",
                           ],
                           [
-                            "Every 4 weeks (28 days)",
+                            "4 weeks (28 days)",
                             computed.breakdown.fourWeeksScaled,
                             "every_4_weeks",
                           ],
