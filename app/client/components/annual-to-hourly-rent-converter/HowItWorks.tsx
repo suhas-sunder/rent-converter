@@ -22,16 +22,12 @@ const HowItWorks = () => {
                   equivalence)
                 </h2>
                 <p className="mt-2 text-slate-600 leading-7 max-w-2xl">
-                  This page converts a yearly rent total into an hourly
-                  equivalent using a fixed 365-day year. The default result
-                  spreads the same annual cost across every hour in the year,
-                  which is{" "}
-                  <span className="font-semibold text-slate-900">
-                    365 × 24 = 8,760 hours
-                  </span>
-                  . You can optionally enable a paid-hours scenario to compare
-                  against a work-hours assumption, but the time-based hourly is
-                  the primary conversion used for consistent breakdowns.
+                  This page converts an annual rent total into an hourly
+                  equivalent under a fixed time-length model. Input is one
+                  annual amount. Output is an hourly equivalent that represents
+                  the same annual cost under that model. Results are equivalents
+                  under a fixed basis, not billing rules, not due dates, and not
+                  lease terms.
                 </p>
               </div>
 
@@ -42,7 +38,7 @@ const HowItWorks = () => {
                 </span>
                 <span className="inline-flex items-center gap-2 rounded-full bg-slate-50 text-slate-700 ring-1 ring-slate-200 px-3 py-1 text-xs font-semibold">
                   <span className="h-2 w-2 rounded-full bg-slate-500" />
-                  Optional paid-hours
+                  365-day model
                 </span>
               </div>
             </div>
@@ -66,10 +62,10 @@ const HowItWorks = () => {
               </div>
               <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
                 <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                  OPTION
+                  BASIS
                 </div>
                 <div className="mt-2 text-sm font-semibold text-slate-900">
-                  annual ÷ (hrs/wk × 52)
+                  365 × 24 hours
                 </div>
               </div>
               <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
@@ -84,7 +80,7 @@ const HowItWorks = () => {
           </div>
 
           <div className="mt-10 space-y-6 text-base text-slate-700 leading-7">
-            {/* SectionCard: what you get */}
+            {/* 1 */}
             <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
               <div
                 aria-hidden="true"
@@ -110,51 +106,41 @@ const HowItWorks = () => {
                   </div>
                   <div className="min-w-0">
                     <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
-                      What this annual to hourly converter returns
+                      What this converter returns
                     </h3>
                   </div>
                 </div>
 
                 <div className="mt-4 space-y-3">
                   <p>
-                    You enter an annual rent total and the tool computes a
-                    time-based hourly equivalent using{" "}
-                    <span className="font-semibold text-slate-900">
-                      8,760 hours
-                    </span>
-                    . The hourly number is the same annual cost expressed per
-                    hour under a fixed-year model.
+                    Input is an annual rent total (currency per year). Output is
+                    a time-based hourly equivalent (currency per hour) plus a
+                    breakdown table of other period equivalents that all
+                    reconcile back to the same annual total under one fixed
+                    model.
+                  </p>
+                  <p>
+                    Results are equivalents under a fixed time-length basis.
+                    This page is not a billing rules engine. It does not
+                    determine due dates, it does not interpret lease terms, and
+                    it does not infer payment schedules or payment counts.
                   </p>
 
                   <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
                     <div className="text-sm font-bold text-slate-900">
-                      Default conversion
+                      What the output represents
                     </div>
                     <p className="mt-2">
-                      <span className="font-semibold text-slate-900">
-                        Time-based hourly
-                      </span>{" "}
-                      = annual rent ÷ (365 × 24) = annual rent ÷ 8,760
-                    </p>
-                    <p className="mt-2 text-sm text-slate-600">
-                      This is the primary hourly used for consistency across the
-                      breakdown.
+                      Hourly is the annual amount expressed per hour under the
+                      same model used for daily, weekly, biweekly, 4-week, and
+                      monthly equivalents.
                     </p>
                   </div>
-
-                  <p>
-                    The results section can also show a breakdown derived from
-                    the same annual basis. Weekly, biweekly, 4-week, monthly,
-                    daily, and hourly equivalents should all reconcile back to
-                    the annual total under the same assumptions. If you toggle
-                    paid-hours, it is shown as a clearly labeled alternative
-                    hourly for comparison.
-                  </p>
                 </div>
               </div>
             </div>
 
-            {/* SectionCard: why every hour and consistency */}
+            {/* 2 */}
             <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
               <div
                 aria-hidden="true"
@@ -180,126 +166,72 @@ const HowItWorks = () => {
                   </div>
                   <div className="min-w-0">
                     <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
-                      Why the time-based hourly uses every hour
+                      Definitions used on this page
                     </h3>
                   </div>
                 </div>
 
                 <div className="mt-4 space-y-3">
                   <p>
-                    The time-based hourly is designed to stay compatible with
-                    the rest of the period breakdowns on the site. When
-                    everything is derived from a fixed day-length model, the
-                    table stays internally consistent. Using every hour in the
-                    year is the cleanest way to keep hourly aligned with daily,
-                    weekly, biweekly, 4-week, and monthly lines.
+                    Periods are defined by fixed day counts so every conversion
+                    uses the same model. The year model used here is a 365-day
+                    year.
                   </p>
 
-                  <p>
-                    This is why the default uses{" "}
-                    <span className="font-semibold text-slate-900">
-                      annual ÷ (365 × 24)
-                    </span>{" "}
-                    and not a paid-hours assumption. If the default used only a
-                    subset of hours, the hourly line would no longer reconcile
-                    cleanly with day-based periods, and the breakdown would mix
-                    two different models.
-                  </p>
-
-                  <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
-                      <div className="text-sm font-bold text-slate-900">
-                        Time-based model
-                      </div>
-                      <p className="mt-2">
-                        Best for keeping the breakdown consistent. Annual,
-                        monthly, weekly, daily, and hourly all come from the
-                        same base.
-                      </p>
-                    </div>
-                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
-                      <div className="text-sm font-bold text-slate-900">
-                        Alternative scenario
-                      </div>
-                      <p className="mt-2">
-                        Paid-hours hourly is optional and explicitly labeled so
-                        it is not confused with the default.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* SectionCard: paid-hours scenario */}
-            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
-              <div
-                aria-hidden="true"
-                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
-              />
-              <div className="p-5 sm:px-6">
-                <div className="flex items-start gap-3">
-                  <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
-                    <svg
-                      aria-hidden="true"
-                      viewBox="0 0 24 24"
-                      className="h-5 w-5 text-sky-600"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M7 7h10v10H7z"
-                      />
-                    </svg>
-                  </div>
-                  <div className="min-w-0">
-                    <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
-                      Paid-hours hourly (optional) and how it is computed
-                    </h3>
-                  </div>
-                </div>
-
-                <div className="mt-4 space-y-3">
-                  <p>
-                    The paid-hours scenario is useful when you want an
-                    alternative hourly derived from a chosen hours-per-week
-                    assumption. It does not replace the time-based hourly. It is
-                    a comparison line that shows how different the number
-                    becomes when you divide the same annual total by a smaller
-                    set of hours.
-                  </p>
-
-                  <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
-                    <div className="text-sm font-bold text-slate-900">
-                      Paid-hours conversion
-                    </div>
-                    <p className="mt-2">
+                  <ul className="list-disc pl-5 space-y-2">
+                    <li>
+                      <span className="font-semibold text-slate-900">Hour</span>
+                      : 1 hour. Time-based annual hours = 365 × 24 ={" "}
                       <span className="font-semibold text-slate-900">
-                        Paid-hours hourly
-                      </span>{" "}
-                      = annual rent ÷ (hours/week × 52)
-                    </p>
-                    <p className="mt-2 text-sm text-slate-600">
-                      The hours/week value should be positive. If it is missing,
-                      zero, or invalid, the paid-hours line should be disabled
-                      or show an explicit warning.
-                    </p>
-                  </div>
+                        8,760
+                      </span>
+                      .
+                    </li>
+                    <li>
+                      <span className="font-semibold text-slate-900">Day</span>:
+                      1 day.
+                    </li>
+                    <li>
+                      <span className="font-semibold text-slate-900">Week</span>
+                      : 7 days.
+                    </li>
+                    <li>
+                      <span className="font-semibold text-slate-900">
+                        Biweekly
+                      </span>
+                      : 14 days (not twice per month).
+                    </li>
+                    <li>
+                      <span className="font-semibold text-slate-900">
+                        4-week
+                      </span>
+                      : 28 days.
+                    </li>
+                    <li>
+                      <span className="font-semibold text-slate-900">
+                        Month
+                      </span>
+                      : average month length implied by the model, 365 ÷ 12
+                      days. On this page, “monthly” means annual ÷ 12, not 4
+                      weeks.
+                    </li>
+                    <li>
+                      <span className="font-semibold text-slate-900">Year</span>
+                      : 365 days.
+                    </li>
+                  </ul>
 
-                  <p>
-                    If paid-hours is enabled, the page should show both values
-                    with clear labels: time-based hourly (annual ÷ 8,760) and
-                    paid-hours hourly (annual ÷ (hours/week × 52)). The tool
-                    should not guess your schedule.
+                  <p className="text-sm text-slate-600">
+                    If a paid-hours scenario exists on the page, it is a
+                    separate model that divides by assumed work hours. The
+                    default hourly shown by this converter is time-based and
+                    uses 8,760 hours for internal consistency.
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* SectionCard: examples + parsing */}
+            {/* 3 */}
             <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
               <div
                 aria-hidden="true"
@@ -325,82 +257,108 @@ const HowItWorks = () => {
                   </div>
                   <div className="min-w-0">
                     <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
-                      Examples and input parsing rules
+                      Core formula and conversion basis
                     </h3>
                   </div>
                 </div>
 
                 <div className="mt-4 space-y-3">
                   <p>
-                    These examples match the displayed formulas. If the UI
-                    formats the result to fewer decimals, that should be
-                    display-only and not change the underlying math.
+                    The annual total is the anchor. Every period shown is
+                    derived from the same annual basis. This is done so the
+                    hourly line and the breakdown table stay internally
+                    consistent.
                   </p>
-
-                  <ul className="list-disc pl-5 space-y-2">
-                    <li>
-                      If annual rent is{" "}
-                      <strong className="text-slate-900">$30,000</strong>,
-                      time-based hourly is about{" "}
-                      <strong className="text-slate-900">
-                        $30,000 ÷ 8,760 ≈ $3.4247
-                      </strong>
-                      .
-                    </li>
-                    <li>
-                      With{" "}
-                      <strong className="text-slate-900">40 hours/week</strong>,
-                      paid-hours hourly is{" "}
-                      <strong className="text-slate-900">
-                        $30,000 ÷ (40 × 52) ≈ $14.4231
-                      </strong>
-                      .
-                    </li>
-                    <li>
-                      <strong className="text-slate-900">1,234</strong> is
-                      interpreted as 1234 (grouping). If you meant a decimal,
-                      type <strong className="text-slate-900">1.234</strong>.
-                    </li>
-                  </ul>
 
                   <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
                     <div className="text-sm font-bold text-slate-900">
-                      Accepted numeric formats
+                      Exact formulas (annual as input)
                     </div>
                     <ul className="mt-2 list-disc pl-5 space-y-2">
                       <li>
-                        Decimals:{" "}
-                        <strong className="text-slate-900">30000.50</strong>,{" "}
-                        <strong className="text-slate-900">.5</strong>,{" "}
-                        <strong className="text-slate-900">12.</strong>
+                        <span className="font-semibold text-slate-900">
+                          Hourly (time-based)
+                        </span>{" "}
+                        = annual ÷ (365 × 24) = annual ÷ 8,760
                       </li>
+                      <li>Daily = annual ÷ 365</li>
+                      <li>Weekly = annual × 7 ÷ 365</li>
+                      <li>Biweekly = annual × 14 ÷ 365</li>
+                      <li>4-week = annual × 28 ÷ 365</li>
                       <li>
-                        Thousands grouping:{" "}
-                        <strong className="text-slate-900">30,000</strong>,{" "}
-                        <strong className="text-slate-900">30,000.50</strong>
-                      </li>
-                      <li>
-                        Currency symbols are ignored:{" "}
-                        <strong className="text-slate-900">$30,000</strong>
+                        Monthly = annual ÷ 12 (equivalently: annual × (365 ÷ 12)
+                        ÷ 365)
                       </li>
                     </ul>
-                    <p className="mt-3 text-sm text-slate-600">
-                      If an input could be interpreted more than one way, the
-                      correct behavior is a warning or error instead of silently
-                      guessing.
+
+                    <div className="mt-4 text-sm">
+                      <div className="font-bold text-slate-900">
+                        Stepwise version (annual → daily → hourly)
+                      </div>
+                      <div className="mt-2">Daily = annual ÷ 365</div>
+                      <div>Hourly = daily ÷ 24 = (annual ÷ 365) ÷ 24</div>
+                    </div>
+
+                    <p className="mt-4 text-sm text-slate-600">
+                      This basis is used to keep one coherent model across the
+                      headline result and the breakdown table.
                     </p>
                   </div>
+                </div>
+              </div>
+            </div>
 
+            {/* 4 */}
+            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+              <div
+                aria-hidden="true"
+                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+              />
+              <div className="p-5 sm:px-6">
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 24 24"
+                      className="h-5 w-5 text-sky-600"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M7 7h10v10H7z"
+                      />
+                    </svg>
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
+                      What the breakdown table represents
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="mt-4 space-y-3">
                   <p>
-                    This converter treats the annual figure as the source of
-                    truth. It does not add fees, utilities, deposits, or taxes.
-                    It only converts the number you entered.
+                    The breakdown table is a set of equivalent amounts for
+                    different periods, all derived from the same annual basis.
+                    Rows are not computed from each other. Weekly is not
+                    computed as hourly × 168, and monthly is not computed as
+                    weekly × 4. Each row is derived from the annual anchor so
+                    everything reconciles to the same annual total.
+                  </p>
+                  <p>
+                    This matters when comparing weekly, 28-day, and monthly
+                    listings. Those periods are defined differently, so the
+                    equivalents differ even when they look close. These rows are
+                    equivalents, not payment schedules.
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* Related tools */}
+            {/* 5 */}
             <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
               <div
                 aria-hidden="true"
@@ -426,36 +384,428 @@ const HowItWorks = () => {
                   </div>
                   <div className="min-w-0">
                     <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
-                      Related rent converters
+                      Common mismatches and how this page treats them
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="mt-4 space-y-4">
+                  <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-slate-900">
+                      Hourly by paid-hours vs time-based hourly
+                    </div>
+                    <p className="mt-2">
+                      Time-based hourly uses 8,760 hours so hourly stays
+                      compatible with daily and weekly equivalents. A paid-hours
+                      model divides by assumed work hours (hours/week × 52) and
+                      will usually be larger because it spreads the same annual
+                      total across fewer hours. If a paid-hours scenario is
+                      shown, it should be labeled as a separate comparison
+                      model, not the default basis.
+                    </p>
+                  </div>
+
+                  <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-slate-900">
+                      Weekly × 4 vs monthly
+                    </div>
+                    <p className="mt-2">
+                      Weekly × 4 is a 28-day amount. Monthly on this page is
+                      annual ÷ 12 (average month under a 365-day year). Because
+                      a month is not fixed at 28 days, weekly × 4 does not match
+                      monthly under this model.
+                    </p>
+                  </div>
+
+                  <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-slate-900">
+                      4-week vs calendar month
+                    </div>
+                    <p className="mt-2">
+                      4-week is always 28 days. Monthly is computed as annual ÷
+                      12. These are different definitions, so they are different
+                      rows.
+                    </p>
+                  </div>
+
+                  <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-slate-900">
+                      “26 payments” vs time-length conversion
+                    </div>
+                    <p className="mt-2">
+                      Payment counts are schedule language. This page converts
+                      by time length under a fixed 365-day year. Outputs are
+                      equivalents, not a statement about payment counts or due
+                      dates.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 6 */}
+            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+              <div
+                aria-hidden="true"
+                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+              />
+              <div className="p-5 sm:px-6">
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 24 24"
+                      className="h-5 w-5 text-sky-600"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M4 7h16M4 12h12M4 17h14"
+                      />
+                    </svg>
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
+                      Examples you can cross-check
                     </h3>
                   </div>
                 </div>
 
                 <div className="mt-4 space-y-3">
                   <p>
-                    If you need a different direction or want to start from a
-                    monthly rate, use a dedicated converter page.
+                    Each example uses the exact formula shown on this page and
+                    an approximate result. Display rounding can change the last
+                    digits without changing the underlying math.
                   </p>
-                  <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
+
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
+                      <div className="text-sm font-bold text-slate-900">
+                        Example 1
+                      </div>
+                      <div className="mt-2 text-sm text-slate-700">
+                        Annual = 24,000
+                      </div>
+                      <div className="mt-1">
+                        Hourly = 24,000 ÷ 8,760 = 2.739726… ≈{" "}
+                        <span className="font-semibold text-slate-900">
+                          2.74
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
+                      <div className="text-sm font-bold text-slate-900">
+                        Example 2
+                      </div>
+                      <div className="mt-2 text-sm text-slate-700">
+                        Annual = 30,000.50
+                      </div>
+                      <div className="mt-1">
+                        Hourly = 30,000.50 ÷ 8,760 = 3.424714… ≈{" "}
+                        <span className="font-semibold text-slate-900">
+                          3.42
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
+                      <div className="text-sm font-bold text-slate-900">
+                        Example 3
+                      </div>
+                      <div className="mt-2 text-sm text-slate-700">
+                        Annual = 18,200
+                      </div>
+                      <div className="mt-1">
+                        Daily = 18,200 ÷ 365 = 49.863013…
+                      </div>
+                      <div className="mt-1">
+                        Hourly = Daily ÷ 24 = 49.863013… ÷ 24 = 2.077625… ≈{" "}
+                        <span className="font-semibold text-slate-900">
+                          2.08
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
+                      <div className="text-sm font-bold text-slate-900">
+                        Example 4 (paid-hours comparison)
+                      </div>
+                      <div className="mt-2 text-sm text-slate-700">
+                        Annual = 30,000, hours/week = 40
+                      </div>
+                      <div className="mt-1">
+                        Paid-hours hourly = 30,000 ÷ (40 × 52) = 14.423076… ≈{" "}
+                        <span className="font-semibold text-slate-900">
+                          14.42
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 7 */}
+            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+              <div
+                aria-hidden="true"
+                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+              />
+              <div className="p-5 sm:px-6">
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 24 24"
+                      className="h-5 w-5 text-sky-600"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M4 6h16M9 6v12m6-12v12"
+                      />
+                    </svg>
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
+                      Input formats and parsing rules
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="mt-4 space-y-3">
+                  <p>
+                    Supported numeric formats are listed below. Currency symbols
+                    are ignored for parsing. Thousands separators are supported.
+                    Ambiguous inputs should be warned or blocked rather than
+                    guessed.
+                  </p>
+
+                  <div className="overflow-hidden rounded-2xl ring-1 ring-slate-200">
+                    <table className="w-full text-sm">
+                      <thead className="bg-slate-50">
+                        <tr>
+                          <th className="text-left font-semibold text-slate-900 px-4 py-3">
+                            Format
+                          </th>
+                          <th className="text-left font-semibold text-slate-900 px-4 py-3">
+                            Examples accepted
+                          </th>
+                          <th className="text-left font-semibold text-slate-900 px-4 py-3">
+                            Notes
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-200">
+                        <tr className="bg-white">
+                          <td className="px-4 py-3">Decimals</td>
+                          <td className="px-4 py-3">30000.50, .5, 12.</td>
+                          <td className="px-4 py-3">
+                            Decimal point supported. Leading dot and trailing
+                            dot supported.
+                          </td>
+                        </tr>
+                        <tr className="bg-white">
+                          <td className="px-4 py-3">Thousands grouping</td>
+                          <td className="px-4 py-3">30,000; 30,000.50</td>
+                          <td className="px-4 py-3">
+                            Commas treated as thousands separators.
+                          </td>
+                        </tr>
+                        <tr className="bg-white">
+                          <td className="px-4 py-3">Currency symbols</td>
+                          <td className="px-4 py-3">$30,000; €30000</td>
+                          <td className="px-4 py-3">
+                            Symbols ignored for parsing.
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <p>
+                    Ambiguous input behavior: if a value can reasonably be read
+                    more than one way (for example “1.200,50” or malformed
+                    grouping like “1,200,50”), the correct behavior is a warning
+                    or block. The tool should not guess and produce a clean
+                    result from a misread number.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* 8 */}
+            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+              <div
+                aria-hidden="true"
+                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+              />
+              <div className="p-5 sm:px-6">
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 24 24"
+                      className="h-5 w-5 text-sky-600"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 3v18M5 12h14"
+                      />
+                    </svg>
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
+                      Rounding and calculation precision
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="mt-4 space-y-3">
+                  <p>
+                    Decimals are preserved internally end to end. Rounding is
+                    display-only. Changing display precision does not change the
+                    underlying math or the annual anchor.
+                  </p>
+                  <p>
+                    If the UI shows fewer decimals for hourly, daily, or monthly
+                    rows, the underlying calculations still use the exact parsed
+                    value and the formulas defined above.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* 9 */}
+            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+              <div
+                aria-hidden="true"
+                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+              />
+              <div className="p-5 sm:px-6">
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 24 24"
+                      className="h-5 w-5 text-sky-600"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M4 7h16M4 12h16M4 17h16"
+                      />
+                    </svg>
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
+                      Scope and limits of this tool
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="mt-4 space-y-3">
+                  <p>
+                    This tool converts only the rent amount you enter. It does
+                    not include fees, utilities, deposits, taxes, insurance,
+                    proration, or discounts. It does not interpret lease terms
+                    or local billing rules.
+                  </p>
+                  <p>
+                    Outputs are equivalences under a fixed time-length model,
+                    not due-date schedules. If the task is determining due dates
+                    or a calendar of payments, use a due-date calculator rather
+                    than period equivalents.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* 10 */}
+            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+              <div
+                aria-hidden="true"
+                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+              />
+              <div className="p-5 sm:px-6">
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 24 24"
+                      className="h-5 w-5 text-sky-600"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M5 12h14"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 5v14"
+                      />
+                    </svg>
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
+                      Related tools (short contextual references only)
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="mt-4 space-y-3">
+                  <p>
+                    For other period conversions that use the same time-length
+                    basis, the{" "}
                     <Link
                       to="/rent-converter"
                       className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
                     >
-                      Rent converter →
-                    </Link>
-                    <Link
-                      to="/monthly-to-hourly-rent-converter"
-                      className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
-                    >
-                      Monthly to hourly →
-                    </Link>
+                      rent converter hub
+                    </Link>{" "}
+                    links the full set. For the inverse direction of this page,
+                    use{" "}
                     <Link
                       to="/hourly-to-annual-rent-converter"
                       className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
                     >
-                      Hourly to annual →
-                    </Link>
-                  </div>
+                      hourly to annual
+                    </Link>{" "}
+                    so the same 8,760-hour basis is applied in reverse. For
+                    comparisons against monthly and weekly, use{" "}
+                    <Link
+                      to="/annual-to-monthly-rent-converter"
+                      className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                    >
+                      annual to monthly
+                    </Link>{" "}
+                    and{" "}
+                    <Link
+                      to="/annual-to-weekly-rent-converter"
+                      className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                    >
+                      annual to weekly
+                    </Link>{" "}
+                    to avoid mixing incompatible shortcuts.
+                  </p>
                 </div>
               </div>
             </div>
@@ -475,16 +825,23 @@ const HowItWorks = () => {
                   Utility note
                 </div>
                 <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight">
-                  Paid-hours is a comparison assumption, not the default model
+                  This is an equivalence converter, not a payment schedule
                 </h3>
                 <p className="mt-3 text-slate-200 leading-7">
-                  Time-based hourly uses all 8,760 hours in a 365-day year so
-                  the hourly value stays consistent with the rest of the
-                  breakdown. Paid-hours divides by (hours/week × 52) and can
-                  produce a much larger number because it spreads the same
-                  annual total across fewer hours. If the paid-hours line is
-                  shown, it should always be clearly labeled as optional.
+                  The hourly result is derived from annual ÷ 8,760 under a
+                  365-day model. It does not determine due dates, invoice
+                  timing, or payment counts within a month. If you need due
+                  dates, use a due-date calculator instead of relying on period
+                  equivalents.
                 </p>
+                <div className="mt-4">
+                  <Link
+                    to="/rent-due-date-calculator"
+                    className="cursor-pointer inline-flex items-center font-semibold text-white hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 rounded-sm"
+                  >
+                    Rent due date calculator →
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
