@@ -711,7 +711,6 @@ export default function HourlyToAnnualRent() {
       : breakdownScaled.annualPaidScaled;
   }, [hourMode, breakdownScaled]);
 
-
   const handlePrint = () => {
     if (typeof window === "undefined") return;
     window.print();
@@ -802,18 +801,6 @@ export default function HourlyToAnnualRent() {
           `,
         }}
       />
-
-      <section className="mt-4 rc-no-print hidden sm:block">
-        <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-600">
-          <a
-            href={safeHref("/")}
-            className="hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
-          >
-            Home
-          </a>{" "}
-          / Hourly to Annual Rent Converter
-        </nav>
-      </section>
 
       <section id="converter" className="mx-auto max-w-6xl px-6 pb-6 mt-4">
         <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block sm:pt-6">
@@ -1508,8 +1495,18 @@ export default function HourlyToAnnualRent() {
           </div>
         </div>
       </section>
-
-      <section id="faq" className="max-w-5xl mx-auto py-16 px-6">
+      <section className="mt-8 mb-4 rc-no-print hidden sm:block">
+        <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-600">
+          <a
+            href={safeHref("/")}
+            className="hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
+          >
+            Home
+          </a>{" "}
+          / Hourly to Annual Rent Converter
+        </nav>
+      </section>
+      <section id="faq" className="max-w-5xl mx-auto pb-16 px-6">
         <h2 className="text-3xl font-bold text-center mb-3 text-sky-800 tracking-tight">
           Frequently Asked Questions
         </h2>

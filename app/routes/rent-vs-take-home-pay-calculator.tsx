@@ -881,15 +881,6 @@ export default function RentVsTakeHomePay() {
         }}
       />
 
-      <section className="mt-4 rc-no-print hidden sm:block">
-        <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-500">
-          <a href={safeHref("/")} className="hover:underline">
-            Home
-          </a>{" "}
-          / {pageName}
-        </nav>
-      </section>
-
       <section id="calculator" className="mx-auto max-w-6xl px-6 pb-6 mt-4">
         <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block sm:pt-6">
           <div className="mb-3 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
@@ -1716,8 +1707,16 @@ export default function RentVsTakeHomePay() {
           </div>
         </div>
       </section>
+      <section className="mt-8 mb-4 hidden sm:block">
+        <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-500">
+          <a href={safeHref("/")} className="hover:underline">
+            Home
+          </a>{" "}
+          / {pageName}
+        </nav>
+      </section>
 
-      <section id="faq" className="max-w-5xl mx-auto py-16 px-6">
+      <section id="faq" className="max-w-5xl mx-auto pb-16 px-6">
         <h2 className="text-3xl font-bold text-center mb-3 text-sky-800 tracking-tight">
           Frequently Asked Questions
         </h2>
