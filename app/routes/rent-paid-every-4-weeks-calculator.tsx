@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Route } from "./+types/rent-paid-every-4-weeks-calculator";
+import Assumptions from "~/client/components/layout/Assumptions";
 
 function safeToFixed(n: number, digits: number): string {
   if (!Number.isFinite(n)) return "-";
@@ -974,19 +975,7 @@ export default function RentPaidEvery4Weeks() {
               </>
             )}
           </div>
-          <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-2 text-sm text-slate-700">
-            <div className="font-semibold">Assumptions used on this page</div>
-            <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
-              <li>1 year = 365 days</li>
-              <li>Biweekly = 14 days</li>
-              <li>4-week rent = 28 days</li>
-              <li>Month = 365 ÷ 12 days (average)</li>
-              <li>
-                This tool does not assume what is included in “rent” (fees,
-                utilities, taxes). Enter the total you want to budget with.
-              </li>
-            </ul>
-          </div>
+          <Assumptions />
         </div>
 
         <div className="md:col-span-6 mt-6">

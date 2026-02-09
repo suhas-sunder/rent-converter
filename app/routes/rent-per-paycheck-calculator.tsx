@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Route } from "./+types/rent-per-paycheck-calculator";
+import Assumptions from "~/client/components/layout/Assumptions";
 
 export const meta: Route.MetaFunction = () => {
   const title = "Rent Per Paycheck Calculator (How Much to Set Aside Each Pay)";
@@ -774,8 +775,6 @@ export default function RentPerPaycheck() {
         }}
       />
 
-
-
       <section id="calculator" className="mx-auto max-w-6xl px-6 pb-6 mt-4">
         <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block sm:pt-6">
           <div className="mb-3 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
@@ -1176,19 +1175,7 @@ export default function RentPerPaycheck() {
             </section>
           ) : null}
 
-          <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-2 text-sm text-slate-700">
-            <div className="font-semibold">Assumptions used on this page</div>
-            <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
-              <li>1 year = 365 days</li>
-              <li>Biweekly = 14 days</li>
-              <li>4-week rent = 28 days</li>
-              <li>Month = 365 ÷ 12 days (average)</li>
-              <li>
-                This tool does not assume what is included in “rent” (fees,
-                utilities, taxes). Enter the total you want to budget with.
-              </li>
-            </ul>
-          </div>
+          <Assumptions />
         </div>
 
         <div className="md:col-span-12 mt-6">
