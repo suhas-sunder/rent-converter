@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Route } from "./+types/weekly-to-monthly-rent-converter";
 import Assumptions from "~/client/components/layout/Assumptions";
+import Rounding from "~/client/components/layout/Rounding";
 
 function safeToFixed(n: number, digits: number): string {
   if (!Number.isFinite(n)) return "—";
@@ -247,6 +248,44 @@ function scaledToDecimalStrings(
   return { negative, intStr: intPart.toString(), fracStr };
 }
 
+/**
+ * Plain (non-currency) formatting for the input preview.
+ * Uses BigInt-only formatting so values never "disappear" due to Number precision limits.
+ */
+function formatPlainNumberFromScaled(
+  scaled: bigint,
+  maxFractionDigits: number,
+): string {
+  const digitsCap = Math.max(0, Math.min(12, maxFractionDigits));
+  const { group, decimal } = getNumberSeparators();
+
+  const negative = scaled < 0n;
+  const a = absBigInt(scaled);
+  const intPart = a / SCALE;
+  const fracPart = a % SCALE;
+
+  let digits = 0;
+  if (digitsCap > 0 && fracPart !== 0n) {
+    const fracFull = fracPart.toString().padStart(12, "0");
+    const trimmed = fracFull.replace(/0+$/g, "");
+    digits = Math.min(digitsCap, Math.max(0, trimmed.length));
+  }
+
+  const { intStr, fracStr } = scaledToDecimalStrings(
+    scaled,
+    digits,
+    true, // trim trailing zeros for preview
+  );
+
+  const groupedInt = groupInt(intStr, group);
+
+  if (digits > 0 && fracStr.length > 0) {
+    return `${negative ? "-" : ""}${groupedInt}${decimal}${fracStr}`;
+  }
+
+  return `${negative ? "-" : ""}${groupedInt}`;
+}
+
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
@@ -318,20 +357,6 @@ function formatCurrencyFromScaled(
   }
 
   return out || "—";
-}
-
-function formatNumberPreviewFromScaled(
-  scaled: bigint,
-  maxFractionDigits: number,
-): string {
-  const n = toNumberSafe(scaled);
-  if (!Number.isFinite(n)) return "";
-  const digits = Math.max(0, Math.min(12, maxFractionDigits));
-  return new Intl.NumberFormat("en-US", {
-    useGrouping: true,
-    minimumFractionDigits: 0,
-    maximumFractionDigits: digits,
-  }).format(n);
 }
 
 /**
@@ -570,8 +595,9 @@ export default function WeeklyToMonthlyRent() {
   }, [amount]);
 
   const amountPreviewValue = useMemo(() => {
-    if (!parsed.ok || !parsed.p.scaled) return amount;
-    return formatNumberPreviewFromScaled(parsed.p.scaled, 12);
+    if (!parsed.ok || parsed.p.scaled === undefined) return amount;
+    // BigInt-only preview so large values never collapse to "" due to float limits.
+    return formatPlainNumberFromScaled(parsed.p.scaled, 12);
   }, [amount, parsed]);
 
   const amountInputValue = isAmountFocused
@@ -795,21 +821,11 @@ export default function WeeklyToMonthlyRent() {
                   </ul>
                 </div>
               ) : null}
-
-              <div className="mt-2">
-                <div className="flex items-center justify-between px-1">
-                  <span className="text-sm font-semibold text-slate-800">
-                    {PERIOD_LABEL.weekly}
-                    <span className="mx-2 text-slate-400">→</span>
-                    {PERIOD_LABEL.monthly}
-                  </span>
-                </div>
-              </div>
             </div>
           </div>
 
           {!parsed.ok ? (
-            <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6">
+            <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 sm:px-6">
               <div className="font-semibold text-slate-900">
                 No results to show
               </div>
@@ -841,7 +857,7 @@ export default function WeeklyToMonthlyRent() {
                 </div>
               ) : null}
 
-              <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
+              <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:px-6 rc-print-block">
                 <div className="flex items-center gap-2">
                   <div
                     className="h-2 w-2 rounded-full bg-sky-600"
@@ -923,40 +939,12 @@ export default function WeeklyToMonthlyRent() {
               Print / Save as PDF
             </button>
           </div>
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <label className="flex items-center gap-2 text-sm text-slate-700">
-              <input
-                type="checkbox"
-                checked={roundDisplay}
-                onChange={(e) => setRoundDisplay(e.target.checked)}
-                className="cursor-pointer h-4 w-4"
-              />
-              Round displayed values (display only)
-            </label>
-
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-slate-500">Displayed decimals</span>
-              <select
-                value={displayDecimals}
-                onChange={(e) => {
-                  const v = Math.trunc(Number(e.target.value));
-                  setDisplayDecimals(
-                    v === 0 || v === 2 || v === 4 || v === 6 ? v : 2,
-                  );
-                }}
-                className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
-              >
-                <option value={0}>0</option>
-                <option value={2}>2</option>
-                <option value={4}>4</option>
-                <option value={6}>6</option>
-              </select>
-            </div>
-          </div>
-          <p className="mt-2 text-xs text-slate-500">
-            Internal math is fixed-point up to 12 decimals. This only changes
-            what is displayed.
-          </p>
+          <Rounding
+            roundDisplay={roundDisplay}
+            setRoundDisplay={setRoundDisplay}
+            displayDecimals={displayDecimals}
+            setDisplayDecimals={setDisplayDecimals as any}
+          />
         </div>
       </section>
 
@@ -1053,7 +1041,7 @@ export default function WeeklyToMonthlyRent() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <div className="flex items-start gap-3">
                     <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
                       <svg
@@ -1125,7 +1113,7 @@ export default function WeeklyToMonthlyRent() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <div className="flex items-start gap-3">
                     <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
                       <svg
@@ -1205,7 +1193,7 @@ export default function WeeklyToMonthlyRent() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <div className="flex items-start gap-3">
                     <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
                       <svg
@@ -1302,7 +1290,7 @@ export default function WeeklyToMonthlyRent() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <div className="flex items-start gap-3">
                     <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
                       <svg

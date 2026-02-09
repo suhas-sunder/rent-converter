@@ -1,6 +1,7 @@
 import { useMemo, useEffect, useRef, useState } from "react";
 import type { Route } from "./+types/monthly-to-biweekly-rent-converter";
 import Assumptions from "~/client/components/layout/Assumptions";
+import Rounding from "~/client/components/layout/Rounding";
 
 function safeToFixed(n: number, digits: number): string {
   if (!Number.isFinite(n)) return "-";
@@ -728,7 +729,7 @@ export default function MonthlyToBiweeklyRent() {
         <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block sm:pt-6">
           <div className="mb-3 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <h1 className="text-2xl sm:text-left text-center capitalize sm:text-4xl text-sky-800 font-bold">
-              Instant monthly to biweekly converter
+              Monthly to biweekly converter
             </h1>
 
             <div className="rc-no-print flex-col sm:flex-row gap-2 hidden md:flex">
@@ -800,7 +801,7 @@ export default function MonthlyToBiweeklyRent() {
             </div>
           </div>
 
-          <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
+          <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:px-6 rc-print-block">
             {!canShowResults || !breakdown ? (
               <div className="rounded-xl border border-slate-200 bg-white p-4">
                 <div className="font-semibold text-slate-800">
@@ -835,13 +836,9 @@ export default function MonthlyToBiweeklyRent() {
                       ["Daily", breakdown.daily, "daily"],
                       ["Weekly", breakdown.weekly, "weekly"],
 
-                      [
-                        "4 weeks (28 days)",
-                        breakdown.every4w,
-                        "every_4_weeks",
-                      ],
+                      ["4 weeks (28 days)", breakdown.every4w, "every_4_weeks"],
                       ["Monthly (average)", breakdown.monthly, "monthly"],
-                      ["Annual (equivalence)", breakdown.annualEquiv, "annual"],
+                      ["Annual", breakdown.annualEquiv, "annual"],
                     ] as const
                   ).map(([label, val, key]) => (
                     <div
@@ -874,9 +871,8 @@ export default function MonthlyToBiweeklyRent() {
                       </div>
                     </div>
                     <p className="mt-2 text-xs text-slate-500">
-                      A 4-week period is 28 days. An average month is about
-                      30.42 days (365 ÷ 12). These are different periods, so
-                      their equivalents can diverge.
+                      28-day 4-week periods vs ~30.42-day months cause different
+                      equivalents.
                     </p>
                   </div>
                 </div>
@@ -898,42 +894,12 @@ export default function MonthlyToBiweeklyRent() {
                 Print / Save as PDF
               </button>
             </div>
-            <div className="text-xs text-slate-500">
-              Rounding (display only)
-            </div>
-            <label className="mt-1 flex items-center gap-2 text-sm text-slate-700">
-              <input
-                type="checkbox"
-                checked={roundDisplay}
-                onChange={(e) => setRoundDisplay(e.target.checked)}
-                className="cursor-pointer h-4 w-4"
-              />
-              Round displayed values
-            </label>
-
-            <div className="mt-3 flex items-center justify-between gap-3">
-              <div className="text-xs text-slate-500">Displayed decimals</div>
-              <select
-                value={displayDecimals}
-                onChange={(e) => {
-                  const v = Number(e.target.value);
-                  setDisplayDecimals(
-                    v === 0 || v === 2 || v === 4 || v === 6 ? v : 2,
-                  );
-                }}
-                className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
-              >
-                <option value={0}>0</option>
-                <option value={2}>2</option>
-                <option value={4}>4</option>
-                <option value={6}>6</option>
-              </select>
-            </div>
-
-            <p className="mt-2 text-xs text-slate-500">
-              Calculations preserve decimals internally (up to 12). If rounding
-              is enabled, displayed values keep exactly the selected decimals.
-            </p>
+            <Rounding
+              roundDisplay={roundDisplay}
+              setRoundDisplay={setRoundDisplay}
+              displayDecimals={displayDecimals}
+              setDisplayDecimals={setDisplayDecimals as any}
+            />
           </div>
         </div>
       </section>
@@ -1023,7 +989,7 @@ export default function MonthlyToBiweeklyRent() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
                     Step 1: Enter the monthly amount
                   </h3>
@@ -1069,7 +1035,7 @@ export default function MonthlyToBiweeklyRent() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
                     Step 2: Convert monthly to a biweekly equivalent
                   </h3>
@@ -1116,7 +1082,7 @@ export default function MonthlyToBiweeklyRent() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
                     How the breakdown stays consistent
                   </h3>
@@ -1157,7 +1123,7 @@ export default function MonthlyToBiweeklyRent() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
                     Equivalence vs payment schedules
                   </h3>
@@ -1202,7 +1168,7 @@ export default function MonthlyToBiweeklyRent() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
                     Printing and saved copies
                   </h3>

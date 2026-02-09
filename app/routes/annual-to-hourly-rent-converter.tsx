@@ -1,6 +1,8 @@
 import { useMemo, useEffect, useRef, useState } from "react";
 import type { Route } from "./+types/annual-to-hourly-rent-converter";
 import Assumptions from "~/client/components/layout/Assumptions";
+import FourWeekVsMonthly from "~/client/components/layout/FourWeekVsMonthly";
+import Rounding from "~/client/components/layout/Rounding";
 
 const SITE_URL = "https://www.rentconverter.com";
 const PAGE_PATH = "/annual-to-hourly-rent-converter";
@@ -868,7 +870,7 @@ export default function AnnualToHourlyRent() {
         <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block sm:pt-6">
           <div className="mb-3 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <h1 className="text-2xl sm:text-left text-center capitalize sm:text-4xl text-sky-800 font-bold">
-              Instant annual to hourly converter
+              Annual to hourly converter
             </h1>
 
             <div className=" rounded-xl border border-slate-200 bg-white p-4 rc-no-print">
@@ -976,20 +978,10 @@ export default function AnnualToHourlyRent() {
                   ))}
                 </select>
               </div>
-
-              <div className="mt-2">
-                <div className="flex items-center px-1">
-                  <span className="text-sm font-semibold text-slate-800">
-                    {PERIOD_LABEL.annual}
-                    <span className="mx-2 text-slate-400">→</span>
-                    {PERIOD_LABEL.hourly}
-                  </span>
-                </div>
-              </div>
             </div>
           </div>
 
-          <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
+          <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:px-6 rc-print-block">
             <div className="flex items-center gap-2">
               <div
                 className="h-2 w-2 rounded-full bg-sky-600"
@@ -1125,30 +1117,14 @@ export default function AnnualToHourlyRent() {
                     </div>
                   ) : null}
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-2">
-                    <div className="text-xs text-slate-500">
-                      4-week vs monthly context
-                    </div>
-                    <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                      <div className="text-sm text-slate-700">
-                        Monthly minus 4-week ={" "}
-                        <strong className="text-slate-900">
-                          {fmt(breakdownScaled!.monthlyMinus4w)}
-                        </strong>
-                      </div>
-                      <div className="text-sm text-slate-700">
-                        Difference ≈{" "}
-                        <strong className="text-slate-900">
-                          {formatPercent(breakdownScaled!.monthlyMinus4wPct, 2)}
-                        </strong>
-                      </div>
-                    </div>
-                    <p className="mt-2 text-xs text-slate-500">
-                      4-week rent is 28 days. This page uses an average month
-                      length of 365 ÷ 12 days (about 30.42). Different lengths
-                      produce different equivalents.
-                    </p>
-                  </div>
+                  {breakdownScaled && (
+                    <FourWeekVsMonthly
+                      monthlyMinus4w={breakdownScaled.monthlyMinus4w}
+                      monthlyMinus4wPct={breakdownScaled.monthlyMinus4wPct}
+                      fmt={fmt}
+                      formatPercent={formatPercent as any}
+                    />
+                  )}
                 </div>
               </>
             )}
@@ -1167,46 +1143,12 @@ export default function AnnualToHourlyRent() {
               Print / Save as PDF
             </button>
           </div>
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <div>
-              <div className="text-xs text-slate-500">
-                Rounding (display only)
-              </div>
-              <label className="mt-1 flex items-center gap-2 text-sm text-slate-700">
-                <input
-                  type="checkbox"
-                  checked={roundDisplay}
-                  onChange={(e) => setRoundDisplay(e.target.checked)}
-                  className="cursor-pointer h-4 w-4"
-                />
-                Round displayed values
-              </label>
-              <p className="mt-1 text-xs text-slate-500">
-                Calculations use up to 12 decimals internally. If enabled,
-                displayed values are rounded to your chosen decimals.
-              </p>
-            </div>
-
-            <div className="sm:text-right">
-              <div className="text-xs text-slate-500">Displayed decimals</div>
-              <select
-                value={displayDecimals}
-                onChange={(e) => {
-                  const v = Math.trunc(Number(e.target.value));
-                  setDisplayDecimals(
-                    v === 0 || v === 2 || v === 4 || v === 6 ? v : 2,
-                  );
-                }}
-                className="mt-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
-                aria-label="Displayed decimals"
-              >
-                <option value={0}>0</option>
-                <option value={2}>2</option>
-                <option value={4}>4</option>
-                <option value={6}>6</option>
-              </select>
-            </div>
-          </div>
+          <Rounding
+            roundDisplay={roundDisplay}
+            setRoundDisplay={setRoundDisplay}
+            displayDecimals={displayDecimals}
+            setDisplayDecimals={setDisplayDecimals as any}
+          />
         </div>
       </section>
 
@@ -1301,7 +1243,7 @@ export default function AnnualToHourlyRent() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <div className="flex items-start gap-3">
                     <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
                       <svg
@@ -1371,7 +1313,7 @@ export default function AnnualToHourlyRent() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <div className="flex items-start gap-3">
                     <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
                       <svg
@@ -1448,7 +1390,7 @@ export default function AnnualToHourlyRent() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <div className="flex items-start gap-3">
                     <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
                       <svg
@@ -1516,7 +1458,7 @@ export default function AnnualToHourlyRent() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <div className="flex items-start gap-3">
                     <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
                       <svg
@@ -1619,7 +1561,7 @@ export default function AnnualToHourlyRent() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <div className="flex items-start gap-3">
                     <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
                       <svg

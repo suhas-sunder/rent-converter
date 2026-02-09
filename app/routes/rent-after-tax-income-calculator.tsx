@@ -1,6 +1,7 @@
 import { useMemo, useEffect, useRef, useState } from "react";
 import type { Route } from "./+types/rent-after-tax-income-calculator";
 import Assumptions from "~/client/components/layout/Assumptions";
+import Rounding from "~/client/components/layout/Rounding";
 function safeToFixed(n: number, digits: number): string {
   if (!Number.isFinite(n)) return "-";
   return n.toFixed(digits);
@@ -964,7 +965,7 @@ export default function RentAfterTaxIncome() {
                   className="col-span-7 rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!taxParsed.ok}
                 />
-                <div className="cursor-pointer col-span-5 rounded-xl border border-slate-200 bg-white px-4 py-2 flex items-center text-sm font-semibold text-slate-700">
+                <div className="col-span-5 rounded-xl bg-white py-2 flex items-center text-sm font-bold text-slate-700">
                   %
                 </div>
               </div>
@@ -1045,7 +1046,7 @@ export default function RentAfterTaxIncome() {
                     isCurrency(e.target.value) ? e.target.value : "USD",
                   )
                 }
-                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-lg font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                 aria-label="Currency"
               >
                 {SUPPORTED_CURRENCIES.map((c) => (
@@ -1057,7 +1058,7 @@ export default function RentAfterTaxIncome() {
             </div>
           </div>
 
-          <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
+          <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:px-6 rc-print-block">
             {!computed.ok ? (
               <div className="rounded-xl border border-slate-200 bg-white p-4">
                 <div className="font-semibold text-slate-800">
@@ -1129,14 +1130,17 @@ export default function RentAfterTaxIncome() {
                     </div>
                   </div>
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-2 rc-print-block">
-                    <div className="text-xs text-slate-500">
-                      Monthly vs every 4 weeks (derived from annual totals)
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-3 py-2 rc-print-block">
+                    <div className="text-[11px] text-slate-500">
+                      Monthly vs 4-week (from annual totals)
                     </div>
+
                     <div className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-                      <div className="text-sm text-slate-700">
-                        Net per month (avg):{" "}
-                        <strong className="text-slate-900">
+                      <div className="rounded-lg border border-slate-200 bg-white/50 px-3 py-2">
+                        <div className="text-[11px] text-slate-600">
+                          Net · monthly
+                        </div>
+                        <div className="mt-0.5 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
                           {fmtMoney(
                             convertScaled(
                               computed.annualNet,
@@ -1144,11 +1148,14 @@ export default function RentAfterTaxIncome() {
                               "monthly",
                             ),
                           )}
-                        </strong>
+                        </div>
                       </div>
-                      <div className="text-sm text-slate-700">
-                        Net per 4 weeks:{" "}
-                        <strong className="text-slate-900">
+
+                      <div className="rounded-lg border border-slate-200 bg-white/50 px-3 py-2">
+                        <div className="text-[11px] text-slate-600">
+                          Net · 4-week
+                        </div>
+                        <div className="mt-0.5 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
                           {fmtMoney(
                             convertScaled(
                               computed.annualNet,
@@ -1156,11 +1163,14 @@ export default function RentAfterTaxIncome() {
                               "every_4_weeks",
                             ),
                           )}
-                        </strong>
+                        </div>
                       </div>
-                      <div className="text-sm text-slate-700">
-                        Rent per month (avg):{" "}
-                        <strong className="text-slate-900">
+
+                      <div className="rounded-lg border border-slate-200 bg-white/50 px-3 py-2">
+                        <div className="text-[11px] text-slate-600">
+                          Rent · monthly
+                        </div>
+                        <div className="mt-0.5 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
                           {fmtMoney(
                             convertScaled(
                               computed.annualRent,
@@ -1168,11 +1178,14 @@ export default function RentAfterTaxIncome() {
                               "monthly",
                             ),
                           )}
-                        </strong>
+                        </div>
                       </div>
-                      <div className="text-sm text-slate-700">
-                        Rent per 4 weeks:{" "}
-                        <strong className="text-slate-900">
+
+                      <div className="rounded-lg border border-slate-200 bg-white/50 px-3 py-2">
+                        <div className="text-[11px] text-slate-600">
+                          Rent · 4-week
+                        </div>
+                        <div className="mt-0.5 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
                           {fmtMoney(
                             convertScaled(
                               computed.annualRent,
@@ -1180,11 +1193,12 @@ export default function RentAfterTaxIncome() {
                               "every_4_weeks",
                             ),
                           )}
-                        </strong>
+                        </div>
                       </div>
                     </div>
-                    <p className="mt-2 text-xs text-slate-500">
-                      Every 4 weeks is 28 days. An average month is{" "}
+
+                    <p className="mt-1.5 text-[11px] text-slate-500">
+                      4-week = 28 days. Avg month ={" "}
                       {safeToFixed(computed.avgMonthDays, 2)} days (365 ÷ 12).
                     </p>
                   </div>
@@ -1205,7 +1219,7 @@ export default function RentAfterTaxIncome() {
           </div>
 
           {computed.ok ? (
-            <div className="mt-3 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 rc-print-block">
+            <div className="mt-3 rounded-2xl border border-slate-200 bg-white p-5 sm:px-6 rc-print-block">
               <h3 className="text-lg font-bold text-slate-900 mb-3">
                 Full breakdown across periods (annual-equivalent)
               </h3>
@@ -1264,40 +1278,12 @@ export default function RentAfterTaxIncome() {
               Print / Save as PDF
             </button>
           </div>
-          <div className="text-xs text-slate-500">Display</div>
-          <label className="mt-1 flex items-center gap-2 text-sm text-slate-700">
-            <input
-              type="checkbox"
-              checked={roundDisplay}
-              onChange={(e) => setRoundDisplay(e.target.checked)}
-              className="cursor-pointer h-4 w-4"
-            />
-            Round displayed values (display only)
-          </label>
-
-          <div className="mt-3 flex items-center justify-between gap-3">
-            <div className="text-xs text-slate-500">Displayed decimals</div>
-            <select
-              value={displayDecimals}
-              onChange={(e) => {
-                const v = Number(e.target.value);
-                const allowed = new Set<number>([0, 2, 4, 6]);
-                const t = Number.isFinite(v) ? Math.trunc(v) : 2;
-                setDisplayDecimals(allowed.has(t) ? t : 2);
-              }}
-              className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
-            >
-              <option value={0}>0</option>
-              <option value={2}>2</option>
-              <option value={4}>4</option>
-              <option value={6}>6</option>
-            </select>
-          </div>
-
-          <p className="mt-2 text-xs text-slate-500">
-            Calculations preserve decimals internally (up to 12). If rounding is
-            enabled, only displayed values are rounded.
-          </p>
+          <Rounding
+            roundDisplay={roundDisplay}
+            setRoundDisplay={setRoundDisplay}
+            displayDecimals={displayDecimals}
+            setDisplayDecimals={setDisplayDecimals as any}
+          />
         </div>
       </section>
 
@@ -1377,7 +1363,7 @@ export default function RentAfterTaxIncome() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
                     Inputs are validated before results are shown
                   </h3>
@@ -1422,7 +1408,7 @@ export default function RentAfterTaxIncome() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
                     Income and rent are converted through annual totals
                   </h3>
@@ -1466,7 +1452,7 @@ export default function RentAfterTaxIncome() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
                     Net income is estimated using one effective tax rate
                   </h3>
@@ -1509,7 +1495,7 @@ export default function RentAfterTaxIncome() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
                     Rent share and income left are computed on the same annual
                     basis
@@ -1558,7 +1544,7 @@ export default function RentAfterTaxIncome() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
                     Rounding and numeric precision
                   </h3>

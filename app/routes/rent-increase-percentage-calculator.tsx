@@ -1,6 +1,7 @@
 import { useMemo, useEffect, useRef, useState } from "react";
 import type { Route } from "./+types/rent-increase-percentage-calculator";
 import Assumptions from "~/client/components/layout/Assumptions";
+import Rounding from "~/client/components/layout/Rounding";
 
 export const meta: Route.MetaFunction = () => {
   const title = "Rent Increase Percentage Calculator (Old vs New Rent)";
@@ -324,6 +325,28 @@ function formatCurrencyFromScaled(
   return out || "-";
 }
 
+function formatPercentFromScaled(
+  percentScaled: bigint,
+  decimals: number,
+): string {
+  const d = Math.max(0, Math.min(12, decimals));
+  const rounded = roundScaledToDecimals(percentScaled, d);
+
+  const { group, decimal } = getNumberSeparators();
+  const { negative, intStr, fracStr } = scaledToDecimalStrings(
+    rounded,
+    d,
+    false,
+  );
+
+  const groupedInt = groupInt(intStr, group);
+  if (d === 0) return `${negative ? "-" : ""}${groupedInt}`;
+  return `${negative ? "-" : ""}${groupedInt}${decimal}${fracStr.padEnd(
+    d,
+    "0",
+  )}`;
+}
+
 function groupIntEnUS(intStr: string): string {
   const s = intStr.replace(/^0+(?=\d)/, "");
   return s.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -492,12 +515,13 @@ function mulDivRound(a: bigint, num: bigint, den: bigint): bigint {
 }
 
 function fromAnnualScaled(annualScaled: bigint, to: Period): bigint {
-  if (to === "hourly") return annualScaled / (365n * 24n);
-  if (to === "daily") return annualScaled / 365n;
+  // IMPORTANT: use rounded division (not truncation) to preserve cents and higher precision
+  if (to === "hourly") return mulDivRound(annualScaled, 1n, 365n * 24n);
+  if (to === "daily") return mulDivRound(annualScaled, 1n, 365n);
   if (to === "weekly") return mulDivRound(annualScaled, 7n, 365n);
   if (to === "biweekly") return mulDivRound(annualScaled, 14n, 365n);
   if (to === "every_4_weeks") return mulDivRound(annualScaled, 28n, 365n);
-  if (to === "monthly") return annualScaled / 12n;
+  if (to === "monthly") return mulDivRound(annualScaled, 1n, 12n);
   return annualScaled;
 }
 
@@ -511,10 +535,7 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   }
 }
 
-function safeParseDisplayDecimals(
-  raw: string | null,
-  fallback: number,
-): number {
+function safeParseDisplayDecimals(raw: string | null, fallback: number): number {
   if (raw === null) return fallback;
   const n = Number(raw);
   if (!Number.isFinite(n)) return fallback;
@@ -602,24 +623,12 @@ export default function RentIncreasePercentage() {
   useEffect(() => {
     if (oldFocused) return;
     setOldDisplay(oldParsed.ok ? formatPreviewFromParsed(oldParsed) : oldRent);
-  }, [
-    oldRent,
-    oldParsed.ok,
-    oldParsed.scaled,
-    oldParsed.normalized,
-    oldFocused,
-  ]);
+  }, [oldRent, oldParsed.ok, oldParsed.scaled, oldParsed.normalized, oldFocused]);
 
   useEffect(() => {
     if (newFocused) return;
     setNewDisplay(newParsed.ok ? formatPreviewFromParsed(newParsed) : newRent);
-  }, [
-    newRent,
-    newParsed.ok,
-    newParsed.scaled,
-    newParsed.normalized,
-    newFocused,
-  ]);
+  }, [newRent, newParsed.ok, newParsed.scaled, newParsed.normalized, newFocused]);
 
   const fmtMoney = (scaled: bigint) =>
     formatCurrencyFromScaled(scaled, currency, roundDisplay, displayDecimals);
@@ -645,21 +654,22 @@ export default function RentIncreasePercentage() {
     const annualNewScaled = annualizeFromScaled(newScaled, period);
     const annualDeltaScaled = annualNewScaled - annualOldScaled;
 
-    const annualOld = toNumberSafe(annualOldScaled);
-    const annualNew = toNumberSafe(annualNewScaled);
-    const annualDelta = toNumberSafe(annualDeltaScaled);
-
-    let pct: number | null = null;
+    // Percent calculation in bigint fixed-point to avoid float precision and NaN.
+    let pctScaled: bigint | null = null;
+    let pctDisplay: string | null = null;
     let pctNote: string | null = null;
 
-    if (annualOld > 0) {
-      pct = (annualDelta / annualOld) * 100;
-    } else if (annualNew > 0) {
-      pct = null;
-      pctNote =
-        "Percent increase is not meaningful when the starting rent is 0.";
+    if (annualOldScaled > 0n) {
+      // pct = (annualDelta / annualOld) * 100
+      pctScaled = mulDivRound(annualDeltaScaled, 100n * SCALE, annualOldScaled);
+      pctDisplay = `${formatPercentFromScaled(pctScaled, 2)}%`;
+    } else if (annualNewScaled > 0n) {
+      pctScaled = null;
+      pctDisplay = null;
+      pctNote = "Percent increase is not meaningful when the starting rent is 0.";
     } else {
-      pct = 0;
+      pctScaled = 0n;
+      pctDisplay = `${formatPercentFromScaled(0n, 2)}%`;
     }
 
     const periods: Period[] = [
@@ -691,6 +701,14 @@ export default function RentIncreasePercentage() {
 
     const deltaPerSelectedPeriodScaled = newScaled - oldScaled;
 
+    // Keep these numbers for any future use, but do not rely on them for percent.
+    const _annualOld = toNumberSafe(annualOldScaled);
+    const _annualNew = toNumberSafe(annualNewScaled);
+    const _annualDelta = toNumberSafe(annualDeltaScaled);
+    void _annualOld;
+    void _annualNew;
+    void _annualDelta;
+
     return {
       ok: true as const,
       warnings,
@@ -699,7 +717,8 @@ export default function RentIncreasePercentage() {
       annualNewScaled,
       annualDeltaScaled,
 
-      pct,
+      pctScaled,
+      pctDisplay,
       pctNote,
 
       breakdown,
@@ -977,7 +996,7 @@ export default function RentIncreasePercentage() {
           </div>
 
           <div
-            className="mt-3 rounded-2xl border border-slate-200 border-l-4 border-l-sky-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block"
+            className="mt-3 rounded-2xl border border-slate-200 border-l-4 border-l-sky-200 bg-[#f7fbff] p-5 sm:px-6 rc-print-block"
             role="region"
             aria-label="Results"
             aria-live="polite"
@@ -1020,9 +1039,7 @@ export default function RentIncreasePercentage() {
 
                 <div className="mt-2 flex flex-col gap-2">
                   <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700 tabular-nums ">
-                    {computed.pct === null
-                      ? "N/A"
-                      : `${safeToFixed(computed.pct, 2)}%`}
+                    {computed.pctDisplay ?? "N/A"}
                   </div>
                 </div>
 
@@ -1075,10 +1092,7 @@ export default function RentIncreasePercentage() {
                         Weekly difference:{" "}
                         <strong className="text-slate-900 tabular-nums">
                           {fmtMoney(
-                            fromAnnualScaled(
-                              computed.annualNewScaled,
-                              "weekly",
-                            ) -
+                            fromAnnualScaled(computed.annualNewScaled, "weekly") -
                               fromAnnualScaled(
                                 computed.annualOldScaled,
                                 "weekly",
@@ -1089,44 +1103,55 @@ export default function RentIncreasePercentage() {
                     </div>
                   </div>
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-2.5 shadow-sm">
-                    <div className="text-xs text-slate-600">
-                      Monthly vs every 4 weeks (old and new)
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-3 py-2">
+                    <div className="text-[11px] text-slate-600">
+                      Monthly vs 4-week (old/new)
                     </div>
+
                     <div className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-                      <div className="text-sm text-slate-800">
-                        Old (monthly avg):{" "}
-                        <strong className="text-slate-900 tabular-nums">
+                      <div className="rounded-lg border border-slate-200 bg-white/50 px-3 py-2">
+                        <div className="text-[11px] text-slate-600">
+                          Old · monthly
+                        </div>
+                        <div className="mt-0.5 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
                           {fmtMoney(computed.oldMonthlyAvgScaled)}
-                        </strong>
+                        </div>
                       </div>
-                      <div className="text-sm text-slate-800">
-                        Old (4 weeks):{" "}
-                        <strong className="text-slate-900 tabular-nums">
+
+                      <div className="rounded-lg border border-slate-200 bg-white/50 px-3 py-2">
+                        <div className="text-[11px] text-slate-600">
+                          Old · 4-week
+                        </div>
+                        <div className="mt-0.5 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
                           {fmtMoney(computed.old4wScaled)}
-                        </strong>
+                        </div>
                       </div>
-                      <div className="text-sm text-slate-800">
-                        New (monthly avg):{" "}
-                        <strong className="text-slate-900 tabular-nums">
+
+                      <div className="rounded-lg border border-slate-200 bg-white/50 px-3 py-2">
+                        <div className="text-[11px] text-slate-600">
+                          New · monthly
+                        </div>
+                        <div className="mt-0.5 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
                           {fmtMoney(computed.newMonthlyAvgScaled)}
-                        </strong>
+                        </div>
                       </div>
-                      <div className="text-sm text-slate-800">
-                        New (4 weeks):{" "}
-                        <strong className="text-slate-900 tabular-nums">
+
+                      <div className="rounded-lg border border-slate-200 bg-white/50 px-3 py-2">
+                        <div className="text-[11px] text-slate-600">
+                          New · 4-week
+                        </div>
+                        <div className="mt-0.5 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
                           {fmtMoney(computed.new4wScaled)}
-                        </strong>
+                        </div>
                       </div>
                     </div>
 
-                    <p className="mt-2 text-xs text-slate-600">
-                      A 4-week period is 28 days. An average month is{" "}
+                    <p className="mt-1.5 text-[11px] text-slate-600">
+                      4-week = 28 days. Avg month ={" "}
                       <span className="tabular-nums">
                         {safeToFixed(computed.avgMonthDays, 2)}
                       </span>{" "}
-                      days (365 ÷ 12). The difference here is shown explicitly:
-                      old{" "}
+                      days. Δ month−4w: old{" "}
                       <span className="tabular-nums">
                         {fmtMoney(computed.oldMonthMinus4wScaled)}
                       </span>
@@ -1139,7 +1164,7 @@ export default function RentIncreasePercentage() {
                   </div>
                 </div>
 
-                <div className="mt-3 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 rc-print-block shadow-sm">
+                <div className="mt-3 rounded-2xl border border-slate-200 bg-white p-5 sm:px-6 rc-print-block shadow-sm">
                   <h3 className="text-lg font-bold text-slate-900 mb-3">
                     Full breakdown across periods (annual-equivalent)
                   </h3>
@@ -1216,42 +1241,12 @@ export default function RentIncreasePercentage() {
                 Print / Save as PDF
               </button>
             </div>
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <label className="flex items-center gap-2 text-sm text-slate-800">
-                <input
-                  type="checkbox"
-                  checked={roundDisplay}
-                  onChange={(e) => setRoundDisplay(e.target.checked)}
-                  className="cursor-pointer h-4 w-4 rounded border-slate-300 text-sky-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-                />
-                Round displayed values (display only)
-              </label>
-
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-slate-600">
-                  Displayed decimals
-                </span>
-                <select
-                  value={displayDecimals}
-                  onChange={(e) =>
-                    setDisplayDecimals(
-                      safeParseDisplayDecimals(e.target.value, 2),
-                    )
-                  }
-                  className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus:border-sky-600"
-                >
-                  <option value={0}>0</option>
-                  <option value={2}>2</option>
-                  <option value={4}>4</option>
-                  <option value={6}>6</option>
-                </select>
-              </div>
-            </div>
-
-            <p className="mt-2 text-xs text-slate-600">
-              Calculations preserve decimals internally (up to 12). Only the
-              displayed values are rounded.
-            </p>
+                <Rounding
+                      roundDisplay={roundDisplay}
+                      setRoundDisplay={setRoundDisplay}
+                      displayDecimals={displayDecimals}
+                      setDisplayDecimals={setDisplayDecimals as any}
+                    />
           </div>
         </div>
       </section>
@@ -1260,10 +1255,7 @@ export default function RentIncreasePercentage() {
         id="how-it-works"
         className="relative overflow-hidden rounded-3xl bg-white ring-1 ring-slate-200/70 shadow-sm rc-no-print"
       >
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0"
-        >
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0">
           <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-sky-100/60 blur-3xl" />
           <div className="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-slate-100/70 blur-3xl" />
           <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-sky-300/60 to-transparent" />
@@ -1329,7 +1321,7 @@ export default function RentIncreasePercentage() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
                     1) Old and new rents use the same billing period
                   </h3>
@@ -1371,7 +1363,7 @@ export default function RentIncreasePercentage() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
                     2) Both rents are normalized to annual totals
                   </h3>
@@ -1421,7 +1413,7 @@ export default function RentIncreasePercentage() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
                     3) Percent change is computed from annual totals
                   </h3>
@@ -1461,7 +1453,7 @@ export default function RentIncreasePercentage() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
                     4) Outputs: percentage, period difference, annual impact,
                     and breakdown
@@ -1513,7 +1505,7 @@ export default function RentIncreasePercentage() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
                     5) Decimals and rounding
                   </h3>

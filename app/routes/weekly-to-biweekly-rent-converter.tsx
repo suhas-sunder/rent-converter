@@ -1,6 +1,8 @@
+// weekly-to-biweekly-rent-converter.tsx
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Route } from "./+types/weekly-to-biweekly-rent-converter";
 import Assumptions from "~/client/components/layout/Assumptions";
+import Rounding from "~/client/components/layout/Rounding";
 
 function safeToFixed(n: number, digits: number): string {
   if (!Number.isFinite(n)) return "—";
@@ -186,16 +188,8 @@ function clampScaled(v: bigint, min: bigint, max: bigint): bigint {
   return v;
 }
 
-const MAX_SAFE_INT_FOR_NUMBER = 9_000_000_000_000_000n; // ~9e15, JS Number integer precision limit
-
 function absBigInt(x: bigint): bigint {
   return x < 0n ? -x : x;
-}
-
-function toNumberSafe(scaled: bigint): number {
-  const a = absBigInt(scaled);
-  if (a > MAX_SAFE_INT_FOR_NUMBER) return Number.NaN;
-  return Number(scaled) / Number(SCALE);
 }
 
 function groupInt(intStr: string, groupSep: string): string {
@@ -246,6 +240,32 @@ function scaledToDecimalStrings(
   return { negative, intStr: intPart.toString(), fracStr };
 }
 
+function formatPlainNumberFromScaled(
+  scaled: bigint,
+  fractionDigits: number,
+  trimTrailingZeros: boolean,
+): string {
+  const digits = Math.max(0, Math.min(12, Math.trunc(fractionDigits)));
+  const { group, decimal } = getNumberSeparators();
+  const { negative, intStr, fracStr } = scaledToDecimalStrings(
+    scaled,
+    digits,
+    trimTrailingZeros,
+  );
+  const groupedInt = groupInt(intStr, group);
+
+  let out = negative ? "-" : "";
+  out += groupedInt;
+
+  if (digits > 0 && fracStr.length > 0) {
+    out += decimal + fracStr;
+  } else if (!trimTrailingZeros && digits > 0) {
+    out += decimal + "0".repeat(digits);
+  }
+
+  return out;
+}
+
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
@@ -257,7 +277,6 @@ function formatCurrencyFromScaled(
   if (roundDisplay) {
     digits = Math.max(0, Math.min(12, displayDecimals));
   } else {
-    // Show up to 12 decimals but trim trailing zeros for display.
     const a = absBigInt(scaled);
     const fracPart = a % SCALE;
     if (fracPart === 0n) {
@@ -277,7 +296,7 @@ function formatCurrencyFromScaled(
   const { negative, intStr, fracStr } = scaledToDecimalStrings(
     scaledForDisplay,
     digits,
-    !roundDisplay, // trim only when not rounding to fixed digits
+    !roundDisplay,
   );
 
   const groupedInt = groupInt(intStr, group);
@@ -289,7 +308,6 @@ function formatCurrencyFromScaled(
     maximumFractionDigits: digits,
   });
 
-  // Build by parts so we keep locale currency placement and symbols without using floats for the value.
   const parts = fmt.formatToParts(-1);
   let out = "";
   for (const p of parts) {
@@ -302,7 +320,6 @@ function formatCurrencyFromScaled(
       continue;
     }
     if (p.type === "group") {
-      // We already grouped ourselves.
       continue;
     }
     if (p.type === "decimal") {
@@ -482,20 +499,6 @@ function getRawFractionDigitsForPreview(raw: string): number | null {
   return Math.max(0, Math.min(maxDec, frac.length));
 }
 
-function formatNumberPreviewFromScaled(
-  scaled: bigint,
-  fractionDigits: number,
-): string {
-  const n = toNumberSafe(scaled);
-  if (!Number.isFinite(n)) return "";
-  const digits = Math.max(0, Math.min(12, Math.trunc(fractionDigits)));
-  return new Intl.NumberFormat("en-US", {
-    useGrouping: true,
-    minimumFractionDigits: digits,
-    maximumFractionDigits: digits,
-  }).format(n);
-}
-
 function mulDivRound(a: bigint, num: bigint, den: bigint): bigint {
   if (den === 0n) return 0n;
   const sign =
@@ -649,7 +652,7 @@ export default function WeeklyToBiweeklyRent() {
     const monthlyMinus4w = monthly - fourWeeks;
     const monthlyMinus4wPct =
       fourWeeks !== 0n
-        ? toNumberSafe(monthlyMinus4w) / toNumberSafe(fourWeeks)
+        ? Number(monthlyMinus4w) / Number(fourWeeks)
         : Number.NaN;
 
     // Payment-count illustrations (calendar counts) vs day-based annual equivalence
@@ -693,17 +696,18 @@ export default function WeeklyToBiweeklyRent() {
 
   const amountDisplayValue = useMemo(() => {
     if (amountFocused) return amount;
-
     if (!amountBlurred) return amount;
-
     if (amountBlurError) return amount;
-
     if (!parsed.ok) return amount;
+
+    const scaled = parsed.p.scaled;
+    if (scaled === undefined) return amount;
 
     const fd = getRawFractionDigitsForPreview(amount);
     if (fd === null) return amount;
 
-    return formatNumberPreviewFromScaled(parsed.p.scaled as bigint, fd);
+    // bigint formatting so large values never become "" (disappear)
+    return formatPlainNumberFromScaled(scaled, fd, fd === 0);
   }, [amountFocused, amountBlurred, amountBlurError, amount, parsed]);
 
   useEffect(() => {
@@ -846,7 +850,7 @@ export default function WeeklyToBiweeklyRent() {
               <div className="flex gap-2">
                 <input
                   inputMode="decimal"
-                  value={amountDisplayValue}
+                  value={amountDisplayValue || amount}
                   onChange={(e) => setAmount(e.target.value)}
                   onFocus={() => setAmountFocused(true)}
                   onBlur={() => {
@@ -886,27 +890,20 @@ export default function WeeklyToBiweeklyRent() {
               </div>
 
               {amountBlurred && amountBlurError ? (
-                <div className="mt-2 text-sm text-rose-700 font-semibold">
+                <div
+                  id="rc-wtbw-amount-error"
+                  className="mt-2 text-sm text-rose-700 font-semibold"
+                >
                   {amountBlurError}
                 </div>
               ) : null}
-
-              <div className="mt-2">
-                <div className="flex items-center justify-between px-1">
-                  <span className="text-sm font-semibold text-slate-800">
-                    {PERIOD_LABEL.weekly}
-                    <span className="mx-2 text-slate-400">→</span>
-                    {PERIOD_LABEL.biweekly}
-                  </span>
-                </div>
-              </div>
             </div>
           </div>
 
           {!parsed.ok ? (
             <div
               id="rc-wtbw-errors"
-              className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6"
+              className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 sm:px-6"
             >
               <div className="font-semibold text-slate-900">
                 No results to show
@@ -939,7 +936,7 @@ export default function WeeklyToBiweeklyRent() {
                 </div>
               ) : null}
 
-              <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
+              <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:px-6 rc-print-block">
                 <div className="flex items-center gap-2">
                   <div
                     className="h-2 w-2 rounded-full bg-sky-600"
@@ -1022,40 +1019,12 @@ export default function WeeklyToBiweeklyRent() {
               Print / Save as PDF
             </button>
           </div>
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <label className="flex items-center gap-2 text-sm text-slate-700">
-              <input
-                type="checkbox"
-                checked={roundDisplay}
-                onChange={(e) => setRoundDisplay(e.target.checked)}
-                className="cursor-pointer h-4 w-4"
-              />
-              Round displayed values (display only)
-            </label>
-
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-slate-500">Displayed decimals</span>
-              <select
-                value={displayDecimals}
-                onChange={(e) => {
-                  const v = Math.trunc(Number(e.target.value));
-                  setDisplayDecimals(
-                    v === 0 || v === 2 || v === 4 || v === 6 ? v : 2,
-                  );
-                }}
-                className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
-              >
-                <option value={0}>0</option>
-                <option value={2}>2</option>
-                <option value={4}>4</option>
-                <option value={6}>6</option>
-              </select>
-            </div>
-          </div>
-          <p className="mt-2 text-xs text-slate-500">
-            Internal math is fixed-point up to 12 decimals. This only changes
-            what is displayed.
-          </p>
+          <Rounding
+            roundDisplay={roundDisplay}
+            setRoundDisplay={setRoundDisplay}
+            displayDecimals={displayDecimals}
+            setDisplayDecimals={setDisplayDecimals as any}
+          />
         </div>
       </section>
 
@@ -1149,7 +1118,7 @@ export default function WeeklyToBiweeklyRent() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <div className="flex items-start gap-3">
                     <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
                       <svg
@@ -1220,7 +1189,7 @@ export default function WeeklyToBiweeklyRent() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <div className="flex items-start gap-3">
                     <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
                       <svg
@@ -1298,7 +1267,7 @@ export default function WeeklyToBiweeklyRent() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <div className="flex items-start gap-3">
                     <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
                       <svg

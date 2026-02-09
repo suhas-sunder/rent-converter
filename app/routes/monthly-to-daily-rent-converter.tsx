@@ -1,6 +1,7 @@
 import { useMemo, useEffect, useRef, useState } from "react";
 import type { Route } from "./+types/monthly-to-daily-rent-converter";
 import Assumptions from "~/client/components/layout/Assumptions";
+import Rounding from "~/client/components/layout/Rounding";
 
 function safeToFixed(n: number, digits: number): string {
   if (!Number.isFinite(n)) return "-";
@@ -772,20 +773,10 @@ export default function MonthlyToDailyRent() {
                   </ul>
                 </div>
               ) : null}
-
-              <div className="mt-2">
-                <div className="flex items-center justify-between px-1">
-                  <span className="text-sm font-semibold text-slate-800">
-                    {PERIOD_LABEL.monthly}
-                    <span className="mx-2 text-slate-400">→</span>
-                    {PERIOD_LABEL.daily}
-                  </span>
-                </div>
-              </div>
             </div>
           </div>
 
-          <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
+          <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:px-6 rc-print-block">
             {!canShowResults || !breakdown ? (
               <div className="rounded-xl border border-slate-200 bg-white p-4">
                 <div className="font-semibold text-slate-800">
@@ -804,7 +795,7 @@ export default function MonthlyToDailyRent() {
                     aria-hidden="true"
                   />
                   <div className="text-sm font-semibold text-slate-800">
-                    Daily equivalent (365-day basis)
+                    Daily
                   </div>
                 </div>
 
@@ -819,18 +810,10 @@ export default function MonthlyToDailyRent() {
                     [
                       ["Hourly", breakdown.hourly, "hourly"],
                       ["Weekly", breakdown.weekly, "weekly"],
-                      [
-                        "2 weeks (14 days)",
-                        breakdown.biweekly,
-                        "biweekly",
-                      ],
-                      [
-                        "4 weeks (28 days)",
-                        breakdown.every4w,
-                        "every_4_weeks",
-                      ],
+                      ["2 weeks (14 days)", breakdown.biweekly, "biweekly"],
+                      ["4 weeks (28 days)", breakdown.every4w, "every_4_weeks"],
                       ["Monthly (average)", breakdown.monthly, "monthly"],
-                      ["Annual (equivalence)", breakdown.annualEquiv, "annual"],
+                      ["Annual", breakdown.annualEquiv, "annual"],
                     ] as const
                   ).map(([label, val, key]) => (
                     <div
@@ -863,8 +846,8 @@ export default function MonthlyToDailyRent() {
                       </div>
                     </div>
                     <p className="mt-2 text-xs text-slate-500">
-                      This uses an average month length (365 ÷ 12 days). A
-                      4-week period is 28 days, so the totals diverge over time.
+                      28-day 4-week periods vs ~30.42-day months cause different
+                      equivalents.
                     </p>
                   </div>
                 </div>
@@ -885,37 +868,12 @@ export default function MonthlyToDailyRent() {
               Print / Save as PDF
             </button>
           </div>
-          <div className="text-xs text-slate-500">Display</div>
-          <label className="mt-1 flex items-center gap-2 text-sm text-slate-700">
-            <input
-              type="checkbox"
-              checked={roundDisplay}
-              onChange={(e) => setRoundDisplay(e.target.checked)}
-              className="cursor-pointer h-4 w-4"
-            />
-            Round displayed values (display only)
-          </label>
-
-          <div className="mt-3 flex items-center justify-between gap-3">
-            <div className="text-xs text-slate-500">Displayed decimals</div>
-            <select
-              value={displayDecimals}
-              onChange={(e) =>
-                setDisplayDecimals(strictReadDisplayDecimals(e.target.value))
-              }
-              className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
-            >
-              <option value={0}>0</option>
-              <option value={2}>2</option>
-              <option value={4}>4</option>
-              <option value={6}>6</option>
-            </select>
-          </div>
-
-          <p className="mt-2 text-xs text-slate-500">
-            Calculations preserve decimals internally (up to 12). If rounding is
-            enabled, displayed values keep exactly the selected decimals.
-          </p>
+          <Rounding
+            roundDisplay={roundDisplay}
+            setRoundDisplay={setRoundDisplay}
+            displayDecimals={displayDecimals}
+            setDisplayDecimals={setDisplayDecimals as any}
+          />
         </div>
       </section>
 
@@ -1008,7 +966,7 @@ export default function MonthlyToDailyRent() {
                     aria-hidden="true"
                     className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                   />
-                  <div className="p-5 sm:p-6">
+                  <div className="p-5 sm:px-6">
                     <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
                       Step 1: Enter the monthly rent amount
                     </h3>
@@ -1055,7 +1013,7 @@ export default function MonthlyToDailyRent() {
                     aria-hidden="true"
                     className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                   />
-                  <div className="p-5 sm:p-6">
+                  <div className="p-5 sm:px-6">
                     <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
                       Step 2: Convert monthly to daily using a 365-day basis
                     </h3>
@@ -1109,7 +1067,7 @@ export default function MonthlyToDailyRent() {
                     aria-hidden="true"
                     className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                   />
-                  <div className="p-5 sm:p-6">
+                  <div className="p-5 sm:px-6">
                     <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
                       Step 3: Keep the breakdown consistent and keep rounding
                       honest
@@ -1245,7 +1203,7 @@ export default function MonthlyToDailyRent() {
                     aria-hidden="true"
                     className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                   />
-                  <div className="p-5 sm:p-6">
+                  <div className="p-5 sm:px-6">
                     <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
                       The page anchors everything to a single annual reference
                     </h3>
@@ -1283,7 +1241,7 @@ export default function MonthlyToDailyRent() {
                 </div>
 
                 <div className="rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
-                  <div className="p-5 sm:p-6">
+                  <div className="p-5 sm:px-6">
                     <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
                       Why a daily equivalent is practical
                     </h3>
@@ -1309,7 +1267,7 @@ export default function MonthlyToDailyRent() {
                 </div>
 
                 <div className="rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
-                  <div className="p-5 sm:p-6">
+                  <div className="p-5 sm:px-6">
                     <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
                       4-week billing versus monthly billing
                     </h3>

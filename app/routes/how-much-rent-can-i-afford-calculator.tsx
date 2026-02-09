@@ -1,6 +1,7 @@
 import { useMemo, useEffect, useRef, useState } from "react";
 import type { Route } from "./+types/how-much-rent-can-i-afford-calculator";
 import Assumptions from "~/client/components/layout/Assumptions";
+import Rounding from "~/client/components/layout/Rounding";
 
 function safeToFixed(n: number, digits: number): string {
   if (!Number.isFinite(n)) return "-";
@@ -59,7 +60,7 @@ const PERIOD_LABEL: Record<Period, string> = {
   weekly: "Weekly",
   biweekly: "2 weeks",
   every_4_weeks: "4 weeks (28 days)",
-  monthly: "Monthly (average, 365 ÷ 12)",
+  monthly: "Monthly (average)",
   annual: "Annual",
 };
 
@@ -882,7 +883,7 @@ export default function HowMuchRentCanIAfford() {
             </div>
           </div>
 
-          <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block border-l-4 border-l-sky-200">
+          <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:x-6 rc-print-block border-l-4 border-l-sky-200">
             <div className="flex items-center gap-2">
               <div
                 className="h-2 w-2 rounded-full bg-sky-600"
@@ -904,7 +905,7 @@ export default function HowMuchRentCanIAfford() {
               </div>
             ) : (
               <>
-                <div className="mt-6 grid gap-4 sm:grid-cols-3 rc-print-block">
+                <div className="mt-3 grid gap-4 sm:grid-cols-3 rc-print-block">
                   {affordability!.map((row) => (
                     <div
                       key={row.ratio}
@@ -965,42 +966,15 @@ export default function HowMuchRentCanIAfford() {
               Print / Save as PDF
             </button>
           </div>
-          <div className="text-xs text-slate-600">Rounding (display only)</div>
 
-          <label className="mt-1 flex items-center gap-2 text-sm text-slate-800">
-            <input
-              type="checkbox"
-              checked={roundDisplay}
-              onChange={(e) => setRoundDisplay(e.target.checked)}
-              className="cursor-pointer h-4 w-4 accent-sky-600 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
-            />
-            Round displayed values
-          </label>
-
-          <div className="mt-3 flex items-center justify-between gap-3">
-            <div className="text-xs text-slate-600">Displayed decimals</div>
-            <select
-              value={displayDecimals}
-              onChange={(e) =>
-                setDisplayDecimals(normalizeDisplayDecimals(e.target.value))
-              }
-              className="rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm font-semibold text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus:border-sky-500"
-              aria-label="Displayed decimals"
-            >
-              <option value={0}>0</option>
-              <option value={2}>2</option>
-              <option value={4}>4</option>
-              <option value={6}>6</option>
-            </select>
-          </div>
-
-          <p className="mt-2 text-sm text-slate-600 leading-relaxed">
-            Calculations use up to 12 decimals internally. If rounding is
-            enabled, displayed values keep exactly your chosen decimals.
-          </p>
+          <Rounding
+            roundDisplay={roundDisplay}
+            setRoundDisplay={setRoundDisplay}
+            displayDecimals={displayDecimals}
+            setDisplayDecimals={setDisplayDecimals as any}
+          />
         </div>
       </section>
-
       <section
         id="how-it-works"
         className="relative overflow-hidden rounded-3xl bg-white ring-1 ring-slate-200/70 shadow-sm rc-no-print"
@@ -1087,7 +1061,7 @@ export default function HowMuchRentCanIAfford() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
                     Step 1: Enter income and choose the pay period
                   </h3>
@@ -1154,7 +1128,7 @@ export default function HowMuchRentCanIAfford() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
                     Step 2: Annualize income using a single daily basis
                   </h3>
@@ -1201,7 +1175,7 @@ export default function HowMuchRentCanIAfford() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
                     Step 3: Apply rent-share targets to the annualized income
                   </h3>
@@ -1259,7 +1233,7 @@ export default function HowMuchRentCanIAfford() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
                     Step 4: Convert targets back into familiar pay and billing
                     cycles
@@ -1306,7 +1280,7 @@ export default function HowMuchRentCanIAfford() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
                     Printing and related pages
                   </h3>

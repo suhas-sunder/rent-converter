@@ -1,6 +1,7 @@
 import { useMemo, useEffect, useRef, useState } from "react";
 import type { Route } from "./+types/monthly-to-weekly-rent-converter";
 import Assumptions from "~/client/components/layout/Assumptions";
+import Rounding from "~/client/components/layout/Rounding";
 
 function safeToFixed(n: number, digits: number): string {
   if (!Number.isFinite(n)) return "-";
@@ -751,20 +752,10 @@ export default function MonthlyToWeeklyRent() {
                   </ul>
                 </div>
               ) : null}
-
-              <div className="mt-2">
-                <div className="flex items-center justify-between px-1">
-                  <span className="text-sm font-semibold text-slate-800">
-                    {PERIOD_LABEL.monthly}
-                    <span className="mx-2 text-slate-400">→</span>
-                    {PERIOD_LABEL.weekly}
-                  </span>
-                </div>
-              </div>
             </div>
           </div>
 
-          <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block min-h-[240px]">
+          <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:px-6 rc-print-block min-h-[240px]">
             {!canShowResults || !breakdown ? (
               <div className="rounded-xl border border-slate-200 bg-white p-4">
                 <div className="font-semibold text-slate-800">
@@ -783,7 +774,7 @@ export default function MonthlyToWeeklyRent() {
                     aria-hidden="true"
                   />
                   <div className="text-sm font-semibold text-slate-800">
-                    Weekly equivalent (365-day basis)
+                    Weekly
                   </div>
                 </div>
 
@@ -798,18 +789,10 @@ export default function MonthlyToWeeklyRent() {
                     [
                       ["Hourly", breakdown.hourly, "hourly"],
                       ["Daily", breakdown.daily, "daily"],
-                      [
-                        "2 weeks (14 days)",
-                        breakdown.biweekly,
-                        "biweekly",
-                      ],
-                      [
-                        "4 weeks (28 days)",
-                        breakdown.every4w,
-                        "every_4_weeks",
-                      ],
+                      ["2 weeks (14 days)", breakdown.biweekly, "biweekly"],
+                      ["4 weeks (28 days)", breakdown.every4w, "every_4_weeks"],
                       ["Monthly (average)", breakdown.monthly, "monthly"],
-                      ["Annual (equivalence)", breakdown.annualEquiv, "annual"],
+                      ["Annual", breakdown.annualEquiv, "annual"],
                     ] as const
                   ).map(([label, val, key]) => (
                     <div
@@ -842,9 +825,8 @@ export default function MonthlyToWeeklyRent() {
                       </div>
                     </div>
                     <p className="mt-2 text-xs text-slate-500 leading-relaxed">
-                      A 4-week period is 28 days. An average month is about
-                      30.42 days (365 ÷ 12). Different periods can produce
-                      different annual totals.
+                      28-day 4-week periods vs ~30.42-day months cause different
+                      equivalents.
                     </p>
                   </div>
                 </div>
@@ -865,40 +847,12 @@ export default function MonthlyToWeeklyRent() {
               Print / Save as PDF
             </button>
           </div>
-          <label className="mt-1 flex items-center gap-2 text-sm text-slate-700">
-            <input
-              type="checkbox"
-              checked={roundDisplay}
-              onChange={(e) => setRoundDisplay(e.target.checked)}
-              className="cursor-pointer h-4 w-4 accent-sky-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded"
-            />
-            Round displayed values (display only)
-          </label>
-
-          <div className="mt-3 flex items-center justify-between gap-3">
-            <div className="text-xs text-slate-500">Displayed decimals</div>
-            <select
-              value={displayDecimals}
-              onChange={(e) => {
-                const n = Math.trunc(Number(e.target.value));
-                setDisplayDecimals(
-                  n === 0 || n === 2 || n === 4 || n === 6 ? n : 2,
-                );
-              }}
-              className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
-              aria-label="Displayed decimals"
-            >
-              <option value={0}>0</option>
-              <option value={2}>2</option>
-              <option value={4}>4</option>
-              <option value={6}>6</option>
-            </select>
-          </div>
-
-          <p className="mt-2 text-xs text-slate-500">
-            Calculations preserve decimals internally (up to 12). If rounding is
-            enabled, only the displayed values are rounded.
-          </p>
+          <Rounding
+            roundDisplay={roundDisplay}
+            setRoundDisplay={setRoundDisplay}
+            displayDecimals={displayDecimals}
+            setDisplayDecimals={setDisplayDecimals as any}
+          />
         </div>
       </section>
 
@@ -990,7 +944,7 @@ export default function MonthlyToWeeklyRent() {
                     aria-hidden="true"
                     className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                   />
-                  <div className="p-5 sm:p-6">
+                  <div className="p-5 sm:px-6">
                     <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
                       Step 1: Enter the monthly rent amount
                     </h3>
@@ -1036,7 +990,7 @@ export default function MonthlyToWeeklyRent() {
                     aria-hidden="true"
                     className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                   />
-                  <div className="p-5 sm:p-6">
+                  <div className="p-5 sm:px-6">
                     <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
                       Step 2: Convert monthly into a weekly equivalent (7-day
                       basis)
@@ -1091,7 +1045,7 @@ export default function MonthlyToWeeklyRent() {
                     aria-hidden="true"
                     className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                   />
-                  <div className="p-5 sm:p-6">
+                  <div className="p-5 sm:px-6">
                     <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
                       Step 3: Keep the breakdown consistent and keep rounding
                       separate
@@ -1203,7 +1157,7 @@ export default function MonthlyToWeeklyRent() {
 
               <div className="mt-8 space-y-6 text-lg text-slate-700 leading-7">
                 <div className="rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
-                  <div className="p-5 sm:p-6">
+                  <div className="p-5 sm:px-6">
                     <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
                       What the weekly number represents
                     </h3>
@@ -1224,7 +1178,7 @@ export default function MonthlyToWeeklyRent() {
                 </div>
 
                 <div className="rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
-                  <div className="p-5 sm:p-6">
+                  <div className="p-5 sm:px-6">
                     <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
                       Why 28-day billing creates “almost monthly” prices
                     </h3>

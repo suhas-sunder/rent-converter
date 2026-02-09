@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Route } from "./+types/rent-due-date-calculator";
 import Assumptions from "~/client/components/layout/Assumptions";
+import Rounding from "~/client/components/layout/Rounding";
 
 export const meta: Route.MetaFunction = () => {
   const title = "Rent Due Date Calculator (Next Due Date + Payment Schedule)";
@@ -1175,7 +1176,7 @@ export default function RentDueDateCalculator() {
             </div>
           </div>
 
-          <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
+          <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:px-6 rc-print-block">
             {!computed.ok ? (
               <div className="rounded-xl border border-slate-200 bg-white p-4">
                 <div className="font-semibold text-slate-800">
@@ -1445,40 +1446,12 @@ export default function RentDueDateCalculator() {
                 Print / Save as PDF
               </button>
             </div>
-            <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <label className="flex items-center gap-2 text-sm text-slate-700">
-                <input
-                  type="checkbox"
-                  checked={roundDisplay}
-                  onChange={(e) => setRoundDisplay(e.target.checked)}
-                  className="cursor-pointer h-4 w-4"
-                />
-                Round displayed values (display only)
-              </label>
-
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-slate-500">
-                  Displayed decimals
-                </span>
-                <select
-                  value={displayDecimals}
-                  onChange={(e) =>
-                    setDisplayDecimals(parseDisplayDecimals(e.target.value))
-                  }
-                  className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
-                >
-                  <option value={0}>0</option>
-                  <option value={2}>2</option>
-                  <option value={4}>4</option>
-                  <option value={6}>6</option>
-                </select>
-              </div>
-            </div>
-
-            <p className="mt-2 text-xs text-slate-500">
-              Calculations preserve decimals internally (up to 12). Only the
-              display is rounded.
-            </p>
+            <Rounding
+              roundDisplay={roundDisplay}
+              setRoundDisplay={setRoundDisplay}
+              displayDecimals={displayDecimals}
+              setDisplayDecimals={setDisplayDecimals as any}
+            />
           </div>
         </div>
       </section>
@@ -1553,7 +1526,7 @@ export default function RentDueDateCalculator() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
                     1) Rent per payment is multiplied by due dates in range
                   </h3>
@@ -1580,7 +1553,7 @@ export default function RentDueDateCalculator() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
                     2) Billing cycles define how the next due date is generated
                   </h3>
@@ -1644,7 +1617,7 @@ export default function RentDueDateCalculator() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
                     3) As-of date and horizon control what appears in the
                     schedule
@@ -1680,7 +1653,7 @@ export default function RentDueDateCalculator() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
                     4) Monthly totals are calendar rollups, not conversions
                   </h3>
@@ -1721,7 +1694,7 @@ export default function RentDueDateCalculator() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
                     5) Rounding is display-only
                   </h3>
@@ -1789,7 +1762,7 @@ export default function RentDueDateCalculator() {
               </div>
 
               <div className="mt-10 rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-2xl font-extrabold text-sky-900 tracking-tight">
                     Related pages
                   </h3>

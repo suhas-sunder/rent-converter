@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Route } from "./+types/rent-vs-buy-calculator";
 import Assumptions from "~/client/components/layout/Assumptions";
+import Rounding from "~/client/components/layout/Rounding";
 
 function safeToFixed(n: number, digits: number): string {
   if (!Number.isFinite(n)) return "—";
@@ -1483,7 +1484,7 @@ export default function RentVsBuyCalculator() {
           </div>
 
           {!parsed.ok ? (
-            <div className="mt-3 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6">
+            <div className="mt-3 rounded-2xl border border-slate-200 bg-white p-5 sm:px-6">
               <div className="font-semibold text-slate-900">
                 No results to show
               </div>
@@ -1647,8 +1648,8 @@ export default function RentVsBuyCalculator() {
               ) : null}
             </>
           )}
-         <Assumptions />
         </div>
+         <Assumptions />
 
         <div className="mb-6  rounded-2xl border border-slate-200 bg-white p-5 rc-no-print mt-6">
           <div className="rc-no-print md:hidden flex flex-col sm:flex-row gap-2 mb-4">
@@ -1660,42 +1661,12 @@ export default function RentVsBuyCalculator() {
               Print / Save as PDF
             </button>
           </div>
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <label className="flex items-center gap-2 text-sm text-slate-700">
-              <input
-                type="checkbox"
-                checked={roundDisplay}
-                onChange={(e) => setRoundDisplay(e.target.checked)}
-                className="cursor-pointer h-4 w-4"
-              />
-              Round displayed values (display only)
-            </label>
-
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-slate-500">Displayed decimals</span>
-              <select
-                value={displayDecimals}
-                onChange={(e) => {
-                  const n = Number(e.target.value);
-                  const t = Math.trunc(n);
-                  setDisplayDecimals(
-                    t === 0 || t === 2 || t === 4 || t === 6 ? t : 2,
-                  );
-                }}
-                className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
-              >
-                <option value={0}>0</option>
-                <option value={2}>2</option>
-                <option value={4}>4</option>
-                <option value={6}>6</option>
-              </select>
-            </div>
-          </div>
-
-          <p className="mt-2 text-xs text-slate-500">
-            Internal math is fixed-point up to 12 decimals. This control only
-            changes what is displayed.
-          </p>
+             <Rounding
+                   roundDisplay={roundDisplay}
+                   setRoundDisplay={setRoundDisplay}
+                   displayDecimals={displayDecimals}
+                   setDisplayDecimals={setDisplayDecimals as any}
+                 />
         </div>
       </section>
 
@@ -1786,7 +1757,7 @@ export default function RentVsBuyCalculator() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <div className="flex items-start gap-3">
                     <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
                       <svg
@@ -1853,7 +1824,7 @@ export default function RentVsBuyCalculator() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <div className="flex items-start gap-3">
                     <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
                       <svg
@@ -1928,7 +1899,7 @@ export default function RentVsBuyCalculator() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <div className="flex items-start gap-3">
                     <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
                       <svg
@@ -2001,7 +1972,7 @@ export default function RentVsBuyCalculator() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <div className="flex items-start gap-3">
                     <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
                       <svg

@@ -1,6 +1,7 @@
 import { useMemo, useEffect, useRef, useState } from "react";
 import type { Route } from "./+types/biweekly-to-annual-rent-converter";
 import Assumptions from "~/client/components/layout/Assumptions";
+import Rounding from "~/client/components/layout/Rounding";
 
 function safeToFixed(n: number, digits: number): string {
   if (!Number.isFinite(n)) return "-";
@@ -54,16 +55,6 @@ type Period =
   | "every_4_weeks"
   | "monthly"
   | "annual";
-
-const PERIOD_LABEL: Record<Period, string> = {
-  hourly: "Hourly",
-  daily: "Daily",
-  weekly: "Weekly",
-  biweekly: "2 weeks (14 days)",
-  every_4_weeks: "4 weeks (28 days)",
-  monthly: "Monthly (average, 365 ÷ 12)",
-  annual: "Annual",
-};
 
 // Internal link whitelist
 const ROUTE_WHITELIST = new Set<string>([
@@ -704,7 +695,7 @@ export default function BiweeklyToAnnualRent() {
         <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block sm:pt-6">
           <div className="mb-3 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <h1 className="text-2xl sm:text-left text-center capitalize sm:text-4xl text-sky-800 font-bold">
-              Instant biweekly to annual conversion
+              Biweekly to annual converter
             </h1>
 
             <div className="rc-no-print flex-col sm:flex-row gap-2 hidden md:flex">
@@ -779,21 +770,11 @@ export default function BiweeklyToAnnualRent() {
                   </ul>
                 </div>
               ) : null}
-
-              <div className="mt-2">
-                <div className="flex items-center justify-between  px-1">
-                  <span className="text-sm font-semibold text-slate-800">
-                    {PERIOD_LABEL.biweekly}
-                    <span className="mx-2 text-slate-400">→</span>
-                    {PERIOD_LABEL.annual}
-                  </span>
-                </div>
-              </div>
             </div>
           </div>
 
           <div
-            className="mt-7 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block shadow-[0_1px_0_rgba(2,132,199,0.06)] relative overflow-hidden"
+            className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:px-6 rc-print-block shadow-[0_1px_0_rgba(2,132,199,0.06)] relative overflow-hidden"
             role="status"
             aria-live="polite"
             aria-atomic="true"
@@ -863,63 +844,62 @@ export default function BiweeklyToAnnualRent() {
                       </div>
                     ))}
 
-                    <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-2.5 shadow-sm">
-                      <div className="text-xs text-slate-600">
-                        Payment-count context (26 vs 365 ÷ 14)
+                    <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-3 py-2">
+                      <div className="text-[11px] text-slate-600">
+                        Payment count: 26 vs 365 ÷ 14
                       </div>
 
-                      <div className="mt-3 grid gap-2 sm:grid-cols-3">
-                        <div className="rounded-xl border border-slate-200 bg-emerald-50 px-4 py-2 shadow-[0_1px_0_rgba(15,23,42,0.02)]">
-                          <div className="text-xs text-slate-600">
-                            Biweekly × 26 (common shortcut)
+                      <div className="mt-2 grid gap-2 sm:grid-cols-3">
+                        <div className="rounded-lg border border-slate-200 bg-white/50 px-3 py-2">
+                          <div className="text-[11px] text-slate-600">
+                            Biweekly × 26
                           </div>
-                          <div className="mt-1 text-sm font-bold text-slate-900 rc-tabular">
+                          <div className="mt-0.5 text-sm font-bold text-slate-900 rc-tabular">
                             <span className="rc-amount">
                               {fmt(breakdownScaled!.annualVia26)}
                             </span>
                           </div>
-                          <div className="mt-1 text-xs text-slate-600">
-                            26 cycles used as a schedule count
+                          <div className="mt-0.5 text-[11px] text-slate-600">
+                            26 scheduled cycles
                           </div>
                         </div>
 
-                        <div className="rounded-xl border border-slate-200 bg-emerald-50 px-4 py-2 shadow-[0_1px_0_rgba(15,23,42,0.02)]">
-                          <div className="text-xs text-slate-600">
-                            365-day annual equivalence (this tool)
+                        <div className="rounded-lg border border-slate-200 bg-white/50 px-3 py-2">
+                          <div className="text-[11px] text-slate-600">
+                            365-day annual
                           </div>
-                          <div className="mt-1 text-sm font-bold text-slate-900 rc-tabular">
+                          <div className="mt-0.5 text-sm font-bold text-slate-900 rc-tabular">
                             <span className="rc-amount">
                               {fmt(breakdownScaled!.annualVia365Day)}
                             </span>
                           </div>
-                          <div className="mt-1 text-xs text-slate-600">
-                            Uses 365 ÷ 14 ≈ {safeToFixed(365 / 14, 2)} biweekly
-                            periods
+                          <div className="mt-0.5 text-[11px] text-slate-600">
+                            365 ÷ 14 ≈ {safeToFixed(365 / 14, 2)} periods
                           </div>
                         </div>
 
-                        <div className="rounded-xl border border-slate-200 bg-emerald-50 px-4 py-2 shadow-[0_1px_0_rgba(15,23,42,0.02)]">
-                          <div className="text-xs text-slate-600">
-                            Difference (365-day minus 26x)
+                        <div className="rounded-lg border border-slate-200 bg-white/50 px-3 py-2">
+                          <div className="text-[11px] text-slate-600">
+                            Difference
                           </div>
-                          <div className="mt-1 text-sm font-bold text-slate-900 rc-tabular">
+                          <div className="mt-0.5 text-sm font-bold text-slate-900 rc-tabular">
                             <span className="rc-amount">
                               {fmt(breakdownScaled!.annualDiff)}
                             </span>
                           </div>
-                          <div className="mt-1 text-xs text-slate-600">
+                          <div className="mt-0.5 text-[11px] text-slate-600">
                             ≈{" "}
                             <span className="rc-amount">
                               {formatPercent(breakdownScaled!.annualDiffPct, 2)}
                             </span>{" "}
-                            of 26x
+                            of 26×
                           </div>
                         </div>
                       </div>
 
-                      <p className="mt-3 text-xs sm:text-sm text-slate-600 leading-relaxed">
-                        This comparison is illustrative. Leases may define
-                        schedule counts, proration rules, and due-date handling.
+                      <p className="mt-1.5 text-[11px] text-slate-600">
+                        Illustrative only. Leases may define schedule counts,
+                        proration, and due-date handling.
                       </p>
                     </div>
                   </div>
@@ -941,48 +921,12 @@ export default function BiweeklyToAnnualRent() {
               Print / Save as PDF
             </button>
           </div>
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div className="min-w-0">
-              <div className="text-xs text-slate-600">
-                Rounding (display only)
-              </div>
-              <label className="mt-1 flex items-center gap-2 text-sm sm:text-[0.95rem] text-slate-800">
-                <input
-                  type="checkbox"
-                  checked={roundDisplay}
-                  onChange={(e) => setRoundDisplay(e.target.checked)}
-                  className="cursor-pointer h-4 w-4 rounded border-slate-300 text-sky-600 focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-                />
-                Round displayed values
-              </label>
-              <p className="mt-1 text-xs sm:text-sm text-slate-600 leading-relaxed">
-                Calculations use up to 12 decimals internally. If enabled,
-                displayed values are rounded to your chosen decimals.
-              </p>
-            </div>
-
-            <div className="sm:text-right">
-              <div className="text-xs text-slate-600">Displayed decimals</div>
-              <select
-                value={displayDecimals}
-                onChange={(e) =>
-                  setDisplayDecimals(validateDisplayDecimals(e.target.value))
-                }
-                className={`mt-1 rounded-xl border bg-white px-3 py-2.5 text-sm sm:text-base font-semibold outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus-visible:border-sky-500 ${
-                  roundDisplay
-                    ? "border-slate-300"
-                    : "border-slate-200 text-slate-400 cursor-not-allowed"
-                }`}
-                aria-label="Displayed decimals"
-                disabled={!roundDisplay}
-              >
-                <option value={0}>0</option>
-                <option value={2}>2</option>
-                <option value={4}>4</option>
-                <option value={6}>6</option>
-              </select>
-            </div>
-          </div>
+          <Rounding
+            roundDisplay={roundDisplay}
+            setRoundDisplay={setRoundDisplay}
+            displayDecimals={displayDecimals}
+            setDisplayDecimals={setDisplayDecimals as any}
+          />
         </div>
       </section>
 
@@ -1076,7 +1020,7 @@ export default function BiweeklyToAnnualRent() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <div className="flex items-start gap-3">
                     <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
                       <svg
@@ -1094,14 +1038,9 @@ export default function BiweeklyToAnnualRent() {
                         />
                       </svg>
                     </div>
-                    <div className="min-w-0">
-                      <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
-                        The conversion model (biweekly → daily → annual)
-                      </h3>
-                    </div>
                   </div>
 
-                  <div className="mt-4 space-y-3">
+                  <div className="mt-3 space-y-3">
                     <p>
                       The tool treats your biweekly number as an amount that
                       covers exactly 14 days. It converts that amount into a
@@ -1156,7 +1095,7 @@ export default function BiweeklyToAnnualRent() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <div className="flex items-start gap-3">
                     <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
                       <svg
@@ -1228,7 +1167,7 @@ export default function BiweeklyToAnnualRent() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <div className="flex items-start gap-3">
                     <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
                       <svg

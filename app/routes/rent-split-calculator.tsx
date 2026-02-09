@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Route } from "./+types/rent-split-calculator";
 import Assumptions from "~/client/components/layout/Assumptions";
+import Rounding from "~/client/components/layout/Rounding";
 
 function safeToFixed(n: number, digits: number): string {
   if (!Number.isFinite(n)) return "-";
@@ -958,7 +959,7 @@ export default function RentPerPerson() {
           </div>
 
           <div
-            className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block"
+            className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:px-6 rc-print-block"
             role="region"
             aria-label="Results"
             aria-live="polite"
@@ -1064,7 +1065,7 @@ export default function RentPerPerson() {
                   </div>
                 </div>
 
-                <div className="mt-3 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 rc-print-block shadow-sm">
+                <div className="mt-3 rounded-2xl border border-slate-200 bg-white p-5 sm:px-6 rc-print-block shadow-sm">
                   <h3 className="text-lg font-bold text-slate-950 mb-3">
                     Full breakdown (annual-equivalent totals and per person)
                   </h3>
@@ -1125,47 +1126,12 @@ export default function RentPerPerson() {
                 Print / Save as PDF
               </button>
             </div>
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <label
-                htmlFor={roundId}
-                className="flex items-center gap-2 text-sm text-slate-800"
-              >
-                <input
-                  id={roundId}
-                  type="checkbox"
-                  checked={roundDisplay}
-                  onChange={(e) => setRoundDisplay(e.target.checked)}
-                  className="cursor-pointer h-5 w-5 accent-sky-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2 rounded"
-                />
-                Round displayed values (display only)
-              </label>
-
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-slate-600">
-                  Displayed decimals
-                </span>
-                <select
-                  id={decimalsId}
-                  value={displayDecimals}
-                  onChange={(e) =>
-                    setDisplayDecimals(
-                      safeParseDisplayDecimals(e.target.value, 2),
-                    )
-                  }
-                  className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
-                >
-                  <option value={0}>0</option>
-                  <option value={2}>2</option>
-                  <option value={4}>4</option>
-                  <option value={6}>6</option>
-                </select>
-              </div>
-            </div>
-
-            <p className="mt-2 text-xs text-slate-600 leading-relaxed">
-              Calculations preserve decimals internally (up to 12). Only display
-              rounding changes.
-            </p>
+            <Rounding
+              roundDisplay={roundDisplay}
+              setRoundDisplay={setRoundDisplay}
+              displayDecimals={displayDecimals}
+              setDisplayDecimals={setDisplayDecimals as any}
+            />
           </div>
         </div>
       </section>
@@ -1242,7 +1208,7 @@ export default function RentPerPerson() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
                     1) The split is calculated in your selected rent period
                   </h3>
@@ -1289,7 +1255,7 @@ export default function RentPerPerson() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
                     2) Why the page converts through an annual basis
                   </h3>
@@ -1335,7 +1301,7 @@ export default function RentPerPerson() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
                     3) How to use the breakdown without over-interpreting it
                   </h3>
@@ -1389,7 +1355,7 @@ export default function RentPerPerson() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
                     4) Decimals, rounding, and input handling
                   </h3>
@@ -1456,7 +1422,7 @@ export default function RentPerPerson() {
                   Links to related tools
                 </h3>
 
-                <div className="rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm p-5 sm:p-6">
+                <div className="rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm p-5 sm:px-6">
                   <ul className="list-disc ml-6 text-slate-700 space-y-2">
                     <li>
                       <a

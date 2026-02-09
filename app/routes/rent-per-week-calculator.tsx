@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Route } from "./+types/rent-per-week-calculator";
 import Assumptions from "~/client/components/layout/Assumptions";
+import Rounding from "~/client/components/layout/Rounding";
 
 function safeToFixed(n: number, digits: number): string {
   if (!Number.isFinite(n)) return "-";
@@ -842,7 +843,7 @@ export default function RentPerWeekCalculator() {
           </div>
 
           {!computed.ok ? (
-            <div className="mt-3 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6">
+            <div className="mt-3 rounded-2xl border border-slate-200 bg-white p-5 sm:px-6">
               <div className="font-semibold text-slate-900">
                 No results to show
               </div>
@@ -874,7 +875,7 @@ export default function RentPerWeekCalculator() {
                 </div>
               ) : null}
 
-              <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
+              <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:px-6 rc-print-block">
                 <div className="flex items-center gap-2">
                   <div
                     className="h-2 w-2 rounded-full bg-sky-600"
@@ -1042,43 +1043,12 @@ export default function RentPerWeekCalculator() {
                 Print / Save as PDF
               </button>
             </div>
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <label className="flex items-center gap-2 text-sm text-slate-700">
-                <input
-                  type="checkbox"
-                  checked={roundDisplay}
-                  onChange={(e) => setRoundDisplay(e.target.checked)}
-                  className="cursor-pointer h-4 w-4"
-                />
-                Round displayed values (display only)
-              </label>
-
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-slate-500">
-                  Displayed decimals
-                </span>
-                <select
-                  value={displayDecimals}
-                  onChange={(e) => {
-                    const v = Number(e.target.value);
-                    setDisplayDecimals(
-                      v === 0 || v === 2 || v === 4 || v === 6 ? v : 2,
-                    );
-                  }}
-                  className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none"
-                >
-                  <option value={0}>0</option>
-                  <option value={2}>2</option>
-                  <option value={4}>4</option>
-                  <option value={6}>6</option>
-                </select>
-              </div>
-            </div>
-
-            <p className="mt-2 text-xs text-slate-500">
-              Calculations preserve decimals internally (up to 12). Only display
-              rounding changes.
-            </p>
+            <Rounding
+              roundDisplay={roundDisplay}
+              setRoundDisplay={setRoundDisplay}
+              displayDecimals={displayDecimals}
+              setDisplayDecimals={setDisplayDecimals as any}
+            />
           </div>
         </div>
       </section>
@@ -1156,7 +1126,7 @@ export default function RentPerWeekCalculator() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
                     1) Weekly is computed from a single annual basis
                   </h3>
@@ -1201,7 +1171,7 @@ export default function RentPerWeekCalculator() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
                     2) What the breakdown cards are for
                   </h3>
@@ -1253,7 +1223,7 @@ export default function RentPerWeekCalculator() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
                     3) The “total for a chosen number of weeks” estimator
                   </h3>
@@ -1299,7 +1269,7 @@ export default function RentPerWeekCalculator() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
                     4) Decimals and rounding
                   </h3>

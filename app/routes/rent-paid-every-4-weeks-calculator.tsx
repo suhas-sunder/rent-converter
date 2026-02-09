@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Route } from "./+types/rent-paid-every-4-weeks-calculator";
 import Assumptions from "~/client/components/layout/Assumptions";
+import Rounding from "~/client/components/layout/Rounding";
 
 function safeToFixed(n: number, digits: number): string {
   if (!Number.isFinite(n)) return "-";
@@ -177,7 +178,8 @@ function absBigInt(x: bigint): bigint {
 
 function toNumberSafe(scaled: bigint): number {
   const a = absBigInt(scaled);
-  if (a > MAX_SAFE_INT_FOR_NUMBER) return Number.NaN;
+  const limit = MAX_SAFE_INT_FOR_NUMBER * SCALE;
+  if (a > limit) return Number.NaN;
   return Number(scaled) / Number(SCALE);
 }
 
@@ -227,6 +229,34 @@ function scaledToDecimalStrings(
     }
   }
   return { negative, intStr: intPart.toString(), fracStr };
+}
+
+/**
+ * Preview formatting WITHOUT converting to Number (prevents "disappearing" values on blur).
+ * Uses the user-entered decimal precision inferred from parsed.normalized.
+ */
+function formatNumberPreviewFromParsed(parsed: ParsedScaled): string | null {
+  if (!parsed.ok || typeof parsed.scaled === "undefined") return null;
+
+  const normalized = parsed.normalized ?? "";
+  const dot = normalized.indexOf(".");
+  const decimals =
+    dot >= 0 ? Math.max(0, Math.min(12, normalized.length - dot - 1)) : 0;
+
+  const { group, decimal } = getNumberSeparators();
+  const { negative, intStr, fracStr } = scaledToDecimalStrings(
+    parsed.scaled,
+    decimals,
+    false,
+  );
+
+  const groupedInt = groupInt(intStr, group);
+
+  if (decimals === 0) return `${negative ? "-" : ""}${groupedInt}`;
+  return `${negative ? "-" : ""}${groupedInt}${decimal}${fracStr.padEnd(
+    decimals,
+    "0",
+  )}`;
 }
 
 function formatCurrencyFromScaled(
@@ -300,26 +330,6 @@ function formatCurrencyFromScaled(
   }
 
   return out || "-";
-}
-
-function formatNumberPreviewFromParsed(
-  parsed: ParsedScaled,
-  locale = "en-US",
-): string | null {
-  if (!parsed.ok || typeof parsed.scaled === "undefined") return null;
-
-  const n = toNumberSafe(parsed.scaled);
-  if (!Number.isFinite(n)) return null;
-
-  const normalized = parsed.normalized ?? "";
-  const dot = normalized.indexOf(".");
-  const decimals = dot >= 0 ? Math.max(0, normalized.length - dot - 1) : 0;
-
-  return new Intl.NumberFormat(locale, {
-    useGrouping: true,
-    minimumFractionDigits: decimals,
-    maximumFractionDigits: decimals,
-  }).format(n);
 }
 
 /**
@@ -619,7 +629,7 @@ export default function RentPaidEvery4Weeks() {
   }, [parsed]);
 
   const amountPreviewValue = useMemo(() => {
-    const preview = formatNumberPreviewFromParsed(parsed, "en-US");
+    const preview = formatNumberPreviewFromParsed(parsed);
     return preview ?? amount;
   }, [parsed, amount]);
 
@@ -724,11 +734,11 @@ export default function RentPaidEvery4Weeks() {
       />
 
       <section id="calculator" className="mx-auto max-w-6xl px-6 pb-6 mt-4">
-        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block sm:pt-6">
+        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block sm:pt-4">
           <div className="mb-3 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
               <h1 className="text-2xl sm:text-left text-center capitalize sm:text-4xl text-sky-800 font-bold">
-                Convert 4-week rent to monthly and annual
+                4-week to monthly rent calculator
               </h1>
             </div>
 
@@ -832,22 +842,12 @@ export default function RentPaidEvery4Weeks() {
                   </ul>
                 </div>
               ) : null}
-
-              <div className="md:col-span-6 mt-2">
-                <div className="flex items-center justify-between px-1">
-                  <span className="text-sm font-semibold text-slate-800">
-                    Every 4 weeks (28 days)
-                    <span className="mx-2 text-slate-400">→</span>
-                    Monthly (average, 365 ÷ 12)
-                  </span>
-                </div>
-              </div>
             </div>
           </div>
 
           {/* Results */}
           <div
-            className="mb-6 mt-3 rounded-2xl border border-slate-200 border-l-4 border-l-sky-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block"
+            className=" mt-3 rounded-2xl border border-slate-200 border-l-4 border-l-sky-200 bg-[#f7fbff] p-5 sm:px-6 rc-print-block"
             role="region"
             aria-label="Results"
             aria-live="polite"
@@ -919,43 +919,44 @@ export default function RentPaidEvery4Weeks() {
                     </div>
                   ))}
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-2.5 shadow-sm">
-                    <div className="text-xs text-slate-600">
+                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-3 py-2">
+                    <div className="text-[11px] text-slate-600">
                       4-week vs monthly (same annual basis)
                     </div>
+
                     <div className="mt-2 grid gap-2 sm:grid-cols-3">
-                      <div className="rounded-xl border border-slate-100 bg-emerald-50 px-4 py-2">
-                        <div className="text-xs text-slate-600">
-                          4-week amount
-                        </div>
-                        <div className="mt-1 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
+                      <div className="rounded-lg border border-slate-200 bg-white/50 px-3 py-2">
+                        <div className="text-[11px] text-slate-600">4-week</div>
+                        <div className="mt-0.5 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
                           {fmtMoney(computed.every4wScaled)}
                         </div>
-                        <div className="mt-1 text-xs text-slate-600">
-                          Fixed 28-day period
+                        <div className="mt-0.5 text-[11px] text-slate-600">
+                          28-day period
                         </div>
                       </div>
 
-                      <div className="rounded-xl border border-slate-100 bg-emerald-50 px-4 py-2">
-                        <div className="text-xs text-slate-600">
-                          Monthly equivalent
+                      <div className="rounded-lg border border-slate-200 bg-white/50 px-3 py-2">
+                        <div className="text-[11px] text-slate-600">
+                          Monthly
                         </div>
-                        <div className="mt-1 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
+                        <div className="mt-0.5 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
                           {fmtMoney(computed.monthlyScaled)}
                         </div>
-                        <div className="mt-1 text-xs text-slate-600">
-                          Average month (365 ÷ 12)
+                        <div className="mt-0.5 text-[11px] text-slate-600">
+                          365 ÷ 12 days
                         </div>
                       </div>
 
-                      <div className="rounded-xl border border-slate-100 bg-emerald-50 px-4 py-2">
-                        <div className="text-xs text-slate-600">Difference</div>
-                        <div className="mt-1 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
+                      <div className="rounded-lg border border-slate-200 bg-white/50 px-3 py-2">
+                        <div className="text-[11px] text-slate-600">
+                          Difference
+                        </div>
+                        <div className="mt-0.5 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
                           {fmtMoney(computed.monthlyMinus4wScaled)}
                         </div>
-                        <div className="mt-1 text-xs text-slate-600 tabular-nums">
-                          ≈ {safeToFixed(computed.monthlyMinus4wPct, 2)}% of the
-                          4-week amount
+                        <div className="mt-0.5 text-[11px] text-slate-600 tabular-nums">
+                          ≈ {safeToFixed(computed.monthlyMinus4wPct, 2)}% of
+                          4-week
                         </div>
                       </div>
                     </div>
@@ -989,43 +990,12 @@ export default function RentPaidEvery4Weeks() {
                 Print / Save as PDF
               </button>
             </div>
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <label className="flex items-center gap-2 text-sm text-slate-800 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={roundDisplay}
-                  onChange={(e) => setRoundDisplay(e.target.checked)}
-                  className="cursor-pointer h-4 w-4 rounded border-slate-300 text-sky-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-                />
-                Round displayed values (display only)
-              </label>
-
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-slate-600">
-                  Displayed decimals
-                </span>
-                <select
-                  value={displayDecimals}
-                  onChange={(e) =>
-                    setDisplayDecimals(
-                      coerceDisplayDecimalsFromStorage(e.target.value),
-                    )
-                  }
-                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none transition hover:bg-sky-50 hover:border-sky-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus:border-sky-600"
-                  aria-label="Displayed decimals"
-                >
-                  <option value={0}>0</option>
-                  <option value={2}>2</option>
-                  <option value={4}>4</option>
-                  <option value={6}>6</option>
-                </select>
-              </div>
-            </div>
-
-            <p className="mt-2 text-xs text-slate-600">
-              Calculations preserve decimals internally (up to 12). Only display
-              rounding changes.
-            </p>
+            <Rounding
+              roundDisplay={roundDisplay}
+              setRoundDisplay={setRoundDisplay}
+              displayDecimals={displayDecimals}
+              setDisplayDecimals={setDisplayDecimals as any}
+            />
           </div>
         </div>
       </section>
@@ -1174,7 +1144,6 @@ export default function RentPaidEvery4Weeks() {
           </div>
         </div>
       </section>
-
       <section
         id="how-it-works"
         className="relative overflow-hidden rounded-3xl bg-white ring-1 ring-slate-200/70 shadow-sm rc-no-print mt-8"
@@ -1200,7 +1169,7 @@ export default function RentPaidEvery4Weeks() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
                     A 4-week schedule is a 28-day schedule
                   </h3>
@@ -1225,7 +1194,7 @@ export default function RentPaidEvery4Weeks() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
                     Conversions use an annual total as the source of truth
                   </h3>
@@ -1265,7 +1234,7 @@ export default function RentPaidEvery4Weeks() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
                     The “4-week × 13” comparison is shown separately on purpose
                   </h3>
@@ -1295,7 +1264,7 @@ export default function RentPaidEvery4Weeks() {
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
-                <div className="p-5 sm:p-6">
+                <div className="p-5 sm:px-6">
                   <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
                     Decimals and rounding behavior
                   </h3>
