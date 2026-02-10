@@ -1,3 +1,5 @@
+import { Link } from "react-router";
+
 const HowItWorks = () => {
   return (
     <section
@@ -21,15 +23,16 @@ const HowItWorks = () => {
                 <p className="mt-2 text-slate-600 leading-7 max-w-2xl">
                   This page converts an hourly amount into a monthly equivalent
                   by scaling through a full year. Hourly is treated as a
-                  clock-hour rate unless stated otherwise. Monthly is defined as
-                  one-twelfth of an annual total derived from that hourly input.
+                  clock-hour rate (24 hours per day, 365 days per year). Monthly
+                  is defined as one-twelfth of the annual total produced from
+                  that hourly input.
                 </p>
               </div>
 
               <div className="hidden sm:flex flex-col items-end gap-2 shrink-0">
                 <span className="inline-flex items-center gap-2 rounded-full bg-sky-50 text-sky-700 ring-1 ring-sky-200/70 px-3 py-1 text-xs font-semibold">
                   <span className="h-2 w-2 rounded-full bg-sky-500" />
-                  Hourly = base
+                  Hourly → annual
                 </span>
                 <span className="inline-flex items-center gap-2 rounded-full bg-slate-50 text-slate-700 ring-1 ring-slate-200 px-3 py-1 text-xs font-semibold">
                   <span className="h-2 w-2 rounded-full bg-slate-500" />
@@ -75,6 +78,189 @@ const HowItWorks = () => {
           </div>
 
           <div className="mt-10 space-y-6 text-base text-slate-700 leading-7">
+            {/* SectionCard: related tools (near top) */}
+            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+              <div
+                aria-hidden="true"
+                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+              />
+              <div className="p-5 sm:px-6">
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 24 24"
+                      className="h-5 w-5 text-sky-600"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M5 12h14"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 5v14"
+                      />
+                    </svg>
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
+                      Related tools
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="mt-4 space-y-3">
+                  <p>
+                    If you want a different conversion direction or you want to
+                    compare multiple billing periods side by side, these related
+                    tools may be useful.
+                  </p>
+
+                  <div className="mt-3 text-sm flex flex-wrap gap-x-5 gap-y-2">
+                    <Link
+                      to="/monthly-to-hourly-rent-converter"
+                      className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                    >
+                      Monthly to hourly →
+                    </Link>
+                    <Link
+                      to="/hourly-to-annual-rent-converter"
+                      className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                    >
+                      Hourly to annual →
+                    </Link>
+                    <Link
+                      to="/rent-converter"
+                      className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                    >
+                      Rent converter →
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* SectionCard: examples (directly under related tools) */}
+            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+              <div
+                aria-hidden="true"
+                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+              />
+              <div className="p-5 sm:px-6">
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 24 24"
+                      className="h-5 w-5 text-sky-600"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M4 7h16M4 12h12M4 17h14"
+                      />
+                    </svg>
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
+                      Examples
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="mt-4 space-y-3">
+                  <p>
+                    These examples use the exact formulas shown below. If your
+                    display settings round to fewer decimals, the last digits
+                    may look different, but the underlying math is the same.
+                  </p>
+
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
+                      <div className="text-sm font-bold text-slate-900">
+                        Example 1
+                      </div>
+                      <div className="mt-2 text-sm text-slate-700">
+                        Hourly = 2.50
+                      </div>
+                      <div className="mt-1">
+                        Annual = 2.50 × 24 × 365 ={" "}
+                        <span className="font-semibold text-slate-900">
+                          21,900
+                        </span>
+                      </div>
+                      <div className="mt-1">
+                        Monthly = 21,900 ÷ 12 ={" "}
+                        <span className="font-semibold text-slate-900">
+                          1,825
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
+                      <div className="text-sm font-bold text-slate-900">
+                        Example 2
+                      </div>
+                      <div className="mt-2 text-sm text-slate-700">
+                        Hourly = 3.25
+                      </div>
+                      <div className="mt-1">
+                        Annual = 3.25 × 24 × 365 ={" "}
+                        <span className="font-semibold text-slate-900">
+                          28,470
+                        </span>
+                      </div>
+                      <div className="mt-1">
+                        Monthly = 28,470 ÷ 12 ={" "}
+                        <span className="font-semibold text-slate-900">
+                          2,372.50
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
+                      <div className="text-sm font-bold text-slate-900">
+                        Example 3
+                      </div>
+                      <div className="mt-2 text-sm text-slate-700">
+                        Hourly = 1.10
+                      </div>
+                      <div className="mt-1">
+                        Annual = 1.10 × 24 × 365 ={" "}
+                        <span className="font-semibold text-slate-900">
+                          9,636
+                        </span>
+                      </div>
+                      <div className="mt-1">
+                        Monthly = 9,636 ÷ 12 ={" "}
+                        <span className="font-semibold text-slate-900">
+                          803
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
+                      <div className="text-sm font-bold text-slate-900">
+                        Quick check
+                      </div>
+                      <p className="mt-2 text-sm text-slate-700">
+                        If you double the hourly input, the monthly result
+                        doubles. If you halve hourly, monthly halves.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* SectionCard: core path */}
             <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
               <div
@@ -89,10 +275,9 @@ const HowItWorks = () => {
                 <div className="mt-4 space-y-3">
                   <p>
                     The converter treats the hourly input as a rate that applies
-                    to every hour in the day. That hourly rate is expanded into
-                    a daily amount, then into an annual total. The monthly value
-                    is computed by dividing that annual total into twelve equal
-                    parts.
+                    to every hour in the day. It expands hourly into a daily
+                    amount, then into an annual total, then into a monthly
+                    equivalent.
                   </p>
 
                   <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
@@ -121,16 +306,15 @@ const HowItWorks = () => {
                   </div>
 
                   <p>
-                    This keeps the math reversible. Multiplying the monthly
-                    result by twelve returns the same annual total. Dividing the
-                    annual total by 365 returns the original daily rate implied
-                    by the hourly input.
+                    This keeps the math consistent: monthly × 12 returns the
+                    same annual total, and annual ÷ 365 returns the daily amount
+                    implied by hourly × 24.
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* SectionCard: why hourly needs clarification */}
+            {/* SectionCard: what hourly means */}
             <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
               <div
                 aria-hidden="true"
@@ -138,41 +322,39 @@ const HowItWorks = () => {
               />
               <div className="p-5 sm:px-6">
                 <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
-                  What “hourly” means in this context
+                  What “hourly” means on this page
                 </h3>
 
                 <div className="mt-4 space-y-3">
                   <p>
-                    An hourly number does not, by itself, describe how many
-                    hours apply per day or per year. Without an assumption,
-                    there is no single correct monthly equivalent.
+                    Hourly can mean different things depending on the context.
+                    For rent comparisons, this page uses a simple time-length
+                    meaning: hourly applies to all 24 hours of each day.
                   </p>
+
+                  <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-slate-900">
+                      Good use cases
+                    </div>
+                    <ul className="mt-2 list-disc pl-5 space-y-2">
+                      <li>
+                        Comparing listings that quote different billing periods
+                      </li>
+                      <li>
+                        Turning “per hour” style numbers into a monthly anchor
+                      </li>
+                      <li>
+                        Keeping all breakdown lines consistent with the same
+                        year
+                      </li>
+                    </ul>
+                  </div>
 
                   <p>
-                    This page makes the assumption explicit. Hourly is treated
-                    as a clock-hour rate that applies to all twenty-four hours
-                    of each day. Alternative interpretations, such as paid-hours
-                    schedules, are not used as the primary basis here.
+                    If your hourly rate only applies to specific paid hours each
+                    week, use the rent converter page to compare periods under
+                    your preferred assumptions.
                   </p>
-
-                  <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
-                      <div className="text-sm font-bold text-slate-900">
-                        Included
-                      </div>
-                      <p className="mt-2">
-                        Hourly applies to every hour in the day.
-                      </p>
-                    </div>
-                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
-                      <div className="text-sm font-bold text-slate-900">
-                        Not modeled
-                      </div>
-                      <p className="mt-2">
-                        Work schedules or limited paid hours.
-                      </p>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -190,11 +372,8 @@ const HowItWorks = () => {
 
                 <div className="mt-4 space-y-3">
                   <p>
-                    All period values shown on the page are derived from the
-                    same clock-hour assumption. Daily, weekly, biweekly, and
-                    4-week lines are computed using fixed day counts. Monthly is
-                    derived from the annual total so the year reconciles
-                    cleanly.
+                    All period values shown on the page come from the same daily
+                    and annual basis implied by the hourly input.
                   </p>
 
                   <ul className="list-disc pl-5 space-y-2">
@@ -213,9 +392,8 @@ const HowItWorks = () => {
                   </ul>
 
                   <p>
-                    No value in the breakdown is chained from a rounded
-                    intermediate result. Each line reconciles back to the same
-                    annual figure implied by the hourly input.
+                    Values are derived from the same basis so comparisons do not
+                    drift across the table.
                   </p>
                 </div>
               </div>
@@ -234,10 +412,9 @@ const HowItWorks = () => {
 
                 <div className="mt-4 space-y-3">
                   <p>
-                    Hourly inputs are parsed as decimal values. Thousands
-                    separators are treated as grouping characters. Currency
-                    symbols may be present and are ignored during numeric
-                    parsing.
+                    Hourly inputs are parsed as decimal values. Commas are
+                    treated as thousands separators. Currency symbols may be
+                    present and are ignored during numeric parsing.
                   </p>
 
                   <ul className="list-disc pl-5 space-y-2">
@@ -254,16 +431,8 @@ const HowItWorks = () => {
                   </ul>
 
                   <p>
-                    Computation preserves precision internally, up to twelve
-                    decimal places. Rounding, if enabled, affects display only.
-                    When rounding is disabled, additional decimals remain
-                    visible for close comparisons.
-                  </p>
-
-                  <p>
-                    If an input could reasonably be interpreted in more than one
-                    way, the tool shows a warning or error instead of producing
-                    a misleading result.
+                    Decimals are preserved in computation. If the UI rounds
+                    values, it should only change display formatting.
                   </p>
                 </div>
               </div>
@@ -304,14 +473,14 @@ const HowItWorks = () => {
                 <div className="text-sm font-semibold text-sky-300">
                   Utility note
                 </div>
-                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-800">
-                  Monthly here is an average, not a schedule
+                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-200">
+                  Monthly here is an average month
                 </h3>
                 <p className="mt-3 text-slate-200 leading-7">
-                  This page produces a monthly equivalent derived from an hourly
-                  rate via an annual total. It does not attempt to model billing
-                  dates or work schedules. If you need schedule-based
-                  assumptions, use a paid-hours or due-date tool instead.
+                  This page converts by fixed time lengths: 24 hours per day and
+                  365 days per year, then annual ÷ 12 for monthly. It is for
+                  comparing value across periods, not for predicting billing
+                  dates.
                 </p>
               </div>
             </div>

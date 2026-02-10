@@ -79,7 +79,137 @@ const HowItWorks = () => {
               </div>
             </div>
           </div>
+          {/* SectionCard: related tools + EXAMPLES (examples must live here) */}
+          <div className="group mt-8 relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+            <div
+              aria-hidden="true"
+              className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+            />
+            <div className="p-5 sm:px-6">
+              <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
+                Related tools and examples
+              </h3>
 
+              <div className="mt-4 space-y-4">
+                <p>
+                  If you need other rent period equivalents under the same fixed
+                  time-length definitions, use these:
+                </p>
+
+                <div className="text-sm flex flex-wrap gap-x-5 gap-y-2">
+                  <Link
+                    to="/rent-converter"
+                    className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                  >
+                    Rent converter →
+                  </Link>
+                  <Link
+                    to="/biweekly-to-annual-rent-converter"
+                    className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                  >
+                    Biweekly to annual →
+                  </Link>
+                  <Link
+                    to="/biweekly-to-monthly-rent-converter"
+                    className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                  >
+                    Biweekly to monthly →
+                  </Link>
+                  <Link
+                    to="/rent-due-date-calculator"
+                    className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                  >
+                    Rent due date calculator →
+                  </Link>
+                </div>
+
+                <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                  <div className="text-sm font-bold text-slate-900">
+                    Examples you can cross-check
+                  </div>
+                  <p className="mt-2 text-sm text-slate-600">
+                    Weekly is exact here because 14 days ÷ 2 = 7 days.
+                  </p>
+
+                  <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4">
+                      <div className="text-sm font-bold text-slate-900">
+                        Example 1
+                      </div>
+                      <div className="mt-2 text-sm text-slate-700">
+                        Biweekly = 1,000
+                      </div>
+                      <div className="mt-1">
+                        Weekly = 1,000 ÷ 2 ={" "}
+                        <span className="font-semibold text-slate-900">
+                          500.00
+                        </span>
+                      </div>
+                      <div className="mt-1 text-sm text-slate-600">
+                        Daily = 1,000 ÷ 14 = 71.428571…
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4">
+                      <div className="text-sm font-bold text-slate-900">
+                        Example 2
+                      </div>
+                      <div className="mt-2 text-sm text-slate-700">
+                        Biweekly = 920.55
+                      </div>
+                      <div className="mt-1">
+                        Weekly = 920.55 ÷ 2 ={" "}
+                        <span className="font-semibold text-slate-900">
+                          460.275
+                        </span>
+                      </div>
+                      <div className="mt-1 text-sm text-slate-600">
+                        If display rounds: 460.28 (rounding is display-only)
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4">
+                      <div className="text-sm font-bold text-slate-900">
+                        Example 3 (linearity check)
+                      </div>
+                      <div className="mt-2 text-sm text-slate-700">
+                        Biweekly doubles: 1,000 → 2,000
+                      </div>
+                      <div className="mt-1">
+                        Weekly doubles: 500 →{" "}
+                        <span className="font-semibold text-slate-900">
+                          1,000
+                        </span>
+                      </div>
+                      <div className="mt-1 text-sm text-slate-600">
+                        This must always hold for this route.
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4">
+                      <div className="text-sm font-bold text-slate-900">
+                        Example 4 (breakdown anchoring)
+                      </div>
+                      <div className="mt-2 text-sm text-slate-700">
+                        Biweekly = 1,000
+                      </div>
+                      <div className="mt-1 text-sm text-slate-700">
+                        Annual = (1,000 ÷ 14) × 365 = 26,071.428571…
+                      </div>
+                      <div className="mt-1 text-sm text-slate-600">
+                        The breakdown should reconcile to this annual basis.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <p className="text-sm text-slate-600">
+                  This section is marked no-print so it does not clutter
+                  exported copies.
+                </p>
+              </div>
+            </div>
+          </div>
           <div className="mt-10 space-y-6 text-base text-slate-700 leading-7">
             {/* SectionCard: direct conversion */}
             <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
@@ -105,19 +235,21 @@ const HowItWorks = () => {
                       Primary formula
                     </div>
                     <p className="mt-2">
-                      <strong>Weekly</strong> = biweekly ÷ 2
+                      <span className="font-semibold text-slate-900">
+                        Weekly
+                      </span>{" "}
+                      = biweekly ÷ 2
                     </p>
                     <p className="mt-2 text-sm text-slate-600">
-                      This is exact under the 14-day / 7-day definitions used on
-                      this page.
+                      This is exact under the 14-day and 7-day definitions used
+                      on this page.
                     </p>
                   </div>
 
                   <p>
                     This is one of the few routes where the direct division is
                     mathematically exact and does not rely on average month
-                    lengths or annualization. If your biweekly amount doubles,
-                    the weekly amount doubles. If it halves, the weekly halves.
+                    lengths or annualization.
                   </p>
                 </div>
               </div>
@@ -136,18 +268,15 @@ const HowItWorks = () => {
 
                 <div className="mt-4 space-y-3">
                   <p>
-                    This page does not attempt to model calendar weeks, paydays,
-                    or due dates. It converts strictly by time length. That
-                    means a week is always seven days and a biweekly period is
-                    always fourteen days, regardless of where those days fall on
-                    a calendar.
+                    This page does not attempt to model paydays, due dates, or
+                    calendar alignment. It converts strictly by time length. A
+                    week is always seven days and a biweekly period is always
+                    fourteen days, regardless of where those days fall on a
+                    calendar.
                   </p>
-
                   <p>
-                    This avoids a common problem where “weekly” is interpreted
-                    as “paid on Fridays” or “due every Monday.” Those schedules
-                    belong to a due-date calculator, not a period equivalence
-                    tool.
+                    If you need actual due dates or a schedule, use a due-date
+                    tool, not period equivalents.
                   </p>
                 </div>
               </div>
@@ -173,20 +302,32 @@ const HowItWorks = () => {
 
                   <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
                     <div className="text-sm font-bold text-slate-900">
-                      Derived periods
+                      Derived periods (from the same daily basis)
                     </div>
                     <ul className="mt-2 list-disc pl-5 space-y-2">
                       <li>
-                        <strong>Daily</strong> = biweekly ÷ 14
+                        <span className="font-semibold text-slate-900">
+                          Daily
+                        </span>{" "}
+                        = biweekly ÷ 14
                       </li>
                       <li>
-                        <strong>Annual</strong> = daily × 365
+                        <span className="font-semibold text-slate-900">
+                          Annual
+                        </span>{" "}
+                        = daily × 365
                       </li>
                       <li>
-                        <strong>Monthly</strong> = annual ÷ 12 (average month)
+                        <span className="font-semibold text-slate-900">
+                          Monthly
+                        </span>{" "}
+                        = annual ÷ 12 (average month)
                       </li>
                       <li>
-                        <strong>4-week</strong> = daily × 28
+                        <span className="font-semibold text-slate-900">
+                          4-week
+                        </span>{" "}
+                        = daily × 28
                       </li>
                     </ul>
                   </div>
@@ -220,72 +361,32 @@ const HowItWorks = () => {
 
                   <ul className="list-disc pl-5 space-y-2">
                     <li>
-                      <strong>1,234</strong> is interpreted as 1234
+                      <span className="font-semibold text-slate-900">
+                        1,234
+                      </span>{" "}
+                      is interpreted as 1234
                     </li>
                     <li>
-                      <strong>1.234</strong> is interpreted as 1.234
+                      <span className="font-semibold text-slate-900">
+                        1.234
+                      </span>{" "}
+                      is interpreted as 1.234
                     </li>
                     <li>
-                      Edge formats such as <strong>.5</strong> and{" "}
-                      <strong>12.</strong> are accepted
+                      Edge formats such as{" "}
+                      <span className="font-semibold text-slate-900">.5</span>{" "}
+                      and{" "}
+                      <span className="font-semibold text-slate-900">12.</span>{" "}
+                      are accepted
                     </li>
                   </ul>
 
                   <p>
                     Computation preserves decimals internally. Rounding, if
-                    enabled, affects only how many decimals are displayed. When
-                    rounding is disabled, up to twelve decimal places may be
-                    shown so close comparisons do not collapse into the same
-                    number.
+                    enabled, affects only how many decimals are displayed.
+                    Ambiguous inputs should be blocked or warned on instead of
+                    producing a clean-looking but incorrect result.
                   </p>
-
-                  <p>
-                    If an input could reasonably be interpreted more than one
-                    way, the correct behavior is to block or warn instead of
-                    returning a clean-looking but incorrect result.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* SectionCard: printing + related tools */}
-            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
-              <div
-                aria-hidden="true"
-                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
-              />
-              <div className="p-5 sm:px-6">
-                <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
-                  Printing and related tools
-                </h3>
-
-                <div className="mt-4 space-y-3">
-                  <p>
-                    You can print the results or save the page as a PDF using
-                    your browser’s print function. This section is marked
-                    no-print so it does not appear in exported copies.
-                  </p>
-
-                  <p>
-                    If you need to convert between arbitrary periods or check
-                    affordability against income, use the related tools linked
-                    below.
-                  </p>
-
-                  <div className="mt-3 text-sm flex flex-wrap gap-x-5 gap-y-2">
-                    <Link
-                      to="/rent-converter"
-                      className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
-                    >
-                      Rent converter →
-                    </Link>
-                    <Link
-                      to="/rent-affordability-calculator"
-                      className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
-                    >
-                      Rent affordability →
-                    </Link>
-                  </div>
                 </div>
               </div>
             </div>
@@ -304,7 +405,7 @@ const HowItWorks = () => {
                 <div className="text-sm font-semibold text-sky-300">
                   Utility note
                 </div>
-                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-800">
+                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-200">
                   This is the simplest conversion on the site
                 </h3>
                 <p className="mt-3 text-slate-200 leading-7">

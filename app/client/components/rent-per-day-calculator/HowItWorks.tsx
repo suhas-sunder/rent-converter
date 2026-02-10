@@ -185,7 +185,7 @@ const HowItWorks = () => {
                   Real proration depends on what the lease defines as a billing
                   month, due dates, partial periods, and any fees or minimums.
                   This tool keeps that out of scope and stays strictly in
-                  “equivalence math” territory.
+                  equivalence math territory.
                 </p>
               </div>
             </div>
@@ -215,6 +215,104 @@ const HowItWorks = () => {
                   often used as a base for other calculations on the page, so
                   hiding results on bad input is the correct behavior.
                 </p>
+              </div>
+            </div>
+
+            {/* Examples section (separate) */}
+            <div className="mt-10 rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+              <div className="p-5 sm:p-6">
+                <h3 className="text-2xl font-extrabold text-sky-900 tracking-tight">
+                  Examples
+                </h3>
+                <p className="mt-3 text-slate-600 leading-7">
+                  Each example shows the same structure: convert the input to an
+                  annual total using this page’s period definition, then divide
+                  by 365 to get a daily equivalent. Values below are shown with
+                  decimals to make the math transparent.
+                </p>
+
+                <div className="mt-6 grid gap-4 sm:gap-5">
+                  {/* Example A: Monthly */}
+                  <div className="rounded-3xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-900">
+                      Example 1: $2,400 monthly
+                    </div>
+                    <ul className="mt-3 list-disc pl-5 space-y-2 text-slate-700">
+                      <li>
+                        Annual = <strong>$28,800</strong> (2400 × 12)
+                      </li>
+                      <li>
+                        Daily = <strong>$78.904110</strong> (28,800 ÷ 365)
+                      </li>
+                      <li className="text-slate-600">
+                        Why this differs from “÷ 30”: monthly here is treated as
+                        annual ÷ 12, not a fixed 30-day month.
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Example B: Every 4 weeks */}
+                  <div className="rounded-3xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-900">
+                      Example 2: $2,000 every 4 weeks (28 days)
+                    </div>
+                    <ul className="mt-3 list-disc pl-5 space-y-2 text-slate-700">
+                      <li>
+                        Daily = <strong>$71.428571</strong> (2000 ÷ 28)
+                      </li>
+                      <li>
+                        Annual = <strong>$26,071.428571</strong> (daily × 365)
+                      </li>
+                      <li className="text-slate-600">
+                        This is why “every 4 weeks” is not interchangeable with
+                        “monthly” even if the numbers look close.
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Example C: Weekly + days-total */}
+                  <div className="rounded-3xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-900">
+                      Example 3: $700 weekly, plus a 45-day total
+                    </div>
+                    <ul className="mt-3 list-disc pl-5 space-y-2 text-slate-700">
+                      <li>
+                        Daily = <strong>$100.000000</strong> (700 ÷ 7)
+                      </li>
+                      <li>
+                        Annual = <strong>$36,500</strong> (100 × 365)
+                      </li>
+                      <li>
+                        Total for 45 days = <strong>$4,500</strong> (100 × 45)
+                      </li>
+                      <li className="text-slate-600">
+                        The 45-day total is just daily × days. No proration or
+                        lease rules are applied.
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="rounded-2xl bg-white ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-900">
+                      What these examples are doing
+                    </div>
+                    <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
+                      <li>
+                        Monthly inputs annualize via <strong>× 12</strong>, then
+                        daily is annual ÷ 365.
+                      </li>
+                      <li>
+                        28-day inputs annualize via{" "}
+                        <strong>(amount ÷ 28) × 365</strong>, then daily is
+                        annual ÷ 365, which returns to amount ÷ 28.
+                      </li>
+                      <li>
+                        Fixed-day inputs (weekly, biweekly, 28-day) stay
+                        consistent because the day count is explicit.
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </div>
             </div>
 

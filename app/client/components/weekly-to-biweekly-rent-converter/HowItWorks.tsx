@@ -45,7 +45,7 @@ const HowItWorks = () => {
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition cursor-pointer">
                 <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
                   INPUT
                 </div>
@@ -53,7 +53,7 @@ const HowItWorks = () => {
                   Weekly amount
                 </div>
               </div>
-              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition cursor-pointer">
                 <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
                   DEFINITION
                 </div>
@@ -61,7 +61,7 @@ const HowItWorks = () => {
                   Biweekly = 14 days
                 </div>
               </div>
-              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition cursor-pointer">
                 <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
                   CORE RULE
                 </div>
@@ -69,7 +69,7 @@ const HowItWorks = () => {
                   biweekly = weekly × 2
                 </div>
               </div>
-              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition cursor-pointer">
                 <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
                   OUTPUT
                 </div>
@@ -227,7 +227,7 @@ const HowItWorks = () => {
               </div>
             </div>
 
-            {/* SectionCard: examples + formats */}
+            {/* Examples section (separate) */}
             <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
               <div
                 aria-hidden="true"
@@ -253,46 +253,108 @@ const HowItWorks = () => {
                   </div>
                   <div className="min-w-0">
                     <h3 className="text-xl font-extrabold text-sky-900 tracking-tight">
-                      Examples you can cross-check
+                      Examples
                     </h3>
                   </div>
                 </div>
 
                 <div className="mt-4 space-y-3">
                   <p>
-                    These examples match the same rules the calculator uses. If
-                    the UI formats the display to fewer decimals, your screen
-                    output can look slightly different, but the underlying
-                    computation is the same.
+                    Each example uses the same rule:{" "}
+                    <span className="font-semibold text-slate-900">
+                      biweekly = weekly × 2
+                    </span>
+                    . If the UI rounds display values, the final digits can
+                    differ, but the conversion logic is unchanged.
                   </p>
 
-                  <ul className="list-disc pl-5 space-y-2">
-                    <li>
-                      Weekly rent{" "}
-                      <strong className="text-slate-900">$500</strong> →
-                      biweekly equivalent{" "}
-                      <strong className="text-slate-900">
-                        $500 × 2 = $1,000
-                      </strong>
-                    </li>
-                    <li>
-                      Weekly rent{" "}
-                      <strong className="text-slate-900">$625.75</strong> →
-                      biweekly equivalent{" "}
-                      <strong className="text-slate-900">$1,251.50</strong>{" "}
-                      (decimals stay part of the calculation)
-                    </li>
-                    <li>
-                      Input <strong className="text-slate-900">1,234</strong> →
-                      comma is treated as thousands grouping (1234). If you
-                      meant a decimal, use{" "}
-                      <strong className="text-slate-900">1.234</strong>.
-                    </li>
-                  </ul>
+                  <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                    <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                      <div className="text-sm font-bold text-sky-900">
+                        Example 1: $500 weekly
+                      </div>
+                      <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
+                        <li>
+                          Biweekly ={" "}
+                          <strong className="text-slate-900">
+                            $500 × 2 = $1,000
+                          </strong>
+                        </li>
+                      </ul>
+                    </div>
 
+                    <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                      <div className="text-sm font-bold text-sky-900">
+                        Example 2: $625.75 weekly
+                      </div>
+                      <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
+                        <li>
+                          Biweekly ={" "}
+                          <strong className="text-slate-900">$1,251.50</strong>
+                        </li>
+                        <li className="text-slate-600">
+                          Decimals are preserved end-to-end; rounding is
+                          display-only.
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 rounded-2xl bg-white ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-900">
+                      What these examples are doing
+                    </div>
+                    <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
+                      <li>
+                        Weekly and biweekly are fixed-day periods (7 and 14
+                        days), so the ×2 conversion is exact.
+                      </li>
+                      <li>
+                        Any additional period values in the breakdown should be
+                        derived from one shared annual basis to avoid mixed
+                        assumptions.
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* SectionCard: input formats (separate) */}
+            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+              <div
+                aria-hidden="true"
+                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+              />
+              <div className="p-5 sm:px-6">
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 24 24"
+                      className="h-5 w-5 text-sky-600"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M4 7h16M7 11h10M7 15h6"
+                      />
+                    </svg>
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-xl font-extrabold text-sky-900 tracking-tight">
+                      Input formats supported
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="mt-4 space-y-3">
                   <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
                     <div className="text-sm font-bold text-slate-900">
-                      Input formats supported
+                      Parsing rules
                     </div>
                     <ul className="mt-2 list-disc pl-5 space-y-2">
                       <li>
@@ -318,6 +380,13 @@ const HowItWorks = () => {
                     way, the correct behavior is to warn or block instead of
                     guessing and returning a clean-looking but incorrect result.
                   </p>
+
+                  <p className="text-sm text-slate-600">
+                    Example: <strong className="text-slate-900">1,234</strong>{" "}
+                    is treated as thousands grouping (1234). If you meant a
+                    decimal, use{" "}
+                    <strong className="text-slate-900">1.234</strong>.
+                  </p>
                 </div>
               </div>
             </div>
@@ -336,7 +405,7 @@ const HowItWorks = () => {
                 <div className="text-sm font-semibold text-sky-300">
                   Utility note
                 </div>
-                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight">
+                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-100">
                   This converts periods, not due dates
                 </h3>
                 <p className="mt-3 text-slate-200 leading-7">
@@ -360,21 +429,21 @@ const HowItWorks = () => {
               Related pages:{" "}
               <Link
                 to="/rent-paid-weekly-vs-monthly"
-                className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                className="cursor-pointer font-semibold text-sky-700 hover:text-sky-800 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
               >
                 weekly vs monthly rent
               </Link>
               ,{" "}
               <Link
                 to="/rent-converter"
-                className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                className="cursor-pointer font-semibold text-sky-700 hover:text-sky-800 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
               >
                 rent converter
               </Link>
               , and{" "}
               <Link
                 to="/rent-affordability-calculator"
-                className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                className="cursor-pointer font-semibold text-sky-700 hover:text-sky-800 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
               >
                 rent affordability calculator
               </Link>

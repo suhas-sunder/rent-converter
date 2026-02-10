@@ -1,3 +1,5 @@
+import { Link } from "react-router";
+
 const HowItWorks = () => {
   return (
     <section
@@ -76,6 +78,205 @@ const HowItWorks = () => {
           </div>
 
           <div className="mt-10 space-y-6 text-base text-slate-700 leading-7">
+            {/* SectionCard: related tools */}
+            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+              <div
+                aria-hidden="true"
+                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+              />
+              <div className="p-5 sm:px-6">
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 24 24"
+                      className="h-5 w-5 text-sky-600"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M5 12h14"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 5v14"
+                      />
+                    </svg>
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
+                      Related tools
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="mt-4 space-y-3">
+                  <p>
+                    If you need other period conversions that keep the same
+                    time-length definitions, use the{" "}
+                    <Link
+                      to="/rent-converter"
+                      className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                    >
+                      rent converter
+                    </Link>
+                    .
+                  </p>
+
+                  <p className="text-sm text-slate-600">
+                    Common neighbors:{" "}
+                    <Link
+                      to="/monthly-to-biweekly-rent-converter"
+                      className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                    >
+                      monthly to biweekly
+                    </Link>
+                    ,{" "}
+                    <Link
+                      to="/biweekly-to-annual-rent-converter"
+                      className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                    >
+                      biweekly to annual
+                    </Link>
+                    , and{" "}
+                    <Link
+                      to="/biweekly-to-weekly-rent-converter"
+                      className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                    >
+                      biweekly to weekly
+                    </Link>
+                    .
+                  </p>
+
+                  <p className="text-sm text-slate-600">
+                    If you need due dates (not equivalents), use{" "}
+                    <Link
+                      to="/rent-due-date-calculator"
+                      className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                    >
+                      rent due date calculator
+                    </Link>
+                    .
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* SectionCard: examples */}
+            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+              <div
+                aria-hidden="true"
+                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+              />
+              <div className="p-5 sm:px-6">
+                <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
+                  Examples you can cross-check
+                </h3>
+
+                <div className="mt-4 space-y-3">
+                  <p>
+                    These examples follow the exact formulas above. Any “≈” is
+                    display rounding only.
+                  </p>
+
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
+                      <div className="text-sm font-bold text-slate-900">
+                        Example 1
+                      </div>
+                      <div className="mt-2 text-sm text-slate-700">
+                        Biweekly = 1,000
+                      </div>
+                      <div className="mt-1">
+                        Daily = 1,000 ÷ 14 = 71.428571…
+                      </div>
+                      <div className="mt-1">
+                        Annual = daily × 365 = 26,071.428571…
+                      </div>
+                      <div className="mt-1">
+                        Monthly = annual ÷ 12 = 2,172.619047… ≈{" "}
+                        <span className="font-semibold text-slate-900">
+                          2,172.62
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
+                      <div className="text-sm font-bold text-slate-900">
+                        Example 2
+                      </div>
+                      <div className="mt-2 text-sm text-slate-700">
+                        Biweekly = 1,150.70
+                      </div>
+                      <div className="mt-1">
+                        Daily = 1,150.70 ÷ 14 = 82.192857…
+                      </div>
+                      <div className="mt-1">
+                        Annual = daily × 365 = 29,999.392857…
+                      </div>
+                      <div className="mt-1">
+                        Monthly = annual ÷ 12 = 2,499.949404… ≈{" "}
+                        <span className="font-semibold text-slate-900">
+                          2,499.95
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
+                      <div className="text-sm font-bold text-slate-900">
+                        Example 3 (why biweekly × 2 drifts)
+                      </div>
+                      <div className="mt-2 text-sm text-slate-700">
+                        Biweekly = 1,000
+                      </div>
+                      <div className="mt-1">
+                        Biweekly × 2 = 2,000 (this is a 28-day amount)
+                      </div>
+                      <div className="mt-1">
+                        Monthly (average) ≈{" "}
+                        <span className="font-semibold text-slate-900">
+                          2,172.62
+                        </span>{" "}
+                        (from annual ÷ 12)
+                      </div>
+                      <div className="mt-2 text-sm text-slate-600">
+                        The shortcut compares a 28-day value to an average
+                        month.
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
+                      <div className="text-sm font-bold text-slate-900">
+                        Example 4 (4-week comparison)
+                      </div>
+                      <div className="mt-2 text-sm text-slate-700">
+                        Biweekly = 1,000
+                      </div>
+                      <div className="mt-1">
+                        4-week (28-day) = daily × 28 = (1,000 ÷ 14) × 28 ={" "}
+                        <span className="font-semibold text-slate-900">
+                          2,000.00
+                        </span>
+                      </div>
+                      <div className="mt-2 text-sm text-slate-600">
+                        This is why “biweekly × 2” matches a 28-day cycle, not
+                        an average calendar month.
+                      </div>
+                    </div>
+                  </div>
+
+                  <p className="text-sm text-slate-600">
+                    Linearity check: double the biweekly input and the monthly
+                    output doubles.
+                  </p>
+                </div>
+              </div>
+            </div>
+
             {/* SectionCard: core model */}
             <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
               <div
@@ -101,17 +302,22 @@ const HowItWorks = () => {
                     </div>
                     <ul className="mt-2 list-disc pl-5 space-y-2">
                       <li>
-                        <strong>Daily</strong> = biweekly ÷ 14
+                        <strong className="text-slate-900">Daily</strong> =
+                        biweekly ÷ 14
                       </li>
                       <li>
-                        <strong>Annual</strong> = daily × 365
+                        <strong className="text-slate-900">Annual</strong> =
+                        daily × 365
                       </li>
                       <li>
-                        <strong>Monthly</strong> = annual ÷ 12
+                        <strong className="text-slate-900">Monthly</strong> =
+                        annual ÷ 12
                       </li>
                       <li>
                         Combined:{" "}
-                        <strong>Monthly = biweekly × 365 ÷ (14 × 12)</strong>
+                        <strong className="text-slate-900">
+                          Monthly = biweekly × 365 ÷ (14 × 12)
+                        </strong>
                       </li>
                     </ul>
                     <p className="mt-3 text-sm text-slate-600">
@@ -121,10 +327,10 @@ const HowItWorks = () => {
                   </div>
 
                   <p>
-                    This approach avoids treating “biweekly” as “twice per
-                    month” and avoids treating “monthly” as a fixed 30-day or
-                    28-day interval. Each step is derived from time length, not
-                    payment counts.
+                    This avoids treating “biweekly” as “twice per month” and
+                    avoids treating “monthly” as a fixed 30-day or 28-day
+                    interval. Each step is derived from time length, not payment
+                    counts.
                   </p>
                 </div>
               </div>
@@ -145,16 +351,15 @@ const HowItWorks = () => {
                   <p>
                     A common shortcut is to double a biweekly amount to estimate
                     a monthly cost. That shortcut assumes a month is exactly two
-                    biweekly periods (28 days). In reality, calendar months
-                    average about 30.42 days.
+                    biweekly periods (28 days). Calendar months average about
+                    30.42 days under a 365-day year.
                   </p>
 
                   <p>
-                    If you doubled a biweekly amount, you would be comparing a
-                    28-day value to a monthly label. Over a full year, that
-                    shortcut produces drift. This page avoids that by anchoring
-                    both sides to the same annual total before computing
-                    monthly.
+                    Over a full year, the shortcut produces drift because it
+                    mixes a 28-day cycle with a monthly label. This page avoids
+                    that by anchoring everything to the same annual total before
+                    computing the monthly equivalent.
                   </p>
 
                   <div className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -171,7 +376,7 @@ const HowItWorks = () => {
                         Monthly definition
                       </div>
                       <p className="mt-2">
-                        Monthly is an average month derived from a 365-day year.
+                        Monthly is an average month derived from annual ÷ 12.
                       </p>
                     </div>
                   </div>
@@ -193,23 +398,22 @@ const HowItWorks = () => {
                 <div className="mt-4 space-y-3">
                   <p>
                     Once the daily rate is established, every other period is
-                    derived from that same basis. Weekly uses seven days. 4-week
-                    uses twenty-eight days. Monthly uses an average month
-                    length. Because all lines reconcile to the same annual
-                    total, comparisons stay coherent.
+                    derived from that same basis. Weekly uses 7 days. 4-week
+                    uses 28 days. Monthly uses an average month length. Because
+                    all lines reconcile to the same annual total, comparisons
+                    stay coherent.
                   </p>
 
                   <p>
-                    The breakdown is intentionally derived from daily, not from
-                    the monthly value. This prevents rounding drift and avoids a
-                    situation where one line looks correct but does not
-                    reconcile with the others.
+                    The breakdown should be derived from daily (the normalized
+                    basis), not from the monthly display value. That prevents
+                    rounding drift and keeps reconciliation clean.
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* SectionCard: precision and exports */}
+            {/* SectionCard: scope + precision */}
             <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
               <div
                 aria-hidden="true"
@@ -217,40 +421,60 @@ const HowItWorks = () => {
               />
               <div className="p-5 sm:px-6">
                 <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
-                  Precision, ambiguity handling, and exports
+                  Input formats, ambiguity handling, and rounding
                 </h3>
 
                 <div className="mt-4 space-y-3">
                   <p>
                     Inputs are parsed as decimal numbers. Commas are treated as
                     thousands separators. Currency symbols may be present and
-                    ignored for numeric parsing. Computation uses fixed-point
-                    arithmetic with preserved precision.
+                    ignored for numeric parsing. Precision should be preserved
+                    end to end, and rounding should be display-only.
                   </p>
 
-                  <ul className="list-disc pl-5 space-y-2">
-                    <li>
-                      <strong>1,234</strong> is interpreted as 1234
-                    </li>
-                    <li>
-                      <strong>1.234</strong> is interpreted as 1.234
-                    </li>
-                    <li>
-                      Edge formats such as <strong>.5</strong> and{" "}
-                      <strong>12.</strong> are supported
-                    </li>
-                  </ul>
+                  <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-slate-900">
+                      Accepted formats
+                    </div>
+                    <ul className="mt-2 list-disc pl-5 space-y-2">
+                      <li>
+                        <span className="font-semibold text-slate-900">
+                          1,234
+                        </span>{" "}
+                        is interpreted as 1234
+                      </li>
+                      <li>
+                        <span className="font-semibold text-slate-900">
+                          1.234
+                        </span>{" "}
+                        is interpreted as 1.234
+                      </li>
+                      <li>
+                        Decimal edge formats are supported:{" "}
+                        <span className="font-semibold text-slate-900">.5</span>{" "}
+                        and{" "}
+                        <span className="font-semibold text-slate-900">
+                          12.
+                        </span>
+                      </li>
+                    </ul>
+                    <p className="mt-3 text-sm text-slate-600">
+                      If an input could reasonably mean two different numbers,
+                      the correct behavior is a warning or an error instead of a
+                      guessed output.
+                    </p>
+                  </div>
 
                   <p>
-                    If an input could reasonably be interpreted in more than one
-                    way, the tool should show a warning or error instead of
-                    producing a clean-looking but misleading result.
+                    Scope: this converter does not add fees, utilities,
+                    deposits, taxes, insurance, discounts, or proration. It
+                    converts only the amount you enter.
                   </p>
 
-                  <p>
-                    You can export the breakdown to CSV for record-keeping or
-                    print the page and save it as a PDF. This section is marked
-                    no-print so it does not clutter printed output.
+                  <p className="text-sm text-slate-600">
+                    If you export the breakdown (CSV) or print to PDF, the
+                    outputs should match the same formulas and basis described
+                    above.
                   </p>
                 </div>
               </div>
@@ -270,16 +494,23 @@ const HowItWorks = () => {
                 <div className="text-sm font-semibold text-sky-300">
                   Utility note
                 </div>
-                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-800">
+                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-200">
                   Monthly here is an average, not a billing schedule
                 </h3>
                 <p className="mt-3 text-slate-200 leading-7">
                   This page produces a monthly equivalent derived from an annual
-                  total. It does not attempt to model calendar due dates or
-                  payment timing. If your rent is billed every 28 days, that is
-                  shown as a separate 4-week line, not merged into the monthly
-                  value.
+                  total. It does not model due dates or payment timing. If your
+                  rent is billed every 28 days, that should be shown as a
+                  separate 4-week line rather than being merged into “monthly.”
                 </p>
+                <div className="mt-4">
+                  <Link
+                    to="/rent-due-date-calculator"
+                    className="cursor-pointer inline-flex items-center font-semibold text-white hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 rounded-sm"
+                  >
+                    Rent due date calculator →
+                  </Link>
+                </div>
               </div>
             </div>
           </div>

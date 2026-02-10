@@ -17,7 +17,7 @@ const HowItWorks = () => {
           <div className="flex flex-col gap-4 sm:gap-5">
             <div className="flex items-start justify-between gap-4">
               <div className="min-w-0">
-                <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-sky-700 tracking-tight leading-tight">
                   How the annual to monthly rent converter works
                 </h2>
                 <p className="mt-2 text-slate-600 leading-7 max-w-2xl">
@@ -29,7 +29,15 @@ const HowItWorks = () => {
                   </span>
                   . A full breakdown is also shown so you can compare the same
                   annual basis against weekly, biweekly, daily, hourly, and a
-                  4-week (28-day) schedule without switching tools.
+                  4-week (28-day) schedule without switching tools. If you want
+                  to switch between rent periods on one page, use the{" "}
+                  <Link
+                    to="/rent-converter"
+                    className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                  >
+                    rent converter
+                  </Link>
+                  .
                 </p>
               </div>
 
@@ -82,6 +90,94 @@ const HowItWorks = () => {
           </div>
 
           <div className="mt-10 space-y-6 text-base text-slate-700 leading-7">
+            {/* SectionCard: related tools */}
+            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+              <div
+                aria-hidden="true"
+                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+              />
+              <div className="p-5 sm:px-6">
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 24 24"
+                      className="h-5 w-5 text-sky-600"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M5 12h14"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 5v14"
+                      />
+                    </svg>
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-xl font-extrabold text-sky-700 tracking-tight">
+                      Related tools
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="mt-4 space-y-3">
+                  <p>
+                    For the reverse direction, use{" "}
+                    <Link
+                      to="/monthly-to-annual-rent-converter"
+                      className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                    >
+                      monthly to annual
+                    </Link>
+                    . If you are comparing a listing that is not monthly, these
+                    routes keep the same annual anchor while changing the output
+                    period:{" "}
+                    <Link
+                      to="/annual-to-weekly-rent-converter"
+                      className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                    >
+                      annual to weekly
+                    </Link>
+                    ,{" "}
+                    <Link
+                      to="/annual-to-biweekly-rent-converter"
+                      className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                    >
+                      annual to biweekly
+                    </Link>
+                    ,{" "}
+                    <Link
+                      to="/annual-to-daily-rent-converter"
+                      className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                    >
+                      annual to daily
+                    </Link>
+                    , and{" "}
+                    <Link
+                      to="/annual-to-hourly-rent-converter"
+                      className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                    >
+                      annual to hourly
+                    </Link>
+                    . If you want all conversions on one page, use the{" "}
+                    <Link
+                      to="/rent-converter"
+                      className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                    >
+                      rent converter
+                    </Link>
+                    .
+                  </p>
+                </div>
+              </div>
+            </div>
+
             {/* SectionCard: what it does */}
             <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
               <div
@@ -107,7 +203,7 @@ const HowItWorks = () => {
                     </svg>
                   </div>
                   <div className="min-w-0">
-                    <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
+                    <h3 className="text-xl font-extrabold text-sky-700 tracking-tight">
                       What the monthly result represents
                     </h3>
                   </div>
@@ -155,7 +251,7 @@ const HowItWorks = () => {
               </div>
             </div>
 
-            {/* SectionCard: 28-day clarification */}
+            {/* SectionCard: examples */}
             <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
               <div
                 aria-hidden="true"
@@ -175,154 +271,98 @@ const HowItWorks = () => {
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        d="M5 12h14M12 5v14"
+                        d="M4 7h16M4 12h16M4 17h16"
                       />
                     </svg>
                   </div>
                   <div className="min-w-0">
-                    <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
-                      4-week (28-day) versus monthly, kept visible on purpose
+                    <h3 className="text-xl font-extrabold text-sky-700 tracking-tight">
+                      Examples you can cross-check
                     </h3>
                   </div>
                 </div>
 
                 <div className="mt-4 space-y-3">
                   <p>
-                    If a listing is billed “every 4 weeks” or “every 28 days,”
-                    it is not a monthly schedule. A 28-day cycle repeats 13
-                    times in a year. That can produce a different implied annual
-                    total than a monthly price that looks similar at a glance.
+                    Each example uses the primary monthly formula (annual ÷ 12).
+                    When the breakdown shows day-based rows, those rows use a
+                    365-day year so the table stays internally consistent.
                   </p>
 
-                  <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                  <div className="grid gap-3 sm:grid-cols-2">
                     <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
                       <div className="text-sm font-bold text-slate-900">
-                        Example annualization
+                        Example 1
                       </div>
-                      <p className="mt-2">
-                        If a listing says{" "}
+                      <div className="mt-2 text-sm text-slate-700">
+                        Annual = 24,000
+                      </div>
+                      <div className="mt-1">
+                        Monthly = 24,000 ÷ 12 ={" "}
                         <span className="font-semibold text-slate-900">
-                          $2,000 every 4 weeks
+                          2,000
                         </span>
-                        , a simple annualization is{" "}
-                        <span className="font-semibold text-slate-900">
-                          $2,000 × 13 = $26,000
-                        </span>
-                        .
-                      </p>
+                      </div>
                     </div>
+
                     <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
                       <div className="text-sm font-bold text-slate-900">
-                        Why it’s separate
+                        Example 2
                       </div>
-                      <p className="mt-2">
-                        The 4-week line is labeled explicitly so it is not
-                        confused with the monthly budgeting split (annual ÷ 12).
-                      </p>
+                      <div className="mt-2 text-sm text-slate-700">
+                        Annual = 30,000.50
+                      </div>
+                      <div className="mt-1">
+                        Monthly = 30,000.50 ÷ 12 = 2,500.0416… ≈{" "}
+                        <span className="font-semibold text-slate-900">
+                          2,500.04
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
+                      <div className="text-sm font-bold text-slate-900">
+                        Example 3
+                      </div>
+                      <div className="mt-2 text-sm text-slate-700">
+                        Annual = 52,000
+                      </div>
+                      <div className="mt-1">
+                        Monthly = 52,000 ÷ 12 = 4,333.3333… ≈{" "}
+                        <span className="font-semibold text-slate-900">
+                          4,333.33
+                        </span>
+                      </div>
+                      <div className="mt-2 text-sm text-slate-600">
+                        For comparison in the breakdown: 4-week (28-day) is a
+                        different interval than monthly.
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
+                      <div className="text-sm font-bold text-slate-900">
+                        Example 4 (28-day comparison)
+                      </div>
+                      <div className="mt-2 text-sm text-slate-700">
+                        Annual = 24,000
+                      </div>
+                      <div className="mt-1">
+                        4-week = 24,000 × 28 ÷ 365 = 1,841.0958… ≈{" "}
+                        <span className="font-semibold text-slate-900">
+                          1,841.10
+                        </span>
+                      </div>
+                      <div className="mt-2 text-sm text-slate-600">
+                        This is why a 28-day schedule is shown separately from
+                        the monthly budgeting split.
+                      </div>
                     </div>
                   </div>
-
-                  <p>
-                    This page does not try to pick the “right” schedule. It
-                    keeps the 28-day interval visible so comparisons stay
-                    honest.
-                  </p>
                 </div>
               </div>
             </div>
 
-            {/* SectionCard: parsing + decimals */}
-            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
-              <div
-                aria-hidden="true"
-                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
-              />
-              <div className="p-5 sm:px-6">
-                <div className="flex items-start gap-3">
-                  <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
-                    <svg
-                      aria-hidden="true"
-                      viewBox="0 0 24 24"
-                      className="h-5 w-5 text-sky-600"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M7 7h10v10H7z"
-                      />
-                    </svg>
-                  </div>
-                  <div className="min-w-0">
-                    <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
-                      Input parsing rules and precision behavior
-                    </h3>
-                  </div>
-                </div>
-
-                <div className="mt-4 space-y-3">
-                  <p>
-                    Inputs are treated as numeric amounts. Thousands separators
-                    (commas) are interpreted as grouping, not decimals. If you
-                    type{" "}
-                    <span className="font-semibold text-slate-900">1,234</span>,
-                    it is interpreted as 1234. If you meant one point two three
-                    four, type{" "}
-                    <span className="font-semibold text-slate-900">1.234</span>.
-                  </p>
-
-                  <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
-                    <div className="text-sm font-bold text-slate-900">
-                      Accepted numeric formats
-                    </div>
-                    <ul className="mt-2 list-disc pl-5 space-y-2">
-                      <li>
-                        Decimals:{" "}
-                        <span className="font-semibold text-slate-900">
-                          1200.50
-                        </span>
-                        ,{" "}
-                        <span className="font-semibold text-slate-900">.5</span>
-                        ,{" "}
-                        <span className="font-semibold text-slate-900">
-                          12.
-                        </span>
-                      </li>
-                      <li>
-                        Grouping:{" "}
-                        <span className="font-semibold text-slate-900">
-                          1,200
-                        </span>
-                        ,{" "}
-                        <span className="font-semibold text-slate-900">
-                          1,200.50
-                        </span>
-                      </li>
-                      <li>
-                        Currency symbols may be present and ignored for parsing:{" "}
-                        <span className="font-semibold text-slate-900">
-                          $1,200.50
-                        </span>
-                      </li>
-                    </ul>
-                    <p className="mt-3 text-sm text-slate-600">
-                      If an input format is ambiguous, the correct behavior is a
-                      warning or error instead of a guessed value.
-                    </p>
-                  </div>
-
-                  <p>
-                    Decimals are preserved through the calculation. Any rounding
-                    you see should be display-only so comparisons do not
-                    collapse into identical results.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* SectionCard: step-by-step + related tool */}
+            {/* SectionCard: step-by-step */}
             <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
               <div
                 aria-hidden="true"
@@ -347,7 +387,7 @@ const HowItWorks = () => {
                     </svg>
                   </div>
                   <div className="min-w-0">
-                    <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
+                    <h3 className="text-xl font-extrabold text-sky-700 tracking-tight">
                       How it works on this route
                     </h3>
                   </div>
@@ -373,7 +413,7 @@ const HowItWorks = () => {
                       <strong className="text-slate-900">
                         Compute breakdown lines from the same annual basis.
                       </strong>{" "}
-                      Time-length equivalents use a 365-day model so daily,
+                      Day-based equivalents use a 365-day model so daily,
                       weekly, and hourly reconcile back to the same annual
                       number.
                     </li>
@@ -385,24 +425,187 @@ const HowItWorks = () => {
                       merged into “monthly.”
                     </li>
                   </ol>
+                </div>
+              </div>
+            </div>
 
-                  <div className="mt-5 rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
+            {/* SectionCard: common mismatches */}
+            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+              <div
+                aria-hidden="true"
+                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+              />
+              <div className="p-5 sm:px-6">
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 24 24"
+                      className="h-5 w-5 text-sky-600"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M5 12h14"
+                      />
+                    </svg>
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-xl font-extrabold text-sky-700 tracking-tight">
+                      Common mismatches and how this page treats them
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="mt-4 space-y-4">
+                  <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
                     <div className="text-sm font-bold text-slate-900">
-                      Related tool
+                      Monthly vs 4-week (28-day)
                     </div>
                     <p className="mt-2">
-                      If you need conversions in other directions, use the
-                      general converter.
+                      Monthly on this page is a budgeting split (annual ÷ 12). A
+                      4-week schedule is a fixed 28-day interval. They are not
+                      the same thing, so the breakdown shows them as different
+                      rows with different definitions.
                     </p>
-                    <div className="mt-3 text-sm">
+                  </div>
+
+                  <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-slate-900">
+                      Weekly × 4 vs monthly
+                    </div>
+                    <p className="mt-2">
+                      Weekly × 4 is also a 28-day amount. That is why it can
+                      differ from monthly, even when it looks close. If you want
+                      a weekly comparison, use{" "}
+                      <Link
+                        to="/annual-to-weekly-rent-converter"
+                        className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                      >
+                        annual to weekly
+                      </Link>{" "}
+                      or the{" "}
                       <Link
                         to="/rent-converter"
                         className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
                       >
-                        Rent converter →
-                      </Link>
-                    </div>
+                        rent converter
+                      </Link>{" "}
+                      so everything stays anchored to the same annual total.
+                    </p>
                   </div>
+
+                  <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-slate-900">
+                      Equivalents vs due dates
+                    </div>
+                    <p className="mt-2">
+                      These are equivalents under a fixed basis. They do not
+                      determine invoice timing, due dates, or how many payments
+                      land inside a calendar month. For actual due dates, use{" "}
+                      <Link
+                        to="/rent-due-date-calculator"
+                        className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                      >
+                        rent due date calculator
+                      </Link>
+                      .
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* SectionCard: input formats + rounding */}
+            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+              <div
+                aria-hidden="true"
+                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+              />
+              <div className="p-5 sm:px-6">
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 24 24"
+                      className="h-5 w-5 text-sky-600"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M4 7h16M4 12h12M4 17h14"
+                      />
+                    </svg>
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-xl font-extrabold text-sky-700 tracking-tight">
+                      Input formats and rounding
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="mt-4 space-y-3">
+                  <p>
+                    The calculator accepts common numeric formats and should
+                    reject or warn on ambiguous formats rather than guessing.
+                    Decimals are preserved internally end to end. Rounding is
+                    display-only.
+                  </p>
+
+                  <div className="overflow-hidden rounded-2xl ring-1 ring-slate-200">
+                    <table className="w-full text-sm">
+                      <thead className="bg-slate-50">
+                        <tr>
+                          <th className="text-left font-semibold text-slate-900 px-4 py-3">
+                            Format
+                          </th>
+                          <th className="text-left font-semibold text-slate-900 px-4 py-3">
+                            Examples accepted
+                          </th>
+                          <th className="text-left font-semibold text-slate-900 px-4 py-3">
+                            Notes
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-200">
+                        <tr className="bg-white">
+                          <td className="px-4 py-3">Decimals</td>
+                          <td className="px-4 py-3">1200.50, .5, 12.</td>
+                          <td className="px-4 py-3">
+                            Decimal point is supported. Trailing dot is treated
+                            as a decimal with no fractional digits.
+                          </td>
+                        </tr>
+                        <tr className="bg-white">
+                          <td className="px-4 py-3">Thousands grouping</td>
+                          <td className="px-4 py-3">1,200; 1,200.50</td>
+                          <td className="px-4 py-3">
+                            Commas are treated as thousands separators.
+                          </td>
+                        </tr>
+                        <tr className="bg-white">
+                          <td className="px-4 py-3">Currency symbols</td>
+                          <td className="px-4 py-3">$1,200.50; €1200</td>
+                          <td className="px-4 py-3">
+                            Currency symbols are ignored for numeric parsing.
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <p className="text-sm text-slate-600">
+                    If a value can reasonably be read in more than one way, the
+                    tool should warn or block instead of guessing. The goal is
+                    to avoid producing clean-looking numbers from a misread
+                    input.
+                  </p>
                 </div>
               </div>
             </div>
@@ -421,7 +624,7 @@ const HowItWorks = () => {
                 <div className="text-sm font-semibold text-sky-300">
                   Utility note
                 </div>
-                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight">
+                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-200">
                   Monthly here is a budgeting split, not a 30-day assumption
                 </h3>
                 <p className="mt-3 text-slate-200 leading-7">
@@ -431,6 +634,14 @@ const HowItWorks = () => {
                   because it is a different billing interval and often
                   annualizes differently.
                 </p>
+                <div className="mt-4">
+                  <Link
+                    to="/rent-paid-every-4-weeks-calculator"
+                    className="cursor-pointer inline-flex items-center font-semibold text-white hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 rounded-sm"
+                  >
+                    Rent paid every 4 weeks calculator →
+                  </Link>
+                </div>
               </div>
             </div>
           </div>

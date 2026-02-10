@@ -25,7 +25,15 @@ const HowItWorks = () => {
                   equivalent using a fixed time-length model. The output is an
                   equivalent amount that represents the same annual cost under a
                   defined year basis. It is not a billing rule engine, not a due
-                  date tool, and not a lease-terms interpreter.
+                  date tool, and not a lease-terms interpreter. If you want to
+                  switch between any rent periods on one page, use the{" "}
+                  <Link
+                    to="/rent-converter"
+                    className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                  >
+                    rent converter
+                  </Link>{" "}
+                  or the universal rent converter.
                 </p>
               </div>
 
@@ -78,6 +86,44 @@ const HowItWorks = () => {
           </div>
 
           <div className="mt-10 space-y-6 text-base text-slate-700 leading-7">
+            <h3 className="text-xl font-extrabold text-sky-700 tracking-tight">
+              Related tools
+            </h3>
+            <p>
+              If you need to switch between other rent periods without changing
+              the conversion basis, the{" "}
+              <Link
+                to="/rent-converter"
+                className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+              >
+                rent converter
+              </Link>{" "}
+              links the full set of period converters. For the reverse of this
+              page, use the{" "}
+              <Link
+                to="/biweekly-to-annual-rent-converter"
+                className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+              >
+                biweekly to annual converter
+              </Link>{" "}
+              so the same year basis is applied in the opposite direction. For a
+              nearby frequency comparison, the{" "}
+              <Link
+                to="/weekly-to-biweekly-rent-converter"
+                className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+              >
+                weekly to biweekly converter
+              </Link>{" "}
+              keeps weekly and 14-day equivalents on the same footing. Monthly
+              comparisons can be checked against{" "}
+              <Link
+                to="/annual-to-monthly-rent-converter"
+                className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+              >
+                annual to monthly
+              </Link>{" "}
+              to avoid the "weekly × 4" shortcut.
+            </p>
             <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
               <div
                 aria-hidden="true"
@@ -133,6 +179,77 @@ const HowItWorks = () => {
                       Biweekly equivalent = annual rent × 14 ÷ 365 (using a
                       365-day year and 14-day biweekly period).
                     </p>
+                  </div>
+
+                  <h3 className="text-xl font-extrabold text-sky-700 tracking-tight">
+                    Examples you can cross-check
+                  </h3>
+
+                  <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
+                    <div className="text-sm font-bold text-slate-900">
+                      Example 1
+                    </div>
+                    <div className="mt-2 text-sm text-slate-700">
+                      Annual = 24,000
+                    </div>
+                    <div className="mt-1">
+                      Biweekly = 24,000 × 14 ÷ 365 = 920.5479… ≈{" "}
+                      <span className="font-semibold text-slate-900">
+                        920.55
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
+                    <div className="text-sm font-bold text-slate-900">
+                      Example 2
+                    </div>
+                    <div className="mt-2 text-sm text-slate-700">
+                      Annual = 30,000.50
+                    </div>
+                    <div className="mt-1">
+                      Biweekly = 30,000.50 × 14 ÷ 365 = 1,150.7038… ≈{" "}
+                      <span className="font-semibold text-slate-900">
+                        1,150.70
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
+                    <div className="text-sm font-bold text-slate-900">
+                      Example 3
+                    </div>
+                    <div className="mt-2 text-sm text-slate-700">
+                      Annual = 18,200
+                    </div>
+                    <div className="mt-1">Daily = 18,200 ÷ 365 = 49.8630…</div>
+                    <div className="mt-1">
+                      Biweekly = Daily × 14 = 49.8630… × 14 = 698.0821… ≈{" "}
+                      <span className="font-semibold text-slate-900">
+                        698.08
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
+                    <div className="text-sm font-bold text-slate-900">
+                      Example 4
+                    </div>
+                    <div className="mt-2 text-sm text-slate-700">
+                      Annual = 52,000
+                    </div>
+                    <div className="mt-1">
+                      Weekly = 52,000 × 7 ÷ 365 = 997.2602… ≈{" "}
+                      <span className="font-semibold text-slate-900">
+                        997.26
+                      </span>
+                    </div>
+                    <div className="mt-1">
+                      Monthly = 52,000 ÷ 12 = 4,333.3333… ≈{" "}
+                      <span className="font-semibold text-slate-900">
+                        4,333.33
+                      </span>
+                    </div>
                   </div>
 
                   <h3 className="text-xl font-extrabold text-sky-700 tracking-tight">
@@ -302,147 +419,6 @@ const HowItWorks = () => {
                   </div>
 
                   <h3 className="text-xl font-extrabold text-sky-700 tracking-tight">
-                    Examples you can cross-check
-                  </h3>
-
-                  <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
-                    <div className="text-sm font-bold text-slate-900">
-                      Example 1
-                    </div>
-                    <div className="mt-2 text-sm text-slate-700">
-                      Annual = 24,000
-                    </div>
-                    <div className="mt-1">
-                      Biweekly = 24,000 × 14 ÷ 365 = 920.5479… ≈{" "}
-                      <span className="font-semibold text-slate-900">
-                        920.55
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
-                    <div className="text-sm font-bold text-slate-900">
-                      Example 2
-                    </div>
-                    <div className="mt-2 text-sm text-slate-700">
-                      Annual = 30,000.50
-                    </div>
-                    <div className="mt-1">
-                      Biweekly = 30,000.50 × 14 ÷ 365 = 1,150.7038… ≈{" "}
-                      <span className="font-semibold text-slate-900">
-                        1,150.70
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
-                    <div className="text-sm font-bold text-slate-900">
-                      Example 3
-                    </div>
-                    <div className="mt-2 text-sm text-slate-700">
-                      Annual = 18,200
-                    </div>
-                    <div className="mt-1">Daily = 18,200 ÷ 365 = 49.8630…</div>
-                    <div className="mt-1">
-                      Biweekly = Daily × 14 = 49.8630… × 14 = 698.0821… ≈{" "}
-                      <span className="font-semibold text-slate-900">
-                        698.08
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
-                    <div className="text-sm font-bold text-slate-900">
-                      Example 4
-                    </div>
-                    <div className="mt-2 text-sm text-slate-700">
-                      Annual = 52,000
-                    </div>
-                    <div className="mt-1">
-                      Weekly = 52,000 × 7 ÷ 365 = 997.2602… ≈{" "}
-                      <span className="font-semibold text-slate-900">
-                        997.26
-                      </span>
-                    </div>
-                    <div className="mt-1">
-                      Monthly = 52,000 ÷ 12 = 4,333.3333… ≈{" "}
-                      <span className="font-semibold text-slate-900">
-                        4,333.33
-                      </span>
-                    </div>
-                  </div>
-
-                  <h3 className="text-xl font-extrabold text-sky-700 tracking-tight">
-                    Input formats and parsing rules
-                  </h3>
-                  <p>
-                    The calculator accepts common numeric formats and rejects or
-                    warns on ambiguous formats rather than guessing.
-                  </p>
-
-                  <div className="overflow-hidden rounded-2xl ring-1 ring-slate-200">
-                    <table className="w-full text-sm">
-                      <thead className="bg-slate-50">
-                        <tr>
-                          <th className="text-left font-semibold text-slate-900 px-4 py-3">
-                            Format
-                          </th>
-                          <th className="text-left font-semibold text-slate-900 px-4 py-3">
-                            Examples accepted
-                          </th>
-                          <th className="text-left font-semibold text-slate-900 px-4 py-3">
-                            Notes
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-200">
-                        <tr className="bg-white">
-                          <td className="px-4 py-3">Decimals</td>
-                          <td className="px-4 py-3">1200.50, .5, 12.</td>
-                          <td className="px-4 py-3">
-                            Decimal point is supported. Trailing dot is treated
-                            as a decimal with no fractional digits.
-                          </td>
-                        </tr>
-                        <tr className="bg-white">
-                          <td className="px-4 py-3">Thousands grouping</td>
-                          <td className="px-4 py-3">1,200; 1,200.50</td>
-                          <td className="px-4 py-3">
-                            Commas are treated as thousands separators.
-                          </td>
-                        </tr>
-                        <tr className="bg-white">
-                          <td className="px-4 py-3">Currency symbols</td>
-                          <td className="px-4 py-3">$1,200.50; €1200</td>
-                          <td className="px-4 py-3">
-                            Currency symbols are ignored for numeric parsing.
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-
-                  <p>
-                    Ambiguous input behavior: if a value can reasonably be read
-                    in more than one way, the tool should warn or block instead
-                    of guessing. Examples of ambiguity include mixed separators
-                    like "1.200,50" (locale-dependent) or malformed grouping
-                    like "1,200,50". The goal is to avoid producing
-                    clean-looking numbers from a misread input.
-                  </p>
-
-                  <h3 className="text-xl font-extrabold text-sky-700 tracking-tight">
-                    Rounding and calculation precision
-                  </h3>
-                  <p>
-                    Decimals are preserved internally end to end. Rounding is
-                    display-only. If the UI shows fewer decimals, the underlying
-                    calculations still use the full parsed value and the fixed
-                    formulas above. Changing display precision changes
-                    formatting, not the math.
-                  </p>
-
-                  <h3 className="text-xl font-extrabold text-sky-700 tracking-tight">
                     Scope and limits of this tool
                   </h3>
                   <p>
@@ -453,45 +429,6 @@ const HowItWorks = () => {
                     statement about how many payments occur in any calendar
                     month. For due dates or invoice timing, use a due-date tool
                     instead of relying on period equivalents.
-                  </p>
-
-                  <h3 className="text-xl font-extrabold text-sky-700 tracking-tight">
-                    Related tools (short contextual references only)
-                  </h3>
-                  <p>
-                    If you need to switch between other rent periods without
-                    changing the conversion basis, the{" "}
-                    <Link
-                      to="/rent-converter"
-                      className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
-                    >
-                      rent converter hub
-                    </Link>{" "}
-                    links the full set of period converters. For the reverse of
-                    this page, use the{" "}
-                    <Link
-                      to="/biweekly-to-annual-rent-converter"
-                      className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
-                    >
-                      biweekly to annual converter
-                    </Link>{" "}
-                    so the same year basis is applied in the opposite direction.
-                    For a nearby frequency comparison, the{" "}
-                    <Link
-                      to="/weekly-to-biweekly-rent-converter"
-                      className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
-                    >
-                      weekly to biweekly converter
-                    </Link>{" "}
-                    keeps weekly and 14-day equivalents on the same footing.
-                    Monthly comparisons can be checked against{" "}
-                    <Link
-                      to="/annual-to-monthly-rent-converter"
-                      className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
-                    >
-                      annual to monthly
-                    </Link>{" "}
-                    to avoid the "weekly × 4" shortcut.
                   </p>
                 </div>
               </div>

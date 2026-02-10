@@ -2,6 +2,7 @@ import { useMemo, useEffect, useRef, useState } from "react";
 import type { Route } from "./+types/monthly-to-daily-rent-converter";
 import Assumptions from "~/client/components/layout/Assumptions";
 import Rounding from "~/client/components/layout/Rounding";
+import HowItWorks from "~/client/components/monthly-to-daily-rent-converter/HowItWorks";
 
 function safeToFixed(n: number, digits: number): string {
   if (!Number.isFinite(n)) return "-";
@@ -876,6 +877,8 @@ export default function MonthlyToDailyRent() {
           />
         </div>
       </section>
+
+      <HowItWorks />
 
       <section className="mt-8 mb-4 hidden sm:block">
         <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-500">

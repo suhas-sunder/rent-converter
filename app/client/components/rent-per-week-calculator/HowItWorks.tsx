@@ -226,6 +226,108 @@ const HowItWorks = () => {
               </div>
             </div>
 
+            {/* Examples section (separate) */}
+            <div className="mt-10 rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+              <div className="p-5 sm:p-6">
+                <h3 className="text-2xl font-extrabold text-sky-900 tracking-tight">
+                  Examples
+                </h3>
+                <p className="mt-3 text-slate-600 leading-7">
+                  Each example follows the same structure: convert the input to
+                  an annual total using this page’s period definition, then
+                  convert that annual total into a 7-day (weekly) equivalent.
+                </p>
+
+                <div className="mt-6 grid gap-4 sm:gap-5">
+                  {/* Example 1: Monthly */}
+                  <div className="rounded-3xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-900">
+                      Example 1: $2,400 monthly
+                    </div>
+                    <ul className="mt-3 list-disc pl-5 space-y-2 text-slate-700">
+                      <li>
+                        Annual = <strong>$28,800</strong> (2400 × 12)
+                      </li>
+                      <li>
+                        Weekly = <strong>$552.328767</strong> (28,800 × 7 ÷ 365)
+                      </li>
+                      <li className="text-slate-600">
+                        This differs from “monthly ÷ 4” because a month here is
+                        treated as an average month length (365 ÷ 12 days), not
+                        a fixed 4-week block.
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Example 2: Every 4 weeks */}
+                  <div className="rounded-3xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-900">
+                      Example 2: $2,000 every 4 weeks (28 days)
+                    </div>
+                    <ul className="mt-3 list-disc pl-5 space-y-2 text-slate-700">
+                      <li>
+                        Daily = <strong>$71.428571</strong> (2000 ÷ 28)
+                      </li>
+                      <li>
+                        Weekly = <strong>$500.000000</strong> (daily × 7)
+                      </li>
+                      <li>
+                        Annual = <strong>$26,071.428571</strong> (daily × 365)
+                      </li>
+                      <li className="text-slate-600">
+                        Fixed-day cycles stay clean because the day count is
+                        explicit. This is why 28-day rent is not the same thing
+                        as monthly rent, even if the numbers look close.
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Example 3: Weekly + weeks-total */}
+                  <div className="rounded-3xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-900">
+                      Example 3: $700 weekly, plus a 12-week total
+                    </div>
+                    <ul className="mt-3 list-disc pl-5 space-y-2 text-slate-700">
+                      <li>
+                        Weekly = <strong>$700.00</strong> (already a 7-day
+                        amount)
+                      </li>
+                      <li>
+                        Annual = <strong>$36,500</strong> (700 × 365 ÷ 7)
+                      </li>
+                      <li>
+                        Total for 12 weeks = <strong>$8,400</strong> (700 × 12)
+                      </li>
+                      <li className="text-slate-600">
+                        The weeks-total box is just weekly × weeks. No due-date
+                        logic, proration, or fees are applied.
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="rounded-2xl bg-white ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-900">
+                      What these examples are doing
+                    </div>
+                    <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
+                      <li>
+                        Monthly inputs annualize via <strong>× 12</strong>, then
+                        weekly is <strong>annual × 7 ÷ 365</strong>.
+                      </li>
+                      <li>
+                        28-day inputs use explicit days (amount ÷ 28), then
+                        scale to weekly (× 7) and annual (× 365).
+                      </li>
+                      <li>
+                        Weekly inputs are already 7-day amounts, so they map
+                        directly.
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Dark callout */}
             <div className="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-6 sm:p-7">
               <div
@@ -253,37 +355,31 @@ const HowItWorks = () => {
               </div>
             </div>
 
-            <div className="mt-10 rc-no-print">
-              <h3 className="text-2xl font-semibold mb-4 text-slate-900">
-                Related pages
-              </h3>
-              <ul className="list-disc ml-6 text-slate-700">
-                <li>
-                  <Link
-                    to="/monthly-to-weekly-rent-converter"
-                    className="text-sky-700 hover:underline"
-                  >
-                    Monthly to weekly rent converter
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/rent-paid-every-4-weeks-calculator"
-                    className="text-sky-700 hover:underline"
-                  >
-                    Rent paid every 4 weeks calculator
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/how-much-rent-can-i-afford-calculator"
-                    className="text-sky-700 hover:underline"
-                  >
-                    How much rent can I afford calculator
-                  </Link>
-                </li>
-              </ul>
-            </div>
+            {/* Related tools (kept) */}
+            <p className="text-slate-700 leading-relaxed">
+              Related tools:{" "}
+              <Link
+                to="/rent-converter"
+                className="inline-flex items-center gap-2 text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+              >
+                rent converter
+              </Link>
+              ,{" "}
+              <Link
+                to="/monthly-to-weekly-rent-converter"
+                className="inline-flex items-center gap-2 text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+              >
+                monthly to weekly
+              </Link>
+              ,{" "}
+              <Link
+                to="/rent-paid-every-4-weeks-calculator"
+                className="inline-flex items-center gap-2 text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+              >
+                rent paid every 4 weeks
+              </Link>
+              .
+            </p>
           </div>
         </div>
       </div>

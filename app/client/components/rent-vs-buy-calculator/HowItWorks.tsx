@@ -121,7 +121,7 @@ const HowItWorks = () => {
                   </p>
 
                   <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
-                    <div className="text-sm font-bold text-slate-900">
+                    <div className="text-sm font-bold text-sky-900">
                       Core idea
                     </div>
                     <p className="mt-2">
@@ -197,7 +197,7 @@ const HowItWorks = () => {
 
                   <div className="mt-4 grid gap-3 sm:grid-cols-2">
                     <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
-                      <div className="text-sm font-bold text-slate-900">
+                      <div className="text-sm font-bold text-sky-900">
                         What counts on rent
                       </div>
                       <ul className="mt-2 list-disc pl-5 space-y-2">
@@ -207,7 +207,7 @@ const HowItWorks = () => {
                       </ul>
                     </div>
                     <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
-                      <div className="text-sm font-bold text-slate-900">
+                      <div className="text-sm font-bold text-sky-900">
                         What does not count
                       </div>
                       <ul className="mt-2 list-disc pl-5 space-y-2">
@@ -275,7 +275,7 @@ const HowItWorks = () => {
                   </p>
 
                   <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
-                    <div className="text-sm font-bold text-slate-900">
+                    <div className="text-sm font-bold text-sky-900">
                       End-of-horizon sale estimate
                     </div>
                     <p className="mt-2">
@@ -350,6 +350,104 @@ const HowItWorks = () => {
               </div>
             </div>
 
+            {/* Examples section (separate) */}
+            <div className="mt-10 rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+              <div className="p-5 sm:p-6">
+                <h3 className="text-2xl font-extrabold text-sky-900 tracking-tight">
+                  Examples
+                </h3>
+                <p className="mt-3 text-slate-600 leading-7">
+                  These are simplified examples to show how the model combines
+                  cash outflows, balance tracking, and an end-of-horizon sale
+                  estimate. Your results depend entirely on the assumptions you
+                  enter.
+                </p>
+
+                <div className="mt-6 grid gap-4 sm:gap-5">
+                  <div className="rounded-3xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-900">
+                      Example 1: Short horizon where transaction costs dominate
+                    </div>
+                    <ul className="mt-3 list-disc pl-5 space-y-2 text-slate-700">
+                      <li>Horizon: 3 years</li>
+                      <li>
+                        Rent: $2,500/mo (no increase) → rent paid ≈ $90,000
+                      </li>
+                      <li>
+                        Buying: upfront costs + selling costs can make the buy
+                        side look expensive if you sell quickly
+                      </li>
+                      <li className="text-slate-600">
+                        Why: you have less time for principal paydown and
+                        appreciation to offset one-time costs.
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="rounded-3xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-900">
+                      Example 2: Higher rent growth increases rent-side total
+                    </div>
+                    <ul className="mt-3 list-disc pl-5 space-y-2 text-slate-700">
+                      <li>Horizon: 10 years</li>
+                      <li>Rent: $2,200/mo with 4% annual increase</li>
+                      <li>
+                        Output pattern: rent paid curve accelerates because rent
+                        steps up each year
+                      </li>
+                      <li className="text-slate-600">
+                        What to check: whether your assumed rent increase rate
+                        is realistic for your area.
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="rounded-3xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-900">
+                      Example 3: Appreciation and selling costs drive the end
+                      result
+                    </div>
+                    <ul className="mt-3 list-disc pl-5 space-y-2 text-slate-700">
+                      <li>Horizon: 15 years</li>
+                      <li>
+                        Buying: appreciation increases modeled home value each
+                        year
+                      </li>
+                      <li>
+                        Net sale proceeds = modeled home value − selling costs −
+                        remaining mortgage balance
+                      </li>
+                      <li className="text-slate-600">
+                        What to check: selling cost %, appreciation %, and
+                        maintenance assumptions. Those often dominate the final
+                        gap.
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="rounded-2xl bg-white ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-900">
+                      What these examples are highlighting
+                    </div>
+                    <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
+                      <li>
+                        Short horizons amplify one-time buy costs (closing and
+                        selling).
+                      </li>
+                      <li>
+                        Rent growth compounds once per year and can shift the
+                        comparison over time.
+                      </li>
+                      <li>
+                        The buy-side outcome is heavily influenced by the sale
+                        estimate inputs.
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Dark utility callout */}
             <div className="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-6 sm:p-7">
               <div
@@ -364,7 +462,7 @@ const HowItWorks = () => {
                 <div className="text-sm font-semibold text-sky-300">
                   Scope note
                 </div>
-                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight">
+                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-100">
                   This is a scenario comparison, not a forecast
                 </h3>
                 <p className="mt-3 text-slate-200 leading-7">
@@ -382,14 +480,14 @@ const HowItWorks = () => {
               Related tools:{" "}
               <Link
                 to="/rent-affordability-calculator"
-                className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                className="cursor-pointer font-semibold text-sky-700 hover:underline hover:text-sky-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
               >
                 rent affordability calculator
               </Link>{" "}
               and{" "}
               <Link
                 to="/rent-converter"
-                className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                className="cursor-pointer font-semibold text-sky-700 hover:underline hover:text-sky-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
               >
                 rent converter
               </Link>

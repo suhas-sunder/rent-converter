@@ -17,15 +17,23 @@ const HowItWorks = () => {
           <div className="flex flex-col gap-4 sm:gap-5">
             <div className="flex items-start justify-between gap-4">
               <div className="min-w-0">
-                <h2 className="text-3xl sm:text-4xl font-extrabold text-sky-900 tracking-tight leading-tight">
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-sky-800 tracking-tight leading-tight">
                   How the rent after increase calculator works
                 </h2>
                 <p className="mt-2 text-slate-600 leading-7 max-w-2xl">
-                  This page applies a defined increase to a rent amount and then
-                  expresses the updated rent across common time periods using
-                  one consistent time basis. It converts through an annual
-                  reference so the before-and-after numbers stay comparable
-                  across monthly, weekly, and 28-day views.
+                  This page takes your current rent and an increase, then shows
+                  your updated rent across common time periods. It uses one
+                  consistent time basis, so the “before” and “after” numbers
+                  stay comparable whether you are looking at monthly, weekly,
+                  biweekly, or every 4 weeks. If you need to convert any rent
+                  amount between periods, use the{" "}
+                  <Link
+                    to="/rent-converter"
+                    className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                  >
+                    universal rent converter
+                  </Link>
+                  .
                 </p>
               </div>
 
@@ -60,10 +68,10 @@ const HowItWorks = () => {
               </div>
               <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
                 <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                  NORMALIZE
+                  CALCULATE
                 </div>
                 <div className="mt-2 text-sm font-semibold text-slate-900">
-                  Annual basis
+                  New rent
                 </div>
               </div>
               <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
@@ -71,7 +79,7 @@ const HowItWorks = () => {
                   OUTPUT
                 </div>
                 <div className="mt-2 text-sm font-semibold text-slate-900">
-                  Updated breakdown
+                  Full breakdown
                 </div>
               </div>
             </div>
@@ -85,28 +93,48 @@ const HowItWorks = () => {
                 className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
               />
               <div className="p-5 sm:p-6">
-                <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
-                  Inputs and validation
+                <h3 className="text-xl sm:text-2xl font-extrabold text-sky-800 tracking-tight">
+                  Step 1: Enter your current rent (and the period)
                 </h3>
                 <p className="mt-4">
-                  Inputs are validated before results are shown. If the current
-                  rent, increase percent, or increase amount is invalid or
-                  ambiguous, the calculator avoids outputting a misleading “0”
-                  or a guessed value. The tool only uses what you explicitly
-                  provide.
-                </p>
-                <p className="mt-4">
-                  The parser supports currency symbols, thousands separators,
-                  and decimal formats such as <strong>.5</strong> and{" "}
-                  <strong>12.</strong>. If an entry could reasonably be read
-                  more than one way, the page surfaces an error or warning
-                  rather than silently picking an interpretation.
-                </p>
-                <p className="mt-4">
-                  This calculator does not infer inclusions. Utilities, fees,
+                  Start with the rent amount you pay today and choose the period
+                  it belongs to (monthly, weekly, biweekly, every 4 weeks, and
+                  so on). The calculator only uses what you provide. It does not
+                  guess what your rent includes, so utilities, parking, fees,
                   taxes, deposits, and one-time charges are not added or
-                  removed. Whatever “rent” means for your use case is the number
-                  you enter.
+                  removed.
+                </p>
+
+                <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                  <div className="text-sm font-bold text-slate-900">
+                    Input parsing and safeguards
+                  </div>
+                  <ul className="mt-2 list-disc pl-5 space-y-2">
+                    <li>
+                      Currency symbols and commas are fine:{" "}
+                      <strong>$1,850</strong> → 1850
+                    </li>
+                    <li>
+                      Decimals are supported, including <strong>.5</strong> and{" "}
+                      <strong>12.</strong>
+                    </li>
+                    <li>
+                      If an entry is invalid or ambiguous, the page warns or
+                      blocks instead of outputting a misleading “0”
+                    </li>
+                  </ul>
+                </div>
+
+                <p className="mt-4">
+                  If you want to see the rent share impact instead of just the
+                  new rent number, use{" "}
+                  <Link
+                    to="/rent-as-percentage-of-income-calculator"
+                    className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                  >
+                    rent as percentage of income
+                  </Link>
+                  .
                 </p>
               </div>
             </div>
@@ -118,23 +146,54 @@ const HowItWorks = () => {
                 className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
               />
               <div className="p-5 sm:p-6">
-                <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
-                  One consistent annual basis
+                <h3 className="text-xl sm:text-2xl font-extrabold text-sky-800 tracking-tight">
+                  Step 2: Choose percent increase or fixed increase
                 </h3>
+
                 <p className="mt-4">
-                  Everything is converted through an annual reference based on a
-                  365-day year. Months are treated as an average month length of{" "}
-                  <strong>365 ÷ 12</strong> days. Weekly is always 7 days.
-                  Biweekly is always 14 days. Every 4 weeks is always 28 days.
-                  Those time lengths are what drive equivalence values across
-                  the breakdown.
+                  You can increase rent in two different ways. Percent mode is
+                  best when you are given a rate like 2.5%. Fixed mode is best
+                  when you are told “rent goes up by $50” in the same period as
+                  your current rent.
                 </p>
+
+                <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                  <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-slate-900">
+                      Percent mode
+                    </div>
+                    <p className="mt-2 text-slate-700">
+                      New rent = current rent × (1 + percent ÷ 100)
+                    </p>
+                    <p className="mt-2 text-sm text-slate-600">
+                      Useful for capped increases and notice letters that quote
+                      a percentage.
+                    </p>
+                  </div>
+                  <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-slate-900">
+                      Fixed-amount mode
+                    </div>
+                    <p className="mt-2 text-slate-700">
+                      New rent = current rent + fixed increase (same period)
+                    </p>
+                    <p className="mt-2 text-sm text-slate-600">
+                      The increase amount is treated as attached to the period
+                      you selected.
+                    </p>
+                  </div>
+                </div>
+
                 <p className="mt-4">
-                  This is not a payment-schedule model. The equivalence math
-                  does not assume “monthly × 12” or “4-week × 13” as the basis
-                  for the breakdown. Those schedule totals can be shown
-                  elsewhere for context, but the conversion here is based on
-                  time length so the outputs remain compatible across periods.
+                  If you specifically need to calculate the percentage change
+                  between two rent numbers, use{" "}
+                  <Link
+                    to="/rent-increase-percentage-calculator"
+                    className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                  >
+                    rent increase percentage calculator
+                  </Link>
+                  .
                 </p>
               </div>
             </div>
@@ -146,108 +205,194 @@ const HowItWorks = () => {
                 className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
               />
               <div className="p-5 sm:p-6">
-                <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
-                  Percent mode vs fixed-amount mode
+                <h3 className="text-xl sm:text-2xl font-extrabold text-sky-800 tracking-tight">
+                  Step 3: See the updated rent across periods (one time basis)
                 </h3>
 
                 <p className="mt-4">
-                  Percent mode treats the current annual rent as the baseline
-                  and computes the increase as a proportion of that annual
-                  total. The annual increase is:
+                  After the new rent is calculated, the page expresses it across
+                  common periods so you can compare listings and budgets without
+                  mixing labels. The breakdown uses a single time basis: year is
+                  365 days, average month is 365 ÷ 12 days, week is 7 days,
+                  biweekly is 14 days, and every 4 weeks is 28 days.
                 </p>
 
                 <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
-                  <div className="text-sm font-bold text-sky-900">
-                    Percent mode
+                  <div className="text-sm font-bold text-slate-900">
+                    What this avoids
                   </div>
-                  <p className="mt-2 text-slate-700">
-                    <strong>Annual increase</strong> = annual current rent ×
-                    (percent ÷ 100)
-                  </p>
-                  <p className="mt-2 text-sm text-slate-600">
-                    The new annual total is then converted back into hourly,
-                    daily, weekly, biweekly, 4-week, monthly, and annual
-                    equivalents using the same time basis.
-                  </p>
+                  <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
+                    <li>
+                      Treating “monthly” as 30 days in one place and 28 days in
+                      another
+                    </li>
+                    <li>Turning “every 4 weeks” into “monthly” by gut feel</li>
+                    <li>
+                      Chaining rounded intermediate values that drift over time
+                    </li>
+                  </ul>
                 </div>
 
-                <p className="mt-5">
-                  Fixed-amount mode treats the increase as an add-on in the same
-                  billing period as the rent you entered. If rent is monthly and
-                  the increase amount is entered, the increase is interpreted as
-                  a monthly add-on. If rent is weekly, it’s treated as a weekly
-                  add-on. That combined amount is then annualized on the same
-                  365-day and average-month basis.
-                </p>
-
-                <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
-                  <div className="text-sm font-bold text-sky-900">
-                    Fixed-amount mode
-                  </div>
-                  <p className="mt-2 text-slate-700">
-                    <strong>New period rent</strong> = current rent + fixed
-                    increase (same period)
-                  </p>
-                  <p className="mt-2 text-sm text-slate-600">
-                    The period result is then annualized and reconverted into
-                    the full breakdown so all displayed periods reconcile to the
-                    same annual total.
-                  </p>
-                </div>
-
-                <p className="mt-5">
-                  The calculator does not infer whether a fixed increase is
-                  temporary, capped, prorated, or offset by other changes. It
-                  applies the numbers mechanically and shows the resulting
-                  equivalents.
+                <p className="mt-4">
+                  If you are comparing a 28-day billed listing to a monthly one,
+                  the quickest sanity check is to look at the annual totals or
+                  use{" "}
+                  <Link
+                    to="/rent-paid-every-4-weeks-calculator"
+                    className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                  >
+                    rent paid every 4 weeks
+                  </Link>
+                  .
                 </p>
               </div>
             </div>
 
-            {/* Card 4 */}
+            {/* Examples (required, its own section) */}
             <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
               <div
                 aria-hidden="true"
                 className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
               />
               <div className="p-5 sm:p-6">
-                <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
-                  Outputs, precision, and printing
+                <h3 className="text-xl sm:text-2xl font-extrabold text-sky-800 tracking-tight">
+                  Examples
+                </h3>
+
+                <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                  <ul className="list-disc pl-5 space-y-3 text-slate-700">
+                    <li>
+                      <span className="font-semibold text-slate-900">
+                        Percent increase on monthly rent:
+                      </span>{" "}
+                      Your rent is <strong>$2,000/month</strong> and the
+                      increase is <strong>3%</strong>. Percent mode shows the
+                      new monthly rent and also the weekly and annual
+                      equivalents so you can understand the yearly impact at a
+                      glance.
+                    </li>
+                    <li>
+                      <span className="font-semibold text-slate-900">
+                        Fixed increase attached to the same period:
+                      </span>{" "}
+                      Your rent is <strong>$525/week</strong> and it increases
+                      by <strong>$25/week</strong>. Fixed mode treats that $25
+                      as a weekly add-on, then shows the updated monthly,
+                      4-week, and annual views using the same time basis.
+                    </li>
+                    <li>
+                      <span className="font-semibold text-slate-900">
+                        Spotting 28-day vs monthly differences:
+                      </span>{" "}
+                      You see <strong>$2,150 every 4 weeks</strong> and want to
+                      compare it to a <strong>$2,150/month</strong> option.
+                      Converting the updated rent into annual and weekly makes
+                      the 28-day difference obvious.
+                    </li>
+                    <li>
+                      <span className="font-semibold text-slate-900">
+                        Budget check after an increase:
+                      </span>{" "}
+                      After you compute the new rent, jump to{" "}
+                      <Link
+                        to="/how-much-rent-can-i-afford-calculator"
+                        className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                      >
+                        how much rent can I afford
+                      </Link>{" "}
+                      to see how the new number fits against your income target.
+                    </li>
+                  </ul>
+                </div>
+
+                <p className="mt-4">
+                  If you only want the increase math (without the breakdown),
+                  use{" "}
+                  <Link
+                    to="/rent-increase-calculator"
+                    className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                  >
+                    rent increase calculator
+                  </Link>
+                  .
+                </p>
+              </div>
+            </div>
+
+            {/* Related tools (required) */}
+            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+              <div
+                aria-hidden="true"
+                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+              />
+              <div className="p-5 sm:p-6">
+                <h3 className="text-xl sm:text-2xl font-extrabold text-sky-800 tracking-tight">
+                  Related tools
                 </h3>
 
                 <p className="mt-4">
-                  Results are converted back into common periods so the change
-                  can be viewed consistently: hourly, daily, weekly, biweekly,
-                  every 4 weeks, monthly, and annual. All outputs come from the
-                  same annual basis.
+                  Use these when you want to answer the next question after an
+                  increase: “what does this mean per year,” “what share of my
+                  income is this,” or “how do I compare two billing cycles.”
                 </p>
 
-                <p className="mt-4">
-                  Rounding is display-only. Internally the calculator preserves
-                  decimals (up to 12 places). Enabling rounding changes only
-                  what is shown on screen, not the underlying computed values.
-                </p>
-
-                <p className="mt-4">
-                  Printing uses your browser’s print dialog, including
-                  save-as-PDF. The breakdown is formatted to remain readable
-                  when printed.
-                </p>
-
-                <div className="mt-5 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
-                  <div className="text-sm font-bold text-sky-900">
-                    What you can do
-                  </div>
-                  <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
+                <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                  <ul className="list-disc pl-5 space-y-2 text-slate-700">
                     <li>
-                      Compute the updated rent in the same period you entered
+                      <Link
+                        to="/rent-converter"
+                        className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                      >
+                        Universal rent converter →
+                      </Link>{" "}
+                      Convert between monthly, weekly, biweekly, daily, hourly,
+                      and annual.
                     </li>
-                    <li>See the annual impact without switching assumptions</li>
                     <li>
-                      Compare monthly and 28-day views without treating them as
-                      the same period
+                      <Link
+                        to="/rent-increase-calculator"
+                        className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                      >
+                        Rent increase calculator →
+                      </Link>{" "}
+                      Compute the increase amount from a percent or a target.
                     </li>
-                    <li>Print or save a PDF copy of the results</li>
+                    <li>
+                      <Link
+                        to="/rent-increase-percentage-calculator"
+                        className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                      >
+                        Rent increase percentage calculator →
+                      </Link>{" "}
+                      Find the percent change between old and new rent.
+                    </li>
+                    <li>
+                      <Link
+                        to="/rent-paid-every-4-weeks-calculator"
+                        className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                      >
+                        Rent paid every 4 weeks calculator →
+                      </Link>{" "}
+                      Compare 28-day billing to monthly and annual.
+                    </li>
+                    <li>
+                      <Link
+                        to="/rent-as-percentage-of-income-calculator"
+                        className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                      >
+                        Rent as percentage of income →
+                      </Link>{" "}
+                      See what share of income your updated rent represents.
+                    </li>
+                    <li>
+                      <Link
+                        to="/how-much-rent-can-i-afford-calculator"
+                        className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                      >
+                        How much rent can I afford →
+                      </Link>{" "}
+                      Translate income into a rent target range.
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -267,15 +412,14 @@ const HowItWorks = () => {
                 <div className="text-sm font-semibold text-sky-300">
                   Utility note
                 </div>
-                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-100">
-                  Percent and fixed increases behave differently across periods
+                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-300">
+                  Percent and fixed increases can tell different stories
                 </h3>
                 <p className="mt-3 text-slate-200 leading-7">
-                  A percent increase scales with the baseline annual rent. A
-                  fixed increase depends on the period it’s attached to. This
-                  page keeps both modes on the same annual basis so the updated
-                  weekly, monthly, and 28-day equivalents can be compared
-                  without hidden shortcuts.
+                  A percent increase scales with the baseline rent. A fixed
+                  increase depends on the period you attach it to. This page
+                  keeps both modes on one time basis so the updated weekly,
+                  monthly, and 28-day equivalents stay comparable.
                 </p>
               </div>
             </div>

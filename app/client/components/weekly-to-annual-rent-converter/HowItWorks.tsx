@@ -49,7 +49,7 @@ const HowItWorks = () => {
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition cursor-pointer">
                 <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
                   INPUT
                 </div>
@@ -57,7 +57,7 @@ const HowItWorks = () => {
                   Weekly rent amount
                 </div>
               </div>
-              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition cursor-pointer">
                 <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
                   BASIS
                 </div>
@@ -65,7 +65,7 @@ const HowItWorks = () => {
                   365-day equivalence
                 </div>
               </div>
-              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition cursor-pointer">
                 <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
                   CONTEXT
                 </div>
@@ -73,7 +73,7 @@ const HowItWorks = () => {
                   Weekly × 52 (schedule)
                 </div>
               </div>
-              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition cursor-pointer">
                 <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
                   OUTPUT
                 </div>
@@ -138,7 +138,7 @@ const HowItWorks = () => {
                       <span className="font-semibold text-slate-900">
                         Annual (time-based)
                       </span>{" "}
-                      = weekly × 7 × 365 ÷ 7 = weekly × 365 ÷ 7
+                      = weekly × 365 ÷ 7
                     </p>
                     <p className="mt-2 text-sm text-slate-600">
                       Equivalent form: daily = weekly ÷ 7, then annual = daily ×
@@ -238,7 +238,7 @@ const HowItWorks = () => {
               </div>
             </div>
 
-            {/* SectionCard: examples + input formats */}
+            {/* SectionCard: examples (separate) */}
             <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
               <div
                 aria-hidden="true"
@@ -258,13 +258,13 @@ const HowItWorks = () => {
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        d="M7 7h10v10H7z"
+                        d="M12 6v6l4 2M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                       />
                     </svg>
                   </div>
                   <div className="min-w-0">
                     <h3 className="text-xl font-extrabold text-sky-900 tracking-tight">
-                      Examples you can cross-check
+                      Examples
                     </h3>
                   </div>
                 </div>
@@ -272,38 +272,95 @@ const HowItWorks = () => {
                 <div className="mt-4 space-y-3">
                   <p>
                     These examples match the tool’s intent: compute an annual
-                    total on a 365-day basis, then show consistent equivalents.
-                    Display rounding can change the last few digits, but the
-                    math rule is the same.
+                    total on a 365-day basis, then (optionally) compare against
+                    the 52-payment schedule shortcut.
                   </p>
 
-                  <ul className="list-disc pl-5 space-y-2">
-                    <li>
-                      Weekly rent{" "}
-                      <strong className="text-slate-900">$500</strong> →
-                      time-based annual{" "}
-                      <strong className="text-slate-900">
-                        $500 × 365 ÷ 7 ≈ $26,071.43
-                      </strong>
-                    </li>
-                    <li>
-                      Weekly rent{" "}
-                      <strong className="text-slate-900">$500</strong> →
-                      schedule annual{" "}
-                      <strong className="text-slate-900">
-                        $500 × 52 = $26,000
-                      </strong>
-                    </li>
-                    <li>
-                      Input <strong className="text-slate-900">1,234</strong> →
-                      comma is treated as thousands grouping (1234). If you
-                      meant a decimal, use{" "}
-                      <strong className="text-slate-900">1.234</strong>.
-                    </li>
-                  </ul>
+                  <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                    <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                      <div className="text-sm font-bold text-sky-900">
+                        Example 1: $500 per week
+                      </div>
+                      <ul className="mt-2 list-disc pl-5 space-y-2">
+                        <li>
+                          Time-based annual:{" "}
+                          <strong className="text-slate-900">
+                            $500 × 365 ÷ 7 ≈ $26,071.43
+                          </strong>
+                        </li>
+                        <li>
+                          Schedule annual:{" "}
+                          <strong className="text-slate-900">
+                            $500 × 52 = $26,000
+                          </strong>
+                        </li>
+                      </ul>
+                    </div>
 
+                    <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                      <div className="text-sm font-bold text-sky-900">
+                        Example 2: $725 per week
+                      </div>
+                      <ul className="mt-2 list-disc pl-5 space-y-2">
+                        <li>
+                          Time-based annual:{" "}
+                          <strong className="text-slate-900">
+                            $725 × 365 ÷ 7 ≈ $37,803.57
+                          </strong>
+                        </li>
+                        <li>
+                          Schedule annual:{" "}
+                          <strong className="text-slate-900">
+                            $725 × 52 = $37,700
+                          </strong>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <p className="text-sm text-slate-600">
+                    Display rounding can change the last digits. Internally,
+                    calculations should preserve decimals end-to-end, with
+                    rounding applied only to display.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* SectionCard: input formats (separate) */}
+            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+              <div
+                aria-hidden="true"
+                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+              />
+              <div className="p-5 sm:px-6">
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 24 24"
+                      className="h-5 w-5 text-sky-600"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M4 7h16M7 11h10M7 15h6"
+                      />
+                    </svg>
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-xl font-extrabold text-sky-900 tracking-tight">
+                      Input parsing and decimals
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="mt-4 space-y-3">
                   <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
-                    <div className="text-sm font-bold text-slate-900">
+                    <div className="text-sm font-bold text-sky-900">
                       Input formats supported
                     </div>
                     <ul className="mt-2 list-disc pl-5 space-y-2">
@@ -327,8 +384,15 @@ const HowItWorks = () => {
 
                   <p>
                     If an input could reasonably be interpreted more than one
-                    way, the correct behavior is to warn or block instead of
-                    guessing and returning a clean-looking but incorrect result.
+                    way, the page should warn or block instead of guessing and
+                    returning a clean-looking but incorrect result.
+                  </p>
+
+                  <p className="text-sm text-slate-600">
+                    Example: <strong className="text-slate-900">1,234</strong>{" "}
+                    is treated as thousands grouping (1234). If you meant a
+                    decimal, use{" "}
+                    <strong className="text-slate-900">1.234</strong>.
                   </p>
                 </div>
               </div>
@@ -348,7 +412,7 @@ const HowItWorks = () => {
                 <div className="text-sm font-semibold text-sky-300">
                   Utility note
                 </div>
-                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight">
+                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-100">
                   Equivalent conversion is not a lease billing engine
                 </h3>
                 <p className="mt-3 text-slate-200 leading-7">
@@ -373,21 +437,21 @@ const HowItWorks = () => {
               Related pages:{" "}
               <Link
                 to="/rent-paid-weekly-vs-monthly"
-                className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                className="cursor-pointer font-semibold text-sky-700 hover:text-sky-800 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
               >
                 weekly vs monthly rent
               </Link>
               ,{" "}
               <Link
                 to="/monthly-to-annual-rent-converter"
-                className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                className="cursor-pointer font-semibold text-sky-700 hover:text-sky-800 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
               >
                 monthly to annual rent
               </Link>
               , and{" "}
               <Link
                 to="/rent-converter"
-                className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                className="cursor-pointer font-semibold text-sky-700 hover:text-sky-800 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
               >
                 rent converter
               </Link>

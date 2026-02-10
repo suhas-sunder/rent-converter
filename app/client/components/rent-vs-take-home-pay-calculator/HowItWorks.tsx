@@ -185,7 +185,7 @@ const HowItWorks = () => {
                   <p>
                     People get misleading results when pay and rent are entered
                     in different cycles and the math silently treats one cycle
-                    as “close enough” to another. This tool avoids that by
+                    as close enough to another. This tool avoids that by
                     converting both inputs to annual totals first, then
                     computing the ratio and remainder on that same basis.
                   </p>
@@ -196,7 +196,7 @@ const HowItWorks = () => {
 
                   <ul className="list-disc pl-5 space-y-2">
                     <li>
-                      It prevents “monthly” from being treated as a fixed number
+                      It prevents monthly from being treated as a fixed number
                       of weeks, which can shift the implied annual totals.
                     </li>
                     <li>
@@ -305,17 +305,16 @@ const HowItWorks = () => {
                     <p className="mt-2">
                       If you are paid weekly and rent is monthly, the tool does
                       not pretend that a month equals four weeks. If rent is
-                      every 28 days, it does not quietly convert it into
-                      “monthly” by assuming 30 days. The entire point is that
-                      cycles don’t line up, so annualizing is the neutral
-                      meeting point.
+                      every 28 days, it does not quietly convert it into monthly
+                      by assuming 30 days. The entire point is that cycles do
+                      not line up, so annualizing is the neutral meeting point.
                     </p>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* SectionCard: what it includes / excludes */}
+            {/* SectionCard: scope */}
             <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
               <div
                 aria-hidden="true"
@@ -373,17 +372,17 @@ const HowItWorks = () => {
                       <ul className="mt-2 list-disc pl-5 space-y-2">
                         <li>Utilities, internet, parking, or fees</li>
                         <li>Debt payments, groceries, or other costs</li>
-                        <li>Tax calculations (use after-tax tool if needed)</li>
+                        <li>Tax calculations</li>
                         <li>Calendar due-date planning</li>
                       </ul>
                     </div>
                   </div>
 
                   <p>
-                    If you need a take-home estimate from gross income, use the
-                    after-tax tool. If you need an apples-to-apples conversion
-                    of a listing between weekly, monthly, and 28-day cycles, use
-                    the rent converter hub.
+                    If you need an estimate from gross income, use the after-tax
+                    tool. If you need an apples-to-apples conversion of a
+                    listing between weekly, monthly, and 28-day cycles, use the
+                    rent converter hub.
                   </p>
                 </div>
               </div>
@@ -403,7 +402,7 @@ const HowItWorks = () => {
                 <div className="text-sm font-semibold text-sky-300">
                   Utility note
                 </div>
-                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight">
+                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-100">
                   This compares amounts, not timing
                 </h3>
                 <p className="mt-3 text-slate-200 leading-7">
@@ -420,21 +419,21 @@ const HowItWorks = () => {
               Related tools:{" "}
               <Link
                 to="/how-much-rent-can-i-afford-calculator"
-                className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                className="cursor-pointer font-semibold text-sky-700 hover:text-sky-800 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
               >
                 how much rent can I afford
               </Link>
               ,{" "}
               <Link
                 to="/rent-after-tax-income-calculator"
-                className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                className="cursor-pointer font-semibold text-sky-700 hover:text-sky-800 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
               >
                 rent after-tax income calculator
               </Link>
               , and{" "}
               <Link
                 to="/rent-converter"
-                className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                className="cursor-pointer font-semibold text-sky-700 hover:text-sky-800 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
               >
                 rent converter
               </Link>

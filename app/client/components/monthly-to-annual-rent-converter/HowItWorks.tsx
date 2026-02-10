@@ -1,3 +1,5 @@
+import { Link } from "react-router";
+
 const HowItWorks = () => {
   return (
     <section
@@ -19,11 +21,11 @@ const HowItWorks = () => {
                   How the monthly to annual rent converter works
                 </h2>
                 <p className="mt-2 text-slate-600 leading-7 max-w-2xl">
-                  This page converts a monthly rent amount into an annual
-                  equivalent by committing to a single definition of “monthly.”
-                  Monthly is treated as an average month derived from a 365-day
-                  year. The result is an annual equivalence that can be compared
-                  cleanly against weekly, biweekly, and 4-week pricing.
+                  Enter a monthly rent amount and this page converts it into a
+                  clean annual equivalent, plus a breakdown into other common
+                  cycles (weekly, biweekly, every 4 weeks, daily, hourly). It
+                  uses one consistent time model so you can compare listings
+                  priced in different ways without mixing assumptions.
                 </p>
               </div>
 
@@ -90,10 +92,10 @@ const HowItWorks = () => {
                 <div className="mt-4 space-y-3">
                   <p>
                     The converter treats your monthly input as one average month
-                    of rent. That month is not assumed to be 28 days, 30 days,
-                    or tied to a specific calendar. Instead, monthly is defined
-                    as one-twelfth of a 365-day year. From there, the annual
-                    equivalent is computed directly.
+                    of rent. It is not assumed to be 28 days or 30 days, and it
+                    is not tied to a specific calendar month. Instead, “monthly”
+                    is defined as one-twelfth of a 365-day year, so everything
+                    stays comparable across cycles.
                   </p>
 
                   <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
@@ -113,15 +115,15 @@ const HowItWorks = () => {
                   </div>
 
                   <p>
-                    Because the page commits to this definition, the annual
-                    result can be compared against other period labels without
-                    silently changing assumptions.
+                    In practice, this means you can compare “$2,200/month” to
+                    “$520/week” without accidentally comparing different time
+                    definitions.
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* SectionCard: why not payment count */}
+            {/* SectionCard: why schedule is separate */}
             <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
               <div
                 aria-hidden="true"
@@ -129,16 +131,16 @@ const HowItWorks = () => {
               />
               <div className="p-5 sm:px-6">
                 <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
-                  Why payment schedules are shown separately
+                  Why “monthly” can be confusing (and how this page avoids it)
                 </h3>
 
                 <div className="mt-4 space-y-3">
                   <p>
-                    A monthly label can describe two different things: a
-                    time-based equivalent or a payment schedule. This page
-                    separates those ideas. The annual equivalence is based on
-                    time length. Payment schedules are shown only as
-                    illustrations.
+                    “Monthly” can describe a time-based equivalent, or it can
+                    describe a payment schedule. Those are not always the same
+                    thing. This page focuses on time-based equivalence first,
+                    and only shows schedules as context so you can spot when a
+                    label hides real cost differences.
                   </p>
 
                   <div className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -147,23 +149,30 @@ const HowItWorks = () => {
                         Equivalence basis
                       </div>
                       <p className="mt-2">
-                        Monthly × 12, derived from an average month.
+                        Monthly × 12, based on an average month definition.
                       </p>
                     </div>
                     <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
                       <div className="text-sm font-bold text-slate-900">
-                        Schedule examples
+                        Schedule context
                       </div>
                       <p className="mt-2">
-                        Monthly × 12, 4-week × 13 (illustrative only).
+                        Some billing patterns (like every 4 weeks) can change
+                        how many payments happen in a year.
                       </p>
                     </div>
                   </div>
 
                   <p>
-                    This prevents a common mistake where a 4-week rent looks
-                    cheaper than monthly when compared only by label. The page
-                    shows both so the difference is explicit.
+                    If you want to compare rent across cycles directly, you can
+                    also use the{" "}
+                    <Link
+                      to="/rent-converter"
+                      className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                    >
+                      universal rent converter →
+                    </Link>
+                    .
                   </p>
                 </div>
               </div>
@@ -182,10 +191,9 @@ const HowItWorks = () => {
 
                 <div className="mt-4 space-y-3">
                   <p>
-                    Once the annual equivalence is established, every other
-                    period shown on the page is derived from that same annual
-                    basis. This keeps all outputs internally consistent and
-                    comparable.
+                    Once the annual equivalent is set, every other period shown
+                    is derived from that same annual basis. This keeps the
+                    numbers consistent and avoids rounding chains.
                   </p>
 
                   <ul className="list-disc pl-5 space-y-2">
@@ -207,9 +215,77 @@ const HowItWorks = () => {
                   </ul>
 
                   <p>
-                    No output is chained from a rounded intermediate value. Each
-                    line reconciles back to the same annual figure implied by
-                    the monthly input.
+                    The key idea: the monthly input implies one annual number,
+                    and everything else is just a different view of that same
+                    annual cost.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* SectionCard: examples (own section) */}
+            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+              <div
+                aria-hidden="true"
+                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+              />
+              <div className="p-5 sm:px-6">
+                <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
+                  Examples
+                </h3>
+
+                <div className="mt-4 space-y-3">
+                  <p>
+                    Use these to get a feel for how to read the outputs when
+                    listings are priced in different cycles.
+                  </p>
+
+                  <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <ul className="list-disc pl-5 space-y-3">
+                      <li>
+                        <span className="font-semibold text-slate-900">
+                          Comparing two listings:
+                        </span>{" "}
+                        Listing A is{" "}
+                        <span className="font-semibold text-slate-900">
+                          $2,100/month
+                        </span>{" "}
+                        and Listing B is{" "}
+                        <span className="font-semibold text-slate-900">
+                          $500/week
+                        </span>
+                        . Convert both to annual to compare apples to apples.
+                      </li>
+                      <li>
+                        <span className="font-semibold text-slate-900">
+                          Checking “every 4 weeks”:
+                        </span>{" "}
+                        If a place is priced every 4 weeks, the annual total can
+                        look different than monthly even when the labels feel
+                        similar. Use annual as the baseline, then compare the
+                        4-week view.
+                      </li>
+                      <li>
+                        <span className="font-semibold text-slate-900">
+                          Sanity check daily cost:
+                        </span>{" "}
+                        Converting to daily helps you quickly see how expensive
+                        a rent option feels per day, especially when comparing
+                        different billing labels.
+                      </li>
+                    </ul>
+                  </div>
+
+                  <p>
+                    If you already have a weekly price and want the reverse
+                    direction, use{" "}
+                    <Link
+                      to="/weekly-to-annual-rent-converter"
+                      className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                    >
+                      weekly to annual rent converter →
+                    </Link>
+                    .
                   </p>
                 </div>
               </div>
@@ -229,7 +305,7 @@ const HowItWorks = () => {
                 <div className="mt-4 space-y-3">
                   <p>
                     Monthly inputs are parsed as decimal values. Currency
-                    symbols are ignored for numeric parsing. Thousands
+                    symbols are ignored for numeric parsing, and thousands
                     separators are treated as grouping characters.
                   </p>
 
@@ -241,14 +317,14 @@ const HowItWorks = () => {
                       <strong>1.234</strong> → 1.234
                     </li>
                     <li>
-                      Edge formats such as <strong>.5</strong> and{" "}
+                      Edge formats like <strong>.5</strong> and{" "}
                       <strong>12.</strong> are supported
                     </li>
                   </ul>
 
                   <p>
-                    Computation preserves precision internally, up to twelve
-                    decimal places. If an input could reasonably be interpreted
+                    Computation preserves precision internally (up to twelve
+                    decimal places). If an input could reasonably be interpreted
                     more than one way, the page blocks or warns instead of
                     producing a misleading result.
                   </p>
@@ -256,7 +332,125 @@ const HowItWorks = () => {
               </div>
             </div>
 
-            {/* SectionCard: printing + utility */}
+            {/* SectionCard: related tools (required) */}
+            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+              <div
+                aria-hidden="true"
+                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+              />
+              <div className="p-5 sm:px-6">
+                <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
+                  Related tools
+                </h3>
+
+                <div className="mt-4 space-y-3">
+                  <p>
+                    Use these tools if you want a different conversion direction
+                    or a different kind of rent planning calculation.
+                  </p>
+
+                  <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <ul className="list-disc pl-5 space-y-2">
+                      <li>
+                        <Link
+                          to="/rent-converter"
+                          className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                        >
+                          Universal rent converter →
+                        </Link>{" "}
+                        <span className="text-slate-600">
+                          Convert between monthly, weekly, biweekly, annual,
+                          daily, and hourly in one place.
+                        </span>
+                      </li>
+                      <li>
+                        <Link
+                          to="/annual-to-monthly-rent-converter"
+                          className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                        >
+                          Annual to monthly rent converter →
+                        </Link>{" "}
+                        <span className="text-slate-600">
+                          Reverse the direction and go from annual back to
+                          monthly.
+                        </span>
+                      </li>
+                      <li>
+                        <Link
+                          to="/monthly-to-weekly-rent-converter"
+                          className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                        >
+                          Monthly to weekly rent converter →
+                        </Link>{" "}
+                        <span className="text-slate-600">
+                          Helpful when listings show weekly pricing.
+                        </span>
+                      </li>
+                      <li>
+                        <Link
+                          to="/monthly-to-biweekly-rent-converter"
+                          className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                        >
+                          Monthly to biweekly rent converter →
+                        </Link>{" "}
+                        <span className="text-slate-600">
+                          Compare monthly rent to a biweekly billing view.
+                        </span>
+                      </li>
+                      <li>
+                        <Link
+                          to="/rent-split-calculator"
+                          className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                        >
+                          Rent split calculator →
+                        </Link>{" "}
+                        <span className="text-slate-600">
+                          Split rent between roommates.
+                        </span>
+                      </li>
+                      <li>
+                        <Link
+                          to="/rent-vs-buy-calculator"
+                          className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                        >
+                          Rent vs buy calculator →
+                        </Link>{" "}
+                        <span className="text-slate-600">
+                          Compare renting to buying using broader costs.
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <p className="text-slate-700">
+                    If you need other directions:{" "}
+                    <Link
+                      to="/weekly-to-monthly-rent-converter"
+                      className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                    >
+                      weekly to monthly rent converter →
+                    </Link>{" "}
+                    <span className="text-slate-400">·</span>{" "}
+                    <Link
+                      to="/biweekly-to-annual-rent-converter"
+                      className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                    >
+                      biweekly to annual rent converter →
+                    </Link>{" "}
+                    <span className="text-slate-400">·</span>{" "}
+                    <Link
+                      to="/hourly-to-annual-rent-converter"
+                      className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                    >
+                      hourly to annual rent converter →
+                    </Link>
+                    .
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* SectionCard: printing */}
             <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
               <div
                 aria-hidden="true"
@@ -275,10 +469,17 @@ const HowItWorks = () => {
                   </p>
 
                   <p>
-                    This page is designed for comparison, not scheduling. If
-                    your rent is billed on fixed calendar dates, the equivalence
-                    here gives you a common baseline before you look at timing
-                    details.
+                    This converter is built for comparison, not scheduling. If
+                    your rent is billed on fixed calendar dates, use the annual
+                    baseline here first, then think about due dates and timing
+                    with{" "}
+                    <Link
+                      to="/rent-due-date-calculator"
+                      className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                    >
+                      rent due date calculator →
+                    </Link>
+                    .
                   </p>
                 </div>
               </div>
@@ -298,14 +499,14 @@ const HowItWorks = () => {
                 <div className="text-sm font-semibold text-sky-300">
                   Utility note
                 </div>
-                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-800">
-                  Monthly labels can hide real differences
+                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-300">
+                  Use annual as the “truth” for comparisons
                 </h3>
                 <p className="mt-3 text-slate-200 leading-7">
-                  Two listings can both say “monthly” and still imply different
-                  annual costs once billing cycles are accounted for. This page
-                  gives you a single annual equivalence so you can line numbers
-                  up before deciding what actually fits.
+                  Billing labels can hide real differences. Converting monthly
+                  rent into an annual equivalent gives you a stable baseline,
+                  and the rest of the breakdown simply shows that same annual
+                  cost in different cycles.
                 </p>
               </div>
             </div>

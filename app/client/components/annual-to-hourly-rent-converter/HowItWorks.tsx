@@ -17,7 +17,7 @@ const HowItWorks = () => {
           <div className="flex flex-col gap-4 sm:gap-5">
             <div className="flex items-start justify-between gap-4">
               <div className="min-w-0">
-                <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-sky-700 tracking-tight leading-tight">
                   How the annual to hourly rent converter works (8,760-hour
                   equivalence)
                 </h2>
@@ -80,6 +80,81 @@ const HowItWorks = () => {
           </div>
 
           <div className="mt-10 space-y-6 text-base text-slate-700 leading-7">
+            {/* 10 */}
+            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+              <div
+                aria-hidden="true"
+                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+              />
+              <div className="p-5 sm:px-6">
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 24 24"
+                      className="h-5 w-5 text-sky-600"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M5 12h14"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 5v14"
+                      />
+                    </svg>
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-xl font-extrabold text-sky-700 tracking-tight">
+                      Related tools
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="mt-4 space-y-3">
+                  <p>
+                    For other period conversions that use the same time-length
+                    basis, the{" "}
+                    <Link
+                      to="/rent-converter"
+                      className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                    >
+                      rent converter
+                    </Link>{" "}
+                    links the full set. For the inverse direction of this page,
+                    use{" "}
+                    <Link
+                      to="/hourly-to-annual-rent-converter"
+                      className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                    >
+                      hourly to annual
+                    </Link>{" "}
+                    so the same 8,760-hour basis is applied in reverse. For
+                    comparisons against monthly and weekly, use{" "}
+                    <Link
+                      to="/annual-to-monthly-rent-converter"
+                      className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                    >
+                      annual to monthly
+                    </Link>{" "}
+                    and{" "}
+                    <Link
+                      to="/annual-to-weekly-rent-converter"
+                      className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                    >
+                      annual to weekly
+                    </Link>{" "}
+                    to avoid mixing incompatible shortcuts.
+                  </p>
+                </div>
+              </div>
+            </div>
+
             {/* 1 */}
             <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
               <div
@@ -105,7 +180,7 @@ const HowItWorks = () => {
                     </svg>
                   </div>
                   <div className="min-w-0">
-                    <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
+                    <h3 className="text-xl font-extrabold text-sky-700 tracking-tight">
                       What this converter returns
                     </h3>
                   </div>
@@ -140,6 +215,112 @@ const HowItWorks = () => {
               </div>
             </div>
 
+            {/* 6 */}
+            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+              <div
+                aria-hidden="true"
+                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+              />
+              <div className="p-5 sm:px-6">
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 24 24"
+                      className="h-5 w-5 text-sky-600"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M4 7h16M4 12h12M4 17h14"
+                      />
+                    </svg>
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-xl font-extrabold text-sky-700 tracking-tight">
+                      Examples you can cross-check
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="mt-4 space-y-3">
+                  <p>
+                    Each example uses the exact formula shown on this page and
+                    an approximate result. Display rounding can change the last
+                    digits without changing the underlying math.
+                  </p>
+
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
+                      <div className="text-sm font-bold text-slate-900">
+                        Example 1
+                      </div>
+                      <div className="mt-2 text-sm text-slate-700">
+                        Annual = 24,000
+                      </div>
+                      <div className="mt-1">
+                        Hourly = 24,000 ÷ 8,760 = 2.739726… ≈{" "}
+                        <span className="font-semibold text-slate-900">
+                          2.74
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
+                      <div className="text-sm font-bold text-slate-900">
+                        Example 2
+                      </div>
+                      <div className="mt-2 text-sm text-slate-700">
+                        Annual = 30,000.50
+                      </div>
+                      <div className="mt-1">
+                        Hourly = 30,000.50 ÷ 8,760 = 3.424714… ≈{" "}
+                        <span className="font-semibold text-slate-900">
+                          3.42
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
+                      <div className="text-sm font-bold text-slate-900">
+                        Example 3
+                      </div>
+                      <div className="mt-2 text-sm text-slate-700">
+                        Annual = 18,200
+                      </div>
+                      <div className="mt-1">
+                        Daily = 18,200 ÷ 365 = 49.863013…
+                      </div>
+                      <div className="mt-1">
+                        Hourly = Daily ÷ 24 = 49.863013… ÷ 24 = 2.077625… ≈{" "}
+                        <span className="font-semibold text-slate-900">
+                          2.08
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
+                      <div className="text-sm font-bold text-slate-900">
+                        Example 4 (paid-hours comparison)
+                      </div>
+                      <div className="mt-2 text-sm text-slate-700">
+                        Annual = 30,000, hours/week = 40
+                      </div>
+                      <div className="mt-1">
+                        Paid-hours hourly = 30,000 ÷ (40 × 52) = 14.423076… ≈{" "}
+                        <span className="font-semibold text-slate-900">
+                          14.42
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* 2 */}
             <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
               <div
@@ -165,7 +346,7 @@ const HowItWorks = () => {
                     </svg>
                   </div>
                   <div className="min-w-0">
-                    <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
+                    <h3 className="text-xl font-extrabold text-sky-700 tracking-tight">
                       Definitions used on this page
                     </h3>
                   </div>
@@ -256,7 +437,7 @@ const HowItWorks = () => {
                     </svg>
                   </div>
                   <div className="min-w-0">
-                    <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
+                    <h3 className="text-xl font-extrabold text-sky-700 tracking-tight">
                       Core formula and conversion basis
                     </h3>
                   </div>
@@ -333,7 +514,7 @@ const HowItWorks = () => {
                     </svg>
                   </div>
                   <div className="min-w-0">
-                    <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
+                    <h3 className="text-xl font-extrabold text-sky-700 tracking-tight">
                       What the breakdown table represents
                     </h3>
                   </div>
@@ -383,7 +564,7 @@ const HowItWorks = () => {
                     </svg>
                   </div>
                   <div className="min-w-0">
-                    <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
+                    <h3 className="text-xl font-extrabold text-sky-700 tracking-tight">
                       Common mismatches and how this page treats them
                     </h3>
                   </div>
@@ -443,250 +624,6 @@ const HowItWorks = () => {
               </div>
             </div>
 
-            {/* 6 */}
-            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
-              <div
-                aria-hidden="true"
-                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
-              />
-              <div className="p-5 sm:px-6">
-                <div className="flex items-start gap-3">
-                  <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
-                    <svg
-                      aria-hidden="true"
-                      viewBox="0 0 24 24"
-                      className="h-5 w-5 text-sky-600"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M4 7h16M4 12h12M4 17h14"
-                      />
-                    </svg>
-                  </div>
-                  <div className="min-w-0">
-                    <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
-                      Examples you can cross-check
-                    </h3>
-                  </div>
-                </div>
-
-                <div className="mt-4 space-y-3">
-                  <p>
-                    Each example uses the exact formula shown on this page and
-                    an approximate result. Display rounding can change the last
-                    digits without changing the underlying math.
-                  </p>
-
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
-                      <div className="text-sm font-bold text-slate-900">
-                        Example 1
-                      </div>
-                      <div className="mt-2 text-sm text-slate-700">
-                        Annual = 24,000
-                      </div>
-                      <div className="mt-1">
-                        Hourly = 24,000 ÷ 8,760 = 2.739726… ≈{" "}
-                        <span className="font-semibold text-slate-900">
-                          2.74
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
-                      <div className="text-sm font-bold text-slate-900">
-                        Example 2
-                      </div>
-                      <div className="mt-2 text-sm text-slate-700">
-                        Annual = 30,000.50
-                      </div>
-                      <div className="mt-1">
-                        Hourly = 30,000.50 ÷ 8,760 = 3.424714… ≈{" "}
-                        <span className="font-semibold text-slate-900">
-                          3.42
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
-                      <div className="text-sm font-bold text-slate-900">
-                        Example 3
-                      </div>
-                      <div className="mt-2 text-sm text-slate-700">
-                        Annual = 18,200
-                      </div>
-                      <div className="mt-1">
-                        Daily = 18,200 ÷ 365 = 49.863013…
-                      </div>
-                      <div className="mt-1">
-                        Hourly = Daily ÷ 24 = 49.863013… ÷ 24 = 2.077625… ≈{" "}
-                        <span className="font-semibold text-slate-900">
-                          2.08
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
-                      <div className="text-sm font-bold text-slate-900">
-                        Example 4 (paid-hours comparison)
-                      </div>
-                      <div className="mt-2 text-sm text-slate-700">
-                        Annual = 30,000, hours/week = 40
-                      </div>
-                      <div className="mt-1">
-                        Paid-hours hourly = 30,000 ÷ (40 × 52) = 14.423076… ≈{" "}
-                        <span className="font-semibold text-slate-900">
-                          14.42
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* 7 */}
-            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
-              <div
-                aria-hidden="true"
-                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
-              />
-              <div className="p-5 sm:px-6">
-                <div className="flex items-start gap-3">
-                  <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
-                    <svg
-                      aria-hidden="true"
-                      viewBox="0 0 24 24"
-                      className="h-5 w-5 text-sky-600"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M4 6h16M9 6v12m6-12v12"
-                      />
-                    </svg>
-                  </div>
-                  <div className="min-w-0">
-                    <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
-                      Input formats and parsing rules
-                    </h3>
-                  </div>
-                </div>
-
-                <div className="mt-4 space-y-3">
-                  <p>
-                    Supported numeric formats are listed below. Currency symbols
-                    are ignored for parsing. Thousands separators are supported.
-                    Ambiguous inputs should be warned or blocked rather than
-                    guessed.
-                  </p>
-
-                  <div className="overflow-hidden rounded-2xl ring-1 ring-slate-200">
-                    <table className="w-full text-sm">
-                      <thead className="bg-slate-50">
-                        <tr>
-                          <th className="text-left font-semibold text-slate-900 px-4 py-3">
-                            Format
-                          </th>
-                          <th className="text-left font-semibold text-slate-900 px-4 py-3">
-                            Examples accepted
-                          </th>
-                          <th className="text-left font-semibold text-slate-900 px-4 py-3">
-                            Notes
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-200">
-                        <tr className="bg-white">
-                          <td className="px-4 py-3">Decimals</td>
-                          <td className="px-4 py-3">30000.50, .5, 12.</td>
-                          <td className="px-4 py-3">
-                            Decimal point supported. Leading dot and trailing
-                            dot supported.
-                          </td>
-                        </tr>
-                        <tr className="bg-white">
-                          <td className="px-4 py-3">Thousands grouping</td>
-                          <td className="px-4 py-3">30,000; 30,000.50</td>
-                          <td className="px-4 py-3">
-                            Commas treated as thousands separators.
-                          </td>
-                        </tr>
-                        <tr className="bg-white">
-                          <td className="px-4 py-3">Currency symbols</td>
-                          <td className="px-4 py-3">$30,000; €30000</td>
-                          <td className="px-4 py-3">
-                            Symbols ignored for parsing.
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-
-                  <p>
-                    Ambiguous input behavior: if a value can reasonably be read
-                    more than one way (for example “1.200,50” or malformed
-                    grouping like “1,200,50”), the correct behavior is a warning
-                    or block. The tool should not guess and produce a clean
-                    result from a misread number.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* 8 */}
-            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
-              <div
-                aria-hidden="true"
-                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
-              />
-              <div className="p-5 sm:px-6">
-                <div className="flex items-start gap-3">
-                  <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
-                    <svg
-                      aria-hidden="true"
-                      viewBox="0 0 24 24"
-                      className="h-5 w-5 text-sky-600"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M12 3v18M5 12h14"
-                      />
-                    </svg>
-                  </div>
-                  <div className="min-w-0">
-                    <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
-                      Rounding and calculation precision
-                    </h3>
-                  </div>
-                </div>
-
-                <div className="mt-4 space-y-3">
-                  <p>
-                    Decimals are preserved internally end to end. Rounding is
-                    display-only. Changing display precision does not change the
-                    underlying math or the annual anchor.
-                  </p>
-                  <p>
-                    If the UI shows fewer decimals for hourly, daily, or monthly
-                    rows, the underlying calculations still use the exact parsed
-                    value and the formulas defined above.
-                  </p>
-                </div>
-              </div>
-            </div>
-
             {/* 9 */}
             <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
               <div
@@ -712,7 +649,7 @@ const HowItWorks = () => {
                     </svg>
                   </div>
                   <div className="min-w-0">
-                    <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
+                    <h3 className="text-xl font-extrabold text-sky-700 tracking-tight">
                       Scope and limits of this tool
                     </h3>
                   </div>
@@ -735,81 +672,6 @@ const HowItWorks = () => {
               </div>
             </div>
 
-            {/* 10 */}
-            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
-              <div
-                aria-hidden="true"
-                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
-              />
-              <div className="p-5 sm:px-6">
-                <div className="flex items-start gap-3">
-                  <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
-                    <svg
-                      aria-hidden="true"
-                      viewBox="0 0 24 24"
-                      className="h-5 w-5 text-sky-600"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M5 12h14"
-                      />
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M12 5v14"
-                      />
-                    </svg>
-                  </div>
-                  <div className="min-w-0">
-                    <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
-                      Related tools (short contextual references only)
-                    </h3>
-                  </div>
-                </div>
-
-                <div className="mt-4 space-y-3">
-                  <p>
-                    For other period conversions that use the same time-length
-                    basis, the{" "}
-                    <Link
-                      to="/rent-converter"
-                      className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
-                    >
-                      rent converter hub
-                    </Link>{" "}
-                    links the full set. For the inverse direction of this page,
-                    use{" "}
-                    <Link
-                      to="/hourly-to-annual-rent-converter"
-                      className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
-                    >
-                      hourly to annual
-                    </Link>{" "}
-                    so the same 8,760-hour basis is applied in reverse. For
-                    comparisons against monthly and weekly, use{" "}
-                    <Link
-                      to="/annual-to-monthly-rent-converter"
-                      className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
-                    >
-                      annual to monthly
-                    </Link>{" "}
-                    and{" "}
-                    <Link
-                      to="/annual-to-weekly-rent-converter"
-                      className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
-                    >
-                      annual to weekly
-                    </Link>{" "}
-                    to avoid mixing incompatible shortcuts.
-                  </p>
-                </div>
-              </div>
-            </div>
-
             {/* Dark utility callout */}
             <div className="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-6 sm:p-7">
               <div
@@ -824,7 +686,7 @@ const HowItWorks = () => {
                 <div className="text-sm font-semibold text-sky-300">
                   Utility note
                 </div>
-                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight">
+                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-200">
                   This is an equivalence converter, not a payment schedule
                 </h3>
                 <p className="mt-3 text-slate-200 leading-7">

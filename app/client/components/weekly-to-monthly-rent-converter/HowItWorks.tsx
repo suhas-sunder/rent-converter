@@ -50,7 +50,7 @@ const HowItWorks = () => {
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 transition cursor-pointer hover:ring-sky-200/80 hover:bg-sky-50/40">
                 <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
                   INPUT
                 </div>
@@ -58,7 +58,7 @@ const HowItWorks = () => {
                   Weekly amount
                 </div>
               </div>
-              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 transition cursor-pointer hover:ring-sky-200/80 hover:bg-sky-50/40">
                 <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
                   BASIS
                 </div>
@@ -66,7 +66,7 @@ const HowItWorks = () => {
                   365-day year
                 </div>
               </div>
-              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 transition cursor-pointer hover:ring-sky-200/80 hover:bg-sky-50/40">
                 <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
                   FORMULA
                 </div>
@@ -74,7 +74,7 @@ const HowItWorks = () => {
                   weekly × 365 ÷ (7 × 12)
                 </div>
               </div>
-              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 transition cursor-pointer hover:ring-sky-200/80 hover:bg-sky-50/40">
                 <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
                   OUTPUT
                 </div>
@@ -87,7 +87,7 @@ const HowItWorks = () => {
 
           <div className="mt-10 space-y-6 text-lg text-slate-700 leading-7">
             {/* SectionCard: what it returns */}
-            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm transition hover:ring-sky-200/80">
               <div
                 aria-hidden="true"
                 className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
@@ -159,7 +159,7 @@ const HowItWorks = () => {
             </div>
 
             {/* SectionCard: what “monthly” means here + common mismatch */}
-            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm transition hover:ring-sky-200/80">
               <div
                 aria-hidden="true"
                 className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
@@ -239,7 +239,7 @@ const HowItWorks = () => {
             </div>
 
             {/* SectionCard: examples + input handling */}
-            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm transition hover:ring-sky-200/80">
               <div
                 aria-hidden="true"
                 className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
@@ -336,7 +336,7 @@ const HowItWorks = () => {
             </div>
 
             {/* SectionCard: step-by-step + rounding + printing + related */}
-            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm transition hover:ring-sky-200/80">
               <div
                 aria-hidden="true"
                 className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
@@ -419,13 +419,13 @@ const HowItWorks = () => {
                       <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-sm">
                         <Link
                           to="/rent-paid-weekly-vs-monthly"
-                          className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                          className="cursor-pointer font-semibold text-sky-700 hover:text-sky-800 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
                         >
                           Weekly vs monthly rent →
                         </Link>
                         <Link
                           to="/rent-converter"
-                          className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                          className="cursor-pointer font-semibold text-sky-700 hover:text-sky-800 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
                         >
                           Rent converter →
                         </Link>
@@ -464,7 +464,7 @@ const HowItWorks = () => {
                 <div className="text-sm font-semibold text-sky-300">
                   Utility note
                 </div>
-                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight">
+                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-100">
                   Equivalent monthly is not a calendar due-date schedule
                 </h3>
                 <p className="mt-3 text-slate-200 leading-7">
@@ -477,7 +477,7 @@ const HowItWorks = () => {
                 <div className="mt-4">
                   <Link
                     to="/rent-due-date-calculator"
-                    className="cursor-pointer inline-flex items-center font-semibold text-white hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 rounded-sm"
+                    className="cursor-pointer inline-flex items-center font-semibold text-white hover:text-sky-100 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 rounded-sm"
                   >
                     Rent due date calculator →
                   </Link>
@@ -489,21 +489,21 @@ const HowItWorks = () => {
               Related pages:{" "}
               <Link
                 to="/rent-paid-weekly-vs-monthly"
-                className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                className="cursor-pointer font-semibold text-sky-700 hover:text-sky-800 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
               >
                 weekly vs monthly rent
               </Link>
               ,{" "}
               <Link
                 to="/rent-converter"
-                className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                className="cursor-pointer font-semibold text-sky-700 hover:text-sky-800 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
               >
                 rent converter
               </Link>
               , and{" "}
               <Link
                 to="/rent-affordability-calculator"
-                className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                className="cursor-pointer font-semibold text-sky-700 hover:text-sky-800 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
               >
                 rent affordability calculator
               </Link>

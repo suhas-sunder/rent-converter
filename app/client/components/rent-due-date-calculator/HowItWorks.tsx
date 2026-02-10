@@ -5,13 +5,12 @@ interface RelatedLink {
   text: string;
 }
 
-const HowItWorks = ({
-  relatedLinks,
-  safeHref,
-}: {
+type Props = {
   relatedLinks: RelatedLink[];
   safeHref: (href: string) => string;
-}) => {
+};
+
+const HowItWorks = ({ relatedLinks, safeHref }: Props) => {
   return (
     <section
       id="how-it-works"
@@ -25,7 +24,7 @@ const HowItWorks = ({
 
       <div className="relative p-6 sm:p-10">
         <div className="mx-auto max-w-4xl">
-          <h2 className="text-3xl sm:text-4xl font-extrabold mb-6 text-center text-sky-900 tracking-tight leading-tight">
+          <h2 className="text-3xl sm:text-4xl font-extrabold mb-6 text-center text-sky-800 tracking-tight leading-tight">
             How this rent due date calculator works
           </h2>
 
@@ -34,7 +33,7 @@ const HowItWorks = ({
             the amount paid over a defined horizon. You enter a rent amount per
             payment, pick a billing cycle, choose an as-of date, and set how far
             ahead to project. The output includes a due-date list and
-            calendar-month rollups so it is clear when fixed-day cycles create
+            calendar-month rollups so it’s clear when fixed-day cycles create
             months with extra payments.
           </p>
 
@@ -81,7 +80,7 @@ const HowItWorks = ({
                 className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
               />
               <div className="p-5 sm:px-6">
-                <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
+                <h3 className="text-xl sm:text-2xl font-extrabold text-sky-800 tracking-tight">
                   1) Rent per payment is multiplied by due dates in range
                 </h3>
                 <p className="mt-4">
@@ -108,7 +107,7 @@ const HowItWorks = ({
                 className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
               />
               <div className="p-5 sm:px-6">
-                <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
+                <h3 className="text-xl sm:text-2xl font-extrabold text-sky-800 tracking-tight">
                   2) Billing cycles define how the next due date is generated
                 </h3>
 
@@ -121,7 +120,7 @@ const HowItWorks = ({
                 </p>
 
                 <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
-                  <div className="text-sm font-bold text-sky-900">
+                  <div className="text-sm font-bold text-sky-800">
                     Fixed-day cycles
                   </div>
                   <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
@@ -136,7 +135,7 @@ const HowItWorks = ({
                     </li>
                   </ul>
 
-                  <div className="mt-4 text-sm font-bold text-sky-900">
+                  <div className="mt-4 text-sm font-bold text-sky-800">
                     Calendar-based cycles
                   </div>
                   <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
@@ -172,7 +171,7 @@ const HowItWorks = ({
                 className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
               />
               <div className="p-5 sm:px-6">
-                <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
+                <h3 className="text-xl sm:text-2xl font-extrabold text-sky-800 tracking-tight">
                   3) As-of date and horizon control what appears in the schedule
                 </h3>
 
@@ -207,7 +206,7 @@ const HowItWorks = ({
                 className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
               />
               <div className="p-5 sm:px-6">
-                <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
+                <h3 className="text-xl sm:text-2xl font-extrabold text-sky-800 tracking-tight">
                   4) Monthly totals are calendar rollups, not conversions
                 </h3>
 
@@ -227,7 +226,7 @@ const HowItWorks = ({
                 </p>
 
                 <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
-                  <div className="text-sm font-bold text-sky-900">
+                  <div className="text-sm font-bold text-sky-800">
                     What the rollup answers
                   </div>
                   <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
@@ -248,7 +247,7 @@ const HowItWorks = ({
                 className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
               />
               <div className="p-5 sm:px-6">
-                <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
+                <h3 className="text-xl sm:text-2xl font-extrabold text-sky-800 tracking-tight">
                   5) Rounding is display-only
                 </h3>
 
@@ -264,6 +263,102 @@ const HowItWorks = ({
                   save-as-PDF. The print layout is intended to keep the date
                   list and month totals readable.
                 </p>
+              </div>
+            </div>
+
+            {/* Examples (real examples, standalone section) */}
+            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+              <div
+                aria-hidden="true"
+                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+              />
+              <div className="p-5 sm:px-6">
+                <h3 className="text-xl sm:text-2xl font-extrabold text-sky-800 tracking-tight">
+                  Examples
+                </h3>
+
+                <div className="mt-4 space-y-4">
+                  <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-800">
+                      Example 1: Weekly rent, 12 weeks ahead
+                    </div>
+                    <p className="mt-2 text-slate-700">
+                      Rent per payment: <strong>$500</strong>. Cycle:{" "}
+                      <strong>weekly</strong>. As-of date:{" "}
+                      <strong>March 1, 2026</strong>. Horizon:{" "}
+                      <strong>12 weeks</strong>.
+                    </p>
+                    <ul className="mt-3 list-disc pl-5 space-y-2 text-slate-700">
+                      <li>
+                        The tool lists the next 12 weekly due dates starting on
+                        or after March 1, 2026.
+                      </li>
+                      <li>
+                        If there are 12 due dates in range, total paid is{" "}
+                        <strong>$500 × 12 = $6,000</strong>.
+                      </li>
+                      <li>
+                        The month rollup shows which calendar months contain 4
+                        weekly due dates and which contain 5 (that’s the “extra
+                        payment month” effect).
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-800">
+                      Example 2: Every 28 days (4-week), 6 months ahead
+                    </div>
+                    <p className="mt-2 text-slate-700">
+                      Rent per payment: <strong>$2,000</strong>. Cycle:{" "}
+                      <strong>every 28 days</strong>. As-of date:{" "}
+                      <strong>January 15, 2026</strong>. Horizon:{" "}
+                      <strong>6 months</strong>.
+                    </p>
+                    <ul className="mt-3 list-disc pl-5 space-y-2 text-slate-700">
+                      <li>
+                        Each next due date is generated by adding{" "}
+                        <strong>28 days</strong>.
+                      </li>
+                      <li>
+                        If the range contains 7 due dates, total paid is{" "}
+                        <strong>$2,000 × 7 = $14,000</strong>.
+                      </li>
+                      <li>
+                        Month rollups will look uneven because 28-day cycles do
+                        not align to calendar months.
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-800">
+                      Example 3: Monthly on the 31st (month-end fallback)
+                    </div>
+                    <p className="mt-2 text-slate-700">
+                      Rent per payment: <strong>$2,400</strong>. Cycle:{" "}
+                      <strong>monthly</strong>. Anchor day: <strong>31</strong>.
+                      As-of date: <strong>January 31, 2026</strong>. Horizon:{" "}
+                      <strong>4 months</strong>.
+                    </p>
+                    <ul className="mt-3 list-disc pl-5 space-y-2 text-slate-700">
+                      <li>
+                        February does not have a 31st, so the tool falls back to{" "}
+                        <strong>February 28, 2026</strong> (or Feb 29 in leap
+                        years).
+                      </li>
+                      <li>
+                        March then returns to <strong>March 31, 2026</strong>,
+                        and April uses <strong>April 30, 2026</strong> as the
+                        fallback.
+                      </li>
+                      <li>
+                        The schedule makes the fallback explicit so you can see
+                        exactly which dates are used.
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -294,7 +389,7 @@ const HowItWorks = ({
             </div>
 
             <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
-              <div className="text-sm font-bold text-sky-900">Useful for</div>
+              <div className="text-sm font-bold text-sky-800">Useful for</div>
               <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
                 <li>
                   Listing future due dates for a chosen cycle within a horizon
@@ -314,11 +409,11 @@ const HowItWorks = ({
 
             <div className="mt-10 rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
               <div className="p-5 sm:px-6">
-                <h3 className="text-2xl font-extrabold text-sky-900 tracking-tight">
+                <h3 className="text-2xl font-extrabold text-sky-800 tracking-tight">
                   Related pages
                 </h3>
                 <ul className="mt-3 list-disc ml-6 text-slate-700 space-y-2">
-                  {relatedLinks.map((l: RelatedLink) => (
+                  {relatedLinks.map((l) => (
                     <li key={l.href}>
                       <Link
                         to={safeHref(l.href)}

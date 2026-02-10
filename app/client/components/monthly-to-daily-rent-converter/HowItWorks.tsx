@@ -21,17 +21,17 @@ const HowItWorks = () => {
             <div className="flex flex-col gap-4 sm:gap-5">
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0">
-                  <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                  <h2 className="text-3xl sm:text-4xl font-extrabold text-sky-800 tracking-tight leading-tight">
                     How the monthly to daily rent converter works
                   </h2>
                   <p className="mt-2 text-slate-600 leading-7 max-w-2xl">
                     This page converts a monthly rent amount into a daily
                     equivalent using one consistent time-length model. Monthly
-                    is treated as an average month derived from a 365-day year.
-                    Daily is the 1-day equivalent on that same 365-day basis.
-                    The goal is a daily number you can compare against weekly,
-                    biweekly, and 28-day listings without using a fixed 30-day
-                    shortcut.
+                    is treated as an average month derived from a 365-day year,
+                    and daily is the 1-day equivalent on that same basis. The
+                    goal is a daily number you can compare against weekly,
+                    biweekly, and every-4-weeks listings without relying on a
+                    fixed 30-day shortcut.
                   </p>
                 </div>
 
@@ -91,7 +91,7 @@ const HowItWorks = () => {
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
                 <div className="p-5 sm:px-6">
-                  <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
+                  <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
                     Step 1: Enter the monthly rent amount
                   </h3>
 
@@ -99,9 +99,9 @@ const HowItWorks = () => {
                     <p>
                       Enter the amount as written and select “monthly” as the
                       period. The parser accepts thousands separators and
-                      currency symbols, and it supports decimal formats. It
-                      avoids producing a clean-looking daily value when the
-                      input is invalid or ambiguous.
+                      currency symbols, and it supports decimals. If an entry
+                      could reasonably be read more than one way, the calculator
+                      blocks the result instead of guessing.
                     </p>
 
                     <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
@@ -138,7 +138,7 @@ const HowItWorks = () => {
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
                 <div className="p-5 sm:px-6">
-                  <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
+                  <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
                     Step 2: Convert monthly to daily using a 365-day basis
                   </h3>
 
@@ -148,8 +148,8 @@ const HowItWorks = () => {
                       fixed 30-day block. It first expresses the monthly amount
                       as an annual total, then converts that annual total into a
                       daily figure on a 365-day year. This keeps the daily
-                      number aligned with the weekly, biweekly, and 28-day lines
-                      shown elsewhere on the page.
+                      number aligned with the weekly, biweekly, and
+                      every-4-weeks lines shown in the breakdown.
                     </p>
 
                     <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
@@ -174,11 +174,10 @@ const HowItWorks = () => {
                     </div>
 
                     <p>
-                      If you are comparing two listings, the daily figure is
-                      useful because it removes the label problem. “Monthly” and
-                      “every 4 weeks” look similar on a listing page, but they
-                      are different time lengths. Converting both to daily makes
-                      that difference show up immediately.
+                      Daily is handy when listings mix labels. “Monthly” and
+                      “every 4 weeks” can look similar on a listing page, but
+                      they are different time lengths. Converting both to daily
+                      makes that difference visible immediately.
                     </p>
                   </div>
                 </div>
@@ -191,7 +190,7 @@ const HowItWorks = () => {
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
                 <div className="p-5 sm:px-6">
-                  <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
+                  <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
                     Step 3: Keep the breakdown consistent and keep rounding
                     honest
                   </h3>
@@ -251,6 +250,186 @@ const HowItWorks = () => {
                 </div>
               </div>
 
+              {/* Examples (required, own section) */}
+              <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+                />
+                <div className="p-5 sm:px-6">
+                  <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
+                    Examples
+                  </h3>
+
+                  <div className="mt-4 space-y-3">
+                    <p>
+                      These examples show when a daily equivalent helps, and how
+                      to use it to compare mixed listing labels.
+                    </p>
+
+                    <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                      <ul className="list-disc pl-5 space-y-3">
+                        <li>
+                          <span className="font-semibold text-slate-900">
+                            Monthly vs every 4 weeks:
+                          </span>{" "}
+                          A place is <strong>$2,200/month</strong>. Another is{" "}
+                          <strong>$2,050 every 4 weeks</strong>. Converting both
+                          to daily shows the real gap, then the weekly and
+                          4-week views make it easier to sanity-check the
+                          listing.
+                        </li>
+                        <li>
+                          <span className="font-semibold text-slate-900">
+                            Checking affordability quickly:
+                          </span>{" "}
+                          If you want a rough daily budget limit, convert your
+                          target monthly rent to daily and compare it to the
+                          daily output for a listing you are considering.
+                        </li>
+                        <li>
+                          <span className="font-semibold text-slate-900">
+                            Comparing two monthly listings:
+                          </span>{" "}
+                          Even when both are monthly, daily makes close numbers
+                          feel clearer when you are deciding if a small monthly
+                          difference is worth it over time.
+                        </li>
+                      </ul>
+                    </div>
+
+                    <p>
+                      If you already have a daily rent value and want the
+                      reverse direction, use{" "}
+                      <Link
+                        to="/daily-to-monthly-rent-converter"
+                        className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                      >
+                        daily to monthly rent converter →
+                      </Link>
+                      .
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Related tools (required) */}
+              <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+                />
+                <div className="p-5 sm:px-6">
+                  <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
+                    Related tools
+                  </h3>
+
+                  <div className="mt-4 space-y-3">
+                    <p>
+                      Use these tools to convert other directions or to compare
+                      rent in the cycle you actually budget with.
+                    </p>
+
+                    <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                      <ul className="list-disc pl-5 space-y-2">
+                        <li>
+                          <Link
+                            to="/rent-converter"
+                            className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                          >
+                            Universal rent converter →
+                          </Link>{" "}
+                          <span className="text-slate-600">
+                            Convert between monthly, weekly, biweekly, annual,
+                            daily, and hourly.
+                          </span>
+                        </li>
+                        <li>
+                          <Link
+                            to="/monthly-to-weekly-rent-converter"
+                            className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                          >
+                            Monthly to weekly rent converter →
+                          </Link>{" "}
+                          <span className="text-slate-600">
+                            Helpful for weekly-priced listings.
+                          </span>
+                        </li>
+                        <li>
+                          <Link
+                            to="/monthly-to-biweekly-rent-converter"
+                            className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                          >
+                            Monthly to biweekly rent converter →
+                          </Link>{" "}
+                          <span className="text-slate-600">
+                            If you budget rent per paycheck.
+                          </span>
+                        </li>
+                        <li>
+                          <Link
+                            to="/monthly-to-annual-rent-converter"
+                            className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                          >
+                            Monthly to annual rent converter →
+                          </Link>{" "}
+                          <span className="text-slate-600">
+                            Convert monthly to annual for clean comparisons.
+                          </span>
+                        </li>
+                        <li>
+                          <Link
+                            to="/rent-per-paycheck-calculator"
+                            className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                          >
+                            Rent per paycheck calculator →
+                          </Link>{" "}
+                          <span className="text-slate-600">
+                            Turn rent into a per-paycheck budget view.
+                          </span>
+                        </li>
+                        <li>
+                          <Link
+                            to="/how-much-rent-can-i-afford-calculator"
+                            className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                          >
+                            How much rent can I afford calculator →
+                          </Link>{" "}
+                          <span className="text-slate-600">
+                            Explore affordability starting from income.
+                          </span>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <p className="text-slate-700">
+                      Quick conversions:{" "}
+                      <Link
+                        to="/daily-to-monthly-rent-converter"
+                        className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                      >
+                        daily to monthly →
+                      </Link>{" "}
+                      <span className="text-slate-400">·</span>{" "}
+                      <Link
+                        to="/weekly-to-monthly-rent-converter"
+                        className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                      >
+                        weekly to monthly →
+                      </Link>{" "}
+                      <span className="text-slate-400">·</span>{" "}
+                      <Link
+                        to="/monthly-to-annual-rent-converter"
+                        className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                      >
+                        monthly to annual →
+                      </Link>
+                      .
+                    </p>
+                  </div>
+                </div>
+              </div>
+
               {/* Dark callout */}
               <div className="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-6 sm:p-7">
                 <div
@@ -265,36 +444,18 @@ const HowItWorks = () => {
                   <div className="text-sm font-semibold text-sky-300">
                     Utility note
                   </div>
-                  <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight">
+                  <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-300">
                     Daily makes mixed billing cycles comparable
                   </h3>
                   <p className="mt-3 text-slate-200 leading-7">
                     When listings use different period labels, comparing
-                    “monthly” to “every 4 weeks” by gut feel is a losing game. A
+                    “monthly” to “every 4 weeks” by gut feel is unreliable. A
                     daily equivalent gives you one baseline, and the breakdown
                     shows the rest of the periods without switching assumptions
                     mid-table.
                   </p>
                 </div>
               </div>
-
-              {/* Related links */}
-              <p className="text-slate-700">
-                Related pages:{" "}
-                <Link
-                  to="/rent-converter"
-                  className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
-                >
-                  rent converter
-                </Link>{" "}
-                <span className="text-slate-400">·</span>{" "}
-                <Link
-                  to="/how-much-rent-can-i-afford-calculator"
-                  className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
-                >
-                  rent affordability calculator
-                </Link>
-              </p>
             </div>
           </div>
         </div>
@@ -313,25 +474,25 @@ const HowItWorks = () => {
 
         <div className="relative p-6 sm:p-10">
           <div className="mx-auto max-w-4xl">
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight text-center leading-tight">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-sky-800 tracking-tight text-center leading-tight">
               Method used on this page
             </h2>
 
             <div className="mt-8 space-y-6 text-lg text-slate-700 leading-7">
-              <div className="rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+              <div className="relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
                 <div
                   aria-hidden="true"
                   className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
                 />
                 <div className="p-5 sm:px-6">
-                  <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
-                    The page anchors everything to a single annual reference
+                  <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
+                    Everything anchors to a single annual reference
                   </h3>
                   <p className="mt-4">
                     This converter uses the annual total as the reference point
-                    so daily, weekly, biweekly, and 28-day values can be derived
-                    without switching definitions. Your monthly input is first
-                    mapped to an annual amount. That annual amount is then
+                    so daily, weekly, biweekly, and every-4-weeks values can be
+                    derived without switching definitions. Your monthly input is
+                    first mapped to an annual amount. That annual amount is then
                     converted into a daily rate using a 365-day year. Once daily
                     exists, all other periods can be computed mechanically from
                     fixed day counts.
@@ -357,43 +518,54 @@ const HowItWorks = () => {
                     It is a time-length equivalent that stays compatible with
                     the rest of the breakdown.
                   </p>
+
+                  <p className="mt-5 text-slate-700">
+                    Prefer a single tool that converts between any cycles? Use{" "}
+                    <Link
+                      to="/rent-converter"
+                      className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                    >
+                      the universal rent converter →
+                    </Link>
+                    .
+                  </p>
                 </div>
               </div>
 
               <div className="rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
                 <div className="p-5 sm:px-6">
-                  <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
+                  <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
                     Why a daily equivalent is practical
                   </h3>
                   <p className="mt-4">
                     Daily is the smallest unit in the breakdown and it makes the
                     other conversions easier to interpret. If you have a monthly
-                    listing and a 4-week listing, daily lets you compare them
-                    without taking a guess at how long “a month” is. It also
-                    makes small differences visible. A change that looks minor
-                    on a monthly figure may look different when expressed per
-                    day and then scaled back into weekly or 28-day equivalents.
+                    listing and a every-4-weeks listing, daily lets you compare
+                    them without taking a guess at how long “a month” is. It
+                    also makes small differences visible. A change that looks
+                    minor on a monthly figure may feel different when expressed
+                    per day and then scaled back into weekly or every-4-weeks
+                    equivalents.
                   </p>
 
                   <p className="mt-4">
-                    This is also a quick way to sanity-check the label on a
-                    listing. If a “monthly” amount produces a daily number that
-                    implies an unusually high weekly or 4-week value, you can
-                    spot it immediately in the breakdown without doing separate
-                    math.
+                    This is also a quick way to sanity-check a label. If a
+                    “monthly” amount produces a daily number that implies an
+                    unusually high weekly or 28-day value, you can spot it
+                    immediately in the breakdown without doing separate math.
                   </p>
                 </div>
               </div>
 
               <div className="rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
                 <div className="p-5 sm:px-6">
-                  <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
-                    4-week billing versus monthly billing
+                  <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
+                    Every 4 weeks versus monthly
                   </h3>
                   <p className="mt-4">
-                    A 4-week period is always 28 days. An average month is
-                    longer than that (365 ÷ 12 days). That gap is why “every 4
-                    weeks” can imply a higher annual total even if the number
+                    Every 4 weeks is always 28 days. An average month is longer
+                    than that (365 ÷ 12 days). That gap is why every-4-weeks
+                    billing can imply a higher annual total even if the number
                     looks close to the monthly price. This page keeps those time
                     lengths explicit by converting everything through the same
                     daily and annual basis.
@@ -416,12 +588,202 @@ const HowItWorks = () => {
                     </Link>{" "}
                     <span className="text-slate-400">·</span>{" "}
                     <Link
-                      to="/how-much-rent-can-i-afford-calculator"
+                      to="/monthly-to-weekly-rent-converter"
                       className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
                     >
-                      rent affordability calculator
+                      monthly to weekly rent converter
+                    </Link>{" "}
+                    <span className="text-slate-400">·</span>{" "}
+                    <Link
+                      to="/monthly-to-annual-rent-converter"
+                      className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                    >
+                      monthly to annual rent converter
                     </Link>
                     .
+                  </p>
+                </div>
+              </div>
+
+              {/* Examples (required, own section) */}
+              <div className="rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                <div className="p-5 sm:px-6">
+                  <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
+                    Examples
+                  </h3>
+
+                  <p className="mt-4">
+                    Here are a few quick ways people use a daily view when rent
+                    listings do not match the way they budget.
+                  </p>
+
+                  <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <ul className="list-disc pl-5 space-y-3">
+                      <li>
+                        A listing is <strong>$2,300/month</strong>. Another is{" "}
+                        <strong>$2,150 every 4 weeks</strong>. Convert both to
+                        daily to see which is actually cheaper, then use the
+                        weekly and 28-day lines to sanity-check the difference.
+                      </li>
+                      <li>
+                        You have a rough limit of <strong>$80/day</strong>. Use
+                        daily to quickly screen listings before digging into
+                        commute, utilities, and fees.
+                      </li>
+                      <li>
+                        A monthly price difference of <strong>$75</strong> may
+                        feel small. Seeing it as a daily and weekly difference
+                        can make the tradeoff easier to judge.
+                      </li>
+                    </ul>
+                  </div>
+
+                  <p className="mt-4">
+                    Have a daily price and want monthly? Use{" "}
+                    <Link
+                      to="/daily-to-monthly-rent-converter"
+                      className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                    >
+                      daily to monthly rent converter →
+                    </Link>
+                    .
+                  </p>
+                </div>
+              </div>
+
+              {/* Related tools (required) */}
+              <div className="rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+                <div className="p-5 sm:px-6">
+                  <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
+                    Related tools
+                  </h3>
+
+                  <p className="mt-4">
+                    These tools help you convert other directions or plan rent
+                    in the cycle you actually think in.
+                  </p>
+
+                  <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <ul className="list-disc pl-5 space-y-2">
+                      <li>
+                        <Link
+                          to="/rent-converter"
+                          className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                        >
+                          Universal rent converter →
+                        </Link>{" "}
+                        <span className="text-slate-600">
+                          Convert between all common rent cycles.
+                        </span>
+                      </li>
+                      <li>
+                        <Link
+                          to="/daily-to-monthly-rent-converter"
+                          className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                        >
+                          Daily to monthly rent converter →
+                        </Link>{" "}
+                        <span className="text-slate-600">
+                          Reverse this conversion.
+                        </span>
+                      </li>
+                      <li>
+                        <Link
+                          to="/monthly-to-weekly-rent-converter"
+                          className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                        >
+                          Monthly to weekly rent converter →
+                        </Link>{" "}
+                        <span className="text-slate-600">
+                          Compare monthly pricing to weekly listings.
+                        </span>
+                      </li>
+                      <li>
+                        <Link
+                          to="/monthly-to-biweekly-rent-converter"
+                          className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                        >
+                          Monthly to biweekly rent converter →
+                        </Link>{" "}
+                        <span className="text-slate-600">
+                          Useful for paycheck budgeting.
+                        </span>
+                      </li>
+                      <li>
+                        <Link
+                          to="/how-much-rent-can-i-afford-calculator"
+                          className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                        >
+                          How much rent can I afford calculator →
+                        </Link>{" "}
+                        <span className="text-slate-600">
+                          Translate income into a rent range.
+                        </span>
+                      </li>
+                      <li>
+                        <Link
+                          to="/rent-as-percentage-of-income-calculator"
+                          className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                        >
+                          Rent as percentage of income calculator →
+                        </Link>{" "}
+                        <span className="text-slate-600">
+                          See what share of income a rent amount represents.
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <p className="mt-4 text-slate-700">
+                    More conversions:{" "}
+                    <Link
+                      to="/weekly-to-monthly-rent-converter"
+                      className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                    >
+                      weekly to monthly →
+                    </Link>{" "}
+                    <span className="text-slate-400">·</span>{" "}
+                    <Link
+                      to="/monthly-to-annual-rent-converter"
+                      className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                    >
+                      monthly to annual →
+                    </Link>{" "}
+                    <span className="text-slate-400">·</span>{" "}
+                    <Link
+                      to="/hourly-to-monthly-rent-converter"
+                      className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                    >
+                      hourly to monthly →
+                    </Link>
+                    .
+                  </p>
+                </div>
+              </div>
+
+              {/* Dark callout */}
+              <div className="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-6 sm:p-7">
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0"
+                >
+                  <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-sky-500 blur-3xl opacity-20" />
+                  <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-slate-500 blur-3xl opacity-30" />
+                </div>
+
+                <div className="relative">
+                  <div className="text-sm font-semibold text-sky-300">
+                    Utility note
+                  </div>
+                  <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-300">
+                    Daily is a comparison tool, not a billing claim
+                  </h3>
+                  <p className="mt-3 text-slate-200 leading-7">
+                    Most landlords do not bill rent “daily.” The daily number is
+                    just the cleanest baseline for comparing mixed listing
+                    labels. Once you line things up, you can switch back to
+                    monthly, weekly, biweekly, or every-4-weeks depending on how
+                    you budget.
                   </p>
                 </div>
               </div>

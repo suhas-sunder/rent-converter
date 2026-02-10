@@ -17,17 +17,16 @@ const HowItWorks = () => {
           <div className="flex flex-col gap-4 sm:gap-5">
             <div className="flex items-start justify-between gap-4">
               <div className="min-w-0">
-                <h2 className="text-3xl sm:text-4xl font-extrabold text-sky-900 tracking-tight leading-tight text-center">
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-sky-800 tracking-tight leading-tight text-center">
                   How the rent after tax income calculator works
                 </h2>
                 <p className="mt-3 text-slate-600 leading-7">
-                  This page estimates take-home (net) income using a single
-                  effective tax rate, then compares rent to that net income on
-                  one consistent time basis. It produces three primary outputs:
-                  estimated net income, rent as a percentage of net income, and
-                  estimated income left after rent. All values are derived from
-                  annual totals so the breakdown stays consistent across
-                  monthly, weekly, and 28-day views.
+                  This page estimates take-home (net) income using one effective
+                  tax rate, then compares rent to that net income on a single,
+                  consistent time basis. You get three core outputs: estimated
+                  net income, rent as a percentage of net income, and estimated
+                  income left after rent. Income and rent are annualized first
+                  so monthly, weekly, and every-4-weeks views stay consistent.
                 </p>
               </div>
             </div>
@@ -76,20 +75,21 @@ const HowItWorks = () => {
                 className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
               />
               <div className="p-5 sm:px-6">
-                <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
-                  Inputs are validated before results are shown
+                <h3 className="text-xl sm:text-2xl font-extrabold text-sky-800 tracking-tight">
+                  Step 1: Enter income, rent, and an effective tax rate
                 </h3>
 
                 <p className="mt-4">
-                  The calculator validates income, rent, and tax rate before it
-                  shows computed outputs. If an entry is invalid or ambiguous,
-                  it avoids returning a misleading 0 or a guessed result. This
-                  includes basic numeric errors and formatting that could
-                  reasonably be interpreted multiple ways.
+                  Enter your income and rent exactly as you want them treated,
+                  then pick the period for each one. Choose an effective tax
+                  rate that matches your rough take-home reality (one all-in
+                  percentage). The calculator only uses what you type. It does
+                  not infer deductions, credits, overtime, household size, or
+                  rent inclusions like utilities and fees.
                 </p>
 
                 <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
-                  <div className="text-sm font-bold text-sky-900">
+                  <div className="text-sm font-bold text-sky-800">
                     Parsing behavior
                   </div>
                   <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
@@ -102,14 +102,10 @@ const HowItWorks = () => {
                       <strong>12.</strong> are accepted.
                     </li>
                     <li>
-                      If a value is ambiguous, the page shows an error or
-                      warning instead of guessing.
+                      If a value is invalid or ambiguous, the page shows an
+                      error or warning instead of guessing.
                     </li>
                   </ul>
-                  <p className="mt-3 text-sm text-slate-600">
-                    The tool does not infer missing context. It uses only the
-                    values and periods you enter.
-                  </p>
                 </div>
               </div>
             </div>
@@ -121,28 +117,20 @@ const HowItWorks = () => {
                 className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
               />
               <div className="p-5 sm:px-6">
-                <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
-                  Income and rent are converted through annual totals
+                <h3 className="text-xl sm:text-2xl font-extrabold text-sky-800 tracking-tight">
+                  Step 2: Convert both numbers through annual totals
                 </h3>
 
                 <p className="mt-4">
-                  Both income and rent are annualized first so all comparisons
-                  share one basis. The model uses a 365-day year and treats a
-                  month as an average month length of <strong>365 ÷ 12</strong>{" "}
-                  days. Weekly is always a 7-day equivalent. Biweekly is always
-                  14 days. Every 4 weeks is always 28 days.
-                </p>
-
-                <p className="mt-4">
-                  This matters because “monthly” and “every 4 weeks” are
-                  different time lengths. If a breakdown mixes time definitions,
-                  the rent share and “after rent” values can drift depending on
-                  which line you look at. Here, the annual basis keeps the
-                  breakdown coherent.
+                  Income and rent are annualized first so the comparison does
+                  not change when you switch views. The model uses explicit time
+                  lengths (not payment counts): year is 365 days, an average
+                  month is 365 ÷ 12 days, week is 7 days, biweekly is 14 days,
+                  and every 4 weeks is 28 days.
                 </p>
 
                 <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
-                  <div className="text-sm font-bold text-sky-900">
+                  <div className="text-sm font-bold text-sky-800">
                     Time assumptions used
                   </div>
                   <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
@@ -154,6 +142,11 @@ const HowItWorks = () => {
                     <li>Hourly conversions assume 24 hours per day</li>
                   </ul>
                 </div>
+
+                <p className="mt-4">
+                  This is why the page can keep “monthly” and “every 4 weeks”
+                  separate instead of treating them as interchangeable.
+                </p>
               </div>
             </div>
 
@@ -164,66 +157,27 @@ const HowItWorks = () => {
                 className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
               />
               <div className="p-5 sm:px-6">
-                <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
-                  Net income is estimated using one effective tax rate
+                <h3 className="text-xl sm:text-2xl font-extrabold text-sky-800 tracking-tight">
+                  Step 3: Estimate net income, then compute rent share and money
+                  left
                 </h3>
 
                 <p className="mt-4">
-                  The calculator uses a single effective tax rate to estimate
-                  take-home income. The net income estimate is computed from the
-                  annual gross income as:
+                  Net income is estimated from annualized gross income using one
+                  effective rate. From there, rent share and income left are
+                  computed from annual totals and then shown in period
+                  equivalents.
                 </p>
 
                 <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
-                  <div className="text-sm font-bold text-sky-900">
-                    Net income formula
-                  </div>
-                  <p className="mt-2 text-slate-700">
-                    <strong>Annual net income</strong> = annual gross income ×
-                    (1 − effective tax rate)
-                  </p>
-                  <p className="mt-2 text-sm text-slate-600">
-                    The tax rate is treated as an all-in effective rate. The
-                    calculator does not apply brackets, credits, deductions, or
-                    multiple payroll components.
-                  </p>
-                </div>
-
-                <p className="mt-4">
-                  This is a simplification by design. The page is built to keep
-                  the model explicit and consistent, not to approximate any
-                  specific tax system. If you need a different definition of net
-                  income, enter the value you want represented by choosing a
-                  rate that matches your intended effective adjustment.
-                </p>
-              </div>
-            </div>
-
-            {/* Card 4 */}
-            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
-              <div
-                aria-hidden="true"
-                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
-              />
-              <div className="p-5 sm:px-6">
-                <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
-                  Rent share and income left are computed on the same annual
-                  basis
-                </h3>
-
-                <p className="mt-4">
-                  Once annual rent and annual net income exist, the tool
-                  computes two core comparisons: rent share (as a percentage of
-                  take-home pay) and income left after rent. Both are derived
-                  from annual totals so they stay consistent no matter which
-                  period you entered.
-                </p>
-
-                <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
-                  <div className="text-sm font-bold text-sky-900">
-                    Comparison formulas
+                  <div className="text-sm font-bold text-sky-800">
+                    Core formulas (annual basis)
                   </div>
                   <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
+                    <li>
+                      <strong>Annual net income</strong> = annual gross income ×
+                      (1 − effective tax rate)
+                    </li>
                     <li>
                       <strong>Rent share</strong> = annual rent ÷ annual net
                       income
@@ -233,45 +187,199 @@ const HowItWorks = () => {
                       rent
                     </li>
                   </ul>
-                  <p className="mt-3 text-sm text-slate-600">
-                    The page may also show period equivalents of these outputs,
-                    derived from the same annual basis.
-                  </p>
                 </div>
 
                 <p className="mt-4">
-                  The “monthly vs every 4 weeks” view exists because those
-                  labels are commonly treated as interchangeable, but they are
-                  not the same time length. This tool keeps them distinct by
-                  converting everything through the same annual reference.
+                  If you want a separate view that focuses only on rent share
+                  targets, use{" "}
+                  <Link
+                    to="/rent-as-percentage-of-income-calculator"
+                    className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                  >
+                    rent as percentage of income
+                  </Link>
+                  .
                 </p>
               </div>
             </div>
 
-            {/* Precision and rounding */}
+            {/* Examples (required) */}
             <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
               <div
                 aria-hidden="true"
                 className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
               />
               <div className="p-5 sm:px-6">
-                <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
-                  Rounding and numeric precision
+                <h3 className="text-xl sm:text-2xl font-extrabold text-sky-800 tracking-tight">
+                  Examples
                 </h3>
 
                 <p className="mt-4">
-                  Calculations preserve decimals internally (up to 12 places).
-                  If rounding is enabled, only the displayed values are rounded.
-                  This separation prevents rounding preferences from changing
-                  the computed share or “after rent” results.
+                  These are real, end-to-end examples of what the calculator is
+                  doing. (Rounded here for readability.)
                 </p>
 
+                <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                  <div className="text-sm font-bold text-sky-800">
+                    Example 1: Annual income, monthly rent
+                  </div>
+                  <ul className="mt-3 list-disc pl-5 space-y-2 text-slate-700">
+                    <li>
+                      Gross income: <strong>$80,000/year</strong>
+                    </li>
+                    <li>
+                      Effective tax rate: <strong>25%</strong> → net is{" "}
+                      <strong>$80,000 × 0.75 = $60,000/year</strong>
+                    </li>
+                    <li>
+                      Rent: <strong>$2,000/month</strong> → annual rent{" "}
+                      <strong>$2,000 × 12 = $24,000/year</strong>
+                    </li>
+                    <li>
+                      Rent share: <strong>$24,000 ÷ $60,000 = 40%</strong>
+                    </li>
+                    <li>
+                      After rent:{" "}
+                      <strong>$60,000 − $24,000 = $36,000/year</strong> (about{" "}
+                      <strong>$3,000/month</strong>)
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                  <div className="text-sm font-bold text-sky-800">
+                    Example 2: Weekly income, rent every 4 weeks
+                  </div>
+                  <ul className="mt-3 list-disc pl-5 space-y-2 text-slate-700">
+                    <li>
+                      Gross income: <strong>$1,200/week</strong> → annual gross{" "}
+                      <strong>$1,200 × (365 ÷ 7) ≈ $62,571.43</strong>
+                    </li>
+                    <li>
+                      Effective tax rate: <strong>30%</strong> → annual net{" "}
+                      <strong>≈ $62,571.43 × 0.70 = $43,800.00</strong>
+                    </li>
+                    <li>
+                      Rent: <strong>$2,100 every 4 weeks</strong> → daily rent{" "}
+                      <strong>$2,100 ÷ 28 = $75/day</strong> → annual rent{" "}
+                      <strong>$75 × 365 = $27,375/year</strong>
+                    </li>
+                    <li>
+                      Rent share: <strong>$27,375 ÷ $43,800 ≈ 62.5%</strong>
+                    </li>
+                    <li>
+                      After rent:{" "}
+                      <strong>$43,800 − $27,375 = $16,425/year</strong> (about{" "}
+                      <strong>$1,368.75/month</strong>)
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                  <div className="text-sm font-bold text-sky-800">
+                    Example 3: Monthly income, weekly rent
+                  </div>
+                  <ul className="mt-3 list-disc pl-5 space-y-2 text-slate-700">
+                    <li>
+                      Gross income: <strong>$5,000/month</strong> → annual gross{" "}
+                      <strong>$5,000 × 12 = $60,000/year</strong>
+                    </li>
+                    <li>
+                      Effective tax rate: <strong>20%</strong> → annual net{" "}
+                      <strong>$60,000 × 0.80 = $48,000/year</strong>
+                    </li>
+                    <li>
+                      Rent: <strong>$525/week</strong> → daily rent{" "}
+                      <strong>$525 ÷ 7 = $75/day</strong> → annual rent{" "}
+                      <strong>$75 × 365 = $27,375/year</strong>
+                    </li>
+                    <li>
+                      Rent share: <strong>$27,375 ÷ $48,000 ≈ 57.0%</strong>
+                    </li>
+                    <li>
+                      After rent:{" "}
+                      <strong>$48,000 − $27,375 = $20,625/year</strong> (about{" "}
+                      <strong>$1,718.75/month</strong>)
+                    </li>
+                  </ul>
+                </div>
+
                 <p className="mt-4">
-                  If you are comparing close values, leaving rounding disabled
-                  keeps the raw precision visible. If you are copying results
-                  for documentation, rounding can be enabled to format values
-                  consistently without changing the underlying computation.
+                  If you want to convert a rent amount between periods before
+                  comparing, use the{" "}
+                  <Link
+                    to="/rent-converter"
+                    className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                  >
+                    universal rent converter
+                  </Link>
+                  .
                 </p>
+              </div>
+            </div>
+
+            {/* Related tools (required) */}
+            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+              <div
+                aria-hidden="true"
+                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+              />
+              <div className="p-5 sm:px-6">
+                <h3 className="text-xl sm:text-2xl font-extrabold text-sky-800 tracking-tight">
+                  Related tools
+                </h3>
+
+                <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                  <ul className="list-disc pl-5 space-y-2 text-slate-700">
+                    <li>
+                      <Link
+                        to="/rent-converter"
+                        className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                      >
+                        Universal rent converter →
+                      </Link>{" "}
+                      Convert between weekly, monthly, biweekly, every 4 weeks,
+                      daily, hourly, and annual.
+                    </li>
+                    <li>
+                      <Link
+                        to="/how-much-rent-can-i-afford-calculator"
+                        className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                      >
+                        How much rent can I afford →
+                      </Link>{" "}
+                      Translate income into a rent target range.
+                    </li>
+                    <li>
+                      <Link
+                        to="/rent-as-percentage-of-income-calculator"
+                        className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                      >
+                        Rent as percentage of income →
+                      </Link>{" "}
+                      Compare rent share targets across periods.
+                    </li>
+                    <li>
+                      <Link
+                        to="/rent-vs-take-home-pay-calculator"
+                        className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                      >
+                        Rent vs take-home pay →
+                      </Link>{" "}
+                      Another angle on affordability using take-home pay
+                      framing.
+                    </li>
+                    <li>
+                      <Link
+                        to="/rent-split-calculator"
+                        className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                      >
+                        Rent split calculator →
+                      </Link>{" "}
+                      Split rent across roommates and see per-person amounts.
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
 
@@ -289,41 +397,17 @@ const HowItWorks = () => {
                 <div className="text-sm font-semibold text-sky-300">
                   Scope note
                 </div>
-                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-100">
-                  This page estimates net income with one rate and compares it
-                  to rent
+                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-300">
+                  This is a simple net estimate, not a tax system
                 </h3>
                 <p className="mt-3 text-slate-200 leading-7">
-                  The tool does not model tax brackets, credits, deductions,
+                  The calculator does not model brackets, credits, deductions,
                   payroll categories, or jurisdiction rules. It applies one
-                  effective rate to annualized gross income, then computes rent
-                  share and “after rent” using annual totals derived from
-                  explicit day-count assumptions.
+                  effective rate to annualized income and keeps rent share and
+                  after-rent math on the same annual basis so the breakdown does
+                  not drift.
                 </p>
               </div>
-            </div>
-
-            <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
-              <div className="text-sm font-bold text-sky-900">
-                What you can do
-              </div>
-              <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
-                <li>
-                  Estimate rent as a percentage of take-home pay using one
-                  effective rate
-                </li>
-                <li>
-                  See estimated net income left after rent on an annual basis
-                </li>
-                <li>
-                  Compare monthly and every-4-weeks views without treating them
-                  as interchangeable
-                </li>
-                <li>
-                  Copy results with consistent formatting by enabling
-                  display-only rounding
-                </li>
-              </ul>
             </div>
 
             <p className="text-slate-700 leading-relaxed">
@@ -340,6 +424,13 @@ const HowItWorks = () => {
                 className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
               >
                 rent paid every 4 weeks
+              </Link>
+              , and{" "}
+              <Link
+                to="/rent-converter"
+                className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+              >
+                universal rent converter
               </Link>
               .
             </p>

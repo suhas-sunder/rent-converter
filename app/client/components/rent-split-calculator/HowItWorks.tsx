@@ -239,6 +239,131 @@ const HowItWorks = () => {
               </div>
             </div>
 
+            {/* Examples section (separate) */}
+            <div className="mt-10 rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+              <div className="p-5 sm:p-6">
+                <h3 className="text-2xl font-extrabold text-sky-900 tracking-tight">
+                  Examples
+                </h3>
+                <p className="mt-3 text-slate-600 leading-7">
+                  Each example shows two things: the equal per-person split in
+                  the selected rent period, and a couple of derived equivalents
+                  that come from the same 365-day annual basis.
+                </p>
+
+                <div className="mt-6 grid gap-4 sm:gap-5">
+                  {/* Example 1: Monthly */}
+                  <div className="rounded-3xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-900">
+                      Example 1: $2,400 monthly split between 3 people
+                    </div>
+                    <ul className="mt-3 list-disc pl-5 space-y-2 text-slate-700">
+                      <li>
+                        Per-person (monthly) = <strong>$800.00</strong> (2400 ÷
+                        3)
+                      </li>
+                      <li>
+                        Annual total = <strong>$28,800.00</strong> (2400 × 12)
+                      </li>
+                      <li>
+                        Per-person annual = <strong>$9,600.00</strong> (28,800 ÷
+                        3)
+                      </li>
+                      <li>
+                        Per-person weekly (derived) ={" "}
+                        <strong>$184.109589</strong> (9,600 × 7 ÷ 365)
+                      </li>
+                      <li className="text-slate-600">
+                        The weekly figure is a comparison value derived from the
+                        annual basis. It does not mean rent is billed weekly.
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Example 2: Every 4 weeks */}
+                  <div className="rounded-3xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-900">
+                      Example 2: $2,000 every 4 weeks (28 days) split between 4
+                      people
+                    </div>
+                    <ul className="mt-3 list-disc pl-5 space-y-2 text-slate-700">
+                      <li>
+                        Per-person (28-day) = <strong>$500.00</strong> (2000 ÷
+                        4)
+                      </li>
+                      <li>
+                        Daily total = <strong>$71.428571</strong> (2000 ÷ 28)
+                      </li>
+                      <li>
+                        Annual total = <strong>$26,071.428571</strong> (daily ×
+                        365)
+                      </li>
+                      <li>
+                        Per-person daily = <strong>$17.857143</strong>{" "}
+                        (71.428571 ÷ 4)
+                      </li>
+                      <li>
+                        Per-person monthly (avg, derived) ={" "}
+                        <strong>$543.154762</strong> (26,071.428571 ÷ 12 ÷ 4)
+                      </li>
+                      <li className="text-slate-600">
+                        This makes the “monthly vs every 4 weeks” difference
+                        visible without pretending the cycles are the same.
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Example 3: Weekly with decimals */}
+                  <div className="rounded-3xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-900">
+                      Example 3: $975 weekly split between 2 people
+                    </div>
+                    <ul className="mt-3 list-disc pl-5 space-y-2 text-slate-700">
+                      <li>
+                        Per-person (weekly) = <strong>$487.50</strong> (975 ÷ 2)
+                      </li>
+                      <li>
+                        Annual total = <strong>$50,803.571429</strong> (975 ×
+                        365 ÷ 7)
+                      </li>
+                      <li>
+                        Per-person annual = <strong>$25,401.785714</strong>{" "}
+                        (50,803.571429 ÷ 2)
+                      </li>
+                      <li>
+                        Per-person monthly (avg, derived) ={" "}
+                        <strong>$2,116.815476</strong> (25,401.785714 ÷ 12)
+                      </li>
+                      <li className="text-slate-600">
+                        Rounding should be display-only so these equivalents
+                        reconcile cleanly.
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="rounded-2xl bg-white ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-900">
+                      What these examples are doing
+                    </div>
+                    <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
+                      <li>
+                        Headline per-person = <strong>rent ÷ people</strong> in
+                        the selected rent period.
+                      </li>
+                      <li>
+                        Derived equivalents use a single anchor:{" "}
+                        <strong>an annual total on a 365-day basis</strong>.
+                      </li>
+                      <li>
+                        Fixed-day cycles (weekly, biweekly, 28-day) remain clean
+                        because their day counts are explicit.
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Dark callout */}
             <div className="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-6 sm:p-7">
               <div
@@ -278,6 +403,7 @@ const HowItWorks = () => {
               .
             </p>
 
+            {/* Keep the related tools section */}
             <div className="mt-10">
               <h3 className="text-2xl font-extrabold mb-4 text-sky-900 tracking-tight">
                 Links to related tools
@@ -307,6 +433,14 @@ const HowItWorks = () => {
                       className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
                     >
                       Rent per week
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/rent-per-day-calculator"
+                      className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                    >
+                      Rent per day
                     </Link>
                   </li>
                 </ul>

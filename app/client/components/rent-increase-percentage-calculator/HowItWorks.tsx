@@ -145,12 +145,12 @@ const HowItWorks = () => {
                 </div>
 
                 <p className="mt-4">
-                  This annual basis is also what makes “weekly and 4-week
-                  equivalents” comparable on the same page. Weekly is always a
+                  This annual basis is also what makes weekly and 4-week
+                  equivalents comparable on the same page. Weekly is always a
                   7-day equivalent. Every 4 weeks is always a 28-day equivalent.
                   Monthly is an average month length. The calculator keeps those
-                  definitions explicit rather than using shortcuts like treating
-                  28 days as “a month.”
+                  definitions explicit rather than treating 28 days as “a
+                  month.”
                 </p>
               </div>
             </div>
@@ -188,9 +188,9 @@ const HowItWorks = () => {
                 </div>
 
                 <p className="mt-4">
-                  The “change per selected period” output is then derived from
-                  the same basis so the percent result, the per-period change,
-                  and the annual difference reconcile cleanly.
+                  The “change per selected period” output is derived to
+                  reconcile with the same annual basis so the percent result,
+                  the per-period change, and the annual difference stay aligned.
                 </p>
               </div>
             </div>
@@ -268,6 +268,143 @@ const HowItWorks = () => {
                   valid decimals. If a value is ambiguous, the page should avoid
                   producing a “close enough” output.
                 </p>
+              </div>
+            </div>
+
+            {/* EXAMPLES (own section) */}
+            <div className="mt-10 rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+              <div className="p-5 sm:px-6">
+                <h3 className="text-2xl font-extrabold text-sky-900 tracking-tight">
+                  Examples
+                </h3>
+                <p className="mt-3 text-slate-600 leading-7">
+                  These examples show exactly what the outputs mean. Old and new
+                  values share one period, then the tool normalizes to annual
+                  totals and derives the breakdown from that same annual basis.
+                </p>
+
+                <div className="mt-6 grid gap-4 sm:gap-5">
+                  {/* Example 1 */}
+                  <div className="rounded-3xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-900">
+                      Example 1: Monthly rent change
+                    </div>
+
+                    <div className="mt-3 grid sm:grid-cols-2 gap-4">
+                      <div className="rounded-2xl bg-white ring-1 ring-slate-200 p-4">
+                        <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                          Inputs (monthly)
+                        </div>
+                        <ul className="mt-2 space-y-1 text-slate-700">
+                          <li>
+                            Old: <strong>$1,800</strong> / month
+                          </li>
+                          <li>
+                            New: <strong>$1,950</strong> / month
+                          </li>
+                        </ul>
+                      </div>
+
+                      <div className="rounded-2xl bg-white ring-1 ring-slate-200 p-4">
+                        <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                          Key outputs
+                        </div>
+                        <ul className="mt-2 space-y-1 text-slate-700">
+                          <li>
+                            Percent increase: <strong>8.3333%</strong>
+                          </li>
+                          <li>
+                            Change (monthly): <strong>$150</strong>
+                          </li>
+                          <li>
+                            Annual difference: <strong>$1,800</strong>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 rounded-2xl bg-white ring-1 ring-slate-200 p-4">
+                      <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                        Derived equivalents (from annual totals)
+                      </div>
+                      <ul className="mt-2 grid sm:grid-cols-2 gap-x-6 gap-y-2 text-slate-700">
+                        <li>
+                          Weekly old: <strong>$414.2466</strong> · weekly new:{" "}
+                          <strong>$448.7671</strong>
+                        </li>
+                        <li>
+                          28-day old: <strong>$1,656.9863</strong> · 28-day new:{" "}
+                          <strong>$1,795.0685</strong>
+                        </li>
+                      </ul>
+                      <p className="mt-3 text-sm text-slate-600">
+                        The percent stays the same across the breakdown because
+                        it is computed from annual totals.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Example 2 */}
+                  <div className="rounded-3xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-900">
+                      Example 2: Weekly rent change
+                    </div>
+
+                    <div className="mt-3 grid sm:grid-cols-2 gap-4">
+                      <div className="rounded-2xl bg-white ring-1 ring-slate-200 p-4">
+                        <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                          Inputs (weekly)
+                        </div>
+                        <ul className="mt-2 space-y-1 text-slate-700">
+                          <li>
+                            Old: <strong>$450</strong> / week
+                          </li>
+                          <li>
+                            New: <strong>$480</strong> / week
+                          </li>
+                        </ul>
+                      </div>
+
+                      <div className="rounded-2xl bg-white ring-1 ring-slate-200 p-4">
+                        <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                          Key outputs
+                        </div>
+                        <ul className="mt-2 space-y-1 text-slate-700">
+                          <li>
+                            Percent increase: <strong>6.6667%</strong>
+                          </li>
+                          <li>
+                            Change (weekly): <strong>$30</strong>
+                          </li>
+                          <li>
+                            Annual difference: <strong>$1,564.2857</strong>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 rounded-2xl bg-white ring-1 ring-slate-200 p-4">
+                      <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                        Derived equivalents (from annual totals)
+                      </div>
+                      <ul className="mt-2 grid sm:grid-cols-2 gap-x-6 gap-y-2 text-slate-700">
+                        <li>
+                          Monthly (avg) old: <strong>$1,955.3571</strong> · new:{" "}
+                          <strong>$2,085.7143</strong>
+                        </li>
+                        <li>
+                          28-day old: <strong>$1,800</strong> · 28-day new:{" "}
+                          <strong>$1,920</strong>
+                        </li>
+                      </ul>
+                      <p className="mt-3 text-sm text-slate-600">
+                        Weekly is a 7-day amount. The annual basis uses a
+                        365-day year, then derives other periods from that same
+                        annual total.
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 

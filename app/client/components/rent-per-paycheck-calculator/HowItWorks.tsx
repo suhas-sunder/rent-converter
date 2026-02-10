@@ -14,18 +14,19 @@ const HowItWorks = () => {
 
       <div className="relative p-6 sm:p-10">
         <div className="mx-auto max-w-4xl">
-          <h2 className="text-3xl sm:text-4xl font-extrabold mb-6 text-center sm:text-left  text-sky-900 tracking-tight leading-tight">
-            How this rent per paycheck calculator works and what to expect
+          <h2 className="text-3xl sm:text-4xl font-extrabold mb-6 text-center text-sky-900 tracking-tight leading-tight">
+            How this rent per day calculator works
           </h2>
 
-          <p className="text-center sm:text-left text-slate-600 leading-7">
-            This calculator is a budgeting allocator. It estimates how much rent
-            to set aside from each paycheck by treating your rent as a yearly
-            cost and spreading that cost across the paychecks implied by the pay
-            frequency you select. The goal is not to predict your due dates or
-            simulate your landlord’s billing rules. The goal is to give you a
-            stable “per pay” set-aside number that stays consistent across pay
-            cycles that don’t line up cleanly with calendar months.
+          <p className="text-slate-600 leading-7">
+            This page converts your entered rent amount into a{" "}
+            <strong>daily equivalent</strong>. It does that by using an annual
+            total as the common basis. First, your selected input period is
+            converted into an annual amount using a consistent time-length
+            model. Then that annual amount is converted into a 1-day value. The
+            result is a daily figure that lines up with the rest of the
+            breakdown (weekly, biweekly, 28-day, monthly average, and annual)
+            without switching assumptions mid-stream.
           </p>
 
           <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -34,15 +35,7 @@ const HowItWorks = () => {
                 INPUT
               </div>
               <div className="mt-2 text-sm font-semibold text-slate-900">
-                Rent + rent period
-              </div>
-            </div>
-            <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
-              <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                SELECT
-              </div>
-              <div className="mt-2 text-sm font-semibold text-slate-900">
-                Pay frequency
+                Amount + period
               </div>
             </div>
             <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
@@ -55,10 +48,18 @@ const HowItWorks = () => {
             </div>
             <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
               <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                OUTPUT
+                CONVERT
               </div>
               <div className="mt-2 text-sm font-semibold text-slate-900">
-                Rent per paycheck
+                Daily equivalent
+              </div>
+            </div>
+            <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
+              <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                EXTRA
+              </div>
+              <div className="mt-2 text-sm font-semibold text-slate-900">
+                Days total box
               </div>
             </div>
           </div>
@@ -70,17 +71,51 @@ const HowItWorks = () => {
                 aria-hidden="true"
                 className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
               />
-              <div className="p-5 sm:px-6">
+              <div className="p-5 sm:p-6">
                 <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
-                  1) Rent is converted to an annual total first
+                  1) The daily value is derived from an annual basis
                 </h3>
 
                 <p className="mt-4">
-                  The calculator starts by converting your rent into an annual
-                  total using a consistent time-length model. This is the same
-                  “one source of truth” approach used across the site. Once rent
-                  is annualized, it can be split across paychecks without mixing
-                  calendar-month assumptions with fixed-day cycles.
+                  The daily equivalent is not computed by taking a shortcut like
+                  “monthly ÷ 30” or “weekly ÷ 7 unless the input was weekly.”
+                  The page uses one consistent basis for all inputs:
+                  <strong>
+                    {" "}
+                    convert the input to an annual total, then divide by 365 to
+                    get daily
+                  </strong>
+                  . That way, daily, weekly, 28-day, and monthly outputs
+                  reconcile cleanly because they all come from the same annual
+                  number.
+                </p>
+
+                <p className="mt-4">
+                  This matters most when the input is monthly or every 4 weeks.
+                  A calendar month is not a fixed number of days, and a 4-week
+                  period is exactly 28 days. If you convert monthly to daily by
+                  dividing by 30, you have implicitly changed the annual total.
+                  This page avoids that by mapping monthly through an average
+                  month length (365 ÷ 12 days) and using a 365-day year.
+                </p>
+              </div>
+            </div>
+
+            {/* Card 2 */}
+            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+              <div
+                aria-hidden="true"
+                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+              />
+              <div className="p-5 sm:p-6">
+                <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
+                  2) Period definitions used on this page
+                </h3>
+
+                <p className="mt-4">
+                  The converter treats each period label as a time length. That
+                  prevents mixing calendar-based payment schedules with
+                  fixed-day cycles when you are trying to compare costs.
                 </p>
 
                 <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
@@ -93,68 +128,16 @@ const HowItWorks = () => {
                     <li>Week = 7 days</li>
                     <li>Biweekly = 14 days</li>
                     <li>Every 4 weeks = 28 days</li>
-                  </ul>
-                  <p className="mt-3 text-sm text-slate-600">
-                    These assumptions are for equivalence math. Your lease can
-                    still be due on specific dates.
-                  </p>
-                </div>
-
-                <p className="mt-4">
-                  This step is where small differences versus “month math” come
-                  from. If you divide a monthly amount by 2 and call it
-                  “biweekly rent,” you have implicitly assumed a calendar
-                  structure that may not match a 14-day pay cycle. Using an
-                  annual basis keeps the allocator stable across pay
-                  frequencies.
-                </p>
-              </div>
-            </div>
-
-            {/* Card 2 */}
-            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
-              <div
-                aria-hidden="true"
-                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
-              />
-              <div className="p-5 sm:px-6">
-                <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
-                  2) Annual rent is divided by paychecks per year
-                </h3>
-
-                <p className="mt-4">
-                  After rent is annualized, the calculator divides that annual
-                  total by the number of paychecks implied by your selected pay
-                  frequency. The result is the amount to set aside from each
-                  paycheck so that, over time, you have allocated the same
-                  annual rent.
-                </p>
-
-                <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
-                  <div className="text-sm font-bold text-sky-900">
-                    Why this avoids drift
-                  </div>
-                  <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
-                    <li>
-                      If pay cycles and rent cycles don’t match, “set aside per
-                      pay” should still sum to the same annual rent.
-                    </li>
-                    <li>
-                      Using a single annual basis prevents hidden switching
-                      between 52-week framing and calendar months.
-                    </li>
-                    <li>
-                      You can change the pay frequency and see a consistent
-                      re-allocation, not a different implied rent.
-                    </li>
+                    <li>Hourly conversions assume 24 hours per day</li>
                   </ul>
                 </div>
 
                 <p className="mt-4">
-                  The output is meant to be used as a budgeting habit: allocate
-                  the rent-per-paycheck amount each pay period, regardless of
-                  when rent is actually due. When the rent due date arrives, the
-                  accumulated set-aside is the intended funding source.
+                  If you are comparing listings, the daily equivalent is often
+                  the simplest common unit because it can be scaled into any
+                  other period without switching definitions. It also helps you
+                  see whether a “monthly” listing and a “4-week” listing that
+                  look similar are actually the same annual cost.
                 </p>
               </div>
             </div>
@@ -165,25 +148,44 @@ const HowItWorks = () => {
                 aria-hidden="true"
                 className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
               />
-              <div className="p-5 sm:px-6">
+              <div className="p-5 sm:p-6">
                 <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
-                  3) The result does not change your lease schedule
+                  3) What the “total for a chosen number of days” box does
                 </h3>
 
                 <p className="mt-4">
-                  This is not a due-date tool. If rent is due monthly and you
-                  are paid biweekly or semimonthly, the rent-per-paycheck number
-                  is still useful, but it does not claim that rent is “really
-                  due” every paycheck. It only spreads the annual rent across
-                  pay periods for budgeting consistency.
+                  The days-total box is a quick estimator: it multiplies the
+                  daily equivalent by a day count you choose. That makes it
+                  useful for “what does this difference mean over 10 days, 45
+                  days, or 90 days” comparisons, or for rough planning across a
+                  defined number of days.
                 </p>
 
+                <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                  <div className="text-sm font-bold text-sky-900">
+                    Estimator behavior
+                  </div>
+                  <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
+                    <li>
+                      It uses the <strong>computed daily equivalent</strong>{" "}
+                      from this page as the base.
+                    </li>
+                    <li>
+                      It multiplies by your selected day count (no extra
+                      assumptions are added).
+                    </li>
+                    <li>
+                      It is not a proration engine and does not model
+                      lease-specific rules.
+                    </li>
+                  </ul>
+                </div>
+
                 <p className="mt-4">
-                  If you need a forward schedule of actual due dates and
-                  calendar-month totals, use a due-date schedule tool. If you
-                  need conversions between cycles for listing comparisons, use a
-                  converter. This page is specifically “how much to set aside
-                  per pay” given a rent amount and a pay frequency.
+                  Real proration depends on what the lease defines as a billing
+                  month, due dates, partial periods, and any fees or minimums.
+                  This tool keeps that out of scope and stays strictly in
+                  equivalence math territory.
                 </p>
               </div>
             </div>
@@ -194,73 +196,123 @@ const HowItWorks = () => {
                 aria-hidden="true"
                 className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
               />
-              <div className="p-5 sm:px-6">
+              <div className="p-5 sm:p-6">
                 <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
-                  4) Where “monthly vs 4-week vs pay cycle” mismatches show up
+                  4) Decimals and rounding
                 </h3>
 
                 <p className="mt-4">
-                  The biggest budgeting surprises happen when a rent listing
-                  uses a fixed-day cycle (every 4 weeks) while your mental model
-                  is monthly, or when pay is biweekly while expenses are
-                  monthly. A 28-day schedule drifts through the calendar, and a
-                  biweekly schedule yields a different cadence than “twice per
-                  month.”
-                </p>
-
-                <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
-                  <div className="text-sm font-bold text-sky-900">
-                    Practical interpretation
-                  </div>
-                  <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
-                    <li>
-                      <strong>Biweekly</strong> means every 14 days. It is not
-                      “twice a month.”
-                    </li>
-                    <li>
-                      <strong>Every 4 weeks</strong> means every 28 days. It is
-                      not “monthly.”
-                    </li>
-                    <li>
-                      A stable allocation strategy starts from annual rent, then
-                      spreads across paychecks.
-                    </li>
-                  </ul>
-                </div>
-
-                <p className="mt-4">
-                  This calculator’s annual basis is the anchor that keeps the
-                  per-pay set-aside stable even when rent due dates and paycheck
-                  dates don’t align neatly month-to-month.
-                </p>
-              </div>
-            </div>
-
-            {/* Card 5 */}
-            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
-              <div
-                aria-hidden="true"
-                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
-              />
-              <div className="p-5 sm:px-6">
-                <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
-                  5) Decimals and rounding
-                </h3>
-
-                <p className="mt-4">
-                  Decimals are preserved end-to-end. Internally, calculations
-                  keep precision (up to 12 decimals). If rounding is enabled in
-                  the UI, rounding should be display-only so it formats what you
-                  see without changing the underlying annual basis used for the
-                  allocation.
+                  Inputs are parsed in a decimal-safe way and calculations
+                  preserve precision internally (up to 12 decimals). If rounding
+                  is enabled in the UI, it should be display-only: formatting
+                  what you see without changing the underlying daily or annual
+                  numbers that the breakdown is based on.
                 </p>
 
                 <p className="mt-4">
                   If an input is invalid or ambiguous, the page should avoid
-                  producing a misleading per-pay value. A budgeting allocator
-                  becomes counterproductive if it quietly converts bad input
-                  into a confident-looking result.
+                  showing a misleading “0” daily result. A daily equivalent is
+                  often used as a base for other calculations on the page, so
+                  hiding results on bad input is the correct behavior.
                 </p>
+              </div>
+            </div>
+
+            {/* Examples section (separate) */}
+            <div className="mt-10 rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+              <div className="p-5 sm:p-6">
+                <h3 className="text-2xl font-extrabold text-sky-900 tracking-tight">
+                  Examples
+                </h3>
+                <p className="mt-3 text-slate-600 leading-7">
+                  Each example shows the same structure: convert the input to an
+                  annual total using this page’s period definition, then divide
+                  by 365 to get a daily equivalent. Values below are shown with
+                  decimals to make the math transparent.
+                </p>
+
+                <div className="mt-6 grid gap-4 sm:gap-5">
+                  {/* Example A: Monthly */}
+                  <div className="rounded-3xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-900">
+                      Example 1: $2,400 monthly
+                    </div>
+                    <ul className="mt-3 list-disc pl-5 space-y-2 text-slate-700">
+                      <li>
+                        Annual = <strong>$28,800</strong> (2400 × 12)
+                      </li>
+                      <li>
+                        Daily = <strong>$78.904110</strong> (28,800 ÷ 365)
+                      </li>
+                      <li className="text-slate-600">
+                        Why this differs from “÷ 30”: monthly here is treated as
+                        annual ÷ 12, not a fixed 30-day month.
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Example B: Every 4 weeks */}
+                  <div className="rounded-3xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-900">
+                      Example 2: $2,000 every 4 weeks (28 days)
+                    </div>
+                    <ul className="mt-3 list-disc pl-5 space-y-2 text-slate-700">
+                      <li>
+                        Daily = <strong>$71.428571</strong> (2000 ÷ 28)
+                      </li>
+                      <li>
+                        Annual = <strong>$26,071.428571</strong> (daily × 365)
+                      </li>
+                      <li className="text-slate-600">
+                        This is why “every 4 weeks” is not interchangeable with
+                        “monthly” even if the numbers look close.
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Example C: Weekly + days-total */}
+                  <div className="rounded-3xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-900">
+                      Example 3: $700 weekly, plus a 45-day total
+                    </div>
+                    <ul className="mt-3 list-disc pl-5 space-y-2 text-slate-700">
+                      <li>
+                        Daily = <strong>$100.000000</strong> (700 ÷ 7)
+                      </li>
+                      <li>
+                        Annual = <strong>$36,500</strong> (100 × 365)
+                      </li>
+                      <li>
+                        Total for 45 days = <strong>$4,500</strong> (100 × 45)
+                      </li>
+                      <li className="text-slate-600">
+                        The 45-day total is just daily × days. No proration or
+                        lease rules are applied.
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="rounded-2xl bg-white ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-900">
+                      What these examples are doing
+                    </div>
+                    <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
+                      <li>
+                        Monthly inputs annualize via <strong>× 12</strong>, then
+                        daily is annual ÷ 365.
+                      </li>
+                      <li>
+                        28-day inputs annualize via{" "}
+                        <strong>(amount ÷ 28) × 365</strong>, then daily is
+                        annual ÷ 365, which returns to amount ÷ 28.
+                      </li>
+                      <li>
+                        Fixed-day inputs (weekly, biweekly, 28-day) stay
+                        consistent because the day count is explicit.
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -279,52 +331,43 @@ const HowItWorks = () => {
                   Scope note
                 </div>
                 <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-100">
-                  What this tool includes and excludes
+                  This is an equivalence calculator, not a billing simulator
                 </h3>
                 <p className="mt-3 text-slate-200 leading-7">
-                  This is a per-pay allocation calculator based on annualized
-                  rent and paycheck count. It does not model due dates,
-                  proration, partial periods, late fees, utilities, taxes, or
-                  deposits. It is designed for stable budgeting across pay
-                  frequencies that don’t match rent billing cycles.
+                  The outputs are consistent comparisons derived from explicit
+                  time assumptions. They are useful for comparing listings,
+                  sanity-checking implied annual cost, and estimating day-based
+                  totals. They do not model lease-specific proration, due-date
+                  rules, partial periods, or fees.
                 </p>
               </div>
             </div>
 
-            <section className="mt-10">
-              <h3 className="text-2xl font-extrabold mb-4 text-sky-900 tracking-tight">
-                Links to related tools
-              </h3>
-
-              <div className="rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm p-5 sm:px-6">
-                <ul className="list-disc ml-6 text-slate-700 space-y-2">
-                  <li>
-                    <Link
-                      to="/rent-converter"
-                      className="inline-flex items-center gap-2 text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
-                    >
-                      Rent converter
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/how-much-rent-can-i-afford-calculator"
-                      className="inline-flex items-center gap-2 text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
-                    >
-                      How much rent can I afford?
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/rent-after-tax-income-calculator"
-                      className="inline-flex items-center gap-2 text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
-                    >
-                      Rent after tax income calculator
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-            </section>
+            {/* Related tools (kept) */}
+            <p className="text-slate-700 leading-relaxed">
+              Related tools:{" "}
+              <Link
+                to="/rent-converter"
+                className="inline-flex items-center gap-2 text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+              >
+                rent converter
+              </Link>
+              ,{" "}
+              <Link
+                to="/monthly-to-daily-rent-converter"
+                className="inline-flex items-center gap-2 text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+              >
+                monthly to daily
+              </Link>
+              ,{" "}
+              <Link
+                to="/rent-paid-every-4-weeks-calculator"
+                className="inline-flex items-center gap-2 text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+              >
+                rent paid every 4 weeks
+              </Link>
+              .
+            </p>
           </div>
         </div>
       </div>

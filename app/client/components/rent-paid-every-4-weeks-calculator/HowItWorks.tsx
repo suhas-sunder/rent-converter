@@ -140,6 +140,152 @@ const HowItWorks = () => {
               </div>
             </div>
 
+            {/* Examples section (separate, real numbers) */}
+            <div className="mt-10 rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+              <div className="p-5 sm:px-6">
+                <h3 className="text-2xl font-extrabold text-sky-900 tracking-tight">
+                  Examples
+                </h3>
+                <p className="mt-3 text-slate-600 leading-7">
+                  These examples show the two different ideas side by side:
+                  365-day equivalence (used for conversions) and the “×13”
+                  shorthand (useful for schedule intuition).
+                </p>
+
+                <div className="mt-6 grid gap-4 sm:gap-5">
+                  {/* Example 1 */}
+                  <div className="rounded-3xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-900">
+                      Example 1: $2,000 every 4 weeks (28 days)
+                    </div>
+
+                    <div className="mt-3 grid sm:grid-cols-2 gap-4">
+                      <div className="rounded-2xl bg-white ring-1 ring-slate-200 p-4">
+                        <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                          Equivalence math (365-day basis)
+                        </div>
+                        <ul className="mt-2 space-y-1 text-slate-700">
+                          <li>
+                            Daily = <strong>$71.428571</strong> (2000 ÷ 28)
+                          </li>
+                          <li>
+                            Annual = <strong>$26,071.428571</strong> (daily ×
+                            365)
+                          </li>
+                          <li>
+                            Monthly (avg) = <strong>$2,172.619048</strong>{" "}
+                            (annual ÷ 12)
+                          </li>
+                          <li>
+                            Weekly = <strong>$500.00</strong> (daily × 7)
+                          </li>
+                          <li>
+                            Hourly = <strong>$2.976190</strong> (daily ÷ 24)
+                          </li>
+                        </ul>
+                      </div>
+
+                      <div className="rounded-2xl bg-white ring-1 ring-slate-200 p-4">
+                        <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                          Schedule shorthand (shown separately)
+                        </div>
+                        <ul className="mt-2 space-y-1 text-slate-700">
+                          <li>
+                            4-week × 13 = <strong>$26,000.00</strong>
+                          </li>
+                          <li>
+                            Difference vs 365-day annual ={" "}
+                            <strong>$71.428571</strong>
+                          </li>
+                        </ul>
+                        <p className="mt-3 text-sm text-slate-600">
+                          The shorthand counts 13 payments in 52 weeks. The
+                          equivalence math anchors to 365 days, then derives
+                          every other period from that same annual total.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Example 2 */}
+                  <div className="rounded-3xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-900">
+                      Example 2: $1,500 every 4 weeks (28 days)
+                    </div>
+
+                    <div className="mt-3 grid sm:grid-cols-2 gap-4">
+                      <div className="rounded-2xl bg-white ring-1 ring-slate-200 p-4">
+                        <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                          Equivalence math (365-day basis)
+                        </div>
+                        <ul className="mt-2 space-y-1 text-slate-700">
+                          <li>
+                            Daily = <strong>$53.571429</strong> (1500 ÷ 28)
+                          </li>
+                          <li>
+                            Annual = <strong>$19,553.571429</strong> (daily ×
+                            365)
+                          </li>
+                          <li>
+                            Monthly (avg) = <strong>$1,629.464286</strong>{" "}
+                            (annual ÷ 12)
+                          </li>
+                          <li>
+                            Weekly = <strong>$375.00</strong> (daily × 7)
+                          </li>
+                          <li>
+                            Hourly = <strong>$2.232143</strong> (daily ÷ 24)
+                          </li>
+                        </ul>
+                      </div>
+
+                      <div className="rounded-2xl bg-white ring-1 ring-slate-200 p-4">
+                        <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                          Schedule shorthand (shown separately)
+                        </div>
+                        <ul className="mt-2 space-y-1 text-slate-700">
+                          <li>
+                            4-week × 13 = <strong>$19,500.00</strong>
+                          </li>
+                          <li>
+                            Difference vs 365-day annual ={" "}
+                            <strong>$53.571429</strong>
+                          </li>
+                        </ul>
+                        <p className="mt-3 text-sm text-slate-600">
+                          Over short horizons this gap looks tiny, but it
+                          accumulates if you mix models while budgeting.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="rounded-2xl bg-white ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-sky-900">
+                      What to take from the examples
+                    </div>
+                    <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
+                      <li>
+                        The conversion breakdown uses <strong>365-day</strong>{" "}
+                        equivalence so each derived period reconciles to the
+                        same annual total.
+                      </li>
+                      <li>
+                        The “×13” line is <strong>not</strong> used to derive
+                        monthly (avg), daily, or hourly equivalents. It’s shown
+                        as a separate intuition check.
+                      </li>
+                      <li>
+                        If you are comparing “monthly” listings to “every 4
+                        weeks,” use the derived equivalents rather than dividing
+                        by 4.
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
               <div className="text-sm font-bold text-sky-900">
                 What you can do here
