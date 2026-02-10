@@ -844,11 +844,11 @@ export default function Home() {
 
       <section
         id="converter"
-        className="mx-auto max-w-6xl px-6 pb-6 mt-4 sm:mt-6"
+        className="mx-auto max-w-6xl px-6 pb-6 mt-2 sm:mt-6"
       >
         <div className="rounded-2xl pb-6 bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8">
           <div className=" flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <h1 className="text-center sm:text-left text-2xl sm:text-4xl capitalize font-bold text-sky-800 tracking-tight">
+            <h1 className="text-center mb-1 sm:mb-0 sm:text-left text-2xl sm:text-4xl capitalize font-bold text-sky-800 tracking-tight">
               Instant rent converter
             </h1>
 
@@ -995,124 +995,156 @@ export default function Home() {
             aria-live="polite"
           >
             <div className="absolute inset-x-0 top-0 h-0.5 bg-sky-200 rounded-t-2xl" />
-            <div className="flex items-center gap-2">
-              <div
-                className="h-2 w-2 rounded-full bg-sky-600"
-                aria-hidden="true"
-              />
-              <div className="text-sm font-semibold text-slate-800">
-                Converted rent
-              </div>
-            </div>
 
-            <div className=" flex flex-col">
-              <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700 tabular-nums leading-none min-h-[3.25rem] sm:min-h-[4rem]">
-                {validation.ok ? displayMoney : "—"}
-              </div>
-            </div>
+            {(() => {
+              const selectedLabel =
+                (PERIOD_LABEL as any)?.[to] ??
+                (PERIOD_LABEL as any)?.[from] ??
+                "Converted rent";
 
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {(
+              const topTitle = `${selectedLabel} rent`;
+
+              const items = [
+                ["Hourly", breakdown.hourly, "hourly"],
+                ["Daily", breakdown.daily, "daily"],
+                ["Weekly", breakdown.weekly, "weekly"],
+                ["Every 2 weeks", breakdown.biweekly, "biweekly"],
                 [
-                  ["Hourly", breakdown.hourly, "hourly"],
-                  ["Daily", breakdown.daily, "daily"],
-                  ["Weekly", breakdown.weekly, "weekly"],
-                  ["Every 2 weeks", breakdown.biweekly, "biweekly"],
-                  [
-                    "Every 4 weeks (28 days)",
-                    breakdown.every_4_weeks,
-                    "every_4_weeks",
-                  ],
-                  ["Monthly", breakdown.monthly, "monthly"],
-                  ["Annual", breakdown.annual, "annual"],
-                ] as const
-              ).map(([label, val, key]) => (
-                <div
-                  key={key}
-                  className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm"
-                >
-                  <div className="text-xs font-medium text-slate-600">
-                    {label}
-                  </div>
-                  <div className="mt-1 text-lg font-bold text-slate-900 tabular-nums whitespace-nowrap overflow-hidden text-ellipsis">
-                    {validation.ok ? formatRationalMoney(val) : "—"}
-                  </div>
-                </div>
-              ))}
+                  "Every 4 weeks (28 days)",
+                  breakdown.every_4_weeks,
+                  "every_4_weeks",
+                ],
+                ["Monthly", breakdown.monthly, "monthly"],
+                ["Annual", breakdown.annual, "annual"],
+              ] as const;
 
-              <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-3 shadow-sm">
-                <div className="text-xs font-medium text-slate-600">
-                  4-week vs monthly
-                </div>
-                <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                  <div className="text-sm text-slate-800 leading-relaxed">
-                    Monthly minus 4-week ={" "}
-                    <strong className="text-slate-900 tabular-nums whitespace-nowrap">
+              const selectedKey = to as string;
+              const selectedItem =
+                items.find(([, , key]) => key === selectedKey) ??
+                items.find(([, , key]) => key === "monthly");
+
+              const selectedValue = selectedItem?.[1];
+
+              const gridItems = items.filter(
+                ([, , key]) => key !== selectedKey,
+              );
+
+              return (
+                <>
+                  <div className="flex items-center gap-2">
+                    <div
+                      className="h-2 w-2 rounded-full bg-sky-600"
+                      aria-hidden="true"
+                    />
+                    <div className="text-sm font-semibold text-slate-800">
+                      {topTitle}
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col">
+                    <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700 tabular-nums leading-none min-h-[3.25rem] sm:min-h-[4rem]">
                       {validation.ok
-                        ? formatRationalMoney(breakdown.monthlyMinus4w)
+                        ? formatRationalMoney(
+                            selectedValue ?? breakdown.monthly,
+                          )
                         : "—"}
-                    </strong>
+                    </div>
                   </div>
-                  <div className="text-sm text-slate-800 leading-relaxed">
-                    Difference ≈{" "}
-                    <strong className="text-slate-900 tabular-nums whitespace-nowrap">
-                      {validation.ok ? monthlyMinus4wPctDisplay : "—"}
-                    </strong>
+
+                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                    {gridItems.map(([label, val, key]) => (
+                      <div
+                        key={key}
+                        className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm"
+                      >
+                        <div className="text-xs font-medium text-slate-600">
+                          {label} rent
+                        </div>
+                        <div className="mt-1 text-lg font-bold text-slate-900 tabular-nums whitespace-nowrap overflow-hidden text-ellipsis">
+                          {validation.ok ? formatRationalMoney(val) : "—"}
+                        </div>
+                      </div>
+                    ))}
+
+                    <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-3 shadow-sm">
+                      <div className="text-xs font-medium text-slate-600">
+                        4-week vs monthly
+                      </div>
+                      <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                        <div className="text-sm text-slate-800 leading-relaxed">
+                          Monthly minus 4-week ={" "}
+                          <strong className="text-slate-900 tabular-nums whitespace-nowrap">
+                            {validation.ok
+                              ? formatRationalMoney(breakdown.monthlyMinus4w)
+                              : "—"}
+                          </strong>
+                        </div>
+                        <div className="text-sm text-slate-800 leading-relaxed">
+                          Difference ≈{" "}
+                          <strong className="text-slate-900 tabular-nums whitespace-nowrap">
+                            {validation.ok ? monthlyMinus4wPctDisplay : "—"}
+                          </strong>
+                        </div>
+                      </div>
+                      <p className="mt-2 text-xs text-slate-600 leading-relaxed">
+                        28-day 4-week periods vs ~30.42-day months cause
+                        different equivalents.
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <p className="mt-2 text-xs text-slate-600 leading-relaxed">
-                  28-day 4-week periods vs ~30.42-day months cause different
-                  equivalents.
-                </p>
-              </div>
-            </div>
 
-            <div className="flex flex-wrap items-center gap-3 mt-4">
-              <div
-                id="export-controls"
-                className="mb-3 sm:hidden flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
-              >
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (typeof window === "undefined") return;
-                      window.print();
-                    }}
-                    className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fbff]"
-                  >
-                    Print / Save PDF
-                  </button>
-                </div>
-              </div>
-              <label className="inline-flex items-center gap-2 text-sm font-medium text-slate-700 select-none">
-                <input
-                  type="checkbox"
-                  checked={roundForDisplay}
-                  onChange={(e) => setRoundForDisplay(e.target.checked)}
-                  className="h-4 w-4 rounded border-slate-300 text-sky-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-                />
-                Round results for display
-              </label>
+                  <div className="flex flex-wrap items-center gap-3 mt-4">
+                    <div
+                      id="export-controls"
+                      className="mr-auto flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
+                    >
+                      <div className="flex flex-wrap gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (typeof window === "undefined") return;
+                            window.print();
+                          }}
+                          className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fbff]"
+                        >
+                          Print / Save PDF
+                        </button>
+                      </div>
+                    </div>
 
-              <label className="inline-flex items-center gap-2 text-sm font-medium text-slate-700 select-none">
-                <span className="sr-only">Display decimals</span>
-                <select
-                  value={displayDecimals}
-                  onChange={(e) =>
-                    setDisplayDecimals(safeDisplayDecimals(e.target.value, 2))
-                  }
-                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-sky-400"
-                  aria-describedby={decimalsHelpId}
-                  aria-label="Display decimals"
-                >
-                  <option value={0}>0 decimals</option>
-                  <option value={2}>2 decimals</option>
-                  <option value={4}>4 decimals</option>
-                  <option value={6}>6 decimals</option>
-                </select>
-              </label>
-            </div>
+                    <label className="inline-flex items-center gap-2 text-sm font-medium text-slate-700 select-none">
+                      <input
+                        type="checkbox"
+                        checked={roundForDisplay}
+                        onChange={(e) => setRoundForDisplay(e.target.checked)}
+                        className="h-4 w-4 rounded border-slate-300 text-sky-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                      />
+                      Round results for display
+                    </label>
+
+                    <label className="inline-flex items-center gap-2 text-sm font-medium text-slate-700 select-none">
+                      <span className="sr-only">Display decimals</span>
+                      <select
+                        value={displayDecimals}
+                        onChange={(e) =>
+                          setDisplayDecimals(
+                            safeDisplayDecimals(e.target.value, 2),
+                          )
+                        }
+                        className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-sky-400"
+                        aria-describedby={decimalsHelpId}
+                        aria-label="Display decimals"
+                      >
+                        <option value={0}>0 decimals</option>
+                        <option value={2}>2 decimals</option>
+                        <option value={4}>4 decimals</option>
+                        <option value={6}>6 decimals</option>
+                      </select>
+                    </label>
+                  </div>
+                </>
+              );
+            })()}
           </div>
         </div>
         <Assumptions />

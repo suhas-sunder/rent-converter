@@ -13,7 +13,7 @@ const HowItWorks = () => {
       </div>
 
       <div className="relative p-6 sm:p-10">
-        <div className="mx-auto max-w-4xl">
+        <div className="mx-auto max-w-6xl">
           <div className="flex flex-col gap-4 sm:gap-5">
             <div className="flex items-start justify-between gap-4">
               <div className="min-w-0">
@@ -21,12 +21,12 @@ const HowItWorks = () => {
                   How the annual to biweekly rent converter works
                 </h2>
                 <p className="mt-2 text-slate-600 leading-7 max-w-2xl">
-                  This page converts an annual rent total into a biweekly
-                  equivalent using a fixed time-length model. The output is an
-                  equivalent amount that represents the same annual cost under a
-                  defined year basis. It is not a billing rule engine, not a due
-                  date tool, and not a lease-terms interpreter. If you want to
-                  switch between any rent periods on one page, use the{" "}
+                  Convert a yearly rent total into a true 14-day equivalent so
+                  you can compare it to pay cycles, budgeting rules, or a
+                  landlord quote that is listed as “biweekly.” This page uses a
+                  fixed time-length basis (365-day year, 14-day period) and keeps
+                  all breakdown rows anchored to the same annual total. If you
+                  want to switch between any rent periods on one page, use the{" "}
                   <Link
                     to="/rent-converter"
                     className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
@@ -35,6 +35,20 @@ const HowItWorks = () => {
                   </Link>{" "}
                   or the universal rent converter.
                 </p>
+                <ul className="mt-4 list-disc pl-5 space-y-2 text-slate-600 leading-7 max-w-2xl">
+                  <li>
+                    Use the biweekly number to test affordability against a
+                    biweekly budget cap or payroll cadence.
+                  </li>
+                  <li>
+                    Use the breakdown table to make different listing styles
+                    comparable without shortcuts.
+                  </li>
+                  <li>
+                    Treat results as equivalents, not billing rules or invoice
+                    timing.
+                  </li>
+                </ul>
               </div>
 
               <div className="hidden sm:flex flex-col items-end gap-2 shrink-0">
@@ -89,41 +103,52 @@ const HowItWorks = () => {
             <h3 className="text-xl font-extrabold text-sky-700 tracking-tight">
               Related tools
             </h3>
-            <p>
-              If you need to switch between other rent periods without changing
-              the conversion basis, the{" "}
-              <Link
-                to="/rent-converter"
-                className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
-              >
-                rent converter
-              </Link>{" "}
-              links the full set of period converters. For the reverse of this
-              page, use the{" "}
-              <Link
-                to="/biweekly-to-annual-rent-converter"
-                className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
-              >
-                biweekly to annual converter
-              </Link>{" "}
-              so the same year basis is applied in the opposite direction. For a
-              nearby frequency comparison, the{" "}
-              <Link
-                to="/weekly-to-biweekly-rent-converter"
-                className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
-              >
-                weekly to biweekly converter
-              </Link>{" "}
-              keeps weekly and 14-day equivalents on the same footing. Monthly
-              comparisons can be checked against{" "}
-              <Link
-                to="/annual-to-monthly-rent-converter"
-                className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
-              >
-                annual to monthly
-              </Link>{" "}
-              to avoid the "weekly × 4" shortcut.
-            </p>
+            <ul className="list-disc pl-5 space-y-2">
+              <li>
+                When you need to jump between multiple period types on one page,
+                the{" "}
+                <Link
+                  to="/rent-converter"
+                  className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                >
+                  rent converter
+                </Link>{" "}
+                keeps all comparisons on a consistent basis.
+              </li>
+              <li>
+                When a listing is priced biweekly and you want the annual
+                equivalent for budgeting or reporting, the{" "}
+                <Link
+                  to="/biweekly-to-annual-rent-converter"
+                  className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                >
+                  biweekly to annual converter
+                </Link>{" "}
+                applies the same model in reverse.
+              </li>
+              <li>
+                When you are comparing a weekly price to a 14-day price without
+                mixing “twice per month” assumptions, the{" "}
+                <Link
+                  to="/weekly-to-biweekly-rent-converter"
+                  className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                >
+                  weekly to biweekly converter
+                </Link>{" "}
+                makes that comparison directly.
+              </li>
+              <li>
+                When you want a clean monthly benchmark from a yearly total
+                (instead of “weekly × 4”),{" "}
+                <Link
+                  to="/annual-to-monthly-rent-converter"
+                  className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                >
+                  annual to monthly
+                </Link>{" "}
+                keeps month math explicit.
+              </li>
+            </ul>
             <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
               <div
                 aria-hidden="true"
@@ -156,19 +181,39 @@ const HowItWorks = () => {
 
                 <div className="mt-4 space-y-4">
                   <p>
-                    Input: one annual rent total (a currency amount per year).
-                    Output: a biweekly equivalent (a currency amount per 14-day
-                    period), plus a breakdown table for other periods derived
-                    from the same annual basis. Every value shown is an
-                    equivalent under one fixed model, so the annual total is the
-                    anchor and all rows reconcile back to that same annual cost.
+                    You enter one annual rent total (currency per year). You get
+                    a biweekly equivalent (currency per 14 days) plus a breakdown
+                    table of other period equivalents derived from the same
+                    annual anchor.
                   </p>
+
+                  <ul className="list-disc pl-5 space-y-2">
+                    <li>
+                      <span className="font-semibold text-slate-900">
+                        Budgeting:
+                      </span>{" "}
+                      compare the biweekly result to a biweekly housing budget or
+                      payroll cycle.
+                    </li>
+                    <li>
+                      <span className="font-semibold text-slate-900">
+                        Offer checks:
+                      </span>{" "}
+                      sanity-check a “biweekly” quote against an annual number so
+                      you can spot small overcharges.
+                    </li>
+                    <li>
+                      <span className="font-semibold text-slate-900">
+                        Comparisons:
+                      </span>{" "}
+                      use the breakdown rows to compare listings priced weekly,
+                      4-week, monthly, or annual without mixing shortcuts.
+                    </li>
+                  </ul>
+
                   <p>
-                    This page is not a payment schedule generator. It does not
-                    decide due dates, it does not interpret lease language, and
-                    it does not decide whether a landlord charges 26 payments,
-                    24 payments, or any other schedule. It converts amounts by
-                    time length only.
+                    Results are time-length equivalents. This page does not
+                    interpret lease terms, fees, or billing schedules.
                   </p>
 
                   <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
@@ -176,8 +221,9 @@ const HowItWorks = () => {
                       One-line summary
                     </div>
                     <p className="mt-2">
-                      Biweekly equivalent = annual rent × 14 ÷ 365 (using a
-                      365-day year and 14-day biweekly period).
+                      Biweekly equivalent = annual rent × 14 ÷ 365 (365-day year,
+                      14-day period). Rounded values are for display; the model
+                      stays anchored to the annual total.
                     </p>
                   </div>
 
@@ -190,13 +236,44 @@ const HowItWorks = () => {
                       Example 1
                     </div>
                     <div className="mt-2 text-sm text-slate-700">
-                      Annual = 24,000
-                    </div>
-                    <div className="mt-1">
-                      Biweekly = 24,000 × 14 ÷ 365 = 920.5479… ≈{" "}
-                      <span className="font-semibold text-slate-900">
-                        920.55
-                      </span>
+                      <div className="font-semibold text-slate-900">
+                        Situation
+                      </div>
+                      <p className="mt-1">
+                        You are setting a hard cap of $950 per 14 days for rent.
+                        A listing gives only an annual total.
+                      </p>
+
+                      <div className="mt-3 font-semibold text-slate-900">
+                        Numbers
+                      </div>
+                      <ul className="mt-1 list-disc pl-5 space-y-1">
+                        <li>Annual rent: $24,000</li>
+                        <li>Biweekly cap: $950</li>
+                      </ul>
+
+                      <div className="mt-3 font-semibold text-slate-900">
+                        Calculation
+                      </div>
+                      <p className="mt-1">
+                        Biweekly = 24,000 × 14 ÷ 365 = 920.5479… ≈{" "}
+                        <span className="font-semibold text-slate-900">
+                          $920.55
+                        </span>
+                      </p>
+
+                      <div className="mt-3 font-semibold text-slate-900">
+                        Result
+                      </div>
+                      <p className="mt-1">$920.55 per 14 days</p>
+
+                      <div className="mt-3 font-semibold text-slate-900">
+                        Meaning
+                      </div>
+                      <p className="mt-1">
+                        It clears the $950 cap, so it stays in your shortlist
+                        instead of being rejected on guesswork.
+                      </p>
                     </div>
                   </div>
 
@@ -205,13 +282,45 @@ const HowItWorks = () => {
                       Example 2
                     </div>
                     <div className="mt-2 text-sm text-slate-700">
-                      Annual = 30,000.50
-                    </div>
-                    <div className="mt-1">
-                      Biweekly = 30,000.50 × 14 ÷ 365 = 1,150.7038… ≈{" "}
-                      <span className="font-semibold text-slate-900">
-                        1,150.70
-                      </span>
+                      <div className="font-semibold text-slate-900">
+                        Situation
+                      </div>
+                      <p className="mt-1">
+                        You receive $1,000 biweekly as a housing allowance. A
+                        listing advertises a yearly total that “sounds fine.”
+                      </p>
+
+                      <div className="mt-3 font-semibold text-slate-900">
+                        Numbers
+                      </div>
+                      <ul className="mt-1 list-disc pl-5 space-y-1">
+                        <li>Annual rent: $27,600</li>
+                        <li>Allowance: $1,000 per 14 days</li>
+                      </ul>
+
+                      <div className="mt-3 font-semibold text-slate-900">
+                        Calculation
+                      </div>
+                      <p className="mt-1">
+                        Biweekly = 27,600 × 14 ÷ 365 = 1,058.6301… ≈{" "}
+                        <span className="font-semibold text-slate-900">
+                          $1,058.63
+                        </span>
+                      </p>
+
+                      <div className="mt-3 font-semibold text-slate-900">
+                        Result
+                      </div>
+                      <p className="mt-1">$1,058.63 per 14 days</p>
+
+                      <div className="mt-3 font-semibold text-slate-900">
+                        Meaning
+                      </div>
+                      <p className="mt-1">
+                        The allowance is short by $58.63 every pay period, so the
+                        decision flips from “maybe” to “not without a lower rent
+                        or extra income.”
+                      </p>
                     </div>
                   </div>
 
@@ -220,14 +329,49 @@ const HowItWorks = () => {
                       Example 3
                     </div>
                     <div className="mt-2 text-sm text-slate-700">
-                      Annual = 18,200
-                    </div>
-                    <div className="mt-1">Daily = 18,200 ÷ 365 = 49.8630…</div>
-                    <div className="mt-1">
-                      Biweekly = Daily × 14 = 49.8630… × 14 = 698.0821… ≈{" "}
-                      <span className="font-semibold text-slate-900">
-                        698.08
-                      </span>
+                      <div className="font-semibold text-slate-900">
+                        Situation
+                      </div>
+                      <p className="mt-1">
+                        Two options are priced differently: one is annual-only,
+                        the other is quoted as a biweekly amount. You need a
+                        fair comparison before choosing.
+                      </p>
+
+                      <div className="mt-3 font-semibold text-slate-900">
+                        Numbers
+                      </div>
+                      <ul className="mt-1 list-disc pl-5 space-y-1">
+                        <li>Option A annual total: $31,200</li>
+                        <li>Option B biweekly quote: $1,200</li>
+                      </ul>
+
+                      <div className="mt-3 font-semibold text-slate-900">
+                        Calculation
+                      </div>
+                      <p className="mt-1">
+                        Option A biweekly = 31,200 × 14 ÷ 365 = 1,196.7123… ≈{" "}
+                        <span className="font-semibold text-slate-900">
+                          $1,196.71
+                        </span>
+                      </p>
+
+                      <div className="mt-3 font-semibold text-slate-900">
+                        Result
+                      </div>
+                      <p className="mt-1">
+                        Option A: $1,196.71 per 14 days (equivalent) vs Option B:
+                        $1,200 per 14 days (quoted)
+                      </p>
+
+                      <div className="mt-3 font-semibold text-slate-900">
+                        Meaning
+                      </div>
+                      <p className="mt-1">
+                        Option A is slightly cheaper on the same 14-day footing,
+                        so you do not overpay just because the pricing formats
+                        differed.
+                      </p>
                     </div>
                   </div>
 
@@ -236,19 +380,48 @@ const HowItWorks = () => {
                       Example 4
                     </div>
                     <div className="mt-2 text-sm text-slate-700">
-                      Annual = 52,000
-                    </div>
-                    <div className="mt-1">
-                      Weekly = 52,000 × 7 ÷ 365 = 997.2602… ≈{" "}
-                      <span className="font-semibold text-slate-900">
-                        997.26
-                      </span>
-                    </div>
-                    <div className="mt-1">
-                      Monthly = 52,000 ÷ 12 = 4,333.3333… ≈{" "}
-                      <span className="font-semibold text-slate-900">
-                        4,333.33
-                      </span>
+                      <div className="font-semibold text-slate-900">
+                        Situation
+                      </div>
+                      <p className="mt-1">
+                        A landlord says the annual total is $52,000, but the lease
+                        draft shows “$2,000 biweekly.” You want to spot a quiet
+                        mismatch before signing.
+                      </p>
+
+                      <div className="mt-3 font-semibold text-slate-900">
+                        Numbers
+                      </div>
+                      <ul className="mt-1 list-disc pl-5 space-y-1">
+                        <li>Annual rent: $52,000</li>
+                        <li>Quoted biweekly in draft: $2,000</li>
+                      </ul>
+
+                      <div className="mt-3 font-semibold text-slate-900">
+                        Calculation
+                      </div>
+                      <p className="mt-1">
+                        Biweekly equivalent = 52,000 × 14 ÷ 365 = 1,994.5205… ≈{" "}
+                        <span className="font-semibold text-slate-900">
+                          $1,994.52
+                        </span>
+                      </p>
+
+                      <div className="mt-3 font-semibold text-slate-900">
+                        Result
+                      </div>
+                      <p className="mt-1">
+                        Equivalent biweekly is $1,994.52, not $2,000.
+                      </p>
+
+                      <div className="mt-3 font-semibold text-slate-900">
+                        Meaning
+                      </div>
+                      <p className="mt-1">
+                        The draft overstates the 14-day amount, so the decision
+                        becomes “request correction before signing” instead of
+                        accepting the paperwork as-is.
+                      </p>
                     </div>
                   </div>
 
@@ -256,9 +429,9 @@ const HowItWorks = () => {
                     Definitions used on this page
                   </h3>
                   <p>
-                    Period definitions here are fixed and explicit. These
-                    definitions are used for all conversions and for the
-                    breakdown table.
+                    These definitions are fixed for the conversion and for every
+                    breakdown row, so each value remains comparable under one
+                    consistent basis.
                   </p>
                   <ul className="list-disc pl-5 space-y-2">
                     <li>
@@ -305,10 +478,9 @@ const HowItWorks = () => {
                     Core formula and conversion basis
                   </h3>
                   <p>
-                    The converter uses a single annual basis and derives all
-                    other periods from that basis. This avoids mixing shortcuts
-                    like "weekly × 4" with calendar-month math, which do not
-                    reconcile.
+                    The annual total is the single source value. Every other
+                    period is derived from that same annual anchor so comparisons
+                    do not drift.
                   </p>
 
                   <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
@@ -336,9 +508,10 @@ const HowItWorks = () => {
                     </div>
 
                     <p className="mt-4 text-sm text-slate-600">
-                      This basis is used for internal consistency: every row is
-                      anchored to the same annual total, so comparisons across
-                      periods remain coherent.
+                      If you are comparing two options, compare using the same
+                      row type (biweekly-to-biweekly, monthly-to-monthly). Mixing
+                      “biweekly” with “twice per month” assumptions is a common
+                      source of mistaken rankings.
                     </p>
                   </div>
 
@@ -346,21 +519,24 @@ const HowItWorks = () => {
                     What the breakdown table represents
                   </h3>
                   <p>
-                    The breakdown table shows multiple period equivalents for
-                    the same underlying annual total. Each row is derived from
-                    the same annual basis, not from the headline row. For
-                    example, the weekly row is not computed as biweekly ÷ 2 and
-                    the monthly row is not computed as weekly × 4. They are all
-                    derived from the same annual anchor.
+                    The breakdown table is a comparison aid: multiple period
+                    equivalents for the same annual total, all calculated from
+                    the annual anchor (not from the headline row).
                   </p>
-                  <p>
-                    This matters when comparing listings that mix weekly
-                    pricing, 28-day cycles, and calendar-month figures. Under a
-                    consistent basis, weekly and 4-week values can differ from
-                    monthly values even when they look "close." These rows are
-                    equivalents, not payment schedules and not statements about
-                    how many payments happen inside a given month.
-                  </p>
+                  <ul className="list-disc pl-5 space-y-2">
+                    <li>
+                      Use it to translate a weekly or monthly listing into the
+                      same footing as an annual-only listing.
+                    </li>
+                    <li>
+                      Use it to sanity-check “close enough” shortcuts that can
+                      flip which option is actually cheaper.
+                    </li>
+                    <li>
+                      Treat each row as an equivalent for decision-making, not
+                      as a claim about how invoices land in a calendar month.
+                    </li>
+                  </ul>
 
                   <h3 className="text-xl font-extrabold text-sky-700 tracking-tight">
                     Common mismatches and how this page treats them
@@ -372,10 +548,10 @@ const HowItWorks = () => {
                         Weekly × 4 vs monthly
                       </div>
                       <p className="mt-2">
-                        "Weekly × 4" is a 28-day amount. A calendar month is not
-                        always 28 days, and this page defines monthly as annual
-                        ÷ 12 under a 365-day year. That difference is why weekly
-                        × 4 does not match monthly on this page.
+                        “Weekly × 4” is a 28-day amount. This page defines monthly
+                        as annual ÷ 12 under a 365-day year. If you use weekly ×
+                        4 as a proxy for monthly, you can mis-rank two listings
+                        that are priced near your budget limit.
                       </p>
                     </div>
 
@@ -384,10 +560,10 @@ const HowItWorks = () => {
                         4-week vs calendar month
                       </div>
                       <p className="mt-2">
-                        A 4-week period is fixed at 28 days. A month on this
-                        page is the average month implied by the year model (365
-                        ÷ 12 days). The tool keeps these separate, so 4-week and
-                        monthly are different rows with different definitions.
+                        A 4-week period is fixed at 28 days. A month here is the
+                        average month implied by the year model (365 ÷ 12 days).
+                        The tool keeps these separate so you can compare “every 4
+                        weeks” listings without forcing them into a monthly label.
                       </p>
                     </div>
 
@@ -396,11 +572,11 @@ const HowItWorks = () => {
                         "26 payments" vs time-length conversion
                       </div>
                       <p className="mt-2">
-                        "26 payments" is a scheduling statement (every 14 days
-                        across 52 weeks). This page does not assume a payment
-                        count. It converts by time length using 14-day blocks
-                        over a 365-day year so every period stays anchored to
-                        the same annual total.
+                        “26 payments” describes cadence, not equivalence. This
+                        page uses a 14-day block over a 365-day year so the
+                        biweekly figure is comparable to daily, weekly, and
+                        monthly equivalents without assuming how a landlord
+                        schedules invoices.
                       </p>
                     </div>
 
@@ -409,11 +585,10 @@ const HowItWorks = () => {
                         Hourly: paid-hours vs time-based hourly (when shown)
                       </div>
                       <p className="mt-2">
-                        If an hourly row is shown, it is time-based: annual ÷
-                        8,760 (365 × 24). It is not based on paid working hours,
-                        shifts, or an assumed work week. This keeps hourly,
-                        daily, and weekly rows internally consistent under the
-                        same year model.
+                        If an hourly row is shown, it is time-based (annual ÷
+                        8,760). It is not tied to working hours, shifts, or a
+                        workweek. Use it only to compare time-length equivalents,
+                        not employment pay.
                       </p>
                     </div>
                   </div>
@@ -422,13 +597,11 @@ const HowItWorks = () => {
                     Scope and limits of this tool
                   </h3>
                   <p>
-                    This converter does not include fees, utilities, deposits,
-                    taxes, insurance, discounts, or proration. It converts only
-                    the rent amount you enter. Outputs are equivalents under a
-                    fixed time-length model, not a schedule of due dates or a
-                    statement about how many payments occur in any calendar
-                    month. For due dates or invoice timing, use a due-date tool
-                    instead of relying on period equivalents.
+                    This converter only transforms the rent amount you enter. It
+                    does not include utilities, parking, fees, deposits, taxes,
+                    insurance, discounts, rent-free weeks, or proration. If those
+                    change the true cost, compare totals that include them (or
+                    add them consistently before converting).
                   </p>
                 </div>
               </div>
@@ -454,9 +627,17 @@ const HowItWorks = () => {
                   The biweekly result is a 14-day equivalent derived from a
                   365-day year model. It does not determine which dates rent is
                   due, how many payments land inside a specific calendar month,
-                  or how invoices are scheduled. If you need actual due dates,
-                  use a due-date calculator.
+                  or how invoices are scheduled.
                 </p>
+                <ul className="mt-4 list-disc pl-5 space-y-2 text-slate-200 leading-7">
+                  <li>
+                    Use this page to compare prices across listings and periods.
+                  </li>
+                  <li>
+                    Use a due-date calculator when you need calendar dates,
+                    reminders, or invoice timing.
+                  </li>
+                </ul>
                 <div className="mt-4">
                   <Link
                     to="/rent-due-date-calculator"

@@ -13,7 +13,7 @@ const HowItWorks = () => {
       </div>
 
       <div className="relative p-6 sm:p-10">
-        <div className="mx-auto max-w-4xl">
+        <div className="mx-auto max-w-6xl">
           <div className="flex flex-col gap-4 sm:gap-x-5 gap-y-3">
             <div className="flex items-start justify-between gap-4">
               <div className="min-w-0">
@@ -21,15 +21,25 @@ const HowItWorks = () => {
                   Rent vs take-home pay comparison
                 </h2>
                 <p className="mt-2 text-slate-600 leading-7 max-w-2xl">
-                  This page answers a simple budgeting question:{" "}
+                  This page answers one decision question:{" "}
                   <span className="font-semibold text-slate-900">
-                    how much of my take-home pay goes to rent?
+                    is this rent workable with my take-home pay?
                   </span>{" "}
-                  You can enter rent and take-home pay in different periods (for
-                  example, weekly pay with monthly rent, or biweekly pay with
-                  28-day rent). The tool converts both to the same annual basis
-                  first, then computes rent share and the amount left over.
+                  Enter your take-home pay and rent even if they use different
+                  cycles (weekly pay with monthly rent, biweekly pay with 28-day
+                  rent, and so on). The tool converts both to the same annual
+                  basis, then shows:
                 </p>
+                <ul className="mt-3 list-disc pl-5 space-y-2 text-slate-600 leading-7 max-w-2xl">
+                  <li>
+                    the share of your take-home pay that rent consumes (a stress
+                    check),
+                  </li>
+                  <li>
+                    what is left after rent (a budget reality check you can
+                    apply to everything else).
+                  </li>
+                </ul>
               </div>
 
               <div className="hidden sm:flex flex-col items-end gap-2 shrink-0">
@@ -52,6 +62,10 @@ const HowItWorks = () => {
                 <div className="mt-2 text-sm font-semibold text-slate-900">
                   Take-home pay + period
                 </div>
+                <p className="mt-2 text-sm text-slate-600 leading-6">
+                  Use the amount that actually hits your account for that pay
+                  cycle.
+                </p>
               </div>
               <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
                 <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
@@ -60,6 +74,10 @@ const HowItWorks = () => {
                 <div className="mt-2 text-sm font-semibold text-slate-900">
                   Rent + period
                 </div>
+                <p className="mt-2 text-sm text-slate-600 leading-6">
+                  Enter the rent you must pay each cycle, before any optional
+                  extras.
+                </p>
               </div>
               <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
                 <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
@@ -68,6 +86,10 @@ const HowItWorks = () => {
                 <div className="mt-2 text-sm font-semibold text-slate-900">
                   Annualize both values
                 </div>
+                <p className="mt-2 text-sm text-slate-600 leading-6">
+                  Removes “4 weeks = a month” assumptions so cycles compare
+                  cleanly.
+                </p>
               </div>
               <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
                 <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
@@ -75,6 +97,156 @@ const HowItWorks = () => {
                 </div>
                 <div className="mt-2 text-sm font-semibold text-slate-900">
                   Rent % + after-rent
+                </div>
+                <p className="mt-2 text-sm text-slate-600 leading-6">
+                  A ratio for stress-testing, plus the dollars you live on.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="group relative my-8 p-6 rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+            <h3 className="text-xl mb-2  font-extrabold text-sky-900 tracking-tight">
+              Related pages
+            </h3>
+
+            <p className="text-slate-700 leading-relaxed">
+              Related tools:{" "}
+              <Link
+                to="/how-much-rent-can-i-afford-calculator"
+                className="cursor-pointer font-semibold text-sky-700 hover:text-sky-800 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+              >
+                how much rent can I afford
+              </Link>
+              <span className="text-slate-700">
+                {" "}
+                when you want a top-end rent target from your income rather than
+                checking a specific listing.
+              </span>
+              ,{" "}
+              <Link
+                to="/rent-after-tax-income-calculator"
+                className="cursor-pointer font-semibold text-sky-700 hover:text-sky-800 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+              >
+                rent after-tax income calculator
+              </Link>
+              <span className="text-slate-700">
+                {" "}
+                when you only know gross pay and need a take-home estimate
+                before judging rent.
+              </span>
+              , and{" "}
+              <Link
+                to="/rent-converter"
+                className="cursor-pointer font-semibold text-sky-700 hover:text-sky-800 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+              >
+                rent converter
+              </Link>
+              <span className="text-slate-700">
+                {" "}
+                when you want pure period conversions for listings (weekly vs
+                monthly vs 28-day) without comparing to income.
+              </span>
+              .
+            </p>
+          </div>
+
+          {/* SectionCard: step-by-step */}
+          <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+            <div
+              aria-hidden="true"
+              className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+            />
+            <div className="p-5 sm:px-6">
+              <div className="flex items-start gap-3">
+                <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    className="h-5 w-5 text-sky-600"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M4 6h16M9 6v12m6-12v12"
+                    />
+                  </svg>
+                </div>
+                <div className="min-w-0">
+                  <h3 className="text-xl font-extrabold text-sky-900 tracking-tight">
+                    How it works
+                  </h3>
+                </div>
+              </div>
+
+              <div className="mt-4">
+                <ol className="list-decimal pl-5 space-y-3">
+                  <li>
+                    <strong className="text-slate-900">
+                      Enter your take-home pay and choose its period.
+                    </strong>{" "}
+                    Use your net pay for that cycle (the deposit amount), since
+                    the decision is “can I cover rent and still live,” not “what
+                    is my salary.”
+                  </li>
+                  <li>
+                    <strong className="text-slate-900">
+                      Enter your rent and choose its period.
+                    </strong>{" "}
+                    Use the required rent payment for that cycle. If you want
+                    utilities or parking treated as “rent” for affordability,
+                    bundle them into the number you enter.
+                  </li>
+                  <li>
+                    <strong className="text-slate-900">
+                      Convert both inputs to annual totals using their real
+                      cycle lengths.
+                    </strong>{" "}
+                    Fixed-day cycles use their day lengths (weekly = 7, biweekly
+                    = 14, 28-day = 28). Monthly is derived from the same annual
+                    basis so it stays consistent with everything else.
+                  </li>
+                  <li>
+                    <strong className="text-slate-900">
+                      Compute the two decision outputs from those annual totals.
+                    </strong>{" "}
+                    Rent share shows how “tight” the rent is. After-rent shows
+                    what you must cover everything else with.
+                  </li>
+                  <li>
+                    <strong className="text-slate-900">
+                      Show equivalent views for readability, not new math.
+                    </strong>{" "}
+                    Monthly, weekly, and 28-day result blocks are the same
+                    relationship expressed in different cycles so you can sanity
+                    check against how you think and budget.
+                  </li>
+                </ol>
+
+                <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                  <div className="text-sm font-bold text-slate-900">
+                    Why this matters for mixed cycles
+                  </div>
+                  <p className="mt-2">
+                    If you get paid weekly and rent is monthly, “monthly = four
+                    weeks” will misstate the yearly totals and can swing the
+                    rent share enough to change a yes/no decision. Annualizing
+                    is the neutral meeting point that keeps the comparison
+                    honest.
+                  </p>
+                  <ul className="mt-3 list-disc pl-5 space-y-2">
+                    <li>
+                      A 28-day rent schedule is more payments per year than a
+                      calendar month schedule.
+                    </li>
+                    <li>
+                      A weekly pay cycle does not line up cleanly with any
+                      calendar month.
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>
@@ -114,8 +286,8 @@ const HowItWorks = () => {
 
                 <div className="mt-4 space-y-3">
                   <p>
-                    The calculator produces two headline outputs derived from
-                    the same annual basis:
+                    Use the results to make one call: keep pursuing a listing,
+                    or walk away because rent squeezes your take-home too hard.
                   </p>
 
                   <div className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -124,28 +296,51 @@ const HowItWorks = () => {
                         Rent share of take-home
                       </div>
                       <p className="mt-2">
-                        Rent share = annual rent ÷ annual take-home pay, shown
-                        as a percentage.
+                        A single percentage that tells you how much of your
+                        take-home is locked into housing before any other bills.
                       </p>
+                      <ul className="mt-3 list-disc pl-5 space-y-2 text-slate-700">
+                        <li>
+                          Use it to compare two listings even when rent cycles
+                          differ.
+                        </li>
+                        <li>
+                          Use it to spot “looks cheaper” traps (weekly or 28-day
+                          listings that understate the annual cost).
+                        </li>
+                      </ul>
                     </div>
                     <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
                       <div className="text-sm font-bold text-slate-900">
                         Income left after rent
                       </div>
                       <p className="mt-2">
-                        After-rent = annual take-home pay − annual rent, with
-                        equivalents shown in other periods for readability.
+                        The dollars you have left to run your life: food,
+                        transit, debt, savings, and everything else.
                       </p>
+                      <ul className="mt-3 list-disc pl-5 space-y-2 text-slate-700">
+                        <li>
+                          Compare it to your real non-rent spending and savings
+                          minimums.
+                        </li>
+                        <li>
+                          Treat a negative result as an immediate dealbreaker.
+                        </li>
+                      </ul>
                     </div>
                   </div>
 
-                  <p>
-                    The monthly, weekly, and 28-day figures shown under the
-                    results are not separate calculations with new assumptions.
-                    They are derived from the same annual totals so you can view
-                    the same relationship in familiar cycles without mixing
-                    definitions.
-                  </p>
+                  <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-slate-900">
+                      How to read the extra period blocks
+                    </div>
+                    <p className="mt-2">
+                      The monthly, weekly, and 28-day blocks are the same annual
+                      totals expressed in familiar cycles. They help you check
+                      the numbers against your own budgeting rhythm, without
+                      changing the underlying comparison.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -183,26 +378,32 @@ const HowItWorks = () => {
 
                 <div className="mt-4 space-y-3">
                   <p>
-                    People get misleading results when pay and rent are entered
-                    in different cycles and the math silently treats one cycle
-                    as close enough to another. This tool avoids that by
-                    converting both inputs to annual totals first, then
-                    computing the ratio and remainder on that same basis.
+                    This section exists for one purpose: to prevent cycle
+                    shortcuts from changing the decision. When pay and rent use
+                    different periods, “close enough” conversions can understate
+                    or overstate the true rent burden across a full year.
                   </p>
 
                   <p>
-                    Converting through annual totals does two practical things:
+                    Converting through annual totals protects you from the two
+                    mistakes people actually make:
                   </p>
 
                   <ul className="list-disc pl-5 space-y-2">
                     <li>
-                      It prevents monthly from being treated as a fixed number
-                      of weeks, which can shift the implied annual totals.
+                      <strong className="text-slate-900">
+                        Treating a month like a fixed number of weeks.
+                      </strong>{" "}
+                      That shifts the annual totals and can make a tight listing
+                      look safe.
                     </li>
                     <li>
-                      It keeps fixed-day cycles visible. A 28-day rent schedule
-                      is not the same thing as a calendar month, and that
-                      mismatch is exactly what causes confusion in budgeting.
+                      <strong className="text-slate-900">
+                        Treating 28-day cycles like calendar months.
+                      </strong>{" "}
+                      A 28-day schedule typically means more rent payments per
+                      year than “monthly,” so the yearly cost is higher than it
+                      looks at a glance.
                     </li>
                   </ul>
 
@@ -212,102 +413,8 @@ const HowItWorks = () => {
                     </div>
                     <p className="mt-2">
                       Annualize pay and rent first. Compute rent share and
-                      leftover from those annual totals. Convert back to display
-                      periods only for readability.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* SectionCard: step-by-step */}
-            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
-              <div
-                aria-hidden="true"
-                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
-              />
-              <div className="p-5 sm:px-6">
-                <div className="flex items-start gap-3">
-                  <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
-                    <svg
-                      aria-hidden="true"
-                      viewBox="0 0 24 24"
-                      className="h-5 w-5 text-sky-600"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M4 6h16M9 6v12m6-12v12"
-                      />
-                    </svg>
-                  </div>
-                  <div className="min-w-0">
-                    <h3 className="text-xl font-extrabold text-sky-900 tracking-tight">
-                      How it works (exactly)
-                    </h3>
-                  </div>
-                </div>
-
-                <div className="mt-4">
-                  <ol className="list-decimal pl-5 space-y-3">
-                    <li>
-                      <strong className="text-slate-900">
-                        Enter your take-home pay and choose its period.
-                      </strong>{" "}
-                      Take-home pay is treated as what lands in your account for
-                      budgeting. It is not gross pay and it is not automatically
-                      adjusted for taxes, deductions, or benefits.
-                    </li>
-                    <li>
-                      <strong className="text-slate-900">
-                        Enter your rent and choose its period.
-                      </strong>{" "}
-                      Rent is treated as the rent amount only. The tool does not
-                      add utilities, fees, parking, debt payments, or other
-                      household costs unless you include them in the rent number
-                      you enter.
-                    </li>
-                    <li>
-                      <strong className="text-slate-900">
-                        Both inputs are annualized on the same model.
-                      </strong>{" "}
-                      Fixed-day cycles use their day lengths (weekly = 7 days,
-                      biweekly = 14 days, every 4 weeks = 28 days). Monthly uses
-                      an average month length derived from the same annual
-                      basis.
-                    </li>
-                    <li>
-                      <strong className="text-slate-900">
-                        Rent share and after-rent are computed from annual
-                        totals.
-                      </strong>{" "}
-                      Rent share = annual rent ÷ annual take-home pay.
-                      After-rent = annual take-home pay − annual rent.
-                    </li>
-                    <li>
-                      <strong className="text-slate-900">
-                        Display periods are derived from the same annual totals.
-                      </strong>{" "}
-                      The monthly, weekly, and 28-day blocks shown under results
-                      are conversions of the same annual rent and annual
-                      take-home pay. They exist to help you read the numbers in
-                      a cycle you recognize without changing the math.
-                    </li>
-                  </ol>
-
-                  <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
-                    <div className="text-sm font-bold text-slate-900">
-                      Why this matters for mixed cycles
-                    </div>
-                    <p className="mt-2">
-                      If you are paid weekly and rent is monthly, the tool does
-                      not pretend that a month equals four weeks. If rent is
-                      every 28 days, it does not quietly convert it into monthly
-                      by assuming 30 days. The entire point is that cycles do
-                      not line up, so annualizing is the neutral meeting point.
+                      after-rent from those annual totals. Only then convert to
+                      monthly, weekly, or 28-day views for interpretation.
                     </p>
                   </div>
                 </div>
@@ -347,9 +454,9 @@ const HowItWorks = () => {
 
                 <div className="mt-4 space-y-3">
                   <p>
-                    This page is a rent-versus-income share calculator based on
-                    take-home pay. It is designed for quick comparison and
-                    budgeting checks, not for building a full household budget.
+                    This is a rent burden check against take-home pay. It is
+                    built for fast decisions on specific rents, not for
+                    forecasting your full lifestyle budget.
                   </p>
 
                   <div className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -363,6 +470,10 @@ const HowItWorks = () => {
                         <li>Annualized rent share and after-rent totals</li>
                         <li>Equivalent views (monthly, weekly, 28-day)</li>
                       </ul>
+                      <p className="mt-3 text-sm text-slate-600 leading-6">
+                        Best for: “Can I take this place without blowing up my
+                        monthly cash flow?”
+                      </p>
                     </div>
 
                     <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
@@ -375,14 +486,17 @@ const HowItWorks = () => {
                         <li>Tax calculations</li>
                         <li>Calendar due-date planning</li>
                       </ul>
+                      <p className="mt-3 text-sm text-slate-600 leading-6">
+                        If those costs decide the deal for you, add them into
+                        the rent input or use a separate budgeting workflow.
+                      </p>
                     </div>
                   </div>
 
                   <p>
                     If you need an estimate from gross income, use the after-tax
-                    tool. If you need an apples-to-apples conversion of a
-                    listing between weekly, monthly, and 28-day cycles, use the
-                    rent converter hub.
+                    tool. If you need clean period conversions for listings (not
+                    an income comparison), use the rent converter hub.
                   </p>
                 </div>
               </div>
@@ -406,39 +520,25 @@ const HowItWorks = () => {
                   This compares amounts, not timing
                 </h3>
                 <p className="mt-3 text-slate-200 leading-7">
-                  The outputs are annualized equivalents and period views. They
-                  do not attempt to model when money leaves your account. If you
-                  need a calendar schedule of due dates (especially for 28-day
-                  cycles), use the due-date calculator instead of relying on
-                  period equivalence.
+                  Use these results to judge affordability across a year, not to
+                  predict cash timing. Rent and pay can hit on different days,
+                  different weeks, and different months. If you are trying to
+                  plan due dates (especially with 28-day schedules), you need a
+                  calendar schedule tool. Period equivalence is not a payment
+                  calendar.
                 </p>
+                <ul className="mt-4 list-disc pl-5 space-y-2 text-slate-200 leading-7">
+                  <li>
+                    A “safe” annual rent share can still cause short-term
+                    shortfalls if paydays and rent due dates clash.
+                  </li>
+                  <li>
+                    Use the period views here to interpret affordability, not to
+                    decide which exact week a payment lands.
+                  </li>
+                </ul>
               </div>
             </div>
-
-            <p className="text-slate-700 leading-relaxed">
-              Related tools:{" "}
-              <Link
-                to="/how-much-rent-can-i-afford-calculator"
-                className="cursor-pointer font-semibold text-sky-700 hover:text-sky-800 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
-              >
-                how much rent can I afford
-              </Link>
-              ,{" "}
-              <Link
-                to="/rent-after-tax-income-calculator"
-                className="cursor-pointer font-semibold text-sky-700 hover:text-sky-800 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
-              >
-                rent after-tax income calculator
-              </Link>
-              , and{" "}
-              <Link
-                to="/rent-converter"
-                className="cursor-pointer font-semibold text-sky-700 hover:text-sky-800 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
-              >
-                rent converter
-              </Link>
-              .
-            </p>
           </div>
         </div>
       </div>

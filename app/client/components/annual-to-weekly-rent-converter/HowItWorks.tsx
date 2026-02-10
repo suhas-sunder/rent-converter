@@ -13,7 +13,7 @@ const HowItWorks = () => {
       </div>
 
       <div className="relative p-6 sm:p-10">
-        <div className="mx-auto max-w-4xl">
+        <div className="mx-auto max-w-6xl">
           <div className="flex flex-col gap-4 sm:gap-5">
             <div className="flex items-start justify-between gap-4">
               <div className="min-w-0">
@@ -21,11 +21,13 @@ const HowItWorks = () => {
                   How the annual to weekly rent converter works
                 </h2>
                 <p className="mt-2 text-slate-600 leading-7 max-w-2xl">
-                  This route starts with a single source value (your annual rent
-                  total) and expresses it as a weekly amount. The headline
-                  weekly result matches “annual ÷ 52” budgeting intent. A second
-                  weekly line is shown using a 365-day model (annual × 7 ÷ 365)
-                  so you can compare the two definitions without mixing them.
+                  Use this route when you have a single annual rent total and
+                  need a weekly number you can act on, such as checking a weekly
+                  affordability cap, comparing to weekly income, or normalizing
+                  listings that quote different periods. The headline result is
+                  the budgeting weekly (annual ÷ 52). A separate weekly line is
+                  also shown under a 365-day model (annual × 7 ÷ 365) so you can
+                  compare week values without mixing definitions.
                 </p>
               </div>
 
@@ -209,9 +211,10 @@ const HowItWorks = () => {
 
                 <div className="mt-4 space-y-3">
                   <p>
-                    These show both weekly definitions from the same annual
-                    input. The difference is small, but it is real, and the page
-                    keeps them separate so you do not mix models.
+                    Each example ends in a concrete decision. Notice when the
+                    budgeting weekly (÷ 52) is the right number to act on, and
+                    when the 365-day weekly is the definition you must match for
+                    a policy, worksheet, or day-based comparison.
                   </p>
 
                   <div className="grid gap-3 sm:grid-cols-2">
@@ -219,20 +222,50 @@ const HowItWorks = () => {
                       <div className="text-sm font-bold text-slate-900">
                         Example 1
                       </div>
-                      <div className="mt-2 text-sm text-slate-700">
-                        Annual = 24,000
-                      </div>
-                      <div className="mt-1">
-                        Weekly (budgeting) = 24,000 ÷ 52 = 461.5384… ≈{" "}
-                        <span className="font-semibold text-slate-900">
-                          461.54
-                        </span>
-                      </div>
-                      <div className="mt-1">
-                        Weekly (365-day) = 24,000 × 7 ÷ 365 = 460.2740… ≈{" "}
-                        <span className="font-semibold text-slate-900">
-                          460.27
-                        </span>
+
+                      <div className="mt-3 space-y-2 text-sm text-slate-700">
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Situation:
+                          </span>{" "}
+                          You can only spend $450/week on rent without cutting
+                          essentials.
+                        </div>
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Numbers:
+                          </span>{" "}
+                          Annual = 24,000
+                        </div>
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Calculation:
+                          </span>{" "}
+                          Budgeting weekly = 24,000 ÷ 52 = 461.5384… ≈{" "}
+                          <span className="font-semibold text-slate-900">
+                            461.54
+                          </span>{" "}
+                          <br />
+                          365-day weekly = 24,000 × 7 ÷ 365 = 460.2740… ≈{" "}
+                          <span className="font-semibold text-slate-900">
+                            460.27
+                          </span>
+                        </div>
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Result:
+                          </span>{" "}
+                          Weekly equivalent is about $460 to $462/week depending
+                          on definition.
+                        </div>
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Meaning:
+                          </span>{" "}
+                          This fails a hard $450/week cap, so you reject the
+                          listing or negotiate before spending time on
+                          applications.
+                        </div>
                       </div>
                     </div>
 
@@ -240,20 +273,50 @@ const HowItWorks = () => {
                       <div className="text-sm font-bold text-slate-900">
                         Example 2
                       </div>
-                      <div className="mt-2 text-sm text-slate-700">
-                        Annual = 30,000.50
-                      </div>
-                      <div className="mt-1">
-                        Weekly (budgeting) = 30,000.50 ÷ 52 = 576.9326… ≈{" "}
-                        <span className="font-semibold text-slate-900">
-                          576.93
-                        </span>
-                      </div>
-                      <div className="mt-1">
-                        Weekly (365-day) = 30,000.50 × 7 ÷ 365 = 575.3513… ≈{" "}
-                        <span className="font-semibold text-slate-900">
-                          575.35
-                        </span>
+
+                      <div className="mt-3 space-y-2 text-sm text-slate-700">
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Situation:
+                          </span>{" "}
+                          A housing program checks eligibility using a day-based
+                          weekly definition and has a $576/week limit.
+                        </div>
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Numbers:
+                          </span>{" "}
+                          Annual = 30,000.50
+                        </div>
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Calculation:
+                          </span>{" "}
+                          Budgeting weekly = 30,000.50 ÷ 52 = 576.9326… ≈{" "}
+                          <span className="font-semibold text-slate-900">
+                            576.93
+                          </span>{" "}
+                          <br />
+                          365-day weekly = 30,000.50 × 7 ÷ 365 = 575.3513… ≈{" "}
+                          <span className="font-semibold text-slate-900">
+                            575.35
+                          </span>
+                        </div>
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Result:
+                          </span>{" "}
+                          One definition is above $576/week; the other is below.
+                        </div>
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Meaning:
+                          </span>{" "}
+                          If the reviewer uses the 365-day weekly, you stay
+                          eligible; if they use ÷ 52, you do not. You match the
+                          definition required by the policy before you commit to
+                          the lease.
+                        </div>
                       </div>
                     </div>
 
@@ -261,16 +324,48 @@ const HowItWorks = () => {
                       <div className="text-sm font-bold text-slate-900">
                         Example 3 (biweekly)
                       </div>
-                      <div className="mt-2 text-sm text-slate-700">
-                        Annual = 24,000
+
+                      <div className="mt-3 space-y-2 text-sm text-slate-700">
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Situation:
+                          </span>{" "}
+                          You get paid every two weeks and want a simple “set
+                          aside” amount per paycheck.
+                        </div>
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Numbers:
+                          </span>{" "}
+                          Annual = 24,000
+                        </div>
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Calculation:
+                          </span>{" "}
+                          Biweekly (365-day) = 24,000 × 14 ÷ 365 = 920.5479… ≈{" "}
+                          <span className="font-semibold text-slate-900">
+                            920.55
+                          </span>
+                        </div>
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Result:
+                          </span>{" "}
+                          Setting aside about $921 per paycheck covers the rent
+                          total under the 14-day definition.
+                        </div>
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Meaning:
+                          </span>{" "}
+                          If your “rent bucket” target is $950 per paycheck,
+                          this stays inside the limit, so you keep the listing
+                          in your short list.
+                        </div>
                       </div>
-                      <div className="mt-1">
-                        Biweekly (365-day) = 24,000 × 14 ÷ 365 = 920.5479… ≈{" "}
-                        <span className="font-semibold text-slate-900">
-                          920.55
-                        </span>
-                      </div>
-                      <div className="mt-2 text-sm text-slate-600">
+
+                      <div className="mt-3 text-sm text-slate-600">
                         If you want the dedicated route, use{" "}
                         <Link
                           to="/annual-to-biweekly-rent-converter"
@@ -286,16 +381,53 @@ const HowItWorks = () => {
                       <div className="text-sm font-bold text-slate-900">
                         Example 4 (4-week / 28-day)
                       </div>
-                      <div className="mt-2 text-sm text-slate-700">
-                        Annual = 24,000
+
+                      <div className="mt-3 space-y-2 text-sm text-slate-700">
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Situation:
+                          </span>{" "}
+                          A landlord bills every 4 weeks, but your budget is
+                          planned monthly.
+                        </div>
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Numbers:
+                          </span>{" "}
+                          Annual = 24,000
+                        </div>
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Calculation:
+                          </span>{" "}
+                          4-week (365-day) = 24,000 × 28 ÷ 365 = 1,841.0958… ≈{" "}
+                          <span className="font-semibold text-slate-900">
+                            1,841.10
+                          </span>
+                          <br />
+                          Monthly budgeting check (for planning) = 24,000 ÷ 12 ={" "}
+                          <span className="font-semibold text-slate-900">
+                            2,000.00
+                          </span>
+                        </div>
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Result:
+                          </span>{" "}
+                          The 4-week invoice is lower than $2,000, but it occurs
+                          13 times per year, not 12.
+                        </div>
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Meaning:
+                          </span>{" "}
+                          If your cash flow cannot handle the “extra” payment
+                          cycle, you avoid a 4-week billing lease even if the
+                          headline monthly number looks similar.
+                        </div>
                       </div>
-                      <div className="mt-1">
-                        4-week (365-day) = 24,000 × 28 ÷ 365 = 1,841.0958… ≈{" "}
-                        <span className="font-semibold text-slate-900">
-                          1,841.10
-                        </span>
-                      </div>
-                      <div className="mt-2 text-sm text-slate-600">
+
+                      <div className="mt-3 text-sm text-slate-600">
                         If your rent is actually billed every 4 weeks, use{" "}
                         <Link
                           to="/rent-paid-every-4-weeks-calculator"
@@ -348,12 +480,11 @@ const HowItWorks = () => {
 
                 <div className="mt-4 space-y-3">
                   <p>
-                    “Annual rent” here means the yearly total you want the tool
-                    to treat as rent. It is a single source value. The
-                    calculator does not guess what the number includes.
-                    Utilities, taxes, fees, deposits, and discounts are not
-                    added or removed. If you want a different definition of
-                    “annual,” change the input, not the settings.
+                    Enter one yearly total and treat it as your definition of
+                    “rent” for this comparison. If you want utilities, parking,
+                    discounts, or fees included, roll them into the annual
+                    number before converting. If you want them excluded, remove
+                    them first.
                   </p>
 
                   <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
@@ -388,9 +519,8 @@ const HowItWorks = () => {
                   </div>
 
                   <p className="text-sm text-slate-600">
-                    Rounding should be display-only. Internally, calculations
-                    should use the full parsed value so cents and decimals are
-                    preserved end to end.
+                    Treat the input as a source of truth. If the annual total is
+                    wrong, every period will be wrong by the same proportion.
                   </p>
                 </div>
               </div>
@@ -429,11 +559,10 @@ const HowItWorks = () => {
 
                 <div className="mt-4 space-y-3">
                   <p>
-                    The headline weekly output on this route uses a 52-week
-                    budgeting split. That means the annual total is divided into
-                    52 equal weekly amounts. This matches the route’s
-                    “annual-to-weekly” intent and produces a simple weekly
-                    number tied directly to the annual input.
+                    This route’s primary output is the budgeting weekly. It is
+                    the number you use when your planning is organized in weeks,
+                    or when you need to compare rent to weekly income or a
+                    weekly affordability cap.
                   </p>
 
                   <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
@@ -446,18 +575,27 @@ const HowItWorks = () => {
                       </span>{" "}
                       = annual rent ÷ 52
                     </p>
-                    <p className="mt-2 text-sm text-slate-600">
-                      This is the primary result shown at the top. Any rounding
-                      applied is display-only.
-                    </p>
+                    <ul className="mt-3 list-disc pl-5 space-y-2 text-sm text-slate-600">
+                      <li>
+                        Good for “can I afford this per week?” and “how much
+                        should I allocate each week?”
+                      </li>
+                      <li>
+                        Good for comparing two annual totals on the same weekly
+                        budget basis
+                      </li>
+                      <li>
+                        Not intended to represent the length of an actual 7-day
+                        billing cycle
+                      </li>
+                    </ul>
                   </div>
 
-                  <p>
-                    If you see two weekly values on the page, the labels matter.
-                    One is the budgeting weekly (÷ 52). The other is a
-                    time-length weekly derived from a 365-day model. They are
-                    close, but not identical, and the page shows both so you do
-                    not accidentally compare different definitions of “weekly.”
+                  <p className="text-sm text-slate-600">
+                    If you are cross-checking against a day-based policy or a
+                    prorated daily rate, use the labeled 365-day weekly line
+                    instead of forcing weekly budgeting into a day-count
+                    comparison.
                   </p>
                 </div>
               </div>
@@ -496,11 +634,11 @@ const HowItWorks = () => {
 
                 <div className="mt-4 space-y-3">
                   <p>
-                    The tool also shows a weekly value computed by time length
-                    so it stays aligned with day-based lines (daily, hourly, and
-                    other period equivalents derived from a 365-day year). This
-                    comparison weekly is derived from an annual per-day rate
-                    multiplied by seven.
+                    The 365-day weekly is a labeled comparison line. It keeps
+                    “weekly” consistent with day-based equivalents like daily
+                    and hourly, which matters when you are reconciling numbers
+                    from policies, prorations, or spreadsheets that start from a
+                    per-day rate.
                   </p>
 
                   <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
@@ -513,18 +651,26 @@ const HowItWorks = () => {
                       </span>{" "}
                       = annual rent × 7 ÷ 365
                     </p>
-                    <p className="mt-2 text-sm text-slate-600">
-                      This is a comparison line so weekly can be interpreted
-                      under the same model as other day-based equivalents.
-                    </p>
+                    <ul className="mt-3 list-disc pl-5 space-y-2 text-sm text-slate-600">
+                      <li>
+                        Use when a worksheet or program explicitly derives
+                        weekly from a daily rate
+                      </li>
+                      <li>
+                        Use when you are comparing to daily, hourly, or other
+                        day-count equivalents on the same page
+                      </li>
+                      <li>
+                        Use when you are sanity-checking prorations, since the
+                        logic starts from days
+                      </li>
+                    </ul>
                   </div>
 
-                  <p>
-                    The page keeps both weekly definitions visible because they
-                    serve different purposes. The budgeting weekly matches the
-                    route’s intent. The 365-day weekly keeps day-based lines
-                    coherent. The calculator should not silently swap one for
-                    the other.
+                  <p className="text-sm text-slate-600">
+                    Do not treat this as “more correct” than the headline. It is
+                    a different definition designed to prevent mixing weekly
+                    budgeting with day-based math.
                   </p>
                 </div>
               </div>
@@ -563,11 +709,10 @@ const HowItWorks = () => {
 
                 <div className="mt-4 space-y-3">
                   <p>
-                    Beyond weekly, this route can show biweekly (14-day) and
-                    4-week (28-day) equivalents so common pay and billing cycles
-                    are visible in one place. These are derived from the same
-                    annual total, not from the weekly value, so the breakdown
-                    remains anchored to a single source number.
+                    The extra lines exist for real-world planning. If you budget
+                    by paycheck or your landlord bills on a fixed cycle, these
+                    equivalents let you decide whether a listing fits your cash
+                    flow without rewriting the annual total.
                   </p>
 
                   <div className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -582,6 +727,10 @@ const HowItWorks = () => {
                         </span>{" "}
                         when shown as a time-based line.
                       </p>
+                      <p className="mt-2 text-sm text-slate-600">
+                        Useful when you are setting aside rent per paycheck and
+                        want the definition to match day-based math.
+                      </p>
                     </div>
                     <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
                       <div className="text-sm font-bold text-slate-900">
@@ -594,16 +743,32 @@ const HowItWorks = () => {
                         </span>{" "}
                         and shown explicitly as a distinct cycle.
                       </p>
+                      <p className="mt-2 text-sm text-slate-600">
+                        Useful when a listing is billed every 4 weeks and you
+                        need to plan for the extra payment cycle over a year.
+                      </p>
                     </div>
                   </div>
 
-                  <p>
-                    Decimals are preserved in computation. If you enter cents or
-                    fractional units, the math should keep them. If the UI
-                    formats the display to fewer decimals, that should be
-                    presentation only. The underlying precision should not be
-                    thrown away early.
-                  </p>
+                  <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-slate-900">
+                      Precision rules that prevent bad decisions
+                    </div>
+                    <ul className="mt-2 list-disc pl-5 space-y-2 text-sm text-slate-700">
+                      <li>
+                        Decimals should be preserved through calculation so
+                        cents do not disappear.
+                      </li>
+                      <li>
+                        Rounding should be display-only so “just under” and
+                        “just over” checks remain trustworthy.
+                      </li>
+                      <li>
+                        If the UI displays fewer decimals, the underlying value
+                        should still retain the full parsed input.
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
@@ -662,17 +827,35 @@ const HowItWorks = () => {
                       </Link>
                       .
                     </p>
+                    <p className="mt-2 text-sm text-slate-600">
+                      This mismatch is a common source of “it looked cheaper”
+                      errors when comparing listings.
+                    </p>
                   </div>
 
                   <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
                     <div className="text-sm font-bold text-slate-900">
                       Two weekly definitions
                     </div>
-                    <p className="mt-2">
-                      Budgeting weekly (annual ÷ 52) and time-based weekly
-                      (annual × 7 ÷ 365) are different definitions. This page
-                      shows both so you can compare them without the tool
-                      silently switching models.
+                    <ul className="mt-2 list-disc pl-5 space-y-2 text-sm text-slate-700">
+                      <li>
+                        <span className="font-semibold text-slate-900">
+                          Budgeting weekly
+                        </span>{" "}
+                        is for weekly planning and weekly affordability checks
+                        (annual ÷ 52).
+                      </li>
+                      <li>
+                        <span className="font-semibold text-slate-900">
+                          365-day weekly
+                        </span>{" "}
+                        is for day-based comparisons and prorations (annual × 7
+                        ÷ 365).
+                      </li>
+                    </ul>
+                    <p className="mt-2 text-sm text-slate-600">
+                      If a policy, form, or listing uses one definition, match
+                      it explicitly instead of swapping models mid-comparison.
                     </p>
                   </div>
 
@@ -691,6 +874,11 @@ const HowItWorks = () => {
                         rent due date calculator
                       </Link>
                       .
+                    </p>
+                    <p className="mt-2 text-sm text-slate-600">
+                      A weekly equivalent can fit your budget and still fail
+                      your cash flow if the due date lands before your pay
+                      cycle.
                     </p>
                   </div>
                 </div>
@@ -715,17 +903,30 @@ const HowItWorks = () => {
                   Two weekly definitions can both be correct if they are labeled
                 </h3>
                 <p className="mt-3 text-slate-200 leading-7">
-                  This route’s headline weekly is{" "}
-                  <span className="font-semibold text-white">annual ÷ 52</span>.
-                  The 365-day weekly line (
-                  <span className="font-semibold text-white">
-                    annual × 7 ÷ 365
-                  </span>
-                  ) is shown so weekly can be compared under the same day-based
-                  model used in the breakdown. If you are comparing weekly
-                  values across pages, make sure you are comparing the same
-                  definition.
+                  Treat the headline weekly as a budgeting decision number, and
+                  treat the 365-day weekly as a consistency check for day-based
+                  math. If you are comparing weekly values across pages, across
+                  listings, or against a third-party rule, confirm which
+                  definition is being used before you accept or reject a rental.
                 </p>
+                <ul className="mt-4 list-disc pl-5 space-y-2 text-slate-200">
+                  <li>
+                    Comparing to a weekly budget cap: use{" "}
+                    <span className="font-semibold text-white">
+                      annual ÷ 52
+                    </span>
+                  </li>
+                  <li>
+                    Reconciling against daily prorations or day-based policies:
+                    use{" "}
+                    <span className="font-semibold text-white">
+                      annual × 7 ÷ 365
+                    </span>
+                  </li>
+                  <li>
+                    4-week billing: plan for 13 cycles per year, not 12 months
+                  </li>
+                </ul>
                 <div className="mt-4">
                   <Link
                     to="/rent-converter"

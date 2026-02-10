@@ -13,7 +13,7 @@ const HowItWorks = () => {
       </div>
 
       <div className="relative p-6 sm:p-10">
-        <div className="mx-auto max-w-4xl">
+        <div className="mx-auto max-w-6xl">
           <div className="flex flex-col gap-4 sm:gap-5">
             <div className="flex items-start justify-between gap-4">
               <div className="min-w-0">
@@ -21,11 +21,13 @@ const HowItWorks = () => {
                   How the daily to monthly rent converter works
                 </h2>
                 <p className="mt-2 text-slate-600 leading-7 max-w-2xl">
-                  This page starts from a daily rent amount and produces a
-                  monthly equivalent by scaling through an annual total. Daily
-                  is treated as the base unit. Monthly is treated as an average
-                  month derived from a 365-day year. All other period values
-                  shown on the page reconcile to the same daily input.
+                  This page converts a daily rent into a comparable monthly
+                  figure so you can judge whether a daily-priced listing fits a
+                  monthly budget or competes with monthly-priced listings. The
+                  conversion reconciles through a full year, then reports an
+                  average month. All other period values shown on the page
+                  reconcile to the same daily input, so comparisons stay
+                  consistent.
                 </p>
               </div>
 
@@ -116,10 +118,11 @@ const HowItWorks = () => {
 
                 <div className="mt-4 space-y-3">
                   <p>
-                    If you need to switch between rent periods without changing
-                    the underlying assumptions, use the rent converter. If you
-                    are sanity-checking budget fit against income, use rent
-                    affordability.
+                    Use the rent converter when you need the same price
+                    expressed across periods to compare listings quoted in
+                    different terms. Use rent affordability when deciding
+                    whether the monthly equivalent fits your income limits and
+                    budget rules.
                   </p>
 
                   <div className="mt-3 text-sm flex flex-wrap gap-x-5 gap-y-2">
@@ -172,63 +175,95 @@ const HowItWorks = () => {
                 </div>
 
                 <div className="mt-4 space-y-3">
-                  <p>
-                    These examples use the exact path this page uses: daily →
-                    annual → monthly. Display rounding can change the last
-                    digits without changing the underlying math.
-                  </p>
-
                   <div className="grid gap-3 sm:grid-cols-2">
-                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
+                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5 space-y-2">
                       <div className="text-sm font-bold text-slate-900">
                         Example 1
                       </div>
-                      <div className="mt-2 text-sm text-slate-700">
-                        Daily = 80
+                      <div className="text-sm">
+                        <strong>Situation:</strong> Two listings compete for the
+                        same unit. One is priced daily, the other monthly.
                       </div>
-                      <div className="mt-1">Annual = 80 × 365 = 29,200</div>
-                      <div className="mt-1">
-                        Monthly = 29,200 ÷ 12 = 2,433.3333… ≈{" "}
+                      <div className="text-sm">
+                        <strong>Numbers:</strong> Daily = 80. Monthly listing =
+                        2,350.
+                      </div>
+                      <div className="text-sm">
+                        <strong>Calculation:</strong> 80 × 365 = 29,200 per
+                        year. 29,200 ÷ 12 = 2,433.33 per month.
+                      </div>
+                      <div className="text-sm">
+                        <strong>Result:</strong>{" "}
                         <span className="font-semibold text-slate-900">
-                          2,433.33
+                          2,433.33 / month
                         </span>
+                      </div>
+                      <div className="text-sm">
+                        <strong>Meaning:</strong> The daily-priced option looks
+                        cheaper at a glance, but after conversion it is more
+                        expensive than the 2,350/month listing. The decision
+                        flips to the monthly listing.
                       </div>
                     </div>
 
-                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
+                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5 space-y-2">
                       <div className="text-sm font-bold text-slate-900">
                         Example 2
                       </div>
-                      <div className="mt-2 text-sm text-slate-700">
-                        Daily = 65.50
+                      <div className="text-sm">
+                        <strong>Situation:</strong> You have a hard monthly cap
+                        and need to decide whether a daily quote fits it.
                       </div>
-                      <div className="mt-1">
-                        Annual = 65.50 × 365 = 23,907.50
+                      <div className="text-sm">
+                        <strong>Numbers:</strong> Budget cap = 2,000/month.
+                        Daily = 65.50.
                       </div>
-                      <div className="mt-1">
-                        Monthly = 23,907.50 ÷ 12 = 1,992.2916… ≈{" "}
+                      <div className="text-sm">
+                        <strong>Calculation:</strong> 65.50 × 365 = 23,907.50
+                        per year. 23,907.50 ÷ 12 = 1,992.29 per month.
+                      </div>
+                      <div className="text-sm">
+                        <strong>Result:</strong>{" "}
                         <span className="font-semibold text-slate-900">
-                          1,992.29
+                          1,992.29 / month
                         </span>
+                      </div>
+                      <div className="text-sm">
+                        <strong>Meaning:</strong> The converted monthly total
+                        stays under the 2,000 cap. This listing passes the
+                        budget screen and stays in consideration.
                       </div>
                     </div>
                   </div>
 
-                  <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                  <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5 space-y-2">
                     <div className="text-sm font-bold text-slate-900">
-                      Quick 30-day comparison (not the headline)
+                      Quick 30-day comparison (rounding pitfall)
                     </div>
-                    <p className="mt-2">
-                      If daily = 80, then a 30-day shortcut gives 80 × 30 ={" "}
+                    <div className="text-sm">
+                      <strong>Situation:</strong> A landlord advertises “80 per
+                      day” and informally says that is “about 2,400 per month.”
+                    </div>
+                    <div className="text-sm">
+                      <strong>Numbers:</strong> Daily = 80. Shortcut month = 30
+                      days.
+                    </div>
+                    <div className="text-sm">
+                      <strong>Calculation:</strong> 80 × 30 = 2,400 (shortcut).
+                      Page method: 80 × 365 ÷ 12 = 2,433.33.
+                    </div>
+                    <div className="text-sm">
+                      <strong>Result:</strong>{" "}
                       <span className="font-semibold text-slate-900">
-                        2,400
+                        2,433.33 / month (average)
                       </span>
-                      . The average-month result on this page is{" "}
-                      <span className="font-semibold text-slate-900">
-                        2,433.33
-                      </span>{" "}
-                      because it reconciles to a full 365-day year.
-                    </p>
+                    </div>
+                    <div className="text-sm">
+                      <strong>Meaning:</strong> Treating the shortcut as a
+                      “monthly” price understates the true average. If your cap
+                      is 2,400, the shortcut suggests acceptance, but the
+                      reconciled monthly exceeds the cap and should be rejected.
+                    </div>
                   </div>
                 </div>
               </div>
@@ -247,11 +282,9 @@ const HowItWorks = () => {
 
                 <div className="mt-4 space-y-3">
                   <p>
-                    The converter treats your daily input as covering exactly
-                    one day. From there, it expands that amount to a full year
-                    using a fixed 365-day assumption. The monthly value is then
-                    computed by dividing the annual total into twelve equal
-                    parts.
+                    This page uses one reversible path so every period stays
+                    comparable to the same daily price. The path is fixed and
+                    does not change based on calendar months or billing cycles.
                   </p>
 
                   <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
@@ -270,16 +303,15 @@ const HowItWorks = () => {
                       </li>
                     </ul>
                     <p className="mt-3 text-sm text-slate-600">
-                      Monthly corresponds to an average month length of 365 ÷ 12
-                      days.
+                      This produces an average month length of 365 ÷ 12 days so
+                      the yearly total reconciles cleanly.
                     </p>
                   </div>
 
                   <p>
-                    This approach keeps the math reversible. If you multiply the
-                    monthly result by twelve, you return to the same annual
-                    total. If you divide the annual by 365, you return to the
-                    original daily rate.
+                    Use the monthly output when comparing against monthly-priced
+                    listings or a monthly budget. Use the annual total when you
+                    need to sanity-check the full-year cost of a daily rate.
                   </p>
                 </div>
               </div>
@@ -298,19 +330,27 @@ const HowItWorks = () => {
 
                 <div className="mt-4 space-y-3">
                   <p>
-                    A 30-day month is a common shortcut, but it is a different
-                    definition than an average month derived from a 365-day
-                    year. This page keeps those ideas separate so you can
-                    compare them without accidentally treating them as the same
-                    thing.
+                    A 30-day cycle and an average calendar month are different
+                    pricing models. Treating them as interchangeable skews
+                    comparisons and can push a listing across a budget boundary.
                   </p>
 
+                  <ul className="list-disc pl-5 space-y-2">
+                    <li>
+                      Use a 30-day figure only when the contract bills every 30
+                      days.
+                    </li>
+                    <li>
+                      Use the average-month figure when comparing to listings
+                      quoted “per month” or to a monthly budget.
+                    </li>
+                  </ul>
+
                   <p>
-                    If your real-world billing cycle is “every 30 days,” that is
-                    a valid schedule, but it is not the same as a calendar month
-                    average. The headline monthly on this page is the
-                    average-month result (annual ÷ 12) so the yearly
-                    reconciliation stays clean.
+                    The headline monthly on this page is the average-month
+                    result (annual ÷ 12) so yearly totals reconcile. The 30-day
+                    number is provided only to compare against contracts that
+                    actually bill on a 30-day cycle.
                   </p>
                 </div>
               </div>
@@ -334,9 +374,10 @@ const HowItWorks = () => {
                   Monthly here is an average, not a due date
                 </h3>
                 <p className="mt-3 text-slate-200 leading-7">
-                  This converter produces a monthly equivalent derived from a
-                  daily rate via an annual total. It does not attempt to predict
-                  calendar billing dates or month-specific charges.
+                  The monthly figure is an average derived from a full-year
+                  reconciliation. It does not imply when rent is due, how many
+                  days are in a specific month, or what you will be charged in a
+                  particular billing period.
                 </p>
               </div>
             </div>

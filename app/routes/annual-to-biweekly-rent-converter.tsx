@@ -712,15 +712,6 @@ export default function AnnualToBiweeklyRent() {
               Annual to biweekly converter
             </h1>
 
-            <div className="rc-no-print flex-col sm:flex-row gap-2 hidden md:flex">
-              <button
-                type="button"
-                onClick={handlePrint}
-                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-              >
-                Print / Save as PDF
-              </button>
-            </div>
           </div>
 
           <div className="grid gap-5">
@@ -853,23 +844,54 @@ export default function AnnualToBiweeklyRent() {
           <Assumptions />
         </div>
 
-        <div className="mt-3 rounded-xl border border-slate-200 bg-white p-4">
-          <div className="rc-no-print md:hidden flex flex-col sm:flex-row gap-2 mb-4">
-            <button
-              type="button"
-              onClick={handlePrint}
-              className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-            >
-              Print / Save as PDF
-            </button>
-          </div>
-          <Rounding
-            roundDisplay={roundDisplay}
-            setRoundDisplay={setRoundDisplay}
-            displayDecimals={displayDecimals}
-            setDisplayDecimals={setDisplayDecimals as any}
-          />
-        </div>
+       <div className="flex flex-wrap items-center gap-3 mt-4">
+                    <div
+                      id="export-controls"
+                      className="mr-auto flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
+                    >
+                      <div className="flex flex-wrap gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (typeof window === "undefined") return;
+                            window.print();
+                          }}
+                          className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fbff]"
+                        >
+                          Print / Save PDF
+                        </button>
+                      </div>
+                    </div>
+
+                    <label className="inline-flex items-center gap-2 text-sm font-medium text-slate-700 select-none">
+                      <input
+                        type="checkbox"
+                        checked={roundDisplay}
+                        onChange={(e) => setRoundDisplay(e.target.checked)}
+                        className="h-4 w-4 rounded border-slate-300 text-sky-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                      />
+                      Round results for display
+                    </label>
+
+                    <label className="inline-flex items-center gap-2 text-sm font-medium text-slate-700 select-none">
+                      <span className="sr-only">Display decimals</span>
+                      <select
+                        value={displayDecimals}
+                        onChange={(e) =>
+                          setDisplayDecimals(
+                            validateDisplayDecimals(e.target.value),
+                          )
+                        }
+                        className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-sky-400"
+                        aria-label="Display decimals"
+                      >
+                        <option value={0}>0 decimals</option>
+                        <option value={2}>2 decimals</option>
+                        <option value={4}>4 decimals</option>
+                        <option value={6}>6 decimals</option>
+                      </select>
+                    </label>
+                  </div>
       </section>
 
       <HowItWorks />

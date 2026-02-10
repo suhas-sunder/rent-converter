@@ -13,7 +13,7 @@ const HowItWorks = () => {
       </div>
 
       <div className="relative p-6 sm:p-10">
-        <div className="mx-auto max-w-4xl">
+        <div className="mx-auto max-w-6xl">
           <div className="flex flex-col gap-4 sm:gap-5">
             <div className="flex items-start justify-between gap-4">
               <div className="min-w-0">
@@ -22,13 +22,23 @@ const HowItWorks = () => {
                   equivalence)
                 </h2>
                 <p className="mt-2 text-slate-600 leading-7 max-w-2xl">
-                  This page converts an annual rent total into an hourly
-                  equivalent under a fixed time-length model. Input is one
-                  annual amount. Output is an hourly equivalent that represents
-                  the same annual cost under that model. Results are equivalents
-                  under a fixed basis, not billing rules, not due dates, and not
-                  lease terms.
+                  Convert a single annual rent total into a time-based hourly
+                  cost using a fixed 365-day year (8,760 hours). The hourly
+                  figure is an equivalence used for comparisons and budgeting,
+                  not a lease schedule or invoice rule.
                 </p>
+                <ul className="mt-3 list-disc pl-5 space-y-2 text-slate-600 leading-7 max-w-2xl">
+                  <li>
+                    Use it to translate a yearly rent into an hourly “cost of
+                    space” for comparing options that are priced hourly, daily,
+                    weekly, or monthly.
+                  </li>
+                  <li>
+                    If you are deciding between listings with different billing
+                    periods, rely on the breakdown table so every period is
+                    derived from the same annual anchor.
+                  </li>
+                </ul>
               </div>
 
               <div className="hidden sm:flex flex-col items-end gap-2 shrink-0">
@@ -126,15 +136,16 @@ const HowItWorks = () => {
                     >
                       rent converter
                     </Link>{" "}
-                    links the full set. For the inverse direction of this page,
-                    use{" "}
+                    links the full set when you need a different input period.
+                    For the inverse direction of this page, use{" "}
                     <Link
                       to="/hourly-to-annual-rent-converter"
                       className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
                     >
                       hourly to annual
                     </Link>{" "}
-                    so the same 8,760-hour basis is applied in reverse. For
+                    when your starting point is an hourly quote and you want the
+                    yearly equivalent on the same 8,760-hour basis. For
                     comparisons against monthly and weekly, use{" "}
                     <Link
                       to="/annual-to-monthly-rent-converter"
@@ -149,7 +160,8 @@ const HowItWorks = () => {
                     >
                       annual to weekly
                     </Link>{" "}
-                    to avoid mixing incompatible shortcuts.
+                    when you need those periods defined consistently (instead of
+                    mixing shortcuts like “4 weeks = monthly”).
                   </p>
                 </div>
               </div>
@@ -188,28 +200,48 @@ const HowItWorks = () => {
 
                 <div className="mt-4 space-y-3">
                   <p>
-                    Input is an annual rent total (currency per year). Output is
+                    You enter one annual rent total (currency per year). You get
                     a time-based hourly equivalent (currency per hour) plus a
-                    breakdown table of other period equivalents that all
-                    reconcile back to the same annual total under one fixed
-                    model.
+                    breakdown table of other periods that all reconcile to the
+                    same annual amount under one fixed model.
                   </p>
-                  <p>
-                    Results are equivalents under a fixed time-length basis.
-                    This page is not a billing rules engine. It does not
-                    determine due dates, it does not interpret lease terms, and
-                    it does not infer payment schedules or payment counts.
-                  </p>
+
+                  <ul className="list-disc pl-5 space-y-2">
+                    <li>
+                      <span className="font-semibold text-slate-900">
+                        Hourly (time-based)
+                      </span>{" "}
+                      is best for comparing against anything priced by time
+                      (hourly storage, workspace, parking, short stays, or
+                      “per-hour cost” budgeting).
+                    </li>
+                    <li>
+                      <span className="font-semibold text-slate-900">
+                        The breakdown rows
+                      </span>{" "}
+                      are best for making two listings comparable when they are
+                      advertised in different periods.
+                    </li>
+                  </ul>
 
                   <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
                     <div className="text-sm font-bold text-slate-900">
                       What the output represents
                     </div>
                     <p className="mt-2">
-                      Hourly is the annual amount expressed per hour under the
-                      same model used for daily, weekly, biweekly, 4-week, and
-                      monthly equivalents.
+                      The hourly figure is the annual amount spread across{" "}
+                      <span className="font-semibold text-slate-900">
+                        8,760 hours
+                      </span>{" "}
+                      (365 × 24). It is an equivalence for comparisons and
+                      planning, not a statement about how rent is billed or when
+                      payments happen.
                     </p>
+                    <div className="mt-3 text-sm text-slate-600">
+                      Practical read: “If this lease costs X per year, it is
+                      effectively Y per hour of time on the calendar under one
+                      consistent model.”
+                    </div>
                   </div>
                 </div>
               </div>
@@ -248,9 +280,10 @@ const HowItWorks = () => {
 
                 <div className="mt-4 space-y-3">
                   <p>
-                    Each example uses the exact formula shown on this page and
-                    an approximate result. Display rounding can change the last
-                    digits without changing the underlying math.
+                    Each example is decision-based and uses the same 8,760-hour
+                    time model. The on-screen display may round, but the
+                    decision should be based on the unrounded value when a
+                    threshold is tight.
                   </p>
 
                   <div className="grid gap-3 sm:grid-cols-2">
@@ -258,14 +291,45 @@ const HowItWorks = () => {
                       <div className="text-sm font-bold text-slate-900">
                         Example 1
                       </div>
-                      <div className="mt-2 text-sm text-slate-700">
-                        Annual = 24,000
-                      </div>
-                      <div className="mt-1">
-                        Hourly = 24,000 ÷ 8,760 = 2.739726… ≈{" "}
-                        <span className="font-semibold text-slate-900">
-                          2.74
-                        </span>
+
+                      <div className="mt-3 space-y-2 text-sm text-slate-700">
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Situation:
+                          </span>{" "}
+                          You are comparing a small storage unit advertised at
+                          $3.50/hour to keeping the unit for a year under a
+                          $24,000/year lease.
+                        </div>
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Numbers:
+                          </span>{" "}
+                          Annual = 24,000; Storage hourly quote = 3.50
+                        </div>
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Calculation:
+                          </span>{" "}
+                          Hourly = 24,000 ÷ 8,760 = 2.739726…
+                        </div>
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Result:
+                          </span>{" "}
+                          Hourly ≈{" "}
+                          <span className="font-semibold text-slate-900">
+                            2.74/hour
+                          </span>
+                        </div>
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Meaning:
+                          </span>{" "}
+                          On a pure time-cost basis, the lease is below the
+                          $3.50/hour alternative, so the storage unit is not the
+                          cheaper option for year-long use.
+                        </div>
                       </div>
                     </div>
 
@@ -273,14 +337,45 @@ const HowItWorks = () => {
                       <div className="text-sm font-bold text-slate-900">
                         Example 2
                       </div>
-                      <div className="mt-2 text-sm text-slate-700">
-                        Annual = 30,000.50
-                      </div>
-                      <div className="mt-1">
-                        Hourly = 30,000.50 ÷ 8,760 = 3.424714… ≈{" "}
-                        <span className="font-semibold text-slate-900">
-                          3.42
-                        </span>
+
+                      <div className="mt-3 space-y-2 text-sm text-slate-700">
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Situation:
+                          </span>{" "}
+                          Your internal cap for a project space is $3.40/hour on
+                          a time basis. A listing is quoted as $30,000.50/year.
+                        </div>
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Numbers:
+                          </span>{" "}
+                          Annual = 30,000.50; Cap = 3.40/hour
+                        </div>
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Calculation:
+                          </span>{" "}
+                          Hourly = 30,000.50 ÷ 8,760 = 3.424714…
+                        </div>
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Result:
+                          </span>{" "}
+                          Hourly ≈{" "}
+                          <span className="font-semibold text-slate-900">
+                            3.42/hour
+                          </span>{" "}
+                          (unrounded: 3.424714…)
+                        </div>
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Meaning:
+                          </span>{" "}
+                          This crosses the $3.40/hour cap, so it fails the
+                          pricing rule unless you renegotiate or offset with
+                          savings elsewhere.
+                        </div>
                       </div>
                     </div>
 
@@ -288,17 +383,47 @@ const HowItWorks = () => {
                       <div className="text-sm font-bold text-slate-900">
                         Example 3
                       </div>
-                      <div className="mt-2 text-sm text-slate-700">
-                        Annual = 18,200
-                      </div>
-                      <div className="mt-1">
-                        Daily = 18,200 ÷ 365 = 49.863013…
-                      </div>
-                      <div className="mt-1">
-                        Hourly = Daily ÷ 24 = 49.863013… ÷ 24 = 2.077625… ≈{" "}
-                        <span className="font-semibold text-slate-900">
-                          2.08
-                        </span>
+
+                      <div className="mt-3 space-y-2 text-sm text-slate-700">
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Situation:
+                          </span>{" "}
+                          Two options are both advertised annually, but one
+                          includes a smaller annual rent and you want to compare
+                          in hourly terms to match an internal dashboard.
+                        </div>
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Numbers:
+                          </span>{" "}
+                          Annual = 18,200
+                        </div>
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Calculation:
+                          </span>{" "}
+                          Daily = 18,200 ÷ 365 = 49.863013…; Hourly = Daily ÷ 24
+                          = 2.077625…
+                        </div>
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Result:
+                          </span>{" "}
+                          Hourly ≈{" "}
+                          <span className="font-semibold text-slate-900">
+                            2.08/hour
+                          </span>
+                        </div>
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Meaning:
+                          </span>{" "}
+                          If your dashboard target is at or below $2.10/hour,
+                          this listing passes without needing any further
+                          conversions, and you can compare it directly against
+                          other hourly-priced options.
+                        </div>
                       </div>
                     </div>
 
@@ -306,14 +431,47 @@ const HowItWorks = () => {
                       <div className="text-sm font-bold text-slate-900">
                         Example 4 (paid-hours comparison)
                       </div>
-                      <div className="mt-2 text-sm text-slate-700">
-                        Annual = 30,000, hours/week = 40
-                      </div>
-                      <div className="mt-1">
-                        Paid-hours hourly = 30,000 ÷ (40 × 52) = 14.423076… ≈{" "}
-                        <span className="font-semibold text-slate-900">
-                          14.42
-                        </span>
+
+                      <div className="mt-3 space-y-2 text-sm text-slate-700">
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Situation:
+                          </span>{" "}
+                          You are tempted to compare rent to a wage rate using
+                          only paid work hours. You want to see how that changes
+                          the interpretation before using it in a decision.
+                        </div>
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Numbers:
+                          </span>{" "}
+                          Annual = 30,000; Hours/week = 40
+                        </div>
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Calculation:
+                          </span>{" "}
+                          Paid-hours hourly = 30,000 ÷ (40 × 52) = 14.423076…
+                        </div>
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Result:
+                          </span>{" "}
+                          Paid-hours hourly ≈{" "}
+                          <span className="font-semibold text-slate-900">
+                            14.42/hour
+                          </span>
+                        </div>
+                        <div>
+                          <span className="font-semibold text-slate-900">
+                            Meaning:
+                          </span>{" "}
+                          If you mistakenly use paid-hours hourly as if it were
+                          time-based rent, you will overstate the “per-hour”
+                          cost and may reject a viable lease. For rent period
+                          comparisons, stick to the 8,760-hour time basis and
+                          treat paid-hours as a separate, labeled perspective.
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -354,9 +512,9 @@ const HowItWorks = () => {
 
                 <div className="mt-4 space-y-3">
                   <p>
-                    Periods are defined by fixed day counts so every conversion
-                    uses the same model. The year model used here is a 365-day
-                    year.
+                    These definitions exist for one reason: to make every period
+                    conversion internally consistent so comparisons do not mix
+                    incompatible assumptions.
                   </p>
 
                   <ul className="list-disc pl-5 space-y-2">
@@ -403,10 +561,10 @@ const HowItWorks = () => {
                   </ul>
 
                   <p className="text-sm text-slate-600">
-                    If a paid-hours scenario exists on the page, it is a
-                    separate model that divides by assumed work hours. The
-                    default hourly shown by this converter is time-based and
-                    uses 8,760 hours for internal consistency.
+                    A paid-hours hourly rate (hours/week × 52) is a different
+                    framing. It can be useful for wage-style comparisons, but it
+                    is not the basis used for the rent equivalence output on
+                    this page.
                   </p>
                 </div>
               </div>
@@ -445,10 +603,9 @@ const HowItWorks = () => {
 
                 <div className="mt-4 space-y-3">
                   <p>
-                    The annual total is the anchor. Every period shown is
-                    derived from the same annual basis. This is done so the
-                    hourly line and the breakdown table stay internally
-                    consistent.
+                    One input anchors everything: the annual total. Every output
+                    period is derived from that same anchor so the headline
+                    hourly and the breakdown rows agree with each other.
                   </p>
 
                   <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
@@ -481,8 +638,9 @@ const HowItWorks = () => {
                     </div>
 
                     <p className="mt-4 text-sm text-slate-600">
-                      This basis is used to keep one coherent model across the
-                      headline result and the breakdown table.
+                      The point of this basis is comparability: every period is
+                      computed from the same annual reference so you do not get
+                      drift from chaining rounded rows together.
                     </p>
                   </div>
                 </div>
@@ -522,18 +680,28 @@ const HowItWorks = () => {
 
                 <div className="mt-4 space-y-3">
                   <p>
-                    The breakdown table is a set of equivalent amounts for
-                    different periods, all derived from the same annual basis.
-                    Rows are not computed from each other. Weekly is not
-                    computed as hourly × 168, and monthly is not computed as
-                    weekly × 4. Each row is derived from the annual anchor so
-                    everything reconciles to the same annual total.
+                    The breakdown table exists to make comparisons fair across
+                    period labels. Each row is calculated from the annual total,
+                    not from another row.
                   </p>
+
+                  <ul className="list-disc pl-5 space-y-2">
+                    <li>
+                      Weekly is not computed as hourly × 168, and monthly is not
+                      computed as weekly × 4.
+                    </li>
+                    <li>
+                      Chaining rows can amplify rounding and can bake in the
+                      wrong definition (for example, treating “monthly” as 28
+                      days).
+                    </li>
+                  </ul>
+
                   <p>
-                    This matters when comparing weekly, 28-day, and monthly
-                    listings. Those periods are defined differently, so the
-                    equivalents differ even when they look close. These rows are
-                    equivalents, not payment schedules.
+                    Use the row that matches the period used in the listing you
+                    are evaluating, then compare that like-for-like with another
+                    listing. The goal is one consistent annual anchor, not
+                    matching a landlord’s payment schedule language.
                   </p>
                 </div>
               </div>
@@ -576,14 +744,23 @@ const HowItWorks = () => {
                       Hourly by paid-hours vs time-based hourly
                     </div>
                     <p className="mt-2">
-                      Time-based hourly uses 8,760 hours so hourly stays
-                      compatible with daily and weekly equivalents. A paid-hours
-                      model divides by assumed work hours (hours/week × 52) and
-                      will usually be larger because it spreads the same annual
-                      total across fewer hours. If a paid-hours scenario is
-                      shown, it should be labeled as a separate comparison
-                      model, not the default basis.
+                      Time-based hourly spreads the annual total across 8,760
+                      hours so it stays compatible with daily and weekly
+                      equivalents. A paid-hours model divides by assumed work
+                      hours (hours/week × 52) and will usually be much larger
+                      because it spreads the same annual total across fewer
+                      hours. Treat paid-hours as a separate comparison lens and
+                      do not swap it in for the default hourly output.
                     </p>
+                    <ul className="mt-3 list-disc pl-5 space-y-2 text-sm text-slate-600">
+                      <li>
+                        Use time-based hourly for rent period comparisons.
+                      </li>
+                      <li>
+                        Use paid-hours hourly only when you explicitly want a
+                        wage-style framing.
+                      </li>
+                    </ul>
                   </div>
 
                   <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
@@ -593,9 +770,14 @@ const HowItWorks = () => {
                     <p className="mt-2">
                       Weekly × 4 is a 28-day amount. Monthly on this page is
                       annual ÷ 12 (average month under a 365-day year). Because
-                      a month is not fixed at 28 days, weekly × 4 does not match
+                      a month is not fixed at 28 days, weekly × 4 will not match
                       monthly under this model.
                     </p>
+                    <div className="mt-3 text-sm text-slate-600">
+                      Decision impact: a “$500/week” listing and a
+                      “$2,000/month” listing are not automatically equivalent
+                      without using the correct row definitions.
+                    </div>
                   </div>
 
                   <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
@@ -604,9 +786,13 @@ const HowItWorks = () => {
                     </div>
                     <p className="mt-2">
                       4-week is always 28 days. Monthly is computed as annual ÷
-                      12. These are different definitions, so they are different
-                      rows.
+                      12. These are different periods, so they are intentionally
+                      different rows in the table.
                     </p>
+                    <div className="mt-3 text-sm text-slate-600">
+                      Decision impact: if a landlord advertises “every 4 weeks,”
+                      compare using the 4-week row, not the monthly row.
+                    </div>
                   </div>
 
                   <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
@@ -614,11 +800,16 @@ const HowItWorks = () => {
                       “26 payments” vs time-length conversion
                     </div>
                     <p className="mt-2">
-                      Payment counts are schedule language. This page converts
-                      by time length under a fixed 365-day year. Outputs are
-                      equivalents, not a statement about payment counts or due
-                      dates.
+                      “26 payments” describes a payment schedule. This page
+                      converts by time length under a fixed 365-day year. If a
+                      listing talks about payment counts, keep that as a billing
+                      detail and still use this tool to compare the underlying
+                      period equivalents.
                     </p>
+                    <div className="mt-3 text-sm text-slate-600">
+                      Decision impact: you can compare offers without letting
+                      schedule language distort the effective rate.
+                    </div>
                   </div>
                 </div>
               </div>
@@ -658,16 +849,21 @@ const HowItWorks = () => {
                 <div className="mt-4 space-y-3">
                   <p>
                     This tool converts only the rent amount you enter. It does
-                    not include fees, utilities, deposits, taxes, insurance,
-                    proration, or discounts. It does not interpret lease terms
-                    or local billing rules.
+                    not include utilities, parking, internet, deposits, taxes,
+                    insurance, proration, incentives, or one-time fees.
                   </p>
-                  <p>
-                    Outputs are equivalences under a fixed time-length model,
-                    not due-date schedules. If the task is determining due dates
-                    or a calendar of payments, use a due-date calculator rather
-                    than period equivalents.
-                  </p>
+                  <ul className="list-disc pl-5 space-y-2">
+                    <li>
+                      If two listings include different extras, convert the base
+                      rent here, then adjust outside the tool so you do not
+                      accidentally treat a fee as “rent per hour.”
+                    </li>
+                    <li>
+                      If you are close to a threshold, avoid deciding based on a
+                      rounded display. Use the full precision behind the output
+                      and treat rounding as presentation.
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>
@@ -690,11 +886,11 @@ const HowItWorks = () => {
                   This is an equivalence converter, not a payment schedule
                 </h3>
                 <p className="mt-3 text-slate-200 leading-7">
-                  The hourly result is derived from annual ÷ 8,760 under a
-                  365-day model. It does not determine due dates, invoice
-                  timing, or payment counts within a month. If you need due
-                  dates, use a due-date calculator instead of relying on period
-                  equivalents.
+                  Use this page when your decision is “which option is cheaper
+                  when expressed on the same time basis.” Do not use it to infer
+                  due dates, invoice timing, payment counts, or how a landlord
+                  structures billing. If your decision depends on dates on a
+                  calendar, use a due-date tool instead.
                 </p>
                 <div className="mt-4">
                   <Link

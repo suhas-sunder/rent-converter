@@ -13,23 +13,37 @@ const HowItWorks = () => {
       </div>
 
       <div className="relative p-6 sm:p-10">
-        <div className="mx-auto max-w-4xl">
+        <div className="mx-auto max-w-6xl">
           <div className="flex flex-col gap-4 sm:gap-5">
             <div className="flex items-start justify-between gap-4">
               <div className="min-w-0">
                 <h2 className="text-3xl sm:text-4xl font-extrabold text-sky-800 tracking-tight leading-tight">
                   How the biweekly to weekly rent converter works
                 </h2>
-                <p className="mt-2 text-slate-600 leading-7 max-w-2xl">
-                  This page converts a biweekly rent amount into a weekly
-                  equivalent using fixed time-length definitions. Biweekly is
-                  treated as exactly{" "}
-                  <span className="font-semibold text-slate-900">14 days</span>{" "}
-                  and weekly as{" "}
-                  <span className="font-semibold text-slate-900">7 days</span>.
-                  Under those definitions, the weekly result is computed
-                  directly and exactly as half of the biweekly amount.
-                </p>
+                <div className="mt-2 text-slate-600 leading-7 max-w-2xl space-y-3">
+                  <p>
+                    Use this conversion when you’re comparing a{" "}
+                    <span className="font-semibold text-slate-900">
+                      biweekly rent request
+                    </span>{" "}
+                    to anything priced weekly (room rentals, short-term sublets,
+                    “per week” ads), or when you want to sanity-check whether a
+                    “cheap biweekly” number actually fits your weekly budget.
+                  </p>
+                  <p>
+                    This route uses fixed time lengths:{" "}
+                    <span className="font-semibold text-slate-900">
+                      biweekly = 14 days
+                    </span>{" "}
+                    and{" "}
+                    <span className="font-semibold text-slate-900">
+                      weekly = 7 days
+                    </span>
+                    . Under those definitions, the weekly equivalent is exactly
+                    half of the biweekly amount, so you get a clean comparable
+                    number without any calendar assumptions.
+                  </p>
+                </div>
               </div>
 
               <div className="hidden sm:flex flex-col items-end gap-2 shrink-0">
@@ -79,6 +93,7 @@ const HowItWorks = () => {
               </div>
             </div>
           </div>
+
           {/* SectionCard: related tools + EXAMPLES (examples must live here) */}
           <div className="group mt-8 relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
             <div
@@ -91,9 +106,13 @@ const HowItWorks = () => {
               </h3>
 
               <div className="mt-4 space-y-4">
-                <p>
-                  If you need other rent period equivalents under the same fixed
-                  time-length definitions, use these:
+                <p className="text-slate-700">
+                  Use the related tools below when your next decision depends on{" "}
+                  <span className="font-semibold text-slate-900">
+                    a different comparison frame
+                  </span>{" "}
+                  (monthly budget planning, annual totals, or a real schedule)
+                  rather than a weekly equivalent.
                 </p>
 
                 <div className="text-sm flex flex-wrap gap-x-5 gap-y-2">
@@ -127,26 +146,49 @@ const HowItWorks = () => {
                   <div className="text-sm font-bold text-slate-900">
                     Examples you can cross-check
                   </div>
-                  <p className="mt-2 text-sm text-slate-600">
-                    Weekly is exact here because 14 days ÷ 2 = 7 days.
-                  </p>
 
                   <div className="mt-4 grid gap-3 sm:grid-cols-2">
                     <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4">
                       <div className="text-sm font-bold text-slate-900">
                         Example 1
                       </div>
-                      <div className="mt-2 text-sm text-slate-700">
-                        Biweekly = 1,000
-                      </div>
-                      <div className="mt-1">
-                        Weekly = 1,000 ÷ 2 ={" "}
-                        <span className="font-semibold text-slate-900">
-                          500.00
-                        </span>
-                      </div>
-                      <div className="mt-1 text-sm text-slate-600">
-                        Daily = 1,000 ÷ 14 = 71.428571…
+
+                      <div className="mt-2 space-y-2 text-sm text-slate-700">
+                        <p>
+                          <span className="font-semibold text-slate-900">
+                            Situation:
+                          </span>{" "}
+                          You’re choosing between a room listed at $500/week and
+                          a place listed at $1,000 biweekly, and you can’t tell
+                          if the biweekly option is “the same deal.”
+                        </p>
+                        <p>
+                          <span className="font-semibold text-slate-900">
+                            Numbers:
+                          </span>{" "}
+                          Weekly listing = 500/week; Biweekly listing =
+                          1,000/biweekly
+                        </p>
+                        <p>
+                          <span className="font-semibold text-slate-900">
+                            Calculation:
+                          </span>{" "}
+                          Weekly(biweekly listing) = 1,000 ÷ 2
+                        </p>
+                        <p>
+                          <span className="font-semibold text-slate-900">
+                            Result:
+                          </span>{" "}
+                          500.00/week
+                        </p>
+                        <p className="text-slate-600">
+                          <span className="font-semibold text-slate-900">
+                            Meaning:
+                          </span>{" "}
+                          They’re equivalent on a weekly basis, so the decision
+                          should shift to non-price factors (location,
+                          utilities, lease terms), not the payment cadence.
+                        </p>
                       </div>
                     </div>
 
@@ -154,17 +196,42 @@ const HowItWorks = () => {
                       <div className="text-sm font-bold text-slate-900">
                         Example 2
                       </div>
-                      <div className="mt-2 text-sm text-slate-700">
-                        Biweekly = 920.55
-                      </div>
-                      <div className="mt-1">
-                        Weekly = 920.55 ÷ 2 ={" "}
-                        <span className="font-semibold text-slate-900">
-                          460.275
-                        </span>
-                      </div>
-                      <div className="mt-1 text-sm text-slate-600">
-                        If display rounds: 460.28 (rounding is display-only)
+
+                      <div className="mt-2 space-y-2 text-sm text-slate-700">
+                        <p>
+                          <span className="font-semibold text-slate-900">
+                            Situation:
+                          </span>{" "}
+                          Your weekly rent cap is $450/week. A landlord asks for
+                          $920.55 biweekly, and the rounded weekly display might
+                          look “close enough.”
+                        </p>
+                        <p>
+                          <span className="font-semibold text-slate-900">
+                            Numbers:
+                          </span>{" "}
+                          Cap = 450/week; Biweekly = 920.55
+                        </p>
+                        <p>
+                          <span className="font-semibold text-slate-900">
+                            Calculation:
+                          </span>{" "}
+                          Weekly = 920.55 ÷ 2
+                        </p>
+                        <p>
+                          <span className="font-semibold text-slate-900">
+                            Result:
+                          </span>{" "}
+                          460.275/week (if display rounds: 460.28)
+                        </p>
+                        <p className="text-slate-600">
+                          <span className="font-semibold text-slate-900">
+                            Meaning:
+                          </span>{" "}
+                          This exceeds your cap, so it’s a reject or
+                          renegotiate, even if the rounded display makes it feel
+                          marginal.
+                        </p>
                       </div>
                     </div>
 
@@ -172,17 +239,41 @@ const HowItWorks = () => {
                       <div className="text-sm font-bold text-slate-900">
                         Example 3 (linearity check)
                       </div>
-                      <div className="mt-2 text-sm text-slate-700">
-                        Biweekly doubles: 1,000 → 2,000
-                      </div>
-                      <div className="mt-1">
-                        Weekly doubles: 500 →{" "}
-                        <span className="font-semibold text-slate-900">
-                          1,000
-                        </span>
-                      </div>
-                      <div className="mt-1 text-sm text-slate-600">
-                        This must always hold for this route.
+
+                      <div className="mt-2 space-y-2 text-sm text-slate-700">
+                        <p>
+                          <span className="font-semibold text-slate-900">
+                            Situation:
+                          </span>{" "}
+                          You’re comparing two biweekly offers that differ by
+                          “only $60,” and you want the weekly impact for your
+                          budget.
+                        </p>
+                        <p>
+                          <span className="font-semibold text-slate-900">
+                            Numbers:
+                          </span>{" "}
+                          Offer A = 1,000 biweekly; Offer B = 1,060 biweekly
+                        </p>
+                        <p>
+                          <span className="font-semibold text-slate-900">
+                            Calculation:
+                          </span>{" "}
+                          A weekly = 1,000 ÷ 2; B weekly = 1,060 ÷ 2
+                        </p>
+                        <p>
+                          <span className="font-semibold text-slate-900">
+                            Result:
+                          </span>{" "}
+                          A = 500/week; B = 530/week (difference = 30/week)
+                        </p>
+                        <p className="text-slate-600">
+                          <span className="font-semibold text-slate-900">
+                            Meaning:
+                          </span>{" "}
+                          The “$60 biweekly” gap is a $30/week gap, which is the
+                          number that matters if you budget weekly.
+                        </p>
                       </div>
                     </div>
 
@@ -190,14 +281,43 @@ const HowItWorks = () => {
                       <div className="text-sm font-bold text-slate-900">
                         Example 4 (breakdown anchoring)
                       </div>
-                      <div className="mt-2 text-sm text-slate-700">
-                        Biweekly = 1,000
-                      </div>
-                      <div className="mt-1 text-sm text-slate-700">
-                        Annual = (1,000 ÷ 14) × 365 = 26,071.428571…
-                      </div>
-                      <div className="mt-1 text-sm text-slate-600">
-                        The breakdown should reconcile to this annual basis.
+
+                      <div className="mt-2 space-y-2 text-sm text-slate-700">
+                        <p>
+                          <span className="font-semibold text-slate-900">
+                            Situation:
+                          </span>{" "}
+                          You’re negotiating and the landlord uses weekly talk,
+                          but you want to sanity-check the implied annual cost
+                          from a biweekly quote before committing.
+                        </p>
+                        <p>
+                          <span className="font-semibold text-slate-900">
+                            Numbers:
+                          </span>{" "}
+                          Biweekly = 1,000
+                        </p>
+                        <p>
+                          <span className="font-semibold text-slate-900">
+                            Calculation:
+                          </span>{" "}
+                          Daily = 1,000 ÷ 14; Annual = Daily × 365
+                        </p>
+                        <p>
+                          <span className="font-semibold text-slate-900">
+                            Result:
+                          </span>{" "}
+                          Annual = (1,000 ÷ 14) × 365 = 26,071.428571…
+                        </p>
+                        <p className="text-slate-600">
+                          <span className="font-semibold text-slate-900">
+                            Meaning:
+                          </span>{" "}
+                          If the annualized total is outside what you can carry,
+                          the weekly “sounds fine” framing is misleading and the
+                          negotiation should focus on lowering the biweekly
+                          figure.
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -210,6 +330,7 @@ const HowItWorks = () => {
               </div>
             </div>
           </div>
+
           <div className="mt-10 space-y-6 text-base text-slate-700 leading-7">
             {/* SectionCard: direct conversion */}
             <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
@@ -224,10 +345,13 @@ const HowItWorks = () => {
 
                 <div className="mt-4 space-y-3">
                   <p>
-                    Because biweekly is defined here as a 14-day amount and
-                    weekly as a 7-day amount, the weekly value is exactly one
-                    half of the biweekly input. No normalization step is
-                    required to compute the headline result.
+                    The output is designed for one decision:{" "}
+                    <span className="font-semibold text-slate-900">
+                      can this biweekly rent be compared fairly to weekly
+                      pricing
+                    </span>
+                    ? With the fixed definitions on this page, the weekly
+                    equivalent is exact and immediate.
                   </p>
 
                   <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
@@ -240,16 +364,22 @@ const HowItWorks = () => {
                       </span>{" "}
                       = biweekly ÷ 2
                     </p>
-                    <p className="mt-2 text-sm text-slate-600">
-                      This is exact under the 14-day and 7-day definitions used
-                      on this page.
-                    </p>
+                    <ul className="mt-3 list-disc pl-5 space-y-2 text-sm text-slate-600">
+                      <li>
+                        Use the weekly result to compare listings that advertise
+                        “per week.”
+                      </li>
+                      <li>
+                        Use it to check a weekly cap (what you can pay each
+                        week) without guessing from a biweekly number.
+                      </li>
+                    </ul>
                   </div>
 
                   <p>
-                    This is one of the few routes where the direct division is
-                    mathematically exact and does not rely on average month
-                    lengths or annualization.
+                    This route avoids “average month” math entirely. If you only
+                    need a weekly comparable number, dividing by 2 is the
+                    cleanest and least error-prone conversion you can do.
                   </p>
                 </div>
               </div>
@@ -268,15 +398,29 @@ const HowItWorks = () => {
 
                 <div className="mt-4 space-y-3">
                   <p>
-                    This page does not attempt to model paydays, due dates, or
-                    calendar alignment. It converts strictly by time length. A
-                    week is always seven days and a biweekly period is always
-                    fourteen days, regardless of where those days fall on a
-                    calendar.
+                    Calendar reality varies: paydays shift, lease start dates
+                    differ, and some “biweekly” arrangements aren’t perfectly
+                    aligned to a strict schedule. This converter intentionally
+                    ignores all of that and answers a narrower question:
+                    <span className="font-semibold text-slate-900">
+                      {" "}
+                      what is the 7-day equivalent of a 14-day price
+                    </span>
+                    ?
                   </p>
+
+                  <ul className="list-disc pl-5 space-y-2 text-sm text-slate-600">
+                    <li>It will not tell you which dates rent is due.</li>
+                    <li>
+                      It will not model “this month has five Fridays” effects.
+                    </li>
+                    <li>It will not infer anything about payroll timing.</li>
+                  </ul>
+
                   <p>
-                    If you need actual due dates or a schedule, use a due-date
-                    tool, not period equivalents.
+                    If your decision depends on dates (planning due dates,
+                    avoiding late fees, coordinating move-in timing), the period
+                    equivalent is the wrong output for that job.
                   </p>
                 </div>
               </div>
@@ -295,9 +439,9 @@ const HowItWorks = () => {
 
                 <div className="mt-4 space-y-3">
                   <p>
-                    While the weekly headline result is computed directly, the
-                    rest of the breakdown is derived from a single daily basis
-                    so all periods remain consistent with each other.
+                    The breakdown is for cross-checking and for decisions that
+                    need a different frame (monthly planning, annual
+                    affordability), not for re-explaining the weekly result.
                   </p>
 
                   <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
@@ -309,87 +453,50 @@ const HowItWorks = () => {
                         <span className="font-semibold text-slate-900">
                           Daily
                         </span>{" "}
-                        = biweekly ÷ 14
+                        = biweekly ÷ 14{" "}
+                        <span className="text-slate-600">
+                          (the shared anchor for everything else)
+                        </span>
                       </li>
                       <li>
                         <span className="font-semibold text-slate-900">
                           Annual
                         </span>{" "}
-                        = daily × 365
+                        = daily × 365{" "}
+                        <span className="text-slate-600">
+                          (useful for affordability checks and comparisons)
+                        </span>
                       </li>
                       <li>
                         <span className="font-semibold text-slate-900">
                           Monthly
                         </span>{" "}
-                        = annual ÷ 12 (average month)
+                        = annual ÷ 12{" "}
+                        <span className="text-slate-600">
+                          (planning bucket, not a calendar month claim)
+                        </span>
                       </li>
                       <li>
                         <span className="font-semibold text-slate-900">
                           4-week
                         </span>{" "}
-                        = daily × 28
+                        = daily × 28{" "}
+                        <span className="text-slate-600">
+                          (matches a 28-day budgeting block)
+                        </span>
                       </li>
                     </ul>
                   </div>
 
                   <p>
-                    The breakdown does not reuse the weekly value to compute
-                    other periods. Everything reconciles back to daily so the
-                    table does not accumulate rounding drift or mix definitions.
+                    Using a single daily anchor prevents mismatched definitions
+                    across the table and keeps the breakdown internally
+                    consistent even when some rows display rounded decimals.
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* SectionCard: decimals + rounding */}
-            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
-              <div
-                aria-hidden="true"
-                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
-              />
-              <div className="p-5 sm:px-6">
-                <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
-                  Precision, rounding, and ambiguity handling
-                </h3>
-
-                <div className="mt-4 space-y-3">
-                  <p>
-                    Inputs are parsed as decimal values. Thousands separators
-                    are treated as grouping characters. Currency symbols may be
-                    present and are ignored for numeric parsing.
-                  </p>
-
-                  <ul className="list-disc pl-5 space-y-2">
-                    <li>
-                      <span className="font-semibold text-slate-900">
-                        1,234
-                      </span>{" "}
-                      is interpreted as 1234
-                    </li>
-                    <li>
-                      <span className="font-semibold text-slate-900">
-                        1.234
-                      </span>{" "}
-                      is interpreted as 1.234
-                    </li>
-                    <li>
-                      Edge formats such as{" "}
-                      <span className="font-semibold text-slate-900">.5</span>{" "}
-                      and{" "}
-                      <span className="font-semibold text-slate-900">12.</span>{" "}
-                      are accepted
-                    </li>
-                  </ul>
-
-                  <p>
-                    Computation preserves decimals internally. Rounding, if
-                    enabled, affects only how many decimals are displayed.
-                    Ambiguous inputs should be blocked or warned on instead of
-                    producing a clean-looking but incorrect result.
-                  </p>
-                </div>
-              </div>
-            </div>
 
             {/* Dark utility callout */}
             <div className="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-6 sm:p-7">
@@ -408,12 +515,21 @@ const HowItWorks = () => {
                 <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-200">
                   This is the simplest conversion on the site
                 </h3>
-                <p className="mt-3 text-slate-200 leading-7">
-                  Because biweekly is defined as 14 days and weekly as 7 days,
-                  the weekly result is exactly half of the biweekly amount.
-                  Other routes require normalization through days or annual
-                  totals. This one does not.
-                </p>
+                <div className="mt-3 text-slate-200 leading-7 space-y-3">
+                  <p>
+                    If your next action depends on a weekly number (compare a
+                    “per week” listing, check a weekly cap, quantify a weekly
+                    difference), this route is the cleanest option because the
+                    definition match is exact: 14 days converts to 7 days by
+                    halving the price.
+                  </p>
+                  <p className="text-sm text-slate-300">
+                    If your decision depends on monthly budgeting or annual
+                    affordability, use the breakdown rows for that frame instead
+                    of trying to infer monthly or annual cost from the weekly
+                    headline alone.
+                  </p>
+                </div>
               </div>
             </div>
           </div>

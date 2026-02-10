@@ -13,19 +13,20 @@ const HowItWorks = () => {
       </div>
 
       <div className="relative p-6 sm:p-10">
-        <div className="mx-auto max-w-4xl">
+        <div className="mx-auto max-w-6xl">
           <div className="flex flex-col gap-4 sm:gap-5">
             <div className="flex items-start justify-between gap-4">
               <div className="min-w-0">
-                <h2 className="text-3xl sm:text-4xl font-extrabold text-sky-800 tracking-tight leading-tight">
+                <h2 className="text-3xl max-w-6xlfont-extrabold text-sky-800 tracking-tight leading-tight">
                   How the monthly to biweekly rent converter works
                 </h2>
                 <p className="mt-2 text-slate-600 leading-7 max-w-2xl">
-                  This page converts a monthly rent amount into a biweekly
-                  equivalent using a time-based model. Monthly is treated as an
-                  average month derived from a 365-day year, and biweekly is a
-                  fixed 14-day period. The result is a biweekly figure you can
-                  compare cleanly to weekly, every-4-weeks, and annual pricing.
+                  Use this page when a listing is priced monthly but your
+                  decisions happen on a 14-day rhythm: paychecks, budgeting, or
+                  comparing to biweekly and 4-week listings. The tool converts
+                  your monthly figure into a time-equivalent biweekly amount,
+                  anchored to a 365-day year so every period shown is
+                  mathematically consistent.
                 </p>
               </div>
 
@@ -77,7 +78,275 @@ const HowItWorks = () => {
             </div>
           </div>
 
-          <div className="mt-10 space-y-6 text-lg text-slate-700 leading-7">
+          {/* SectionCard: related tools (required) */}
+          <div className="group my-8 relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+            <div
+              aria-hidden="true"
+              className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+            />
+            <div className="p-5 sm:px-6">
+              <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
+                Related tools
+              </h3>
+
+              <div className="mt-4 space-y-3">
+                <p className="text-slate-700 leading-7">
+                  Each tool below solves a different comparison problem, based
+                  on how the rent is quoted or how you prefer to sanity-check
+                  totals.
+                </p>
+
+                <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                  <ul className="list-disc pl-5 space-y-2">
+                    <li>
+                      <Link
+                        to="/rent-converter"
+                        className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                      >
+                        Universal rent converter →
+                      </Link>{" "}
+                      <span className="text-slate-600">
+                        Best when you have mixed listing formats and want one
+                        consistent breakdown (weekly, biweekly, 4-week, annual,
+                        daily, hourly) for every option.
+                      </span>
+                    </li>
+                    <li>
+                      <Link
+                        to="/biweekly-to-monthly-rent-converter"
+                        className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                      >
+                        Biweekly to monthly rent converter →
+                      </Link>{" "}
+                      <span className="text-slate-600">
+                        Use this when the listing is already biweekly and you
+                        need the monthly equivalent that fits a monthly budget
+                        cap.
+                      </span>
+                    </li>
+                    <li>
+                      <Link
+                        to="/monthly-to-annual-rent-converter"
+                        className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                      >
+                        Monthly to annual rent converter →
+                      </Link>{" "}
+                      <span className="text-slate-600">
+                        Use this when your decision is “total cost over a year,”
+                        such as comparing leases, incentives, or renewal offers.
+                      </span>
+                    </li>
+                    <li>
+                      <Link
+                        to="/monthly-to-weekly-rent-converter"
+                        className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                      >
+                        Monthly to weekly rent converter →
+                      </Link>{" "}
+                      <span className="text-slate-600">
+                        Use this when a comparable unit is advertised weekly and
+                        you want a like-for-like weekly number.
+                      </span>
+                    </li>
+                    <li>
+                      <Link
+                        to="/weekly-to-monthly-rent-converter"
+                        className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                      >
+                        Weekly to monthly rent converter →
+                      </Link>{" "}
+                      <span className="text-slate-600">
+                        Use this when your rent limit is monthly but the listing
+                        is weekly, so you can quickly screen out over-budget
+                        options.
+                      </span>
+                    </li>
+                    <li>
+                      <Link
+                        to="/rent-per-paycheck-calculator"
+                        className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                      >
+                        Rent per paycheck calculator →
+                      </Link>{" "}
+                      <span className="text-slate-600">
+                        Use this when rent needs to fit alongside other bills in
+                        a paycheck plan, not just in a monthly budget.
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+
+                <p className="text-slate-700 leading-7">
+                  Need more directions?{" "}
+                  <Link
+                    to="/monthly-to-weekly-rent-converter"
+                    className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                  >
+                    monthly to weekly →
+                  </Link>{" "}
+                  <span className="text-slate-400">·</span>{" "}
+                  <Link
+                    to="/monthly-to-annual-rent-converter"
+                    className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                  >
+                    monthly to annual →
+                  </Link>{" "}
+                  <span className="text-slate-400">·</span>{" "}
+                  <Link
+                    to="/biweekly-to-annual-rent-converter"
+                    className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                  >
+                    biweekly to annual →
+                  </Link>
+                  .
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* SectionCard: examples (required, own section) */}
+          <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+            <div
+              aria-hidden="true"
+              className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
+            />
+            <div className="p-5 sm:px-6">
+              <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
+                Examples
+              </h3>
+
+              <div className="mt-4 space-y-3">
+                <p className="text-slate-700 leading-7">
+                  Each example ends with a concrete choice that changes once the
+                  monthly price is translated into a true 14-day amount.
+                </p>
+
+                <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                  <ul className="list-disc pl-5 space-y-3">
+                    <li className="space-y-2">
+                      <div>
+                        <span className="font-semibold text-slate-900">
+                          Budget cap (accept vs reject)
+                        </span>
+                      </div>
+                      <p className="text-slate-700 leading-7">
+                        <strong>Situation:</strong> You can set aside at most{" "}
+                        <strong>$1,100</strong> per paycheck for rent.
+                      </p>
+                      <p className="text-slate-700 leading-7">
+                        <strong>Numbers:</strong> Listing is{" "}
+                        <strong>$2,300/month</strong>; you are paid biweekly.
+                      </p>
+                      <p className="text-slate-700 leading-7">
+                        <strong>Calculation:</strong> Annual = 2,300 × 12 ={" "}
+                        27,600. Daily = 27,600 ÷ 365 ≈ 75.62. Biweekly = 75.62 ×
+                        14 ≈ <strong>$1,058.68</strong>.
+                      </p>
+                      <p className="text-slate-700 leading-7">
+                        <strong>Result:</strong> About{" "}
+                        <strong>$1,058.68</strong> per paycheck.
+                      </p>
+                      <p className="text-slate-700 leading-7">
+                        <strong>Meaning:</strong> It fits under{" "}
+                        <strong>$1,100</strong>, so the listing stays in your
+                        shortlist instead of being rejected.
+                      </p>
+                    </li>
+
+                    <li className="space-y-2">
+                      <div>
+                        <span className="font-semibold text-slate-900">
+                          “Looks cheaper” but isn’t after conversion
+                        </span>
+                      </div>
+                      <p className="text-slate-700 leading-7">
+                        <strong>Situation:</strong> Two similar units are priced
+                        differently, and you need the real per-paycheck impact.
+                      </p>
+                      <p className="text-slate-700 leading-7">
+                        <strong>Numbers:</strong> Option A is{" "}
+                        <strong>$2,150/month</strong>. Option B is{" "}
+                        <strong>$1,050/biweekly</strong>.
+                      </p>
+                      <p className="text-slate-700 leading-7">
+                        <strong>Calculation:</strong> Convert Option A to
+                        biweekly: Annual = 2,150 × 12 = 25,800. Daily = 25,800 ÷
+                        365 ≈ 70.68. Biweekly = 70.68 × 14 ≈{" "}
+                        <strong>$989.56</strong>.
+                      </p>
+                      <p className="text-slate-700 leading-7">
+                        <strong>Result:</strong> A is about{" "}
+                        <strong>$989.56</strong> per 14 days versus B at{" "}
+                        <strong>$1,050</strong>.
+                      </p>
+                      <p className="text-slate-700 leading-7">
+                        <strong>Meaning:</strong> Option A is cheaper per
+                        paycheck, even though B can look attractive at first
+                        glance. If you are optimizing cashflow between paydays,
+                        A is the better pick.
+                      </p>
+                    </li>
+
+                    <li className="space-y-2">
+                      <div>
+                        <span className="font-semibold text-slate-900">
+                          “Twice monthly” trap (avoid a bad comparison)
+                        </span>
+                      </div>
+                      <p className="text-slate-700 leading-7">
+                        <strong>Situation:</strong> A landlord offers “pay
+                        half-monthly” and you want to compare it to a true
+                        biweekly budget.
+                      </p>
+                      <p className="text-slate-700 leading-7">
+                        <strong>Numbers:</strong> Rent is{" "}
+                        <strong>$2,400/month</strong>. Landlord proposes{" "}
+                        <strong>$1,200 twice monthly</strong>. You budget by
+                        biweekly paychecks.
+                      </p>
+                      <p className="text-slate-700 leading-7">
+                        <strong>Calculation:</strong> True biweekly equivalent
+                        from monthly: Annual = 2,400 × 12 = 28,800. Daily =
+                        28,800 ÷ 365 ≈ 78.90. Biweekly = 78.90 × 14 ≈{" "}
+                        <strong>$1,104.66</strong>.
+                      </p>
+                      <p className="text-slate-700 leading-7">
+                        <strong>Result:</strong> Time-equivalent biweekly is{" "}
+                        <strong>$1,104.66</strong>, not <strong>$1,200</strong>.
+                      </p>
+                      <p className="text-slate-700 leading-7">
+                        <strong>Meaning:</strong> If you mistakenly treat “twice
+                        monthly” as “biweekly,” you would over-allocate cash per
+                        paycheck. The correct move is to fund rent at about{" "}
+                        <strong>$1,104.66</strong> per paycheck and keep the
+                        difference for other bills or savings.
+                      </p>
+                    </li>
+                  </ul>
+                </div>
+
+                <p className="text-slate-700 leading-7">
+                  If your listing is priced every 4 weeks, you may want{" "}
+                  <Link
+                    to="/monthly-to-weekly-rent-converter"
+                    className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                  >
+                    monthly to weekly rent converter →
+                  </Link>{" "}
+                  alongside{" "}
+                  <Link
+                    to="/weekly-to-biweekly-rent-converter"
+                    className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                  >
+                    weekly to biweekly rent converter →
+                  </Link>{" "}
+                  to line up the pricing in the same cycle.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-8 space-y-6 text-lg text-slate-700 leading-7">
             {/* SectionCard: step 1 */}
             <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
               <div
@@ -90,12 +359,11 @@ const HowItWorks = () => {
                 </h3>
 
                 <div className="mt-4 space-y-3">
-                  <p>
-                    Type the rent amount exactly as it appears (for example,
-                    “$2,350” or “2350.50”). The calculator accepts currency
-                    symbols, thousands separators, and decimals. If an entry
-                    could reasonably be read more than one way, it blocks the
-                    result instead of guessing.
+                  <p className="text-slate-700 leading-7">
+                    Enter the monthly rent exactly as advertised, including
+                    cents if they are shown. This matters when you are comparing
+                    two close options or trying to stay under a strict
+                    per-paycheck limit.
                   </p>
 
                   <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
@@ -113,13 +381,19 @@ const HowItWorks = () => {
                         Formats like <strong>.5</strong> and{" "}
                         <strong>12.</strong> are valid
                       </li>
+                      <li>
+                        If an entry could be interpreted more than one way, the
+                        calculator blocks the result instead of guessing.
+                      </li>
                     </ul>
                   </div>
 
-                  <p>
-                    The page does not try to guess what rent includes. Utilities,
-                    parking, fees, and deposits can change what you actually pay,
-                    but they are outside this conversion.
+                  <p className="text-slate-700 leading-7">
+                    This conversion only translates time periods. It does not
+                    estimate add-ons like utilities, parking, mandatory fees, or
+                    deposits. If those costs are material to your decision,
+                    compare them separately after you have a clean rent
+                    equivalent.
                   </p>
                 </div>
               </div>
@@ -137,11 +411,11 @@ const HowItWorks = () => {
                 </h3>
 
                 <div className="mt-4 space-y-3">
-                  <p>
-                    The converter starts by turning your monthly amount into an
-                    annual equivalent, then into a daily value, and finally into
-                    a biweekly (14-day) amount. This is why the biweekly result
-                    stays aligned with the rest of the breakdown.
+                  <p className="text-slate-700 leading-7">
+                    The math is intentionally chained through a single time
+                    basis so the biweekly output matches the rest of the period
+                    breakdown. Practically, you use the biweekly number to plan
+                    what must leave your account every paycheck.
                   </p>
 
                   <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
@@ -165,10 +439,11 @@ const HowItWorks = () => {
                     </p>
                   </div>
 
-                  <p>
-                    This is useful when a landlord lists rent monthly, but you
-                    budget biweekly around paychecks, or when you are comparing
-                    a monthly listing to a biweekly or every-4-weeks listing.
+                  <p className="text-slate-700 leading-7">
+                    Use the biweekly output when you are screening listings
+                    against a paycheck-based limit, or when you need to make a
+                    monthly listing comparable to a unit advertised biweekly or
+                    every 4 weeks.
                   </p>
                 </div>
               </div>
@@ -186,32 +461,43 @@ const HowItWorks = () => {
                 </h3>
 
                 <div className="mt-4 space-y-3">
-                  <p>
-                    After the annual number is established, every other period is
-                    derived from that same annual basis using fixed time lengths.
-                    That prevents the breakdown from mixing assumptions or
-                    chaining rounded values.
+                  <p className="text-slate-700 leading-7">
+                    The breakdown is designed for comparisons. It starts with a
+                    single annual total implied by your monthly input, then
+                    derives every other line from that same annual basis using
+                    fixed time lengths. That avoids “rounding drift,” where one
+                    rounded result is used to compute the next.
                   </p>
 
-                  <ul className="list-disc pl-5 space-y-2">
-                    <li>
-                      <strong>Weekly</strong> = daily × 7
-                    </li>
-                    <li>
-                      <strong>Biweekly</strong> = daily × 14
-                    </li>
-                    <li>
-                      <strong>4-week</strong> = daily × 28
-                    </li>
-                    <li>
-                      <strong>Hourly</strong> = daily ÷ 24
-                    </li>
-                  </ul>
+                  <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-slate-900">
+                      What each line is for
+                    </div>
+                    <ul className="mt-2 list-disc pl-5 space-y-2">
+                      <li>
+                        <strong>Weekly</strong> helps compare to weekly
+                        advertising without rethinking the whole budget.
+                      </li>
+                      <li>
+                        <strong>Biweekly</strong> aligns with paycheck planning
+                        and “can I afford this between paydays?”
+                      </li>
+                      <li>
+                        <strong>4-week</strong> lines up with “every 28 days”
+                        listings, which often feel like monthly but aren’t.
+                      </li>
+                      <li>
+                        <strong>Hourly</strong> is a sanity check for short-stay
+                        framing or “what does this cost per day/hour?”
+                      </li>
+                    </ul>
+                  </div>
 
-                  <p>
-                    If you are comparing listings, the annual value is the
-                    easiest “truth” to anchor to, and the other lines are just
-                    alternate views of that same total.
+                  <p className="text-slate-700 leading-7">
+                    When you are choosing between two rentals, anchor on the{" "}
+                    <strong>annual</strong> total for fairness, then use the
+                    other periods only as different views of the same implied
+                    cost.
                   </p>
                 </div>
               </div>
@@ -229,11 +515,12 @@ const HowItWorks = () => {
                 </h3>
 
                 <div className="mt-4 space-y-3">
-                  <p>
-                    The biweekly result on this page is a time-based equivalent.
-                    It is not claiming a landlord will collect rent every 14 days.
-                    That difference matters because “twice monthly” and “biweekly”
-                    can lead to different annual totals.
+                  <p className="text-slate-700 leading-7">
+                    This page outputs a <strong>time-equivalent</strong>{" "}
+                    biweekly number. That is different from how a landlord
+                    actually invoices rent. The distinction prevents a common
+                    mistake: treating “twice monthly” and “every 14 days” as the
+                    same thing.
                   </p>
 
                   <div className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -241,23 +528,41 @@ const HowItWorks = () => {
                       <div className="text-sm font-bold text-slate-900">
                         Equivalence
                       </div>
-                      <p className="mt-2">
-                        Derived from days and the annual total implied by your
-                        monthly input.
+                      <p className="mt-2 text-slate-700 leading-7">
+                        A comparable biweekly figure derived from days and the
+                        annual total implied by your monthly input.
                       </p>
+                      <ul className="mt-3 list-disc pl-5 space-y-2 text-slate-700 leading-7">
+                        <li>
+                          Best for “which option costs less?” comparisons.
+                        </li>
+                        <li>
+                          Best for paycheck planning when the listing is
+                          monthly.
+                        </li>
+                      </ul>
                     </div>
                     <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
                       <div className="text-sm font-bold text-slate-900">
                         Schedules (context)
                       </div>
-                      <p className="mt-2">
-                        Some schedules use monthly × 12, while biweekly billing
-                        would imply × 26 payments (illustrative only).
+                      <p className="mt-2 text-slate-700 leading-7">
+                        A billing pattern is a contract detail. A “biweekly
+                        billing” schedule could imply a different number of
+                        payments than a monthly lease.
                       </p>
+                      <ul className="mt-3 list-disc pl-5 space-y-2 text-slate-700 leading-7">
+                        <li>
+                          Useful when reviewing payment terms before signing.
+                        </li>
+                        <li>
+                          Not a substitute for reading the lease schedule.
+                        </li>
+                      </ul>
                     </div>
                   </div>
 
-                  <p>
+                  <p className="text-slate-700 leading-7">
                     If you are converting a rent amount that is already labeled
                     biweekly, use{" "}
                     <Link
@@ -267,191 +572,6 @@ const HowItWorks = () => {
                       biweekly to monthly rent converter →
                     </Link>{" "}
                     to go the other direction.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* SectionCard: examples (required, own section) */}
-            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
-              <div
-                aria-hidden="true"
-                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
-              />
-              <div className="p-5 sm:px-6">
-                <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
-                  Examples
-                </h3>
-
-                <div className="mt-4 space-y-3">
-                  <p>
-                    These examples show how to use the biweekly result for
-                    budgeting and how to use annual as the comparison baseline.
-                  </p>
-
-                  <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
-                    <ul className="list-disc pl-5 space-y-3">
-                      <li>
-                        <span className="font-semibold text-slate-900">
-                          Budgeting per paycheck:
-                        </span>{" "}
-                        Your rent is <strong>$2,400/month</strong> and you get
-                        paid biweekly. Convert to biweekly so you can set aside a
-                        consistent amount each paycheck.
-                      </li>
-                      <li>
-                        <span className="font-semibold text-slate-900">
-                          Comparing two listings:
-                        </span>{" "}
-                        Listing A is <strong>$2,150/month</strong>. Listing B is{" "}
-                        <strong>$1,050/biweekly</strong>. Convert both to annual
-                        so you can see which one is actually cheaper over a year.
-                      </li>
-                      <li>
-                        <span className="font-semibold text-slate-900">
-                          Catching “twice monthly” differences:
-                        </span>{" "}
-                        If a landlord says “twice monthly,” that is not the same
-                        as a 14-day cycle. Use the annual figure and the biweekly
-                        view to see the size of the gap before you decide.
-                      </li>
-                    </ul>
-                  </div>
-
-                  <p>
-                    If your listing is priced every 4 weeks, you may want{" "}
-                    <Link
-                      to="/monthly-to-weekly-rent-converter"
-                      className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
-                    >
-                      monthly to weekly rent converter →
-                    </Link>{" "}
-                    alongside{" "}
-                    <Link
-                      to="/weekly-to-biweekly-rent-converter"
-                      className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
-                    >
-                      weekly to biweekly rent converter →
-                    </Link>{" "}
-                    to line up the pricing in the same cycle.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* SectionCard: related tools (required) */}
-            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
-              <div
-                aria-hidden="true"
-                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
-              />
-              <div className="p-5 sm:px-6">
-                <h3 className="text-xl font-extrabold text-sky-800 tracking-tight">
-                  Related tools
-                </h3>
-
-                <div className="mt-4 space-y-3">
-                  <p>
-                    Use these if you need a different conversion direction or a
-                    quick way to compare multiple listing formats.
-                  </p>
-
-                  <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
-                    <ul className="list-disc pl-5 space-y-2">
-                      <li>
-                        <Link
-                          to="/rent-converter"
-                          className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
-                        >
-                          Universal rent converter →
-                        </Link>{" "}
-                        <span className="text-slate-600">
-                          Convert between monthly, weekly, biweekly, annual,
-                          daily, and hourly.
-                        </span>
-                      </li>
-                      <li>
-                        <Link
-                          to="/biweekly-to-monthly-rent-converter"
-                          className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
-                        >
-                          Biweekly to monthly rent converter →
-                        </Link>{" "}
-                        <span className="text-slate-600">
-                          Convert biweekly rent back into a monthly equivalent.
-                        </span>
-                      </li>
-                      <li>
-                        <Link
-                          to="/monthly-to-annual-rent-converter"
-                          className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
-                        >
-                          Monthly to annual rent converter →
-                        </Link>{" "}
-                        <span className="text-slate-600">
-                          Convert monthly to annual for quick side-by-side
-                          comparisons.
-                        </span>
-                      </li>
-                      <li>
-                        <Link
-                          to="/monthly-to-weekly-rent-converter"
-                          className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
-                        >
-                          Monthly to weekly rent converter →
-                        </Link>{" "}
-                        <span className="text-slate-600">
-                          Helpful when listings show weekly pricing.
-                        </span>
-                      </li>
-                      <li>
-                        <Link
-                          to="/weekly-to-monthly-rent-converter"
-                          className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
-                        >
-                          Weekly to monthly rent converter →
-                        </Link>{" "}
-                        <span className="text-slate-600">
-                          Convert weekly pricing into a monthly view.
-                        </span>
-                      </li>
-                      <li>
-                        <Link
-                          to="/rent-per-paycheck-calculator"
-                          className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
-                        >
-                          Rent per paycheck calculator →
-                        </Link>{" "}
-                        <span className="text-slate-600">
-                          Budget rent per paycheck once you know the cycle.
-                        </span>
-                      </li>
-                    </ul>
-                  </div>
-
-                  <p className="text-slate-700">
-                    Need more directions?{" "}
-                    <Link
-                      to="/monthly-to-weekly-rent-converter"
-                      className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
-                    >
-                      monthly to weekly →
-                    </Link>{" "}
-                    <span className="text-slate-400">·</span>{" "}
-                    <Link
-                      to="/monthly-to-annual-rent-converter"
-                      className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
-                    >
-                      monthly to annual →
-                    </Link>{" "}
-                    <span className="text-slate-400">·</span>{" "}
-                    <Link
-                      to="/biweekly-to-annual-rent-converter"
-                      className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
-                    >
-                      biweekly to annual →
-                    </Link>
-                    .
                   </p>
                 </div>
               </div>
@@ -469,10 +589,12 @@ const HowItWorks = () => {
                 </h3>
 
                 <div className="mt-4 space-y-3">
-                  <p>
-                    Use your browser’s print dialog to print the results or save
-                    them as a PDF. This explanation section is excluded from
-                    print layouts.
+                  <p className="text-slate-700 leading-7">
+                    Print the results when you need a stable reference for
+                    roommate discussions, lease negotiations, or side-by-side
+                    comparisons with other units. Use your browser’s print
+                    dialog to print or save as a PDF. This explanation section
+                    is excluded from print layouts.
                   </p>
                 </div>
               </div>
@@ -496,9 +618,11 @@ const HowItWorks = () => {
                   Biweekly is not twice monthly
                 </h3>
                 <p className="mt-3 text-slate-200 leading-7">
-                  A biweekly amount represents 14 days of rent. A “twice monthly”
-                  amount represents half of a calendar month. This page keeps
-                  those definitions separate so the comparison stays honest.
+                  “Biweekly” means a fixed 14-day equivalent. “Twice monthly”
+                  means half of a calendar month and will not line up with a
+                  paycheck cycle across a full year. This page keeps those
+                  definitions separate so you do not make a decision using a
+                  misleading comparison.
                 </p>
               </div>
             </div>

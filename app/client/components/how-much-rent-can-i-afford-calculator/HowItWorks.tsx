@@ -13,7 +13,7 @@ const HowItWorks = () => {
       </div>
 
       <div className="relative p-6 sm:p-10">
-        <div className="mx-auto max-w-4xl">
+        <div className="mx-auto max-w-6xl">
           <div className="flex flex-col gap-4 sm:gap-5">
             <div className="flex items-start justify-between gap-4">
               <div className="min-w-0">
@@ -21,12 +21,16 @@ const HowItWorks = () => {
                   How this rent affordability target calculator works
                 </h2>
                 <p className="mt-2 text-slate-600 leading-7 max-w-2xl">
-                  Enter your income, pick the pay period, and this page turns it
-                  into one consistent yearly total. Then it shows what your rent
-                  budget looks like at common targets (25%, 30%, 35%), converted
-                  back into the billing cycles you actually see in listings.
-                  Everything stays consistent so you can compare numbers without
-                  hidden assumptions.
+                  This page turns your income into a single yearly baseline,
+                  then shows what rent looks like at 25%, 30%, and 35% of that
+                  income, expressed in the billing cycles you actually see on
+                  listings.
+                </p>
+                <p className="mt-3 text-slate-600 leading-7 max-w-2xl">
+                  The decision it supports is simple: when you see a rent price
+                  (weekly, monthly, or otherwise), you can check whether it
+                  lands inside the target you want to live by before you waste
+                  time on inspections or applications.
                 </p>
               </div>
 
@@ -50,6 +54,9 @@ const HowItWorks = () => {
                 <div className="mt-2 text-sm font-semibold text-slate-900">
                   Income + period
                 </div>
+                <p className="mt-1 text-sm text-slate-600 leading-6">
+                  Use the same pay basis you budget with (gross or take-home).
+                </p>
               </div>
               <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
                 <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
@@ -58,6 +65,9 @@ const HowItWorks = () => {
                 <div className="mt-2 text-sm font-semibold text-slate-900">
                   Convert to daily
                 </div>
+                <p className="mt-1 text-sm text-slate-600 leading-6">
+                  One time unit prevents “monthly vs weekly” drift.
+                </p>
               </div>
               <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
                 <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
@@ -66,6 +76,9 @@ const HowItWorks = () => {
                 <div className="mt-2 text-sm font-semibold text-slate-900">
                   Daily × 365
                 </div>
+                <p className="mt-1 text-sm text-slate-600 leading-6">
+                  A fixed year makes outputs comparable across cycles.
+                </p>
               </div>
               <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
                 <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
@@ -74,6 +87,9 @@ const HowItWorks = () => {
                 <div className="mt-2 text-sm font-semibold text-slate-900">
                   Targets + cycles
                 </div>
+                <p className="mt-1 text-sm text-slate-600 leading-6">
+                  Read results in the same cycle as the listing or your pay.
+                </p>
               </div>
             </div>
           </div>
@@ -90,9 +106,10 @@ const HowItWorks = () => {
               </h3>
 
               <div className="mt-4 space-y-3">
-                <p>
-                  Use these tools when you need something slightly different
-                  than a target rent budget.
+                <p className="text-slate-700 leading-7">
+                  Use these when your next decision is not “what rent target
+                  fits my income,” but a different budgeting question you need
+                  to answer to move forward.
                 </p>
 
                 <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
@@ -105,8 +122,8 @@ const HowItWorks = () => {
                         Universal rent converter →
                       </Link>{" "}
                       <span className="text-slate-600">
-                        Convert rent between monthly, weekly, biweekly, annual,
-                        daily, and hourly.
+                        Best when two listings are priced in different cycles
+                        and you want a clean apples-to-apples comparison.
                       </span>
                     </li>
                     <li>
@@ -117,8 +134,8 @@ const HowItWorks = () => {
                         Rent as percentage of income calculator →
                       </Link>{" "}
                       <span className="text-slate-600">
-                        Check what share of your income a specific rent would
-                        take.
+                        Use this when you already know the rent and want to see
+                        the percentage it consumes.
                       </span>
                     </li>
                     <li>
@@ -129,7 +146,8 @@ const HowItWorks = () => {
                         How much rent can I afford calculator →
                       </Link>{" "}
                       <span className="text-slate-600">
-                        Explore affordability starting from a rent amount.
+                        Useful when you want a single “max rent” number instead
+                        of multiple target levels.
                       </span>
                     </li>
                     <li>
@@ -140,7 +158,8 @@ const HowItWorks = () => {
                         Rent split calculator →
                       </Link>{" "}
                       <span className="text-slate-600">
-                        Split rent between roommates.
+                        Use this when the decision depends on how rent is shared
+                        between roommates.
                       </span>
                     </li>
                     <li>
@@ -151,7 +170,8 @@ const HowItWorks = () => {
                         Rent per paycheck calculator →
                       </Link>{" "}
                       <span className="text-slate-600">
-                        Turn monthly rent into a per-paycheck budget.
+                        Best when you budget per pay cycle and want rent
+                        expressed as a paycheck line item.
                       </span>
                     </li>
                     <li>
@@ -162,7 +182,8 @@ const HowItWorks = () => {
                         Rent due date calculator →
                       </Link>{" "}
                       <span className="text-slate-600">
-                        Plan around due dates and timing.
+                        Helps when timing is the problem: due date vs pay date,
+                        first month pro-rating, or cash-flow gaps.
                       </span>
                     </li>
                     <li>
@@ -173,7 +194,8 @@ const HowItWorks = () => {
                         Rent after tax income calculator →
                       </Link>{" "}
                       <span className="text-slate-600">
-                        Budget using take-home pay instead of gross income.
+                        Use this when your budgeting rule is based on take-home
+                        pay, not gross.
                       </span>
                     </li>
                     <li>
@@ -184,7 +206,8 @@ const HowItWorks = () => {
                         Rent vs take-home pay calculator →
                       </Link>{" "}
                       <span className="text-slate-600">
-                        Compare rent to what you actually keep.
+                        Best when you want to see whether rent is crowding out
+                        the money you actually keep.
                       </span>
                     </li>
                   </ul>
@@ -216,6 +239,7 @@ const HowItWorks = () => {
               </div>
             </div>
           </div>
+
           {/* SectionCard: examples (own section) */}
           <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
             <div
@@ -227,75 +251,218 @@ const HowItWorks = () => {
                 Examples
               </h3>
 
-              <div className="mt-4 space-y-3">
-                <p>
-                  These examples show how to read the outputs. Your exact
-                  numbers will vary, but the idea is the same: pick a target,
-                  then compare the rent equivalents in the cycle you care about.
+              <div className="mt-5 space-y-5">
+                <p className="text-slate-700 leading-7">
+                  Each example ends in a specific decision. Use the target level
+                  that matches how conservative you want your rent budget to be,
+                  then judge listings in the listing’s billing cycle.
                 </p>
 
-                <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
-                  <ul className="list-disc pl-5 space-y-3">
-                    <li>
-                      <span className="font-semibold text-slate-900">
-                        Weekly income:
-                      </span>{" "}
-                      You earn{" "}
-                      <span className="font-semibold text-slate-900">
-                        $1,200/week
-                      </span>
-                      . At{" "}
-                      <span className="font-semibold text-slate-900">30%</span>,
-                      your rent target is{" "}
-                      <span className="font-semibold text-slate-900">
-                        about $360/week
-                      </span>
-                      , and the page also shows the monthly equivalent to
-                      compare to listings.
+                <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-4 sm:p-6">
+                  <ul className="space-y-6">
+                    <li className="rounded-xl bg-white ring-1 ring-slate-200/70 p-4 sm:p-5">
+                      <div className="space-y-3">
+                        <div className="text-slate-700 leading-7">
+                          <span className="font-semibold text-slate-900">
+                            Situation:
+                          </span>{" "}
+                          You get paid weekly and you’re deciding whether a
+                          weekly listing fits your 30% target.
+                        </div>
+
+                        <div className="grid gap-3 sm:grid-cols-3">
+                          <div className="rounded-lg bg-slate-50 ring-1 ring-slate-200 p-3">
+                            <div className="text-xs font-semibold uppercase tracking-wide text-slate-600">
+                              Numbers
+                            </div>
+                            <div className="mt-1 text-slate-700 leading-7">
+                              Income ={" "}
+                              <span className="font-semibold text-slate-900">
+                                $1,200/week
+                              </span>
+                              <br />
+                              Listing ={" "}
+                              <span className="font-semibold text-slate-900">
+                                $400/week
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="rounded-lg bg-slate-50 ring-1 ring-slate-200 p-3">
+                            <div className="text-xs font-semibold uppercase tracking-wide text-slate-600">
+                              Calculation
+                            </div>
+                            <div className="mt-1 text-slate-700 leading-7">
+                              Target rent = 30% × $1,200/week ={" "}
+                              <span className="font-semibold text-slate-900">
+                                $360/week
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="rounded-lg bg-slate-50 ring-1 ring-slate-200 p-3">
+                            <div className="text-xs font-semibold uppercase tracking-wide text-slate-600">
+                              Result
+                            </div>
+                            <div className="mt-1 text-slate-700 leading-7">
+                              Listing ($400/week) is{" "}
+                              <span className="font-semibold text-slate-900">
+                                $40/week over
+                              </span>{" "}
+                              your 30% target.
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="rounded-lg bg-sky-50 ring-1 ring-sky-200/60 p-3 text-slate-700 leading-7">
+                          <span className="font-semibold text-slate-900">
+                            Meaning:
+                          </span>{" "}
+                          You treat this listing as a “stretch” and only proceed
+                          if you’re comfortable budgeting closer to the 35% line
+                          (or cutting other costs), otherwise you skip it.
+                        </div>
+                      </div>
                     </li>
-                    <li>
-                      <span className="font-semibold text-slate-900">
-                        Monthly income:
-                      </span>{" "}
-                      You earn{" "}
-                      <span className="font-semibold text-slate-900">
-                        $3,000/month
-                      </span>
-                      . At{" "}
-                      <span className="font-semibold text-slate-900">25%</span>,
-                      your rent target is{" "}
-                      <span className="font-semibold text-slate-900">
-                        about $750/month
-                      </span>
-                      , plus weekly and annual equivalents for quick
-                      cross-checks.
+
+                    <li className="rounded-xl bg-white ring-1 ring-slate-200/70 p-4 sm:p-5">
+                      <div className="space-y-3">
+                        <div className="text-slate-700 leading-7">
+                          <span className="font-semibold text-slate-900">
+                            Situation:
+                          </span>{" "}
+                          You’re paid monthly and want a hard pass/fail screen
+                          on a monthly listing using the conservative 25%
+                          target.
+                        </div>
+
+                        <div className="grid gap-3 sm:grid-cols-3">
+                          <div className="rounded-lg bg-slate-50 ring-1 ring-slate-200 p-3">
+                            <div className="text-xs font-semibold uppercase tracking-wide text-slate-600">
+                              Numbers
+                            </div>
+                            <div className="mt-1 text-slate-700 leading-7">
+                              Income ={" "}
+                              <span className="font-semibold text-slate-900">
+                                $3,000/month
+                              </span>
+                              <br />
+                              Listing ={" "}
+                              <span className="font-semibold text-slate-900">
+                                $850/month
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="rounded-lg bg-slate-50 ring-1 ring-slate-200 p-3">
+                            <div className="text-xs font-semibold uppercase tracking-wide text-slate-600">
+                              Calculation
+                            </div>
+                            <div className="mt-1 text-slate-700 leading-7">
+                              Target rent = 25% × $3,000/month ={" "}
+                              <span className="font-semibold text-slate-900">
+                                $750/month
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="rounded-lg bg-slate-50 ring-1 ring-slate-200 p-3">
+                            <div className="text-xs font-semibold uppercase tracking-wide text-slate-600">
+                              Result
+                            </div>
+                            <div className="mt-1 text-slate-700 leading-7">
+                              Listing ($850/month) is{" "}
+                              <span className="font-semibold text-slate-900">
+                                $100/month over
+                              </span>{" "}
+                              the 25% target.
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="rounded-lg bg-sky-50 ring-1 ring-sky-200/60 p-3 text-slate-700 leading-7">
+                          <span className="font-semibold text-slate-900">
+                            Meaning:
+                          </span>{" "}
+                          If 25% is your non-negotiable cap, this is a reject.
+                          If you still like the place, you move the decision to
+                          “what needs to change” (income, roommates, location)
+                          rather than pretending it fits.
+                        </div>
+                      </div>
                     </li>
-                    <li>
-                      <span className="font-semibold text-slate-900">
-                        Comparing listing cycles:
-                      </span>{" "}
-                      One place is{" "}
-                      <span className="font-semibold text-slate-900">
-                        $2,250/month
-                      </span>{" "}
-                      and another is{" "}
-                      <span className="font-semibold text-slate-900">
-                        $520/week
-                      </span>
-                      . Use the{" "}
-                      <Link
-                        to="/rent-converter"
-                        className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
-                      >
-                        universal rent converter →
-                      </Link>{" "}
-                      to put both in the same cycle before you decide which is
-                      actually cheaper.
+
+                    <li className="rounded-xl bg-white ring-1 ring-slate-200/70 p-4 sm:p-5">
+                      <div className="space-y-3">
+                        <div className="text-slate-700 leading-7">
+                          <span className="font-semibold text-slate-900">
+                            Situation:
+                          </span>{" "}
+                          Two listings look close, but one is weekly and one is
+                          monthly. You need a fair comparison before choosing
+                          which to inspect first.
+                        </div>
+
+                        <div className="grid gap-3 sm:grid-cols-3">
+                          <div className="rounded-lg bg-slate-50 ring-1 ring-slate-200 p-3">
+                            <div className="text-xs font-semibold uppercase tracking-wide text-slate-600">
+                              Numbers
+                            </div>
+                            <div className="mt-1 text-slate-700 leading-7">
+                              Listing A ={" "}
+                              <span className="font-semibold text-slate-900">
+                                $2,250/month
+                              </span>
+                              <br />
+                              Listing B ={" "}
+                              <span className="font-semibold text-slate-900">
+                                $520/week
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="rounded-lg bg-slate-50 ring-1 ring-slate-200 p-3 sm:col-span-2">
+                            <div className="text-xs font-semibold uppercase tracking-wide text-slate-600">
+                              Calculation
+                            </div>
+                            <div className="mt-1 text-slate-700 leading-7">
+                              Convert both into the same cycle using the{" "}
+                              <Link
+                                to="/rent-converter"
+                                className="text-sky-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                              >
+                                universal rent converter →
+                              </Link>
+                              .
+                            </div>
+                          </div>
+
+                          <div className="rounded-lg bg-slate-50 ring-1 ring-slate-200 p-3">
+                            <div className="text-xs font-semibold uppercase tracking-wide text-slate-600">
+                              Result
+                            </div>
+                            <div className="mt-1 text-slate-700 leading-7">
+                              You end up with a single comparable monthly (or
+                              annual) number for each listing, instead of
+                              guessing based on the sticker price.
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="rounded-lg bg-sky-50 ring-1 ring-sky-200/60 p-3 text-slate-700 leading-7">
+                          <span className="font-semibold text-slate-900">
+                            Meaning:
+                          </span>{" "}
+                          You pick the genuinely cheaper option to prioritize,
+                          or you justify paying more only if the extra cost is
+                          worth the features you care about.
+                        </div>
+                      </div>
                     </li>
                   </ul>
                 </div>
 
-                <p>
+                <p className="text-slate-700 leading-7">
                   If you want the rent target expressed per paycheck, use{" "}
                   <Link
                     to="/rent-per-paycheck-calculator"
@@ -323,19 +490,47 @@ const HowItWorks = () => {
 
                 <div className="mt-4 space-y-3">
                   <p>
-                    Put in the income number you want to plan with, then choose
-                    the period that number belongs to (hourly, daily, weekly,
-                    biweekly, every 4 weeks, monthly, or annual). The calculator
-                    treats your input as the truth for that period and keeps the
-                    rest of the math consistent from there.
+                    Enter the income figure you actually plan with, then pick
+                    the period that figure belongs to (hourly, daily, weekly,
+                    biweekly, every 4 weeks, monthly, or annual). The output is
+                    only as good as the input basis you choose.
                   </p>
 
+                  <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-slate-900">
+                      What to enter (so the target matches your real budget)
+                    </div>
+                    <ul className="mt-2 list-disc pl-5 space-y-2">
+                      <li>
+                        Use{" "}
+                        <span className="font-semibold text-slate-900">
+                          take-home pay
+                        </span>{" "}
+                        if your rent decision is constrained by what hits your
+                        bank account.
+                      </li>
+                      <li>
+                        Use{" "}
+                        <span className="font-semibold text-slate-900">
+                          gross pay
+                        </span>{" "}
+                        if you’re comparing jobs or planning before taxes are
+                        known.
+                      </li>
+                      <li>
+                        If your income varies, enter a{" "}
+                        <span className="font-semibold text-slate-900">
+                          conservative average
+                        </span>{" "}
+                        so your “pass” decisions stay safe.
+                      </li>
+                    </ul>
+                  </div>
+
                   <p>
-                    It does not try to “correct” your income. If you want to
-                    plan using take-home pay, enter take-home pay. If you want
-                    to plan using gross pay, enter gross pay. Either way, the
-                    results stay comparable across cycles because they come from
-                    the same annual basis.
+                    The calculator does not “correct” your income or assume what
+                    it includes. That is intentional: your rent target should
+                    reflect your budgeting reality, not a generic default.
                   </p>
 
                   <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
@@ -397,10 +592,10 @@ const HowItWorks = () => {
 
                 <div className="mt-4 space-y-3">
                   <p>
-                    To keep comparisons fair, the calculator converts your pay
-                    period to a daily amount first, then annualizes it using a
-                    fixed 365-day year. That means switching from “weekly” to
-                    “monthly” does not quietly change the underlying model.
+                    This step exists to stop silent model changes. The
+                    calculator converts your chosen pay period into a daily
+                    figure, then annualizes it using a fixed 365-day year so
+                    every target is based on the same underlying timeline.
                   </p>
 
                   <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
@@ -420,9 +615,11 @@ const HowItWorks = () => {
                   </div>
 
                   <p>
-                    Once that annual number exists, the rest becomes simple:
-                    apply a target percentage, then convert the target rent back
-                    into the cycle you care about.
+                    Why it matters: if two tools use different assumptions
+                    (calendar months, pay cycles, or “4 weeks as a month”), they
+                    can give different answers for the same input. This page
+                    keeps the baseline fixed so your decisions do not shift when
+                    you change a dropdown.
                   </p>
                 </div>
               </div>
@@ -441,12 +638,42 @@ const HowItWorks = () => {
 
                 <div className="mt-4 space-y-3">
                   <p>
-                    The page shows multiple rent-share targets so you can
-                    compare tradeoffs. A smaller percentage leaves more room for
-                    savings and bills. A higher percentage may still work, but
-                    it is a useful stress test when you are comparing
-                    neighborhoods or unit types.
+                    These targets are decision thresholds. Pick the one that
+                    matches how tight you want rent to be relative to the rest
+                    of your budget, then use it to screen listings quickly.
                   </p>
+
+                  <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-slate-900">
+                      How to choose a target (practical, not moral)
+                    </div>
+                    <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
+                      <li>
+                        Choose{" "}
+                        <span className="font-semibold text-slate-900">
+                          25%
+                        </span>{" "}
+                        if stability matters more than space, location, or
+                        amenities.
+                      </li>
+                      <li>
+                        Choose{" "}
+                        <span className="font-semibold text-slate-900">
+                          30%
+                        </span>{" "}
+                        if you want a strong default benchmark for comparing
+                        listings.
+                      </li>
+                      <li>
+                        Treat{" "}
+                        <span className="font-semibold text-slate-900">
+                          35%
+                        </span>{" "}
+                        as a stress test, especially if you have other fixed
+                        monthly obligations.
+                      </li>
+                    </ul>
+                  </div>
 
                   <div className="mt-4 grid gap-3 sm:grid-cols-3">
                     <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
@@ -454,7 +681,8 @@ const HowItWorks = () => {
                         25%
                       </div>
                       <p className="mt-2 text-slate-700">
-                        Conservative budgeting, more breathing room.
+                        Tight screening threshold: fewer listings pass, but the
+                        ones that do usually leave room for bills and savings.
                       </p>
                     </div>
                     <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
@@ -462,7 +690,8 @@ const HowItWorks = () => {
                         30%
                       </div>
                       <p className="mt-2 text-slate-700">
-                        A common benchmark for quick comparisons.
+                        Practical benchmark: good for comparing neighborhoods
+                        without overthinking the math.
                       </p>
                     </div>
                     <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
@@ -470,15 +699,17 @@ const HowItWorks = () => {
                         35%
                       </div>
                       <p className="mt-2 text-slate-700">
-                        Higher target to test “tight but possible.”
+                        Stretch line: useful when you need to know how far
+                        you’re pushing your budget.
                       </p>
                     </div>
                   </div>
 
                   <p>
-                    These are targets, not rules. If your budget has big fixed
-                    costs (debt, childcare, commuting), treat the lower target
-                    as a safer starting point.
+                    If you have large fixed costs (debt payments, childcare,
+                    medical expenses, long commutes), using the lower target as
+                    your default “pass” line reduces the chance of a budget that
+                    works only on paper.
                   </p>
                 </div>
               </div>
@@ -497,12 +728,40 @@ const HowItWorks = () => {
 
                 <div className="mt-4 space-y-3">
                   <p>
-                    After it calculates your annual rent target, the calculator
-                    converts it into familiar cycles like monthly, weekly,
-                    biweekly, and every 4 weeks. This is especially helpful when
-                    your pay period does not match how rent is listed, or when
-                    you are comparing two rentals priced in different cycles.
+                    The outputs are shown in common rent cycles so you can apply
+                    the target immediately to listings. That matters most when
+                    your pay period and the listing cycle do not match.
                   </p>
+
+                  <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                    <div className="text-sm font-bold text-slate-900">
+                      How to use the converted targets
+                    </div>
+                    <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
+                      <li>
+                        Compare a{" "}
+                        <span className="font-semibold text-slate-900">
+                          monthly listing
+                        </span>{" "}
+                        to the monthly target, not the weekly target.
+                      </li>
+                      <li>
+                        When a listing uses{" "}
+                        <span className="font-semibold text-slate-900">
+                          weekly rent
+                        </span>
+                        , judge it using the weekly target to avoid mental math.
+                      </li>
+                      <li>
+                        If a landlord quotes “every 4 weeks,” use that specific
+                        line, because it is{" "}
+                        <span className="font-semibold text-slate-900">
+                          not the same as monthly
+                        </span>
+                        .
+                      </li>
+                    </ul>
+                  </div>
 
                   <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
                     <div className="text-sm font-bold text-slate-900">
@@ -556,11 +815,16 @@ const HowItWorks = () => {
                   Targets are math, not a guarantee
                 </h3>
                 <p className="mt-3 text-slate-200 leading-7">
-                  This page gives you consistent equivalents so you can compare
-                  rent options without mixing models. It does not decide what is
-                  “affordable,” and it does not guess what your income includes.
-                  If the number you want to plan with is different, change the
-                  input and the rest of the math stays straightforward.
+                  Treat the targets as consistent screening thresholds, not a
+                  promise that a lease will feel comfortable. The page does not
+                  estimate your taxes, debts, or spending. It only keeps the
+                  time model consistent so your “yes” and “no” decisions are
+                  based on the same baseline every time.
+                </p>
+                <p className="mt-3 text-slate-200 leading-7">
+                  If a listing is right on the edge, the most reliable next step
+                  is to rerun the calculator with a more conservative income
+                  assumption (or a lower target) and see if the decision flips.
                 </p>
               </div>
             </div>

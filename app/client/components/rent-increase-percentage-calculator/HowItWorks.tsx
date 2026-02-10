@@ -13,23 +13,22 @@ const HowItWorks = () => {
       </div>
 
       <div className="relative p-6 sm:p-10">
-        <div className="mx-auto max-w-4xl">
+        <div className="mx-auto max-w-6xl">
           <h2 className="text-3xl sm:text-4xl font-extrabold mb-6 text-center text-sky-900 tracking-tight leading-tight">
             How the rent increase percentage calculator works
           </h2>
 
           <p className="text-slate-600 leading-7">
-            This page computes the percentage change between an old rent amount
-            and a new rent amount. You enter both values in the same billing
-            period, then the calculator converts each rent into a consistent
-            annual total (using explicit time assumptions) and computes the
-            percent change from those annual totals. The output includes the
-            percentage, the difference in the selected period, an annual
-            difference figure, and a cross-period breakdown so the result stays
-            coherent when you view weekly, 28-day, and monthly equivalents.
+            This calculator turns an “old rent” and “new rent” into a
+            decision-ready rent change: the percent increase, the raw change in
+            your selected period, and the implied annual impact under one
+            consistent time basis. Use it when you need to decide whether a
+            proposed renewal fits your budget, whether the increase is
+            meaningful enough to negotiate, or how large the change is when you
+            look beyond a single billing cycle.
           </p>
 
-          <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div className="mt-8 grid sm:grid-cols-2 md:grid-cols-4 gap-3">
             <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
               <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
                 INPUT
@@ -64,6 +63,275 @@ const HowItWorks = () => {
             </div>
           </div>
 
+          <div className="group relative my-8 p-6 rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+            <h3 className="text-xl mb-2 font-extrabold text-sky-900 tracking-tight">
+              Related pages
+            </h3>
+
+            <p className="text-slate-700 leading-relaxed">
+              These tools are useful when your next step is not “what changed,”
+              but “what should I do with that change.”
+            </p>
+
+            <ul className="mt-3">
+              <li className="mb-2 list-disc ml-5">
+                <Link
+                  to="/rent-increase-calculator"
+                  className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                >
+                  rent increase calculator
+                </Link>{" "}
+                <span className="text-slate-700">
+                  matters when you are checking a proposed increase against a
+                  rule, guideline, or a specific cap.
+                </span>
+              </li>
+
+              <li className="mb-2 list-disc ml-5">
+                {" "}
+                <Link
+                  to="/rent-converter"
+                  className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                >
+                  rent converter
+                </Link>{" "}
+                <span className="text-slate-700">
+                  matters when two listings are quoted on different cycles and
+                  you need them on the same period before comparing.
+                </span>
+              </li>
+
+              <li className="mb-2 list-disc ml-5">
+                {" "}
+                <Link
+                  to="/how-much-rent-can-i-afford-calculator"
+                  className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                >
+                  rent affordability calculator
+                </Link>{" "}
+                <span className="text-slate-700">
+                  matters when you want to translate the new rent into a budget
+                  constraint, not just a percentage.
+                </span>
+              </li>
+            </ul>
+          </div>
+
+          {/* EXAMPLES (own section) */}
+          <div className="mt-10 rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+            <div className="p-5 sm:px-6">
+              <h3 className="text-2xl font-extrabold text-sky-900 tracking-tight">
+                Examples
+              </h3>
+              <p className="mt-3 text-slate-600 leading-7">
+                Each example ends with a concrete choice. The numbers are
+                realistic, the calculation mirrors what the page outputs, and
+                the meaning is the action that changes because of the result.
+              </p>
+
+              <div className="mt-6 grid gap-4 sm:gap-5">
+                {/* Example 1 */}
+                <div className="rounded-3xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                  <div className="text-sm font-bold text-sky-900">
+                    Example 1: Monthly increase crosses a budget cap
+                  </div>
+
+                  <div className="mt-3 grid sm:grid-cols-2 gap-4">
+                    <div className="rounded-2xl bg-white ring-1 ring-slate-200 p-4">
+                      <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                        Situation
+                      </div>
+                      <p className="mt-2 text-slate-700 leading-7">
+                        Your renewal offer is higher. You can afford up to{" "}
+                        <strong>$2,000</strong> per month, so the decision is
+                        accept vs negotiate or decline.
+                      </p>
+                      <div className="mt-3 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                        Numbers
+                      </div>
+                      <ul className="mt-2 space-y-1 text-slate-700">
+                        <li>
+                          Old: <strong>$1,920</strong> / month
+                        </li>
+                        <li>
+                          New: <strong>$2,040</strong> / month
+                        </li>
+                        <li>
+                          Personal cap: <strong>$2,000</strong> / month
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div className="rounded-2xl bg-white ring-1 ring-slate-200 p-4">
+                      <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                        Calculation
+                      </div>
+                      <ul className="mt-2 space-y-2 text-slate-700">
+                        <li>
+                          <strong>Percent</strong> = (($2,040 − $1,920) ÷
+                          $1,920) × 100
+                        </li>
+                        <li>
+                          <strong>Per month change</strong> = $2,040 − $1,920
+                        </li>
+                        <li>
+                          <strong>Annual impact</strong> = (per month change) ×
+                          12
+                        </li>
+                      </ul>
+
+                      <div className="mt-4 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                        Result
+                      </div>
+                      <ul className="mt-2 space-y-1 text-slate-700">
+                        <li>
+                          Percent increase: <strong>6.25%</strong>
+                        </li>
+                        <li>
+                          Change (monthly): <strong>$120</strong>
+                        </li>
+                        <li>
+                          Annual difference: <strong>$1,440</strong>
+                        </li>
+                      </ul>
+
+                      <div className="mt-4 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                        Meaning
+                      </div>
+                      <p className="mt-2 text-slate-700 leading-7">
+                        The new rent is <strong>$40</strong> above your cap.
+                        That changes the action: you either negotiate toward{" "}
+                        <strong>$2,000</strong> or below, or you plan for a
+                        move, even though the percent increase looks moderate.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 rounded-2xl bg-white ring-1 ring-slate-200 p-4">
+                    <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                      Derived equivalents (from annual totals)
+                    </div>
+                    <ul className="mt-2 grid sm:grid-cols-2 gap-x-6 gap-y-2 text-slate-700">
+                      <li>
+                        Weekly old: <strong>$441.5342</strong> · weekly new:{" "}
+                        <strong>$469.2603</strong>
+                      </li>
+                      <li>
+                        28-day old: <strong>$1,766.1370</strong> · 28-day new:{" "}
+                        <strong>$1,877.0411</strong>
+                      </li>
+                    </ul>
+                    <p className="mt-3 text-sm text-slate-600">
+                      The breakdown is useful when you mentally budget by week,
+                      but the acceptance decision here is still driven by the
+                      monthly cap.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Example 2 */}
+                <div className="rounded-3xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                  <div className="text-sm font-bold text-sky-900">
+                    Example 2: Weekly change looks small, annual impact forces a
+                    choice
+                  </div>
+
+                  <div className="mt-3 grid sm:grid-cols-2 gap-4">
+                    <div className="rounded-2xl bg-white ring-1 ring-slate-200 p-4">
+                      <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                        Situation
+                      </div>
+                      <p className="mt-2 text-slate-700 leading-7">
+                        A landlord increases a weekly rent. You are deciding
+                        whether to accept, counteroffer, or start comparing
+                        alternatives.
+                      </p>
+
+                      <div className="mt-3 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                        Numbers
+                      </div>
+                      <ul className="mt-2 space-y-1 text-slate-700">
+                        <li>
+                          Old: <strong>$525</strong> / week
+                        </li>
+                        <li>
+                          New: <strong>$555</strong> / week
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div className="rounded-2xl bg-white ring-1 ring-slate-200 p-4">
+                      <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                        Calculation
+                      </div>
+                      <ul className="mt-2 space-y-2 text-slate-700">
+                        <li>
+                          <strong>Percent</strong> = (($555 − $525) ÷ $525) ×
+                          100
+                        </li>
+                        <li>
+                          <strong>Per week change</strong> = $555 − $525
+                        </li>
+                        <li>
+                          <strong>Annual impact</strong> = (annual new − annual
+                          old) using the page’s 365-day basis
+                        </li>
+                      </ul>
+
+                      <div className="mt-4 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                        Result
+                      </div>
+                      <ul className="mt-2 space-y-1 text-slate-700">
+                        <li>
+                          Percent increase: <strong>5.7143%</strong>
+                        </li>
+                        <li>
+                          Change (weekly): <strong>$30</strong>
+                        </li>
+                        <li>
+                          Annual difference: <strong>$1,564.2857</strong>
+                        </li>
+                      </ul>
+
+                      <div className="mt-4 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                        Meaning
+                      </div>
+                      <p className="mt-2 text-slate-700 leading-7">
+                        <strong>$30/week</strong> feels minor, but the implied
+                        annual delta is about <strong>$1.56k</strong>. That
+                        changes the decision: it is large enough to justify
+                        negotiating terms (longer lease, included utilities) or
+                        comparing comparable listings rather than accepting on
+                        autopilot.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 rounded-2xl bg-white ring-1 ring-slate-200 p-4">
+                    <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                      Derived equivalents (from annual totals)
+                    </div>
+                    <ul className="mt-2 grid sm:grid-cols-2 gap-x-6 gap-y-2 text-slate-700">
+                      <li>
+                        Monthly (avg) old: <strong>$2,281.2500</strong> · new:{" "}
+                        <strong>$2,411.6071</strong>
+                      </li>
+                      <li>
+                        28-day old: <strong>$2,100</strong> · 28-day new:{" "}
+                        <strong>$2,220</strong>
+                      </li>
+                    </ul>
+                    <p className="mt-3 text-sm text-slate-600">
+                      This is where people get misled: a “weekly” quote is not
+                      the same as “monthly ÷ 4,” so the derived monthly is an
+                      average-month equivalent, not a payment schedule.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div className="mt-10 space-y-6 text-lg text-slate-700 leading-7">
             {/* Card 1 */}
             <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
@@ -77,11 +345,11 @@ const HowItWorks = () => {
                 </h3>
 
                 <p className="mt-4">
-                  The period dropdown applies to both numbers. That means “old”
-                  and “new” must represent the same type of amount: both
-                  monthly, both weekly, both every 4 weeks, and so on. This
-                  prevents a hidden mismatch where the two inputs are different
-                  time lengths before the percent change is even computed.
+                  The period dropdown applies to both numbers. Enter two values
+                  that represent the same type of amount: both monthly, both
+                  weekly, both every 4 weeks, and so on. If the periods are
+                  mixed, the percent is meaningless because you are comparing
+                  different time lengths.
                 </p>
 
                 <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
@@ -90,16 +358,18 @@ const HowItWorks = () => {
                   </div>
                   <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
                     <li>
-                      Old rent and new rent are treated as amounts per the
-                      selected period.
+                      Enter the steady-state rent amounts you want to compare
+                      for the selected period.
                     </li>
                     <li>
-                      The calculator does not infer add-ons such as utilities,
-                      fees, taxes, or deposits.
+                      The calculator does not guess what is included. Utilities,
+                      parking, fees, and discounts only count if you include
+                      them in the numbers.
                     </li>
                     <li>
-                      If you want those included, they need to be included in
-                      the numbers you enter.
+                      One-time items (deposit, move-in bonus, lease break fee)
+                      do not belong in these fields because they are not
+                      recurring rent.
                     </li>
                   </ul>
                 </div>
@@ -118,11 +388,10 @@ const HowItWorks = () => {
                 </h3>
 
                 <p className="mt-4">
-                  To keep the percent change stable across the breakdown, the
-                  calculator converts both old and new rents into annual totals
-                  using a single set of time assumptions. The annualization step
-                  is the shared reference that keeps weekly, monthly, and 28-day
-                  views aligned rather than mixing definitions.
+                  The calculator annualizes both rents using one set of time
+                  assumptions. That annual total is the reference point used to
+                  keep the percent and the breakdown internally consistent, even
+                  when you view other period equivalents.
                 </p>
 
                 <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
@@ -138,19 +407,17 @@ const HowItWorks = () => {
                     <li>Hourly conversions assume 24 hours per day</li>
                   </ul>
                   <p className="mt-3 text-sm text-slate-600">
-                    These assumptions are used for equivalence math and
-                    breakdown consistency. Payment-count illustrations, if
-                    shown, are separate from the equivalence basis.
+                    These assumptions are for equivalence math. They are not a
+                    statement about how many times you are billed in a calendar
+                    year.
                   </p>
                 </div>
 
                 <p className="mt-4">
-                  This annual basis is also what makes weekly and 4-week
-                  equivalents comparable on the same page. Weekly is always a
-                  7-day equivalent. Every 4 weeks is always a 28-day equivalent.
-                  Monthly is an average month length. The calculator keeps those
-                  definitions explicit rather than treating 28 days as “a
-                  month.”
+                  This matters most for weekly vs monthly thinking. A month is
+                  treated as an average-length month, and every 4 weeks is
+                  always 28 days. The tool keeps those definitions explicit so
+                  you do not accidentally treat 28 days as “a month.”
                 </p>
               </div>
             </div>
@@ -167,10 +434,10 @@ const HowItWorks = () => {
                 </h3>
 
                 <p className="mt-4">
-                  The percentage result is computed from the annual totals
-                  derived from your two inputs. This keeps the percentage
-                  consistent with the annual impact and with any derived period
-                  views shown in the breakdown.
+                  The percentage is computed from the annualized old and new
+                  totals. That makes the percent comparable to the annual
+                  difference and prevents the percent from shifting when you
+                  look at other period equivalents.
                 </p>
 
                 <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
@@ -188,9 +455,10 @@ const HowItWorks = () => {
                 </div>
 
                 <p className="mt-4">
-                  The “change per selected period” output is derived to
-                  reconcile with the same annual basis so the percent result,
-                  the per-period change, and the annual difference stay aligned.
+                  Use the percent to judge relative change (how big the increase
+                  is compared to what you were paying). Use the annual
+                  difference to judge absolute impact (how much more you pay
+                  over a year under the same basis).
                 </p>
               </div>
             </div>
@@ -208,13 +476,12 @@ const HowItWorks = () => {
                 </h3>
 
                 <p className="mt-4">
-                  The page provides multiple outputs so the percentage is not
-                  isolated from practical comparisons. The percentage describes
-                  the relative change. The per-period difference shows the raw
-                  change in the period you selected. The annual difference shows
-                  the implied year-over-year delta under the page’s time
-                  assumptions. The breakdown then expresses old and new across
-                  common periods derived from the same annual basis.
+                  Each output supports a different part of the decision. The
+                  percentage is the headline change. The per-period difference
+                  tells you what changes on the bill you actually receive. The
+                  annual difference tells you what the change means over time.
+                  The breakdown helps you compare the same two rents across
+                  common cycles without changing the underlying basis.
                 </p>
 
                 <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
@@ -222,189 +489,33 @@ const HowItWorks = () => {
                     What you can expect to see
                   </div>
                   <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
-                    <li>Rent increase percentage based on annualized values</li>
                     <li>
-                      Change in the selected period (old vs new for that period)
+                      <strong>Rent increase percentage</strong> for judging
+                      relative size
                     </li>
-                    <li>Annual difference derived from the annual totals</li>
                     <li>
-                      A breakdown across common cycles derived from the same
-                      assumptions
+                      <strong>Change in the selected period</strong> for
+                      immediate cash flow
+                    </li>
+                    <li>
+                      <strong>Annual difference</strong> for longer-term
+                      affordability checks
+                    </li>
+                    <li>
+                      <strong>Breakdown</strong> to translate the same result
+                      into other common cycles without redefining “month” or “4
+                      weeks”
                     </li>
                   </ul>
                 </div>
 
                 <p className="mt-4">
-                  None of these outputs apply proration rules, partial-month
-                  handling, or mid-cycle effective dates. The tool treats the
-                  two rents as steady-state values for comparison and
-                  documentation.
+                  The outputs are steady-state comparisons. They do not model
+                  proration, partial-month transitions, or mid-cycle effective
+                  dates. If your increase starts partway through a cycle, use
+                  the calculator to understand the full change, then handle
+                  proration separately when reviewing the first bill.
                 </p>
-              </div>
-            </div>
-
-            {/* Card 5 */}
-            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
-              <div
-                aria-hidden="true"
-                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
-              />
-              <div className="p-5 sm:px-6">
-                <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
-                  5) Decimals and rounding
-                </h3>
-
-                <p className="mt-4">
-                  Decimals are preserved end-to-end. Internally, calculations
-                  keep precision (up to 12 decimals). If rounding is enabled, it
-                  is applied only to what’s displayed. This prevents rounding
-                  preferences from changing the computed percent or the annual
-                  difference.
-                </p>
-
-                <p className="mt-4">
-                  Inputs support commas and currency symbols. Formats like{" "}
-                  <strong>.5</strong> and <strong>12.</strong> are treated as
-                  valid decimals. If a value is ambiguous, the page should avoid
-                  producing a “close enough” output.
-                </p>
-              </div>
-            </div>
-
-            {/* EXAMPLES (own section) */}
-            <div className="mt-10 rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
-              <div className="p-5 sm:px-6">
-                <h3 className="text-2xl font-extrabold text-sky-900 tracking-tight">
-                  Examples
-                </h3>
-                <p className="mt-3 text-slate-600 leading-7">
-                  These examples show exactly what the outputs mean. Old and new
-                  values share one period, then the tool normalizes to annual
-                  totals and derives the breakdown from that same annual basis.
-                </p>
-
-                <div className="mt-6 grid gap-4 sm:gap-5">
-                  {/* Example 1 */}
-                  <div className="rounded-3xl bg-slate-50 ring-1 ring-slate-200 p-5">
-                    <div className="text-sm font-bold text-sky-900">
-                      Example 1: Monthly rent change
-                    </div>
-
-                    <div className="mt-3 grid sm:grid-cols-2 gap-4">
-                      <div className="rounded-2xl bg-white ring-1 ring-slate-200 p-4">
-                        <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                          Inputs (monthly)
-                        </div>
-                        <ul className="mt-2 space-y-1 text-slate-700">
-                          <li>
-                            Old: <strong>$1,800</strong> / month
-                          </li>
-                          <li>
-                            New: <strong>$1,950</strong> / month
-                          </li>
-                        </ul>
-                      </div>
-
-                      <div className="rounded-2xl bg-white ring-1 ring-slate-200 p-4">
-                        <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                          Key outputs
-                        </div>
-                        <ul className="mt-2 space-y-1 text-slate-700">
-                          <li>
-                            Percent increase: <strong>8.3333%</strong>
-                          </li>
-                          <li>
-                            Change (monthly): <strong>$150</strong>
-                          </li>
-                          <li>
-                            Annual difference: <strong>$1,800</strong>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-
-                    <div className="mt-4 rounded-2xl bg-white ring-1 ring-slate-200 p-4">
-                      <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                        Derived equivalents (from annual totals)
-                      </div>
-                      <ul className="mt-2 grid sm:grid-cols-2 gap-x-6 gap-y-2 text-slate-700">
-                        <li>
-                          Weekly old: <strong>$414.2466</strong> · weekly new:{" "}
-                          <strong>$448.7671</strong>
-                        </li>
-                        <li>
-                          28-day old: <strong>$1,656.9863</strong> · 28-day new:{" "}
-                          <strong>$1,795.0685</strong>
-                        </li>
-                      </ul>
-                      <p className="mt-3 text-sm text-slate-600">
-                        The percent stays the same across the breakdown because
-                        it is computed from annual totals.
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Example 2 */}
-                  <div className="rounded-3xl bg-slate-50 ring-1 ring-slate-200 p-5">
-                    <div className="text-sm font-bold text-sky-900">
-                      Example 2: Weekly rent change
-                    </div>
-
-                    <div className="mt-3 grid sm:grid-cols-2 gap-4">
-                      <div className="rounded-2xl bg-white ring-1 ring-slate-200 p-4">
-                        <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                          Inputs (weekly)
-                        </div>
-                        <ul className="mt-2 space-y-1 text-slate-700">
-                          <li>
-                            Old: <strong>$450</strong> / week
-                          </li>
-                          <li>
-                            New: <strong>$480</strong> / week
-                          </li>
-                        </ul>
-                      </div>
-
-                      <div className="rounded-2xl bg-white ring-1 ring-slate-200 p-4">
-                        <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                          Key outputs
-                        </div>
-                        <ul className="mt-2 space-y-1 text-slate-700">
-                          <li>
-                            Percent increase: <strong>6.6667%</strong>
-                          </li>
-                          <li>
-                            Change (weekly): <strong>$30</strong>
-                          </li>
-                          <li>
-                            Annual difference: <strong>$1,564.2857</strong>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-
-                    <div className="mt-4 rounded-2xl bg-white ring-1 ring-slate-200 p-4">
-                      <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                        Derived equivalents (from annual totals)
-                      </div>
-                      <ul className="mt-2 grid sm:grid-cols-2 gap-x-6 gap-y-2 text-slate-700">
-                        <li>
-                          Monthly (avg) old: <strong>$1,955.3571</strong> · new:{" "}
-                          <strong>$2,085.7143</strong>
-                        </li>
-                        <li>
-                          28-day old: <strong>$1,800</strong> · 28-day new:{" "}
-                          <strong>$1,920</strong>
-                        </li>
-                      </ul>
-                      <p className="mt-3 text-sm text-slate-600">
-                        Weekly is a 7-day amount. The annual basis uses a
-                        365-day year, then derives other periods from that same
-                        annual total.
-                      </p>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
 
@@ -426,39 +537,16 @@ const HowItWorks = () => {
                   What this calculator does and does not do
                 </h3>
                 <p className="mt-3 text-slate-200 leading-7">
-                  This tool computes a percentage change and related equivalence
-                  outputs from two rent amounts under explicit time assumptions.
-                  It does not include fees, utilities, deposits, taxes,
-                  proration, or effective-date logic. It is a numeric comparison
-                  tool for old vs new rent values expressed on the same period.
+                  This tool compares two rent amounts stated on the same period
+                  and returns a percent change plus practical impact numbers
+                  under explicit time assumptions. It does not add fees or
+                  utilities, and it does not model proration, effective dates,
+                  deposits, or one-time credits. Treat it as a clean comparison
+                  for old vs new rent, then apply lease-specific details outside
+                  the calculator when you review the offer.
                 </p>
               </div>
             </div>
-
-            <p className="text-slate-700 leading-relaxed">
-              Related pages:{" "}
-              <Link
-                to="/rent-increase-calculator"
-                className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
-              >
-                rent increase calculator
-              </Link>
-              ,{" "}
-              <Link
-                to="/rent-converter"
-                className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
-              >
-                rent converter
-              </Link>
-              , and{" "}
-              <Link
-                to="/how-much-rent-can-i-afford-calculator"
-                className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
-              >
-                rent affordability calculator
-              </Link>
-              .
-            </p>
           </div>
         </div>
       </div>

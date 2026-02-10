@@ -13,20 +13,24 @@ const HowItWorks = () => {
       </div>
 
       <div className="relative p-6 sm:p-10">
-        <div className="mx-auto max-w-4xl">
+        <div className="mx-auto max-w-6xl">
           <h2 className="text-3xl sm:text-4xl font-extrabold mb-6 text-center text-sky-900 tracking-tight leading-tight">
-            How this rent split calculator works and what to expect
+            How this rent split calculator works
           </h2>
 
           <p className="text-slate-600 leading-7">
-            This calculator splits rent across the number of people you enter.
-            The headline output is a per-person amount in the same period you
-            selected for the rent input (monthly stays monthly, weekly stays
-            weekly, and so on). Under the hood, the page also computes an annual
-            equivalent on a consistent 365-day basis so it can show a clean
-            period-by-period breakdown without mixing assumptions. That
-            breakdown is there for comparison and consistency, not to change how
-            you actually pay rent.
+            Use this page to answer one question:{" "}
+            <strong className="font-semibold text-slate-800">
+              what does each person owe for this rent amount
+            </strong>{" "}
+            in the same billing period the listing or lease uses (monthly stays
+            monthly, weekly stays weekly, every 4 weeks stays 28-day).
+          </p>
+          <p className="mt-4 text-slate-600 leading-7">
+            The extra period breakdown is a comparison view. It converts through
+            a single 365-day annual basis so weekly, 28-day, monthly average,
+            and daily equivalents all reconcile to the same implied annual
+            total. It is not a payment schedule.
           </p>
 
           <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -64,7 +68,226 @@ const HowItWorks = () => {
             </div>
           </div>
 
-          <div className="mt-10 space-y-6 text-lg text-slate-700 leading-7">
+          <div className="rounded-3xl my-8 bg-white ring-1 ring-slate-200/80 shadow-sm p-5 sm:px-6">
+            <h3 className="text-xl mb-2 font-extrabold text-sky-900 tracking-tight">
+              Related pages
+            </h3>
+            <ul className="list-disc ml-6 text-slate-700 space-y-2">
+              <li>
+                <Link
+                  to="/rent-per-paycheck-calculator"
+                  className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                >
+                  Rent per paycheck
+                </Link>
+                <span className="text-slate-600">
+                  {" "}
+                  Useful when your budget is paycheck-based and you want a clean
+                  rent-per-pay number to sanity check affordability.
+                </span>
+              </li>
+              <li>
+                <Link
+                  to="/rent-paid-every-4-weeks-calculator"
+                  className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                >
+                  Rent paid every 4 weeks
+                </Link>
+                <span className="text-slate-600">
+                  {" "}
+                  Relevant when a listing is billed on a 28-day cycle and you
+                  need a fair comparison against monthly figures.
+                </span>
+              </li>
+              <li>
+                <Link
+                  to="/rent-per-week-calculator"
+                  className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                >
+                  Rent per week
+                </Link>
+                <span className="text-slate-600">
+                  {" "}
+                  Best for weekly-priced listings where you want the implied
+                  annual and monthly averages without guessing month length.
+                </span>
+              </li>
+              <li>
+                <Link
+                  to="/rent-per-day-calculator"
+                  className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
+                >
+                  Rent per day
+                </Link>
+                <span className="text-slate-600">
+                  {" "}
+                  Helps when you need a day-level baseline for short stays,
+                  proration checks, or comparing options with different billing
+                  cycles.
+                </span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Examples section (separate) */}
+          <div className="my-8 rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+            <div className="p-5 sm:p-6">
+              <h3 className="text-2xl font-extrabold text-sky-900 tracking-tight">
+                Examples
+              </h3>
+              <p className="mt-3 text-slate-600 leading-7">
+                These are decision-style examples. Each one ends with a specific
+                action that changes (accept, reject, negotiate, or compare
+                fairly) based on the output.
+              </p>
+
+              <div className="mt-6 grid gap-4 sm:gap-5">
+                {/* Example 1: Monthly */}
+                <div className="rounded-3xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                  <div className="text-sm font-bold text-sky-900">
+                    Example 1: Monthly lease, deciding if you need a third
+                    roommate
+                  </div>
+                  <ul className="mt-3 list-disc pl-5 space-y-2 text-slate-700">
+                    <li>
+                      <strong>Situation:</strong> A $2,400/month place is on the
+                      table. Two people want it, but each has an $850/month rent
+                      cap.
+                    </li>
+                    <li>
+                      <strong>Numbers:</strong> Rent = $2,400 monthly, People =
+                      3 (considering adding one roommate), Cap = $850 per person
+                      per month.
+                    </li>
+                    <li>
+                      <strong>Calculation:</strong> Per-person (monthly) ={" "}
+                      <strong>$800.00</strong> (2400 ÷ 3). Annual total ={" "}
+                      <strong>$28,800.00</strong> (2400 × 12). Per-person weekly
+                      (derived) = <strong>$184.109589</strong> (9,600 × 7 ÷
+                      365).
+                    </li>
+                    <li>
+                      <strong>Result:</strong> $800/month per person (and
+                      $184.11/week as a comparison view).
+                    </li>
+                    <li className="text-slate-600">
+                      <strong>Meaning:</strong> With three people, the split
+                      stays under the $850 cap, so the group can proceed. If you
+                      stayed at two people, it would be $1,200/month each and
+                      the decision flips to "find a third roommate or pick a
+                      cheaper place."
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Example 2: Every 4 weeks */}
+                <div className="rounded-3xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                  <div className="text-sm font-bold text-sky-900">
+                    Example 2: "Every 4 weeks" looks cheaper, but the monthly
+                    average is higher
+                  </div>
+                  <ul className="mt-3 list-disc pl-5 space-y-2 text-slate-700">
+                    <li>
+                      <strong>Situation:</strong> Two listings are competing.
+                      One advertises "$2,000 every 4 weeks" and the other is
+                      "$2,100 monthly." You want a fair apples-to-apples
+                      comparison for a four-person split.
+                    </li>
+                    <li>
+                      <strong>Numbers:</strong> Option A = $2,000 per 28 days,
+                      Option B = $2,100 per month, People = 4.
+                    </li>
+                    <li>
+                      <strong>Calculation:</strong> Option A per-person (28-day)
+                      = <strong>$500.00</strong> (2000 ÷ 4). Option A daily
+                      total = <strong>$71.428571</strong> (2000 ÷ 28). Option A
+                      annual total = <strong>$26,071.428571</strong> (daily ×
+                      365). Option A per-person monthly (avg, derived) ={" "}
+                      <strong>$543.154762</strong> (26,071.428571 ÷ 12 ÷ 4).
+                      Option B per-person (monthly) = <strong>$525.00</strong>{" "}
+                      (2100 ÷ 4).
+                    </li>
+                    <li>
+                      <strong>Result:</strong> Option A is $500 per 28 days, but
+                      averages about $543.15 per month per person. Option B is
+                      $525 per month per person.
+                    </li>
+                    <li className="text-slate-600">
+                      <strong>Meaning:</strong> Even though "$2,000 every 4
+                      weeks" feels cheaper at payment time, the implied monthly
+                      average per person is higher than the $2,100/month option.
+                      If your budget is monthly, the decision changes to favor
+                      the monthly listing (or to negotiate the 28-day price
+                      down).
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Example 3: Weekly with decimals */}
+                <div className="rounded-3xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                  <div className="text-sm font-bold text-sky-900">
+                    Example 3: Weekly rent passes weekly budget, fails monthly
+                    budget
+                  </div>
+                  <ul className="mt-3 list-disc pl-5 space-y-2 text-slate-700">
+                    <li>
+                      <strong>Situation:</strong> A $975/week rental is proposed
+                      for two people. Weekly feels manageable, but you budget
+                      rent monthly and need to stay under $2,000/month each.
+                    </li>
+                    <li>
+                      <strong>Numbers:</strong> Rent = $975 weekly, People = 2,
+                      Monthly cap = $2,000 per person.
+                    </li>
+                    <li>
+                      <strong>Calculation:</strong> Per-person (weekly) ={" "}
+                      <strong>$487.50</strong> (975 ÷ 2). Annual total ={" "}
+                      <strong>$50,803.571429</strong> (975 × 365 ÷ 7).
+                      Per-person monthly (avg, derived) ={" "}
+                      <strong>$2,116.815476</strong> (25,401.785714 ÷ 12).
+                    </li>
+                    <li>
+                      <strong>Result:</strong> $487.50/week each, but about
+                      $2,116.82/month each on a consistent annual basis.
+                    </li>
+                    <li className="text-slate-600">
+                      <strong>Meaning:</strong> If you only looked at the weekly
+                      number, you might accept. Converting to a monthly average
+                      crosses the $2,000 cap, so the decision changes to
+                      "reject, negotiate, or add a roommate" based on your
+                      monthly budget.
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="rounded-2xl bg-white ring-1 ring-slate-200 p-5">
+                  <div className="text-sm font-bold text-sky-900">
+                    What these examples are doing
+                  </div>
+                  <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
+                    <li>
+                      They use a consistent structure:{" "}
+                      <strong>
+                        Situation → Numbers → Calculation → Result → Meaning
+                      </strong>
+                      , so the conclusion is a decision, not a math recap.
+                    </li>
+                    <li>
+                      The headline split stays in the listing period, while
+                      comparisons come from{" "}
+                      <strong>a single 365-day annual anchor</strong>.
+                    </li>
+                    <li>
+                      Decimals are preserved so derived equivalents reconcile
+                      cleanly when you compare periods or add splits back up.
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className=" space-y-6 text-lg text-slate-700 leading-7">
             {/* Card 1 */}
             <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
               <div
@@ -77,38 +300,40 @@ const HowItWorks = () => {
                 </h3>
 
                 <p className="mt-4">
-                  The primary per-person value is the equal split in the same
-                  period as your rent input. If you enter rent as “monthly,” the
-                  per-person headline is a monthly number. If you enter rent as
-                  “every 4 weeks,” the per-person headline is a 28-day number.
-                  This keeps the main output aligned with how the rent is
-                  actually written or discussed in the listing or lease.
-                </p>
-
-                <p className="mt-4">
-                  If your household uses an uneven split, treat the equal split
-                  as a baseline. You can still use the per-person breakdown as a
-                  shared reference point, then adjust outside the tool (for
-                  example, one person pays more for a larger room or a parking
-                  spot). This calculator intentionally does not guess your
-                  weighting rules.
+                  The main output is the equal per-person split in the same
+                  period as your input. That keeps the number aligned with the
+                  way rent is quoted in a listing or written in a lease.
                 </p>
 
                 <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
                   <div className="text-sm font-bold text-sky-900">
-                    What the headline per-person value is
+                    What to do with the headline per-person number
                   </div>
                   <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
                     <li>
-                      An equal split across the number of people you entered
+                      Use it as the baseline for agreement:{" "}
+                      <strong>
+                        each person owes this amount per billing period
+                      </strong>
+                      .
                     </li>
-                    <li>In the same period as the rent input</li>
                     <li>
-                      A budgeting and agreement reference, not a due-date
-                      schedule
+                      Check it against each person’s rent cap (weekly cap for
+                      weekly leases, monthly cap for monthly leases).
+                    </li>
+                    <li>
+                      If you plan an uneven split, treat this as the neutral
+                      reference point, then adjust the difference separately.
                     </li>
                   </ul>
                 </div>
+
+                <p className="mt-4">
+                  If your household uses an uneven split, keep the decision
+                  logic simple: agree on the equal baseline first, then apply
+                  your own rule (bigger room, parking, ensuite) outside the
+                  calculator. This page intentionally avoids inventing weights.
+                </p>
               </div>
             </div>
 
@@ -124,22 +349,17 @@ const HowItWorks = () => {
                 </h3>
 
                 <p className="mt-4">
-                  After computing the split, the page converts the rent to an
-                  annual equivalent on a 365-day basis. That annual number acts
-                  as the source of truth for all other period views. The benefit
-                  is that you can compare weekly, biweekly, 28-day, monthly
-                  (average), daily, and hourly equivalents without switching
-                  definitions between outputs.
+                  Comparisons break down when each period uses a different
+                  hidden assumption. This calculator normalizes to one implied
+                  annual total (365-day year), then derives every other period
+                  view from that same anchor.
                 </p>
 
                 <p className="mt-4">
-                  This is where the “monthly vs every 4 weeks” mismatch becomes
-                  visible. A 4-week period is exactly 28 days. A month is longer
-                  on average. If you convert monthly rent by assuming a fixed 30
-                  days, you silently change the implied annual total. This page
-                  avoids that by treating a month as an average month length
-                  (365 ÷ 12 days) and using a 365-day year as the consistent
-                  anchor.
+                  That matters most for “monthly vs every 4 weeks.” A 4-week
+                  cycle is always 28 days. A month is longer on average.
+                  Converting monthly rent with a fixed 30-day guess changes the
+                  annual total and can flip a comparison.
                 </p>
 
                 <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
@@ -170,197 +390,41 @@ const HowItWorks = () => {
                 </h3>
 
                 <p className="mt-4">
-                  The breakdown is best used for comparisons, sanity checks, and
-                  agreement clarity. It helps answer questions like “If one
-                  listing is weekly and the other is monthly, what does each
-                  imply on the same basis?” or “If our rent is every 4 weeks,
-                  what does that look like as an average monthly amount?” It is
-                  not telling you how many payments you will make in a calendar
-                  year, and it is not a lease proration engine.
+                  Treat the breakdown as a comparison lens, not a promise about
+                  due dates. Its job is to make two rents comparable when they
+                  are quoted in different cycles.
                 </p>
 
                 <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
                   <div className="text-sm font-bold text-sky-900">
-                    Good uses
+                    Comparisons this breakdown is built for
                   </div>
                   <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
                     <li>
-                      Compare listings that quote different billing cycles
+                      Weekly listing vs monthly listing: compare the implied
+                      annual totals on one basis.
                     </li>
                     <li>
-                      Agree on an equal-split baseline, then adjust externally
-                      if needed
+                      Every-4-weeks vs monthly: see whether the 28-day price is
+                      effectively higher over a year.
                     </li>
                     <li>
-                      Check whether a “4-week” amount is effectively higher than
-                      a similar “monthly” amount
+                      Budget translation: convert the same rent into the period
+                      your budget uses, without changing the implied annual
+                      cost.
                     </li>
                     <li>
-                      Translate one rent amount into a period that fits
-                      someone’s budgeting style
+                      Roommate planning: test different people counts and see
+                      which splits cross an affordability threshold.
                     </li>
                   </ul>
                 </div>
 
                 <p className="mt-4">
-                  If you need a schedule of actual due dates and calendar-month
-                  totals, use a due-date schedule tool. This page stays strictly
-                  in equivalence math and per-person splitting.
+                  If you need actual due dates, calendar-month totals, or
+                  proration rules, this is the wrong tool. Those are schedule
+                  problems, not equivalence problems.
                 </p>
-              </div>
-            </div>
-
-            {/* Card 4 */}
-            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
-              <div
-                aria-hidden="true"
-                className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
-              />
-              <div className="p-5 sm:px-6">
-                <h3 className="text-xl sm:text-2xl font-extrabold text-sky-900 tracking-tight">
-                  4) Decimals, rounding, and input handling
-                </h3>
-
-                <p className="mt-4">
-                  Splits often produce decimals, especially with three or more
-                  roommates. This page should preserve decimals internally (up
-                  to 12) so a per-person split stays accurate across the
-                  breakdown. If rounding is available, it should be display-only
-                  so it formats outputs without changing the annual basis the
-                  breakdown is derived from.
-                </p>
-
-                <p className="mt-4">
-                  If an input is invalid or ambiguous, the page should avoid
-                  producing a confident-looking per-person number. A split
-                  calculator is only useful if it does not silently turn bad
-                  inputs into misleading results.
-                </p>
-              </div>
-            </div>
-
-            {/* Examples section (separate) */}
-            <div className="mt-10 rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
-              <div className="p-5 sm:p-6">
-                <h3 className="text-2xl font-extrabold text-sky-900 tracking-tight">
-                  Examples
-                </h3>
-                <p className="mt-3 text-slate-600 leading-7">
-                  Each example shows two things: the equal per-person split in
-                  the selected rent period, and a couple of derived equivalents
-                  that come from the same 365-day annual basis.
-                </p>
-
-                <div className="mt-6 grid gap-4 sm:gap-5">
-                  {/* Example 1: Monthly */}
-                  <div className="rounded-3xl bg-slate-50 ring-1 ring-slate-200 p-5">
-                    <div className="text-sm font-bold text-sky-900">
-                      Example 1: $2,400 monthly split between 3 people
-                    </div>
-                    <ul className="mt-3 list-disc pl-5 space-y-2 text-slate-700">
-                      <li>
-                        Per-person (monthly) = <strong>$800.00</strong> (2400 ÷
-                        3)
-                      </li>
-                      <li>
-                        Annual total = <strong>$28,800.00</strong> (2400 × 12)
-                      </li>
-                      <li>
-                        Per-person annual = <strong>$9,600.00</strong> (28,800 ÷
-                        3)
-                      </li>
-                      <li>
-                        Per-person weekly (derived) ={" "}
-                        <strong>$184.109589</strong> (9,600 × 7 ÷ 365)
-                      </li>
-                      <li className="text-slate-600">
-                        The weekly figure is a comparison value derived from the
-                        annual basis. It does not mean rent is billed weekly.
-                      </li>
-                    </ul>
-                  </div>
-
-                  {/* Example 2: Every 4 weeks */}
-                  <div className="rounded-3xl bg-slate-50 ring-1 ring-slate-200 p-5">
-                    <div className="text-sm font-bold text-sky-900">
-                      Example 2: $2,000 every 4 weeks (28 days) split between 4
-                      people
-                    </div>
-                    <ul className="mt-3 list-disc pl-5 space-y-2 text-slate-700">
-                      <li>
-                        Per-person (28-day) = <strong>$500.00</strong> (2000 ÷
-                        4)
-                      </li>
-                      <li>
-                        Daily total = <strong>$71.428571</strong> (2000 ÷ 28)
-                      </li>
-                      <li>
-                        Annual total = <strong>$26,071.428571</strong> (daily ×
-                        365)
-                      </li>
-                      <li>
-                        Per-person daily = <strong>$17.857143</strong>{" "}
-                        (71.428571 ÷ 4)
-                      </li>
-                      <li>
-                        Per-person monthly (avg, derived) ={" "}
-                        <strong>$543.154762</strong> (26,071.428571 ÷ 12 ÷ 4)
-                      </li>
-                      <li className="text-slate-600">
-                        This makes the “monthly vs every 4 weeks” difference
-                        visible without pretending the cycles are the same.
-                      </li>
-                    </ul>
-                  </div>
-
-                  {/* Example 3: Weekly with decimals */}
-                  <div className="rounded-3xl bg-slate-50 ring-1 ring-slate-200 p-5">
-                    <div className="text-sm font-bold text-sky-900">
-                      Example 3: $975 weekly split between 2 people
-                    </div>
-                    <ul className="mt-3 list-disc pl-5 space-y-2 text-slate-700">
-                      <li>
-                        Per-person (weekly) = <strong>$487.50</strong> (975 ÷ 2)
-                      </li>
-                      <li>
-                        Annual total = <strong>$50,803.571429</strong> (975 ×
-                        365 ÷ 7)
-                      </li>
-                      <li>
-                        Per-person annual = <strong>$25,401.785714</strong>{" "}
-                        (50,803.571429 ÷ 2)
-                      </li>
-                      <li>
-                        Per-person monthly (avg, derived) ={" "}
-                        <strong>$2,116.815476</strong> (25,401.785714 ÷ 12)
-                      </li>
-                      <li className="text-slate-600">
-                        Rounding should be display-only so these equivalents
-                        reconcile cleanly.
-                      </li>
-                    </ul>
-                  </div>
-
-                  <div className="rounded-2xl bg-white ring-1 ring-slate-200 p-5">
-                    <div className="text-sm font-bold text-sky-900">
-                      What these examples are doing
-                    </div>
-                    <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">
-                      <li>
-                        Headline per-person = <strong>rent ÷ people</strong> in
-                        the selected rent period.
-                      </li>
-                      <li>
-                        Derived equivalents use a single anchor:{" "}
-                        <strong>an annual total on a 365-day basis</strong>.
-                      </li>
-                      <li>
-                        Fixed-day cycles (weekly, biweekly, 28-day) remain clean
-                        because their day counts are explicit.
-                      </li>
-                    </ul>
-                  </div>
-                </div>
               </div>
             </div>
 
@@ -383,67 +447,12 @@ const HowItWorks = () => {
                   decide your household rules.
                 </h3>
                 <p className="mt-3 text-slate-200 leading-7">
-                  The calculator does not add or remove fees, utilities, taxes,
-                  deposits, or one-time charges. It also does not model due
-                  dates, proration rules, or “who pays when.” Use the equal
-                  split as a reference point, then handle uneven arrangements
-                  separately.
+                  It does not add fees, utilities, deposits, or one-time
+                  charges. It does not model payment timing, due dates, or
+                  proration. Use it to get an equal-split baseline and a
+                  consistent comparison view, then apply your real-world
+                  arrangement separately.
                 </p>
-              </div>
-            </div>
-
-            <p className="text-slate-700 leading-relaxed">
-              Related tool:{" "}
-              <Link
-                to="/rent-converter"
-                className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
-              >
-                rent converter
-              </Link>
-              .
-            </p>
-
-            {/* Keep the related tools section */}
-            <div className="mt-10">
-              <h3 className="text-2xl font-extrabold mb-4 text-sky-900 tracking-tight">
-                Links to related tools
-              </h3>
-
-              <div className="rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm p-5 sm:px-6">
-                <ul className="list-disc ml-6 text-slate-700 space-y-2">
-                  <li>
-                    <Link
-                      to="/rent-per-paycheck-calculator"
-                      className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
-                    >
-                      Rent per paycheck
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/rent-paid-every-4-weeks-calculator"
-                      className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
-                    >
-                      Rent paid every 4 weeks
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/rent-per-week-calculator"
-                      className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
-                    >
-                      Rent per week
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/rent-per-day-calculator"
-                      className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
-                    >
-                      Rent per day
-                    </Link>
-                  </li>
-                </ul>
               </div>
             </div>
           </div>
