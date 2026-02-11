@@ -922,32 +922,32 @@ export default function RentDueDateCalculator() {
 
   const faqData = [
     {
-      q: "What does total paid by end date mean on this page?",
-      a: "It is the count of scheduled due dates from the as-of date through the selected end date, multiplied by the rent amount entered. It illustrates timing and cadence, not lease enforcement.",
+      q: "What does “total paid by end date” mean on this page?",
+      a: "It is the number of scheduled due dates from the as-of date through the selected end date, multiplied by the rent amount you entered. It illustrates timing and cadence, not lease enforcement.",
     },
     {
       q: "Why can monthly totals vary for weekly, biweekly, or 28-day rent?",
-      a: "Those cycles are fixed-day intervals. Some calendar months contain more interval due dates than others, which changes the count of payments that fall inside a given month.",
+      a: "Those cycles repeat on fixed day intervals. Some calendar months contain more due dates than others, which changes how many payments fall within a given month.",
     },
     {
       q: "How is monthly rent handled when the due day is 29 to 31?",
-      a: "If the selected day does not exist in a month, the schedule estimate places the due date on that month’s last calendar day.",
+      a: "If the selected day does not exist in a month, the schedule places the due date on that month’s last calendar day for that cycle.",
     },
     {
       q: "What is the anchor date used for?",
-      a: "For weekly, biweekly, and 28-day cycles, the anchor date acts as the reference point for the repeating interval so the schedule follows that cadence forward in time.",
+      a: "For weekly, biweekly, and 28-day cycles, the anchor date sets the reference point for the repeating interval so the schedule follows that cadence forward in time.",
     },
     {
       q: "Why does a 4-week (28-day) cycle often show 13 payments per year?",
-      a: "A 28-day interval fits into a 365-day year about 13 times. That cadence can shift due dates across the calendar and can create an extra payment compared with 12 monthly payments.",
+      a: "A 28-day interval fits into a 365-day year about 13 times. That cadence shifts due dates across the calendar and can produce an extra payment compared with 12 monthly payments.",
     },
     {
-      q: "Does this adjust due dates for weekends, holidays, or grace periods?",
-      a: "No. It uses calendar dates and a simplified cadence to illustrate payment timing. Lease terms and landlord policies can define different rules.",
+      q: "Does this adjust for weekends, holidays, or grace periods?",
+      a: "No. It uses calendar dates and a simple cadence to illustrate timing. Lease terms and landlord policies can define different rules.",
     },
     {
-      q: "Is the standard annual total the same as the multi-year schedule total?",
-      a: "The standard annual total uses a simple payment count per year for comparison. The multi-year schedule total is a calendar-based rollup from the selected as-of date through the end date.",
+      q: "Why can the schedule total differ from the standard annual total?",
+      a: "The standard annual total uses fixed payment counts for comparison. The schedule total is a calendar-based rollup from your as-of date through the selected end date, which can span partial years.",
     },
   ];
 

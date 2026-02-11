@@ -719,11 +719,11 @@ export default function HourlyToAnnualRent() {
   const faqData = [
     {
       q: "How does this convert an hourly amount to annual rent?",
-      a: "Clock-hour conversion uses annual equivalence. It treats the hourly amount as applying to every hour of the day (24 hours), then scales to a 365-day year for an annual total.",
+      a: "The main result is time-based: the hourly amount is treated as applying to every hour of the day (24 hours), then annualized over a 365-day year to produce an annual equivalent.",
     },
     {
       q: "Why does hourly-to-annual depend on assumptions about hours?",
-      a: "Hourly quotes can mean different things. A pure time-based equivalence treats every clock hour as billable, while other contexts treat only certain hours as applicable. This page shows both to illustrate how annual totals change.",
+      a: "Hourly prices can mean different things in practice. A pure time-based equivalence treats every clock hour as billable, while other contexts only apply to certain hours. This page shows both so you can see how annual totals change under different assumptions.",
     },
     {
       q: "What is the difference between 24/7 equivalence and paid-hours mode?",
@@ -731,17 +731,18 @@ export default function HourlyToAnnualRent() {
     },
     {
       q: "Does this represent what a landlord will actually charge in a year?",
-      a: "It estimates an annual equivalent for comparison. Actual charges can depend on minimum stays, proration rules, included utilities, fees, and the specific agreement.",
+      a: "Not necessarily. This is an annualized equivalent for comparison. Actual charges depend on minimum stays, proration rules, included utilities, fees, and the agreement.",
     },
     {
       q: "Why show monthly and 4-week amounts on an annual converter page?",
-      a: "Listings mix periods. Showing monthly and every-4-weeks equivalents alongside annual totals helps compare the same value across common billing cycles using one consistent basis.",
+      a: "Listings mix billing periods. Showing monthly and 4-week equivalents alongside annual totals lets you compare the same value across common cycles using one consistent basis.",
     },
     {
       q: "Does this use leap years or a 365-day year?",
-      a: "It uses a 365-day year, 7-day weeks, and an average month length of 365 ÷ 12 days. This keeps the math consistent for budgeting comparisons.",
+      a: "The calculator uses a 365-day year, 7-day weeks, and an average month length of 365 ÷ 12 days for consistent budgeting comparisons.",
     },
   ];
+
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",

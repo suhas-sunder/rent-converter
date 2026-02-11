@@ -676,19 +676,19 @@ export default function BiweeklyToWeeklyRent() {
     },
     {
       q: "Is weekly always exactly half of biweekly rent?",
-      a: "Under these day-based definitions (biweekly = 14 days, weekly = 7 days), yes: weekly = biweekly ÷ 2. Calendar billing rules can still vary by lease.",
+      a: "Under these day-based definitions (biweekly = 14 days, weekly = 7 days), yes: weekly = biweekly ÷ 2. Real lease billing can still differ based on due dates and prorations.",
     },
     {
       q: "Why does the breakdown include monthly and annual amounts too?",
-      a: "It keeps comparisons consistent when listings mix weekly, monthly, 4-week, and annual pricing. All values come from the same 365-day, day-based framework.",
+      a: "It lets you compare offers that are quoted in different periods using one consistent framework. All values come from the same 365-day, day-based conversions.",
     },
     {
       q: "Why does monthly differ from the 4-week value?",
-      a: "A 4-week period is 28 days. An average month is about 30.42 days (365 ÷ 12). Different lengths produce different equivalents.",
+      a: "A 4-week period is 28 days. A true average month is about 30.42 days (365 ÷ 12). Because the lengths differ, the equivalents differ.",
     },
     {
-      q: "Does this match exact lease totals?",
-      a: "It provides equivalences for budgeting and comparison. Exact totals depend on the agreement, due dates, proration, fees, and what is included in rent.",
+      q: "Will this match my exact lease totals?",
+      a: "Not necessarily. This tool provides equivalences for budgeting and comparison. Exact totals depend on lease terms, due dates, prorations, fees, and what is included as rent.",
     },
   ];
 

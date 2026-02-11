@@ -628,33 +628,34 @@ export default function HourlyToMonthlyRent() {
   const faqData = [
     {
       q: "How does this convert hourly rent to monthly rent?",
-      a: "It uses annual equivalence. The hourly amount is converted into a daily amount (24 hours per day), then expressed as a monthly equivalent using an average month length based on a 365-day year.",
+      a: "The calculator annualizes the hourly amount using a time-based model (24 hours per day, 365 days per year), then expresses that same annual total as a monthly equivalent using an average month length (365 ÷ 12 days).",
     },
     {
-      q: "Why does this not treat a month as exactly 30 days?",
-      a: "A fixed 30-day month is a rough estimate. This converter uses an average month length (365 ÷ 12 days) so the monthly result stays consistent with annual, weekly, and 4-week equivalents.",
+      q: "Why doesn’t this treat a month as exactly 30 days?",
+      a: "A fixed 30-day month is a rough shortcut. Using an average month (365 ÷ 12 days) keeps monthly results consistent with annual, weekly, and 4-week equivalents.",
     },
     {
       q: "What does an hourly rent number represent in practice?",
-      a: "It can represent a time-based rate used for comparison, budgeting, or short-stay pricing. The monthly equivalent here illustrates what that hourly amount would look like when scaled to an average month on the same annual basis.",
+      a: "It can be a time-based comparison rate or a short-stay pricing signal. The monthly equivalent shows what that hourly amount looks like when scaled to an average month on the same annual basis.",
     },
     {
       q: "Does this include assumptions about occupancy or usage?",
-      a: "No. It applies time-period assumptions only (hours per day, days per year, and average month length). If an hourly rate is only charged for certain hours or days, that is a different structure than this equivalence.",
+      a: "No. It applies time-period assumptions only (hours per day, days per year, and average month length). If an hourly rate only applies to certain hours or days, that is a different pricing structure than this equivalence.",
     },
     {
       q: "How is hourly conversion related to 4-week (28-day) rent?",
-      a: "A 4-week period is 28 days. An average month is about 30.42 days (365 ÷ 12). Converting both through annual equivalence helps compare 28-day pricing to monthly pricing without treating 4 weeks as a calendar month.",
+      a: "A 4-week period is 28 days. An average month is about 30.42 days (365 ÷ 12). Converting both through annual equivalence lets you compare 28-day pricing to monthly pricing without treating 4 weeks as a calendar month.",
     },
     {
-      q: "Why can the monthly equivalent look high compared with expectations?",
-      a: "Hourly amounts scale quickly when expressed over an average month because a month contains many hours. The full breakdown shows the intermediate daily and weekly equivalents so the scaling is visible.",
+      q: "Why can the monthly equivalent look high?",
+      a: "Hourly amounts scale quickly when expressed over an average month because a month contains many hours. The breakdown shows daily and weekly steps so the scaling is visible.",
     },
     {
       q: "Does this match exact totals for a specific contract or lease?",
-      a: "It estimates equivalents for comparison. Real totals depend on contract terms, billing rules, minimum charges, and due dates.",
+      a: "Not necessarily. These are equivalences for comparison. Real totals depend on contract terms, billing rules, minimum charges, and due dates.",
     },
   ];
+
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",

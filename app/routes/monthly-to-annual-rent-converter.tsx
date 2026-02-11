@@ -45,7 +45,6 @@ export const meta: Route.MetaFunction = () => {
   ];
 };
 
-
 type Period =
   | "weekly"
   | "monthly"
@@ -665,7 +664,7 @@ export default function MonthlyToAnnualRent() {
   const faqData = [
     {
       q: "What is “annual rent” when a listing is priced monthly?",
-      a: "It is the yearly total implied by that monthly price. This page estimates an annual equivalent so you can compare listings and payment schedules on the same timeline.",
+      a: "It is the yearly total implied by a monthly price. This page estimates an annual equivalent so you can compare listings and payment schedules on the same yearly timeline.",
     },
     {
       q: "How does this converter turn monthly rent into an annual total?",
@@ -673,21 +672,22 @@ export default function MonthlyToAnnualRent() {
     },
     {
       q: "Is yearly rent always monthly rent × 12?",
-      a: "For many quick comparisons, yes. This page also shows an annual-equivalence view and related period breakdowns so you can compare monthly pricing to other billing frequencies without mixing assumptions.",
+      a: "For quick comparisons, yes. This page also shows an annual-equivalent view and related period breakdowns so you can compare monthly pricing to other billing frequencies without mixing assumptions.",
     },
     {
       q: "Why does 4-week (28-day) billing change the annual total?",
-      a: "Because 28-day periods fit into a year differently than calendar months. A 4-week schedule is often framed as 13 payments per year, while monthly is typically 12 payments. The annual total can be higher even if each 4-week payment looks similar.",
+      a: "Because 28-day periods fit into a year differently than calendar months. A 4-week schedule often implies 13 payments per year, while monthly typically implies 12. The annual total can be higher even if each 4-week payment looks similar.",
     },
     {
       q: "Does this match my exact lease or due dates?",
-      a: "No. It is for budgeting and comparison. Your actual total depends on the lease start date, proration rules, billing terms, and fees.",
+      a: "No. This is for budgeting and comparison. Actual totals depend on lease start dates, proration rules, billing terms, and fees.",
     },
     {
       q: "What does the breakdown section help with?",
-      a: "It shows the same rent expressed hourly, daily, weekly, biweekly, every 4 weeks, monthly, and annually. That makes it easier to compare ads that use different price formats and to sanity-check what a rate implies over a year.",
+      a: "It shows the same rent expressed hourly, daily, weekly, biweekly, every 4 weeks, monthly, and annually. This helps compare ads that use different price formats and sanity-check what a rate implies over a year.",
     },
   ];
+
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",

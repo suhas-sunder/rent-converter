@@ -4,8 +4,6 @@ import Assumptions from "~/client/components/layout/Assumptions";
 import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/rent-split-calculator/HowItWorks";
 
-
-
 export const meta: Route.MetaFunction = () => {
   const title = "Rent Split Calculator (See What Each Roommate Pays)";
   const description =
@@ -50,7 +48,6 @@ export const meta: Route.MetaFunction = () => {
     { name: "twitter:image:alt", content: "RentConverter.com preview image" },
   ];
 };
-
 
 type Period =
   | "hourly"
@@ -725,15 +722,15 @@ export default function RentPerPerson() {
   const faqData = [
     {
       q: "What does rent per person mean on this page?",
-      a: "It is an equal split of the rent amount you entered. The page also shows annual equivalents so the split stays comparable across different billing cycles.",
+      a: "It is an equal split of the rent amount you entered. The page also shows annual equivalents so the per-person share stays comparable across billing cycles.",
     },
     {
-      q: "What if the rent is listed monthly but paid every 4 weeks?",
-      a: "Monthly and every 4 weeks are different time lengths. This page shows both so the per-person cost can be compared without treating them as interchangeable.",
+      q: "What if rent is listed monthly but paid every 4 weeks?",
+      a: "Monthly and every 4 weeks are different time lengths. This page shows both so per-person costs can be compared without treating them as interchangeable.",
     },
     {
       q: "Does the calculator handle uneven splits?",
-      a: "No. It calculates an equal split only. If one person pays more due to room size, a couple sharing a room, or income differences, use the equal split as a baseline and adjust outside the tool.",
+      a: "No. It calculates equal splits only. If one person pays more due to room size, shared rooms, or other agreements, use this as a baseline and adjust outside the tool.",
     },
     {
       q: "Why does the tool convert everything through annual totals?",
@@ -741,17 +738,18 @@ export default function RentPerPerson() {
     },
     {
       q: "What if the split does not divide evenly to the cent?",
-      a: "Rent often does not split perfectly. You can assign the small remainder to one person or rotate it over time. The page also shows the cents remainder for the selected split period.",
+      a: "Rent often does not split perfectly. You can assign the small remainder to one person or rotate it over time. The page shows any cents remainder for the selected period.",
     },
     {
       q: "Does this include utilities, parking, or fees?",
-      a: "No. It is rent-only. Add shared bills to the rent amount first or calculate them separately and combine totals.",
+      a: "No. This is rent-only. Add shared bills to the rent input or calculate them separately and combine totals.",
     },
     {
-      q: "What assumptions are used for the conversions?",
-      a: "Assumptions: 1 year = 365 days, 1 week = 7 days, every 4 weeks = 28 days, and month = 365 ÷ 12 days (average). Actual due dates and billing schedules vary by agreement.",
+      q: "What time assumptions does this page use?",
+      a: "Assumptions: year = 365 days, week = 7 days, every 4 weeks = 28 days, and month = 365 ÷ 12 days (average). Billing schedules vary by agreement.",
     },
   ];
+
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",

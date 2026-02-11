@@ -951,33 +951,34 @@ export default function RentIncreaseCalculator() {
   const faqData = [
     {
       q: "What does this rent increase calculator output?",
-      a: "It estimates a new rent after a percent or fixed increase, plus the annual and monthly impact. The results are derived from annual totals so different pay and billing cycles can be compared consistently.",
+      a: "It estimates your new rent after a percent or fixed increase and shows the annual and per-period impact. Results are derived from annual totals so different pay and billing cycles can be compared consistently.",
     },
     {
-      q: "How is a percent increase applied when there are multiple increases?",
-      a: "Percent increases are compounded in the projection. For example, two increases of 3% are applied as 1.03 × 1.03 on the annualized rent total.",
+      q: "How are percent increases applied when there are multiple increases?",
+      a: "Percent increases are compounded in sequence. For example, two 3% increases are applied as 1.03 × 1.03 to the annualized rent.",
     },
     {
-      q: "How is a fixed increase applied when there are multiple increases?",
-      a: "A fixed increase is treated as an amount added each time, in the same billing period as the rent input. The calculator annualizes that fixed amount and applies it repeatedly for the number of increases selected.",
+      q: "How are fixed increases applied when there are multiple increases?",
+      a: "A fixed increase is added each time in the same billing period as the rent input. The calculator annualizes that fixed amount and applies it for the number of increases selected.",
     },
     {
       q: "Why do the monthly and 4-week equivalents differ?",
-      a: "A 4-week period is always 28 days. An average month is about 30.42 days (365 ÷ 12). This calculator shows both so the difference is visible instead of implied away.",
+      a: "A 4-week period is 28 days. An average month is about 30.42 days (365 ÷ 12). Showing both avoids treating them as interchangeable.",
     },
     {
-      q: "Does this reflect proration, mid-lease changes, or partial months?",
-      a: "No. It estimates full-period equivalents. Lease proration rules and effective dates can change the first payment after an increase.",
+      q: "Does this reflect proration, mid-lease changes, or partial periods?",
+      a: "No. It estimates full-period equivalents. Proration rules and effective dates can change the first payment after an increase.",
     },
     {
-      q: "Can this be used to compare two different rent listings after an increase?",
+      q: "Can this be used to compare two listings after an increase?",
       a: "It helps compare estimated totals on a consistent basis. Actual costs can differ if utilities, fees, parking, or incentives are included in one listing and not the other.",
     },
     {
-      q: "What assumptions are used for the time conversions?",
-      a: "Assumptions: 1 year = 365 days, 1 week = 7 days, every 4 weeks = 28 days, and month = 365 ÷ 12 days (average). Actual due dates and billing schedules vary by agreement.",
+      q: "What time assumptions does this page use?",
+      a: "Assumptions: year = 365 days, week = 7 days, every 4 weeks = 28 days, and month = 365 ÷ 12 days (average). Billing schedules vary by agreement.",
     },
   ];
+
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",

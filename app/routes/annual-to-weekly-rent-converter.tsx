@@ -579,27 +579,27 @@ export default function AnnualToWeeklyRentConverter() {
   const faqData = [
     {
       q: "What weekly formula does this page use?",
-      a: "The headline result uses a weekly budgeting definition: weekly = annual ÷ 52. This is the most common annual-to-weekly conversion used for weekly budgeting.",
+      a: "The main result uses a weekly budgeting definition: weekly = annual ÷ 52. This is the standard conversion most people expect for weekly budgeting.",
     },
     {
       q: "Why is there also a 365-day weekly amount?",
-      a: "Some comparisons are day-based (daily, hourly, 14-day, 28-day). The 365-day weekly equivalent uses annual × 7 ÷ 365 so week values stay aligned with those day-based conversions.",
+      a: "Some comparisons on this page are day-based (daily, hourly, 14-day, 28-day). The 365-day weekly equivalent uses annual × 7 ÷ 365 so weekly values stay aligned with those day-based conversions.",
     },
     {
       q: "Which weekly number should I use?",
-      a: "Use annual ÷ 52 for a simple weekly budgeting figure. Use annual × 7 ÷ 365 when you want weekly aligned to a 365-day year (useful when comparing to daily, hourly, or 28-day cycles).",
+      a: "Use annual ÷ 52 for simple weekly budgeting. Use annual × 7 ÷ 365 when you want weekly aligned to a true 365-day year, especially when comparing to daily, hourly, or 28-day cycles.",
     },
     {
       q: "Why can a 28-day schedule feel different than weekly?",
-      a: "A 28-day billing cycle often lands on 13 payments per year. That can imply a different annual total than 52 weekly payments, even if the advertised periodic price sounds similar.",
+      a: "A 28-day billing cycle results in about 13 payments per year. That can produce a different annual total than 52 weekly payments, even when the sticker prices look similar.",
     },
     {
       q: "Why do I see many decimals when rounding is off?",
-      a: "Some conversions produce repeating decimals. When rounding is off, the tool shows up to 12 decimals without forcing trailing zeros, so you can see the computed precision.",
+      a: "Some conversions produce repeating decimals. When rounding is off, the calculator shows up to 12 decimals without forcing trailing zeros so you can see the computed precision.",
     },
     {
       q: "Does currency selection convert exchange rates?",
-      a: "No. Currency selection only changes formatting. Convert currencies elsewhere before entering your annual total.",
+      a: "No. Currency selection only changes formatting. Convert currencies externally before entering your annual total.",
     },
   ];
 

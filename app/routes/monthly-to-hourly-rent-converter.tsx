@@ -588,31 +588,31 @@ export default function MonthlyToHourlyRent() {
   const faqData = [
     {
       q: "How does this convert monthly rent to an hourly equivalent?",
-      a: "It uses annual equivalence. The monthly amount is first expressed on an annual basis using an average month length (365 ÷ 12 days), then converted to an hourly amount using 24 hours per day.",
+      a: "This page uses annual equivalence. The monthly amount is first expressed on an annual basis using an average month length (365 ÷ 12 days), then converted to an hourly amount using 24 hours per day.",
     },
     {
-      q: "Why is the converter not based on a 30-day month?",
-      a: "A fixed 30-day month is a rough estimate. This tool uses an average month length so the hourly result stays consistent with annual, weekly, biweekly, and 4-week equivalents on the same basis.",
+      q: "Why isn’t the converter based on a 30-day month?",
+      a: "A fixed 30-day month is a shortcut that changes assumptions. Using an average month length keeps hourly results consistent with daily, weekly, biweekly, 4-week, and annual equivalents.",
     },
     {
       q: "What does an hourly rent equivalent mean for a monthly lease?",
-      a: "It is a comparison number. It illustrates what the monthly amount represents per hour when expressed through the same annual equivalence assumptions. Billing and due dates remain defined by the lease.",
+      a: "It’s a comparison number. It shows what the monthly amount represents per hour under the same annual-equivalence assumptions. Billing and due dates still follow the lease.",
     },
     {
-      q: "Is the hourly number the same as a short-stay hourly charge?",
-      a: "Not necessarily. Short stays often include minimum charges, fees, utilities, or different terms. This tool converts the rent amount only, using time-period equivalence.",
+      q: "Is this the same as an hourly rate for short stays?",
+      a: "No. Short stays often include minimum charges, fees, utilities, or different terms. This tool converts the rent amount only using time-period equivalence.",
     },
     {
       q: "How does monthly compare to rent billed every 4 weeks (28 days)?",
-      a: "A 4-week period is 28 days, while an average month is about 30.42 days (365 ÷ 12). These are different periods, so their annual totals and equivalents can differ even when the amounts look similar.",
+      a: "A 4-week period is 28 days, while an average month is about 30.42 days (365 ÷ 12). Different period lengths lead to different annual totals and hourly equivalents.",
     },
     {
       q: "Why can the hourly equivalent look small?",
-      a: "Monthly rent is spread across many hours in an average month. The breakdown shows daily and weekly equivalents so the scaling from monthly to hourly is transparent.",
+      a: "Monthly rent is spread across many hours in an average month. The breakdown shows daily and weekly equivalents so the scaling to hourly is transparent.",
     },
     {
       q: "Does this match exact totals for partial months or specific due dates?",
-      a: "It estimates equivalents for comparison. Actual totals for partial periods depend on lease terms, prorating rules, and due dates.",
+      a: "No. These are equivalences for comparison. Actual totals depend on lease terms, proration rules, and due dates.",
     },
   ];
 

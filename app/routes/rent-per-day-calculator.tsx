@@ -688,29 +688,30 @@ export default function RentPerDayCalculator() {
   const faqData = [
     {
       q: "What does “rent per day” mean on this calculator?",
-      a: "It is the rent amount converted into a daily equivalent using a consistent 365-day annual basis. This helps compare rent amounts quoted on different billing cycles on the same basis.",
+      a: "It is your rent expressed as a daily equivalent using a consistent 365-day annual basis. This makes listings priced on different billing cycles comparable on the same scale.",
     },
     {
-      q: "Why is monthly rent divided by 30 not always the same as this result?",
-      a: "Months are not a fixed length. This calculator uses an average month of 365 ÷ 12 days, then expresses the implied annual total as a per-day amount. Dividing by 30 assumes a 30-day month and changes the implied annual total.",
+      q: "Why is dividing monthly rent by 30 not the same as this result?",
+      a: "Months are not a fixed length. This calculator uses an average month of 365 ÷ 12 days and then derives a daily equivalent from the implied annual total. Dividing by 30 assumes a 30-day month and changes the implied annual total.",
     },
     {
-      q: "How does every 4 weeks (28 days) affect daily rent?",
-      a: "A 4-week period is exactly 28 days, which makes the daily math straightforward for that billing cycle. The annual total can still differ from monthly because a 4-week schedule often implies 13 payments per year rather than 12.",
+      q: "How does every 4 weeks (28 days) affect the daily number?",
+      a: "A 4-week period is exactly 28 days, so the daily rate from a 4-week amount is straightforward. The annual total can still differ from monthly because a 4-week cadence often implies about 13 payments per year instead of 12.",
     },
     {
-      q: "Is this the same as a lease proration calculation for a specific move-in date?",
-      a: "No. This is a daily equivalent for comparison. Lease proration depends on the lease wording and how the landlord defines billing months, due dates, and partial periods.",
+      q: "Is this the same as lease proration for a specific move-in date?",
+      a: "No. This is a daily equivalent for comparison. Lease proration depends on the lease terms, billing months, due dates, and how partial periods are handled.",
     },
     {
       q: "What is this most useful for?",
-      a: "Comparing listings (weekly vs monthly vs 4-week), translating a quoted rent into a consistent per-day rate, and estimating short windows for budgeting comparisons.",
+      a: "Comparing listings priced weekly, monthly, or every 4 weeks on a single daily basis, and estimating short windows for budgeting comparisons.",
     },
     {
-      q: "What assumptions does the daily calculation use?",
-      a: "It uses a 365-day year, a month length of 365 ÷ 12 days (average), and fixed day counts for weekly (7), biweekly (14), and every 4 weeks (28).",
+      q: "What time assumptions does this page use?",
+      a: "Assumptions: year = 365 days, month = 365 ÷ 12 days (average), week = 7 days, biweekly = 14 days, and every 4 weeks = 28 days.",
     },
   ];
+
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",

@@ -650,37 +650,38 @@ export default function HowMuchRentCanIAfford() {
   const faqData = [
     {
       q: "What does this calculator estimate?",
-      a: "It estimates rent amounts that correspond to different shares of income using annualized income as the comparison base.",
+      a: "It estimates rent amounts that correspond to different shares of your income, using annualized income as the consistent comparison base across pay cycles.",
     },
     {
       q: "Is this telling me what rent I should pay?",
-      a: "No. The results illustrate how different rent levels relate to income. Actual affordability depends on many factors beyond income alone.",
+      a: "No. The results show how rent levels relate to income. Actual affordability depends on your full budget, savings goals, and obligations beyond income alone.",
     },
     {
       q: "Why does the calculator use annual income?",
-      a: "Annualizing income allows pay cycles like monthly, weekly, and every 4 weeks to be compared consistently.",
+      a: "Annualizing income lets monthly, weekly, biweekly, and 4-week pay cycles be compared on the same basis instead of mixing calendar periods.",
     },
     {
       q: "Why are multiple percentages shown?",
-      a: "Different households tolerate different housing costs. Showing multiple ranges illustrates how rent levels change as income share changes.",
+      a: "Different households target different rent-to-income ranges. Showing multiple percentages illustrates how rent levels change as the income share changes.",
     },
     {
       q: "Does this include utilities or other housing costs?",
-      a: "No. This calculator compares rent to income only. Utilities, insurance, parking, debt payments, and other costs can materially change affordability.",
+      a: "No. This compares rent to income only. Utilities, insurance, parking, internet, debt payments, and other costs can materially change what feels affordable.",
     },
     {
       q: "Why does every 4 weeks differ from monthly?",
-      a: "A 4-week period is always 28 days, while an average month is about 30.42 days (365 ÷ 12). Over a year, this changes totals.",
+      a: "A 4-week period is always 28 days, while an average month is about 30.42 days (365 ÷ 12). Over a year, that difference changes totals.",
     },
     {
       q: "Can this be used with hourly or variable income?",
-      a: "It can illustrate estimates, but irregular income can make any fixed-period comparison less representative. Treat results as a starting point.",
+      a: "It can provide estimates, but irregular income makes any fixed-period comparison less representative. Treat results as a starting point, not a rule.",
     },
     {
       q: "What assumptions are used?",
-      a: "Assumptions: 1 year = 365 days and 1 month = 365 ÷ 12 days (average). Actual pay schedules and billing rules vary.",
+      a: "Assumptions: 1 year = 365 days and 1 month = 365 ÷ 12 days (average). Real pay schedules and billing rules vary.",
     },
   ];
+
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",

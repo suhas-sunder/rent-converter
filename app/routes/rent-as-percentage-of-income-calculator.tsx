@@ -732,35 +732,35 @@ export default function RentAsPercentageOfIncome() {
   const faqData = [
     {
       q: "What does rent as a percentage of income represent?",
-      a: "It estimates how much of your income is associated with rent over the same time horizon. This page annualizes both values first so different pay cycles can be compared consistently.",
+      a: "It shows what share of your income is associated with rent over the same time horizon. This page annualizes both values so different pay cycles can be compared consistently.",
     },
     {
-      q: "How does this calculator handle weekly pay, biweekly pay, and 4-week pay?",
-      a: "Both rent and income are converted to an annual total using a 365-day year, then the ratio is calculated from those annual totals. This avoids mixing 12-month assumptions with 28-day pay cycles.",
+      q: "How does this handle weekly, biweekly, and 4-week pay?",
+      a: "Both rent and income are converted to annual totals using a 365-day year, then the ratio is calculated from those annual totals. This avoids mixing 12-month assumptions with 28-day pay cycles.",
     },
     {
       q: "Why does every 4 weeks differ from monthly?",
-      a: "A 4-week period is always 28 days, while an average month is about 30.42 days (365 ÷ 12). Over a year, that difference changes totals, which changes the percentage.",
+      a: "A 4-week period is 28 days, while an average month is about 30.42 days (365 ÷ 12). Over a year, that difference changes totals and therefore the percentage.",
     },
     {
-      q: "Can I enter rent as monthly and income as hourly (or any mix)?",
-      a: "Yes. Each input is annualized using its own selected period, then compared on the same annual basis.",
+      q: "Can I mix periods (for example monthly rent and hourly income)?",
+      a: "Yes. Each input is annualized using its selected period, then compared on the same annual basis.",
     },
     {
       q: "Is this based on take-home pay or gross pay?",
-      a: "It works with either, as long as the income number matches what you want to compare against. Taxes, deductions, benefits, and irregular income can make real cash flow differ from a simple ratio.",
+      a: "Either works, as long as the income number matches what you want to compare against. Taxes, deductions, and irregular income can make real cash flow differ from a simple ratio.",
     },
     {
       q: "Does this include utilities, parking, or fees?",
-      a: "No. This is a rent-to-income comparison only. If your housing cost includes add-ons, you can include them in the rent input to estimate a combined housing payment percentage.",
+      a: "No. This compares rent to income only. If housing costs include add-ons, include them in the rent input to estimate a combined housing percentage.",
     },
     {
       q: "What happens if income is zero or invalid?",
-      a: "Results are not shown. Enter a valid income greater than 0 to compute a meaningful percentage.",
+      a: "No result is shown. Enter a valid income greater than 0 to compute a meaningful percentage.",
     },
     {
-      q: "What assumptions does the math use?",
-      a: "Assumptions: 1 year = 365 days, 1 week = 7 days, biweekly = 14 days, every 4 weeks = 28 days, and month = 365 ÷ 12 days (average). Actual pay dates and billing rules vary.",
+      q: "What time assumptions does this page use?",
+      a: "Assumptions: year = 365 days, week = 7 days, biweekly = 14 days, every 4 weeks = 28 days, and month = 365 ÷ 12 days (average). Actual pay schedules and billing rules vary.",
     },
   ];
 

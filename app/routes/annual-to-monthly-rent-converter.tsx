@@ -669,27 +669,27 @@ export default function AnnualToMonthlyRent() {
   const faqData = [
     {
       q: "How do you convert annual rent to monthly rent on this page?",
-      a: "This page uses a monthly budgeting view: monthly = annual ÷ 12. It treats your annual total as the source of truth and shows the equivalent monthly amount for comparison.",
+      a: "This page uses a monthly budgeting view: monthly = annual ÷ 12. Your annual total is treated as the source of truth, and the monthly value is the annual-equivalent amount for comparison.",
     },
     {
       q: "Is monthly rent always annual rent ÷ 12?",
-      a: "It’s a common way to compare costs. Real leases can be based on calendar dates, prorations, and due-date rules. This calculator shows the annual-equivalent monthly amount (annual ÷ 12) for budgeting and comparison.",
+      a: "For budgeting and comparison, yes. Real leases can bill on specific dates, include prorations, or use non-monthly cycles. This tool shows the annual-equivalent monthly amount (annual ÷ 12) so different offers can be compared on the same basis.",
     },
     {
       q: "Why does 4-week (28-day) rent differ from monthly rent?",
-      a: "A 4-week cycle is 28 days and often results in 13 payments per year, while monthly is typically 12 payments per year. Different period lengths lead to different annual totals even if a listing sounds similar.",
+      a: "A 4-week cycle is 28 days and results in about 13 payments per year, while monthly billing is typically 12 payments. Because the time lengths differ, the annual totals differ even when the sticker prices look similar.",
     },
     {
       q: "What assumptions does this converter use?",
-      a: "Year = 365 days, week = 7 days, biweekly = 14 days, 4-week = 28 days, and monthly uses annual ÷ 12 as the budgeting equivalent. Outputs are for comparison, not a promise of exact due dates.",
+      a: "Year = 365 days, week = 7 days, biweekly = 14 days, 4-week = 28 days, and monthly uses annual ÷ 12 as the budgeting equivalent. Outputs are for comparison, not exact billing dates.",
     },
     {
       q: "Does this tool include utilities, fees, taxes, or deposits?",
-      a: "No. It does not guess what is included. Enter the annual total you want to treat as rent for your budgeting comparison.",
+      a: "No. The calculator does not guess what is included. Enter only what you personally treat as rent for your budgeting comparison.",
     },
     {
       q: "Does this convert currencies or exchange rates?",
-      a: "No. Currency selection only changes formatting. Convert currencies elsewhere before using this tool if needed.",
+      a: "No. Currency selection only changes formatting. Convert exchange rates externally before using this calculator if needed.",
     },
   ];
 

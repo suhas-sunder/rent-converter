@@ -785,35 +785,35 @@ export default function RentAfterTaxIncome() {
   const faqData = [
     {
       q: "What is an effective tax rate in this calculator?",
-      a: "It is a single percentage used to estimate take-home income from pre-tax income. It is a simplified estimate and can differ from actual withholding and year-end taxes.",
+      a: "It’s a single percentage used to estimate take-home income from pre-tax income. It’s a simplification and can differ from actual withholding and year-end taxes.",
     },
     {
-      q: "What numbers does this page calculate?",
-      a: "It estimates annual after-tax income, annual rent, rent as a percentage of after-tax income, and estimated after-tax income left after rent. It also shows per-period equivalents derived from the same annual totals.",
+      q: "What does this page calculate?",
+      a: "It estimates annual after-tax income, annual rent, rent as a percentage of after-tax income, and how much take-home income remains after rent. Per-period equivalents are derived from the same annual totals.",
     },
     {
       q: "Why does the calculator use annual equivalence?",
-      a: "Annualizing both income and rent keeps comparisons consistent across time periods. It avoids mixing 12-month assumptions with 4-week cycles.",
+      a: "Annualizing both income and rent keeps comparisons consistent across time periods and avoids mixing monthly assumptions with 4-week or weekly cycles.",
     },
     {
       q: "Why does every 4 weeks differ from monthly?",
-      a: "A 4-week period is always 28 days, while an average month is about 30.42 days (365 ÷ 12). Over a year, the totals differ.",
+      a: "A 4-week period is always 28 days, while an average month is about 30.42 days (365 ÷ 12). Over a year, that difference changes totals.",
     },
     {
       q: "Does this include utilities, parking, or other housing costs?",
-      a: "No. It compares rent to income. If you want a combined housing payment estimate, you can add those amounts to the rent input.",
+      a: "No. It compares rent to income only. If you want to account for bundled housing costs, add them to the rent input.",
     },
     {
-      q: "Is the result the same as a budgeting recommendation?",
-      a: "No. The results show relationships between rent and estimated take-home income. Actual affordability depends on debts, household size, location, and other expenses.",
+      q: "Is this a budgeting recommendation?",
+      a: "No. The results show how rent relates to estimated take-home income. Actual affordability depends on debts, household size, location, and other expenses.",
     },
     {
-      q: "Can I enter monthly rent but annual income (or any mix)?",
-      a: "Yes. Each input is annualized using its own selected period before the percentage is calculated.",
+      q: "Can I mix periods (for example monthly rent and annual income)?",
+      a: "Yes. Each input is annualized using its selected period before the percentage is calculated.",
     },
     {
-      q: "What assumptions are used for time periods?",
-      a: "Assumptions: 1 year = 365 days, 1 week = 7 days, every 4 weeks = 28 days, and 1 month = 365 ÷ 12 days (average). Actual pay dates and billing rules vary.",
+      q: "What time assumptions does this page use?",
+      a: "Assumptions: year = 365 days, week = 7 days, every 4 weeks = 28 days, and month = 365 ÷ 12 days (average). Actual pay dates and billing rules vary.",
     },
   ];
 

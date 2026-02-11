@@ -755,33 +755,34 @@ export default function RentIncreasePercentage() {
   const faqData = [
     {
       q: "What does “rent increase percentage” mean on this page?",
-      a: "It is the percent change between the old rent and the new rent, calculated using annual totals so the result stays consistent across pay cycles.",
+      a: "It is the percent change between your old rent and new rent. The page calculates this from annualized totals so the result stays consistent across pay cycles.",
     },
     {
-      q: "Why does this calculator use annual equivalence instead of a simple percent formula?",
-      a: "If both values are entered in the same period, the percent change matches a simple formula. Annualizing is used so the page can also show comparable equivalents across monthly, weekly, and 4-week cycles without mixing assumptions.",
+      q: "Why use annual equivalence instead of a simple percent formula?",
+      a: "If both values are entered in the same period, the percent change matches a simple formula. Annualizing is used so comparable monthly, weekly, and 4-week equivalents can also be shown without mixing assumptions.",
     },
     {
-      q: "What if the old rent is zero or blank?",
-      a: "A percent increase is not meaningful when the starting value is zero. In that case the page still shows the absolute differences and annual totals.",
+      q: "What if the old rent is zero or missing?",
+      a: "A percent increase is not meaningful when the starting value is zero. In that case, the page shows absolute differences and annual totals instead of a percentage.",
     },
     {
-      q: "Why are “monthly” and “every 4 weeks” shown separately?",
-      a: "A 4-week period is always 28 days. An average month is about 30.42 days (365 ÷ 12). The page shows both so the difference is visible when comparing payment schedules.",
+      q: "Why are monthly and every 4 weeks shown separately?",
+      a: "A 4-week period is 28 days. An average month is about 30.42 days (365 ÷ 12). Showing both avoids treating different period lengths as interchangeable.",
     },
     {
-      q: "Does the output include fees, utilities, or taxes?",
-      a: "No. It compares rent amounts only. If one option includes bundled costs, treat the result as a baseline comparison.",
+      q: "Does this include fees, utilities, or taxes?",
+      a: "No. It compares rent amounts only. If a listing bundles other costs, treat the result as a baseline comparison.",
     },
     {
-      q: "Does this reflect proration or mid-month effective dates?",
-      a: "No. The calculation is a full-period comparison. Proration rules and effective dates can change the first payment after a change.",
+      q: "Does this reflect proration or mid-cycle effective dates?",
+      a: "No. This is a full-period comparison. Proration rules and effective dates can change the first payment after a change.",
     },
     {
-      q: "What time assumptions are used for conversions?",
-      a: "Assumptions: 1 year = 365 days, 1 week = 7 days, every 4 weeks = 28 days, and month = 365 ÷ 12 days (average). Actual due dates and billing schedules vary by agreement.",
+      q: "What time assumptions does this page use?",
+      a: "Assumptions: year = 365 days, week = 7 days, every 4 weeks = 28 days, and month = 365 ÷ 12 days (average). Billing schedules vary by agreement.",
     },
   ];
+
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",

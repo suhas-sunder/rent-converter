@@ -860,8 +860,6 @@ export default function RentAfterIncrease() {
     amtAmbiguous,
   ]);
 
-  const canShowResults = computed.ok;
-
   const handlePrint = () => {
     if (typeof window === "undefined") return;
     window.print();
@@ -870,31 +868,31 @@ export default function RentAfterIncrease() {
   const faqData = [
     {
       q: "What does this calculator output?",
-      a: "It estimates the new rent after an increase and shows the annual impact. It also displays equivalents across common pay cycles so the change is comparable even when listings use different periods.",
+      a: "It estimates your new rent after an increase and shows the annual impact. It also displays equivalents across common pay cycles so changes are comparable even when listings use different periods.",
     },
     {
       q: "How do I enter the increase?",
-      a: "Choose percent if the increase is stated as a rate (for example 5%). Choose amount if the increase is a fixed add-on per billing period (for example $100 per month).",
+      a: "Choose percent if the increase is a rate (for example, 5%). Choose amount if the increase is a fixed add-on per billing period (for example, $100 per month).",
     },
     {
       q: "What does the billing period apply to?",
-      a: "The billing period applies to the current rent and also to the increase amount if you use fixed-amount mode. The calculator converts values to annual totals to keep comparisons consistent.",
+      a: "The billing period applies to the current rent and to the increase amount in fixed-amount mode. The calculator converts values to annual totals to keep comparisons consistent.",
     },
     {
-      q: "Why does the page show monthly and every 4 weeks separately?",
+      q: "Why are monthly and every 4 weeks shown separately?",
       a: "Every 4 weeks is always 28 days. A calendar month is longer on average (365 ÷ 12 days). Showing both avoids treating them as interchangeable when comparing costs.",
     },
     {
       q: "Does this include utilities, fees, or taxes?",
-      a: "No. It compares rent amounts only. If one option includes bundled costs, treat the result as a baseline comparison, not a full housing-cost total.",
+      a: "No. It compares rent amounts only. If a listing bundles other costs, treat the result as a baseline comparison rather than a full housing-cost total.",
     },
     {
       q: "Will this match the first payment after an increase takes effect?",
-      a: "Not necessarily. This is a full-period estimate. Proration, mid-cycle effective dates, and lease-specific rules can change the first payment after a change.",
+      a: "Not necessarily. This shows a full-period estimate. Proration, mid-cycle effective dates, and lease-specific rules can change the first payment.",
     },
     {
-      q: "What assumptions are used for the period conversions?",
-      a: "Assumptions: 1 year = 365 days, 1 week = 7 days, every 4 weeks = 28 days, and month = 365 ÷ 12 days (average). Actual due dates and billing schedules vary by agreement.",
+      q: "What time assumptions does this page use?",
+      a: "Assumptions: year = 365 days, week = 7 days, every 4 weeks = 28 days, and month = 365 ÷ 12 days (average). Actual billing schedules vary by agreement.",
     },
   ];
 

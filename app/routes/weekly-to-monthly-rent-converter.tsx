@@ -662,27 +662,27 @@ export default function WeeklyToMonthlyRent() {
   const faqData = [
     {
       q: "What is the formula for weekly to monthly rent on this page?",
-      a: "This page converts through annual equivalence: weekly is treated as a 7-day amount, converted to an annual total using a 365-day year, then divided by 12 to produce a monthly equivalent.",
+      a: "The conversion uses annual equivalence: weekly is treated as a 7-day amount, converted to an annual total using a 365-day year (weekly ÷ 7 × 365), then divided by 12 to produce a monthly equivalent.",
     },
     {
-      q: "Why does weekly x 4 not match the monthly result?",
-      a: "Four weeks is 28 days. An average month is about 30.42 days (365 ÷ 12). Weekly x 4 is closer to a 28-day cycle, not a calendar month average.",
+      q: "Why does weekly × 4 not match the monthly result?",
+      a: "Four weeks is 28 days. An average month is about 30.42 days (365 ÷ 12). Weekly × 4 matches a 28-day cycle, not a calendar-month equivalent.",
     },
     {
       q: "How is every-4-weeks rent different from monthly rent?",
-      a: "4 weeks is 28 days and is commonly associated with 13 periods per year. Monthly billing is 12 periods per year. Even if the per-payment amounts look similar, annual totals can differ.",
+      a: "Every 4 weeks is a fixed 28-day cycle and often implies about 13 payments per year. Monthly billing is typically described as 12 payments per year. Even if the per-payment amounts look similar, the annual totals can differ.",
     },
     {
       q: "Can weekly rent look cheaper but cost more over a year?",
-      a: "Yes. Weekly and monthly quotes can look different even when the annual totals are similar. Converting both to annual totals is the cleanest way to compare.",
+      a: "Yes. Weekly and monthly quotes can appear cheaper or more expensive depending on how they are framed. Converting both to annual totals is the cleanest way to compare true cost.",
     },
     {
       q: "Does this match the exact day rent is due?",
-      a: "It is an estimate for budgeting and comparison. Exact totals depend on lease terms, start dates, proration, and how billing periods are defined.",
+      a: "No. This is an equivalence for budgeting and comparison. Exact totals depend on lease terms, start dates, proration rules, and how billing periods are defined.",
     },
     {
       q: "Does the math change by country?",
-      a: "The conversion math stays the same. What changes is what is commonly advertised (for example, weekly rent in Australia and New Zealand, or monthly rent in Canada and the US).",
+      a: "No. The math is the same everywhere. What changes is how rent is commonly advertised (for example, weekly in Australia and New Zealand versus monthly in Canada and the US).",
     },
   ];
 

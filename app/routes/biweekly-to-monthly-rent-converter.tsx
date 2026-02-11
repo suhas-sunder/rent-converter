@@ -653,19 +653,19 @@ export default function BiweeklyToMonthlyRent() {
   const faqData = [
     {
       q: "What does “biweekly rent” mean?",
-      a: "Biweekly rent is rent paid every 14 days. That schedule is often summarized as 26 payments per year, which is why it can feel different from paying once per calendar month.",
+      a: "Biweekly rent means rent due every 14 days. People often summarize this as 26 payments per year, which is why biweekly billing can feel different from paying once per calendar month.",
     },
     {
       q: "How does this convert biweekly rent to a monthly equivalent?",
-      a: "It converts the biweekly amount to a daily equivalent (biweekly ÷ 14), then derives a yearly total (daily × 365) and finally expresses that annual total as a monthly equivalent (annual ÷ 12).",
+      a: "The calculator converts biweekly to a daily rate (biweekly ÷ 14), annualizes it (daily × 365), then expresses that same annual total as a monthly equivalent (annual ÷ 12).",
     },
     {
       q: "How many biweekly payments are in a year?",
-      a: "A common shortcut is 26 (52 weeks ÷ 2). A day-based annual equivalence uses 365 ÷ 14 ≈ 26.07 biweekly periods, so the totals can differ slightly.",
+      a: "A common shortcut is 26 (52 weeks ÷ 2). A day-based annual equivalence uses 365 ÷ 14 ≈ 26.07 biweekly periods, so totals can differ slightly depending on which method you use.",
     },
     {
       q: "Why doesn’t biweekly map neatly to calendar months?",
-      a: "Because 14-day intervals drift across the calendar. Some months include two payments, and the timing can create an extra payment relative to a monthly budget.",
+      a: "Because 14-day intervals drift across the calendar. Some months include two payments, and over a year this timing can create an extra payment relative to a monthly budget.",
     },
     {
       q: "How is biweekly different from rent paid every 4 weeks?",
@@ -673,7 +673,7 @@ export default function BiweeklyToMonthlyRent() {
     },
     {
       q: "What assumptions does this page use?",
-      a: "Year = 365 days, week = 7 days, biweekly = 14 days, every 4 weeks = 28 days, and month = 365 ÷ 12 days (average). Your lease may still use different billing rules.",
+      a: "Year = 365 days, week = 7 days, biweekly = 14 days, every 4 weeks = 28 days, and month uses an average length of 365 ÷ 12 days. Results are for budgeting and comparison, not exact billing dates.",
     },
   ];
 

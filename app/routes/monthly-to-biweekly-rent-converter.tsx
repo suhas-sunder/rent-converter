@@ -616,41 +616,42 @@ export default function MonthlyToBiweeklyRent() {
     if (typeof window === "undefined") return;
     window.print();
   };
-
+  
   const faqData = [
     {
       q: "How is monthly rent converted to biweekly rent?",
-      a: "This converter uses annual equivalence. It converts a monthly amount to an annual equivalent using an average month length, then expresses that annual amount as a 14-day biweekly equivalent.",
+      a: "This converter uses annual equivalence. It converts the monthly amount to an annual total using an average month length, then expresses that annual total as a 14-day biweekly equivalent.",
     },
     {
       q: "Is biweekly the same as twice per month?",
-      a: "No. Biweekly refers to a 14-day cycle. Twice per month is tied to calendar months. Over a year, these can imply different timing and totals.",
+      a: "No. Biweekly is every 14 days. Twice per month follows calendar dates. Over a year, the timing and totals can differ.",
     },
     {
-      q: "Why is the biweekly amount not exactly monthly rent ÷ 2?",
-      a: "Monthly ÷ 2 is a half-month number. A month is not a fixed number of weeks, so half a month does not reliably equal 14 days. This page shows both so the difference is visible.",
+      q: "Why isn’t biweekly rent exactly monthly rent ÷ 2?",
+      a: "Monthly ÷ 2 is half a month, not 14 days. Months are not a fixed number of weeks, so half a month does not reliably equal a biweekly period. This page shows both so the difference is explicit.",
     },
     {
-      q: "Why does the page show a 4-week (28-day) value on a monthly converter?",
-      a: "Many comparisons mix monthly and 4-week amounts. A 4-week period is 28 days, while an average month is about 30.42 days. Showing both helps illustrate the annual-equivalent difference.",
+      q: "Why show a 4-week (28-day) value on a monthly converter?",
+      a: "Listings often mix monthly and 4-week pricing. A 4-week period is 28 days, while an average month is about 30.42 days. Showing both makes the annual-equivalent difference clear.",
     },
     {
       q: "How many payment cycles are implied by monthly and biweekly rent?",
-      a: "Monthly is commonly described as 12 payments per year. Biweekly is often described as 26 payments per year. This tool also shows a day-based annual equivalence so periods remain comparable across the breakdown.",
+      a: "Monthly is commonly described as 12 payments per year. Biweekly is often described as 26 payments per year. This tool also shows a day-based annual equivalence so periods stay comparable across the breakdown.",
     },
     {
       q: "Does this match a lease that bills on specific calendar dates?",
-      a: "It estimates equivalents for budgeting and comparison. Exact totals depend on lease terms, start date, proration rules, fees, and what is included in rent.",
+      a: "No. These are equivalences for budgeting and comparison. Actual totals depend on lease terms, start dates, proration rules, fees, and what is included in rent.",
     },
     {
-      q: "Can the results be used to compare listings across different rent periods?",
-      a: "Yes. Converting everything to consistent equivalents can help compare a monthly quote to a biweekly or weekly quote without treating different time windows as the same.",
+      q: "Can I use this to compare listings with different rent periods?",
+      a: "Yes. Converting everything to consistent equivalents helps compare a monthly quote to biweekly or weekly pricing without treating different time windows as the same.",
     },
     {
       q: "What month length does the converter assume?",
-      a: "The converter uses an average month length of 365 ÷ 12 days. This keeps conversions consistent across periods, even though actual months vary.",
+      a: "It uses an average month length of 365 ÷ 12 days to keep conversions consistent across periods, even though real months vary.",
     },
   ];
+
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",

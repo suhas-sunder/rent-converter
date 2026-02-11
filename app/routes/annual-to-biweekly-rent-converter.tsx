@@ -625,31 +625,31 @@ export default function AnnualToBiweeklyRent() {
   const faqData = [
     {
       q: "How is annual rent converted to biweekly rent on this page?",
-      a: "Your annual total is treated as the source of truth for a 365-day year. The biweekly result is the 14-day amount that matches the same annual total (annual × 14 ÷ 365).",
+      a: "Your annual total is treated as the source of truth for a 365-day year. The biweekly result is the 14-day amount that matches the same annual total (annual × 14 ÷ 365). This avoids shortcuts like dividing by 26, which can misstate the true equivalent.",
     },
     {
       q: "Does biweekly always mean 26 payments per year?",
-      a: "Biweekly here means a 14-day period. Many people describe that as 26 cycles in a year, but real lease schedules can differ because of start dates, due dates, and prorations.",
+      a: "Not exactly. Biweekly here means a 14-day period. While people often say “26 payments per year,” real lease schedules vary by start date, billing rules, and prorations, so the actual count in a calendar year can differ.",
     },
     {
       q: "Why do monthly and 4-week amounts differ?",
-      a: "A 4-week period is 28 days. This calculator uses an average month length of 365 ÷ 12 days (about 30.42). Different period lengths produce different equivalents even when the annual total is the same.",
+      a: "A 4-week period is 28 days. A true average month is about 30.42 days (365 ÷ 12). Because the time lengths differ, the equivalent amounts differ even when the annual total is the same.",
     },
     {
       q: "What does “annual rent” mean here?",
-      a: "It means the total rent paid over one year. This tool does not guess what is included (utilities, fees, parking, taxes). Include only what you want to treat as ‘rent’ for your own budgeting.",
+      a: "It means the total rent paid over one year using consistent assumptions. The calculator does not guess what is included. Only enter what you personally treat as rent (exclude utilities, parking, fees, or taxes unless you want them included).",
     },
     {
-      q: "Will this match the exact amount due on calendar dates?",
-      a: "Not necessarily. This is for budgeting and comparing quotes across periods. Your lease might bill on specific dates, include partial periods, or add fees that change the exact due amount.",
+      q: "Will this match the exact amount due on my calendar dates?",
+      a: "Not necessarily. This tool is for budgeting and comparing quotes across billing periods. Real leases can include partial periods, specific due dates, or fees that change the exact amount due.",
     },
     {
-      q: "Why show an hourly and daily equivalent?",
-      a: "It helps compare rent totals to time-based budgets and to other quotes that are expressed per day or per week. The hourly value is based on 24 hours per day and a 365-day year.",
+      q: "Why show daily and hourly equivalents?",
+      a: "They help you compare rent to time-based budgets or offers quoted per day or per week. Hourly values assume 24 hours per day and a 365-day year for consistency.",
     },
     {
       q: "Does this tool convert currencies or exchange rates?",
-      a: "No. Currency selection only changes formatting. If you need FX conversion, you should convert the amount externally first, then use this calculator.",
+      a: "No. Currency selection only changes formatting. Convert exchange rates externally first, then use this calculator with the converted amount.",
     },
   ];
 

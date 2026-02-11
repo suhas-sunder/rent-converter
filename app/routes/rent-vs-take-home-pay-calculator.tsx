@@ -807,31 +807,31 @@ export default function RentVsTakeHomePay() {
   const faqData = [
     {
       q: "What is “take-home pay” on this page?",
-      a: "Take-home pay refers to income after payroll deductions such as taxes and other withholdings. This calculator treats the input as a net amount.",
+      a: "Take-home pay is your net income after payroll deductions such as taxes and other withholdings. This calculator treats the income input as a net amount.",
     },
     {
       q: "What does this tool calculate?",
-      a: "It annualizes take-home pay and rent using a 365-day year, then calculates rent as a percentage of take-home pay and the estimated amount left after rent. It also shows monthly, weekly, and 4-week equivalents derived from the same annual totals.",
+      a: "It annualizes take-home pay and rent using a 365-day year, then calculates rent as a percentage of take-home pay and the estimated amount left after rent. It also shows monthly, weekly, and 4-week equivalents from the same annual totals.",
     },
     {
-      q: "Why does it convert everything to an annual total?",
-      a: "Annualizing both numbers keeps the comparison consistent when rent and pay use different time periods. It prevents treating calendar months as fixed weeks and makes 4-week cycles comparable.",
+      q: "Why convert everything to an annual total?",
+      a: "Annualizing both values keeps comparisons consistent when rent and pay use different periods. It avoids mixing calendar months with fixed-week or 28-day cycles.",
     },
     {
-      q: "Why do monthly and every-4-weeks amounts differ?",
-      a: "4 weeks is always 28 days. An average month is about 30.42 days (365 ÷ 12). Over a year, that difference changes totals.",
+      q: "Why do monthly and every 4 weeks differ?",
+      a: "A 4-week period is 28 days. An average month is about 30.42 days (365 ÷ 12). Over a year, that difference changes totals.",
     },
     {
-      q: "If my rent is monthly, can I enter take-home pay weekly or biweekly?",
-      a: "Yes. Each input is annualized from its selected period first, then the percent and leftover amount are computed from annual totals.",
+      q: "Can I mix periods (for example monthly rent and biweekly pay)?",
+      a: "Yes. Each input is annualized from its selected period, then the percentage and leftover amount are computed from the annual totals.",
     },
     {
       q: "Does “left after rent” include utilities or other bills?",
       a: "No. It is take-home pay minus rent only.",
     },
     {
-      q: "What assumptions are used for time periods?",
-      a: "Assumptions: 1 year = 365 days, 1 week = 7 days, every 4 weeks = 28 days, and 1 month = 365 ÷ 12 days (average). Actual pay dates and billing rules vary.",
+      q: "What time assumptions does this page use?",
+      a: "Assumptions: year = 365 days, week = 7 days, every 4 weeks = 28 days, and month = 365 ÷ 12 days (average). Actual pay schedules and billing rules vary.",
     },
   ];
 

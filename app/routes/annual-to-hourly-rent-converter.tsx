@@ -792,27 +792,27 @@ export default function AnnualToHourlyRent() {
   const faqData = [
     {
       q: "How does this convert annual rent to an hourly amount?",
-      a: "The main result is time-based: annual rent is spread across every hour in a 365-day year. That is annual ÷ (365 × 24) = annual ÷ 8,760.",
+      a: "The main result is time-based: your annual rent is spread evenly across every hour in a 365-day year. The calculation is annual ÷ (365 × 24) = annual ÷ 8,760.",
     },
     {
       q: "Is this the same as dividing annual rent by 8,760 hours?",
-      a: "Yes. Under the page assumptions (365 days, 24 hours/day), the hourly equivalence is annual ÷ 8,760.",
+      a: "Yes. Under the page assumptions (365 days, 24 hours per day), the hourly equivalent is annual ÷ 8,760.",
     },
     {
       q: "Why can the hourly equivalent look surprisingly small?",
-      a: "Because the annual total is divided by a large denominator (8,760 hours). This is an equivalence for comparison, not a lease billing rate.",
+      a: "Because the annual total is divided across 8,760 hours. This is a comparison metric for budgeting and context, not a lease billing rate.",
     },
     {
       q: "What is the paid-hours scenario?",
-      a: "It’s an optional comparison that spreads the annual total across only assumed paid hours (hours/week × 52). It shows how the implied hourly changes when you allocate the same annual cost to fewer hours.",
+      a: "It’s an optional comparison that spreads the same annual total across only assumed paid hours (hours per week × 52). This shows how the implied hourly changes when the same cost is allocated to fewer hours.",
     },
     {
       q: "What does “annual rent” mean here?",
-      a: "It means the total amount you want to treat as rent for budgeting. This tool does not guess what is included (utilities, fees, taxes, deposits).",
+      a: "It means the total amount you choose to treat as rent for budgeting. The calculator does not guess what is included. Exclude or include utilities, fees, or taxes based on how you personally track rent.",
     },
     {
       q: "Does this tool convert currencies or exchange rates?",
-      a: "No. Currency selection only changes formatting. Convert the currency externally first if needed.",
+      a: "No. Currency selection only changes formatting. Convert exchange rates externally first if needed.",
     },
     {
       q: "Does this use leap years?",

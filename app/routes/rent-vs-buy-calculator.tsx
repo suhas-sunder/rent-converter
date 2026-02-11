@@ -1069,12 +1069,12 @@ export default function RentVsBuyCalculator() {
       a: "It estimates total rent paid over a chosen time horizon and compares it to a simplified ownership model that includes mortgage payments, property tax, insurance, maintenance, HOA, and estimated selling costs, then subtracts estimated net sale proceeds.",
     },
     {
-      q: "Why does the calculator show both “outflow” and a “net cost” for buying?",
-      a: "Ownership has cash leaving the household (payments and expenses) and also builds an asset through equity. Net cost is a way to compare ownership outflow after accounting for estimated sale proceeds at the end of the horizon.",
+      q: "Why show both ownership “outflow” and a “net cost”?",
+      a: "Buying has cash leaving the household and also builds equity. Net cost compares ownership outflow after accounting for estimated sale proceeds at the end of the horizon.",
     },
     {
       q: "Does the mortgage payment include property tax and insurance?",
-      a: "No. The mortgage payment shown is principal and interest only. Property tax, insurance, maintenance, and HOA are added separately so the ownership total is visible.",
+      a: "No. The mortgage payment shown is principal and interest only. Property tax, insurance, maintenance, and HOA are added separately so the full ownership cost is visible.",
     },
     {
       q: "How are rent increases applied?",
@@ -1082,19 +1082,19 @@ export default function RentVsBuyCalculator() {
     },
     {
       q: "How is home appreciation applied?",
-      a: "Home value is grown once per year by the home appreciation percentage. This affects property tax, maintenance (if set as a percent of value), and the estimated sale proceeds.",
+      a: "Home value is grown once per year by the appreciation rate. This affects estimated sale proceeds and any costs modeled as a percent of home value.",
     },
     {
       q: "What does “break-even year” mean here?",
-      a: "It is the first year where the ownership estimate becomes less expensive than renting in this model, using cumulative ownership outflow plus upfront costs, minus estimated equity, compared against cumulative rent paid.",
+      a: "It is the first year where the ownership estimate becomes less expensive than renting in this model, comparing cumulative ownership outflow (plus upfront costs, minus estimated equity) against cumulative rent paid.",
     },
     {
-      q: "Does this include income tax effects or deductions?",
+      q: "Does this include tax effects or deductions?",
       a: "No. Tax impacts are not modeled. This keeps the tool focused on cash costs and a basic equity estimate rather than jurisdiction-specific tax rules.",
     },
     {
       q: "How accurate are the results?",
-      a: "They are estimates based on simplified assumptions. Real outcomes depend on mortgage terms, fees, maintenance realities, move timing, market changes, and the exact terms of rent and sale.",
+      a: "They are estimates based on simplified assumptions. Real outcomes depend on mortgage terms, fees, maintenance, market changes, move timing, and the exact terms of rent and sale.",
     },
   ];
 

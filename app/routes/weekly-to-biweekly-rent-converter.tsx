@@ -732,27 +732,27 @@ export default function WeeklyToBiweeklyRent() {
   const faqData = [
     {
       q: "How do you convert weekly rent to biweekly rent?",
-      a: "This page uses annual equivalence as the source of truth. Your weekly amount is converted to an annual total using a 365-day year, then expressed as a 14-day (biweekly) equivalent derived from that same annual total.",
+      a: "The conversion uses annual equivalence as the source of truth. Weekly rent is converted to a daily rate (weekly ÷ 7), scaled to a 365-day annual total, then expressed as a 14-day (biweekly) equivalent derived from that same annual total.",
     },
     {
       q: "Is biweekly rent always exactly double weekly rent?",
-      a: "Under the day-based definitions used here (weekly = 7 days and biweekly = 14 days), the biweekly equivalent is effectively 2x the weekly amount. Real billing schedules can still differ depending on due dates and how a lease defines per-week payments.",
+      a: "Under the day-based definitions used here (weekly = 7 days and biweekly = 14 days), yes: the biweekly equivalent is 2× the weekly amount. Calendar billing rules and lease terms can still cause real payments to differ.",
     },
     {
-      q: "Why show an annual basis if the conversion is weekly to biweekly?",
-      a: "RentConverter.com uses annual equivalence consistently so all period breakdowns are derived from one annual total. That avoids mixing month-length assumptions with 4-week cycles.",
+      q: "Why use an annual basis if the conversion is weekly to biweekly?",
+      a: "Using one annual total keeps all period breakdowns consistent. It avoids mixing assumptions when monthly, 4-week, and weekly values are shown together on the same page.",
     },
     {
       q: "Why does the monthly equivalent differ from the 4-week equivalent?",
-      a: "A 4-week period is 28 days. An average month is about 30.42 days (365 divided by 12). Because the periods are different lengths, their annual-equivalent amounts differ.",
+      a: "A 4-week period is 28 days. An average month is about 30.42 days (365 ÷ 12). Because the periods are different lengths, their annual-equivalent amounts differ.",
     },
     {
       q: "Does this match exact lease totals when rent is due on specific dates?",
-      a: "It estimates period equivalents for comparison. Exact totals depend on the payment schedule, start date, proration, fees, and what is included in rent.",
+      a: "No. These are equivalences for comparison and budgeting. Exact totals depend on payment schedules, start dates, proration rules, fees, and what is included in rent.",
     },
     {
       q: "What costs are included?",
-      a: "Only the rent you enter. Utilities, parking, insurance, fees, and one-time charges are not included unless you add them into the amount first.",
+      a: "Only the rent you enter. Utilities, parking, insurance, fees, and one-time charges are excluded unless you include them in the input amount.",
     },
   ];
 

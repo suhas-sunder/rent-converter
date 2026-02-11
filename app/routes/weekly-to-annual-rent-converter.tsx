@@ -696,27 +696,27 @@ export default function WeeklyToAnnualRent() {
   const faqData = [
     {
       q: "How does this convert weekly rent to an annual total?",
-      a: "It uses annual equivalence: your weekly amount is converted into an annual total using a 365-day year. That annual total is then used for all other period equivalents shown on the page.",
+      a: "It uses annual equivalence. Your weekly amount is converted to a daily rate (weekly ÷ 7), then scaled to a 365-day year to produce an annual total. All other period equivalents on the page come from that same annual total.",
     },
     {
       q: "Why is weekly rent × 52 not always the same as the annual result here?",
-      a: "Weekly × 52 assumes exactly 52 weekly payments. A 365-day year is about 52.14 weeks, so a time-based annual equivalent can differ slightly from the payment-count shortcut.",
+      a: "Weekly × 52 assumes exactly 52 weekly payments. A 365-day year is about 52.14 weeks, so a time-based annual equivalent can be slightly higher than the payment-count shortcut.",
     },
     {
       q: "What does the “52 payments” comparison represent?",
-      a: "It shows a payment-count interpretation (52 weekly payments) next to the 365-day annual-equivalence interpretation, so you can compare both without mixing assumptions.",
+      a: "It shows a payment-count interpretation (52 weekly payments) next to the 365-day annual-equivalence interpretation so you can see both without mixing assumptions.",
     },
     {
       q: "How does weekly rent relate to 4-week (28-day) pricing?",
-      a: "A 4-week period is always 28 days. Converting both to an annual basis helps compare weekly listings to 4-week pricing without treating 4 weeks as a calendar month.",
+      a: "A 4-week period is always 28 days. Converting both to annual totals lets you compare weekly listings to 4-week pricing without treating 4 weeks as a calendar month.",
     },
     {
       q: "Does this match exact lease totals and due dates?",
-      a: "It is an annual-equivalent estimate for comparison. Exact totals depend on the lease schedule, start date, and any proration rules.",
+      a: "No. This is an annual-equivalent estimate for comparison and budgeting. Exact totals depend on the lease schedule, start date, and any proration rules.",
     },
     {
       q: "What costs are included in the conversion?",
-      a: "Only the rent amount entered. Utilities, parking, insurance, fees, and one-time charges are not included unless you add them into the amount before converting.",
+      a: "Only the rent amount entered. Utilities, parking, insurance, fees, and one-time charges are excluded unless you add them into the amount before converting.",
     },
   ];
 

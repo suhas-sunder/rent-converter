@@ -51,7 +51,6 @@ export const meta: Route.MetaFunction = () => {
   ];
 };
 
-
 type Period =
   | "hourly"
   | "daily"
@@ -643,31 +642,31 @@ export default function RentPaidEvery4Weeks() {
   const faqData = [
     {
       q: "What does “rent paid every 4 weeks” mean?",
-      a: "It means rent is due on a fixed 28-day cycle instead of a calendar month. The due date moves through the calendar because 28 days is shorter than most months.",
+      a: "It means rent is due on a fixed 28-day cycle instead of by calendar month. Because 28 days is shorter than most months, the due date drifts through the calendar.",
     },
     {
-      q: "How many rent payments happen in a year on a 4-week schedule?",
-      a: "A 4-week schedule is often described as 13 payments in a 52-week year (52 ÷ 4 = 13). Using a 365-day year, there are about 13.04 28-day periods (365 ÷ 28). Lease terms determine how billing is handled in practice.",
+      q: "How many payments happen in a year on a 4-week schedule?",
+      a: "A 4-week schedule is commonly described as 13 payments in a 52-week year (52 ÷ 4 = 13). Using a 365-day year, there are about 13.04 28-day periods (365 ÷ 28). Lease terms determine how billing is handled in practice.",
     },
     {
       q: "Why can 4-week rent feel higher than monthly rent?",
-      a: "Monthly billing implies 12 payments per year. A 4-week schedule is closer to 13 cycles per year, so the annual total can be higher even when each 4-week payment looks similar to a monthly payment.",
+      a: "Monthly billing implies 12 payments per year. A 4-week cadence is closer to 13 cycles per year, so the annual total can be higher even when each 4-week payment looks similar to a monthly payment.",
     },
     {
-      q: "Is 4-week rent the same as paying rent monthly?",
-      a: "No. A 4-week period is 28 days. An average month is about 30.42 days (365 ÷ 12). Because the periods are different lengths, the annual equivalents differ.",
+      q: "Is 4-week rent the same as paying monthly?",
+      a: "No. A 4-week period is 28 days. An average month is about 30.42 days (365 ÷ 12). Different period lengths produce different annual equivalents.",
     },
     {
-      q: "Does this calculator match my exact due dates?",
-      a: "It provides an estimate for budgeting and comparison. Exact due dates and totals can vary with lease rules, start dates, prorations, fees, and what is included in rent.",
+      q: "Does this match exact due dates in my lease?",
+      a: "It provides equivalents for budgeting and comparison. Exact due dates and totals depend on lease rules, start dates, prorations, fees, and what is included in rent.",
     },
     {
       q: "Why does the calculator use an average month?",
-      a: "Months have different lengths (28 to 31 days). Using 365 ÷ 12 creates a consistent monthly average that allows comparisons across hourly, daily, weekly, 4-week, monthly, and annual periods.",
+      a: "Calendar months vary from 28 to 31 days. Using 365 ÷ 12 creates a consistent monthly average so hourly, daily, weekly, 4-week, monthly, and annual equivalents stay comparable.",
     },
     {
-      q: "How can this help when comparing listings?",
-      a: "It converts a 4-week amount into monthly and annual equivalents so different listings can be compared on the same annual basis.",
+      q: "How does this help when comparing listings?",
+      a: "It converts a 4-week amount into monthly and annual equivalents so listings priced on different schedules can be compared on the same annual basis.",
     },
   ];
 

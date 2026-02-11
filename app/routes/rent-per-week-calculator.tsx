@@ -671,23 +671,23 @@ export default function RentPerWeekCalculator() {
   const faqData = [
     {
       q: "What does “rent per week” mean on this calculator?",
-      a: "It is the rent amount converted into a weekly equivalent using annual equivalence (365-day basis). This helps compare listings quoted in different billing cycles on the same weekly basis.",
+      a: "It is your rent expressed as a weekly equivalent using a 365-day annual basis. This makes listings priced on different billing cycles comparable on the same weekly scale.",
     },
     {
       q: "Why isn’t monthly rent divided by 4 the same as weekly rent?",
-      a: "A month is not exactly 4 weeks. This calculator uses an average month length of 365 ÷ 12 days, converts to an annual total, then expresses that annual total as a weekly equivalent.",
+      a: "A month is not exactly 4 weeks. This calculator uses an average month of 365 ÷ 12 days, converts to an annual total, then derives a weekly equivalent from that annual total.",
     },
     {
       q: "How does every 4 weeks (28 days) compare to weekly rent?",
-      a: "4 weeks is exactly 28 days, which corresponds to 4 weeks. Many 4-week billing schedules imply about 13 payments per year, which can differ from monthly (12 payments per year).",
+      a: "Four weeks is exactly 28 days, which equals 4 weeks. Many 4-week billing schedules imply about 13 payments per year, which can differ from monthly (typically 12 payments per year).",
     },
     {
       q: "Is this the same as prorated rent for a partial month?",
-      a: "Not necessarily. This tool is for equivalence and comparison. Lease proration depends on lease terms and how the landlord defines the billing month and due dates.",
+      a: "No. This tool shows equivalences for comparison. Lease proration depends on the lease terms, billing months, and due dates.",
     },
     {
-      q: "What assumptions does the calculator use?",
-      a: "It uses a 365-day year, week = 7 days, biweekly = 14 days, every 4 weeks = 28 days, and month = 365 ÷ 12 days (average).",
+      q: "What time assumptions does this page use?",
+      a: "Assumptions: year = 365 days, week = 7 days, biweekly = 14 days, every 4 weeks = 28 days, and month = 365 ÷ 12 days (average).",
     },
   ];
 

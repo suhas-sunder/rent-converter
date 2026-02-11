@@ -625,27 +625,27 @@ export default function DailyToMonthlyRent() {
   const faqData = [
     {
       q: "If rent is priced per day, what does “monthly rent” mean?",
-      a: "It is an estimated monthly equivalent so you can compare a daily rate to typical monthly listings. This page uses consistent year-based assumptions.",
+      a: "It’s an estimated monthly equivalent so you can compare a daily rate to typical monthly listings. This page uses consistent, year-based assumptions for fair comparison.",
     },
     {
       q: "How is daily rent converted into a monthly equivalent on this page?",
-      a: "Daily is converted to an annual total using 365 days, then converted to monthly using an average month length (365 ÷ 12 days).",
+      a: "The calculator converts daily to an annual total using 365 days, then expresses that same annual total as a monthly equivalent using an average month length (365 ÷ 12 days).",
     },
     {
       q: "Why not just multiply the daily rate by 30?",
-      a: "Thirty days is a common shortcut, but it changes assumptions. Using an average month keeps the conversion consistent across daily, weekly, 4-week, monthly, and annual equivalents.",
+      a: "Thirty days is a common shortcut, but it changes assumptions. Using an average month keeps conversions consistent across daily, weekly, 4-week, monthly, and annual equivalents.",
     },
     {
       q: "Why does a 4-week (28-day) amount differ from the monthly equivalent?",
-      a: "A 4-week period is always 28 days, while an average month is about 30.42 days (365 ÷ 12). Different lengths produce different equivalents.",
+      a: "A 4-week period is always 28 days, while an average month is about 30.42 days (365 ÷ 12). Because the time lengths differ, the equivalents differ.",
     },
     {
       q: "Does this match exact totals for short stays?",
-      a: "Not necessarily. Short stays often include cleaning fees, taxes, parking, or bundled utilities. Treat the result as a baseline for rate comparison.",
+      a: "Not necessarily. Short stays often include cleaning fees, taxes, parking, or bundled utilities. Treat the result as a baseline for rate comparison, not a final invoice.",
     },
     {
       q: "What assumptions are used for the math?",
-      a: "Assumptions: year = 365 days, week = 7 days, biweekly = 14 days, 4-week = 28 days, month = 365 ÷ 12 days (average). Your agreement can differ.",
+      a: "Assumptions: year = 365 days, week = 7 days, biweekly = 14 days, 4-week = 28 days, and month uses an average length of 365 ÷ 12 days. Your agreement can differ.",
     },
   ];
 

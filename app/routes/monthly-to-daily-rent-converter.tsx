@@ -45,7 +45,6 @@ export const meta: Route.MetaFunction = () => {
   ];
 };
 
-
 type Period =
   | "weekly"
   | "monthly"
@@ -598,33 +597,34 @@ export default function MonthlyToDailyRent() {
     if (typeof window === "undefined") return;
     window.print();
   };
-
+  
   const faqData = [
     {
       q: "What does “monthly to daily rent” mean?",
-      a: "It is the same rent expressed as a per-day amount. This page converts a monthly figure into a daily equivalent so costs can be compared on one consistent time basis.",
+      a: "It expresses the same rent as a per-day amount so you can compare costs on a consistent time basis.",
     },
     {
       q: "How is the daily equivalent calculated?",
-      a: "The tool uses annual equivalence. Monthly is treated as an average month (365 ÷ 12 days), converted to an annual amount, then divided by 365 to produce a daily equivalent.",
+      a: "This page uses annual equivalence. Monthly is treated as an average month (365 ÷ 12 days), converted to an annual total, then divided by 365 to produce a daily equivalent.",
     },
     {
       q: "Why not just divide monthly rent by 30?",
-      a: "Dividing by 30 is a quick estimate, but it does not match annual equivalence. Using 365 ÷ 12 days per month keeps conversions consistent across daily, weekly, monthly, and annual views.",
+      a: "Dividing by 30 is a shortcut that changes assumptions. Using an average month (365 ÷ 12 days) keeps daily, weekly, monthly, and annual equivalents consistent with each other.",
     },
     {
-      q: "Why does every 4 weeks (28 days) look different from monthly?",
-      a: "A 4-week period is 28 days, while an average month is about 30.42 days (365 ÷ 12). Over a year, paying every 4 weeks can line up with 13 payment periods instead of 12 monthly payments, which changes totals.",
+      q: "Why does every 4 weeks (28 days) differ from monthly?",
+      a: "A 4-week period is 28 days, while an average month is about 30.42 days (365 ÷ 12). Over a year, 4-week billing often implies 13 payment periods instead of 12 monthly payments, which changes totals.",
     },
     {
-      q: "What time assumptions are used on this page?",
-      a: "Assumptions: 1 year = 365 days, 1 week = 7 days, biweekly = 14 days, every 4 weeks = 28 days, and month = 365 ÷ 12 days (average). Results are estimates for comparison and budgeting.",
+      q: "What time assumptions does this page use?",
+      a: "Assumptions: year = 365 days, week = 7 days, biweekly = 14 days, every 4 weeks = 28 days, and month = 365 ÷ 12 days (average). Results are for budgeting and comparison.",
     },
     {
       q: "Does this include utilities, parking, or other fees?",
       a: "No. It converts the rent amount only. Additional housing costs depend on the lease and the property.",
     },
   ];
+
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",

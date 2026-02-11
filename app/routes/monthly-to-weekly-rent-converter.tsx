@@ -571,27 +571,27 @@ export default function MonthlyToWeeklyRent() {
   const faqData = [
     {
       q: "How is monthly rent converted to weekly rent on this page?",
-      a: "It uses annual equivalence. Monthly is treated as an average month (365 ÷ 12 days), converted to an annual basis, then expressed as a weekly amount (7-day weeks) on the same annual basis.",
+      a: "This page uses annual equivalence. Monthly is treated as an average month (365 ÷ 12 days), converted to an annual total, then expressed as a weekly amount using 7-day weeks.",
     },
     {
       q: "Why not just divide monthly rent by 4 to get weekly?",
-      a: "Dividing by 4 assumes a month is exactly 4 weeks (28 days). An average month is about 30.42 days (365 ÷ 12), so the annual totals do not line up with that shortcut.",
+      a: "Dividing by 4 assumes a month is exactly 4 weeks (28 days). An average month is about 30.42 days (365 ÷ 12), so that shortcut changes the implied annual total.",
     },
     {
       q: "What does “weekly equivalent” mean if my lease is monthly?",
-      a: "It is a comparison number. It helps compare listings across rent periods but does not change how rent is billed under a monthly lease.",
+      a: "It’s a comparison number. It helps compare listings across rent periods but does not change how rent is billed under a monthly lease.",
     },
     {
       q: "How is every 4 weeks (28 days) different from monthly?",
-      a: "A 4-week period is 28 days. Over a year, 4-week billing can imply 13 periods, while monthly billing is typically described as 12 payments. Different period lengths can create different annual totals.",
+      a: "A 4-week period is 28 days. Over a year, that often implies 13 periods, while monthly billing is typically framed as 12 payments. Different period lengths lead to different annual totals.",
     },
     {
       q: "Will this match exact charges on specific due dates?",
-      a: "It estimates equivalents for budgeting and comparison. Exact billing depends on the lease terms, start date, prorations, fees, and due date rules.",
+      a: "No. These are equivalences for budgeting and comparison. Exact billing depends on lease terms, start dates, proration rules, fees, and due-date policies.",
     },
     {
       q: "Does the conversion change by country?",
-      a: "The math stays the same. What changes is how rent is commonly advertised (for example weekly in some countries vs per calendar month in others).",
+      a: "The math is the same everywhere. What changes is how rent is commonly advertised (for example, weekly in some countries versus per calendar month in others).",
     },
   ];
 

@@ -620,27 +620,27 @@ export default function BiweeklyToAnnualRent() {
   const faqData = [
     {
       q: "How does this convert biweekly rent to annual rent?",
-      a: "It treats biweekly as a 14-day amount. The calculator converts biweekly to a daily equivalent (biweekly ÷ 14) and then multiplies by 365 to produce an annual equivalent.",
+      a: "Biweekly is treated as a 14-day amount. The calculator converts to a daily rate (biweekly ÷ 14) and then annualizes it (daily × 365) to get an annual equivalent.",
     },
     {
-      q: "Why is the annual result not always exactly biweekly × 26?",
-      a: "A 365-day year contains about 26.07 biweekly periods (365 ÷ 14). Some budgets use 26 payments as a shortcut, while a day-based annual equivalence can be slightly higher.",
+      q: "Why isn’t the annual result always exactly biweekly × 26?",
+      a: "Because a 365-day year contains about 26.07 biweekly periods (365 ÷ 14). Using ×26 is a common budgeting shortcut, but day-based annualization can be slightly higher.",
     },
     {
       q: "Is biweekly the same as twice per month?",
-      a: "No. Twice per month is a calendar schedule (24 payments per year). Biweekly is every 14 days (about 26 cycles per year). The annual totals can differ.",
+      a: "No. Twice per month (semimonthly) is a calendar schedule with 24 payments per year. Biweekly is every 14 days, which is about 26 payments per year. The annual totals can differ even when the periodic prices look similar.",
     },
     {
       q: "What assumptions does this tool use?",
-      a: "Year = 365 days, week = 7 days, biweekly = 14 days, 4-week = 28 days, month = 365 ÷ 12 days (average). This is for budgeting and comparison, not exact due dates.",
+      a: "Year = 365 days, week = 7 days, biweekly = 14 days, 4-week = 28 days, and month uses an average length of 365 ÷ 12 days. Results are for budgeting and comparison, not exact due dates.",
     },
     {
-      q: "Does this match my exact lease payments?",
-      a: "Not necessarily. Real billing depends on lease terms, due dates, prorations, fees, and what is included in rent.",
+      q: "Will this match my exact lease payments?",
+      a: "Not necessarily. Real billing depends on start dates, due dates, prorations, fees, and what your lease includes as rent.",
     },
     {
       q: "Does the currency selector convert exchange rates?",
-      a: "No. It only changes formatting. Convert currencies elsewhere first if needed.",
+      a: "No. It only changes formatting. Convert exchange rates externally before entering amounts if needed.",
     },
   ];
 

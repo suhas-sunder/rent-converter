@@ -682,31 +682,31 @@ export default function RentPerPaycheck() {
   const faqData = [
     {
       q: "What does rent per paycheck mean?",
-      a: "It is the estimated amount of rent to allocate from each paycheck so the total adds up to the same annual rent cost across your pay cycle.",
+      a: "It is the amount of rent to set aside from each paycheck so the total adds up to the same annual rent cost across your pay cycle.",
     },
     {
       q: "Why does semimonthly differ from biweekly?",
-      a: "Semimonthly pay is typically 24 paychecks per year. Biweekly pay is typically 26 paychecks per year. With the same annual rent, dividing by 24 versus 26 changes the per-paycheck estimate.",
+      a: "Semimonthly pay is typically 24 paychecks per year. Biweekly pay is typically 26 paychecks per year. Dividing the same annual rent by 24 versus 26 changes the per-paycheck amount.",
     },
     {
-      q: "How does this handle rent that is billed every 4 weeks?",
-      a: "A 4-week billing cycle is treated as 28 days, which corresponds to about 13 rent payments per year. The calculator converts that to an annual total before estimating amounts per paycheck.",
+      q: "How does this handle rent billed every 4 weeks?",
+      a: "A 4-week billing cycle is treated as 28 days (about 13 payments per year). The calculator converts that to an annual total before estimating amounts per paycheck.",
     },
     {
       q: "If rent is due monthly but pay is biweekly, how is this used?",
-      a: "This is an allocation amount. Setting aside that amount each paycheck helps spread a monthly rent cost across the year, even though rent due dates and paycheck dates do not always align.",
+      a: "This is an allocation amount. Setting aside this amount each paycheck helps spread a monthly rent cost across the year, even though rent due dates and paycheck dates do not align perfectly.",
     },
     {
       q: "Is the result exact for my calendar and due dates?",
-      a: "No. The result uses standard time-period assumptions and annual equivalence. Actual pay schedules, months, and rent due dates can vary.",
+      a: "No. The result uses standard time-period assumptions and annual equivalence. Actual pay schedules and rent due dates vary.",
     },
     {
       q: "What assumptions does this calculator use?",
-      a: "It uses a 365-day year and an average month length of 365 ÷ 12 days, with fixed day counts for weekly (7), biweekly (14), and every 4 weeks (28). Paycheck counts use standard definitions (weekly=52, biweekly=26, semimonthly=24, monthly=12).",
+      a: "Assumptions: year = 365 days, month = 365 ÷ 12 days (average), week = 7 days, biweekly = 14 days, every 4 weeks = 28 days. Paycheck counts: weekly = 52, biweekly = 26, semimonthly = 24, monthly = 12.",
     },
     {
-      q: "Does this tell whether rent is affordable?",
-      a: "No. This calculator allocates rent across pay cycles. For budgeting context, use the rent affordability calculator.",
+      q: "Does this tell me whether rent is affordable?",
+      a: "No. This tool allocates rent across pay cycles. For affordability context, use the rent affordability calculator.",
     },
   ];
 
