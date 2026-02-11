@@ -4,15 +4,10 @@ import Assumptions from "~/client/components/layout/Assumptions";
 import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/rent-vs-buy-calculator/HowItWorks";
 
-function safeToFixed(n: number, digits: number): string {
-  if (!Number.isFinite(n)) return "—";
-  return n.toFixed(digits);
-}
-
 export const meta: Route.MetaFunction = () => {
   const title = "Rent vs Buy Calculator (When Buying Breaks Even)";
   const description =
-    "Compare renting vs buying and see when buying breaks even. View total rent paid, total ownership costs, estimated equity, and a year-by-year comparison over your chosen time horizon. Clear assumptions, no fluff.";
+    "See when buying breaks even vs renting. Compare total rent paid, total ownership costs, and estimated equity year by year with clear assumptions. Free, private, no signup.";
 
   const canonicalUrl = "https://www.rentconverter.com/rent-vs-buy-calculator";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
@@ -26,7 +21,7 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "keywords",
       content:
-        "rent vs buy calculator, renting vs buying, rent or buy, break even rent vs buy, home ownership cost calculator, total cost of owning",
+        "rent vs buy calculator, rent or buy calculator, break even rent vs buy, renting vs buying, home ownership cost calculator, buy vs rent analysis",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },

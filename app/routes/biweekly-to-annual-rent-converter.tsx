@@ -13,9 +13,9 @@ const SITE_URL = "https://www.rentconverter.com";
 const PAGE_PATH = "/biweekly-to-annual-rent-converter";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Biweekly to Annual Rent Converter (Exact 14-Day Year)";
+  const title = "Biweekly to Annual Rent Converter (True Yearly Cost)";
   const description =
-    "Instantly convert biweekly rent (every 14 days) into an annual total using a true 365-day year. Exact decimals, full breakdown, and payment-count context (×26 vs 365/14), plus print-to-PDF. Free, private, no signup.";
+    "See your true yearly rent from any biweekly amount. Compare ×26 payments vs a true 365-day year with exact decimals and a clear breakdown. Free, private, no signup. Export to PDF.";
 
   const url = `${SITE_URL}${PAGE_PATH}`;
   const ogImage = `${SITE_URL}/og-image.jpg`;
@@ -26,7 +26,7 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "keywords",
       content:
-        "biweekly to annual rent, biweekly rent to yearly, every 2 weeks to annual rent, convert biweekly rent to annual, biweekly rent yearly equivalent, biweekly rent calculator annual, biweekly × 26 vs 365/14",
+        "biweekly to annual rent, biweekly rent to yearly, true yearly rent, biweekly × 26 vs 365/14, convert biweekly rent to annual, rent biweekly to yearly calculator, biweekly yearly equivalent",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },

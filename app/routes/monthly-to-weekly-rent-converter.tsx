@@ -10,9 +10,9 @@ function safeToFixed(n: number, digits: number): string {
 }
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Monthly to Weekly Rent Converter (28-Day vs Monthly)";
+  const title = "Monthly to Weekly Rent Converter (True Weekly Cost)";
   const description =
-    "Instantly convert monthly rent into a weekly amount using a true 365-day year and average month length. Compare monthly vs 4-week (28-day) rent math, with exact decimals and full period breakdowns. Free and private.";
+    "See your true weekly rent from any monthly amount. Compare monthly vs 4-week (28-day) pricing with exact decimals and clear breakdowns. Free, private, no signup.";
 
   const url = "https://www.rentconverter.com/monthly-to-weekly-rent-converter";
   const image = "https://www.rentconverter.com/og-image.jpg";
@@ -23,7 +23,7 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "keywords",
       content:
-        "monthly to weekly rent, monthly rent to weekly, rent converter monthly to weekly, convert monthly rent to weekly, weekly equivalent of monthly rent, rent per week from monthly, monthly vs 4 week rent, 28 day rent vs monthly",
+        "monthly to weekly rent, convert monthly rent to weekly, true weekly rent from monthly, weekly equivalent of monthly rent, monthly vs 4 week rent, 28 day rent vs monthly, rent weekly from monthly",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
@@ -41,11 +41,7 @@ export const meta: Route.MetaFunction = () => {
     { name: "twitter:description", content: description },
     { name: "twitter:image", content: image },
 
-    {
-      tagName: "link",
-      rel: "canonical",
-      href: url,
-    },
+    { tagName: "link", rel: "canonical", href: url },
   ];
 };
 
@@ -57,16 +53,6 @@ type Period =
   | "daily"
   | "hourly"
   | "annual";
-
-const PERIOD_LABEL: Record<Period, string> = {
-  hourly: "Hourly",
-  daily: "Daily",
-  weekly: "Weekly",
-  biweekly: "2 weeks",
-  every_4_weeks: "4 weeks (28 days)",
-  monthly: "Monthly",
-  annual: "Annual",
-};
 
 const ROUTE_WHITELIST = new Set<string>([
   "/",

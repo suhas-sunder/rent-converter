@@ -15,16 +15,16 @@ export const meta: Route.MetaFunction = () => {
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
 
   return [
-    { title: "Weekly to Biweekly Rent Converter (7-Day vs 14-Day Math)" },
+    { title: "Weekly to Biweekly Rent Converter (True Biweekly Cost)" },
     {
       name: "description",
       content:
-        "Instantly convert weekly rent into a biweekly (14-day) amount and see how weekly math carries over across a true 365-day year. Includes a clear breakdown plus monthly vs 4-week (28-day) context. Free and private.",
+        "See the true biweekly cost of weekly rent. Compare 7-day vs 14-day math over a full year with exact decimals and clear breakdowns. Free, private, no signup.",
     },
     {
       name: "keywords",
       content:
-        "weekly to biweekly rent, convert weekly rent to biweekly, weekly rent biweekly equivalent, weekly to every 2 weeks rent, 7 day rent to 14 day rent, rent converter weekly to biweekly",
+        "weekly to biweekly rent, convert weekly rent to biweekly, true biweekly rent from weekly, weekly rent biweekly equivalent, 7 day to 14 day rent, weekly to every 2 weeks rent",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
@@ -33,12 +33,12 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:type", content: "website" },
     {
       property: "og:title",
-      content: "Weekly to Biweekly Rent Converter (7-Day vs 14-Day Math)",
+      content: "Weekly to Biweekly Rent Converter (True Biweekly Cost)",
     },
     {
       property: "og:description",
       content:
-        "Convert weekly rent to a biweekly amount and clearly see how 7-day and 14-day schedules compare over a full year.",
+        "Find the true biweekly cost of weekly rent and compare 7-day vs 14-day schedules.",
     },
     { property: "og:url", content: url },
     { property: "og:site_name", content: "RentConverter.com" },
@@ -48,8 +48,7 @@ export const meta: Route.MetaFunction = () => {
     { name: "twitter:title", content: "Weekly to Biweekly Rent Converter" },
     {
       name: "twitter:description",
-      content:
-        "See the biweekly equivalent of weekly rent and how 7-day math translates to 14-day pay cycles.",
+      content: "See the true biweekly cost of weekly rent with exact decimals.",
     },
     { name: "twitter:image", content: ogImage },
 
@@ -65,16 +64,6 @@ type Period =
   | "every_4_weeks"
   | "monthly"
   | "annual";
-
-const PERIOD_LABEL: Record<Period, string> = {
-  hourly: "Hourly",
-  daily: "Daily",
-  weekly: "Weekly",
-  biweekly: "2 weeks",
-  every_4_weeks: "4 weeks (28 days)",
-  monthly: "Monthly",
-  annual: "Annual",
-};
 
 const SUPPORTED_CURRENCIES = [
   "USD",

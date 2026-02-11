@@ -5,19 +5,14 @@ import FourWeekVsMonthly from "~/client/components/layout/FourWeekVsMonthly";
 import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/biweekly-to-weekly-rent-converter/HowItWorks";
 
-function safeToFixed(n: number, digits: number): string {
-  if (!Number.isFinite(n)) return "-";
-  return n.toFixed(digits);
-}
-
 const ROUTE_SLUG = "biweekly-to-weekly-rent-converter" as const;
 const ROUTE_PATH = `/${ROUTE_SLUG}` as const;
 const PAGE_URL = `https://www.rentconverter.com${ROUTE_PATH}` as const;
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Biweekly to Weekly Rent Converter (Exact 14-Day Math)";
+  const title = "Biweekly to Weekly Rent Converter (True Weekly Cost)";
   const description =
-    "Instantly convert rent paid every 14 days into a weekly amount using a true 365-day year. Exact decimals, clear breakdown, and print-to-PDF. Free, private, no signup.";
+    "See your true weekly rent from any biweekly amount using a 365-day year. Exact decimals, clear breakdown. Free, private, no signup. Export to PDF.";
 
   return [
     { title },
@@ -25,7 +20,7 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "keywords",
       content:
-        "biweekly to weekly rent, convert biweekly rent to weekly, biweekly rent weekly equivalent, every 2 weeks to weekly rent, 14 day rent to weekly, biweekly rent calculator, rent converter biweekly to weekly",
+        "biweekly to weekly rent, convert biweekly rent to weekly, true weekly rent, every 2 weeks to weekly rent, 14 day rent to weekly, biweekly rent calculator, rent converter biweekly to weekly",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
@@ -38,7 +33,7 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:site_name", content: "RentConverter.com" },
     {
       property: "og:image",
-      content: "https://www.rentconverter.comog-image.jpg",
+      content: "https://www.rentconverter.com/og-image.jpg",
     },
 
     { name: "twitter:card", content: "summary_large_image" },
@@ -46,7 +41,7 @@ export const meta: Route.MetaFunction = () => {
     { name: "twitter:description", content: description },
     {
       name: "twitter:image",
-      content: "https://www.rentconverter.comog-image.jpg",
+      content: "https://www.rentconverter.com/og-image.jpg",
     },
 
     { tagName: "link", rel: "canonical", href: PAGE_URL },

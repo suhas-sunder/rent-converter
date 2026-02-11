@@ -10,9 +10,9 @@ function safeToFixed(n: number, digits: number): string {
 }
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Rent Per Week Calculator (Weekly Rent From Any Pay Cycle)";
+  const title = "Rent Per Week Calculator (True Weekly Cost)";
   const description =
-    "Instantly calculate rent per week from monthly, 4-week (28-day), biweekly, daily, hourly, or annual amounts. See clear breakdowns, payment counts, and optional weekly totals using consistent math. Free and private.";
+    "See your true rent per week from monthly, 4-week (28-day), biweekly, daily, hourly, or annual amounts. Get exact decimals and clear breakdowns. Free, private, no signup.";
 
   const canonicalUrl = "https://www.rentconverter.com/rent-per-week-calculator";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
@@ -26,7 +26,7 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "keywords",
       content:
-        "rent per week calculator, weekly rent calculator, rent per week from monthly, weekly equivalent rent, rent per week from 4 week rent, rent per week from biweekly, prorated weekly rent",
+        "rent per week calculator, weekly rent calculator, true weekly rent, rent per week from monthly, weekly equivalent rent, rent per week from 4 week rent, prorated weekly rent",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
@@ -47,7 +47,7 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "twitter:description",
       content:
-        "See your rent per week from monthly, 4-week, biweekly, daily, hourly, or annual amounts.",
+        "Find your true weekly rent from any pay cycle with clear breakdowns.",
     },
     { name: "twitter:image", content: ogImage },
     { name: "twitter:image:alt", content: "RentConverter.com preview image" },

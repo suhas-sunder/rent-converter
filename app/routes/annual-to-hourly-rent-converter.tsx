@@ -9,9 +9,9 @@ const SITE_URL = "https://www.rentconverter.com";
 const PAGE_PATH = "/annual-to-hourly-rent-converter";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Annual to Hourly Rent Converter (Exact 8,760-Hour Year)";
+  const title = "Annual to Hourly Rent Converter (Every Hour Cost)";
   const description =
-    "Instantly convert annual rent into an hourly amount using a true 365-day (8,760-hour) year. Exact decimals, full breakdown, optional paid-hours scenario, and print-to-PDF. Free, private, no signup.";
+    "See your hourly rent from any annual amount using a true 365-day (8,760-hour) year. Exact decimals, clear breakdown, optional paid-hours scenario. Free, private, no signup. Export to PDF.";
 
   const url = `${SITE_URL}${PAGE_PATH}`;
 
@@ -21,13 +21,12 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "keywords",
       content:
-        "annual to hourly rent, yearly to hourly rent, annual rent per hour, 8760 hours per year, annual rent to hourly calculator, hourly rent budgeting, rent hourly equivalent",
+        "annual to hourly rent, yearly to hourly rent, rent per hour, 8760 hours per year, annual rent to hourly calculator, hourly rent equivalent, rent hourly conversion",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
     { name: "theme-color", content: "#f8fafc" },
 
-    // Open Graph
     { property: "og:type", content: "website" },
     { property: "og:title", content: title },
     { property: "og:description", content: description },
@@ -35,13 +34,11 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:site_name", content: "RentConverter.com" },
     { property: "og:image", content: `${SITE_URL}/og-image.jpg` },
 
-    // Twitter
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
     { name: "twitter:image", content: `${SITE_URL}/og-image.jpg` },
 
-    // Canonical
     { tagName: "link", rel: "canonical", href: url },
   ];
 };

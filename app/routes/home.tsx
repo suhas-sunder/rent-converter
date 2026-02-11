@@ -7,45 +7,40 @@ const SITE_URL = "https://www.rentconverter.com/";
 
 export const meta: Route.MetaFunction = () => [
   {
-    title:
-      "Rent Converter Calculator (Weekly, Monthly, 4-Week, Biweekly, Daily, Hourly)",
+    title: "Rent Converter: True Monthly Cost of Any Rent",
   },
   {
     name: "description",
     content:
-      "Convert rent between weekly, monthly, every 4 weeks (28 days), biweekly, daily, hourly, and annual using clear, consistent assumptions. Exact decimals, side-by-side comparisons, and transparent math.",
+      "See the true monthly cost of any rent. Compare weekly, 4-week (28-day), biweekly, daily, or annual prices side by side with exact decimals. Free, private, no signup.",
   },
 
-  // Open Graph
   { property: "og:type", content: "website" },
   {
     property: "og:title",
-    content:
-      "Rent Converter Calculator (Weekly, Monthly, 4-Week, Biweekly, Daily, Hourly)",
+    content: "Rent Converter: True Monthly Cost of Any Rent",
   },
   {
     property: "og:description",
     content:
-      "Accurate rent conversions across weekly, monthly, 28-day, biweekly, daily, hourly, and annual periods with clear assumptions and exact decimals.",
+      "Convert weekly, 4-week (28-day), biweekly, daily, or annual rent to the true monthly cost with exact decimals and clear assumptions.",
   },
   { property: "og:url", content: SITE_URL },
   { property: "og:site_name", content: "RentConverter.com" },
   { property: "og:image", content: `${SITE_URL}og-image.jpg` },
 
-  // Twitter
   { name: "twitter:card", content: "summary_large_image" },
   {
     name: "twitter:title",
-    content: "Rent Converter Calculator (Weekly, Monthly, 4-Week, Biweekly)",
+    content: "Rent Converter: True Monthly Cost of Any Rent",
   },
   {
     name: "twitter:description",
     content:
-      "Clear, accurate rent conversions with transparent math and exact decimals.",
+      "Find the true monthly cost of any rent from weekly, 28-day, biweekly, daily, or annual prices.",
   },
   { name: "twitter:image", content: `${SITE_URL}og-image.jpg` },
 
-  // Canonical
   { tagName: "link", rel: "canonical", href: SITE_URL },
 ];
 
@@ -770,23 +765,23 @@ export default function Home() {
   const faqData = [
     {
       q: "What does “rent” mean on this page?",
-      a: "It means your recurring rent amount for the chosen period (weekly, monthly, 4-week, etc.). This tool does not include utilities, parking, taxes, fees, or deposits unless you manually include them in the number you enter.",
+      a: "It means your recurring rent amount for the chosen period (weekly, monthly, 4-week, etc.). This tool does not include utilities, parking, taxes, fees, or deposits unless you include them in the number you enter.",
     },
     {
       q: "How do you convert weekly rent to monthly rent?",
-      a: "We convert via a consistent day-rate model: weekly is treated as a 7-day rate, then we convert to a daily rate, then to an average month (365 ÷ 12 days). This avoids guesswork and keeps assumptions explicit.",
+      a: "We use a consistent day-rate model: weekly is treated as 7 days, converted to a daily rate, then to a true monthly amount using 365 ÷ 12 days. This avoids the common shortcut of just multiplying by 4 or dividing by 12, which can misstate the real monthly cost.",
     },
     {
       q: "Why is every-4-weeks (28-day) rent different from monthly rent?",
-      a: "A 4-week period is 28 days. An average month is about 30.42 days (365 ÷ 12). When you compare them as time lengths, 4-week rent typically comes out lower than the equivalent monthly rent, even if the sticker numbers look similar.",
+      a: "Because 4 weeks is 28 days, while a true month averages about 30.42 days (365 ÷ 12). Listings that quote 4-week rent can look cheaper, but over a year you often pay more than a true monthly price. This calculator shows both side by side so you can spot that difference.",
     },
     {
       q: "Does the calculator preserve decimals?",
-      a: "Yes. We parse and compute using decimal-safe math (not floating point). Optional rounding is display-only and clearly labeled.",
+      a: "Yes. Calculations use decimal-safe math and preserve precision. Any rounding is display-only and clearly labeled so you can see the exact amounts.",
     },
     {
       q: "Can I save the results?",
-      a: "Yes. Use Print / Save PDF to save a copy from your browser.",
+      a: "Yes. You can print or save a PDF directly from your browser to keep a copy of your results.",
     },
   ];
 

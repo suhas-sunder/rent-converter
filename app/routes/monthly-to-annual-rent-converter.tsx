@@ -10,9 +10,9 @@ function safeToFixed(n: number, digits: number): string {
 }
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Monthly to Annual Rent Converter (12 vs 13 Payments)";
+  const title = "Monthly to Annual Rent Converter (True Yearly Cost)";
   const description =
-    "Instantly convert monthly rent into an annual total and see the difference between monthly × 12 and 4-week (13-payment) schedules. Exact decimals, clear comparisons, and a full breakdown across billing periods. Free and private.";
+    "See your true yearly rent from any monthly amount. Compare 12 payments vs 4-week (13-payment) schedules with exact decimals and clear side-by-side totals. Free, private, no signup.";
 
   const url = "https://www.rentconverter.com/monthly-to-annual-rent-converter";
   const image = "https://www.rentconverter.com/og-image.jpg";
@@ -23,7 +23,7 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "keywords",
       content:
-        "monthly to annual rent converter, monthly rent to yearly total, convert rent monthly to annual, yearly rent from monthly, annual rent calculator, 12 payments vs 13 payments rent, 4 week rent vs monthly annual total",
+        "monthly to annual rent converter, monthly rent to yearly total, true yearly rent from monthly, 12 payments vs 13 payments rent, 4 week rent vs monthly annual total, rent monthly to annual calculator, annual rent equivalent from monthly",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
@@ -45,6 +45,7 @@ export const meta: Route.MetaFunction = () => {
   ];
 };
 
+
 type Period =
   | "weekly"
   | "monthly"
@@ -53,16 +54,6 @@ type Period =
   | "daily"
   | "hourly"
   | "annual";
-
-const PERIOD_LABEL: Record<Period, string> = {
-  hourly: "Hourly",
-  daily: "Daily",
-  weekly: "Weekly",
-  biweekly: "2 weeks",
-  every_4_weeks: "4 weeks (28 days)",
-  monthly: "Monthly",
-  annual: "Annual",
-};
 
 // Keep conservative and aligned with your known route set
 const ROUTE_WHITELIST = new Set<string>([

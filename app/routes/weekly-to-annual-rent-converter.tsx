@@ -4,26 +4,21 @@ import Assumptions from "~/client/components/layout/Assumptions";
 import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/weekly-to-annual-rent-converter/HowItWorks";
 
-function safeToFixed(n: number, digits: number): string {
-  if (!Number.isFinite(n)) return "-";
-  return n.toFixed(digits);
-}
-
 export const meta: Route.MetaFunction = () => {
   const url = "https://www.rentconverter.com/weekly-to-annual-rent-converter";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
 
   return [
-    { title: "Weekly to Annual Rent Converter (52 Weeks vs 365 Days)" },
+    { title: "Weekly to Annual Rent Converter (True Annual Cost)" },
     {
       name: "description",
       content:
-        "Instantly convert weekly rent into an annual total and see the difference between 52-week math and a true 365-day year. Includes a clear breakdown, 4-week (28-day) context, and print-to-PDF. Free and private.",
+        "See the true annual cost of weekly rent. Compare simple 52-week totals vs a 365-day year with exact decimals and a clear breakdown. Free, private, no signup.",
     },
     {
       name: "keywords",
       content:
-        "weekly to annual rent, weekly to yearly rent, convert weekly rent to annual, weekly rent annual total, weekly rent 52 weeks vs 365 days, rent converter weekly to annual",
+        "weekly to annual rent, convert weekly rent to annual, true annual cost of weekly rent, weekly rent yearly total, 52 weeks vs 365 days rent, weekly rent annualized",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
@@ -32,12 +27,12 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:type", content: "website" },
     {
       property: "og:title",
-      content: "Weekly to Annual Rent Converter (52 Weeks vs 365 Days)",
+      content: "Weekly to Annual Rent Converter (True Annual Cost)",
     },
     {
       property: "og:description",
       content:
-        "Convert weekly rent to an annual amount and clearly see how 52-week totals compare to a true 365-day year.",
+        "Find the true yearly cost of weekly rent and compare 52-week math to a true year.",
     },
     { property: "og:url", content: url },
     { property: "og:site_name", content: "RentConverter.com" },
@@ -48,7 +43,7 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "twitter:description",
       content:
-        "See the annual cost of weekly rent and compare 52-week math vs a true year.",
+        "See the true annual cost of weekly rent with exact decimals and clear breakdowns.",
     },
     { name: "twitter:image", content: ogImage },
 

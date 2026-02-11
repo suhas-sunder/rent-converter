@@ -4,18 +4,13 @@ import Assumptions from "~/client/components/layout/Assumptions";
 import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/annual-to-weekly-rent-converter/HowItWorks";
 
-function safeToFixed(n: number, digits: number): string {
-  if (!Number.isFinite(n)) return "-";
-  return n.toFixed(digits);
-}
-
 const SITE_URL = "https://www.rentconverter.com";
 const PAGE_PATH = "/annual-to-weekly-rent-converter";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Annual to Weekly Rent Converter (÷ 52 vs 365-Day Week)";
+  const title = "Annual to Weekly Rent Converter (True Weekly Cost)";
   const description =
-    "Instantly convert annual rent to a weekly amount using annual ÷ 52. Also compare against a true 365-day weekly equivalent (annual × 7 ÷ 365), plus biweekly and 28-day views. Exact decimals, private, no signup.";
+    "See your true weekly rent from any annual amount. Compare ÷ 52 vs a 365-day weekly rate, plus biweekly and 28-day views with exact decimals. Free, private, no signup.";
 
   const url = `${SITE_URL}${PAGE_PATH}`;
   const ogImage = `${SITE_URL}/og-image.jpg`;
@@ -26,7 +21,7 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "keywords",
       content:
-        "annual to weekly rent converter, annual rent to weekly, yearly to weekly rent, annual divided by 52, annual ÷ 52, weekly rent equivalent, annual × 7 ÷ 365, 365 day year weekly",
+        "annual to weekly rent converter, yearly to weekly rent, true weekly rent, annual ÷ 52 vs 365-day week, weekly rent equivalent, rent weekly conversion, annual to weekly calculator",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },

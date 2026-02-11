@@ -5,9 +5,9 @@ import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/rent-increase-percentage-calculator/HowItWorks";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Rent Increase Percentage Calculator (Old vs New Rent)";
+  const title = "Rent Increase % Calculator (See Your Real Increase)";
   const description =
-    "Instantly calculate the percentage increase between your old rent and new rent. See the annual impact and per-period equivalents, including monthly vs 4-week (28-day) comparisons. Clear math, exact decimals. Free and private.";
+    "See your real rent increase percentage from old vs new rent. Compare the annual impact and monthly vs 4-week (28-day) equivalents with exact decimals. Free, private, no signup.";
 
   const canonicalUrl =
     "https://www.rentconverter.com/rent-increase-percentage-calculator";
@@ -22,7 +22,7 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "keywords",
       content:
-        "rent increase percentage, rent increase percent calculator, percentage increase in rent, calculate rent raise percentage, old rent vs new rent percent increase",
+        "rent increase percentage, rent increase percent calculator, calculate rent raise percentage, old rent vs new rent percent increase, rent increase rate",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },

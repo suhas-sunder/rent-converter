@@ -10,10 +10,9 @@ function safeToFixed(n: number, digits: number): string {
 }
 
 export const meta: Route.MetaFunction = () => {
-  const title =
-    "Monthly to Biweekly Rent Converter (Biweekly vs Twice-Monthly)";
+  const title = "Monthly to Biweekly Rent Converter (True Biweekly Cost)";
   const description =
-    "Instantly convert monthly rent into a true biweekly (every 14 days) amount using a 365-day year. See the difference between biweekly and twice-monthly timing, with exact decimals and an always-visible breakdown. Free and private.";
+    "See your true biweekly rent from any monthly amount. Compare biweekly vs twice-monthly timing with exact decimals and a clear breakdown. Free, private, no signup.";
 
   const url =
     "https://www.rentconverter.com/monthly-to-biweekly-rent-converter";
@@ -25,7 +24,7 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "keywords",
       content:
-        "monthly to biweekly rent, convert monthly rent to biweekly, monthly rent biweekly equivalent, biweekly rent from monthly, monthly to every 2 weeks rent, twice monthly vs biweekly rent, rent converter monthly to biweekly",
+        "monthly to biweekly rent, convert monthly rent to biweekly, true biweekly rent from monthly, biweekly vs twice monthly rent, monthly to every 2 weeks rent, rent converter monthly to biweekly, biweekly rent equivalent from monthly",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
@@ -43,11 +42,7 @@ export const meta: Route.MetaFunction = () => {
     { name: "twitter:description", content: description },
     { name: "twitter:image", content: image },
 
-    {
-      tagName: "link",
-      rel: "canonical",
-      href: url,
-    },
+    { tagName: "link", rel: "canonical", href: url },
   ];
 };
 
@@ -59,16 +54,6 @@ type Period =
   | "daily"
   | "hourly"
   | "annual";
-
-const PERIOD_LABEL: Record<Period, string> = {
-  hourly: "Hourly",
-  daily: "Daily",
-  weekly: "Weekly",
-  biweekly: "2 weeks",
-  every_4_weeks: "4 weeks (28 days)",
-  monthly: "Monthly",
-  annual: "Annual",
-};
 
 // Keep conservative and aligned with your known route set
 const ROUTE_WHITELIST = new Set<string>([

@@ -4,17 +4,12 @@ import Assumptions from "~/client/components/layout/Assumptions";
 import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/rent-vs-take-home-pay-calculator/HowItWorks";
 
-function safeToFixed(n: number, digits: number): string {
-  if (!Number.isFinite(n)) return "-";
-  return n.toFixed(digits);
-}
-
 export const meta: Route.MetaFunction = () => [
   { title: "Rent vs Take-Home Pay Calculator (What You Actually Keep)" },
   {
     name: "description",
     content:
-      "Instantly see how much of your take-home pay goes to rent and how much you have left. View rent as a percent of net income with clear monthly, weekly, and 4-week (28-day) breakdowns. Free and private.",
+      "See how much of your take-home pay goes to rent and what you actually keep. Compare rent as a % of net income across monthly, weekly, and 4-week (28-day) pay cycles. Free, private, no signup.",
   },
   {
     name: "keywords",
@@ -37,12 +32,12 @@ export const meta: Route.MetaFunction = () => [
   },
   {
     property: "og:url",
-    content: "https://www.rentconverter.comrent-vs-take-home-pay-calculator",
+    content: "https://www.rentconverter.com/rent-vs-take-home-pay-calculator",
   },
   { property: "og:site_name", content: "RentConverter.com" },
   {
     property: "og:image",
-    content: "https://www.rentconverter.comog-image.jpg",
+    content: "https://www.rentconverter.com/og-image.jpg",
   },
 
   { name: "twitter:card", content: "summary_large_image" },
@@ -54,13 +49,13 @@ export const meta: Route.MetaFunction = () => [
   },
   {
     name: "twitter:image",
-    content: "https://www.rentconverter.comog-image.jpg",
+    content: "https://www.rentconverter.com/og-image.jpg",
   },
 
   {
     tagName: "link",
     rel: "canonical",
-    href: "https://www.rentconverter.comrent-vs-take-home-pay-calculator",
+    href: "https://www.rentconverter.com/rent-vs-take-home-pay-calculator",
   },
 ];
 

@@ -2,15 +2,14 @@ import { useMemo, useEffect, useRef, useState } from "react";
 import type { Route } from "./+types/rent-increase-calculator";
 import HowItWorks from "~/client/components/rent-increase-calculator/HowItWorks";
 export const meta: Route.MetaFunction = () => {
-  const title = "Rent Increase Calculator (Percent or Fixed) + Annual Impact";
+  const title = "Rent Increase Calculator (See Your New Rent + Annual Impact)";
   const description =
-    "Instantly calculate your new rent after a percent or fixed increase. See the monthly, weekly, and 4-week (28-day) equivalents, the annual impact, and optional multi-increase projections. Clear assumptions, exact decimals. Free and private.";
+    "See your new rent after a percent or fixed increase. Compare monthly, weekly, and 4-week (28-day) equivalents and the annual impact with exact decimals. Free, private, no signup.";
 
   const canonicalUrl = "https://www.rentconverter.com/rent-increase-calculator";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
 
   return [
-    // Common “full” meta set (page-level)
     { title },
     { charset: "utf-8" },
     { name: "viewport", content: "width=device-width,initial-scale=1" },
@@ -25,10 +24,8 @@ export const meta: Route.MetaFunction = () => {
     { name: "author", content: "RentConverter.com" },
     { name: "theme-color", content: "#f8fafc" },
 
-    // Canonical
     { tagName: "link", rel: "canonical", href: canonicalUrl },
 
-    // Open Graph
     { property: "og:type", content: "website" },
     { property: "og:site_name", content: "RentConverter.com" },
     { property: "og:url", content: canonicalUrl },
@@ -37,13 +34,12 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:image", content: ogImage },
     { property: "og:image:alt", content: "RentConverter.com preview image" },
 
-    // Twitter
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: "Rent Increase Calculator" },
     {
       name: "twitter:description",
       content:
-        "Calculate your new rent after a percent or fixed increase and see the annual impact and pay-cycle equivalents.",
+        "See your new rent after a percent or fixed increase and the annual impact across pay cycles.",
     },
     { name: "twitter:image", content: ogImage },
     { name: "twitter:image:alt", content: "RentConverter.com preview image" },

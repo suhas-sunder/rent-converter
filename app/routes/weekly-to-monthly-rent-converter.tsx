@@ -14,16 +14,16 @@ export const meta: Route.MetaFunction = () => {
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
 
   return [
-    { title: "Weekly to Monthly Rent Converter (28-Day vs Monthly)" },
+    { title: "Weekly to Monthly Rent Converter (True Monthly Cost)" },
     {
       name: "description",
       content:
-        "Instantly convert weekly rent into a monthly amount and see how weekly math compares to 4-week (28-day) billing. Clear breakdowns, exact decimals, and print-to-PDF. Free and private.",
+        "See the true monthly cost of weekly rent. Compare weekly vs 4-week (28-day) pricing with exact decimals and clear breakdowns. Free, private, no signup.",
     },
     {
       name: "keywords",
       content:
-        "weekly to monthly rent, weekly rent to monthly, rent converter weekly to monthly, convert weekly rent to monthly, weekly to monthly rent calculator, 4 week rent vs monthly, 28 day rent vs monthly",
+        "weekly to monthly rent, convert weekly rent to monthly, true monthly cost of weekly rent, weekly rent monthly equivalent, 4 week rent vs monthly, 28 day rent vs monthly",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
@@ -32,12 +32,12 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:type", content: "website" },
     {
       property: "og:title",
-      content: "Weekly to Monthly Rent Converter (28-Day vs Monthly)",
+      content: "Weekly to Monthly Rent Converter (True Monthly Cost)",
     },
     {
       property: "og:description",
       content:
-        "Convert weekly rent to a monthly amount and clearly see the difference between weekly, 4-week (28-day), and monthly billing.",
+        "Find the true monthly cost of weekly rent and compare weekly vs 4-week billing.",
     },
     { property: "og:url", content: url },
     { property: "og:site_name", content: "RentConverter.com" },
@@ -48,7 +48,7 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "twitter:description",
       content:
-        "See the monthly equivalent of weekly rent and how it compares to 4-week (28-day) billing.",
+        "See the true monthly cost of weekly rent with clear breakdowns.",
     },
     { name: "twitter:image", content: ogImage },
 
@@ -64,16 +64,6 @@ type Period =
   | "every_4_weeks"
   | "monthly"
   | "annual";
-
-const PERIOD_LABEL: Record<Period, string> = {
-  hourly: "Hourly",
-  daily: "Daily",
-  weekly: "Weekly",
-  biweekly: "2 weeks",
-  every_4_weeks: "4 weeks (28 days)",
-  monthly: "Monthly",
-  annual: "Annual",
-};
 
 const SUPPORTED_CURRENCIES = [
   "USD",

@@ -5,13 +5,13 @@ import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/rent-due-date-calculator/HowItWorks";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Rent Due Date Calculator (Next Due Date + Payment Schedule)";
+  const title = "Rent Due Date Calculator (Next Due Date + Schedule)";
   const description =
-    "Instantly find your next rent due date and see a forward payment schedule. View how many payments fall in each month, how much rent is paid by an end date, and totals by year. Supports monthly, weekly, biweekly, and 4-week (28-day) cycles.";
+    "See your next rent due date and a full payment schedule at a glance. Track how many payments fall each month and total rent paid by any date across monthly, weekly, biweekly, and 28-day cycles. Free, private, no signup.";
 
   const ogTitle = "Rent Due Date Calculator (Next Due Date + Schedule)";
   const ogDescription =
-    "Find your next rent due date and see monthly payment counts, cumulative rent paid by an end date, and year totals for monthly, weekly, biweekly, and 28-day cycles.";
+    "Find your next rent due date and view payment counts by month plus total rent paid by any date for monthly, weekly, biweekly, and 28-day cycles.";
 
   const canonical = "https://www.rentconverter.com/rent-due-date-calculator";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
@@ -22,7 +22,7 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "keywords",
       content:
-        "rent due date calculator, next rent due date, rent payment schedule, rent paid by end date, monthly rent totals, rent billed every 28 days, rent paid every 4 weeks, rent due weekly, rent due biweekly, rent payment calendar",
+        "rent due date calculator, next rent due date, rent payment schedule, rent paid by date, rent payment calendar, rent billed every 28 days, rent due weekly, rent due biweekly, monthly rent totals",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
@@ -40,15 +40,11 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "twitter:description",
       content:
-        "Find your next rent due date and see payment schedules, monthly totals, and cumulative rent paid.",
+        "Find your next rent due date and view payment schedules, monthly totals, and cumulative rent paid.",
     },
     { name: "twitter:image", content: ogImage },
 
-    {
-      tagName: "link",
-      rel: "canonical",
-      href: canonical,
-    },
+    { tagName: "link", rel: "canonical", href: canonical },
   ];
 };
 

@@ -8,9 +8,9 @@ const SITE_URL = "https://www.rentconverter.com";
 const PAGE_PATH = "/biweekly-to-monthly-rent-converter";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Biweekly to Monthly Rent Converter (26-Pay vs Monthly)";
+  const title = "Biweekly to Monthly Rent Converter (True Monthly Cost)";
   const description =
-    "Instantly convert rent paid every 14 days into a monthly amount using a true 365-day year. See the impact of 26 payments per year, compare against monthly and 28-day rent, with exact decimals, CSV export, and print-to-PDF. Free and private.";
+    "See your true monthly rent from any biweekly amount. Compare 26 payments per year vs monthly and 28-day pricing with exact decimals. Free, private. Export CSV or PDF.";
 
   const url = `${SITE_URL}${PAGE_PATH}`;
   const ogImage = `${SITE_URL}/og-image.jpg`;
@@ -21,7 +21,7 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "keywords",
       content:
-        "biweekly to monthly rent converter, every 2 weeks to monthly rent, convert biweekly rent to monthly, biweekly rent monthly equivalent, 26 payments per year rent, biweekly vs monthly rent, 28 day vs monthly rent",
+        "biweekly to monthly rent converter, every 2 weeks to monthly rent, true monthly rent from biweekly, 26 payments per year rent, biweekly vs monthly rent, 28 day vs monthly rent, rent biweekly to monthly",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },

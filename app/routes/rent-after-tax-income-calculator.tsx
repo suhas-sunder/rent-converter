@@ -9,9 +9,9 @@ function safeToFixed(n: number, digits: number): string {
 }
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Rent After-Tax Income Calculator (Rent vs Take-Home Pay)";
+  const title = "Rent vs Take-Home Pay Calculator (After-Tax Income)";
   const description =
-    "Calculate rent as a percentage of your take-home (after-tax) income. See net income after rent, compare pay cycles, and understand what you actually keep. Clear assumptions, exact decimals. Free and private.";
+    "See how much of your take-home pay goes to rent and what you actually keep. Compare rent as a % of net income across pay cycles with exact decimals. Free, private, no signup.";
 
   const url = "https://www.rentconverter.com/rent-after-tax-income-calculator";
   const image = "https://www.rentconverter.com/og-image.jpg";
@@ -22,7 +22,7 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "keywords",
       content:
-        "rent after tax income, rent percentage of net income, after tax income rent calculator, rent to net income, take home pay rent percentage",
+        "rent after tax income, rent percentage of net income, rent vs take home pay, after tax income rent calculator, rent to net income, take home pay rent percentage",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
@@ -40,11 +40,7 @@ export const meta: Route.MetaFunction = () => {
     { name: "twitter:description", content: description },
     { name: "twitter:image", content: image },
 
-    {
-      tagName: "link",
-      rel: "canonical",
-      href: url,
-    },
+    { tagName: "link", rel: "canonical", href: url },
   ];
 };
 

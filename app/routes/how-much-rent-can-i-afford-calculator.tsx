@@ -4,15 +4,10 @@ import Assumptions from "~/client/components/layout/Assumptions";
 import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/how-much-rent-can-i-afford-calculator/HowItWorks";
 
-function safeToFixed(n: number, digits: number): string {
-  if (!Number.isFinite(n)) return "-";
-  return n.toFixed(digits);
-}
-
 export const meta: Route.MetaFunction = () => {
-  const title = "How Much Rent Can I Afford? Income-Based Calculator";
+  const title = "How Much Rent Can I Afford? (Income-Based Calculator)";
   const description =
-    "Instantly estimate how much rent you can afford based on income using clear, consistent assumptions. See affordable rent across monthly, weekly, and 4-week (28-day) pay cycles, with exact breakdowns and print-to-PDF. Free and private.";
+    "Find your affordable rent from your income in seconds. See safe rent limits across monthly, weekly, and 4-week (28-day) cycles with exact breakdowns. Free, private, no signup. Export to PDF.";
 
   const url =
     "https://www.rentconverter.com/how-much-rent-can-i-afford-calculator";

@@ -4,15 +4,12 @@ import Assumptions from "~/client/components/layout/Assumptions";
 import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/rent-split-calculator/HowItWorks";
 
-function safeToFixed(n: number, digits: number): string {
-  if (!Number.isFinite(n)) return "-";
-  return n.toFixed(digits);
-}
+
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Rent Split Calculator (How Much Each Roommate Pays)";
+  const title = "Rent Split Calculator (See What Each Roommate Pays)";
   const description =
-    "Instantly split rent per roommate and see exactly how much each person pays. View per-person rent by month, week, 4-week (28-day), and year, with clear breakdowns and fair comparisons. Free and private.";
+    "See exactly what each roommate pays for rent. Compare per-person amounts by month, week, 4-week (28-day), and year with clear breakdowns. Free, private, no signup.";
 
   const canonicalUrl = "https://www.rentconverter.com/rent-split-calculator";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
@@ -26,7 +23,7 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "keywords",
       content:
-        "rent split calculator, split rent per roommate, rent split equally, rent per roommate, divide rent",
+        "rent split calculator, split rent per roommate, rent per roommate, divide rent equally, roommate rent split",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
@@ -47,12 +44,13 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "twitter:description",
       content:
-        "See exactly how much each roommate pays for rent with clear per-person breakdowns.",
+        "Find how much each roommate pays with clear per-person breakdowns.",
     },
     { name: "twitter:image", content: ogImage },
     { name: "twitter:image:alt", content: "RentConverter.com preview image" },
   ];
 };
+
 
 type Period =
   | "hourly"

@@ -10,9 +10,9 @@ function safeToFixed(n: number, digits: number): string {
 }
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Monthly to Daily Rent Converter (Avg Day vs 30-Day Month)";
+  const title = "Monthly to Daily Rent Converter (True Daily Cost)";
   const description =
-    "Instantly convert monthly rent into a daily amount using a true 365-day year. Compare average-day vs 30-day month math, plus see weekly, biweekly, 4-week (28-day), hourly, and annual breakdowns. Free and private.";
+    "See your true daily rent from any monthly amount. Compare average-day vs 30-day math with exact decimals and clear breakdowns across periods. Free, private, no signup.";
 
   const url = "https://www.rentconverter.com/monthly-to-daily-rent-converter";
   const image = "https://www.rentconverter.com/og-image.jpg";
@@ -23,7 +23,7 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "keywords",
       content:
-        "monthly to daily rent converter, monthly rent per day, convert monthly rent to daily, daily equivalent rent, rent per day from monthly, 28 day rent vs monthly, 4 week rent comparison, annual equivalence rent",
+        "monthly to daily rent converter, convert monthly rent to daily, true daily rent from monthly, daily equivalent rent, rent per day from monthly, average day vs 30 day month rent, rent daily from monthly",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
@@ -41,13 +41,10 @@ export const meta: Route.MetaFunction = () => {
     { name: "twitter:description", content: description },
     { name: "twitter:image", content: image },
 
-    {
-      tagName: "link",
-      rel: "canonical",
-      href: url,
-    },
+    { tagName: "link", rel: "canonical", href: url },
   ];
 };
+
 
 type Period =
   | "weekly"
@@ -57,16 +54,6 @@ type Period =
   | "daily"
   | "hourly"
   | "annual";
-
-const PERIOD_LABEL: Record<Period, string> = {
-  hourly: "Hourly",
-  daily: "Daily",
-  weekly: "Weekly",
-  biweekly: "2 weeks",
-  every_4_weeks: "4 weeks (28 days)",
-  monthly: "Monthly",
-  annual: "Annual",
-};
 
 // Keep conservative and aligned with your known route set.
 // Add routes here only if they are confirmed to exist.

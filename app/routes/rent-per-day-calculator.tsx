@@ -8,9 +8,9 @@ function safeToFixed(n: number, digits: number): string {
 }
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Rent Per Day Calculator (Daily Rent From Any Pay Cycle)";
+  const title = "Rent Per Day Calculator (True Daily Cost)";
   const description =
-    "Instantly calculate rent per day from monthly, weekly, 4-week (28-day), biweekly, hourly, or annual amounts. Includes clear breakdowns and a daily total estimator for any number of days using consistent math. Free and private.";
+    "See your true rent per day from monthly, weekly, 4-week (28-day), biweekly, hourly, or annual amounts. Estimate totals for any number of days with exact decimals. Free, private, no signup.";
 
   const canonicalUrl = "https://www.rentconverter.com/rent-per-day-calculator";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
@@ -24,7 +24,7 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "keywords",
       content:
-        "rent per day calculator, daily rent calculator, rent per day from monthly, daily equivalent rent, rent per day from weekly, rent per day from 4 week rent, 28 day rent per day, prorated rent per day",
+        "rent per day calculator, daily rent calculator, true daily rent, rent per day from monthly, daily equivalent rent, rent per day from weekly, rent per day from 4 week rent, prorated rent per day",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
@@ -45,7 +45,7 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "twitter:description",
       content:
-        "Calculate daily rent from monthly, weekly, 4-week, biweekly, hourly, or annual amounts with clear breakdowns.",
+        "Find your true daily rent from any pay cycle with clear breakdowns.",
     },
     { name: "twitter:image", content: ogImage },
     { name: "twitter:image:alt", content: "RentConverter.com preview image" },

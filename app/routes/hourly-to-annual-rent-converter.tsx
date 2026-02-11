@@ -6,9 +6,9 @@ import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/hourly-to-annual-rent-converter/HowItWorks";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Hourly to Annual Rent Converter (Exact 365-Day Math)";
+  const title = "Hourly to Annual Rent Converter (True Yearly Cost)";
   const description =
-    "Instantly convert an hourly rent or rate into an annual amount using a true 365-day year. Compare paid-hours scenarios, see exact decimals, and get a full breakdown with print-to-PDF. Free, private, no signup.";
+    "See your true yearly rent from any hourly amount using a 365-day year. Compare paid-hours scenarios with exact decimals and a clear breakdown. Free, private, no signup. Export to PDF.";
 
   const url = "https://www.rentconverter.com/hourly-to-annual-rent-converter";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
@@ -19,7 +19,7 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "keywords",
       content:
-        "hourly to annual rent, convert hourly rent to yearly, hourly rate to annual rent, hourly rent to annual calculator, hourly to yearly rent converter, annual rent equivalent from hourly, hourly rent annualized",
+        "hourly to annual rent, convert hourly rent to yearly, true yearly rent from hourly, hourly rent annualized, hourly to yearly rent converter, annual rent equivalent from hourly, rent hourly to annual",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
@@ -37,11 +37,7 @@ export const meta: Route.MetaFunction = () => {
     { name: "twitter:description", content: description },
     { name: "twitter:image", content: ogImage },
 
-    {
-      tagName: "link",
-      rel: "canonical",
-      href: url,
-    },
+    { tagName: "link", rel: "canonical", href: url },
   ];
 };
 

@@ -5,15 +5,10 @@ import FourWeekVsMonthly from "~/client/components/layout/FourWeekVsMonthly";
 import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/hourly-to-monthly-rent-converter/HowItWorks";
 
-function safeToFixed(n: number, digits: number): string {
-  if (!Number.isFinite(n)) return "-";
-  return n.toFixed(digits);
-}
-
 export const meta: Route.MetaFunction = () => {
-  const title = "Hourly to Monthly Rent Converter (Avg Month vs 30 Days)";
+  const title = "Hourly to Monthly Rent Converter (True Monthly Cost)";
   const description =
-    "Instantly convert hourly rent into a monthly amount using true annual equivalence (365-day year). Compare average-month vs 30-day math, with exact decimals and a clear period breakdown. Free, private, no signup.";
+    "See your true monthly rent from any hourly amount. Compare average-month vs 30-day math with exact decimals and a clear breakdown. Free, private, no signup.";
 
   const url = "https://www.rentconverter.com/hourly-to-monthly-rent-converter";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
@@ -24,7 +19,7 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "keywords",
       content:
-        "hourly to monthly rent, convert hourly rent to monthly, hourly rent to monthly calculator, hourly rate to monthly rent equivalent, rent per hour to monthly, monthly equivalent of hourly rent, hour to month rent converter",
+        "hourly to monthly rent, convert hourly rent to monthly, true monthly rent from hourly, hourly rate to monthly rent equivalent, rent per hour to monthly, monthly equivalent of hourly rent, hour to month rent converter",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
@@ -42,11 +37,7 @@ export const meta: Route.MetaFunction = () => {
     { name: "twitter:description", content: description },
     { name: "twitter:image", content: ogImage },
 
-    {
-      tagName: "link",
-      rel: "canonical",
-      href: url,
-    },
+    { tagName: "link", rel: "canonical", href: url },
   ];
 };
 

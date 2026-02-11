@@ -9,9 +9,9 @@ const SITE_URL = "https://www.rentconverter.com";
 const PAGE_PATH = "/annual-to-monthly-rent-converter";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Annual to Monthly Rent Converter (Exact ÷ 12 + 28-Day Check)";
+  const title = "Annual to Monthly Rent Converter (True Monthly Cost)";
   const description =
-    "Instantly convert annual rent to a true monthly amount (annual ÷ 12). Compare against 4-week (28-day) rent, 12 vs 13 payments per year, with exact decimals, CSV export, and print-to-PDF. Free and private.";
+    "See your true monthly rent from any annual amount. Compare monthly vs 4-week (28-day) pricing and 12 vs 13 payments with exact decimals. Free, private. Export CSV or PDF.";
 
   const url = `${SITE_URL}${PAGE_PATH}`;
 
@@ -21,7 +21,7 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "keywords",
       content:
-        "annual to monthly rent, yearly to monthly rent, annual ÷ 12, annual rent to monthly calculator, 4 week rent vs monthly, 28 day rent vs monthly, 12 vs 13 payments per year, rent converter annual to monthly",
+        "annual to monthly rent, yearly to monthly rent, true monthly rent, annual rent to monthly calculator, 4 week rent vs monthly, 28 day rent vs monthly, 12 vs 13 payments per year, rent converter annual to monthly",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
@@ -51,16 +51,6 @@ type Period =
   | "every_4_weeks"
   | "monthly"
   | "annual";
-
-const PERIOD_LABEL: Record<Period, string> = {
-  hourly: "Hourly",
-  daily: "Daily",
-  weekly: "Weekly",
-  biweekly: "2 weeks (14 days)",
-  every_4_weeks: "4 weeks (28 days)",
-  monthly: "Monthly (annual ÷ 12)",
-  annual: "Annual",
-};
 
 // Whitelist rule (single source of truth)
 //

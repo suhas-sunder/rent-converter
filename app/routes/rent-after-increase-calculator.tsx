@@ -10,9 +10,9 @@ function safeToFixed(n: number, digits: number): string {
 }
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Rent After Increase Calculator (Percent or Fixed Raise)";
+  const title = "Rent After Increase Calculator (See Your New Rent)";
   const description =
-    "Instantly calculate your new rent after an increase by percent or fixed amount. See updated rent per period, annual impact, and clear comparisons across monthly, 4-week (28-day), and other pay cycles. Exact decimals, full breakdown. Free and private.";
+    "See your new rent after a percent or fixed increase. Compare the impact across monthly, 4-week (28-day), and annual totals with exact decimals and clear breakdowns. Free, private, no signup.";
 
   const url = "https://www.rentconverter.com/rent-after-increase-calculator";
   const image = "https://www.rentconverter.com/og-image.jpg";
@@ -23,7 +23,7 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "keywords",
       content:
-        "rent after increase, rent increase calculator, new rent after increase, rent raise calculator, percent rent increase calculator, rent increase amount calculator",
+        "rent after increase, rent increase calculator, new rent after increase, percent rent increase calculator, rent raise calculator, rent increase amount calculator",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
@@ -41,11 +41,7 @@ export const meta: Route.MetaFunction = () => {
     { name: "twitter:description", content: description },
     { name: "twitter:image", content: image },
 
-    {
-      tagName: "link",
-      rel: "canonical",
-      href: url,
-    },
+    { tagName: "link", rel: "canonical", href: url },
   ];
 };
 

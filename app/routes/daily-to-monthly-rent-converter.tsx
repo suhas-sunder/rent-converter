@@ -12,9 +12,9 @@ const PAGE_URL = `${SITE_URL}${ROUTE_PATH}` as const;
 const OG_IMAGE_URL = `${SITE_URL}/og-image.jpg` as const;
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Daily to Monthly Rent Converter (30-Day vs Avg Month)";
+  const title = "Daily to Monthly Rent Converter (True Monthly Cost)";
   const description =
-    "Instantly convert a daily rent price into a monthly amount using a true 365-day year. Compare 30-day months vs average-month math, with exact decimals, a full breakdown, and print-to-PDF. Free and private.";
+    "See your true monthly rent from any daily price. Compare 30-day vs average-month math with exact decimals and a clear breakdown. Free, private, no signup. Export to PDF.";
 
   return [
     { title },
@@ -22,7 +22,7 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "keywords",
       content:
-        "daily to monthly rent converter, daily rent to monthly equivalent, rent per day to monthly, convert daily rent into monthly, daily rate rent monthly, 30 day rent vs monthly, average month rent",
+        "daily to monthly rent converter, daily rent to monthly equivalent, true monthly rent, rent per day to monthly, 30 day vs average month rent, daily rate rent monthly, convert daily rent to monthly",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
@@ -52,16 +52,6 @@ type Period =
   | "every_4_weeks"
   | "monthly"
   | "annual";
-
-const PERIOD_LABEL: Record<Period, string> = {
-  hourly: "Hourly",
-  daily: "Daily",
-  weekly: "Weekly (7 days)",
-  biweekly: "2 weeks (14 days)",
-  every_4_weeks: "4 weeks (28 days)",
-  monthly: "Monthly (average)",
-  annual: "Annual",
-};
 
 // Internal link whitelist (only known routes)
 const ROUTE_WHITELIST = new Set<string>([

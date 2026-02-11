@@ -8,9 +8,9 @@ const SITE_URL = "https://www.rentconverter.com";
 const PAGE_PATH = "/annual-to-biweekly-rent-converter";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Annual to Biweekly Rent Converter (14-Day Equivalent)";
+  const title = "Annual to Biweekly Rent Converter (Every 2 Weeks)";
   const description =
-    "Convert annual rent into a biweekly (14-day) equivalent using a 365-day year. Exact decimals, clear breakdown, and print-to-PDF. Free, private, no signup.";
+    "See your every-2-weeks rent from any annual amount using a true 365-day year. Exact decimals, clear breakdown, export to PDF. Free, private, no signup.";
 
   const url = `${SITE_URL}${PAGE_PATH}`;
 
@@ -20,13 +20,12 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "keywords",
       content:
-        "annual to biweekly rent, yearly to biweekly rent, 14 day rent equivalent, annual rent biweekly calculator, convert annual rent to every 2 weeks, biweekly rent budgeting, rent converter annual to biweekly",
+        "annual to biweekly rent, yearly to biweekly rent, every 2 weeks rent, annual rent biweekly calculator, convert annual rent to biweekly, biweekly rent budgeting, rent converter annual to biweekly",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
     { name: "theme-color", content: "#f8fafc" },
 
-    // Open Graph
     { property: "og:type", content: "website" },
     { property: "og:title", content: title },
     { property: "og:description", content: description },
@@ -34,13 +33,11 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:site_name", content: "RentConverter.com" },
     { property: "og:image", content: `${SITE_URL}/og-image.jpg` },
 
-    // Twitter
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
     { name: "twitter:image", content: `${SITE_URL}/og-image.jpg` },
 
-    // Canonical
     { tagName: "link", rel: "canonical", href: url },
   ];
 };
@@ -711,7 +708,6 @@ export default function AnnualToBiweeklyRent() {
             <h1 className="text-2xl sm:text-left text-center capitalize sm:text-4xl text-sky-800 font-bold">
               Annual to biweekly converter
             </h1>
-
           </div>
 
           <div className="grid gap-5">
@@ -844,54 +840,52 @@ export default function AnnualToBiweeklyRent() {
           <Assumptions />
         </div>
 
-       <div className="flex flex-wrap items-center gap-3 mt-4">
-                    <div
-                      id="export-controls"
-                      className="mr-auto flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
-                    >
-                      <div className="flex flex-wrap gap-2">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            if (typeof window === "undefined") return;
-                            window.print();
-                          }}
-                          className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fbff]"
-                        >
-                          Print / Save PDF
-                        </button>
-                      </div>
-                    </div>
+        <div className="flex flex-wrap items-center gap-3 mt-4">
+          <div
+            id="export-controls"
+            className="mr-auto flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
+          >
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  if (typeof window === "undefined") return;
+                  window.print();
+                }}
+                className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fbff]"
+              >
+                Print / Save PDF
+              </button>
+            </div>
+          </div>
 
-                    <label className="inline-flex items-center gap-2 text-sm font-medium text-slate-700 select-none">
-                      <input
-                        type="checkbox"
-                        checked={roundDisplay}
-                        onChange={(e) => setRoundDisplay(e.target.checked)}
-                        className="h-4 w-4 rounded border-slate-300 text-sky-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-                      />
-                      Round results for display
-                    </label>
+          <label className="inline-flex items-center gap-2 text-sm font-medium text-slate-700 select-none">
+            <input
+              type="checkbox"
+              checked={roundDisplay}
+              onChange={(e) => setRoundDisplay(e.target.checked)}
+              className="h-4 w-4 rounded border-slate-300 text-sky-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+            />
+            Round results for display
+          </label>
 
-                    <label className="inline-flex items-center gap-2 text-sm font-medium text-slate-700 select-none">
-                      <span className="sr-only">Display decimals</span>
-                      <select
-                        value={displayDecimals}
-                        onChange={(e) =>
-                          setDisplayDecimals(
-                            validateDisplayDecimals(e.target.value),
-                          )
-                        }
-                        className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-sky-400"
-                        aria-label="Display decimals"
-                      >
-                        <option value={0}>0 decimals</option>
-                        <option value={2}>2 decimals</option>
-                        <option value={4}>4 decimals</option>
-                        <option value={6}>6 decimals</option>
-                      </select>
-                    </label>
-                  </div>
+          <label className="inline-flex items-center gap-2 text-sm font-medium text-slate-700 select-none">
+            <span className="sr-only">Display decimals</span>
+            <select
+              value={displayDecimals}
+              onChange={(e) =>
+                setDisplayDecimals(validateDisplayDecimals(e.target.value))
+              }
+              className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-sky-400"
+              aria-label="Display decimals"
+            >
+              <option value={0}>0 decimals</option>
+              <option value={2}>2 decimals</option>
+              <option value={4}>4 decimals</option>
+              <option value={6}>6 decimals</option>
+            </select>
+          </label>
+        </div>
       </section>
 
       <HowItWorks />

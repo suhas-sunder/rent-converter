@@ -10,10 +10,9 @@ function safeToFixed(n: number, digits: number): string {
 }
 
 export const meta: Route.MetaFunction = () => {
-  const title =
-    "Rent Paid Every 4 Weeks (28 Days) Calculator – 13 Payments Explained";
+  const title = "Rent Paid Every 4 Weeks Calculator (True Monthly Cost)";
   const description =
-    "Instantly convert rent paid every 4 weeks (28 days) to monthly and annual equivalents. See why there are 13 payments per year, how totals differ from monthly billing, and compare everything on a consistent annual basis. Clear math, exact decimals.";
+    "See the true monthly and yearly cost of rent paid every 28 days. Understand why there are 13 payments per year and compare 4-week vs monthly billing with exact decimals. Free, private, no signup.";
 
   const canonicalUrl =
     "https://www.rentconverter.com/rent-paid-every-4-weeks-calculator";
@@ -28,7 +27,7 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "keywords",
       content:
-        "rent paid every 4 weeks, 28 day rent, 4 week rent calculator, rent every 28 days, 4 week rent vs monthly, convert 4 week rent to monthly, convert 4 week rent to annual",
+        "rent paid every 4 weeks, 28 day rent, 4 week rent calculator, true monthly cost of 4 week rent, 13 payments per year rent, 4 week rent vs monthly, convert 4 week rent to annual",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
@@ -51,6 +50,7 @@ export const meta: Route.MetaFunction = () => {
     { name: "twitter:image:alt", content: "RentConverter.com preview image" },
   ];
 };
+
 
 type Period =
   | "hourly"

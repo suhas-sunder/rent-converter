@@ -9,9 +9,13 @@ function safeToFixed(n: number, digits: number): string {
 }
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Rent-to-Income Ratio Calculator (Percent of Income)";
+  const title = "Rent-to-Income Ratio Calculator (What % Goes to Rent)";
   const description =
-    "Instantly calculate what percent of your income goes to rent. Compare monthly, weekly, and 4-week (28-day) pay cycles with clear assumptions and an annualized breakdown of income and rent. Free and private.";
+    "See what percent of your income goes to rent and how much you keep. Compare monthly, weekly, and 4-week (28-day) pay cycles with exact decimals. Free, private, no signup.";
+
+  const url =
+    "https://www.rentconverter.com/rent-as-percentage-of-income-calculator";
+  const ogImage = "https://www.rentconverter.com/og-image.jpg";
 
   return [
     { title },
@@ -28,30 +32,16 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:type", content: "website" },
     { property: "og:title", content: title },
     { property: "og:description", content: description },
-    {
-      property: "og:url",
-      content:
-        "https://www.rentconverter.comrent-as-percentage-of-income-calculator",
-    },
+    { property: "og:url", content: url },
     { property: "og:site_name", content: "RentConverter.com" },
-    {
-      property: "og:image",
-      content: "https://www.rentconverter.comog-image.jpg",
-    },
+    { property: "og:image", content: ogImage },
 
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
-    {
-      name: "twitter:image",
-      content: "https://www.rentconverter.comog-image.jpg",
-    },
+    { name: "twitter:image", content: ogImage },
 
-    {
-      tagName: "link",
-      rel: "canonical",
-      href: "https://www.rentconverter.comrent-as-percentage-of-income-calculator",
-    },
+    { tagName: "link", rel: "canonical", href: url },
   ];
 };
 
