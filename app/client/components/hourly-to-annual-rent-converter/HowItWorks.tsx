@@ -569,33 +569,6 @@ const HowItWorks = () => {
                 </div>
               </div>
             </div>
-
-            {/* Dark utility callout */}
-            <div className="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-6 sm:p-7">
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0"
-              >
-                <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-sky-500 blur-3xl opacity-20" />
-                <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-slate-500 blur-3xl opacity-30" />
-              </div>
-
-              <div className="relative">
-                <div className="text-sm font-semibold text-sky-300">
-                  Utility note
-                </div>
-                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-200">
-                  “Hourly” depends on how many hours actually apply
-                </h3>
-                <p className="mt-3 text-slate-200 leading-7">
-                  The 24 × 365 view answers “What if this rate runs all the
-                  time?” The work-hours view answers “What if it applies only to
-                  scheduled hours?” If you choose the wrong assumption, the
-                  annual figure can be off by a lot, and that can flip an accept
-                  vs reject decision.
-                </p>
-              </div>
-            </div>
           </div>
         </div>
       </div>

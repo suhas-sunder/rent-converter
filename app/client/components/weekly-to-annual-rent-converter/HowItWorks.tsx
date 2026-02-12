@@ -505,48 +505,6 @@ const HowItWorks = () => {
                 </div>
               </div>
             </div>
-
-            {/* Dark utility callout */}
-            <div className="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-6 sm:p-7">
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0"
-              >
-                <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-sky-500 blur-3xl opacity-20" />
-                <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-slate-500 blur-3xl opacity-30" />
-              </div>
-
-              <div className="relative">
-                <div className="text-sm font-semibold text-sky-300">
-                  Utility note
-                </div>
-                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-100">
-                  Equivalent conversion is not a lease billing engine
-                </h3>
-                <p className="mt-3 text-slate-200 leading-7">
-                  Use the annual equivalents for decisions and comparisons, not
-                  for predicting exact due dates. Real leases can start
-                  mid-week, include pro-rated first periods, and collect
-                  payments on specific calendar dates. If you need a calendar
-                  schedule for what gets paid and when, you need a due-date
-                  tool.
-                </p>
-                <p className="mt-3 text-slate-200 leading-7">
-                  Also, if someone claims an “annual total” for a weekly rent,
-                  this page helps you identify whether they used a 365-day
-                  equivalence or a 52-payment shortcut. That difference is small
-                  per week, but it can flip a tight budget decision.
-                </p>
-                <div className="mt-4">
-                  <Link
-                    to="/rent-due-date-calculator"
-                    className="cursor-pointer inline-flex items-center font-semibold text-white hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 rounded-sm"
-                  >
-                    Rent due date calculator →
-                  </Link>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>

@@ -518,35 +518,6 @@ const HowItWorks = () => {
                 </p>
               </div>
             </div>
-
-            {/* Dark callout */}
-            <div className="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-6 sm:p-7">
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0"
-              >
-                <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-sky-500 blur-3xl opacity-20" />
-                <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-slate-500 blur-3xl opacity-30" />
-              </div>
-
-              <div className="relative">
-                <div className="text-sm font-semibold text-sky-300">
-                  Scope note
-                </div>
-                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-100">
-                  What this calculator does and does not do
-                </h3>
-                <p className="mt-3 text-slate-200 leading-7">
-                  This tool compares two rent amounts stated on the same period
-                  and returns a percent change plus practical impact numbers
-                  under explicit time assumptions. It does not add fees or
-                  utilities, and it does not model proration, effective dates,
-                  deposits, or one-time credits. Treat it as a clean comparison
-                  for old vs new rent, then apply lease-specific details outside
-                  the calculator when you review the offer.
-                </p>
-              </div>
-            </div>
           </div>
         </div>
       </div>

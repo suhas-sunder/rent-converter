@@ -681,54 +681,6 @@ const HowItWorks = () => {
                 </div>
               </div>
             </div>
-
-            {/* Dark utility callout */}
-            <div className="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-6 sm:p-7">
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0"
-              >
-                <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-sky-500 blur-3xl opacity-20" />
-                <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-slate-500 blur-3xl opacity-30" />
-              </div>
-
-              <div className="relative">
-                <div className="text-sm font-semibold text-sky-300">
-                  Utility note
-                </div>
-                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-200">
-                  Monthly here is a budgeting split, not a 30-day assumption
-                </h3>
-                <p className="mt-3 text-slate-200 leading-7">
-                  If your next action is a monthly decision (budgeting,
-                  comparing to a monthly listing, checking a monthly cap), use
-                  the headline monthly value. If your rent is actually paid
-                  every 4 weeks, do not convert it by “monthly” shortcuts. Treat
-                  it as a 28-day schedule and compare it using the dedicated
-                  tool below.
-                </p>
-                <ul className="mt-4 space-y-2 text-slate-200">
-                  <li className="flex gap-2">
-                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-slate-400 shrink-0" />
-                    <span>Monthly decision: use annual ÷ 12.</span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-slate-400 shrink-0" />
-                    <span>
-                      4-week billing decision: use the 28-day schedule logic.
-                    </span>
-                  </li>
-                </ul>
-                <div className="mt-4">
-                  <Link
-                    to="/rent-paid-every-4-weeks-calculator"
-                    className="cursor-pointer inline-flex items-center font-semibold text-white hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 rounded-sm"
-                  >
-                    Rent paid every 4 weeks calculator →
-                  </Link>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>

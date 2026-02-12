@@ -560,33 +560,6 @@ const HowItWorks = () => {
                 </div>
               </div>
             </div>
-
-            {/* Dark callout */}
-            <div className="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-6 sm:p-7">
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0"
-              >
-                <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-sky-500 blur-3xl opacity-20" />
-                <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-slate-500 blur-3xl opacity-30" />
-              </div>
-
-              <div className="relative">
-                <div className="text-sm font-semibold text-sky-300">
-                  Utility note
-                </div>
-                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-300">
-                  Use annual as the “truth” for comparisons
-                </h3>
-                <p className="mt-3 text-slate-200 leading-7">
-                  When two listings use different billing labels, your decision
-                  can swing based on assumptions you did not mean to make.
-                  Converting to an annual equivalent gives you one baseline you
-                  can trust, and the rest of the breakdown is simply the same
-                  annual cost viewed through other time cycles.
-                </p>
-              </div>
-            </div>
           </div>
         </div>
       </div>

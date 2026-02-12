@@ -647,58 +647,6 @@ const HowItWorks = ({
                 </div>
               </div>
             ) : null}
-
-            {/* Dark callout */}
-            <div className="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-6 sm:p-7">
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0"
-              >
-                <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-sky-500 blur-3xl opacity-20" />
-                <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-slate-500 blur-3xl opacity-30" />
-              </div>
-
-              <div className="relative">
-                <div className="text-sm font-semibold text-sky-300">
-                  Utility note
-                </div>
-                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-300">
-                  The percentage stays the same across views because the annual
-                  basis stays the same
-                </h3>
-                <p className="mt-3 text-slate-200 leading-7">
-                  Rent share is computed from annual totals derived from
-                  explicit day-count assumptions. The monthly, weekly, and
-                  4-week views are just different ways of expressing the same
-                  underlying annual numbers.
-                </p>
-              </div>
-            </div>
-
-            <p className="text-slate-700 leading-relaxed">
-              Related pages:{" "}
-              <Link
-                to="/how-much-rent-can-i-afford-calculator"
-                className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
-              >
-                affordability calculator
-              </Link>
-              ,{" "}
-              <Link
-                to="/rent-paid-every-4-weeks-calculator"
-                className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
-              >
-                rent paid every 4 weeks
-              </Link>
-              ,{" "}
-              <Link
-                to="/weekly-to-monthly-rent-converter"
-                className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
-              >
-                weekly to monthly converter
-              </Link>
-              .
-            </p>
           </div>
         </div>
       </div>

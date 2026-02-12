@@ -884,59 +884,6 @@ const HowItWorks = () => {
                 </div>
               </div>
             </div>
-
-            {/* Dark utility callout */}
-            <div className="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-6 sm:p-7">
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0"
-              >
-                <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-sky-500 blur-3xl opacity-20" />
-                <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-slate-500 blur-3xl opacity-30" />
-              </div>
-
-              <div className="relative">
-                <div className="text-sm font-semibold text-sky-300">
-                  Utility note
-                </div>
-                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-200">
-                  Two weekly definitions can both be correct if they are labeled
-                </h3>
-                <p className="mt-3 text-slate-200 leading-7">
-                  Treat the headline weekly as a budgeting decision number, and
-                  treat the 365-day weekly as a consistency check for day-based
-                  math. If you are comparing weekly values across pages, across
-                  listings, or against a third-party rule, confirm which
-                  definition is being used before you accept or reject a rental.
-                </p>
-                <ul className="mt-4 list-disc pl-5 space-y-2 text-slate-200">
-                  <li>
-                    Comparing to a weekly budget cap: use{" "}
-                    <span className="font-semibold text-white">
-                      annual ÷ 52
-                    </span>
-                  </li>
-                  <li>
-                    Reconciling against daily prorations or day-based policies:
-                    use{" "}
-                    <span className="font-semibold text-white">
-                      annual × 7 ÷ 365
-                    </span>
-                  </li>
-                  <li>
-                    4-week billing: plan for 13 cycles per year, not 12 months
-                  </li>
-                </ul>
-                <div className="mt-4">
-                  <Link
-                    to="/rent-converter"
-                    className="cursor-pointer inline-flex items-center font-semibold text-white hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 rounded-sm"
-                  >
-                    Rent converter →
-                  </Link>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>

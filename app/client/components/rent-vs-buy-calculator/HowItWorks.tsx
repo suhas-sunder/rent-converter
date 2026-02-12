@@ -618,44 +618,6 @@ const HowItWorks = () => {
                 </div>
               </div>
             </div>
-
-            {/* Dark utility callout */}
-            <div className="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-6 sm:p-7">
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0"
-              >
-                <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-sky-500 blur-3xl opacity-20" />
-                <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-slate-500 blur-3xl opacity-30" />
-              </div>
-
-              <div className="relative">
-                <div className="text-sm font-semibold text-sky-300">
-                  Scope note
-                </div>
-                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-100">
-                  This is a scenario comparison, not a forecast
-                </h3>
-                <div className="mt-3 space-y-3 text-slate-200 leading-7">
-                  <p>
-                    The calculator keeps your assumptions consistent across both
-                    sides so you can compare outcomes on the same horizon. It is
-                    designed for decision clarity, not market prediction.
-                  </p>
-                  <p>
-                    It does not model tax law, investment returns, refinancing,
-                    variable-rate changes, or timing strategies unless the page
-                    has explicit fields for those items.
-                  </p>
-                  <p>
-                    If the result is close, treat that as a signal to
-                    stress-test the few assumptions that dominate your horizon
-                    (rent growth and owner costs for renting, appreciation and
-                    selling costs for buying).
-                  </p>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>

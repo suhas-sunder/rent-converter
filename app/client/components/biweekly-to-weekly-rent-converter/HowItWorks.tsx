@@ -496,42 +496,6 @@ const HowItWorks = () => {
                 </div>
               </div>
             </div>
-
-
-            {/* Dark utility callout */}
-            <div className="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-6 sm:p-7">
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0"
-              >
-                <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-sky-500 blur-3xl opacity-20" />
-                <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-slate-500 blur-3xl opacity-30" />
-              </div>
-
-              <div className="relative">
-                <div className="text-sm font-semibold text-sky-300">
-                  Utility note
-                </div>
-                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-200">
-                  This is the simplest conversion on the site
-                </h3>
-                <div className="mt-3 text-slate-200 leading-7 space-y-3">
-                  <p>
-                    If your next action depends on a weekly number (compare a
-                    “per week” listing, check a weekly cap, quantify a weekly
-                    difference), this route is the cleanest option because the
-                    definition match is exact: 14 days converts to 7 days by
-                    halving the price.
-                  </p>
-                  <p className="text-sm text-slate-300">
-                    If your decision depends on monthly budgeting or annual
-                    affordability, use the breakdown rows for that frame instead
-                    of trying to infer monthly or annual cost from the weekly
-                    headline alone.
-                  </p>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>

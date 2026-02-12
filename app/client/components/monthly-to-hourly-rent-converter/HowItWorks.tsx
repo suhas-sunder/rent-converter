@@ -562,43 +562,6 @@ const HowItWorks = () => {
                 </div>
               </div>
             </div>
-
-            {/* Dark callout */}
-            <div className="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-6 sm:p-7">
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0"
-              >
-                <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-sky-500 blur-3xl opacity-20" />
-                <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-slate-500 blur-3xl opacity-30" />
-              </div>
-
-              <div className="relative">
-                <div className="text-sm font-semibold text-sky-300">
-                  Utility note
-                </div>
-                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-300">
-                  The hourly result is a baseline, not a lease term
-                </h3>
-                <p className="mt-3 text-slate-200 leading-7">
-                  Treat the hourly figure as a way to interpret and compare
-                  monthly rent on a consistent time scale. It is derived from a
-                  365-day year and a 24-hour day, so it stays aligned with the
-                  rest of the breakdown. It does not represent how any landlord
-                  bills rent, and it does not model short-stay pricing.
-                </p>
-                <ul className="mt-4 list-disc pl-5 space-y-2 text-slate-200 leading-7">
-                  <li>
-                    Good for: comparing close listings, translating rent into a
-                    threshold, and making “small” differences legible
-                  </li>
-                  <li>
-                    Not for: forecasting utilities, cleaning fees, nightly
-                    rates, or minimum-stay rules
-                  </li>
-                </ul>
-              </div>
-            </div>
           </div>
         </div>
       </div>

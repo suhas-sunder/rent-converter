@@ -465,33 +465,6 @@ const HowItWorks = ({ safeHref }: { safeHref: (href: string) => string }) => {
               </div>
             </div>
 
-            {/* Dark callout */}
-            <div className="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-6 sm:p-7">
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0"
-              >
-                <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-sky-500 blur-3xl opacity-20" />
-                <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-slate-500 blur-3xl opacity-30" />
-              </div>
-
-              <div className="relative">
-                <div className="text-sm font-semibold text-sky-300">
-                  Utility note
-                </div>
-                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-100">
-                  Use annualized comparisons to avoid misleading cycle shortcuts
-                </h3>
-                <p className="mt-3 text-slate-200 leading-7">
-                  Weekly is not monthly in a fixed way, and a 28-day cycle is
-                  not a calendar month. Anchor the decision on the annual impact
-                  first, then use the monthly (avg), weekly, and 28-day views to
-                  translate that same cost into the terms you actually plan
-                  with.
-                </p>
-              </div>
-            </div>
-
             <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
               <div className="text-sm font-bold text-sky-900">Useful for</div>
               <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700">

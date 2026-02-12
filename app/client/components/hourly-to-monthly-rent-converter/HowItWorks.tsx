@@ -722,42 +722,6 @@ const HowItWorks = () => {
                 </div>
               </div>
             </div>
-
-            {/* Dark callout */}
-            <div className="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-6 sm:p-7">
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0"
-              >
-                <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-sky-500 blur-3xl opacity-20" />
-                <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-slate-500 blur-3xl opacity-30" />
-              </div>
-
-              <div className="relative">
-                <div className="text-sm font-semibold text-sky-300">
-                  Utility note
-                </div>
-                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-200">
-                  Monthly here is an average month
-                </h3>
-                <p className="mt-3 text-slate-200 leading-7">
-                  This page uses fixed time lengths (24 hours per day and 365
-                  days per year) and then divides by 12. Use it to compare value
-                  across periods with one consistent basis. Do not use it to
-                  predict a specific billing month length or due date behavior.
-                </p>
-                <ul className="mt-4 list-disc pl-5 space-y-2 text-slate-200 leading-7">
-                  <li>
-                    If you are deciding between two listings, compare them on
-                    the monthly line and decide from that number.
-                  </li>
-                  <li>
-                    If the hourly quote is only for some hours, switch tools so
-                    your assumptions match reality.
-                  </li>
-                </ul>
-              </div>
-            </div>
           </div>
         </div>
       </div>

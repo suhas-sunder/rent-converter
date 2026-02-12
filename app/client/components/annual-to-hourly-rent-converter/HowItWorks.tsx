@@ -867,41 +867,6 @@ const HowItWorks = () => {
                 </div>
               </div>
             </div>
-
-            {/* Dark utility callout */}
-            <div className="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-6 sm:p-7">
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0"
-              >
-                <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-sky-500 blur-3xl opacity-20" />
-                <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-slate-500 blur-3xl opacity-30" />
-              </div>
-
-              <div className="relative">
-                <div className="text-sm font-semibold text-sky-300">
-                  Utility note
-                </div>
-                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-200">
-                  This is an equivalence converter, not a payment schedule
-                </h3>
-                <p className="mt-3 text-slate-200 leading-7">
-                  Use this page when your decision is “which option is cheaper
-                  when expressed on the same time basis.” Do not use it to infer
-                  due dates, invoice timing, payment counts, or how a landlord
-                  structures billing. If your decision depends on dates on a
-                  calendar, use a due-date tool instead.
-                </p>
-                <div className="mt-4">
-                  <Link
-                    to="/rent-due-date-calculator"
-                    className="cursor-pointer inline-flex items-center font-semibold text-white hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 rounded-sm"
-                  >
-                    Rent due date calculator →
-                  </Link>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>

@@ -796,38 +796,6 @@ const HowItWorks = () => {
                 </div>
               </div>
             </div>
-
-            {/* Dark utility callout */}
-            <div className="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-6 sm:p-7">
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0"
-              >
-                <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-sky-500 blur-3xl opacity-20" />
-                <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-slate-500 blur-3xl opacity-30" />
-              </div>
-
-              <div className="relative">
-                <div className="text-sm font-semibold text-sky-300">
-                  Utility note
-                </div>
-                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-300">
-                  Targets are math, not a guarantee
-                </h3>
-                <p className="mt-3 text-slate-200 leading-7">
-                  Treat the targets as consistent screening thresholds, not a
-                  promise that a lease will feel comfortable. The page does not
-                  estimate your taxes, debts, or spending. It only keeps the
-                  time model consistent so your “yes” and “no” decisions are
-                  based on the same baseline every time.
-                </p>
-                <p className="mt-3 text-slate-200 leading-7">
-                  If a listing is right on the edge, the most reliable next step
-                  is to rerun the calculator with a more conservative income
-                  assumption (or a lower target) and see if the decision flips.
-                </p>
-              </div>
-            </div>
           </div>
         </div>
       </div>

@@ -529,47 +529,6 @@ const HowItWorks = () => {
                 </div>
               </div>
             </div>
-
-            {/* Dark callout */}
-            <div className="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-6 sm:p-7">
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0"
-              >
-                <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-sky-500 blur-3xl opacity-20" />
-                <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-slate-500 blur-3xl opacity-30" />
-              </div>
-
-              <div className="relative">
-                <div className="text-sm font-semibold text-sky-300">
-                  Utility note
-                </div>
-                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-200">
-                  Monthly here is an average, not a billing schedule
-                </h3>
-                <div className="mt-3 text-slate-200 leading-7 space-y-3">
-                  <p>
-                    Treat the monthly result as a comparison number for budgets
-                    and listings, not as a prediction of what happens in any
-                    given calendar month. A biweekly payment schedule can cause
-                    some months to have two payments and some to have three.
-                  </p>
-                  <p>
-                    If you are planning around exact due dates and payment
-                    timing, keep the rent in its real cadence (biweekly or
-                    28-day) and use the tool below to map it to calendar dates.
-                  </p>
-                </div>
-                <div className="mt-4">
-                  <Link
-                    to="/rent-due-date-calculator"
-                    className="cursor-pointer inline-flex items-center font-semibold text-white hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 rounded-sm"
-                  >
-                    Rent due date calculator →
-                  </Link>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>

@@ -501,44 +501,6 @@ const HowItWorks = () => {
                 </div>
               </div>
             </div>
-
-            {/* Dark utility callout */}
-            <div className="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-6 sm:p-7">
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0"
-              >
-                <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-sky-500 blur-3xl opacity-20" />
-                <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-slate-500 blur-3xl opacity-30" />
-              </div>
-
-              <div className="relative">
-                <div className="text-sm font-semibold text-sky-300">
-                  Utility note
-                </div>
-                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-100">
-                  This compares amounts, not timing
-                </h3>
-                <p className="mt-3 text-slate-200 leading-7">
-                  Use these results to judge affordability across a year, not to
-                  predict cash timing. Rent and pay can hit on different days,
-                  different weeks, and different months. If you are trying to
-                  plan due dates (especially with 28-day schedules), you need a
-                  calendar schedule tool. Period equivalence is not a payment
-                  calendar.
-                </p>
-                <ul className="mt-4 list-disc pl-5 space-y-2 text-slate-200 leading-7">
-                  <li>
-                    A “safe” annual rent share can still cause short-term
-                    shortfalls if paydays and rent due dates clash.
-                  </li>
-                  <li>
-                    Use the period views here to interpret affordability, not to
-                    decide which exact week a payment lands.
-                  </li>
-                </ul>
-              </div>
-            </div>
           </div>
         </div>
       </div>

@@ -24,9 +24,10 @@ const HowItWorks = () => {
                   Convert a yearly rent total into a true 14-day equivalent so
                   you can compare it to pay cycles, budgeting rules, or a
                   landlord quote that is listed as “biweekly.” This page uses a
-                  fixed time-length basis (365-day year, 14-day period) and keeps
-                  all breakdown rows anchored to the same annual total. If you
-                  want to switch between any rent periods on one page, use the{" "}
+                  fixed time-length basis (365-day year, 14-day period) and
+                  keeps all breakdown rows anchored to the same annual total. If
+                  you want to switch between any rent periods on one page, use
+                  the{" "}
                   <Link
                     to="/rent-converter"
                     className="cursor-pointer font-semibold text-sky-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
@@ -182,9 +183,9 @@ const HowItWorks = () => {
                 <div className="mt-4 space-y-4">
                   <p>
                     You enter one annual rent total (currency per year). You get
-                    a biweekly equivalent (currency per 14 days) plus a breakdown
-                    table of other period equivalents derived from the same
-                    annual anchor.
+                    a biweekly equivalent (currency per 14 days) plus a
+                    breakdown table of other period equivalents derived from the
+                    same annual anchor.
                   </p>
 
                   <ul className="list-disc pl-5 space-y-2">
@@ -192,15 +193,15 @@ const HowItWorks = () => {
                       <span className="font-semibold text-slate-900">
                         Budgeting:
                       </span>{" "}
-                      compare the biweekly result to a biweekly housing budget or
-                      payroll cycle.
+                      compare the biweekly result to a biweekly housing budget
+                      or payroll cycle.
                     </li>
                     <li>
                       <span className="font-semibold text-slate-900">
                         Offer checks:
                       </span>{" "}
-                      sanity-check a “biweekly” quote against an annual number so
-                      you can spot small overcharges.
+                      sanity-check a “biweekly” quote against an annual number
+                      so you can spot small overcharges.
                     </li>
                     <li>
                       <span className="font-semibold text-slate-900">
@@ -221,9 +222,9 @@ const HowItWorks = () => {
                       One-line summary
                     </div>
                     <p className="mt-2">
-                      Biweekly equivalent = annual rent × 14 ÷ 365 (365-day year,
-                      14-day period). Rounded values are for display; the model
-                      stays anchored to the annual total.
+                      Biweekly equivalent = annual rent × 14 ÷ 365 (365-day
+                      year, 14-day period). Rounded values are for display; the
+                      model stays anchored to the annual total.
                     </p>
                   </div>
 
@@ -317,9 +318,9 @@ const HowItWorks = () => {
                         Meaning
                       </div>
                       <p className="mt-1">
-                        The allowance is short by $58.63 every pay period, so the
-                        decision flips from “maybe” to “not without a lower rent
-                        or extra income.”
+                        The allowance is short by $58.63 every pay period, so
+                        the decision flips from “maybe” to “not without a lower
+                        rent or extra income.”
                       </p>
                     </div>
                   </div>
@@ -360,8 +361,8 @@ const HowItWorks = () => {
                         Result
                       </div>
                       <p className="mt-1">
-                        Option A: $1,196.71 per 14 days (equivalent) vs Option B:
-                        $1,200 per 14 days (quoted)
+                        Option A: $1,196.71 per 14 days (equivalent) vs Option
+                        B: $1,200 per 14 days (quoted)
                       </p>
 
                       <div className="mt-3 font-semibold text-slate-900">
@@ -384,9 +385,9 @@ const HowItWorks = () => {
                         Situation
                       </div>
                       <p className="mt-1">
-                        A landlord says the annual total is $52,000, but the lease
-                        draft shows “$2,000 biweekly.” You want to spot a quiet
-                        mismatch before signing.
+                        A landlord says the annual total is $52,000, but the
+                        lease draft shows “$2,000 biweekly.” You want to spot a
+                        quiet mismatch before signing.
                       </p>
 
                       <div className="mt-3 font-semibold text-slate-900">
@@ -479,8 +480,8 @@ const HowItWorks = () => {
                   </h3>
                   <p>
                     The annual total is the single source value. Every other
-                    period is derived from that same annual anchor so comparisons
-                    do not drift.
+                    period is derived from that same annual anchor so
+                    comparisons do not drift.
                   </p>
 
                   <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
@@ -509,9 +510,9 @@ const HowItWorks = () => {
 
                     <p className="mt-4 text-sm text-slate-600">
                       If you are comparing two options, compare using the same
-                      row type (biweekly-to-biweekly, monthly-to-monthly). Mixing
-                      “biweekly” with “twice per month” assumptions is a common
-                      source of mistaken rankings.
+                      row type (biweekly-to-biweekly, monthly-to-monthly).
+                      Mixing “biweekly” with “twice per month” assumptions is a
+                      common source of mistaken rankings.
                     </p>
                   </div>
 
@@ -548,10 +549,10 @@ const HowItWorks = () => {
                         Weekly × 4 vs monthly
                       </div>
                       <p className="mt-2">
-                        “Weekly × 4” is a 28-day amount. This page defines monthly
-                        as annual ÷ 12 under a 365-day year. If you use weekly ×
-                        4 as a proxy for monthly, you can mis-rank two listings
-                        that are priced near your budget limit.
+                        “Weekly × 4” is a 28-day amount. This page defines
+                        monthly as annual ÷ 12 under a 365-day year. If you use
+                        weekly × 4 as a proxy for monthly, you can mis-rank two
+                        listings that are priced near your budget limit.
                       </p>
                     </div>
 
@@ -562,8 +563,9 @@ const HowItWorks = () => {
                       <p className="mt-2">
                         A 4-week period is fixed at 28 days. A month here is the
                         average month implied by the year model (365 ÷ 12 days).
-                        The tool keeps these separate so you can compare “every 4
-                        weeks” listings without forcing them into a monthly label.
+                        The tool keeps these separate so you can compare “every
+                        4 weeks” listings without forcing them into a monthly
+                        label.
                       </p>
                     </div>
 
@@ -587,8 +589,8 @@ const HowItWorks = () => {
                       <p className="mt-2">
                         If an hourly row is shown, it is time-based (annual ÷
                         8,760). It is not tied to working hours, shifts, or a
-                        workweek. Use it only to compare time-length equivalents,
-                        not employment pay.
+                        workweek. Use it only to compare time-length
+                        equivalents, not employment pay.
                       </p>
                     </div>
                   </div>
@@ -599,52 +601,10 @@ const HowItWorks = () => {
                   <p>
                     This converter only transforms the rent amount you enter. It
                     does not include utilities, parking, fees, deposits, taxes,
-                    insurance, discounts, rent-free weeks, or proration. If those
-                    change the true cost, compare totals that include them (or
-                    add them consistently before converting).
+                    insurance, discounts, rent-free weeks, or proration. If
+                    those change the true cost, compare totals that include them
+                    (or add them consistently before converting).
                   </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-6 sm:p-7">
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0"
-              >
-                <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-sky-500 blur-3xl opacity-20" />
-                <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-slate-500 blur-3xl opacity-30" />
-              </div>
-
-              <div className="relative">
-                <div className="text-sm font-semibold text-sky-300">
-                  Scope note
-                </div>
-                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-200">
-                  Equivalents are not due dates
-                </h3>
-                <p className="mt-3 text-slate-200 leading-7">
-                  The biweekly result is a 14-day equivalent derived from a
-                  365-day year model. It does not determine which dates rent is
-                  due, how many payments land inside a specific calendar month,
-                  or how invoices are scheduled.
-                </p>
-                <ul className="mt-4 list-disc pl-5 space-y-2 text-slate-200 leading-7">
-                  <li>
-                    Use this page to compare prices across listings and periods.
-                  </li>
-                  <li>
-                    Use a due-date calculator when you need calendar dates,
-                    reminders, or invoice timing.
-                  </li>
-                </ul>
-                <div className="mt-4">
-                  <Link
-                    to="/rent-due-date-calculator"
-                    className="cursor-pointer inline-flex items-center font-semibold text-white hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 rounded-sm"
-                  >
-                    Rent due date calculator →
-                  </Link>
                 </div>
               </div>
             </div>

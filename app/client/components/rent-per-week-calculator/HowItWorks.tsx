@@ -396,35 +396,6 @@ const HowItWorks = () => {
                 </p>
               </div>
             </div>
-
-            {/* Dark callout */}
-            <div className="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-6 sm:p-7">
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0"
-              >
-                <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-sky-500 blur-3xl opacity-20" />
-                <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-slate-500 blur-3xl opacity-30" />
-              </div>
-
-              <div className="relative">
-                <div className="text-sm font-semibold text-sky-300">
-                  Scope note
-                </div>
-                <h3 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-sky-100">
-                  Weekly equivalence is a comparison value
-                </h3>
-                <p className="mt-3 text-slate-200 leading-7">
-                  Use the weekly equivalent to choose between listings and to
-                  sanity-check “monthly vs 28-day vs weekly” pricing. Do not use
-                  it to predict your exact payment calendar. Leases can bill on
-                  specific due dates and may include proration rules, fees, and
-                  utilities that are not modeled here, so the weekly number
-                  should drive comparisons and budgets, not legal payment
-                  timing.
-                </p>
-              </div>
-            </div>
           </div>
         </div>
       </div>
