@@ -843,14 +843,14 @@ export default function Home() {
         className="mx-auto max-w-6xl px-6 pb-6 mt-2 sm:mt-6"
       >
         <div className="rounded-2xl pb-6 bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8">
-          <div className=" flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <h1 className="text-center mb-1 sm:mb-0 sm:text-left text-2xl sm:text-4xl capitalize font-bold text-sky-800 tracking-tight">
-              Instant rent converter
+          <div className="pt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <h1 className="text-center mb-1 sm:mb-0 sm:text-left text-2xl sm:text-3xl capitalize font-bold text-sky-800 tracking-tight">
+              Rent Converter: Daily, Weekly, Monthly & Annual
             </h1>
 
             <div
               id="export-controls"
-              className="mt-6 hidden sm:flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
+              className=" hidden sm:flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
             >
               <div className="flex flex-wrap gap-2">
                 <button
@@ -866,6 +866,10 @@ export default function Home() {
               </div>
             </div>
           </div>
+          <p className="hidden md:flex w-full py-2 ">
+            Convert rent between daily, weekly, monthly, and yearly rates in one
+            click. No sign-up, instant results.
+          </p>
 
           <p id={decimalsHelpId} className="sr-only">
             Controls how many decimals to show when rounding is enabled.

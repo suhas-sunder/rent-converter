@@ -864,11 +864,14 @@ export default function AnnualToHourlyRent() {
           `,
         }}
       />
-      <section id="converter" className="mx-auto max-w-6xl px-6 pb-6 mt-4">
-        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block sm:pt-6">
-          <div className="mb-3 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-            <h1 className="text-2xl sm:text-left text-center capitalize sm:text-4xl text-sky-800 font-bold">
-              Annual to hourly converter
+      <section
+        id="converter"
+        className="mx-auto max-w-6xl px-6 pb-6 mt-2 sm:mt-6"
+      >
+        <div className="rounded-2xl pb-6 bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8">
+          <div className="pt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <h1 className="text-center mb-1 sm:mb-0 sm:text-left text-2xl sm:text-3xl capitalize font-bold text-sky-800 tracking-tight">
+              Annual to Hourly Rent Converter
             </h1>
 
             <div className=" rounded-xl border border-slate-200 bg-white p-4 rc-no-print">
@@ -937,7 +940,10 @@ export default function AnnualToHourlyRent() {
               ) : null}
             </div>
           </div>
-
+          <p className="hidden md:flex w-full py-2 text-base text-slate-600">
+            Convert annual rent into an hourly rate instantly. Clear
+            calculations with transparent assumptions and no sign-up required.
+          </p>{" "}
           <div className="grid gap-5">
             <div>
               <label className="block text-sm font-semibold text-slate-700 mb-2">
@@ -978,7 +984,6 @@ export default function AnnualToHourlyRent() {
               </div>
             </div>
           </div>
-
           <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:px-6 rc-print-block">
             <div className="flex items-center gap-2">
               <div
@@ -1127,7 +1132,6 @@ export default function AnnualToHourlyRent() {
               </>
             )}
           </div>
-
           <Assumptions />
         </div>
 

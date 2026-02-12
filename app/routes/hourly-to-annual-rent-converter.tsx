@@ -804,12 +804,16 @@ export default function HourlyToAnnualRent() {
         }}
       />
 
-      <section id="converter" className="mx-auto max-w-6xl px-6 pb-6 mt-4">
-        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block sm:pt-6">
-          <div className=" md:mb-none sm:mb-none flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-            <h1 className="flex w-full text-2xl sm:text-left text-center capitalize sm:text-4xl text-sky-800 font-bold">
-              Hourly to annual converter
+      <section
+        id="converter"
+        className="mx-auto max-w-6xl px-6 pb-6 mt-2 sm:mt-6"
+      >
+        <div className="rounded-2xl pb-6 bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8">
+          <div className="pt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2 gap-2 sm:gap-4">
+            <h1 className="text-center mb-1 sm:mb-0 sm:text-left text-2xl sm:text-3xl capitalize font-bold text-sky-800 tracking-tight">
+              Hourly to Annual Rent Converter
             </h1>
+
             <div className="flex flex-col w-full sm:ml-auto sm:max-w-[15em] rounded-xl border border-slate-200 bg-blue-50 p-4">
               <div
                 className="inline-flex rounded-xl border border-slate-200 bg-white"
@@ -885,6 +889,10 @@ export default function HourlyToAnnualRent() {
             </div>
           </div>
 
+          <p className="hidden md:flex w-full pb-2 text-base text-slate-600">
+            Convert an hourly rent rate into an annual total instantly. Clear
+            calculations, no sign-up required.
+          </p>
           <div className="grid gap-5">
             <div>
               <label className="block text-sm font-semibold text-slate-800 mb-2">

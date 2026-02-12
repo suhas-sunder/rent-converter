@@ -702,14 +702,39 @@ export default function AnnualToBiweeklyRent() {
           `,
         }}
       />
-
-      <section id="converter" className="mx-auto max-w-6xl px-6 pb-6 mt-4">
-        <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block sm:pt-6">
-          <div className="mb-3 sm:mb-3 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-            <h1 className="text-2xl sm:text-left text-center capitalize sm:text-4xl text-sky-800 font-bold">
-              Annual to biweekly converter
+      <section
+        id="converter"
+        className="mx-auto max-w-6xl px-6 pb-6 mt-2 sm:mt-6"
+      >
+        <div className="rounded-2xl pb-6 bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8">
+          <div className="pt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <h1 className="text-center mb-1 sm:mb-0 sm:text-left text-2xl sm:text-3xl capitalize font-bold text-sky-800 tracking-tight">
+              Rent Converter: Daily, Weekly, Monthly & Annual
             </h1>
+
+            <div
+              id="export-controls"
+              className="hidden sm:flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
+            >
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (typeof window === "undefined") return;
+                    window.print();
+                  }}
+                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fbff]"
+                >
+                  Print / Save PDF
+                </button>
+              </div>
+            </div>
           </div>
+
+          <p className="hidden md:flex w-full py-2 text-base text-slate-600">
+            Convert rent between daily, weekly, monthly, and annual rates
+            instantly. Clear calculations, no sign-up required.
+          </p>
 
           <div className="grid gap-5">
             <div>
@@ -842,24 +867,6 @@ export default function AnnualToBiweeklyRent() {
         </div>
 
         <div className="flex flex-wrap items-center gap-3 mt-4">
-          <div
-            id="export-controls"
-            className="mr-auto flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
-          >
-            <div className="flex flex-wrap gap-2">
-              <button
-                type="button"
-                onClick={() => {
-                  if (typeof window === "undefined") return;
-                  window.print();
-                }}
-                className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fbff]"
-              >
-                Print / Save PDF
-              </button>
-            </div>
-          </div>
-
           <label className="inline-flex items-center gap-2 text-sm font-medium text-slate-700 select-none">
             <input
               type="checkbox"
