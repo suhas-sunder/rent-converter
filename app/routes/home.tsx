@@ -2,6 +2,7 @@ import { useMemo, useEffect, useState } from "react";
 import type { Route } from "./+types/home";
 import Assumptions from "~/client/components/layout/Assumptions";
 import HowItWorks from "~/client/components/home/HowItWorks";
+import ToolFit from "~/client/components/home/ToolFit";
 
 const SITE_URL = "https://www.rentconverter.com/";
 
@@ -1146,6 +1147,7 @@ export default function Home() {
       </section>
 
       <HowItWorks />
+      <ToolFit />
 
       <section id="faq" className="max-w-5xl mx-auto py-16 px-6">
         <h2 className="text-3xl font-bold text-center mb-10 text-sky-800 tracking-tight">

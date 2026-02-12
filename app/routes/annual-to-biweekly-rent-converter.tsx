@@ -4,6 +4,7 @@ import Assumptions from "~/client/components/layout/Assumptions";
 import FourWeekVsMonthly from "~/client/components/layout/FourWeekVsMonthly";
 import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/annual-to-biweekly-rent-converter/HowItWorks";
+import ToolFit from "~/client/components/annual-to-biweekly-rent-converter/ToolFit";
 const SITE_URL = "https://www.rentconverter.com";
 const PAGE_PATH = "/annual-to-biweekly-rent-converter";
 
@@ -901,6 +902,9 @@ export default function AnnualToBiweeklyRent() {
           / Annual to Biweekly Rent Converter
         </nav>
       </section>
+
+      <ToolFit />
+
       <section id="faq" className="max-w-5xl mx-auto pb-16 px-6">
         <h2 className="text-3xl font-bold text-center mb-3 text-sky-800 tracking-tight">
           Frequently Asked Questions

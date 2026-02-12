@@ -4,6 +4,7 @@ import Assumptions from "~/client/components/layout/Assumptions";
 import FourWeekVsMonthly from "~/client/components/layout/FourWeekVsMonthly";
 import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/annual-to-hourly-rent-converter/HowItWorks";
+import ToolFit from "~/client/components/annual-to-hourly-rent-converter/ToolFit";
 
 const SITE_URL = "https://www.rentconverter.com";
 const PAGE_PATH = "/annual-to-hourly-rent-converter";
@@ -863,7 +864,6 @@ export default function AnnualToHourlyRent() {
           `,
         }}
       />
-
       <section id="converter" className="mx-auto max-w-6xl px-6 pb-6 mt-4">
         <div className="rounded-2xl bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8 rc-print-block sm:pt-6">
           <div className="mb-3 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
@@ -1149,7 +1149,6 @@ export default function AnnualToHourlyRent() {
           />
         </div>
       </section>
-
       <HowItWorks />
       <section className=" mt-8 mb-4 hidden sm:block">
         <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-500">
@@ -1159,6 +1158,7 @@ export default function AnnualToHourlyRent() {
           / Annual to Hourly Rent Converter
         </nav>
       </section>
+      <ToolFit />{" "}
       <section id="faq" className="max-w-5xl mx-auto pb-16 px-6">
         <h2 className="text-3xl font-bold text-center mb-3 text-sky-800 tracking-tight">
           Frequently Asked Questions
@@ -1181,7 +1181,6 @@ export default function AnnualToHourlyRent() {
           ))}
         </div>
       </section>
-
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
