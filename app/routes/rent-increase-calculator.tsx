@@ -1,6 +1,7 @@
 import { useMemo, useEffect, useRef, useState } from "react";
 import type { Route } from "./+types/rent-increase-calculator";
 import HowItWorks from "~/client/components/rent-increase-calculator/HowItWorks";
+import ToolFit from "~/client/components/rent-increase-calculator/ToolFit";
 export const meta: Route.MetaFunction = () => {
   const title = "Rent Increase Calculator (See Your New Rent + Annual Impact)";
   const description =
@@ -1533,6 +1534,8 @@ export default function RentIncreaseCalculator() {
       </section>
 
       <HowItWorks safeHref={safeHref} />
+
+      <ToolFit />
 
       <section id="faq" className="max-w-5xl mx-auto py-16 px-6">
         <h2 className="text-3xl font-bold text-center mb-10 text-sky-800 tracking-tight">

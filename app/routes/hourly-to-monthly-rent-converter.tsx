@@ -4,6 +4,7 @@ import Assumptions from "~/client/components/layout/Assumptions";
 import FourWeekVsMonthly from "~/client/components/layout/FourWeekVsMonthly";
 import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/hourly-to-monthly-rent-converter/HowItWorks";
+import ToolFit from "~/client/components/hourly-to-monthly-rent-converter/ToolFit";
 
 export const meta: Route.MetaFunction = () => {
   const title = "Hourly to Monthly Rent Converter (True Monthly Cost)";
@@ -938,6 +939,9 @@ export default function HourlyToMonthlyRent() {
           / Hourly to Monthly Rent Converter
         </nav>
       </section>
+
+      <ToolFit />
+
       <section id="faq" className="max-w-5xl mx-auto pb-16 px-6">
         <h2 className="text-3xl font-bold text-center mb-3 text-sky-800 tracking-tight">
           Frequently Asked Questions

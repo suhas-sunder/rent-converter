@@ -2,7 +2,7 @@ import { Link } from "react-router";
 
 export default function ToolFit() {
   return (
-    <section id="tool-fit" className="max-w-5xl mx-auto pb-16 pt-8 px-6">
+    <section id="tool-fit" className="max-w-5xl mx-auto pb-12 pt-8 px-6">
       <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
         <div className="bg-[#f7fbff] border-b border-slate-200 px-6 py-5">
           <div className="flex items-center gap-2">

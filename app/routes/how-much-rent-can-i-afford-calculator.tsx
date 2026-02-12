@@ -3,6 +3,7 @@ import type { Route } from "./+types/how-much-rent-can-i-afford-calculator";
 import Assumptions from "~/client/components/layout/Assumptions";
 import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/how-much-rent-can-i-afford-calculator/HowItWorks";
+import ToolFit from "~/client/components/how-much-rent-can-i-afford-calculator/ToolFit";
 
 export const meta: Route.MetaFunction = () => {
   const title = "How Much Rent Can I Afford? (Income-Based Calculator)";
@@ -986,6 +987,9 @@ export default function HowMuchRentCanIAfford() {
           / How Much Rent Can I Afford?
         </nav>
       </section>
+
+      <ToolFit />
+
       <section id="faq" className="max-w-5xl mx-auto pb-16 px-6">
         <h2 className="text-3xl font-bold text-center mb-3 text-sky-800 tracking-tight">
           Frequently Asked Questions

@@ -3,6 +3,7 @@ import type { Route } from "./+types/rent-as-percentage-of-income-calculator";
 import Assumptions from "~/client/components/layout/Assumptions";
 import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/rent-as-percentage-of-income-calculator/HowItWorks";
+import ToolFit from "~/client/components/rent-as-percentage-of-income-calculator/ToolFit";
 function safeToFixed(n: number, digits: number): string {
   if (!Number.isFinite(n)) return "-";
   return n.toFixed(digits);
@@ -1153,6 +1154,9 @@ export default function RentAsPercentageOfIncome() {
           / Rent as Percentage of Income Calculator
         </nav>
       </section>
+
+      <ToolFit />
+
       <section id="faq" className="max-w-5xl mx-auto pb-16 px-6">
         <h2 className="text-3xl font-bold text-center mb-3 text-sky-800 tracking-tight">
           Frequently Asked Questions

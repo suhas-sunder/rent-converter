@@ -4,6 +4,7 @@ import Assumptions from "~/client/components/layout/Assumptions";
 import FourWeekVsMonthly from "~/client/components/layout/FourWeekVsMonthly";
 import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/biweekly-to-weekly-rent-converter/HowItWorks";
+import ToolFit from "~/client/components/biweekly-to-weekly-rent-converter/ToolFit";
 
 const ROUTE_SLUG = "biweekly-to-weekly-rent-converter" as const;
 const ROUTE_PATH = `/${ROUTE_SLUG}` as const;
@@ -935,6 +936,9 @@ export default function BiweeklyToWeeklyRent() {
           / Biweekly to Weekly Rent Converter
         </nav>
       </section>
+
+      <ToolFit />
+
       <section id="faq" className="max-w-5xl mx-auto pb-16 px-6">
         <h2 className="text-3xl font-bold text-center mb-3 text-sky-800 tracking-tight">
           Frequently Asked Questions

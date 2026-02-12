@@ -3,6 +3,7 @@ import type { Route } from "./+types/rent-split-calculator";
 import Assumptions from "~/client/components/layout/Assumptions";
 import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/rent-split-calculator/HowItWorks";
+import ToolFit from "~/client/components/rent-split-calculator/ToolFit";
 
 export const meta: Route.MetaFunction = () => {
   const title = "Rent Split Calculator (See What Each Roommate Pays)";
@@ -1149,6 +1150,8 @@ export default function RentPerPerson() {
           / <span className="text-slate-800">{pageName}</span>
         </nav>
       </section>
+
+      <ToolFit />
 
       <section id="faq" className="max-w-5xl mx-auto pb-16 px-6">
         <h2 className="text-3xl font-bold text-center mb-3 text-sky-800 tracking-tight">

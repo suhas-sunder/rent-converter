@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { Route } from "./+types/rent-per-day-calculator";
 import Assumptions from "~/client/components/layout/Assumptions";
 import HowItWorks from "~/client/components/rent-per-day-calculator/HowItWorks";
+import ToolFit from "~/client/components/rent-per-day-calculator/ToolFit";
 function safeToFixed(n: number, digits: number): string {
   if (!Number.isFinite(n)) return "-";
   return n.toFixed(digits);
@@ -1140,6 +1141,9 @@ export default function RentPerDayCalculator() {
           / <span className="text-slate-800">{pageName}</span>
         </nav>
       </section>
+
+      <ToolFit />
+
       <section id="faq" className="max-w-5xl mx-auto pb-16 px-6">
         <h2 className="text-3xl font-bold text-center mb-3 text-sky-800 tracking-tight">
           Frequently Asked Questions

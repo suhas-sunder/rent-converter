@@ -599,31 +599,6 @@ const HowItWorks = () => {
                 </ul>
               </div>
             </div>
-
-            <p className="text-slate-700 leading-relaxed">
-              Related pages:{" "}
-              <Link
-                to="/rent-converter"
-                className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
-              >
-                rent converter
-              </Link>
-              ,{" "}
-              <Link
-                to="/how-much-rent-can-i-afford-calculator"
-                className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
-              >
-                how much rent can I afford
-              </Link>
-              , and{" "}
-              <Link
-                to="/rent-split-calculator"
-                className="text-sky-700 hover:text-sky-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm cursor-pointer"
-              >
-                rent split calculator
-              </Link>
-              .
-            </p>
           </div>
         </div>
       </div>

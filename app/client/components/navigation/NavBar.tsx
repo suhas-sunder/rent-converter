@@ -464,7 +464,7 @@ export default function NavBar() {
   }
 
   return (
-    <header className="bg-sky-950 text-slate-200 border-b border-sky-900/60 shadow-sm">
+    <header className="bg-sky-950 text-slate-200 border-b border-sky-900/60 shadow-sm md:mb-6">
       {/* Scoped scrollbar styles only for menu containers */}
       <style>{`
         .${SCROLL_CLASS} {
