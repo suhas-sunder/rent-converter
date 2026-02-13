@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import type { Route } from "./+types/weekly-to-monthly-rent-converter";
+import { useEffect, useMemo, useState } from "react";
+import type { Route } from "./+types/rent-per-paycheck-us";
 import Assumptions from "~/client/components/layout/Assumptions";
 import Rounding from "~/client/components/layout/Rounding";
-import HowItWorks from "~/client/components/weekly-to-monthly-rent-converter/HowItWorks";
-import ToolFit from "~/client/components/weekly-to-monthly-rent-converter/ToolFit";
-import FAQ from "~/client/components/weekly-to-monthly-rent-converter/FAQ";
+import HowItWorks from "~/client/components/rent-per-paycheck-us/HowItWorks";
+import ToolFit from "~/client/components/rent-per-paycheck-us/ToolFit";
+import FAQ from "~/client/components/rent-per-paycheck-us/FAQ";
 
 function safeToFixed(n: number, digits: number): string {
   if (!Number.isFinite(n)) return "—";
@@ -12,45 +12,37 @@ function safeToFixed(n: number, digits: number): string {
 }
 
 export const meta: Route.MetaFunction = () => {
-  const url = "https://www.rentconverter.com/weekly-to-monthly-rent-converter";
+  const url = "https://www.rentconverter.com/rent-per-paycheck-us";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
 
   return [
-    { title: "Weekly to Monthly Rent Converter (True Monthly Cost)" },
+    { title: "Rent Per Paycheck Calculator (US)" },
     {
       name: "description",
       content:
-        "See the true monthly cost of weekly rent. Compare weekly vs 4-week (28-day) pricing with exact decimals and clear breakdowns. Free, private, no signup.",
-    },
-    {
-      name: "keywords",
-      content:
-        "weekly to monthly rent, convert weekly rent to monthly, true monthly cost of weekly rent, weekly rent monthly equivalent, 4 week rent vs monthly, 28 day rent vs monthly",
+        "Calculate how much rent is per paycheck in the US. Convert monthly rent into per-paycheck amounts for weekly, biweekly, semi-monthly, and monthly pay schedules.",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
     { name: "theme-color", content: "#f8fafc" },
 
     { property: "og:type", content: "website" },
-    {
-      property: "og:title",
-      content: "Weekly to Monthly Rent Converter (True Monthly Cost)",
-    },
+    { property: "og:title", content: "Rent Per Paycheck Calculator (US)" },
     {
       property: "og:description",
       content:
-        "Find the true monthly cost of weekly rent and compare weekly vs 4-week billing.",
+        "Convert monthly rent into per-paycheck rent for common US pay schedules.",
     },
     { property: "og:url", content: url },
     { property: "og:site_name", content: "RentConverter.com" },
     { property: "og:image", content: ogImage },
 
     { name: "twitter:card", content: "summary_large_image" },
-    { name: "twitter:title", content: "Weekly to Monthly Rent Converter" },
+    { name: "twitter:title", content: "Rent Per Paycheck Calculator (US)" },
     {
       name: "twitter:description",
       content:
-        "See the true monthly cost of weekly rent with clear breakdowns.",
+        "See what rent costs per paycheck for weekly, biweekly, semi-monthly, or monthly pay.",
     },
     { name: "twitter:image", content: ogImage },
 
@@ -58,14 +50,7 @@ export const meta: Route.MetaFunction = () => {
   ];
 };
 
-type Period =
-  | "hourly"
-  | "daily"
-  | "weekly"
-  | "biweekly"
-  | "every_4_weeks"
-  | "monthly"
-  | "annual";
+type Period = "weekly" | "biweekly" | "semi_monthly" | "monthly";
 
 const SUPPORTED_CURRENCIES = [
   "USD",
@@ -94,45 +79,27 @@ function isCurrency(x: string): x is Currency {
   return (SUPPORTED_CURRENCIES as readonly string[]).includes(x);
 }
 
-/**
- * Internal link whitelist.
- * Only keep routes you know exist in your app.
- * Unknown routes are forced to "/".
- */
 const ROUTE_WHITELIST = new Set<string>([
-  // Home
   "/",
-
-  // Rent converter hub
   "/rent-converter",
-
-  // Frequency converters
   "/monthly-to-weekly-rent-converter",
   "/weekly-to-monthly-rent-converter",
   "/weekly-to-annual-rent-converter",
   "/weekly-to-biweekly-rent-converter",
-
   "/biweekly-to-weekly-rent-converter",
   "/biweekly-to-monthly-rent-converter",
   "/biweekly-to-annual-rent-converter",
-
   "/monthly-to-annual-rent-converter",
   "/annual-to-monthly-rent-converter",
-
   "/monthly-to-daily-rent-converter",
   "/daily-to-monthly-rent-converter",
-
   "/monthly-to-hourly-rent-converter",
   "/hourly-to-monthly-rent-converter",
-
   "/hourly-to-annual-rent-converter",
   "/annual-to-hourly-rent-converter",
-
   "/annual-to-weekly-rent-converter",
   "/annual-to-biweekly-rent-converter",
   "/monthly-to-biweekly-rent-converter",
-
-  // Rent calculators
   "/rent-calculator",
   "/rent-per-day-calculator",
   "/rent-per-week-calculator",
@@ -140,23 +107,15 @@ const ROUTE_WHITELIST = new Set<string>([
   "/rent-per-paycheck-calculator",
   "/rent-split-calculator",
   "/rent-due-date-calculator",
-
-  // Affordability and income
   "/rent-affordability-calculator",
   "/rent-as-percentage-of-income-calculator",
   "/how-much-rent-can-i-afford-calculator",
   "/rent-after-tax-income-calculator",
   "/rent-vs-take-home-pay-calculator",
-
-  // Rent increases
   "/rent-increase-calculator",
   "/rent-increase-percentage-calculator",
   "/rent-after-increase-calculator",
-
-  // Rent vs buy
   "/rent-vs-buy-calculator",
-
-  // Context pages
   "/rent-paid-weekly-vs-monthly",
 ]);
 
@@ -164,7 +123,6 @@ function safeHref(path: string): string {
   return ROUTE_WHITELIST.has(path) ? path : "/";
 }
 
-/** Fixed-point: store up to 12 decimals exactly */
 const MAX_DECIMALS = 12n;
 const SCALE = 10n ** MAX_DECIMALS;
 
@@ -181,7 +139,7 @@ function clampScaled(v: bigint, min: bigint, max: bigint): bigint {
   return v;
 }
 
-const MAX_SAFE_INT_FOR_NUMBER = 9_000_000_000_000_000n; // ~9e15, JS Number integer precision limit
+const MAX_SAFE_INT_FOR_NUMBER = 9_000_000_000_000_000n;
 
 function absBigInt(x: bigint): bigint {
   return x < 0n ? -x : x;
@@ -199,7 +157,7 @@ function groupInt(intStr: string, groupSep: string): string {
 }
 
 function getNumberSeparators(): { group: string; decimal: string } {
-  const parts = new Intl.NumberFormat(undefined, {
+  const parts = new Intl.NumberFormat("en-US", {
     useGrouping: true,
   }).formatToParts(1000.1);
   const group = parts.find((p) => p.type === "group")?.value ?? ",";
@@ -234,17 +192,11 @@ function scaledToDecimalStrings(
   let fracStr = "";
   if (d > 0) {
     fracStr = fracPart.toString().padStart(12, "0").slice(0, d);
-    if (trimTrailingZeros) {
-      fracStr = fracStr.replace(/0+$/g, "");
-    }
+    if (trimTrailingZeros) fracStr = fracStr.replace(/0+$/g, "");
   }
   return { negative, intStr: intPart.toString(), fracStr };
 }
 
-/**
- * Plain (non-currency) formatting for the input preview.
- * Uses BigInt-only formatting so values never "disappear" due to Number precision limits.
- */
 function formatPlainNumberFromScaled(
   scaled: bigint,
   maxFractionDigits: number,
@@ -254,7 +206,6 @@ function formatPlainNumberFromScaled(
 
   const negative = scaled < 0n;
   const a = absBigInt(scaled);
-  const intPart = a / SCALE;
   const fracPart = a % SCALE;
 
   let digits = 0;
@@ -264,12 +215,7 @@ function formatPlainNumberFromScaled(
     digits = Math.min(digitsCap, Math.max(0, trimmed.length));
   }
 
-  const { intStr, fracStr } = scaledToDecimalStrings(
-    scaled,
-    digits,
-    true, // trim trailing zeros for preview
-  );
-
+  const { intStr, fracStr } = scaledToDecimalStrings(scaled, digits, true);
   const groupedInt = groupInt(intStr, group);
 
   if (digits > 0 && fracStr.length > 0) {
@@ -290,7 +236,6 @@ function formatCurrencyFromScaled(
   if (roundDisplay) {
     digits = Math.max(0, Math.min(12, displayDecimals));
   } else {
-    // Show up to 12 decimals but trim trailing zeros for display.
     const a = absBigInt(scaled);
     const fracPart = a % SCALE;
     if (fracPart === 0n) {
@@ -310,19 +255,18 @@ function formatCurrencyFromScaled(
   const { negative, intStr, fracStr } = scaledToDecimalStrings(
     scaledForDisplay,
     digits,
-    !roundDisplay, // trim only when not rounding to fixed digits
+    !roundDisplay,
   );
 
   const groupedInt = groupInt(intStr, group);
 
-  const fmt = new Intl.NumberFormat(undefined, {
+  const fmt = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency,
     minimumFractionDigits: digits,
     maximumFractionDigits: digits,
   });
 
-  // Build by parts so we keep locale currency placement and symbols without using floats for the value.
   const parts = fmt.formatToParts(-1);
   let out = "";
   for (const p of parts) {
@@ -334,10 +278,7 @@ function formatCurrencyFromScaled(
       out += groupedInt;
       continue;
     }
-    if (p.type === "group") {
-      // We already grouped ourselves.
-      continue;
-    }
+    if (p.type === "group") continue;
     if (p.type === "decimal") {
       if (digits > 0 && fracStr.length > 0) out += decimal;
       continue;
@@ -352,10 +293,6 @@ function formatCurrencyFromScaled(
   return out || "—";
 }
 
-/**
- * Accepts: $650, 650.00, 1,200, .5, 12., 650,50 (comma decimal).
- * Rejects ambiguous formats like "1,2,3".
- */
 function parseMoneyInputToScaled(raw: string, label = "value"): ParsedScaled {
   const warnings: string[] = [];
   const s0 = (raw ?? "").trim();
@@ -472,41 +409,6 @@ function mulDivRound(a: bigint, num: bigint, den: bigint): bigint {
   return sign < 0n ? -q : q;
 }
 
-/**
- * Annual equivalence with a 365-day year.
- * Weekly is treated as a 7-day block, monthly is 365/12 days on the same annual basis.
- */
-function annualizeScaled(valueScaled: bigint, period: Period): bigint {
-  switch (period) {
-    case "annual":
-      return valueScaled;
-    case "monthly":
-      return valueScaled * 12n;
-    case "every_4_weeks":
-      return mulDivRound(valueScaled, 365n, 28n);
-    case "biweekly":
-      return mulDivRound(valueScaled, 365n, 14n);
-    case "weekly":
-      return mulDivRound(valueScaled, 365n, 7n);
-    case "daily":
-      return valueScaled * 365n;
-    case "hourly":
-      return valueScaled * 24n * 365n;
-    default:
-      return 0n;
-  }
-}
-
-function fromAnnualScaled(annualScaled: bigint, to: Period): bigint {
-  if (to === "hourly") return mulDivRound(annualScaled, 1n, 365n * 24n);
-  if (to === "daily") return mulDivRound(annualScaled, 1n, 365n);
-  if (to === "weekly") return mulDivRound(annualScaled, 7n, 365n);
-  if (to === "biweekly") return mulDivRound(annualScaled, 14n, 365n);
-  if (to === "every_4_weeks") return mulDivRound(annualScaled, 28n, 365n);
-  if (to === "monthly") return mulDivRound(annualScaled, 1n, 12n);
-  return annualScaled;
-}
-
 function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   if (raw === null) return fallback;
   try {
@@ -525,14 +427,38 @@ function parseStrictDisplayDecimals(raw: string | null): number {
   return t === 0 || t === 2 || t === 4 || t === 6 ? t : 2;
 }
 
-export default function WeeklyToMonthlyRent() {
-  const pageName = "Weekly to Monthly Rent Converter";
-  const canonicalUrl =
-    "https://www.rentconverter.com/weekly-to-monthly-rent-converter";
+function paychecksPerYear(period: Period): bigint {
+  if (period === "weekly") return 52n;
+  if (period === "biweekly") return 26n;
+  if (period === "semi_monthly") return 24n;
+  return 12n;
+}
 
-  const [amount, setAmount] = useState<string>(() => {
-    if (typeof window === "undefined") return "500";
-    return localStorage.getItem("rc_wtm_amount") ?? "500";
+function labelForPeriod(period: Period): string {
+  if (period === "weekly") return "Weekly pay";
+  if (period === "biweekly") return "Every 2 weeks";
+  if (period === "semi_monthly") return "Twice a month";
+  return "Monthly pay";
+}
+
+export default function RentPerPaycheckUS() {
+  const pageName = "Rent Per Paycheck Calculator (US)";
+  const canonicalUrl = "https://www.rentconverter.com/rent-per-paycheck-us";
+
+  const [monthlyRent, setMonthlyRent] = useState<string>(() => {
+    if (typeof window === "undefined") return "2000";
+    return localStorage.getItem("rc_rpc_us_monthly_rent") ?? "2000";
+  });
+
+  const [payPeriod, setPayPeriod] = useState<Period>(() => {
+    if (typeof window === "undefined") return "biweekly";
+    const saved = localStorage.getItem("rc_rpc_us_pay_period") as Period | null;
+    return saved === "weekly" ||
+      saved === "biweekly" ||
+      saved === "semi_monthly" ||
+      saved === "monthly"
+      ? saved
+      : "biweekly";
   });
 
   const [isAmountFocused, setIsAmountFocused] = useState<boolean>(false);
@@ -540,64 +466,58 @@ export default function WeeklyToMonthlyRent() {
 
   const [currency, setCurrency] = useState<Currency>(() => {
     if (typeof window === "undefined") return "USD";
-    const saved = localStorage.getItem("rc_wtm_currency") ?? "USD";
+    const saved = localStorage.getItem("rc_rpc_us_currency") ?? "USD";
     return isCurrency(saved) ? saved : "USD";
   });
 
-  // Display-only rounding controls (keeps old key rc_wtm_rounding as fallback)
   const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
     if (typeof window === "undefined") return true;
-
-    const newKey = localStorage.getItem("rc_wtm_round_display");
-    if (newKey !== null) return safeParseBoolean(newKey, true);
-
-    const oldKey = localStorage.getItem("rc_wtm_rounding");
-    if (oldKey !== null) return safeParseBoolean(oldKey, true);
-
+    const raw = localStorage.getItem("rc_rpc_us_round_display");
+    if (raw !== null) return safeParseBoolean(raw, true);
     return true;
   });
 
   const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
     if (typeof window === "undefined") return 2;
     return parseStrictDisplayDecimals(
-      localStorage.getItem("rc_wtm_display_decimals"),
+      localStorage.getItem("rc_rpc_us_display_decimals"),
     );
   });
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     try {
-      localStorage.setItem("rc_wtm_amount", amount);
-      localStorage.setItem("rc_wtm_currency", currency);
+      localStorage.setItem("rc_rpc_us_monthly_rent", monthlyRent);
+      localStorage.setItem("rc_rpc_us_pay_period", payPeriod);
+      localStorage.setItem("rc_rpc_us_currency", currency);
       localStorage.setItem(
-        "rc_wtm_round_display",
+        "rc_rpc_us_round_display",
         JSON.stringify(roundDisplay),
       );
-      localStorage.setItem("rc_wtm_display_decimals", String(displayDecimals));
-
-      // keep legacy key in sync
-      localStorage.setItem("rc_wtm_rounding", JSON.stringify(roundDisplay));
+      localStorage.setItem(
+        "rc_rpc_us_display_decimals",
+        String(displayDecimals),
+      );
     } catch {}
-  }, [amount, currency, roundDisplay, displayDecimals]);
+  }, [monthlyRent, payPeriod, currency, roundDisplay, displayDecimals]);
 
   const parsed = useMemo(() => {
-    const p = parseMoneyInputToScaled(amount, "weekly rent amount");
+    const p = parseMoneyInputToScaled(monthlyRent, "monthly rent amount");
     const errors: string[] = [];
-    if (!p.ok) errors.push(p.error ?? "Enter a weekly rent amount.");
+    if (!p.ok) errors.push(p.error ?? "Enter a monthly rent amount.");
     return { ok: errors.length === 0, errors, warnings: p.warnings, p };
-  }, [amount]);
+  }, [monthlyRent]);
 
   const amountPreviewValue = useMemo(() => {
-    if (!parsed.ok || parsed.p.scaled === undefined) return amount;
-    // BigInt-only preview so large values never collapse to "" due to float limits.
+    if (!parsed.ok || parsed.p.scaled === undefined) return monthlyRent;
     return formatPlainNumberFromScaled(parsed.p.scaled, 12);
-  }, [amount, parsed]);
+  }, [monthlyRent, parsed]);
 
   const amountInputValue = isAmountFocused
-    ? amount
+    ? monthlyRent
     : parsed.ok
       ? amountPreviewValue
-      : amount;
+      : monthlyRent;
 
   const computed = useMemo(() => {
     if (!parsed.ok)
@@ -607,51 +527,38 @@ export default function WeeklyToMonthlyRent() {
         warnings: parsed.warnings,
       };
 
-    const weekly = parsed.p.scaled as bigint;
+    const monthly = parsed.p.scaled as bigint;
+    const annual = monthly * 12n;
 
-    // Source of truth: annual equivalence (365-day year)
-    const annual = annualizeScaled(weekly, "weekly");
+    const perPaycheckFor = (p: Period) =>
+      mulDivRound(annual, 1n, paychecksPerYear(p));
 
-    // Monthly derived from annual (keeps consistent annual basis)
-    const monthly = fromAnnualScaled(annual, "monthly");
+    const selected = perPaycheckFor(payPeriod);
 
-    const hourly = fromAnnualScaled(annual, "hourly");
-    const daily = fromAnnualScaled(annual, "daily");
-    const biweekly = fromAnnualScaled(annual, "biweekly");
-    const fourWeeks = fromAnnualScaled(annual, "every_4_weeks");
+    const weekly = perPaycheckFor("weekly");
+    const biweekly = perPaycheckFor("biweekly");
+    const semiMonthly = perPaycheckFor("semi_monthly");
+    const monthlyPay = perPaycheckFor("monthly");
 
-    const monthlyMinus4w = monthly - fourWeeks;
-    const monthlyMinus4wPct =
-      fourWeeks !== 0n
-        ? toNumberSafe(monthlyMinus4w) / toNumberSafe(fourWeeks)
+    const selectedPctOfMonthly =
+      monthly !== 0n
+        ? toNumberSafe(selected) / toNumberSafe(monthly)
         : Number.NaN;
-
-    // Payment-count shortcuts (illustrative)
-    const annualFromWeekly52 = weekly * 52n;
-    const annualFromMonthly12 = monthly * 12n;
-
-    // 4-week comparison
-    const weeklyTimes4 = weekly * 4n;
-    const weeklyTimes4Delta = monthly - weeklyTimes4;
 
     return {
       ok: true as const,
       warnings: parsed.warnings,
-      weekly,
       monthly,
       annual,
-      hourly,
-      daily,
+      payPeriod,
+      selected,
+      weekly,
       biweekly,
-      every_4_weeks: fourWeeks,
-      monthlyMinus4w,
-      monthlyMinus4wPct,
-      annualFromWeekly52,
-      annualFromMonthly12,
-      weeklyTimes4,
-      weeklyTimes4Delta,
+      semi_monthly: semiMonthly,
+      monthly_pay: monthlyPay,
+      selectedPctOfMonthly,
     };
-  }, [parsed]);
+  }, [parsed, payPeriod]);
 
   const money = (scaled: bigint) =>
     formatCurrencyFromScaled(scaled, currency, roundDisplay, displayDecimals);
@@ -687,7 +594,7 @@ export default function WeeklyToMonthlyRent() {
     "@type": "WebPage",
     name: pageName,
     description:
-      "Convert weekly rent to a monthly equivalent using annual equivalence (365-day year). Includes a full breakdown and a 4-week (28-day) comparison.",
+      "Calculate rent per paycheck in the US by converting monthly rent into per-paycheck amounts for common pay schedules.",
     url: canonicalUrl,
   };
 
@@ -713,7 +620,7 @@ export default function WeeklyToMonthlyRent() {
         <div className="rounded-2xl pb-6 bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8">
           <div className="pt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <h1 className="text-center mb-1 sm:mb-0 sm:text-left text-2xl sm:text-3xl capitalize font-bold text-sky-800 tracking-tight">
-              Weekly to Monthly Rent Converter
+              Rent Per Paycheck Calculator (US)
             </h1>
 
             <div
@@ -736,27 +643,27 @@ export default function WeeklyToMonthlyRent() {
           </div>
 
           <p className="hidden md:flex w-full py-2 text-base text-slate-600">
-            Convert weekly rent into a monthly amount instantly. Clear
-            calculations, no sign-up required.
+            Convert monthly rent into a per-paycheck amount for common US pay
+            schedules.
           </p>
 
           <div className="grid gap-x-5 gap-y-3">
             <div>
               <label className="block text-sm font-semibold text-slate-700 mb-2">
-                Weekly rent amount
+                Monthly rent amount
               </label>
 
               <div className="flex gap-2">
                 <input
                   inputMode="decimal"
                   value={amountInputValue}
-                  onChange={(e) => setAmount(e.target.value)}
+                  onChange={(e) => setMonthlyRent(e.target.value)}
                   onFocus={() => setIsAmountFocused(true)}
                   onBlur={() => {
                     setIsAmountFocused(false);
                     setAmountTouched(true);
                   }}
-                  placeholder="e.g. 500"
+                  placeholder="e.g. 2000"
                   className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={amountTouched && !parsed.ok}
                 />
@@ -770,7 +677,7 @@ export default function WeeklyToMonthlyRent() {
                         : "USD",
                     )
                   }
-                  className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-label="Currency"
                 >
                   {SUPPORTED_CURRENCIES.map((c) => (
@@ -778,6 +685,37 @@ export default function WeeklyToMonthlyRent() {
                       {c}
                     </option>
                   ))}
+                </select>
+              </div>
+
+              <div className="mt-3">
+                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  Pay schedule
+                </label>
+                <select
+                  value={payPeriod}
+                  onChange={(e) => {
+                    const v = e.target.value as Period;
+                    setPayPeriod(
+                      v === "weekly" ||
+                        v === "biweekly" ||
+                        v === "semi_monthly" ||
+                        v === "monthly"
+                        ? v
+                        : "biweekly",
+                    );
+                  }}
+                  className="cursor-pointer w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  aria-label="Pay schedule"
+                >
+                  <option value="weekly">Weekly (52 paychecks/year)</option>
+                  <option value="biweekly">
+                    Every 2 weeks (26 paychecks/year)
+                  </option>
+                  <option value="semi_monthly">
+                    Twice a month (24 paychecks/year)
+                  </option>
+                  <option value="monthly">Monthly (12 paychecks/year)</option>
                 </select>
               </div>
 
@@ -834,62 +772,80 @@ export default function WeeklyToMonthlyRent() {
                     aria-hidden="true"
                   />
                   <div className="text-sm font-semibold text-slate-800">
-                    Monthly equivalent
+                    Rent per paycheck
                   </div>
                 </div>
 
                 <div className="mt-2 flex flex-col gap-2">
                   <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700">
-                    {money(computed.monthly)}
+                    {money(computed.selected)}
+                  </div>
+                  <div className="text-sm text-slate-600">
+                    {labelForPeriod(computed.payPeriod)}
+                    {Number.isFinite(computed.selectedPctOfMonthly) ? (
+                      <>
+                        {" "}
+                        (about{" "}
+                        <span className="font-semibold text-slate-800">
+                          {safeToFixed(computed.selectedPctOfMonthly * 100, 2)}%
+                        </span>{" "}
+                        of monthly rent)
+                      </>
+                    ) : null}
                   </div>
                 </div>
 
                 <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                  {(
-                    [
-                      ["Hourly", computed.hourly, "hourly"],
-                      ["Daily", computed.daily, "daily"],
-                      ["Weekly", computed.weekly, "weekly"],
-                      ["2 weeks", computed.biweekly, "biweekly"],
-                      [
-                        "4 weeks (28 days)",
-                        computed.every_4_weeks,
-                        "every_4_weeks",
-                      ],
-                      ["Monthly (average)", computed.monthly, "monthly"],
-                    ] as const
-                  ).map(([label, val, key]) => (
-                    <div
-                      key={key}
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-2"
-                    >
-                      <div className="text-xs text-slate-500">{label}</div>
-                      <div className="mt-1 text-lg font-bold text-slate-800">
-                        {money(val)}
-                      </div>
+                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2">
+                    <div className="text-xs text-slate-500">Monthly rent</div>
+                    <div className="mt-1 text-lg font-bold text-slate-800">
+                      {money(computed.monthly)}
                     </div>
-                  ))}
+                  </div>
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-2">
-                    <div className="text-xs text-slate-500">
-                      4-week (28-day) vs monthly comparison
+                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2">
+                    <div className="text-xs text-slate-500">Annual rent</div>
+                    <div className="mt-1 text-lg font-bold text-slate-800">
+                      {money(computed.annual)}
                     </div>
-                    <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                      <div className="text-sm text-slate-700">
-                        Monthly minus 4-week ={" "}
-                        <strong className="text-slate-900">
-                          {money(computed.monthlyMinus4w)}
-                        </strong>
-                      </div>
-                      <div className="text-sm text-slate-700">
-                        Difference ≈{" "}
-                        <strong className="text-slate-900">
-                          {Number.isFinite(computed.monthlyMinus4wPct)
-                            ? safeToFixed(computed.monthlyMinus4wPct * 100, 2)
-                            : "N/A"}
-                          %
-                        </strong>
-                      </div>
+                  </div>
+
+                  <div className="rounded-2xl border border-slate-200 bg-emerald-50 px-4 py-2 sm:col-span-2 lg:col-span-3">
+                    <div className="text-xs text-slate-500">
+                      Per-paycheck comparison (same monthly rent)
+                    </div>
+
+                    <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                      {(
+                        [
+                          ["Weekly (52/yr)", computed.weekly, "weekly"],
+                          [
+                            "Every 2 weeks (26/yr)",
+                            computed.biweekly,
+                            "biweekly",
+                          ],
+                          [
+                            "Twice a month (24/yr)",
+                            computed.semi_monthly,
+                            "semi_monthly",
+                          ],
+                          [
+                            "Monthly (12/yr)",
+                            computed.monthly_pay,
+                            "monthly_pay",
+                          ],
+                        ] as const
+                      ).map(([label, val, key]) => (
+                        <div
+                          key={key}
+                          className="rounded-xl border border-slate-200 bg-white px-4 py-2"
+                        >
+                          <div className="text-xs text-slate-500">{label}</div>
+                          <div className="mt-1 text-lg font-bold text-slate-800">
+                            {money(val)}
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -899,6 +855,7 @@ export default function WeeklyToMonthlyRent() {
             </>
           ) : null}
         </div>
+
         <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 rc-no-print">
           <div className="rc-no-print md:hidden flex flex-col sm:flex-row gap-2 mb-4">
             <button
@@ -925,7 +882,7 @@ export default function WeeklyToMonthlyRent() {
           <a href={safeHref("/")} className="hover:underline">
             Home
           </a>{" "}
-          / Weekly to Monthly Rent Converter
+          / Rent Per Paycheck Calculator (US)
         </nav>
       </section>
 
@@ -937,7 +894,6 @@ export default function WeeklyToMonthlyRent() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
-
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}

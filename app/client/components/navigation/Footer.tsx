@@ -119,12 +119,42 @@ export default function Footer() {
       title: "Rent vs Buy",
       items: [{ label: "Rent vs Buy", to: "/rent-vs-buy-calculator" }],
     },
+
+    // NEW: Answer pages
+    {
+      title: "Popular Weekly → Monthly Answers",
+      items: [
+        { label: "$500/week → Monthly", to: "/500-per-week-to-monthly-rent" },
+        { label: "$170/week → Monthly", to: "/170-per-week-to-monthly-rent" },
+        { label: "$180/week → Monthly", to: "/180-per-week-to-monthly-rent" },
+      ],
+    },
+
+    // NEW: International variants
+    {
+      title: "Country Versions",
+      items: [
+        { label: "Weekly → Monthly (UK)", to: "/weekly-to-monthly-rent-uk" },
+        {
+          label: "Weekly → Monthly (Australia)",
+          to: "/weekly-to-monthly-rent-australia",
+        },
+        { label: "Rent Per Paycheck (US)", to: "/rent-per-paycheck-us" },
+        {
+          label: "Rent Per Paycheck (Canada)",
+          to: "/rent-per-paycheck-canada",
+        },
+      ],
+    },
   ];
 
   return (
     <footer className="bg-sky-950 text-slate-300">
       <div className="mx-auto max-w-6xl px-4 py-10">
-        <div className="rounded-2xl border border-sky-900/60 bg-sky-950/30 p-6">
+        <div
+          id="all-tools"
+          className="rounded-2xl border border-sky-900/60 bg-sky-950/30 p-6"
+        >
           <div className="flex items-start justify-between gap-3">
             <h2 className="text-base font-bold text-white">All Rental Tools</h2>
             <span className="text-base text-slate-400">

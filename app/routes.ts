@@ -174,6 +174,20 @@ export default [
     "routes/rent-after-increase-calculator.tsx",
   ),
 
+  //Answer pages for specific queries
+  route(
+    "500-per-week-to-monthly-rent",
+    "routes/500-per-week-to-monthly-rent.tsx",
+  ),
+  route("170-per-week-to-monthly-rent", "routes/170-per-week-to-monthly.tsx"),
+  route("180-per-week-to-monthly-rent", "routes/180-per-week-to-monthly.tsx"),
+
+  //International variants
+  route("weekly-to-monthly-rent-uk", "routes/weekly-to-monthly-rent-uk.tsx"),
+  route("weekly-to-monthly-rent-australia", "routes/weekly-to-monthly-rent-australia.tsx"),
+  route("rent-per-paycheck-us", "routes/rent-per-paycheck-us.tsx"),
+  route("rent-per-paycheck-canada", "routes/rent-per-paycheck-canada.tsx"),
+
   // Rent increases (redirect aliases)
   route("rent-increase", "routes/rent-increase.tsx"),
   route("rent-increase-percentage", "routes/rent-increase-percentage.tsx"),

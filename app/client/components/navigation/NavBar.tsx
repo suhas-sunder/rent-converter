@@ -17,25 +17,31 @@ function useIsClient() {
 }
 
 function isCanonicalToolRoute(path: string) {
-  return (
-    path === "/rent-converter" ||
-    path.endsWith("-calculator") ||
-    path.endsWith("-converter")
-  );
+  if (path === "/" || path === "/rent-converter") return true;
+  if (path.endsWith("-calculator") || path.endsWith("-converter")) return true;
+
+  const explicitCanonical = new Set<string>([
+    "/500-per-week-to-monthly-rent",
+    "/170-per-week-to-monthly-rent",
+    "/180-per-week-to-monthly-rent",
+
+    "/weekly-to-monthly-rent-uk",
+    "/weekly-to-monthly-rent-australia",
+    "/rent-per-paycheck-us",
+    "/rent-per-paycheck-canada",
+  ]);
+
+  return explicitCanonical.has(path);
 }
 
 function buildCanonicalItems(): NavItem[] {
-  // Canonical only: your list, filtered to -calculator / -converter plus /rent-converter hub
-  // (Redirect aliases are intentionally excluded.)
   const items: NavItem[] = [
-    // Hub
     {
       label: "Universal Rent Converter",
       to: "/",
       keywords: ["rent", "converter", "convert", "hub", "frequency"],
     },
 
-    // Frequency converters (canonical)
     {
       label: "Monthly to Weekly",
       to: "/monthly-to-weekly-rent-converter",
@@ -127,7 +133,6 @@ function buildCanonicalItems(): NavItem[] {
       keywords: ["monthly", "biweekly", "convert", "frequency"],
     },
 
-    // Rent calculators (canonical)
     {
       label: "Universal Rent Calculator",
       to: "/",
@@ -164,7 +169,6 @@ function buildCanonicalItems(): NavItem[] {
       keywords: ["rent", "due date", "date", "calculator"],
     },
 
-    // Affordability and income (canonical)
     {
       label: "Rent % of Income",
       to: "/rent-as-percentage-of-income-calculator",
@@ -186,7 +190,6 @@ function buildCanonicalItems(): NavItem[] {
       keywords: ["take home", "income", "pay", "calculator"],
     },
 
-    // Rent increases (canonical)
     {
       label: "Rent Increase",
       to: "/rent-increase-calculator",
@@ -203,15 +206,74 @@ function buildCanonicalItems(): NavItem[] {
       keywords: ["rent", "after increase", "new rent", "calculator"],
     },
 
-    // Rent vs buy (canonical)
     {
       label: "Rent vs Buy",
       to: "/rent-vs-buy-calculator",
       keywords: ["rent", "buy", "mortgage", "own", "calculator"],
     },
+
+    {
+      label: "$500/week → Monthly",
+      to: "/500-per-week-to-monthly-rent",
+      keywords: [
+        "500",
+        "$500",
+        "per week",
+        "weekly",
+        "monthly",
+        "convert",
+        "answer",
+      ],
+    },
+    {
+      label: "$170/week → Monthly",
+      to: "/170-per-week-to-monthly-rent",
+      keywords: [
+        "170",
+        "$170",
+        "per week",
+        "weekly",
+        "monthly",
+        "convert",
+        "answer",
+      ],
+    },
+    {
+      label: "$180/week → Monthly",
+      to: "/180-per-week-to-monthly-rent",
+      keywords: [
+        "180",
+        "$180",
+        "per week",
+        "weekly",
+        "monthly",
+        "convert",
+        "answer",
+      ],
+    },
+
+    {
+      label: "Weekly → Monthly (UK)",
+      to: "/weekly-to-monthly-rent-uk",
+      keywords: ["uk", "britain", "pounds", "weekly", "monthly", "rent"],
+    },
+    {
+      label: "Weekly → Monthly (Australia)",
+      to: "/weekly-to-monthly-rent-australia",
+      keywords: ["australia", "aud", "weekly", "monthly", "rent"],
+    },
+    {
+      label: "Rent per Paycheck (US)",
+      to: "/rent-per-paycheck-us",
+      keywords: ["us", "usa", "paycheck", "biweekly", "rent"],
+    },
+    {
+      label: "Rent per Paycheck (Canada)",
+      to: "/rent-per-paycheck-canada",
+      keywords: ["canada", "cad", "paycheck", "biweekly", "rent"],
+    },
   ];
 
-  // Safety: ensure only canonical tool routes make it through
   return items.filter((i) => isCanonicalToolRoute(i.to));
 }
 
@@ -220,11 +282,9 @@ export default function NavBar() {
 
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  // Desktop dropdown state
   const [moreOpen, setMoreOpen] = useState(false);
   const [moreRect, setMoreRect] = useState<Rect | null>(null);
 
-  // Mobile search
   const [mobileQuery, setMobileQuery] = useState("");
 
   const moreBtnRef = useRef<HTMLButtonElement | null>(null);
@@ -233,17 +293,15 @@ export default function NavBar() {
 
   const isClient = useIsClient();
 
-  // Unique class so injected CSS only hits these menus
   const SCROLL_CLASS = "rc-scroll";
 
   const tools: NavItem[] = useMemo(() => buildCanonicalItems(), []);
 
-  // Pick 4 primary links (like ATC) and put the rest in the dropdown
   const primaryLinks: NavItem[] = useMemo(() => {
     const desiredOrder: string[] = [
-      "/rent-calculator",
-      "/rent-converter",
-      "/rent-split-calculator",
+      "/",
+      "/weekly-to-monthly-rent-converter",
+      "/rent-per-paycheck-calculator",
       "/how-much-rent-can-i-afford-calculator",
     ];
 
@@ -256,7 +314,6 @@ export default function NavBar() {
       if (primary.length >= 4) break;
     }
 
-    // Fallback if something is missing
     if (primary.length < 4) {
       for (const t of tools) {
         if (primary.length >= 4) break;
@@ -269,7 +326,21 @@ export default function NavBar() {
 
   const desktopMoreList: NavItem[] = useMemo(() => {
     const primarySet = new Set(primaryLinks.map((l) => l.to));
-    return tools.filter((t) => !primarySet.has(t.to));
+
+    // Keep dropdown focused on tools, not answer pages / country variants.
+    const hiddenFromDropdown = new Set<string>([
+      "/500-per-week-to-monthly-rent",
+      "/170-per-week-to-monthly-rent",
+      "/180-per-week-to-monthly-rent",
+      "/weekly-to-monthly-rent-uk",
+      "/weekly-to-monthly-rent-australia",
+      "/rent-per-paycheck-us",
+      "/rent-per-paycheck-canada",
+    ]);
+
+    return tools.filter(
+      (t) => !primarySet.has(t.to) && !hiddenFromDropdown.has(t.to),
+    );
   }, [tools, primaryLinks]);
 
   const filteredMobileTools: NavItem[] = useMemo(() => {
@@ -286,7 +357,6 @@ export default function NavBar() {
     setMoreOpen(false);
   };
 
-  // Close menus when route changes (important in SPA)
   useEffect(() => {
     closeAll();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -299,7 +369,6 @@ export default function NavBar() {
     setMoreRect({ top: r.top, left: r.left, width: r.width, height: r.height });
   }
 
-  // When opening dropdown, measure button location and keep it updated on scroll/resize
   useLayoutEffect(() => {
     if (!moreOpen) return;
     updateMoreRect();
@@ -317,7 +386,6 @@ export default function NavBar() {
     };
   }, [moreOpen]);
 
-  // Close desktop dropdown on outside click + Escape
   useEffect(() => {
     function onDocMouseDown(e: MouseEvent) {
       if (!moreOpen) return;
@@ -327,7 +395,6 @@ export default function NavBar() {
       const btn = moreBtnRef.current;
       const menu = moreMenuRef.current;
 
-      // menu is in a portal, but ref still works
       if (btn?.contains(t) || menu?.contains(t)) return;
 
       setMoreOpen(false);
@@ -348,7 +415,6 @@ export default function NavBar() {
     };
   }, [moreOpen]);
 
-  // Mobile body lock
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
     return () => {
@@ -356,7 +422,6 @@ export default function NavBar() {
     };
   }, [mobileOpen]);
 
-  // Mobile close on backdrop click
   useEffect(() => {
     if (!mobileOpen) return;
 
@@ -376,15 +441,13 @@ export default function NavBar() {
     };
   }, [mobileOpen]);
 
-  // Dropdown placement (ATC style)
   const dropdownStyle = useMemo(() => {
     if (!moreRect) return undefined;
 
     const gap = 8;
     const top = Math.round(moreRect.top + moreRect.height + gap);
 
-    // Align right edge of menu to button right edge
-    const menuWidth = 320; // matches w-80 in ATC
+    const menuWidth = 320;
     const rightEdge = Math.round(moreRect.left + moreRect.width);
     const left = Math.max(8, rightEdge - menuWidth);
 
@@ -396,6 +459,13 @@ export default function NavBar() {
       zIndex: 2147483647,
     };
   }, [moreRect]);
+
+  function scrollToAllTools(onDone?: () => void) {
+    onDone?.();
+    const el = document.getElementById("all-tools");
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 
   function NavLinkItem({
     item,
@@ -445,7 +515,6 @@ export default function NavBar() {
       );
     }
 
-    // mobile
     return (
       <Link
         to={item.to}
@@ -463,9 +532,25 @@ export default function NavBar() {
     );
   }
 
+  function AllToolsButton({ variant }: { variant: "dropdown" | "mobile" }) {
+    const classes =
+      variant === "dropdown"
+        ? "block w-full text-left cursor-pointer select-none px-5 py-4 text-base transition-colors text-slate-100 hover:bg-sky-900/25 hover:text-sky-200"
+        : "block w-full text-left cursor-pointer select-none px-5 py-4 text-base font-semibold transition-colors text-slate-100 hover:bg-sky-900/25 hover:text-sky-200";
+
+    return (
+      <button
+        type="button"
+        className={classes}
+        onClick={() => scrollToAllTools(closeAll)}
+      >
+        All tools (full list)
+      </button>
+    );
+  }
+
   return (
     <header className="bg-sky-950 text-slate-200 border-b border-sky-900/60 shadow-sm md:mb-6">
-      {/* Scoped scrollbar styles only for menu containers */}
       <style>{`
         .${SCROLL_CLASS} {
           scrollbar-width: thin;
@@ -509,7 +594,6 @@ export default function NavBar() {
             </div>
           </Link>
 
-          {/* Mobile burger */}
           <button
             type="button"
             className="sm:hidden inline-flex items-center justify-center rounded-md px-3 py-2
@@ -526,7 +610,6 @@ export default function NavBar() {
             <IconMenu />
           </button>
 
-          {/* Desktop nav */}
           <nav className="hidden sm:flex items-center gap-2 text-sm">
             {primaryLinks.slice(0, 4).map((l) => (
               <NavLinkItem
@@ -555,7 +638,6 @@ export default function NavBar() {
         </div>
       </div>
 
-      {/* Desktop dropdown rendered in portal so it is always above everything */}
       {isClient && moreOpen && dropdownStyle
         ? createPortal(
             <div
@@ -575,13 +657,16 @@ export default function NavBar() {
                     variant="dropdown"
                   />
                 ))}
+
+                <div className="border-t border-sky-900/60">
+                  <AllToolsButton variant="dropdown" />
+                </div>
               </div>
             </div>,
             document.body,
           )
         : null}
 
-      {/* Mobile drawer */}
       {mobileOpen && (
         <div className="sm:hidden fixed inset-0 z-[2147483647]">
           <div className="absolute inset-0 bg-black/55" />
@@ -660,6 +745,10 @@ export default function NavBar() {
                     />
                   ))
                 )}
+
+                <div className="border-t border-sky-900/60">
+                  <AllToolsButton variant="mobile" />
+                </div>
 
                 <div className="h-[env(safe-area-inset-bottom)]" />
               </div>

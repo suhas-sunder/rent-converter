@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import type { Route } from "./+types/weekly-to-monthly-rent-converter";
+import { useEffect, useMemo, useState } from "react";
+import type { Route } from "./+types/weekly-to-monthly-rent-australia";
 import Assumptions from "~/client/components/layout/Assumptions";
 import Rounding from "~/client/components/layout/Rounding";
-import HowItWorks from "~/client/components/weekly-to-monthly-rent-converter/HowItWorks";
-import ToolFit from "~/client/components/weekly-to-monthly-rent-converter/ToolFit";
-import FAQ from "~/client/components/weekly-to-monthly-rent-converter/FAQ";
+import HowItWorks from "~/client/components/weekly-to-monthly-rent-australia/HowItWorks";
+import ToolFit from "~/client/components/weekly-to-monthly-rent-australia/ToolFit";
+import FAQ from "~/client/components/weekly-to-monthly-rent-australia/FAQ";
 
 function safeToFixed(n: number, digits: number): string {
   if (!Number.isFinite(n)) return "—";
@@ -12,48 +12,41 @@ function safeToFixed(n: number, digits: number): string {
 }
 
 export const meta: Route.MetaFunction = () => {
-  const url = "https://www.rentconverter.com/weekly-to-monthly-rent-converter";
+  const url = "https://www.rentconverter.com/weekly-to-monthly-rent-australia";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
 
   return [
-    { title: "Weekly to Monthly Rent Converter (True Monthly Cost)" },
+    { title: "Weekly to Monthly Rent Converter Australia (True Monthly Cost)" },
     {
       name: "description",
       content:
-        "See the true monthly cost of weekly rent. Compare weekly vs 4-week (28-day) pricing with exact decimals and clear breakdowns. Free, private, no signup.",
-    },
-    {
-      name: "keywords",
-      content:
-        "weekly to monthly rent, convert weekly rent to monthly, true monthly cost of weekly rent, weekly rent monthly equivalent, 4 week rent vs monthly, 28 day rent vs monthly",
+        "Convert weekly rent to a monthly amount in Australia. Compare weekly vs 4-week (28-day) pricing with exact decimals and clear breakdowns.",
     },
     { name: "robots", content: "index,follow" },
-    { name: "author", content: "RentConverter.com" },
-    { name: "theme-color", content: "#f8fafc" },
-
     { property: "og:type", content: "website" },
     {
       property: "og:title",
-      content: "Weekly to Monthly Rent Converter (True Monthly Cost)",
+      content: "Weekly to Monthly Rent Converter Australia",
     },
     {
       property: "og:description",
       content:
-        "Find the true monthly cost of weekly rent and compare weekly vs 4-week billing.",
+        "Find the true monthly cost of weekly rent in Australia with exact math.",
     },
     { property: "og:url", content: url },
     { property: "og:site_name", content: "RentConverter.com" },
     { property: "og:image", content: ogImage },
-
     { name: "twitter:card", content: "summary_large_image" },
-    { name: "twitter:title", content: "Weekly to Monthly Rent Converter" },
+    {
+      name: "twitter:title",
+      content: "Weekly to Monthly Rent Converter Australia",
+    },
     {
       name: "twitter:description",
       content:
-        "See the true monthly cost of weekly rent with clear breakdowns.",
+        "Convert weekly rent to monthly in Australia using true calendar-month math.",
     },
     { name: "twitter:image", content: ogImage },
-
     { tagName: "link", rel: "canonical", href: url },
   ];
 };
@@ -68,11 +61,11 @@ type Period =
   | "annual";
 
 const SUPPORTED_CURRENCIES = [
+  "AUD",
   "USD",
   "CAD",
   "EUR",
   "GBP",
-  "AUD",
   "NZD",
   "JPY",
   "CNY",
@@ -94,45 +87,27 @@ function isCurrency(x: string): x is Currency {
   return (SUPPORTED_CURRENCIES as readonly string[]).includes(x);
 }
 
-/**
- * Internal link whitelist.
- * Only keep routes you know exist in your app.
- * Unknown routes are forced to "/".
- */
 const ROUTE_WHITELIST = new Set<string>([
-  // Home
   "/",
-
-  // Rent converter hub
   "/rent-converter",
-
-  // Frequency converters
   "/monthly-to-weekly-rent-converter",
   "/weekly-to-monthly-rent-converter",
   "/weekly-to-annual-rent-converter",
   "/weekly-to-biweekly-rent-converter",
-
   "/biweekly-to-weekly-rent-converter",
   "/biweekly-to-monthly-rent-converter",
   "/biweekly-to-annual-rent-converter",
-
   "/monthly-to-annual-rent-converter",
   "/annual-to-monthly-rent-converter",
-
   "/monthly-to-daily-rent-converter",
   "/daily-to-monthly-rent-converter",
-
   "/monthly-to-hourly-rent-converter",
   "/hourly-to-monthly-rent-converter",
-
   "/hourly-to-annual-rent-converter",
   "/annual-to-hourly-rent-converter",
-
   "/annual-to-weekly-rent-converter",
   "/annual-to-biweekly-rent-converter",
   "/monthly-to-biweekly-rent-converter",
-
-  // Rent calculators
   "/rent-calculator",
   "/rent-per-day-calculator",
   "/rent-per-week-calculator",
@@ -140,23 +115,15 @@ const ROUTE_WHITELIST = new Set<string>([
   "/rent-per-paycheck-calculator",
   "/rent-split-calculator",
   "/rent-due-date-calculator",
-
-  // Affordability and income
   "/rent-affordability-calculator",
   "/rent-as-percentage-of-income-calculator",
   "/how-much-rent-can-i-afford-calculator",
   "/rent-after-tax-income-calculator",
   "/rent-vs-take-home-pay-calculator",
-
-  // Rent increases
   "/rent-increase-calculator",
   "/rent-increase-percentage-calculator",
   "/rent-after-increase-calculator",
-
-  // Rent vs buy
   "/rent-vs-buy-calculator",
-
-  // Context pages
   "/rent-paid-weekly-vs-monthly",
 ]);
 
@@ -164,7 +131,6 @@ function safeHref(path: string): string {
   return ROUTE_WHITELIST.has(path) ? path : "/";
 }
 
-/** Fixed-point: store up to 12 decimals exactly */
 const MAX_DECIMALS = 12n;
 const SCALE = 10n ** MAX_DECIMALS;
 
@@ -181,7 +147,7 @@ function clampScaled(v: bigint, min: bigint, max: bigint): bigint {
   return v;
 }
 
-const MAX_SAFE_INT_FOR_NUMBER = 9_000_000_000_000_000n; // ~9e15, JS Number integer precision limit
+const MAX_SAFE_INT_FOR_NUMBER = 9_000_000_000_000_000n;
 
 function absBigInt(x: bigint): bigint {
   return x < 0n ? -x : x;
@@ -199,7 +165,7 @@ function groupInt(intStr: string, groupSep: string): string {
 }
 
 function getNumberSeparators(): { group: string; decimal: string } {
-  const parts = new Intl.NumberFormat(undefined, {
+  const parts = new Intl.NumberFormat("en-AU", {
     useGrouping: true,
   }).formatToParts(1000.1);
   const group = parts.find((p) => p.type === "group")?.value ?? ",";
@@ -234,17 +200,11 @@ function scaledToDecimalStrings(
   let fracStr = "";
   if (d > 0) {
     fracStr = fracPart.toString().padStart(12, "0").slice(0, d);
-    if (trimTrailingZeros) {
-      fracStr = fracStr.replace(/0+$/g, "");
-    }
+    if (trimTrailingZeros) fracStr = fracStr.replace(/0+$/g, "");
   }
   return { negative, intStr: intPart.toString(), fracStr };
 }
 
-/**
- * Plain (non-currency) formatting for the input preview.
- * Uses BigInt-only formatting so values never "disappear" due to Number precision limits.
- */
 function formatPlainNumberFromScaled(
   scaled: bigint,
   maxFractionDigits: number,
@@ -264,12 +224,7 @@ function formatPlainNumberFromScaled(
     digits = Math.min(digitsCap, Math.max(0, trimmed.length));
   }
 
-  const { intStr, fracStr } = scaledToDecimalStrings(
-    scaled,
-    digits,
-    true, // trim trailing zeros for preview
-  );
-
+  const { intStr, fracStr } = scaledToDecimalStrings(scaled, digits, true);
   const groupedInt = groupInt(intStr, group);
 
   if (digits > 0 && fracStr.length > 0) {
@@ -290,7 +245,6 @@ function formatCurrencyFromScaled(
   if (roundDisplay) {
     digits = Math.max(0, Math.min(12, displayDecimals));
   } else {
-    // Show up to 12 decimals but trim trailing zeros for display.
     const a = absBigInt(scaled);
     const fracPart = a % SCALE;
     if (fracPart === 0n) {
@@ -310,19 +264,18 @@ function formatCurrencyFromScaled(
   const { negative, intStr, fracStr } = scaledToDecimalStrings(
     scaledForDisplay,
     digits,
-    !roundDisplay, // trim only when not rounding to fixed digits
+    !roundDisplay,
   );
 
   const groupedInt = groupInt(intStr, group);
 
-  const fmt = new Intl.NumberFormat(undefined, {
+  const fmt = new Intl.NumberFormat("en-AU", {
     style: "currency",
     currency,
     minimumFractionDigits: digits,
     maximumFractionDigits: digits,
   });
 
-  // Build by parts so we keep locale currency placement and symbols without using floats for the value.
   const parts = fmt.formatToParts(-1);
   let out = "";
   for (const p of parts) {
@@ -334,10 +287,6 @@ function formatCurrencyFromScaled(
       out += groupedInt;
       continue;
     }
-    if (p.type === "group") {
-      // We already grouped ourselves.
-      continue;
-    }
     if (p.type === "decimal") {
       if (digits > 0 && fracStr.length > 0) out += decimal;
       continue;
@@ -346,16 +295,13 @@ function formatCurrencyFromScaled(
       if (digits > 0 && fracStr.length > 0) out += fracStr;
       continue;
     }
+    if (p.type === "group") continue;
     out += p.value;
   }
 
   return out || "—";
 }
 
-/**
- * Accepts: $650, 650.00, 1,200, .5, 12., 650,50 (comma decimal).
- * Rejects ambiguous formats like "1,2,3".
- */
 function parseMoneyInputToScaled(raw: string, label = "value"): ParsedScaled {
   const warnings: string[] = [];
   const s0 = (raw ?? "").trim();
@@ -394,25 +340,12 @@ function parseMoneyInputToScaled(raw: string, label = "value"): ParsedScaled {
   } else if (lastComma !== -1) {
     const parts = s.split(",");
     if (parts.length === 2) {
-      const before = parts[0] ?? "";
       const after = parts[1] ?? "";
       if (/^\d{1,2}$/.test(after)) {
         decimalSep = ",";
-      } else if (/^\d{3}$/.test(after) && /^\d{1,3}$/.test(before)) {
-        decimalSep = null;
-        warnings.push(
-          `Interpreted "${s0}" as thousands grouping. If you meant a decimal, use a dot like "1234.56".`,
-        );
       } else {
-        return {
-          ok: false,
-          error:
-            'That format is ambiguous. Try "1234.56" or "1,234.56" or "1234,56".',
-          warnings,
-        };
+        decimalSep = null;
       }
-    } else {
-      decimalSep = null;
     }
   }
 
@@ -452,8 +385,6 @@ function parseMoneyInputToScaled(raw: string, label = "value"): ParsedScaled {
 
   const maxVal = 1_000_000_000n * SCALE;
   const clamped = clampScaled(scaled, 0n, maxVal);
-  if (clamped !== scaled)
-    warnings.push("Value was clamped to the supported maximum.");
 
   return { ok: true, scaled: clamped, warnings };
 }
@@ -472,10 +403,6 @@ function mulDivRound(a: bigint, num: bigint, den: bigint): bigint {
   return sign < 0n ? -q : q;
 }
 
-/**
- * Annual equivalence with a 365-day year.
- * Weekly is treated as a 7-day block, monthly is 365/12 days on the same annual basis.
- */
 function annualizeScaled(valueScaled: bigint, period: Period): bigint {
   switch (period) {
     case "annual":
@@ -525,34 +452,30 @@ function parseStrictDisplayDecimals(raw: string | null): number {
   return t === 0 || t === 2 || t === 4 || t === 6 ? t : 2;
 }
 
-export default function WeeklyToMonthlyRent() {
-  const pageName = "Weekly to Monthly Rent Converter";
+export default function WeeklyToMonthlyRentAustralia() {
+  const pageName = "Weekly to Monthly Rent Converter Australia";
   const canonicalUrl =
-    "https://www.rentconverter.com/weekly-to-monthly-rent-converter";
+    "https://www.rentconverter.com/weekly-to-monthly-rent-australia";
 
   const [amount, setAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "500";
-    return localStorage.getItem("rc_wtm_amount") ?? "500";
+    return localStorage.getItem("rc_wtm_amount_au") ?? "500";
   });
 
   const [isAmountFocused, setIsAmountFocused] = useState<boolean>(false);
   const [amountTouched, setAmountTouched] = useState<boolean>(false);
 
   const [currency, setCurrency] = useState<Currency>(() => {
-    if (typeof window === "undefined") return "USD";
-    const saved = localStorage.getItem("rc_wtm_currency") ?? "USD";
-    return isCurrency(saved) ? saved : "USD";
+    if (typeof window === "undefined") return "AUD";
+    const saved = localStorage.getItem("rc_wtm_currency_au") ?? "AUD";
+    return isCurrency(saved) ? saved : "AUD";
   });
 
-  // Display-only rounding controls (keeps old key rc_wtm_rounding as fallback)
   const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
     if (typeof window === "undefined") return true;
 
-    const newKey = localStorage.getItem("rc_wtm_round_display");
+    const newKey = localStorage.getItem("rc_wtm_round_display_au");
     if (newKey !== null) return safeParseBoolean(newKey, true);
-
-    const oldKey = localStorage.getItem("rc_wtm_rounding");
-    if (oldKey !== null) return safeParseBoolean(oldKey, true);
 
     return true;
   });
@@ -560,23 +483,23 @@ export default function WeeklyToMonthlyRent() {
   const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
     if (typeof window === "undefined") return 2;
     return parseStrictDisplayDecimals(
-      localStorage.getItem("rc_wtm_display_decimals"),
+      localStorage.getItem("rc_wtm_display_decimals_au"),
     );
   });
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     try {
-      localStorage.setItem("rc_wtm_amount", amount);
-      localStorage.setItem("rc_wtm_currency", currency);
+      localStorage.setItem("rc_wtm_amount_au", amount);
+      localStorage.setItem("rc_wtm_currency_au", currency);
       localStorage.setItem(
-        "rc_wtm_round_display",
+        "rc_wtm_round_display_au",
         JSON.stringify(roundDisplay),
       );
-      localStorage.setItem("rc_wtm_display_decimals", String(displayDecimals));
-
-      // keep legacy key in sync
-      localStorage.setItem("rc_wtm_rounding", JSON.stringify(roundDisplay));
+      localStorage.setItem(
+        "rc_wtm_display_decimals_au",
+        String(displayDecimals),
+      );
     } catch {}
   }, [amount, currency, roundDisplay, displayDecimals]);
 
@@ -589,7 +512,6 @@ export default function WeeklyToMonthlyRent() {
 
   const amountPreviewValue = useMemo(() => {
     if (!parsed.ok || parsed.p.scaled === undefined) return amount;
-    // BigInt-only preview so large values never collapse to "" due to float limits.
     return formatPlainNumberFromScaled(parsed.p.scaled, 12);
   }, [amount, parsed]);
 
@@ -609,12 +531,8 @@ export default function WeeklyToMonthlyRent() {
 
     const weekly = parsed.p.scaled as bigint;
 
-    // Source of truth: annual equivalence (365-day year)
     const annual = annualizeScaled(weekly, "weekly");
-
-    // Monthly derived from annual (keeps consistent annual basis)
     const monthly = fromAnnualScaled(annual, "monthly");
-
     const hourly = fromAnnualScaled(annual, "hourly");
     const daily = fromAnnualScaled(annual, "daily");
     const biweekly = fromAnnualScaled(annual, "biweekly");
@@ -625,14 +543,6 @@ export default function WeeklyToMonthlyRent() {
       fourWeeks !== 0n
         ? toNumberSafe(monthlyMinus4w) / toNumberSafe(fourWeeks)
         : Number.NaN;
-
-    // Payment-count shortcuts (illustrative)
-    const annualFromWeekly52 = weekly * 52n;
-    const annualFromMonthly12 = monthly * 12n;
-
-    // 4-week comparison
-    const weeklyTimes4 = weekly * 4n;
-    const weeklyTimes4Delta = monthly - weeklyTimes4;
 
     return {
       ok: true as const,
@@ -646,10 +556,6 @@ export default function WeeklyToMonthlyRent() {
       every_4_weeks: fourWeeks,
       monthlyMinus4w,
       monthlyMinus4wPct,
-      annualFromWeekly52,
-      annualFromMonthly12,
-      weeklyTimes4,
-      weeklyTimes4Delta,
     };
   }, [parsed]);
 
@@ -661,51 +567,8 @@ export default function WeeklyToMonthlyRent() {
     window.print();
   };
 
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: "https://www.rentconverter.com/",
-      },
-      { "@type": "ListItem", position: 2, name: pageName, item: canonicalUrl },
-    ],
-  };
-
-  const websiteSchema = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: "RentConverter.com",
-    url: "https://www.rentconverter.com/",
-  };
-
-  const webPageSchema = {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    name: pageName,
-    description:
-      "Convert weekly rent to a monthly equivalent using annual equivalence (365-day year). Includes a full breakdown and a 4-week (28-day) comparison.",
-    url: canonicalUrl,
-  };
-
   return (
     <main className="bg-white text-slate-700 scroll-smooth">
-      <style
-        dangerouslySetInnerHTML={{
-          __html: `
-            @media print {
-              .rc-no-print { display: none !important; }
-              .rc-print-block { break-inside: avoid; }
-              main { background: #fff !important; }
-              a { text-decoration: none !important; color: #000 !important; }
-            }
-          `,
-        }}
-      />
-
       <section
         id="converter"
         className="mx-auto max-w-6xl px-6 pb-6 mt-2 sm:mt-6"
@@ -713,31 +576,12 @@ export default function WeeklyToMonthlyRent() {
         <div className="rounded-2xl pb-6 bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8">
           <div className="pt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <h1 className="text-center mb-1 sm:mb-0 sm:text-left text-2xl sm:text-3xl capitalize font-bold text-sky-800 tracking-tight">
-              Weekly to Monthly Rent Converter
+              Weekly to Monthly Rent Converter Australia
             </h1>
-
-            <div
-              id="export-controls"
-              className="hidden sm:flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
-            >
-              <div className="flex flex-wrap gap-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (typeof window === "undefined") return;
-                    window.print();
-                  }}
-                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fbff]"
-                >
-                  Print / Save PDF
-                </button>
-              </div>
-            </div>
           </div>
 
           <p className="hidden md:flex w-full py-2 text-base text-slate-600">
-            Convert weekly rent into a monthly amount instantly. Clear
-            calculations, no sign-up required.
+            Convert weekly rent into a monthly amount in Australia.
           </p>
 
           <div className="grid gap-x-5 gap-y-3">
@@ -767,7 +611,7 @@ export default function WeeklyToMonthlyRent() {
                     setCurrency(
                       isCurrency(e.target.value)
                         ? (e.target.value as Currency)
-                        : "USD",
+                        : "AUD",
                     )
                   }
                   className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
@@ -780,59 +624,14 @@ export default function WeeklyToMonthlyRent() {
                   ))}
                 </select>
               </div>
-
-              {amountTouched && !parsed.ok ? (
-                <div className="mt-3 rounded-xl border border-rose-200 bg-rose-50 px-4 py-2 text-sm text-rose-800">
-                  <div className="font-semibold">Invalid amount</div>
-                  <ul className="mt-1 list-disc pl-5 space-y-1">
-                    {parsed.errors.map((e, i) => (
-                      <li key={i}>{e}</li>
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
             </div>
           </div>
 
-          {!parsed.ok ? (
-            <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 sm:px-6">
-              <div className="font-semibold text-slate-900">
-                No results to show
-              </div>
-              <p className="mt-1 text-sm text-slate-600">
-                Fix the input to calculate.
-              </p>
-              <ul className="mt-3 list-disc pl-5 space-y-1 text-sm text-rose-700">
-                {parsed.errors.map((e, i) => (
-                  <li key={i}>{e}</li>
-                ))}
-              </ul>
-              {parsed.warnings.length ? (
-                <ul className="mt-3 list-disc pl-5 space-y-1 text-sm text-amber-700">
-                  {parsed.warnings.map((w, i) => (
-                    <li key={i}>{w}</li>
-                  ))}
-                </ul>
-              ) : null}
-            </div>
-          ) : computed.ok ? (
+          {computed.ok ? (
             <>
-              {computed.warnings.length ? (
-                <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
-                  <ul className="list-disc pl-5 space-y-1">
-                    {computed.warnings.map((w, i) => (
-                      <li key={i}>{w}</li>
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
-
-              <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:px-6 rc-print-block">
+              <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:px-6">
                 <div className="flex items-center gap-2">
-                  <div
-                    className="h-2 w-2 rounded-full bg-sky-600"
-                    aria-hidden="true"
-                  />
+                  <div className="h-2 w-2 rounded-full bg-sky-600" />
                   <div className="text-sm font-semibold text-slate-800">
                     Monthly equivalent
                   </div>
@@ -899,16 +698,8 @@ export default function WeeklyToMonthlyRent() {
             </>
           ) : null}
         </div>
+
         <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 rc-no-print">
-          <div className="rc-no-print md:hidden flex flex-col sm:flex-row gap-2 mb-4">
-            <button
-              type="button"
-              onClick={handlePrint}
-              className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-            >
-              Print / Save as PDF
-            </button>
-          </div>
           <Rounding
             roundDisplay={roundDisplay}
             setRoundDisplay={setRoundDisplay}
@@ -919,33 +710,8 @@ export default function WeeklyToMonthlyRent() {
       </section>
 
       <HowItWorks />
-
-      <section className="mt-8 mb-4 hidden sm:block">
-        <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-500">
-          <a href={safeHref("/")} className="hover:underline">
-            Home
-          </a>{" "}
-          / Weekly to Monthly Rent Converter
-        </nav>
-      </section>
-
-      <ToolFit />
-
       <FAQ />
-
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
-
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
-      />
+      <ToolFit />
     </main>
   );
 }
