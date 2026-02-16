@@ -233,6 +233,14 @@ export default function Footer() {
                   Contact
                 </Link>
               </li>
+              <li>
+                <Link
+                  to="/about"
+                  className="hover:text-white hover:underline underline-offset-4 cursor-pointer"
+                >
+                  About
+                </Link>
+              </li>
             </ul>
           </nav>
 

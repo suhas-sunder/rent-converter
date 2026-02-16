@@ -204,4 +204,5 @@ export default [
   route("privacy-policy", "routes/privacy-policy.tsx"),
   route("cookies", "routes/cookies.tsx"),
   route("contact", "routes/contact.tsx"),
+  route("about", "routes/about.tsx"),
 ] satisfies RouteConfig;
