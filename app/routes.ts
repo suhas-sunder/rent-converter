@@ -174,6 +174,11 @@ export default [
     "routes/rent-after-increase-calculator.tsx",
   ),
 
+  route(
+    "income-required-for-rent-calculator",
+    "routes/income-required-for-rent-calculator.tsx",
+  ),
+
   //Answer pages for specific queries
   route(
     "500-per-week-to-monthly-rent",
@@ -184,7 +189,10 @@ export default [
 
   //International variants
   route("weekly-to-monthly-rent-uk", "routes/weekly-to-monthly-rent-uk.tsx"),
-  route("weekly-to-monthly-rent-australia", "routes/weekly-to-monthly-rent-australia.tsx"),
+  route(
+    "weekly-to-monthly-rent-australia",
+    "routes/weekly-to-monthly-rent-australia.tsx",
+  ),
   route("rent-per-paycheck-us", "routes/rent-per-paycheck-us.tsx"),
   route("rent-per-paycheck-canada", "routes/rent-per-paycheck-canada.tsx"),
 
