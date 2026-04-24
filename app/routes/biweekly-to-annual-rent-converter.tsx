@@ -14,9 +14,9 @@ const SITE_URL = "https://www.rentconverter.com";
 const PAGE_PATH = "/biweekly-to-annual-rent-converter";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Biweekly to Annual Rent Converter (True Yearly Cost)";
+  const title = "Free Biweekly/Annual Rental Rate Calculator";
   const description =
-    "See your true yearly rent from any biweekly amount. Compare ×26 payments vs a true 365-day year with exact decimals and a clear breakdown. Free, private, no signup. Export to PDF.";
+    "Convert biweekly rent to rent per year. See the biweekly to annual rent formula, instant result, yearly breakdown, and export options.";
 
   const url = `${SITE_URL}${PAGE_PATH}`;
   const ogImage = `${SITE_URL}/og-image.jpg`;

@@ -11,9 +11,9 @@ function safeToFixed(n: number, digits: number): string {
 }
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Rent Paid Every 4 Weeks Calculator (True Monthly Cost)";
+  const title = "Free 4-Week Rental Rate Calculator";
   const description =
-    "See the true monthly and yearly cost of rent paid every 28 days. Understand why there are 13 payments per year and compare 4-week vs monthly billing with exact decimals. Free, private, no signup.";
+    "Convert rent paid every 4 weeks to monthly and annual rent. See the 28-day rent formula, 13-payment yearly total, monthly comparison, and export options.";
 
   const canonicalUrl =
     "https://www.rentconverter.com/rent-paid-every-4-weeks-calculator";

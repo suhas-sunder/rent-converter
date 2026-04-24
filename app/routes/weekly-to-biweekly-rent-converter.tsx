@@ -16,11 +16,11 @@ export const meta: Route.MetaFunction = () => {
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
 
   return [
-    { title: "Weekly to Biweekly Rent Converter (True Biweekly Cost)" },
+    { title: "Free Weekly/Biweekly Rental Rate Calculator" },
     {
       name: "description",
       content:
-        "See the true biweekly cost of weekly rent. Compare 7-day vs 14-day math over a full year with exact decimals and clear breakdowns. Free, private, no signup.",
+        "Convert weekly rent to rent every 2 weeks. See the weekly to biweekly rent formula, instant result, 14-day total, yearly comparison, and export options.",
     },
     {
       name: "keywords",
@@ -34,22 +34,26 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:type", content: "website" },
     {
       property: "og:title",
-      content: "Weekly to Biweekly Rent Converter (True Biweekly Cost)",
+      content: "Free Weekly/Biweekly Rental Rate Calculator",
     },
     {
       property: "og:description",
       content:
-        "Find the true biweekly cost of weekly rent and compare 7-day vs 14-day schedules.",
+        "Convert weekly rent to rent every 2 weeks with a weekly to biweekly rent formula, 14-day total, and yearly comparison.",
     },
     { property: "og:url", content: url },
     { property: "og:site_name", content: "RentConverter.com" },
     { property: "og:image", content: ogImage },
 
     { name: "twitter:card", content: "summary_large_image" },
-    { name: "twitter:title", content: "Weekly to Biweekly Rent Converter" },
+    {
+      name: "twitter:title",
+      content: "Free Weekly/Biweekly Rental Rate Calculator",
+    },
     {
       name: "twitter:description",
-      content: "See the true biweekly cost of weekly rent with exact decimals.",
+      content:
+        "Convert weekly rent to biweekly rent instantly with a simple weekly/biweekly rental rate calculator.",
     },
     { name: "twitter:image", content: ogImage },
 

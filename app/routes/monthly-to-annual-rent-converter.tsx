@@ -11,9 +11,9 @@ function safeToFixed(n: number, digits: number): string {
 }
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Monthly to Annual Rent Converter (True Yearly Cost)";
+  const title = "Free Monthly/Annual Rental Rate Calculator";
   const description =
-    "See your true yearly rent from any monthly amount. Compare 12 payments vs 4-week (13-payment) schedules with exact decimals and clear side-by-side totals. Free, private, no signup.";
+    "Convert monthly rent to rent per year. See the monthly to annual rent formula, instant result, 12-payment total, 4-week comparison, and export options.";
 
   const url = "https://www.rentconverter.com/monthly-to-annual-rent-converter";
   const image = "https://www.rentconverter.com/og-image.jpg";

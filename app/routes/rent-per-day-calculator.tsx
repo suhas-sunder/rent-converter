@@ -9,9 +9,9 @@ function safeToFixed(n: number, digits: number): string {
 }
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Rent Per Day Calculator (True Daily Cost)";
+  const title = "Free Rent Per Day Calculator";
   const description =
-    "See your true rent per day from monthly, weekly, 4-week (28-day), biweekly, hourly, or annual amounts. Estimate totals for any number of days with exact decimals. Free, private, no signup.";
+    "Calculate rent per day from monthly, weekly, biweekly, 4-week, hourly, or annual rent. See the daily rent formula, instant result, and export options.";
 
   const canonicalUrl = "https://www.rentconverter.com/rent-per-day-calculator";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
@@ -42,12 +42,8 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:image:alt", content: "RentConverter.com preview image" },
 
     { name: "twitter:card", content: "summary_large_image" },
-    { name: "twitter:title", content: "Rent Per Day Calculator" },
-    {
-      name: "twitter:description",
-      content:
-        "Find your true daily rent from any pay cycle with clear breakdowns.",
-    },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: description },
     { name: "twitter:image", content: ogImage },
     { name: "twitter:image:alt", content: "RentConverter.com preview image" },
   ];

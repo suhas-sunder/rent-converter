@@ -10,11 +10,11 @@ export const meta: Route.MetaFunction = () => {
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
 
   return [
-    { title: "Weekly to Annual Rent Converter (True Annual Cost)" },
+    { title: "Free Weekly/Annual Rental Rate Calculator" },
     {
       name: "description",
       content:
-        "See the true annual cost of weekly rent. Compare simple 52-week totals vs a 365-day year with exact decimals and a clear breakdown. Free, private, no signup.",
+        "Convert weekly rent to rent per year. See the weekly to annual rent formula, instant result, 52-week total, 365-day comparison, and export options.",
     },
     {
       name: "keywords",
@@ -28,23 +28,26 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:type", content: "website" },
     {
       property: "og:title",
-      content: "Weekly to Annual Rent Converter (True Annual Cost)",
+      content: "Free Weekly/Annual Rental Rate Calculator",
     },
     {
       property: "og:description",
       content:
-        "Find the true yearly cost of weekly rent and compare 52-week math to a true year.",
+        "Convert weekly rent to rent per year with a weekly to annual rent formula, 52-week total, and 365-day comparison.",
     },
     { property: "og:url", content: url },
     { property: "og:site_name", content: "RentConverter.com" },
     { property: "og:image", content: ogImage },
 
     { name: "twitter:card", content: "summary_large_image" },
-    { name: "twitter:title", content: "Weekly to Annual Rent Converter" },
+    {
+      name: "twitter:title",
+      content: "Free Weekly/Annual Rental Rate Calculator",
+    },
     {
       name: "twitter:description",
       content:
-        "See the true annual cost of weekly rent with exact decimals and clear breakdowns.",
+        "Convert weekly rent to annual rent instantly with a simple weekly/annual rental rate calculator.",
     },
     { name: "twitter:image", content: ogImage },
 

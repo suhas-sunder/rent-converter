@@ -14,29 +14,35 @@ export const meta: Route.MetaFunction = () => {
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
 
   return [
-    { title: "Weekly to Monthly Rent Converter UK (True Monthly Cost)" },
+    { title: "Free Weekly/Monthly Rental Rate Calculator UK" },
     {
       name: "description",
       content:
-        "Convert weekly rent to monthly in the UK using true calendar-month math. Compare weekly vs 4-week pricing with exact decimals and clear breakdowns.",
+        "Convert weekly rent to rent per calendar month in the UK. See the weekly to monthly rent formula, instant result, 4-week comparison, and export options.",
     },
     { name: "robots", content: "index,follow" },
     { property: "og:type", content: "website" },
-    { property: "og:title", content: "Weekly to Monthly Rent Converter UK" },
+    {
+      property: "og:title",
+      content: "Free Weekly/Monthly Rental Rate Calculator UK",
+    },
     {
       property: "og:description",
       content:
-        "Find the true monthly cost of weekly rent in the UK and compare weekly vs 4-week billing.",
+        "Convert weekly rent to monthly rent in the UK with a weekly/monthly rental rate calculator and 4-week comparison.",
     },
     { property: "og:url", content: url },
     { property: "og:site_name", content: "RentConverter.com" },
     { property: "og:image", content: ogImage },
     { name: "twitter:card", content: "summary_large_image" },
-    { name: "twitter:title", content: "Weekly to Monthly Rent Converter UK" },
+    {
+      name: "twitter:title",
+      content: "Free Weekly/Monthly Rental Rate Calculator UK",
+    },
     {
       name: "twitter:description",
       content:
-        "See the true monthly cost of weekly rent in the UK with clear breakdowns.",
+        "Convert weekly rent to monthly rent in the UK with instant results and clear breakdowns.",
     },
     { name: "twitter:image", content: ogImage },
     { tagName: "link", rel: "canonical", href: url },

@@ -16,11 +16,11 @@ export const meta: Route.MetaFunction = () => {
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
 
   return [
-    { title: "Weekly to Monthly Rent Converter (True Monthly Cost)" },
+    { title: "Free Weekly/Monthly Rental Rate Calculator" },
     {
       name: "description",
       content:
-        "See the true monthly cost of weekly rent. Compare weekly vs 4-week (28-day) pricing with exact decimals and clear breakdowns. Free, private, no signup.",
+        "Convert weekly rent to rent per calendar month. See the weekly to monthly rent formula, instant result, 4-week comparison, and export options.",
     },
     {
       name: "keywords",
@@ -34,23 +34,26 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:type", content: "website" },
     {
       property: "og:title",
-      content: "Weekly to Monthly Rent Converter (True Monthly Cost)",
+      content: "Free Weekly/Monthly Rental Rate Calculator",
     },
     {
       property: "og:description",
       content:
-        "Find the true monthly cost of weekly rent and compare weekly vs 4-week billing.",
+        "Convert weekly rent to monthly rent with a weekly/monthly rental rate calculator, formula, instant result, and 4-week comparison.",
     },
     { property: "og:url", content: url },
     { property: "og:site_name", content: "RentConverter.com" },
     { property: "og:image", content: ogImage },
 
     { name: "twitter:card", content: "summary_large_image" },
-    { name: "twitter:title", content: "Weekly to Monthly Rent Converter" },
+    {
+      name: "twitter:title",
+      content: "Free Weekly/Monthly Rental Rate Calculator",
+    },
     {
       name: "twitter:description",
       content:
-        "See the true monthly cost of weekly rent with clear breakdowns.",
+        "Convert weekly rent to monthly rent instantly with a simple weekly/monthly rental rate calculator.",
     },
     { name: "twitter:image", content: ogImage },
 

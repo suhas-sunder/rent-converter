@@ -3,9 +3,9 @@ import type { Route } from "./+types/rent-increase-calculator";
 import HowItWorks from "~/client/components/rent-increase-calculator/HowItWorks";
 import ToolFit from "~/client/components/rent-increase-calculator/ToolFit";
 export const meta: Route.MetaFunction = () => {
-  const title = "Rent Increase Calculator (See Your New Rent + Annual Impact)";
+  const title = "Free Rent Increase Calculator";
   const description =
-    "See your new rent after a percent or fixed increase. Compare monthly, weekly, and 4-week (28-day) equivalents and the annual impact with exact decimals. Free, private, no signup.";
+    "Calculate your new rent after a percent or fixed increase. See the rent increase formula, instant result, monthly impact, annual total, and export options.";
 
   const canonicalUrl = "https://www.rentconverter.com/rent-increase-calculator";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
@@ -36,12 +36,8 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:image:alt", content: "RentConverter.com preview image" },
 
     { name: "twitter:card", content: "summary_large_image" },
-    { name: "twitter:title", content: "Rent Increase Calculator" },
-    {
-      name: "twitter:description",
-      content:
-        "See your new rent after a percent or fixed increase and the annual impact across pay cycles.",
-    },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: description },
     { name: "twitter:image", content: ogImage },
     { name: "twitter:image:alt", content: "RentConverter.com preview image" },
   ];

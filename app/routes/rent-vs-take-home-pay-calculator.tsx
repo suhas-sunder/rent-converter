@@ -6,11 +6,11 @@ import HowItWorks from "~/client/components/rent-vs-take-home-pay-calculator/How
 import ToolFit from "~/client/components/rent-vs-take-home-pay-calculator/ToolFit";
 
 export const meta: Route.MetaFunction = () => [
-  { title: "Rent vs Take-Home Pay Calculator (What You Actually Keep)" },
+  { title: "Free Rent vs Take-Home Pay Calculator" },
   {
     name: "description",
     content:
-      "See how much of your take-home pay goes to rent and what you actually keep. Compare rent as a % of net income across monthly, weekly, and 4-week (28-day) pay cycles. Free, private, no signup.",
+      "Calculate rent as a percentage of take-home pay. See rent vs after-tax income, net income impact, pay-cycle breakdowns, and export options.",
   },
   {
     name: "keywords",
@@ -24,7 +24,7 @@ export const meta: Route.MetaFunction = () => [
   { property: "og:type", content: "website" },
   {
     property: "og:title",
-    content: "Rent vs Take-Home Pay Calculator (What You Actually Keep)",
+    content: "Free Rent vs Take-Home Pay Calculator",
   },
   {
     property: "og:description",
@@ -42,11 +42,11 @@ export const meta: Route.MetaFunction = () => [
   },
 
   { name: "twitter:card", content: "summary_large_image" },
-  { name: "twitter:title", content: "Rent vs Take-Home Pay Calculator" },
+  { name: "twitter:title", content: "Free Rent vs Take-Home Pay Calculator" },
   {
     name: "twitter:description",
     content:
-      "See how much of your take-home pay goes to rent and what you actually keep.",
+      "Calculate rent as a percentage of take-home pay and see what you actually keep.",
   },
   {
     name: "twitter:image",

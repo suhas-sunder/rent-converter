@@ -13,9 +13,9 @@ const PAGE_URL = `${SITE_URL}${ROUTE_PATH}` as const;
 const OG_IMAGE_URL = `${SITE_URL}/og-image.jpg` as const;
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Daily to Monthly Rent Converter (True Monthly Cost)";
+  const title = "Free Daily/Monthly Rental Rate Calculator";
   const description =
-    "See your true monthly rent from any daily price. Compare 30-day vs average-month math with exact decimals and a clear breakdown. Free, private, no signup. Export to PDF.";
+    "Convert daily rent to rent per calendar month. See the daily to monthly rent formula, instant result, 30-day comparison, and export options.";
 
   return [
     { title },

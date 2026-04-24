@@ -6,9 +6,9 @@ import HowItWorks from "~/client/components/rent-per-paycheck-calculator/HowItWo
 import ToolFit from "~/client/components/rent-per-paycheck-calculator/ToolFit";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Rent Per Paycheck Calculator (What to Set Aside Each Pay)";
+  const title = "Free Rent Per Paycheck Calculator";
   const description =
-    "See how much rent to set aside from each paycheck by pay frequency. Compare weekly, biweekly, semimonthly, and monthly amounts with exact breakdowns. Free, private, no signup.";
+    "Calculate how much rent to set aside from each paycheck. See weekly, biweekly, semimonthly, and monthly pay breakdowns with export options.";
 
   const canonicalUrl =
     "https://www.rentconverter.com/rent-per-paycheck-calculator";
@@ -40,12 +40,8 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:image:alt", content: "RentConverter.com preview image" },
 
     { name: "twitter:card", content: "summary_large_image" },
-    { name: "twitter:title", content: "Rent Per Paycheck Calculator" },
-    {
-      name: "twitter:description",
-      content:
-        "Find how much rent to set aside from each paycheck by pay frequency.",
-    },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: description },
     { name: "twitter:image", content: ogImage },
     { name: "twitter:image:alt", content: "RentConverter.com preview image" },
   ];

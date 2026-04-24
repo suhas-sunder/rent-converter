@@ -7,9 +7,9 @@ import HowItWorks from "~/client/components/hourly-to-monthly-rent-converter/How
 import ToolFit from "~/client/components/hourly-to-monthly-rent-converter/ToolFit";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Hourly to Monthly Rent Converter (True Monthly Cost)";
+  const title = "Free Hourly/Monthly Rental Rate Calculator";
   const description =
-    "See your true monthly rent from any hourly amount. Compare average-month vs 30-day math with exact decimals and a clear breakdown. Free, private, no signup.";
+    "Convert hourly rent to rent per calendar month. See the hourly to monthly rent formula, instant result, 30-day comparison, and export options.";
 
   const url = "https://www.rentconverter.com/hourly-to-monthly-rent-converter";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";

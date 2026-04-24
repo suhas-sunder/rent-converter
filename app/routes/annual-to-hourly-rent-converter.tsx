@@ -10,9 +10,9 @@ const SITE_URL = "https://www.rentconverter.com";
 const PAGE_PATH = "/annual-to-hourly-rent-converter";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Annual to Hourly Rent Converter (Every Hour Cost)";
+  const title = "Free Annual/Hourly Rental Rate Calculator";
   const description =
-    "See your hourly rent from any annual amount using a true 365-day (8,760-hour) year. Exact decimals, clear breakdown, optional paid-hours scenario. Free, private, no signup. Export to PDF.";
+    "Convert annual rent to rent per hour. See the yearly to hourly rent formula, instant result, clear breakdown, optional paid-hours scenario, and export options.";
 
   const url = `${SITE_URL}${PAGE_PATH}`;
 

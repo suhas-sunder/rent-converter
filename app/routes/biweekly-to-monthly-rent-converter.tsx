@@ -9,9 +9,9 @@ const SITE_URL = "https://www.rentconverter.com";
 const PAGE_PATH = "/biweekly-to-monthly-rent-converter";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Biweekly to Monthly Rent Converter (True Monthly Cost)";
+  const title = "Free Biweekly/Monthly Rental Rate Calculator";
   const description =
-    "See your true monthly rent from any biweekly amount. Compare 26 payments per year vs monthly and 28-day pricing with exact decimals. Free, private. Export CSV or PDF.";
+    "Convert biweekly rent to rent per calendar month. See the every-2-weeks to monthly rent formula, instant result, 28-day comparison, and export options.";
 
   const url = `${SITE_URL}${PAGE_PATH}`;
   const ogImage = `${SITE_URL}/og-image.jpg`;

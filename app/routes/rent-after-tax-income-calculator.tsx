@@ -10,9 +10,9 @@ function safeToFixed(n: number, digits: number): string {
 }
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Rent vs Take-Home Pay Calculator (After-Tax Income)";
+  const title = "Free Rent vs Take-Home Pay Calculator";
   const description =
-    "See how much of your take-home pay goes to rent and what you actually keep. Compare rent as a % of net income across pay cycles with exact decimals. Free, private, no signup.";
+    "Calculate rent as a percentage of take-home pay. See rent vs after-tax income, net income impact, pay-cycle breakdowns, and export options.";
 
   const url = "https://www.rentconverter.com/rent-after-tax-income-calculator";
   const image = "https://www.rentconverter.com/og-image.jpg";

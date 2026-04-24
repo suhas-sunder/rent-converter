@@ -6,9 +6,9 @@ import HowItWorks from "~/client/components/how-much-rent-can-i-afford-calculato
 import ToolFit from "~/client/components/how-much-rent-can-i-afford-calculator/ToolFit";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "How Much Rent Can I Afford? (Income-Based Calculator)";
+  const title = "Free Rent Affordability Calculator";
   const description =
-    "Find your affordable rent from your income in seconds. See safe rent limits across monthly, weekly, and 4-week (28-day) cycles with exact breakdowns. Free, private, no signup. Export to PDF.";
+    "Calculate how much rent you can afford based on income. See monthly, weekly, and 4-week rent limits with instant results and export options.";
 
   const url =
     "https://www.rentconverter.com/how-much-rent-can-i-afford-calculator";

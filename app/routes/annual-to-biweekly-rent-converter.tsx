@@ -8,9 +8,9 @@ const SITE_URL = "https://www.rentconverter.com";
 const PAGE_PATH = "/annual-to-biweekly-rent-converter";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Annual to Biweekly Rent Converter (Every 2 Weeks)";
+  const title = "Free Annual/Biweekly Rental Rate Calculator";
   const description =
-    "See your every-2-weeks rent from any annual amount using a true 365-day year. Exact decimals, clear breakdown, export to PDF. Free, private, no signup.";
+    "Convert annual rent to rent every 2 weeks. See the yearly to biweekly rent formula, instant result, clear breakdown, and export options.";
 
   const url = `${SITE_URL}${PAGE_PATH}`;
 

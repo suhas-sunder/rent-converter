@@ -177,29 +177,35 @@ export const meta: Route.MetaFunction = () => {
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
 
   return [
-    { title: "180 per Week to Monthly Rent (Exact Conversion)" },
+    { title: "Free 180 Weekly/Monthly Rental Rate Calculator" },
     {
       name: "description",
       content:
-        "Convert 180 per week to a monthly rent equivalent using true calendar-month math. Instant result with exact decimals.",
+        "Convert 180 per week to rent per calendar month. See the weekly to monthly rent formula and instant monthly equivalent.",
     },
     { name: "robots", content: "index,follow" },
     { property: "og:type", content: "website" },
-    { property: "og:title", content: "180 per Week to Monthly Rent" },
+    {
+      property: "og:title",
+      content: "Free 180 Weekly/Monthly Rental Rate Calculator",
+    },
     {
       property: "og:description",
       content:
-        "Instantly see what 180 per week equals per month using exact calendar-month math.",
+        "Easily convert 180 per week to rent per calendar month using the standard weekly to monthly rent formula.",
     },
     { property: "og:url", content: url },
     { property: "og:site_name", content: "RentConverter.com" },
     { property: "og:image", content: ogImage },
     { name: "twitter:card", content: "summary_large_image" },
-    { name: "twitter:title", content: "180 per Week to Monthly Rent" },
+    {
+      name: "twitter:title",
+      content: "Free 180 Weekly/Monthly Rental Rate Calculator",
+    },
     {
       name: "twitter:description",
       content:
-        "Convert 180 per week to monthly rent using true monthly equivalence.",
+        "Convert 180 per week to monthly rent instantly with a simple weekly/monthly rental rate calculator.",
     },
     { name: "twitter:image", content: ogImage },
     { tagName: "link", rel: "canonical", href: url },

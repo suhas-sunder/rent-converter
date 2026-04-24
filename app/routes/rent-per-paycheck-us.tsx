@@ -16,18 +16,18 @@ export const meta: Route.MetaFunction = () => {
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
 
   return [
-    { title: "Rent Per Paycheck Calculator (US)" },
+    { title: "Free Rent Per Paycheck Calculator US" },
     {
       name: "description",
       content:
-        "Calculate how much rent is per paycheck in the US. Convert monthly rent into per-paycheck amounts for weekly, biweekly, semi-monthly, and monthly pay schedules.",
+        "Calculate rent per paycheck in the US. Convert monthly rent into weekly, biweekly, semi-monthly, or monthly pay amounts with clear breakdowns.",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
     { name: "theme-color", content: "#f8fafc" },
 
     { property: "og:type", content: "website" },
-    { property: "og:title", content: "Rent Per Paycheck Calculator (US)" },
+    { property: "og:title", content: "Free Rent Per Paycheck Calculator US" },
     {
       property: "og:description",
       content:
@@ -38,11 +38,11 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:image", content: ogImage },
 
     { name: "twitter:card", content: "summary_large_image" },
-    { name: "twitter:title", content: "Rent Per Paycheck Calculator (US)" },
+    { name: "twitter:title", content: "Free Rent Per Paycheck Calculator US" },
     {
       name: "twitter:description",
       content:
-        "See what rent costs per paycheck for weekly, biweekly, semi-monthly, or monthly pay.",
+        "See what rent costs per paycheck for weekly, biweekly, semi-monthly, or monthly pay in the US.",
     },
     { name: "twitter:image", content: ogImage },
 

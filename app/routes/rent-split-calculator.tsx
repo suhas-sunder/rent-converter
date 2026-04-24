@@ -6,9 +6,9 @@ import HowItWorks from "~/client/components/rent-split-calculator/HowItWorks";
 import ToolFit from "~/client/components/rent-split-calculator/ToolFit";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Rent Split Calculator (See What Each Roommate Pays)";
+  const title = "Free Rent Split Calculator";
   const description =
-    "See exactly what each roommate pays for rent. Compare per-person amounts by month, week, 4-week (28-day), and year with clear breakdowns. Free, private, no signup.";
+    "Calculate how much each roommate pays for rent. Split rent equally and see per-person monthly, weekly, 4-week, and yearly breakdowns.";
 
   const canonicalUrl = "https://www.rentconverter.com/rent-split-calculator";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
@@ -39,17 +39,12 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:image:alt", content: "RentConverter.com preview image" },
 
     { name: "twitter:card", content: "summary_large_image" },
-    { name: "twitter:title", content: "Rent Split Calculator" },
-    {
-      name: "twitter:description",
-      content:
-        "Find how much each roommate pays with clear per-person breakdowns.",
-    },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: description },
     { name: "twitter:image", content: ogImage },
     { name: "twitter:image:alt", content: "RentConverter.com preview image" },
   ];
 };
-
 type Period =
   | "hourly"
   | "daily"

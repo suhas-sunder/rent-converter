@@ -9,9 +9,9 @@ const SITE_URL = "https://www.rentconverter.com";
 const PAGE_PATH = "/annual-to-weekly-rent-converter";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Annual to Weekly Rent Converter (True Weekly Cost)";
+  const title = "Free Annual/Weekly Rental Rate Calculator";
   const description =
-    "See your true weekly rent from any annual amount. Compare ÷ 52 vs a 365-day weekly rate, plus biweekly and 28-day views with exact decimals. Free, private, no signup.";
+    "Convert annual rent to rent per week. See the yearly to weekly rent formula, instant result, biweekly comparison, 28-day view, and export options.";
 
   const url = `${SITE_URL}${PAGE_PATH}`;
   const ogImage = `${SITE_URL}/og-image.jpg`;

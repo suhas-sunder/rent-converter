@@ -16,22 +16,22 @@ export const meta: Route.MetaFunction = () => {
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
 
   return [
-    { title: "Weekly to Monthly Rent Converter Australia (True Monthly Cost)" },
+    { title: "Free Weekly/Monthly Rental Rate Calculator Australia" },
     {
       name: "description",
       content:
-        "Convert weekly rent to a monthly amount in Australia. Compare weekly vs 4-week (28-day) pricing with exact decimals and clear breakdowns.",
+        "Convert weekly rent to rent per calendar month in Australia. See the weekly to monthly rent formula, instant result, 4-week comparison, and export options.",
     },
     { name: "robots", content: "index,follow" },
     { property: "og:type", content: "website" },
     {
       property: "og:title",
-      content: "Weekly to Monthly Rent Converter Australia",
+      content: "Free Weekly/Monthly Rental Rate Calculator Australia",
     },
     {
       property: "og:description",
       content:
-        "Find the true monthly cost of weekly rent in Australia with exact math.",
+        "Convert weekly rent to monthly rent in Australia with a weekly/monthly rental rate calculator and 4-week comparison.",
     },
     { property: "og:url", content: url },
     { property: "og:site_name", content: "RentConverter.com" },
@@ -39,18 +39,17 @@ export const meta: Route.MetaFunction = () => {
     { name: "twitter:card", content: "summary_large_image" },
     {
       name: "twitter:title",
-      content: "Weekly to Monthly Rent Converter Australia",
+      content: "Free Weekly/Monthly Rental Rate Calculator Australia",
     },
     {
       name: "twitter:description",
       content:
-        "Convert weekly rent to monthly in Australia using true calendar-month math.",
+        "Convert weekly rent to monthly rent in Australia with instant results and clear breakdowns.",
     },
     { name: "twitter:image", content: ogImage },
     { tagName: "link", rel: "canonical", href: url },
   ];
 };
-
 type Period =
   | "hourly"
   | "daily"

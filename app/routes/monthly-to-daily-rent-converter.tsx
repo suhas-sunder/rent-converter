@@ -11,9 +11,9 @@ function safeToFixed(n: number, digits: number): string {
 }
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Monthly to Daily Rent Converter (True Daily Cost)";
+  const title = "Free Monthly/Daily Rental Rate Calculator";
   const description =
-    "See your true daily rent from any monthly amount. Compare average-day vs 30-day math with exact decimals and clear breakdowns across periods. Free, private, no signup.";
+    "Convert monthly rent to rent per day. See the monthly to daily rent formula, instant result, average-day comparison, 30-day view, and export options.";
 
   const url = "https://www.rentconverter.com/monthly-to-daily-rent-converter";
   const image = "https://www.rentconverter.com/og-image.jpg";

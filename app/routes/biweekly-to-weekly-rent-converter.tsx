@@ -11,9 +11,9 @@ const ROUTE_PATH = `/${ROUTE_SLUG}` as const;
 const PAGE_URL = `https://www.rentconverter.com${ROUTE_PATH}` as const;
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Biweekly to Weekly Rent Converter (True Weekly Cost)";
+  const title = "Free Biweekly/Weekly Rental Rate Calculator";
   const description =
-    "See your true weekly rent from any biweekly amount using a 365-day year. Exact decimals, clear breakdown. Free, private, no signup. Export to PDF.";
+    "Convert biweekly rent to rent per week. See the every-2-weeks to weekly rent formula, instant result, clear breakdown, and export options.";
 
   return [
     { title },

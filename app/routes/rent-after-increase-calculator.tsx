@@ -11,9 +11,9 @@ function safeToFixed(n: number, digits: number): string {
 }
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Rent After Increase Calculator (See Your New Rent)";
+  const title = "Free Rent Increase Calculator";
   const description =
-    "See your new rent after a percent or fixed increase. Compare the impact across monthly, 4-week (28-day), and annual totals with exact decimals and clear breakdowns. Free, private, no signup.";
+    "Calculate your new rent after a percent or fixed increase. See the rent increase formula, instant result, monthly impact, annual total, and export options.";
 
   const url = "https://www.rentconverter.com/rent-after-increase-calculator";
   const image = "https://www.rentconverter.com/og-image.jpg";

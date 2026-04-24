@@ -11,9 +11,9 @@ function safeToFixed(n: number, digits: number): string {
 }
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Monthly to Weekly Rent Converter (True Weekly Cost)";
+  const title = "Free Monthly/Weekly Rental Rate Calculator";
   const description =
-    "See your true weekly rent from any monthly amount. Compare monthly vs 4-week (28-day) pricing with exact decimals and clear breakdowns. Free, private, no signup.";
+    "Convert monthly rent to rent per week. See the monthly to weekly rent formula, instant result, 4-week comparison, 28-day view, and export options.";
 
   const url = "https://www.rentconverter.com/monthly-to-weekly-rent-converter";
   const image = "https://www.rentconverter.com/og-image.jpg";

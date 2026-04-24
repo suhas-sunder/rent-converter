@@ -6,9 +6,9 @@ import HowItWorks from "~/client/components/rent-vs-buy-calculator/HowItWorks";
 import ToolFit from "~/client/components/rent-vs-buy-calculator/ToolFit";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Rent vs Buy Calculator (When Buying Breaks Even)";
+  const title = "Free Rent vs Buy Calculator";
   const description =
-    "See when buying breaks even vs renting. Compare total rent paid, total ownership costs, and estimated equity year by year with clear assumptions. Free, private, no signup.";
+    "Compare renting vs buying and see when buying breaks even. Estimate total rent paid, ownership costs, equity, year-by-year results, and export options.";
 
   const canonicalUrl = "https://www.rentconverter.com/rent-vs-buy-calculator";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
@@ -33,22 +33,18 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:type", content: "website" },
     { property: "og:site_name", content: "RentConverter.com" },
     { property: "og:url", content: canonicalUrl },
-    {
-      property: "og:title",
-      content: "Rent vs Buy Calculator (Break-Even Analysis)",
-    },
+    { property: "og:title", content: title },
     { property: "og:description", content: description },
     { property: "og:image", content: ogImage },
     { property: "og:image:alt", content: "RentConverter.com preview image" },
 
     { name: "twitter:card", content: "summary_large_image" },
-    { name: "twitter:title", content: "Rent vs Buy Calculator" },
+    { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
     { name: "twitter:image", content: ogImage },
     { name: "twitter:image:alt", content: "RentConverter.com preview image" },
   ];
 };
-
 const SUPPORTED_CURRENCIES = [
   "USD",
   "CAD",

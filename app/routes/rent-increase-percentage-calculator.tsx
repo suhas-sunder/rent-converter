@@ -6,9 +6,9 @@ import HowItWorks from "~/client/components/rent-increase-percentage-calculator/
 import ToolFit from "~/client/components/rent-increase-percentage-calculator/ToolFit";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Rent Increase % Calculator (See Your Real Increase)";
+  const title = "Free Rent Increase Percentage Calculator";
   const description =
-    "See your real rent increase percentage from old vs new rent. Compare the annual impact and monthly vs 4-week (28-day) equivalents with exact decimals. Free, private, no signup.";
+    "Calculate the rent increase percentage from old rent vs new rent. See the percent increase formula, instant result, annual impact, and export options.";
 
   const canonicalUrl =
     "https://www.rentconverter.com/rent-increase-percentage-calculator";
@@ -46,7 +46,6 @@ export const meta: Route.MetaFunction = () => {
     { name: "twitter:image:alt", content: "RentConverter.com preview image" },
   ];
 };
-
 type Period =
   | "hourly"
   | "daily"

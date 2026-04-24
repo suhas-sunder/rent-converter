@@ -6,13 +6,13 @@ import HowItWorks from "~/client/components/rent-due-date-calculator/HowItWorks"
 import ToolFit from "~/client/components/rent-due-date-calculator/ToolFit";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Rent Due Date Calculator (Next Due Date + Schedule)";
+  const title = "Free Rent Due Date Calculator";
   const description =
-    "See your next rent due date and a full payment schedule at a glance. Track how many payments fall each month and total rent paid by any date across monthly, weekly, biweekly, and 28-day cycles. Free, private, no signup.";
+    "Calculate your next rent due date and payment schedule. See monthly, weekly, biweekly, and 28-day rent dates, monthly totals, and export options.";
 
-  const ogTitle = "Rent Due Date Calculator (Next Due Date + Schedule)";
+  const ogTitle = "Free Rent Due Date Calculator";
   const ogDescription =
-    "Find your next rent due date and view payment counts by month plus total rent paid by any date for monthly, weekly, biweekly, and 28-day cycles.";
+    "Find your next rent due date and view payment schedules, monthly totals, and cumulative rent paid.";
 
   const canonical = "https://www.rentconverter.com/rent-due-date-calculator";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
@@ -37,12 +37,8 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:image", content: ogImage },
 
     { name: "twitter:card", content: "summary_large_image" },
-    { name: "twitter:title", content: "Rent Due Date Calculator" },
-    {
-      name: "twitter:description",
-      content:
-        "Find your next rent due date and view payment schedules, monthly totals, and cumulative rent paid.",
-    },
+    { name: "twitter:title", content: ogTitle },
+    { name: "twitter:description", content: ogDescription },
     { name: "twitter:image", content: ogImage },
 
     { tagName: "link", rel: "canonical", href: canonical },

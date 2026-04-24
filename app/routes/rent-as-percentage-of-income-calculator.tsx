@@ -10,9 +10,9 @@ function safeToFixed(n: number, digits: number): string {
 }
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Rent-to-Income Ratio Calculator (What % Goes to Rent)";
+  const title = "Free Rent-to-Income Ratio Calculator";
   const description =
-    "See what percent of your income goes to rent and how much you keep. Compare monthly, weekly, and 4-week (28-day) pay cycles with exact decimals. Free, private, no signup.";
+    "Calculate rent as a percentage of income. See your rent-to-income ratio, monthly impact, weekly pay-cycle breakdowns, 4-week view, and export options.";
 
   const url =
     "https://www.rentconverter.com/rent-as-percentage-of-income-calculator";

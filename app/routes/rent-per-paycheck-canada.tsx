@@ -16,18 +16,21 @@ export const meta: Route.MetaFunction = () => {
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
 
   return [
-    { title: "Rent Per Paycheck Calculator (Canada)" },
+    { title: "Free Rent Per Paycheque Calculator Canada" },
     {
       name: "description",
       content:
-        "Calculate how much rent is per paycheck in Canada. Convert monthly rent into per-paycheque amounts for weekly, biweekly, semi-monthly, and monthly pay schedules.",
+        "Calculate rent per paycheque in Canada. Convert monthly rent into weekly, biweekly, semi-monthly, or monthly pay amounts with clear breakdowns.",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
     { name: "theme-color", content: "#f8fafc" },
 
     { property: "og:type", content: "website" },
-    { property: "og:title", content: "Rent Per Paycheck Calculator (Canada)" },
+    {
+      property: "og:title",
+      content: "Free Rent Per Paycheque Calculator Canada",
+    },
     {
       property: "og:description",
       content:
@@ -38,11 +41,14 @@ export const meta: Route.MetaFunction = () => {
     { property: "og:image", content: ogImage },
 
     { name: "twitter:card", content: "summary_large_image" },
-    { name: "twitter:title", content: "Rent Per Paycheck Calculator (Canada)" },
+    {
+      name: "twitter:title",
+      content: "Free Rent Per Paycheque Calculator Canada",
+    },
     {
       name: "twitter:description",
       content:
-        "See what rent costs per paycheque for weekly, biweekly, semi-monthly, or monthly pay.",
+        "See what rent costs per paycheque for weekly, biweekly, semi-monthly, or monthly pay in Canada.",
     },
     { name: "twitter:image", content: ogImage },
 

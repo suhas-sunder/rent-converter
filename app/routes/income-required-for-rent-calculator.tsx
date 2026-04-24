@@ -9,9 +9,9 @@ const SITE_URL = "https://www.rentconverter.com";
 const PAGE_PATH = "/income-required-for-rent-calculator";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Income Required for Rent Calculator (2x, 2.5x, 3x Rule)";
+  const title = "Free Rent Income Requirement Calculator";
   const description =
-    "Calculate the gross income required to qualify for rent using landlord income-multiple rules (2x, 2.5x, 3x, or custom). Includes reverse mode: income to max rent. Exact decimals, clear breakdown, print to PDF. Free, private, no signup.";
+    "Calculate the income required to qualify for rent using 2x, 2.5x, 3x, or custom rent rules. Includes reverse mode for income to max rent.";
 
   const url = `${SITE_URL}${PAGE_PATH}`;
 

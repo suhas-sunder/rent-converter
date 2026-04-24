@@ -7,9 +7,9 @@ import HowItWorks from "~/client/components/hourly-to-annual-rent-converter/HowI
 import ToolFit from "~/client/components/hourly-to-annual-rent-converter/ToolFit";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Hourly to Annual Rent Converter (True Yearly Cost)";
+  const title = "Free Hourly/Annual Rental Rate Calculator";
   const description =
-    "See your true yearly rent from any hourly amount using a 365-day year. Compare paid-hours scenarios with exact decimals and a clear breakdown. Free, private, no signup. Export to PDF.";
+    "Convert hourly rent to rent per year. See the hourly to annual rent formula, instant result, paid-hours scenarios, and export options.";
 
   const url = "https://www.rentconverter.com/hourly-to-annual-rent-converter";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";

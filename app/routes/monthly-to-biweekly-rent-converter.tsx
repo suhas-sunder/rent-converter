@@ -11,9 +11,9 @@ function safeToFixed(n: number, digits: number): string {
 }
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Monthly to Biweekly Rent Converter (True Biweekly Cost)";
+  const title = "Free Monthly/Biweekly Rental Rate Calculator";
   const description =
-    "See your true biweekly rent from any monthly amount. Compare biweekly vs twice-monthly timing with exact decimals and a clear breakdown. Free, private, no signup.";
+    "Convert monthly rent to rent every 2 weeks. See the monthly to biweekly rent formula, instant result, twice-monthly comparison, and export options.";
 
   const url =
     "https://www.rentconverter.com/monthly-to-biweekly-rent-converter";

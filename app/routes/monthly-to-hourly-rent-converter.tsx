@@ -11,9 +11,9 @@ function safeToFixed(n: number, digits: number): string {
 }
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Monthly to Hourly Rent Converter (True Hourly Cost)";
+  const title = "Free Monthly/Hourly Rental Rate Calculator";
   const description =
-    "See your true hourly rent from any monthly amount. Compare average-month vs 30-day math with exact decimals and a clear breakdown. Free, private, no signup.";
+    "Convert monthly rent to rent per hour. See the monthly to hourly rent formula, instant result, average-month comparison, 30-day view, and export options.";
 
   const url = "https://www.rentconverter.com/monthly-to-hourly-rent-converter";
   const image = "https://www.rentconverter.com/og-image.jpg";

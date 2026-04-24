@@ -10,9 +10,9 @@ const SITE_URL = "https://www.rentconverter.com";
 const PAGE_PATH = "/annual-to-monthly-rent-converter";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Annual to Monthly Rent Converter (True Monthly Cost)";
+  const title = "Free Annual/Monthly Rental Rate Calculator";
   const description =
-    "See your true monthly rent from any annual amount. Compare monthly vs 4-week (28-day) pricing and 12 vs 13 payments with exact decimals. Free, private. Export CSV or PDF.";
+    "Convert annual rent to rent per calendar month. See the yearly to monthly rent formula, instant result, 4-week comparison, and export options.";
 
   const url = `${SITE_URL}${PAGE_PATH}`;
 
