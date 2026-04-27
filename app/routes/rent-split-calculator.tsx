@@ -481,7 +481,7 @@ function parsePeopleInput(raw: string): ParsedPeople {
  * 2) derive any other period from annual
  */
 function annualizeFromScaled(valueScaled: bigint, period: Period): bigint {
-  if (period === "hourly") return valueScaled * 24n * 365n;
+  if (period === "hourly") return valueScaled * 2080n;
   if (period === "daily") return valueScaled * 365n;
   if (period === "weekly") return valueScaled * 52n;
   if (period === "biweekly") return valueScaled * 26n;
@@ -505,11 +505,11 @@ function mulDivRound(a: bigint, num: bigint, den: bigint): bigint {
 }
 
 function fromAnnualScaled(annualScaled: bigint, to: Period): bigint {
-  if (to === "hourly") return annualScaled / (365n * 24n);
+  if (to === "hourly") return mulDivRound(annualScaled, 1n, 2080n);
   if (to === "daily") return annualScaled / 365n;
-  if (to === "weekly") return mulDivRound(annualScaled, 7n, 365n);
-  if (to === "biweekly") return mulDivRound(annualScaled, 14n, 365n);
-  if (to === "every_4_weeks") return mulDivRound(annualScaled, 28n, 365n);
+  if (to === "weekly") return mulDivRound(annualScaled, 1n, 52n);
+  if (to === "biweekly") return mulDivRound(annualScaled, 1n, 26n);
+  if (to === "every_4_weeks") return mulDivRound(annualScaled, 1n, 13n);
   if (to === "monthly") return annualScaled / 12n;
   return annualScaled;
 }

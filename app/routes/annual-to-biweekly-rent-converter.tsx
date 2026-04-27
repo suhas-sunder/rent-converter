@@ -456,15 +456,15 @@ function annualToPeriodScaled(annualScaled: bigint, period: Period): bigint {
     case "monthly":
       return mulDivScaled(annualScaled, 1n, 12n);
     case "every_4_weeks":
-      return mulDivScaled(annualScaled, 28n, 365n);
+      return mulDivScaled(annualScaled, 1n, 13n);
     case "biweekly":
-      return mulDivScaled(annualScaled, 14n, 365n);
+      return mulDivScaled(annualScaled, 1n, 26n);
     case "weekly":
-      return mulDivScaled(annualScaled, 7n, 365n);
+      return mulDivScaled(annualScaled, 1n, 52n);
     case "daily":
       return mulDivScaled(annualScaled, 1n, 365n);
     case "hourly":
-      return mulDivScaled(annualScaled, 1n, 365n * 24n);
+      return mulDivScaled(annualScaled, 1n, 2080n);
     default:
       return annualScaled;
   }

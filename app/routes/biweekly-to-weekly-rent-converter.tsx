@@ -477,20 +477,19 @@ function biweeklyToPeriodScaled(
       return mulDivScaled(biweeklyScaled, 1n, 2n);
 
     case "daily":
-      return mulDivScaled(biweeklyScaled, 1n, 14n);
+      return mulDivScaled(biweeklyScaled, 26n, 365n);
 
     case "hourly":
-      return mulDivScaled(biweeklyScaled, 1n, 14n * 24n);
+      return mulDivScaled(biweeklyScaled, 1n, 80n);
 
     case "every_4_weeks":
-      // 28-day amount from 14-day amount: multiply by 2
-      return mulDivScaled(biweeklyScaled, 2n, 1n);
+      return biweeklyScaled * 2n;
 
     case "annual":
-      return mulDivScaled(biweeklyScaled, 365n, 14n);
+      return biweeklyScaled * 26n;
 
     case "monthly":
-      return mulDivScaled(biweeklyScaled, 365n, 14n * 12n);
+      return mulDivScaled(biweeklyScaled, 26n, 12n);
 
     default:
       return biweeklyScaled;

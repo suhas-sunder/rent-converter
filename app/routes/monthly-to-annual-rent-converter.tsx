@@ -440,9 +440,9 @@ function convertScaled(valueScaled: bigint, from: Period, to: Period): bigint {
     { num: bigint; den: bigint }
   > = {
     daily: { num: 1n, den: 1n },
-    weekly: { num: 7n, den: 1n },
-    biweekly: { num: 14n, den: 1n },
-    every_4_weeks: { num: 28n, den: 1n },
+    weekly: { num: 365n, den: 52n },
+    biweekly: { num: 365n, den: 26n },
+    every_4_weeks: { num: 365n, den: 13n },
     monthly: { num: 365n, den: 12n }, // 365/12
     annual: { num: 365n, den: 1n },
   };
@@ -450,7 +450,7 @@ function convertScaled(valueScaled: bigint, from: Period, to: Period): bigint {
   // toDaily
   let dailyScaled: bigint;
   if (from === "hourly") {
-    dailyScaled = mulDivInt(valueScaled, 24n, 1n);
+    dailyScaled = mulDivInt(valueScaled, 2080n, 365n);
   } else {
     const dp = daysPer[from as Exclude<Period, "hourly">] ?? {
       num: 1n,
@@ -461,7 +461,7 @@ function convertScaled(valueScaled: bigint, from: Period, to: Period): bigint {
   }
 
   // fromDaily
-  if (to === "hourly") return mulDivInt(dailyScaled, 1n, 24n);
+  if (to === "hourly") return mulDivInt(dailyScaled, 365n, 2080n);
   const dpTo = daysPer[to as Exclude<Period, "hourly">] ?? { num: 1n, den: 1n };
   return mulDivInt(dailyScaled, dpTo.num, dpTo.den);
 }

@@ -435,7 +435,7 @@ function dailyToPeriodScaled(dailyScaled: bigint, period: Period): bigint {
     case "daily":
       return dailyScaled;
     case "hourly":
-      return mulDivScaled(dailyScaled, 1n, 24n);
+      return mulDivScaled(dailyScaled, 365n, 2080n);
     case "weekly":
       return mulDivScaled(dailyScaled, 7n, 1n);
     case "biweekly":

@@ -456,17 +456,17 @@ function hourlyToPeriodScaled(hourlyScaled: bigint, period: Period): bigint {
     case "hourly":
       return hourlyScaled;
     case "daily":
-      return mulDivScaled(hourlyScaled, 24n, 1n);
+      return mulDivScaled(hourlyScaled, 2080n, 365n);
     case "weekly":
-      return mulDivScaled(hourlyScaled, 24n * 7n, 1n);
+      return hourlyScaled * 40n;
     case "biweekly":
-      return mulDivScaled(hourlyScaled, 24n * 14n, 1n);
+      return hourlyScaled * 80n;
     case "every_4_weeks":
-      return mulDivScaled(hourlyScaled, 24n * 28n, 1n);
+      return hourlyScaled * 160n;
     case "annual":
-      return mulDivScaled(hourlyScaled, 24n * 365n, 1n);
+      return hourlyScaled * 2080n;
     case "monthly":
-      return mulDivScaled(hourlyScaled, 24n * 365n, 12n);
+      return mulDivScaled(hourlyScaled, 2080n, 12n);
     default:
       return hourlyScaled;
   }
@@ -676,7 +676,7 @@ export default function HourlyToAnnualRent() {
     const monthlyMinus4wPct =
       every4w === 0n ? 0 : Number(monthlyMinus4w) / Number(every4w);
 
-    const hoursPerYear = 24 * 365;
+    const hoursPerYear = 2080;
 
     return {
       hourly,

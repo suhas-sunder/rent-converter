@@ -409,26 +409,26 @@ function annualizeScaled(valueScaled: bigint, period: Period): bigint {
     case "monthly":
       return valueScaled * 12n;
     case "every_4_weeks":
-      return mulDivRound(valueScaled, 365n, 28n);
+      return valueScaled * 13n;
     case "biweekly":
-      return mulDivRound(valueScaled, 365n, 14n);
+      return valueScaled * 26n;
     case "weekly":
-      return mulDivRound(valueScaled, 365n, 7n);
+      return valueScaled * 52n;
     case "daily":
       return valueScaled * 365n;
     case "hourly":
-      return valueScaled * 24n * 365n;
+      return valueScaled * 2080n;
     default:
       return 0n;
   }
 }
 
 function fromAnnualScaled(annualScaled: bigint, to: Period): bigint {
-  if (to === "hourly") return mulDivRound(annualScaled, 1n, 365n * 24n);
+  if (to === "hourly") return mulDivRound(annualScaled, 1n, 2080n);
   if (to === "daily") return mulDivRound(annualScaled, 1n, 365n);
-  if (to === "weekly") return mulDivRound(annualScaled, 7n, 365n);
-  if (to === "biweekly") return mulDivRound(annualScaled, 14n, 365n);
-  if (to === "every_4_weeks") return mulDivRound(annualScaled, 28n, 365n);
+  if (to === "weekly") return mulDivRound(annualScaled, 1n, 52n);
+  if (to === "biweekly") return mulDivRound(annualScaled, 1n, 26n);
+  if (to === "every_4_weeks") return mulDivRound(annualScaled, 1n, 13n);
   if (to === "monthly") return mulDivRound(annualScaled, 1n, 12n);
   return annualScaled;
 }

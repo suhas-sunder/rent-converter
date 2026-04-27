@@ -163,7 +163,7 @@ function mulDivRound(a: bigint, num: bigint, den: bigint): bigint {
 }
 
 function annualizeScaled(valueScaled: bigint, period: Period): bigint {
-  if (period === "weekly") return mulDivRound(valueScaled, 365n, 7n);
+  if (period === "weekly") return valueScaled * 52n;
   return 0n;
 }
 

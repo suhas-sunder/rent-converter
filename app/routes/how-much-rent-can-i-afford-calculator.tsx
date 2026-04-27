@@ -472,9 +472,9 @@ function annualizeScaled(valueScaled: bigint, period: Period): bigint {
     { num: bigint; den: bigint }
   > = {
     daily: { num: 1n, den: 1n },
-    weekly: { num: 7n, den: 1n },
-    biweekly: { num: 14n, den: 1n },
-    every_4_weeks: { num: 28n, den: 1n },
+    weekly: { num: 365n, den: 52n },
+    biweekly: { num: 365n, den: 26n },
+    every_4_weeks: { num: 365n, den: 13n },
     monthly: { num: 365n, den: 12n }, // 365/12 days
     annual: { num: 365n, den: 1n },
   };
@@ -483,7 +483,7 @@ function annualizeScaled(valueScaled: bigint, period: Period): bigint {
 
   if (period === "hourly") {
     // annual = hourly * 24 * 365
-    return mulDivInt(valueScaled, 24n * 365n, 1n);
+    return mulDivInt(valueScaled, 2080n, 1n);
   }
 
   // daily = value / daysPer(period)
@@ -498,11 +498,11 @@ function annualizeScaled(valueScaled: bigint, period: Period): bigint {
 }
 
 function fromAnnualScaled(annualScaled: bigint, to: Period): bigint {
-  if (to === "hourly") return annualScaled / (365n * 24n);
+  if (to === "hourly") return mulDivRound(annualScaled, 1n, 2080n);
   if (to === "daily") return annualScaled / 365n;
-  if (to === "weekly") return mulDivRound(annualScaled, 7n, 365n);
-  if (to === "biweekly") return mulDivRound(annualScaled, 14n, 365n);
-  if (to === "every_4_weeks") return mulDivRound(annualScaled, 28n, 365n);
+  if (to === "weekly") return mulDivRound(annualScaled, 1n, 52n);
+  if (to === "biweekly") return mulDivRound(annualScaled, 1n, 26n);
+  if (to === "every_4_weeks") return mulDivRound(annualScaled, 1n, 13n);
   if (to === "monthly") return annualScaled / 12n;
   return annualScaled;
 }

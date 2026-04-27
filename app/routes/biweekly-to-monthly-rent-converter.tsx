@@ -420,24 +420,21 @@ function biweeklyToPeriodScaled(
   biweeklyScaled: bigint,
   period: Period,
 ): bigint {
-  // Base: biweekly is 14 days
-  const daily = mulDivScaled(biweeklyScaled, 1n, 14n);
-
   switch (period) {
     case "biweekly":
       return biweeklyScaled;
     case "annual":
-      return mulDivScaled(daily, 365n, 1n);
+      return biweeklyScaled * 26n;
     case "monthly":
-      return mulDivScaled(daily, 365n, 12n);
+      return mulDivScaled(biweeklyScaled, 26n, 12n);
     case "every_4_weeks":
-      return mulDivScaled(daily, 28n, 1n);
+      return biweeklyScaled * 2n;
     case "weekly":
-      return mulDivScaled(daily, 7n, 1n);
+      return mulDivScaled(biweeklyScaled, 1n, 2n);
     case "daily":
-      return daily;
+      return mulDivScaled(biweeklyScaled, 26n, 365n);
     case "hourly":
-      return mulDivScaled(daily, 1n, 24n);
+      return mulDivScaled(biweeklyScaled, 1n, 80n);
     default:
       return biweeklyScaled;
   }
