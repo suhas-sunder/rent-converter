@@ -212,5 +212,8 @@
     <loc>https://www.rentconverter.com/about</loc>
     <lastmod>2026-02-16</lastmod>
   </url>
-
+  <url>
+    <loc>https://www.rentconverter.com/sitemap</loc>
+    <lastmod>2026-02-16</lastmod>
+  </url>
 </urlset>

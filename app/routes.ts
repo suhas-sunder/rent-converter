@@ -213,4 +213,5 @@ export default [
   route("cookies", "routes/cookies.tsx"),
   route("contact", "routes/contact.tsx"),
   route("about", "routes/about.tsx"),
+  route("sitemap", "routes/sitemap.tsx"),
 ] satisfies RouteConfig;

@@ -135,7 +135,7 @@ function buildCanonicalItems(): NavItem[] {
 
     {
       label: "Universal Rent Calculator",
-      to: "/",
+      to: "/rent-calculator",
       keywords: ["rent", "calculator", "monthly", "weekly", "annual"],
     },
     {
@@ -285,11 +285,13 @@ export default function NavBar() {
   const [moreOpen, setMoreOpen] = useState(false);
   const [moreRect, setMoreRect] = useState<Rect | null>(null);
 
+  const [desktopQuery, setDesktopQuery] = useState("");
   const [mobileQuery, setMobileQuery] = useState("");
 
   const moreBtnRef = useRef<HTMLButtonElement | null>(null);
   const moreMenuRef = useRef<HTMLDivElement | null>(null);
   const mobilePanelRef = useRef<HTMLDivElement | null>(null);
+  const desktopSearchRef = useRef<HTMLInputElement | null>(null);
 
   const isClient = useIsClient();
 
@@ -325,23 +327,15 @@ export default function NavBar() {
   }, [tools]);
 
   const desktopMoreList: NavItem[] = useMemo(() => {
-    const primarySet = new Set(primaryLinks.map((l) => l.to));
+    const q = desktopQuery.trim().toLowerCase();
 
-    // Keep dropdown focused on tools, not answer pages / country variants.
-    const hiddenFromDropdown = new Set<string>([
-      "/500-per-week-to-monthly-rent",
-      "/170-per-week-to-monthly-rent",
-      "/180-per-week-to-monthly-rent",
-      "/weekly-to-monthly-rent-uk",
-      "/weekly-to-monthly-rent-australia",
-      "/rent-per-paycheck-us",
-      "/rent-per-paycheck-canada",
-    ]);
+    if (!q) return tools;
 
-    return tools.filter(
-      (t) => !primarySet.has(t.to) && !hiddenFromDropdown.has(t.to),
-    );
-  }, [tools, primaryLinks]);
+    return tools.filter((t) => {
+      const hay = [t.label, t.to, ...t.keywords].join(" ").toLowerCase();
+      return hay.includes(q);
+    });
+  }, [desktopQuery, tools]);
 
   const filteredMobileTools: NavItem[] = useMemo(() => {
     const q = mobileQuery.trim().toLowerCase();
@@ -361,6 +355,17 @@ export default function NavBar() {
     closeAll();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
+
+  useEffect(() => {
+    if (!moreOpen) return;
+    const id = window.setTimeout(() => {
+      desktopSearchRef.current?.focus();
+    }, 0);
+
+    return () => {
+      window.clearTimeout(id);
+    };
+  }, [moreOpen]);
 
   function updateMoreRect() {
     const btn = moreBtnRef.current;
@@ -447,7 +452,7 @@ export default function NavBar() {
     const gap = 8;
     const top = Math.round(moreRect.top + moreRect.height + gap);
 
-    const menuWidth = 320;
+    const menuWidth = 360;
     const rightEdge = Math.round(moreRect.left + moreRect.width);
     const left = Math.max(8, rightEdge - menuWidth);
 
@@ -484,10 +489,10 @@ export default function NavBar() {
           to={item.to}
           onClick={onClick}
           className={[
-            "cursor-pointer select-none rounded-md px-3 py-2 text-sm font-semibold transition-colors",
+            "cursor-pointer select-none rounded-xl px-3 py-2 text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white",
             active
-              ? "text-white bg-sky-900/40"
-              : "text-slate-200 hover:text-sky-200 hover:bg-sky-900/25",
+              ? "bg-sky-100 text-sky-900"
+              : "text-slate-700 hover:bg-sky-50 hover:text-sky-800",
           ].join(" ")}
           aria-current={active ? "page" : undefined}
         >
@@ -503,10 +508,10 @@ export default function NavBar() {
           onClick={onClick}
           role="menuitem"
           className={[
-            "block cursor-pointer select-none px-5 py-4 text-base transition-colors",
+            "block cursor-pointer select-none px-5 py-3.5 text-base transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-inset",
             active
-              ? "text-white bg-sky-900/40"
-              : "text-slate-100 hover:bg-sky-900/25 hover:text-sky-200",
+              ? "bg-sky-100 text-sky-900 font-semibold"
+              : "text-slate-700 hover:bg-sky-50 hover:text-sky-800",
           ].join(" ")}
           aria-current={active ? "page" : undefined}
         >
@@ -520,10 +525,10 @@ export default function NavBar() {
         to={item.to}
         onClick={onClick}
         className={[
-          "block cursor-pointer select-none px-5 py-4 text-base font-semibold transition-colors",
+          "block cursor-pointer select-none px-5 py-4 text-base font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-inset",
           active
-            ? "text-white bg-sky-900/40"
-            : "text-slate-100 hover:bg-sky-900/25 hover:text-sky-200",
+            ? "bg-sky-100 text-sky-900"
+            : "text-slate-700 hover:bg-sky-50 hover:text-sky-800",
         ].join(" ")}
         aria-current={active ? "page" : undefined}
       >
@@ -535,8 +540,8 @@ export default function NavBar() {
   function AllToolsButton({ variant }: { variant: "dropdown" | "mobile" }) {
     const classes =
       variant === "dropdown"
-        ? "block w-full text-left cursor-pointer select-none px-5 py-4 text-base transition-colors text-slate-100 hover:bg-sky-900/25 hover:text-sky-200"
-        : "block w-full text-left cursor-pointer select-none px-5 py-4 text-base font-semibold transition-colors text-slate-100 hover:bg-sky-900/25 hover:text-sky-200";
+        ? "block w-full cursor-pointer select-none px-5 py-3.5 text-left text-base text-slate-700 transition-colors hover:bg-sky-50 hover:text-sky-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-inset"
+        : "block w-full cursor-pointer select-none px-5 py-4 text-left text-base font-semibold text-slate-700 transition-colors hover:bg-sky-50 hover:text-sky-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-inset";
 
     return (
       <button
@@ -550,45 +555,45 @@ export default function NavBar() {
   }
 
   return (
-    <header className="bg-sky-950 text-slate-200 border-b border-sky-900/60 shadow-sm md:mb-6">
+    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 text-slate-700 shadow-sm backdrop-blur">
       <style>{`
         .${SCROLL_CLASS} {
           scrollbar-width: thin;
-          scrollbar-color: rgba(125,211,252,.65) rgba(8,47,73,1);
+          scrollbar-color: rgba(14,165,233,.55) rgba(248,250,252,1);
           scrollbar-gutter: stable both-edges;
           overscroll-behavior: contain;
         }
         .${SCROLL_CLASS}::-webkit-scrollbar { width: 10px; }
-        .${SCROLL_CLASS}::-webkit-scrollbar-track { background: rgba(8,47,73,1); }
+        .${SCROLL_CLASS}::-webkit-scrollbar-track { background: rgba(248,250,252,1); }
         .${SCROLL_CLASS}::-webkit-scrollbar-thumb {
-          background-color: rgba(125,211,252,.55);
+          background-color: rgba(14,165,233,.45);
           border-radius: 10px;
-          border: 2px solid rgba(8,47,73,1);
+          border: 2px solid rgba(248,250,252,1);
         }
-        .${SCROLL_CLASS}::-webkit-scrollbar-thumb:hover { background-color: rgba(125,211,252,.75); }
-        .${SCROLL_CLASS}::-webkit-scrollbar-corner { background: rgba(8,47,73,1); }
+        .${SCROLL_CLASS}::-webkit-scrollbar-thumb:hover { background-color: rgba(14,165,233,.7); }
+        .${SCROLL_CLASS}::-webkit-scrollbar-corner { background: rgba(248,250,252,1); }
       `}</style>
 
       <div className="mx-auto max-w-6xl px-4 sm:px-6 py-1">
         <div className="flex items-center justify-between py-3">
           <Link
             to="/"
-            className="group flex items-center gap-3 cursor-pointer"
+            className="group flex cursor-pointer items-center gap-3 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
             onClick={closeAll}
             aria-label="RentConverter home"
           >
             <img
-              src="/images/rent-converter-logo-final.png"
+              src="/images/rent-converter-logo-final_icon_compressed.jpg"
               alt="RentConverter"
               className="h-10 w-10 sm:h-11 sm:w-11 object-contain"
               loading="eager"
               decoding="async"
             />
             <div className="text-left leading-tight">
-              <div className="text-base font-bold text-white tracking-tight group-hover:text-sky-200">
-                RentConverter<span className="text-sky-300">.com</span>
+              <div className="text-base font-bold text-slate-950 tracking-tight group-hover:text-sky-800">
+                RentConverter<span className="text-sky-600">.com</span>
               </div>
-              <div className="text-xs text-sky-200/80 font-semibold">
+              <div className="text-xs text-slate-600 font-semibold">
                 Fast, private rent calculators
               </div>
             </div>
@@ -596,9 +601,7 @@ export default function NavBar() {
 
           <button
             type="button"
-            className="sm:hidden inline-flex items-center justify-center rounded-md px-3 py-2
-                       text-slate-200 hover:text-sky-200 hover:bg-sky-900/25 transition-colors
-                       cursor-pointer"
+            className="sm:hidden inline-flex cursor-pointer items-center justify-center rounded-xl px-3 py-2 text-slate-700 transition-colors hover:bg-sky-50 hover:text-sky-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
             aria-label="Open menu"
             aria-expanded={mobileOpen}
             onClick={() => {
@@ -623,12 +626,14 @@ export default function NavBar() {
             <button
               ref={moreBtnRef}
               type="button"
-              className="font-semibold transition-colors hover:text-sky-200 hover:bg-sky-900/25
-                         rounded-md px-2 py-2 inline-flex items-center gap-2 cursor-pointer"
+              className="inline-flex cursor-pointer items-center gap-2 rounded-xl px-3 py-2 font-semibold text-slate-700 transition-colors hover:bg-sky-50 hover:text-sky-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
               aria-haspopup="menu"
               aria-expanded={moreOpen}
               onClick={() => {
-                if (!moreOpen) updateMoreRect();
+                if (!moreOpen) {
+                  setDesktopQuery("");
+                  updateMoreRect();
+                }
                 setMoreOpen((v) => !v);
               }}
             >
@@ -643,22 +648,53 @@ export default function NavBar() {
             <div
               ref={moreMenuRef}
               role="menu"
-              className="rounded-xl border border-sky-900/60 bg-sky-950 shadow-xl overflow-hidden"
+              className="overflow-hidden rounded-2xl border border-slate-200 bg-white/95 shadow-xl backdrop-blur"
               style={dropdownStyle}
             >
+              <div className="border-b border-slate-200 bg-white/95 p-3">
+                <label className="sr-only" htmlFor="desktop-tool-search">
+                  Search rent tools
+                </label>
+                <input
+                  ref={desktopSearchRef}
+                  id="desktop-tool-search"
+                  value={desktopQuery}
+                  onChange={(e) => setDesktopQuery(e.target.value)}
+                  placeholder="Search tools..."
+                  className="w-full cursor-text rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-sky-400"
+                  onKeyDown={(e) => {
+                    if (e.key === "Escape") {
+                      setMoreOpen(false);
+                    }
+                  }}
+                />
+
+                <div className="mt-2 text-xs font-medium text-slate-500">
+                  {desktopMoreList.length === 1
+                    ? "1 page found"
+                    : `${desktopMoreList.length} pages found`}
+                </div>
+              </div>
+
               <div
                 className={`${SCROLL_CLASS} max-h-[min(60vh,520px)] overflow-y-auto`}
               >
-                {desktopMoreList.map((l) => (
-                  <NavLinkItem
-                    key={l.to}
-                    item={l}
-                    onClick={closeAll}
-                    variant="dropdown"
-                  />
-                ))}
+                {desktopMoreList.length === 0 ? (
+                  <div className="px-5 py-6 text-sm text-slate-600">
+                    No pages match “{desktopQuery.trim()}”.
+                  </div>
+                ) : (
+                  desktopMoreList.map((l) => (
+                    <NavLinkItem
+                      key={l.to}
+                      item={l}
+                      onClick={closeAll}
+                      variant="dropdown"
+                    />
+                  ))
+                )}
 
-                <div className="border-t border-sky-900/60">
+                <div className="border-t border-slate-200">
                   <AllToolsButton variant="dropdown" />
                 </div>
               </div>
@@ -669,22 +705,20 @@ export default function NavBar() {
 
       {mobileOpen && (
         <div className="sm:hidden fixed inset-0 z-[2147483647]">
-          <div className="absolute inset-0 bg-black/55" />
+          <div className="absolute inset-0 bg-slate-950/45" />
 
           <div
             ref={mobilePanelRef}
-            className="absolute inset-y-0 right-0 w-[92vw] max-w-sm
-                       bg-sky-950 border-l border-sky-900/60 shadow-2xl
-                       flex flex-col"
+            className="absolute inset-y-0 right-0 flex w-[92vw] max-w-sm flex-col border-l border-slate-200 bg-white shadow-2xl"
             role="dialog"
             aria-modal="true"
             aria-label="Menu"
           >
-            <div className="shrink-0 bg-sky-950/95 backdrop-blur border-b border-sky-900/60">
+            <div className="shrink-0 border-b border-slate-200 bg-white/95 backdrop-blur">
               <div className="flex items-center justify-between px-4 py-3">
                 <Link
                   to="/"
-                  className="flex items-center gap-3 cursor-pointer"
+                  className="flex cursor-pointer items-center gap-3 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                   onClick={closeAll}
                   aria-label="RentConverter home"
                 >
@@ -696,10 +730,10 @@ export default function NavBar() {
                     decoding="async"
                   />
                   <div className="leading-tight">
-                    <div className="text-sm font-bold text-white">
-                      RentConverter<span className="text-sky-300">.com</span>
+                    <div className="text-sm font-bold text-slate-950">
+                      RentConverter<span className="text-sky-600">.com</span>
                     </div>
-                    <div className="text-xs text-sky-200/80 font-semibold">
+                    <div className="text-xs text-slate-600 font-semibold">
                       Rent calculators and tools
                     </div>
                   </div>
@@ -707,9 +741,7 @@ export default function NavBar() {
 
                 <button
                   type="button"
-                  className="rounded-md px-3 py-2 text-slate-200
-                             hover:text-sky-200 hover:bg-sky-900/25 transition-colors
-                             cursor-pointer"
+                  className="cursor-pointer rounded-xl px-3 py-2 text-slate-700 transition-colors hover:bg-sky-50 hover:text-sky-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                   aria-label="Close menu"
                   onClick={() => setMobileOpen(false)}
                 >
@@ -722,18 +754,22 @@ export default function NavBar() {
                   value={mobileQuery}
                   onChange={(e) => setMobileQuery(e.target.value)}
                   placeholder="Search tools (increase, weekly, biweekly, due date)"
-                  className="w-full rounded-lg bg-sky-950 border border-sky-900/60
-                             px-3 py-2 text-sm text-slate-100 placeholder:text-slate-400
-                             outline-none focus:border-sky-400"
+                  className="w-full cursor-text rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-sky-400"
                 />
+
+                <div className="mt-2 text-xs font-medium text-slate-500">
+                  {filteredMobileTools.length === 1
+                    ? "1 page found"
+                    : `${filteredMobileTools.length} pages found`}
+                </div>
               </div>
             </div>
 
             <div className="flex-1 min-h-0">
               <div className={`${SCROLL_CLASS} h-full overflow-y-auto`}>
                 {filteredMobileTools.length === 0 ? (
-                  <div className="px-5 py-6 text-sm text-slate-300">
-                    No tools match “{mobileQuery.trim()}”.
+                  <div className="px-5 py-6 text-sm text-slate-600">
+                    No pages match “{mobileQuery.trim()}”.
                   </div>
                 ) : (
                   filteredMobileTools.map((l) => (
@@ -746,7 +782,7 @@ export default function NavBar() {
                   ))
                 )}
 
-                <div className="border-t border-sky-900/60">
+                <div className="border-t border-slate-200">
                   <AllToolsButton variant="mobile" />
                 </div>
 

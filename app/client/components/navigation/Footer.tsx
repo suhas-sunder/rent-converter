@@ -119,8 +119,6 @@ export default function Footer() {
       title: "Rent vs Buy",
       items: [{ label: "Rent vs Buy", to: "/rent-vs-buy-calculator" }],
     },
-
-    // NEW: Answer pages
     {
       title: "Popular Weekly → Monthly Answers",
       items: [
@@ -129,8 +127,6 @@ export default function Footer() {
         { label: "$180/week → Monthly", to: "/180-per-week-to-monthly-rent" },
       ],
     },
-
-    // NEW: International variants
     {
       title: "Country Versions",
       items: [
@@ -149,44 +145,51 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="bg-sky-950 text-slate-300">
+    <footer className="border-t border-slate-800 bg-slate-950 text-slate-300">
       <div className="mx-auto max-w-6xl px-4 py-10">
         <div
           id="all-tools"
-          className="rounded-2xl border border-sky-900/60 bg-sky-950/30 p-6"
+          className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 shadow-sm"
         >
-          <div className="flex items-start justify-between gap-3">
-            <h2 className="text-base font-bold text-white">All Rental Tools</h2>
-            <span className="text-base text-slate-400">
-              Browse utilities by category
+          <div className="flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-sky-300">
+                RentConverter.com
+              </p>
+              <h2 className="mt-1 text-xl font-bold text-white">
+                All Rental Tools
+              </h2>
+            </div>
+            <span className="text-sm font-medium text-slate-400">
+              Browse rent converters, calculators, and comparison tools
             </span>
           </div>
 
-          {/* Cap at 3 columns so cards stay wide and readable */}
-          <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {/* Keep cards compact and avoid stretched empty boxes */}
+          <div className="mt-5 grid grid-cols-1 items-start gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {categories.map((cat) => (
               <div
                 key={cat.title}
                 className={[
-                  "rounded-xl border border-sky-900/40 bg-sky-950/15 p-4",
+                  "rounded-xl border border-white/10 bg-white/[0.04] p-4 shadow-sm",
                   cat.cardClassName || "",
                 ].join(" ")}
               >
-                <div className="text-base font-bold uppercase tracking-wide text-slate-200">
+                <div className="text-sm font-bold uppercase tracking-wide text-sky-200">
                   {cat.title}
                 </div>
 
                 <ul
                   className={[
-                    "mt-3 text-lg leading-snug",
-                    cat.listClassName || "space-y-1",
+                    "mt-3 text-base leading-snug",
+                    cat.listClassName || "space-y-1.5",
                   ].join(" ")}
                 >
                   {cat.items.map((item) => (
                     <li key={item.to} className="min-w-0">
                       <Link
                         to={item.to}
-                        className="block text-slate-300 hover:text-white hover:underline underline-offset-4 transition-colors cursor-pointer whitespace-normal break-words"
+                        className="block cursor-pointer whitespace-normal break-words rounded-md text-slate-300 underline-offset-4 transition-colors hover:text-white hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
                       >
                         {item.label}
                       </Link>
@@ -203,8 +206,32 @@ export default function Footer() {
             <ul className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
               <li>
                 <Link
+                  to="/about"
+                  className="cursor-pointer text-slate-300 underline-offset-4 transition-colors hover:text-white hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+                >
+                  About
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/contact"
+                  className="cursor-pointer text-slate-300 underline-offset-4 transition-colors hover:text-white hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+                >
+                  Contact
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/sitemap"
+                  className="cursor-pointer text-slate-300 underline-offset-4 transition-colors hover:text-white hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+                >
+                  Sitemap
+                </Link>
+              </li>
+              <li>
+                <Link
                   to="/privacy-policy"
-                  className="hover:text-white hover:underline underline-offset-4 cursor-pointer"
+                  className="cursor-pointer text-slate-300 underline-offset-4 transition-colors hover:text-white hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
                 >
                   Privacy Policy
                 </Link>
@@ -212,7 +239,7 @@ export default function Footer() {
               <li>
                 <Link
                   to="/terms-of-service"
-                  className="hover:text-white hover:underline underline-offset-4 cursor-pointer"
+                  className="cursor-pointer text-slate-300 underline-offset-4 transition-colors hover:text-white hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
                 >
                   Terms of Service
                 </Link>
@@ -220,35 +247,19 @@ export default function Footer() {
               <li>
                 <Link
                   to="/cookies"
-                  className="hover:text-white hover:underline underline-offset-4 cursor-pointer"
+                  className="cursor-pointer text-slate-300 underline-offset-4 transition-colors hover:text-white hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
                 >
                   Cookies
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/contact"
-                  className="hover:text-white hover:underline underline-offset-4 cursor-pointer"
-                >
-                  Contact
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/about"
-                  className="hover:text-white hover:underline underline-offset-4 cursor-pointer"
-                >
-                  About
                 </Link>
               </li>
             </ul>
           </nav>
 
-          <p className="text-base text-slate-400">
+          <p className="text-base font-medium text-slate-400">
             © {year} RentConverter.com • Rent conversion and renter tools
           </p>
 
-          <p className=" text-sm text-slate-400/90">
+          <p className="max-w-5xl text-sm leading-relaxed text-slate-500">
             Tools on this site are for informational, budgeting, and comparison
             purposes only. Always confirm payment schedules and lease terms in
             your rental agreement. This website does not provide financial,
