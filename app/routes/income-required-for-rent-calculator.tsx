@@ -7,13 +7,13 @@ import ToolFit from "~/client/components/income-required-for-rent-calculator/Too
 
 const SITE_URL = "https://www.rentconverter.com";
 const PAGE_PATH = "/income-required-for-rent-calculator";
+const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
+const OG_IMAGE_URL = `${SITE_URL}/og-image.jpg`;
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Free Rent Income Requirement Calculator";
+  const title = "Income Required for Rent Calculator | Rent Calculator";
   const description =
-    "Calculate the income required to qualify for rent using 2x, 2.5x, 3x, or custom rent rules. Includes reverse mode for income to max rent.";
-
-  const url = `${SITE_URL}${PAGE_PATH}`;
+    "Calculate the income required for rent using 2x, 2.5x, 3x, or a custom rent rule.";
 
   return [
     { title },
@@ -25,21 +25,21 @@ export const meta: Route.MetaFunction = () => {
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
-    { name: "theme-color", content: "#f8fafc" },
+    { name: "theme-color", content: "#f0f9ff" },
 
     { property: "og:type", content: "website" },
     { property: "og:title", content: title },
     { property: "og:description", content: description },
-    { property: "og:url", content: url },
+    { property: "og:url", content: PAGE_URL },
     { property: "og:site_name", content: "RentConverter.com" },
-    { property: "og:image", content: `${SITE_URL}/og-image.jpg` },
+    { property: "og:image", content: OG_IMAGE_URL },
 
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
-    { name: "twitter:image", content: `${SITE_URL}/og-image.jpg` },
+    { name: "twitter:image", content: OG_IMAGE_URL },
 
-    { tagName: "link", rel: "canonical", href: url },
+    { tagName: "link", rel: "canonical", href: PAGE_URL },
   ];
 };
 
@@ -486,6 +486,32 @@ function divScaledByScaled(
   return (numeratorScaled * SCALE) / denomScaled;
 }
 
+function buildCsvRow(cols: string[]): string {
+  return cols
+    .map((c) => {
+      const s = String(c ?? "");
+      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
+      return s;
+    })
+    .join(",");
+}
+
+function downloadTextFile(
+  filename: string,
+  content: string,
+  mime = "text/plain;charset=utf-8",
+) {
+  const blob = new Blob([content], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
 export default function IncomeRequiredForRentCalculator() {
   const [modeReverse, setModeReverse] = useState<boolean>(() => {
     if (typeof window === "undefined") return false;
@@ -713,28 +739,28 @@ export default function IncomeRequiredForRentCalculator() {
 
   const faqData = [
     {
-      q: "How does the income-required-for-rent calculation work?",
-      a: "In standard mode, the required monthly gross income is monthly rent multiplied by your selected income multiple (for example, rent × 3). Annual required income is the monthly requirement multiplied by 12. Reverse mode divides your monthly gross income by the multiple to estimate the maximum rent allowed.",
+      q: "How does the income required for rent calculation work?",
+      a: "In standard mode, monthly rent is multiplied by the selected income multiple. Reverse mode divides monthly income by the multiple to estimate the maximum rent allowed.",
     },
     {
-      q: "What does “3x rent” mean?",
-      a: "It means your monthly gross income is at least three times the monthly rent. Some landlords use 2x, 2.5x, or 3x rules, and some accept a custom multiple based on local norms or risk rules.",
+      q: "What does 3x rent mean?",
+      a: "It means monthly gross income is at least three times the monthly rent.",
     },
     {
       q: "Is this gross income or take-home pay?",
-      a: "This calculator uses gross (pre-tax) income, because that is how many listings and application screens describe income requirements. If your situation uses net income, you can still use the tool, but your result should be interpreted as net.",
+      a: "This calculator is designed for gross income, because that is how many listings describe income requirements.",
     },
     {
       q: "Does this include utilities, parking, or fees?",
-      a: "No. Enter the amount you want to treat as rent. If a landlord uses “total housing cost,” include those items in the rent input yourself.",
+      a: "No. Enter the rent amount you want to test. If a landlord uses total housing cost, include those costs in the input.",
     },
     {
       q: "Will this guarantee I qualify?",
-      a: "No. Landlords may apply different rules (credit score, debt ratios, guarantor rules, employment history), and some use different multipliers for different rent bands. This tool is for budgeting and quick comparisons.",
+      a: "No. Landlords may also review credit, debt, guarantors, employment history, and other application details.",
     },
     {
       q: "Does this tool convert currencies or exchange rates?",
-      a: "No. Currency selection only changes formatting. Convert exchange rates externally first, then use this calculator with the converted amount.",
+      a: "No. Currency selection only changes formatting.",
     },
   ];
 
@@ -762,14 +788,71 @@ export default function IncomeRequiredForRentCalculator() {
         "@type": "ListItem",
         position: 2,
         name: "Income Required for Rent Calculator",
-        item: `${SITE_URL}${PAGE_PATH}`,
+        item: PAGE_URL,
       },
     ],
+  };
+
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "RentConverter.com",
+    url: SITE_URL,
+  };
+
+  const webPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "Income Required for Rent Calculator",
+    description:
+      "Calculate the income required for rent using common rent multiplier rules.",
+    url: PAGE_URL,
+    isPartOf: {
+      "@type": "WebSite",
+      name: "RentConverter.com",
+      url: SITE_URL,
+    },
+    about: {
+      "@type": "Thing",
+      name: "Income required for rent calculation",
+    },
   };
 
   const handlePrint = () => {
     if (typeof window === "undefined") return;
     window.print();
+  };
+
+  const handleCsvExport = () => {
+    if (typeof window === "undefined") return;
+    if (!canShowResults || !resultsScaled) return;
+
+    const rows: string[][] = [
+      ["Income Required for Rent Calculator"],
+      [
+        "Mode",
+        modeReverse ? "Income to maximum rent" : "Rent to required income",
+      ],
+      ["Currency", currency],
+      ["Multiplier", resultsScaled.rowB.valueText],
+      [
+        "Display rounding",
+        roundDisplay ? `On (${displayDecimals} decimals)` : "Off",
+      ],
+      [],
+      ["Result", "Amount"],
+      [resultsScaled.headlineLabel, fmt(resultsScaled.headlineValue)],
+      [resultsScaled.rowA.label, fmt(resultsScaled.rowA.value)],
+      [resultsScaled.rowB.label, resultsScaled.rowB.valueText],
+      [resultsScaled.rowC.label, fmt(resultsScaled.rowC.value)],
+    ];
+
+    const csv = rows.map(buildCsvRow).join("\n");
+    downloadTextFile(
+      "income-required-for-rent-calculation.csv",
+      csv,
+      "text/csv;charset=utf-8",
+    );
   };
 
   const activeError = useMemo(() => {
@@ -813,7 +896,7 @@ export default function IncomeRequiredForRentCalculator() {
   ]);
 
   return (
-    <main className="bg-white text-slate-700 scroll-smooth">
+    <main className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-slate-50 text-slate-700 scroll-smooth">
       <style
         dangerouslySetInnerHTML={{
           __html: `
@@ -826,305 +909,380 @@ export default function IncomeRequiredForRentCalculator() {
           `,
         }}
       />
+
       <section
         id="calculator"
-        className="mx-auto max-w-6xl px-6 pb-6 mt-2 sm:mt-6"
+        className="mx-auto max-w-6xl px-4 sm:px-6 pb-6 pt-3 sm:pt-6"
       >
-        <div className="rounded-2xl pb-6 bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8">
-          <div className="pt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <h1 className="text-center mb-1 sm:mb-0 sm:text-left text-2xl sm:text-3xl capitalize font-bold text-sky-800 tracking-tight">
-              Income Required for Rent Calculator
-            </h1>
+        <div className="rounded-2xl border border-slate-200 bg-white/95 px-4 py-5 shadow-sm sm:px-8 sm:py-7">
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div className="min-w-0">
+                <div className="mb-2 inline-flex rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-800">
+                  Rent income rule calculator
+                </div>
 
-            <div
-              id="export-controls"
-              className="hidden sm:flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
-            >
-              <div className="flex flex-wrap gap-2">
+                <h1 className="text-2xl font-bold tracking-tight text-sky-900 sm:text-3xl">
+                  Income Required for Rent Calculator
+                </h1>
+
+                <p className="mt-2 max-w-4xl text-base text-slate-600">
+                  Calculate the income required for rent using common multiplier
+                  rules. You can also reverse it to estimate maximum rent from
+                  income.
+                </p>
+              </div>
+
+              <div
+                id="export-controls"
+                className="rc-no-print flex flex-wrap gap-2 sm:justify-end"
+              >
                 <button
                   type="button"
                   onClick={handlePrint}
-                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fbff]"
+                  className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 shadow-sm transition hover:border-sky-300 hover:bg-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
                 >
                   Print / Save PDF
                 </button>
+
+                <button
+                  type="button"
+                  onClick={handleCsvExport}
+                  disabled={!canShowResults}
+                  className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 shadow-sm transition hover:border-sky-300 hover:bg-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-slate-200 disabled:hover:bg-white"
+                >
+                  Export CSV
+                </button>
               </div>
             </div>
-          </div>
 
-          <p className="hidden md:flex w-full py-2 text-base text-slate-600">
-            Use common landlord income-multiple rules to estimate required gross
-            income, or reverse it to find the maximum rent allowed from income.
-          </p>
+            <div className="grid gap-5">
+              <div className="rounded-xl border border-slate-200 bg-sky-50/60 px-4 py-3 rc-no-print">
+                <label className="inline-flex cursor-pointer items-center gap-2 text-sm font-medium text-slate-700 select-none">
+                  <input
+                    type="checkbox"
+                    checked={modeReverse}
+                    onChange={(e) => setModeReverse(e.target.checked)}
+                    className="cursor-pointer h-4 w-4 rounded border-slate-300 text-sky-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                  />
+                  Reverse mode: income to max rent
+                </label>
+              </div>
 
-          <div className="grid gap-5">
-            <div className="grid gap-4 sm:grid-cols-2">
-              {!modeReverse ? (
+              <div className="grid gap-4 sm:grid-cols-2">
+                {!modeReverse ? (
+                  <div className="sm:col-span-1">
+                    <label className="mb-2 block text-sm font-semibold text-slate-700">
+                      Monthly rent
+                    </label>
+                    <div className="flex flex-col gap-2 sm:flex-row">
+                      <input
+                        inputMode="decimal"
+                        value={rentInputValue}
+                        onChange={(e) => setRentMonthly(e.target.value)}
+                        onFocus={() => setRentFocused(true)}
+                        onBlur={() => setRentFocused(false)}
+                        placeholder="e.g. 1500 or 1500.50"
+                        className="w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-lg text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                        aria-invalid={!rentParsed.ok && !modeReverse}
+                        aria-describedby="rc-rent-help rc-active-error"
+                      />
+                      <select
+                        value={currency}
+                        onChange={(e) =>
+                          setCurrency(
+                            isCurrency(e.target.value)
+                              ? (e.target.value as Currency)
+                              : "CAD",
+                          )
+                        }
+                        className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm font-semibold text-slate-900 outline-none transition hover:border-sky-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                        aria-label="Currency"
+                      >
+                        {SUPPORTED_CURRENCIES.map((c) => (
+                          <option key={c} value={c}>
+                            {c}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <p
+                      id="rc-rent-help"
+                      className="mt-2 text-xs text-slate-600"
+                    >
+                      Enter the monthly rent amount. Currency symbols, commas,
+                      and decimals are accepted.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="sm:col-span-1">
+                    <label className="mb-2 block text-sm font-semibold text-slate-700">
+                      Monthly gross income
+                    </label>
+                    <div className="flex flex-col gap-2 sm:flex-row">
+                      <input
+                        inputMode="decimal"
+                        value={incomeInputValue}
+                        onChange={(e) => setIncomeMonthly(e.target.value)}
+                        onFocus={() => setIncomeFocused(true)}
+                        onBlur={() => setIncomeFocused(false)}
+                        placeholder="e.g. 4500 or 4500.00"
+                        className="w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-lg text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                        aria-invalid={!incomeParsed.ok && modeReverse}
+                        aria-describedby="rc-income-help rc-active-error"
+                      />
+                      <select
+                        value={currency}
+                        onChange={(e) =>
+                          setCurrency(
+                            isCurrency(e.target.value)
+                              ? (e.target.value as Currency)
+                              : "CAD",
+                          )
+                        }
+                        className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm font-semibold text-slate-900 outline-none transition hover:border-sky-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                        aria-label="Currency"
+                      >
+                        {SUPPORTED_CURRENCIES.map((c) => (
+                          <option key={c} value={c}>
+                            {c}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <p
+                      id="rc-income-help"
+                      className="mt-2 text-xs text-slate-600"
+                    >
+                      Enter monthly gross income. Currency symbols, commas, and
+                      decimals are accepted.
+                    </p>
+                  </div>
+                )}
+
                 <div className="sm:col-span-1">
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Monthly rent
+                  <label className="mb-2 block text-sm font-semibold text-slate-700">
+                    Income multiplier
                   </label>
-                  <div className="flex gap-2">
-                    <input
-                      inputMode="decimal"
-                      value={rentInputValue}
-                      onChange={(e) => setRentMonthly(e.target.value)}
-                      onFocus={() => setRentFocused(true)}
-                      onBlur={() => setRentFocused(false)}
-                      placeholder="e.g. 1500 or 1500.50"
-                      className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
-                      aria-invalid={!rentParsed.ok && !modeReverse}
-                      aria-describedby="rc-rent-help rc-rent-error"
-                    />
+
+                  <div className="flex flex-col gap-2 sm:flex-row">
                     <select
-                      value={currency}
+                      value={multiplierPreset}
                       onChange={(e) =>
-                        setCurrency(
-                          isCurrency(e.target.value)
-                            ? (e.target.value as Currency)
-                            : "CAD",
+                        setMultiplierPreset(
+                          isMultiplierPreset(e.target.value)
+                            ? (e.target.value as MultiplierPreset)
+                            : "3",
                         )
                       }
-                      className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
-                      aria-label="Currency"
+                      className="w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-lg font-semibold text-slate-900 outline-none transition hover:border-sky-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                      aria-label="Income multiplier preset"
+                      aria-invalid={!multiplierParsed.ok}
+                      aria-describedby="rc-multiplier-help rc-active-error"
                     >
-                      {SUPPORTED_CURRENCIES.map((c) => (
-                        <option key={c} value={c}>
-                          {c}
-                        </option>
-                      ))}
+                      <option value="2">2x</option>
+                      <option value="2.5">2.5x</option>
+                      <option value="3">3x</option>
+                      <option value="custom">Custom</option>
                     </select>
+
+                    {multiplierPreset === "custom" ? (
+                      <input
+                        inputMode="decimal"
+                        value={multiplierCustom}
+                        onChange={(e) => setMultiplierCustom(e.target.value)}
+                        placeholder="e.g. 3"
+                        className="w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-lg text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                        aria-invalid={!multiplierParsed.ok}
+                        aria-describedby="rc-multiplier-help rc-active-error"
+                      />
+                    ) : null}
                   </div>
+
+                  <p
+                    id="rc-multiplier-help"
+                    className="mt-2 text-xs text-slate-600"
+                  >
+                    Choose a preset multiplier or enter a custom value.
+                  </p>
+                </div>
+              </div>
+
+              {activeError ? (
+                <p
+                  id="rc-active-error"
+                  className="text-sm font-semibold text-rose-700"
+                  role="alert"
+                  aria-live="assertive"
+                >
+                  {activeError}
+                </p>
+              ) : activeWarnings.length ? (
+                <div
+                  className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900"
+                  role="status"
+                  aria-live="polite"
+                >
+                  <div className="font-semibold">Input interpretation note</div>
+                  <ul className="mt-1 list-disc space-y-1 pl-5">
+                    {activeWarnings.map((w, i) => (
+                      <li key={i}>{w}</li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+            </div>
+
+            <div
+              className="rounded-2xl border border-slate-200 bg-sky-50/60 p-5 shadow-sm sm:px-6 rc-print-block"
+              aria-live="polite"
+              role="region"
+              aria-label={
+                modeReverse
+                  ? "Maximum rent allowed results"
+                  : "Income required results"
+              }
+            >
+              <div className="h-1.5 rounded-full bg-gradient-to-r from-sky-500 to-emerald-400" />
+
+              <div className="mt-4 flex items-center gap-2">
+                <div
+                  className="h-2 w-2 rounded-full bg-sky-600"
+                  aria-hidden="true"
+                />
+                <div className="text-sm font-semibold text-slate-900">
+                  {modeReverse ? "Maximum rent allowed" : "Income required"}
+                </div>
+              </div>
+
+              {!canShowResults || !resultsScaled ? (
+                <div className="mt-3 rounded-xl border border-slate-200 bg-white/95 px-4 py-4 text-slate-700 shadow-sm">
+                  <div className="font-semibold text-slate-900">
+                    No result to show yet
+                  </div>
+                  <p className="mt-1 text-sm text-slate-600">
+                    Enter a valid {modeReverse ? "income" : "monthly rent"} and
+                    multiplier above to see the result.
+                  </p>
                 </div>
               ) : (
-                <div className="sm:col-span-1">
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Monthly gross income
-                  </label>
-                  <div className="flex gap-2">
-                    <input
-                      inputMode="decimal"
-                      value={incomeInputValue}
-                      onChange={(e) => setIncomeMonthly(e.target.value)}
-                      onFocus={() => setIncomeFocused(true)}
-                      onBlur={() => setIncomeFocused(false)}
-                      placeholder="e.g. 4500 or 4500.00"
-                      className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
-                      aria-invalid={!incomeParsed.ok && modeReverse}
-                      aria-describedby="rc-income-help rc-income-error"
-                    />
-                    <select
-                      value={currency}
-                      onChange={(e) =>
-                        setCurrency(
-                          isCurrency(e.target.value)
-                            ? (e.target.value as Currency)
-                            : "CAD",
-                        )
-                      }
-                      className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
-                      aria-label="Currency"
-                    >
-                      {SUPPORTED_CURRENCIES.map((c) => (
-                        <option key={c} value={c}>
-                          {c}
-                        </option>
-                      ))}
-                    </select>
+                <>
+                  <div className="mt-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-4">
+                    <div className="text-xs font-medium text-emerald-700">
+                      {resultsScaled.headlineLabel}
+                    </div>
+                    <div className="mt-1 text-3xl font-extrabold text-emerald-800 sm:text-5xl">
+                      {fmt(resultsScaled.headlineValue)}
+                    </div>
+                    <p className="mt-2 text-sm text-emerald-700">
+                      Based on the selected income multiplier.
+                    </p>
                   </div>
-                </div>
-              )}
 
-              <div className="sm:col-span-1">
-                <label className="block text-sm font-semibold text-slate-700 mb-2">
-                  Income multiplier
+                  <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                    <div className="rounded-xl border border-slate-200 bg-white/95 px-4 py-3 shadow-sm">
+                      <div className="text-xs font-medium text-slate-600">
+                        {resultsScaled.rowA.label}
+                      </div>
+                      <div className="mt-1 text-lg font-bold text-slate-900">
+                        {fmt(resultsScaled.rowA.value)}
+                      </div>
+                    </div>
+
+                    <div className="rounded-xl border border-slate-200 bg-white/95 px-4 py-3 shadow-sm">
+                      <div className="text-xs font-medium text-slate-600">
+                        {resultsScaled.rowB.label}
+                      </div>
+                      <div className="mt-1 text-lg font-bold text-slate-900">
+                        {resultsScaled.rowB.valueText}
+                      </div>
+                    </div>
+
+                    <div className="rounded-xl border border-slate-200 bg-white/95 px-4 py-3 shadow-sm">
+                      <div className="text-xs font-medium text-slate-600">
+                        {resultsScaled.rowC.label}
+                      </div>
+                      <div className="mt-1 text-lg font-bold text-slate-900">
+                        {fmt(resultsScaled.rowC.value)}
+                      </div>
+                    </div>
+
+                    <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 shadow-sm">
+                      <div className="text-xs font-medium text-emerald-700">
+                        Quick example
+                      </div>
+                      <p className="mt-1 text-sm leading-relaxed text-slate-700">
+                        {fmt(1500n * SCALE)} rent at{" "}
+                        {fmt(3n * SCALE).replace(/[^0-9.,]/g, "")}x income
+                        requires{" "}
+                        <span className="font-semibold text-slate-900">
+                          {fmt(mulScaledByScaled(1500n * SCALE, 3n * SCALE))}
+                        </span>{" "}
+                        monthly gross income, or{" "}
+                        <span className="font-semibold text-slate-900">
+                          {fmt(
+                            mulScaledByScaled(1500n * SCALE, 3n * SCALE) * 12n,
+                          )}
+                        </span>{" "}
+                        annually.
+                      </p>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+
+            <Assumptions />
+
+            <div className="rc-no-print rounded-xl border border-slate-200 bg-white/90 p-4 shadow-sm">
+              <div className="mb-3 text-sm font-semibold text-slate-900">
+                Display rounding
+              </div>
+
+              <div className="flex flex-wrap items-center gap-3">
+                <label className="inline-flex cursor-pointer items-center gap-2 text-sm font-medium text-slate-700 select-none">
+                  <input
+                    type="checkbox"
+                    checked={roundDisplay}
+                    onChange={(e) => setRoundDisplay(e.target.checked)}
+                    className="cursor-pointer h-4 w-4 rounded border-slate-300 text-sky-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                  />
+                  Round results for display
                 </label>
 
-                <div className="flex gap-2">
+                <label className="inline-flex cursor-pointer items-center gap-2 text-sm font-medium text-slate-700 select-none">
+                  <span className="sr-only">Display decimals</span>
                   <select
-                    value={multiplierPreset}
+                    value={displayDecimals}
                     onChange={(e) =>
-                      setMultiplierPreset(
-                        isMultiplierPreset(e.target.value)
-                          ? (e.target.value as MultiplierPreset)
-                          : "3",
+                      setDisplayDecimals(
+                        validateDisplayDecimals(e.target.value),
                       )
                     }
-                    className="cursor-pointer w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg font-semibold text-slate-900 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
-                    aria-label="Income multiplier preset"
-                    aria-invalid={!multiplierParsed.ok}
-                    aria-describedby="rc-multiplier-help rc-multiplier-error"
+                    className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition hover:border-sky-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                    aria-label="Display decimals"
                   >
-                    <option value="2">2x</option>
-                    <option value="2.5">2.5x</option>
-                    <option value="3">3x</option>
-                    <option value="custom">Custom</option>
+                    <option value={0}>0 decimals</option>
+                    <option value={2}>2 decimals</option>
+                    <option value={4}>4 decimals</option>
+                    <option value={6}>6 decimals</option>
                   </select>
-
-                  {multiplierPreset === "custom" ? (
-                    <input
-                      inputMode="decimal"
-                      value={multiplierCustom}
-                      onChange={(e) => setMultiplierCustom(e.target.value)}
-                      placeholder="e.g. 3"
-                      className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
-                      aria-invalid={!multiplierParsed.ok}
-                      aria-describedby="rc-multiplier-help rc-multiplier-error"
-                    />
-                  ) : null}
-                </div>
-
-                <p id="rc-multiplier-help" className="sr-only">
-                  Choose a preset multiplier or enter a custom value.
-                </p>
+                </label>
               </div>
             </div>
-            <div className="sm:col-span-2">
-              <label className="inline-flex items-center gap-2 text-sm font-medium text-slate-700 select-none">
-                <input
-                  type="checkbox"
-                  checked={modeReverse}
-                  onChange={(e) => setModeReverse(e.target.checked)}
-                  className="cursor-pointer h-4 w-4 rounded border-slate-300 text-sky-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-                />
-                Reverse mode (income to max rent)
-              </label>
-            </div>
-            {activeError ? (
-              <p
-                id="rc-active-error"
-                className="mt-1 text-sm font-semibold text-rose-700"
-              >
-                {activeError}
-              </p>
-            ) : activeWarnings.length ? (
-              <div className="mt-1 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
-                <div className="font-semibold">Input interpretation note</div>
-                <ul className="mt-1 list-disc pl-5 space-y-1">
-                  {activeWarnings.map((w, i) => (
-                    <li key={i}>{w}</li>
-                  ))}
-                </ul>
-              </div>
-            ) : null}
           </div>
-
-          <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:px-6 rc-print-block">
-            <div className="flex items-center gap-2">
-              <div
-                className="h-2 w-2 rounded-full bg-sky-600"
-                aria-hidden="true"
-              />
-              <div className="text-sm font-semibold text-slate-800">
-                {modeReverse ? "Maximum rent allowed" : "Income required"}
-              </div>
-            </div>
-
-            {!canShowResults || !resultsScaled ? (
-              <div className="mt-2 rounded-xl border border-slate-200 bg-white px-4 py-4 text-slate-700">
-                <div className="font-semibold">No result to show yet</div>
-                <p className="mt-1 text-sm text-slate-600">
-                  Enter a valid {modeReverse ? "income" : "monthly rent"} and a
-                  multiplier above to see the result.
-                </p>
-              </div>
-            ) : (
-              <>
-                <div className="mt-2 flex flex-col gap-2">
-                  <div className="text-xs text-slate-500">
-                    {resultsScaled.headlineLabel}
-                  </div>
-                  <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700">
-                    {fmt(resultsScaled.headlineValue)}
-                  </div>
-                </div>
-
-                <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2">
-                    <div className="text-xs text-slate-500">
-                      {resultsScaled.rowA.label}
-                    </div>
-                    <div className="mt-1 text-lg font-bold text-slate-800">
-                      {fmt(resultsScaled.rowA.value)}
-                    </div>
-                  </div>
-
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2">
-                    <div className="text-xs text-slate-500">
-                      {resultsScaled.rowB.label}
-                    </div>
-                    <div className="mt-1 text-lg font-bold text-slate-800">
-                      {resultsScaled.rowB.valueText}
-                    </div>
-                  </div>
-
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2">
-                    <div className="text-xs text-slate-500">
-                      {resultsScaled.rowC.label}
-                    </div>
-                    <div className="mt-1 text-lg font-bold text-slate-800">
-                      {fmt(resultsScaled.rowC.value)}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-4 rounded-xl border border-slate-200 bg-white px-4 py-3">
-                  <div className="text-xs text-slate-500">Quick example</div>
-                  <div className="mt-1 text-sm text-slate-700 leading-relaxed">
-                    {fmt(1500n * SCALE)} rent at{" "}
-                    {fmt(3n * SCALE).replace(/[^0-9.,]/g, "")}x income requires{" "}
-                    <span className="font-semibold text-slate-900">
-                      {fmt(mulScaledByScaled(1500n * SCALE, 3n * SCALE))}
-                    </span>{" "}
-                    monthly gross income, or{" "}
-                    <span className="font-semibold text-slate-900">
-                      {fmt(mulScaledByScaled(1500n * SCALE, 3n * SCALE) * 12n)}
-                    </span>{" "}
-                    annually.
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
-
-          <Assumptions />
-        </div>
-
-        <div className="flex flex-wrap items-center gap-3 mt-4">
-          <label className="inline-flex items-center gap-2 text-sm font-medium text-slate-700 select-none">
-            <input
-              type="checkbox"
-              checked={roundDisplay}
-              onChange={(e) => setRoundDisplay(e.target.checked)}
-              className="cursor-pointer h-4 w-4 rounded border-slate-300 text-sky-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-            />
-            Round results for display
-          </label>
-
-          <label className="inline-flex items-center gap-2 text-sm font-medium text-slate-700 select-none">
-            <span className="sr-only">Display decimals</span>
-            <select
-              value={displayDecimals}
-              onChange={(e) =>
-                setDisplayDecimals(validateDisplayDecimals(e.target.value))
-              }
-              className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-sky-400"
-              aria-label="Display decimals"
-            >
-              <option value={0}>0 decimals</option>
-              <option value={2}>2 decimals</option>
-              <option value={4}>4 decimals</option>
-              <option value={6}>6 decimals</option>
-            </select>
-          </label>
         </div>
       </section>
 
       <HowItWorks />
+
       <section className="mt-8 mb-4 hidden sm:block">
-        <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-500">
+        <nav className="mx-auto max-w-6xl px-6 text-sm text-slate-600">
           {ROUTE_WHITELIST.has("/") ? (
-            <SafeLink href="/" className="hover:underline cursor-pointer">
+            <SafeLink
+              href="/"
+              className="cursor-pointer rounded text-sky-800 transition hover:text-sky-900 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+            >
               Home
             </SafeLink>
           ) : (
@@ -1136,22 +1294,27 @@ export default function IncomeRequiredForRentCalculator() {
 
       <ToolFit />
 
-      <section id="faq" className="max-w-5xl mx-auto pb-16 px-6">
-        <h2 className="text-3xl font-bold text-center mb-3 text-sky-800 tracking-tight">
+      <section id="faq" className="mx-auto max-w-5xl px-6 pb-16">
+        <h2 className="mb-3 text-center text-3xl font-bold tracking-tight text-sky-800">
           Frequently Asked Questions
         </h2>
 
-        <div className="divide-y divide-slate-200">
+        <p className="mx-auto mb-6 max-w-3xl text-center text-slate-600">
+          These answers explain income multiplier rules, reverse mode, and what
+          the result does not guarantee.
+        </p>
+
+        <div className="divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white/90 px-4 shadow-sm">
           {faqData.map((f, i) => (
             <details key={i} className="group py-4">
-              <summary className="cursor-pointer list-none font-semibold text-lg text-sky-800 flex items-center justify-between hover:text-sky-900">
+              <summary className="flex cursor-pointer list-none items-center justify-between rounded text-lg font-semibold text-sky-800 transition hover:text-sky-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400">
                 <span>{f.q}</span>
                 <span className="ml-4 text-slate-400 transition-transform group-open:rotate-180">
                   ▾
                 </span>
               </summary>
 
-              <div className="mt-2 text-slate-700 leading-relaxed max-w-prose">
+              <div className="mt-2 max-w-prose leading-relaxed text-slate-700">
                 {f.a}
               </div>
             </details>
@@ -1166,6 +1329,14 @@ export default function IncomeRequiredForRentCalculator() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
       />
     </main>
   );

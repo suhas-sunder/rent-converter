@@ -6,13 +6,15 @@ import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/hourly-to-annual-rent-converter/HowItWorks";
 import ToolFit from "~/client/components/hourly-to-annual-rent-converter/ToolFit";
 
-export const meta: Route.MetaFunction = () => {
-  const title = "Free Hourly/Annual Rental Rate Calculator";
-  const description =
-    "Convert hourly rent to rent per year. See the hourly to annual rent formula, instant result, paid-hours scenarios, and export options.";
+const SITE_URL = "https://www.rentconverter.com";
+const PAGE_PATH = "/hourly-to-annual-rent-converter";
+const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
+const OG_IMAGE_URL = `${SITE_URL}/og-image.jpg`;
 
-  const url = "https://www.rentconverter.com/hourly-to-annual-rent-converter";
-  const ogImage = "https://www.rentconverter.com/og-image.jpg";
+export const meta: Route.MetaFunction = () => {
+  const title = "Hourly to Annual Rent Converter | Rent Calculator";
+  const description =
+    "Convert hourly rent to annual rent. See the yearly amount, related breakdowns, and paid-hours comparison.";
 
   return [
     { title },
@@ -20,25 +22,25 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "keywords",
       content:
-        "hourly to annual rent, convert hourly rent to yearly, true yearly rent from hourly, hourly rent annualized, hourly to yearly rent converter, annual rent equivalent from hourly, rent hourly to annual",
+        "hourly to annual rent converter, hourly rent to yearly, hourly rent annual calculator, hourly to yearly rent, annual rent from hourly, paid hours rent comparison",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
-    { name: "theme-color", content: "#f8fafc" },
+    { name: "theme-color", content: "#f0f9ff" },
 
     { property: "og:type", content: "website" },
     { property: "og:title", content: title },
     { property: "og:description", content: description },
-    { property: "og:url", content: url },
+    { property: "og:url", content: PAGE_URL },
     { property: "og:site_name", content: "RentConverter.com" },
-    { property: "og:image", content: ogImage },
+    { property: "og:image", content: OG_IMAGE_URL },
 
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
-    { name: "twitter:image", content: ogImage },
+    { name: "twitter:image", content: OG_IMAGE_URL },
 
-    { tagName: "link", rel: "canonical", href: url },
+    { tagName: "link", rel: "canonical", href: PAGE_URL },
   ];
 };
 
@@ -472,6 +474,32 @@ function hourlyToPeriodScaled(hourlyScaled: bigint, period: Period): bigint {
   }
 }
 
+function buildCsvRow(cols: string[]): string {
+  return cols
+    .map((c) => {
+      const s = String(c ?? "");
+      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
+      return s;
+    })
+    .join(",");
+}
+
+function downloadTextFile(
+  filename: string,
+  content: string,
+  mime = "text/plain;charset=utf-8",
+) {
+  const blob = new Blob([content], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
 function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   if (raw === null) return fallback;
   try {
@@ -712,35 +740,107 @@ export default function HourlyToAnnualRent() {
       : breakdownScaled.annualPaidScaled;
   }, [hourMode, breakdownScaled]);
 
+  const hourlyInterpreted = useMemo(() => {
+    if (!parsedHourly.ok) return null;
+    return fmt(hourlyScaled);
+  }, [parsedHourly.ok, hourlyScaled, currency, displayDecimals, roundDisplay]);
+
   const handlePrint = () => {
     if (typeof window === "undefined") return;
     window.print();
   };
 
+  const handleCsvExport = () => {
+    if (typeof window === "undefined") return;
+    if (!parsedHourly.ok || !breakdownScaled) return;
+
+    const rows: string[][] = [
+      ["Hourly to Annual Rent Converter"],
+      ["Input hourly amount", hourlyInterpreted ?? ""],
+      ["Currency", currency],
+      ["Hour mode", hourMode === "clock" ? "24/7 hours" : "Paid hours"],
+      [
+        "Display rounding",
+        roundDisplay ? `On (${displayDecimals} decimals)` : "Off",
+      ],
+      [],
+      ["Period", "Amount"],
+      [PERIOD_LABEL.hourly, fmt(breakdownScaled.hourly)],
+      [PERIOD_LABEL.daily, fmt(breakdownScaled.daily)],
+      [PERIOD_LABEL.weekly, fmt(breakdownScaled.weekly)],
+      [PERIOD_LABEL.biweekly, fmt(breakdownScaled.biweekly)],
+      [PERIOD_LABEL.every_4_weeks, fmt(breakdownScaled.every4w)],
+      [PERIOD_LABEL.monthly, fmt(breakdownScaled.monthly)],
+      ["Annual (24/7 hours)", fmt(breakdownScaled.annualClock)],
+    ];
+
+    if (hourMode === "paid") {
+      rows.push(
+        [],
+        ["Paid-hours comparison", ""],
+        [
+          "Paid hours per week",
+          parsedPaidHours.ok ? formatNumber(parsedPaidHours.hours, 2) : "",
+        ],
+        ["Annual using paid hours", fmt(breakdownScaled.annualPaidScaled)],
+        ["Monthly using paid hours", fmt(breakdownScaled.monthlyPaidScaled)],
+        [
+          "Difference vs 24/7 annual",
+          fmt(breakdownScaled.annualPaidMinusClock),
+        ],
+        [
+          "Difference percentage",
+          formatPercent(breakdownScaled.annualPaidMinusClockPct, 2),
+        ],
+      );
+    }
+
+    rows.push(
+      [],
+      ["Comparison", "Amount"],
+      ["Monthly minus 4-week amount", fmt(breakdownScaled.monthlyMinus4w)],
+      [
+        "Monthly minus 4-week percentage",
+        formatPercent(breakdownScaled.monthlyMinus4wPct, 2),
+      ],
+    );
+
+    const csv = rows.map(buildCsvRow).join("\n");
+    downloadTextFile(
+      "hourly-to-annual-rent-conversion.csv",
+      csv,
+      "text/csv;charset=utf-8",
+    );
+  };
+
   const faqData = [
     {
-      q: "How does this convert an hourly amount to annual rent?",
-      a: "The main result is time-based: the hourly amount is treated as applying to every hour of the day (24 hours), then annualized over a 365-day year to produce an annual equivalent.",
+      q: "How do you convert hourly rent to annual rent?",
+      a: "In 24/7 mode, the calculator multiplies the hourly amount by 24, then by 365.",
     },
     {
-      q: "Why does hourly-to-annual depend on assumptions about hours?",
-      a: "Hourly prices can mean different things in practice. A pure time-based equivalence treats every clock hour as billable, while other contexts only apply to certain hours. This page shows both so you can see how annual totals change under different assumptions.",
+      q: "What is paid-hours mode?",
+      a: "Paid-hours mode multiplies the hourly amount by paid hours per week, then by 52.",
     },
     {
-      q: "What is the difference between 24/7 equivalence and paid-hours mode?",
-      a: "24/7 equivalence uses 365 × 24 hours per year. Paid-hours mode annualizes as hourly × (paid hours per week) × 52. Both are comparison tools; real billing terms can differ.",
+      q: "Which mode should I use?",
+      a: "Use 24/7 mode for a pure time-based rent comparison. Use paid-hours mode when the hourly amount only applies to a set number of hours per week.",
     },
     {
-      q: "Does this represent what a landlord will actually charge in a year?",
-      a: "Not necessarily. This is an annualized equivalent for comparison. Actual charges depend on minimum stays, proration rules, included utilities, fees, and the agreement.",
+      q: "Will this match what a landlord charges?",
+      a: "Not always. Actual charges can depend on minimum stays, billing rules, utilities, fees, and your agreement.",
     },
     {
-      q: "Why show monthly and 4-week amounts on an annual converter page?",
-      a: "Listings mix billing periods. Showing monthly and 4-week equivalents alongside annual totals lets you compare the same value across common cycles using one consistent basis.",
+      q: "Why does this page show monthly and 4-week amounts too?",
+      a: "Those breakdowns help compare the same hourly amount against other common rent periods.",
     },
     {
-      q: "Does this use leap years or a 365-day year?",
-      a: "The calculator uses a 365-day year, 7-day weeks, and an average month length of 365 ÷ 12 days for consistent budgeting comparisons.",
+      q: "Does this use leap years?",
+      a: "No. The calculator uses a 365-day year for consistency.",
+    },
+    {
+      q: "Does display rounding change the calculation?",
+      a: "No. Rounding is display-only. The calculator keeps decimal precision through the calculation and only rounds shown or exported values.",
     },
   ];
 
@@ -762,13 +862,13 @@ export default function HourlyToAnnualRent() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.rentconverter.com",
+        item: SITE_URL,
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Hourly to Annual Rent Converter",
-        item: "https://www.rentconverter.com/hourly-to-annual-rent-converter",
+        item: PAGE_URL,
       },
     ],
   };
@@ -777,7 +877,7 @@ export default function HourlyToAnnualRent() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "RentConverter.com",
-    url: "https://www.rentconverter.com",
+    url: SITE_URL,
   };
 
   const webPageSchema = {
@@ -785,12 +885,21 @@ export default function HourlyToAnnualRent() {
     "@type": "WebPage",
     name: "Hourly to Annual Rent Converter",
     description:
-      "Convert an hourly rent or rate into an annual rent equivalent using a 365-day year (annual equivalence). Includes a full breakdown and a paid-hours scenario comparison, plus printing.",
-    url: "https://www.rentconverter.com/hourly-to-annual-rent-converter",
+      "Convert hourly rent to annual rent and compare 24/7 hours with a paid-hours scenario.",
+    url: PAGE_URL,
+    isPartOf: {
+      "@type": "WebSite",
+      name: "RentConverter.com",
+      url: SITE_URL,
+    },
+    about: {
+      "@type": "Thing",
+      name: "Hourly to annual rent conversion",
+    },
   };
 
   return (
-    <main className="bg-white text-slate-700 scroll-smooth">
+    <main className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-slate-50 text-slate-700 scroll-smooth">
       <style
         dangerouslySetInnerHTML={{
           __html: `
@@ -806,280 +915,391 @@ export default function HourlyToAnnualRent() {
 
       <section
         id="converter"
-        className="mx-auto max-w-6xl px-6 pb-6 mt-2 sm:mt-6"
+        className="mx-auto max-w-6xl px-4 sm:px-6 pb-6 pt-3 sm:pt-6"
       >
-        <div className="rounded-2xl pb-6 bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8">
-          <div className="pt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2 gap-2 sm:gap-4">
-            <h1 className="text-center mb-1 sm:mb-0 sm:text-left text-2xl sm:text-3xl capitalize font-bold text-sky-800 tracking-tight">
-              Hourly to Annual Rent Converter
-            </h1>
-
-            <div className="flex flex-col w-full sm:ml-auto sm:max-w-[15em] rounded-xl border border-slate-200 bg-blue-50 p-4">
-              <div
-                className="inline-flex rounded-xl border border-slate-200 bg-white"
-                role="tablist"
-                aria-label="Hour interpretation"
-              >
-                <button
-                  type="button"
-                  onClick={() => setHourMode("clock")}
-                  className={`cursor-pointer px-3 py-2 text-sm font-semibold rounded-lg transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 ${
-                    hourMode === "clock"
-                      ? "bg-sky-600 text-white"
-                      : "text-slate-800 hover:bg-slate-50"
-                  }`}
-                  aria-label="Use 24/7 clock-hour equivalence"
-                  role="tab"
-                  aria-selected={hourMode === "clock"}
-                >
-                  24/7 hours
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setHourMode("paid")}
-                  className={`cursor-pointer px-3 py-2 text-sm font-semibold rounded-lg transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 ${
-                    hourMode === "paid"
-                      ? "bg-sky-600 text-white"
-                      : "text-slate-800 hover:bg-slate-50"
-                  }`}
-                  aria-label="Use paid-hours per week scenario"
-                  role="tab"
-                  aria-selected={hourMode === "paid"}
-                >
-                  Paid hours
-                </button>
-              </div>
-
-              {hourMode === "paid" ? (
-                <div className="mt-4">
-                  <label className="block text-sm font-semibold text-slate-800 ">
-                    Paid hours per week (scenario)
-                  </label>
-                  <input
-                    inputMode="decimal"
-                    value={paidHoursDisplayValue}
-                    onFocus={() => setPaidHoursFocused(true)}
-                    onBlur={() => setPaidHoursFocused(false)}
-                    onChange={(e) =>
-                      setPaidHoursPerWeek(e.target.value.replace(/,/g, ""))
-                    }
-                    placeholder="e.g. 40"
-                    className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2.5 text-base text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus:border-sky-500"
-                    aria-invalid={!parsedPaidHours.ok}
-                    aria-describedby="rc-paid-hours-help rc-paid-hours-error"
-                  />
-                  <p
-                    id="rc-paid-hours-help"
-                    className="mt-2 text-sm text-slate-600 leading-relaxed"
-                  >
-                    Range: 0 to 168 hours per week.
-                  </p>
-                  {!parsedPaidHours.ok ? (
-                    <p
-                      id="rc-paid-hours-error"
-                      className="mt-1 text-sm font-semibold text-rose-700"
-                      role="alert"
-                      aria-live="assertive"
-                    >
-                      {parsedPaidHours.error}
-                    </p>
-                  ) : null}
-                </div>
-              ) : null}
-            </div>
-          </div>
-
-          <p className="hidden md:flex w-full pb-2 text-base text-slate-600">
-            Convert an hourly rent rate into an annual total instantly. Clear
-            calculations, no sign-up required.
-          </p>
-          <div className="grid gap-5">
-            <div>
-              <label className="block text-sm font-semibold text-slate-800 mb-2">
-                Hourly amount
-              </label>
-
-              <div className="flex gap-2">
-                <input
-                  inputMode="decimal"
-                  value={amountDisplayValue}
-                  onFocus={() => setAmountFocused(true)}
-                  onBlur={() => setAmountFocused(false)}
-                  onChange={(e) => setAmount(e.target.value.replace(/,/g, ""))}
-                  placeholder="e.g. 25 or 25.50"
-                  className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2.5 text-lg text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus:border-sky-500"
-                  aria-invalid={!parsedHourly.ok}
-                  aria-describedby="rc-hourly-help rc-hourly-error"
-                />
-
-                <select
-                  value={currency}
-                  onChange={(e) =>
-                    setCurrency(
-                      isCurrency(e.target.value)
-                        ? (e.target.value as Currency)
-                        : "USD",
-                    )
-                  }
-                  className="rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm font-semibold text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus:border-sky-500"
-                  aria-label="Currency"
-                >
-                  {SUPPORTED_CURRENCIES.map((c) => (
-                    <option key={c} value={c}>
-                      {c}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {!parsedHourly.ok ? (
-                <p
-                  id="rc-hourly-error"
-                  className="mt-2 text-sm font-semibold text-rose-700"
-                  role="alert"
-                  aria-live="assertive"
-                >
-                  {parsedHourly.error}
-                </p>
-              ) : parsedHourly.warnings.length ? (
-                <div
-                  className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900"
-                  role="status"
-                  aria-live="polite"
-                >
-                  <div className="font-semibold">Input interpretation note</div>
-                  <ul className="mt-1 list-disc pl-5 space-y-1">
-                    {parsedHourly.warnings.map((w, i) => (
-                      <li key={i}>{w}</li>
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
-            </div>
-          </div>
-
-          <div
-            className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:px-6 rc-print-block border-l-4 border-l-sky-200"
-            aria-live="polite"
-            role="region"
-            aria-label="Annual equivalent results"
-          >
-            <div className="flex items-center gap-2">
-              <div
-                className="h-2 w-2 rounded-full bg-sky-600"
-                aria-hidden="true"
-              />
-              <div className="text-sm font-semibold text-slate-800">
-                Annual equivalent
-              </div>
-            </div>
-
-            {!canShowResults ? (
-              <div className="mt-3 rounded-xl border border-slate-200 bg-white px-4 py-4 text-slate-800">
-                <div className="font-semibold">No result to show yet</div>
-                <p className="mt-1 text-sm text-slate-700 leading-relaxed">
-                  Enter a valid hourly amount. If you choose paid-hours mode,
-                  enter a valid hours-per-week value too.
-                </p>
-              </div>
-            ) : (
-              <>
-                <div className="flex flex-col gap-2">
-                  <div className="min-h-[3.5rem] sm:min-h-[4rem]">
-                    <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700 tabular-nums whitespace-nowrap">
-                      {fmt(displayedAnnualScaled)}
-                    </div>
+        <div className="rounded-2xl border border-slate-200 bg-white/95 px-4 py-5 shadow-sm sm:px-8 sm:py-7">
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div className="min-w-0">
+                  <div className="mb-2 inline-flex rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-800">
+                    Hourly to yearly rent calculator
                   </div>
+
+                  <h1 className="text-2xl font-bold tracking-tight text-sky-900 sm:text-3xl">
+                    Hourly to Annual Rent Converter
+                  </h1>
+
+                  <p className="mt-2 max-w-4xl text-base text-slate-600">
+                    Convert an hourly rent amount into an annual amount. Use
+                    24/7 hours or a paid-hours scenario.
+                  </p>
                 </div>
 
-                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                  {(
-                    [
-                      ["Hourly", breakdownScaled!.hourly, "hourly"],
-                      ["Daily (24 hours)", breakdownScaled!.daily, "daily"],
-                      ["Weekly (7 days)", breakdownScaled!.weekly, "weekly"],
-                      [
-                        "2 weeks (14 days)",
-                        breakdownScaled!.biweekly,
-                        "biweekly",
-                      ],
-                      [
-                        "4 weeks (28 days)",
-                        breakdownScaled!.every4w,
-                        "every_4_weeks",
-                      ],
-                      [
-                        "Monthly (average)",
-                        breakdownScaled!.monthly,
-                        "monthly",
-                      ],
-                    ] as const
-                  ).map(([label, val, key]) => (
-                    <div
-                      key={key}
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-2 shadow-sm"
-                    >
-                      <div className="text-xs font-medium text-slate-600">
-                        {label}
-                      </div>
-                      <div className="mt-1 text-lg font-bold text-slate-900 tabular-nums whitespace-nowrap">
-                        {fmt(val)}
-                      </div>
+                <div
+                  id="export-controls"
+                  className="rc-no-print flex flex-wrap gap-2 sm:justify-end"
+                >
+                  <button
+                    type="button"
+                    onClick={handlePrint}
+                    className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 shadow-sm transition hover:border-sky-300 hover:bg-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+                  >
+                    Print / Save PDF
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleCsvExport}
+                    disabled={!canShowResults}
+                    className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 shadow-sm transition hover:border-sky-300 hover:bg-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-slate-200 disabled:hover:bg-white"
+                  >
+                    Export CSV
+                  </button>
+                </div>
+              </div>
+
+              <div className="rc-no-print rounded-xl border border-slate-200 bg-sky-50/60 px-4 py-3">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <div className="text-sm font-semibold text-slate-900">
+                      Hour basis
                     </div>
-                  ))}
+                    <p className="mt-1 text-xs text-slate-600">
+                      Choose whether the hourly amount applies to every clock
+                      hour or only paid hours.
+                    </p>
+                  </div>
 
-                  {breakdownScaled && (
-                    <FourWeekVsMonthly
-                      monthlyMinus4w={breakdownScaled.monthlyMinus4w}
-                      monthlyMinus4wPct={breakdownScaled.monthlyMinus4wPct}
-                      fmt={fmt}
-                      formatPercent={formatPercent as any}
-                    />
-                  )}
-
-                  <div className="rc-no-print hidden md:flex flex-col sm:flex-row gap-2 mb-auto">
+                  <div
+                    className="inline-flex w-fit rounded-xl border border-slate-200 bg-white p-1"
+                    role="tablist"
+                    aria-label="Hour interpretation"
+                  >
                     <button
                       type="button"
-                      onClick={handlePrint}
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
+                      onClick={() => setHourMode("clock")}
+                      className={`cursor-pointer rounded-lg px-3 py-2 text-sm font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 ${
+                        hourMode === "clock"
+                          ? "bg-sky-600 text-white"
+                          : "text-slate-800 hover:bg-sky-50"
+                      }`}
+                      aria-label="Use 24/7 clock-hour equivalence"
+                      role="tab"
+                      aria-selected={hourMode === "clock"}
                     >
-                      Print / Save as PDF
+                      24/7 hours
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setHourMode("paid")}
+                      className={`cursor-pointer rounded-lg px-3 py-2 text-sm font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 ${
+                        hourMode === "paid"
+                          ? "bg-sky-600 text-white"
+                          : "text-slate-800 hover:bg-sky-50"
+                      }`}
+                      aria-label="Use paid-hours per week scenario"
+                      role="tab"
+                      aria-selected={hourMode === "paid"}
+                    >
+                      Paid hours
                     </button>
                   </div>
                 </div>
-              </>
-            )}
-          </div>
-          <Assumptions />
-        </div>
 
-        <div className="mt-3 rounded-xl border border-slate-200 bg-white p-4">
-          <div className="rc-no-print md:hidden flex flex-col sm:flex-row gap-2 mb-4">
-            <button
-              type="button"
-              onClick={handlePrint}
-              className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
+                {hourMode === "paid" ? (
+                  <div className="mt-3 max-w-sm">
+                    <label className="mb-2 block text-sm font-semibold text-slate-700">
+                      Paid hours per week
+                    </label>
+
+                    <input
+                      inputMode="decimal"
+                      value={paidHoursDisplayValue}
+                      onFocus={() => setPaidHoursFocused(true)}
+                      onBlur={() => setPaidHoursFocused(false)}
+                      onChange={(e) =>
+                        setPaidHoursPerWeek(e.target.value.replace(/,/g, ""))
+                      }
+                      placeholder="e.g. 40"
+                      className="w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-base text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                      aria-invalid={!parsedPaidHours.ok}
+                      aria-describedby="rc-paid-hours-help rc-paid-hours-error"
+                    />
+
+                    <p
+                      id="rc-paid-hours-help"
+                      className="mt-2 text-xs leading-relaxed text-slate-600"
+                    >
+                      Range: 0 to 168 hours per week.
+                    </p>
+
+                    {!parsedPaidHours.ok ? (
+                      <p
+                        id="rc-paid-hours-error"
+                        className="mt-1 text-sm font-semibold text-rose-700"
+                        role="alert"
+                        aria-live="assertive"
+                      >
+                        {parsedPaidHours.error}
+                      </p>
+                    ) : null}
+                  </div>
+                ) : null}
+              </div>
+            </div>
+
+            <div className="grid gap-5">
+              <div>
+                <label className="mb-2 block text-sm font-semibold text-slate-700">
+                  Hourly amount
+                </label>
+
+                <div className="flex flex-col gap-2 sm:flex-row">
+                  <input
+                    inputMode="decimal"
+                    value={amountDisplayValue}
+                    onFocus={() => setAmountFocused(true)}
+                    onBlur={() => setAmountFocused(false)}
+                    onChange={(e) =>
+                      setAmount(e.target.value.replace(/,/g, ""))
+                    }
+                    placeholder="e.g. 25 or 25.50"
+                    className="w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-lg text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                    aria-invalid={!parsedHourly.ok}
+                    aria-describedby="rc-hourly-help rc-hourly-error"
+                  />
+
+                  <select
+                    value={currency}
+                    onChange={(e) =>
+                      setCurrency(
+                        isCurrency(e.target.value)
+                          ? (e.target.value as Currency)
+                          : "USD",
+                      )
+                    }
+                    className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm font-semibold text-slate-900 outline-none transition hover:border-sky-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                    aria-label="Currency"
+                  >
+                    {SUPPORTED_CURRENCIES.map((c) => (
+                      <option key={c} value={c}>
+                        {c}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <p id="rc-hourly-help" className="mt-2 text-xs text-slate-600">
+                  Enter the hourly rent amount. Currency symbols, commas, and
+                  decimals are accepted.
+                </p>
+
+                {!parsedHourly.ok ? (
+                  <p
+                    id="rc-hourly-error"
+                    className="mt-2 text-sm font-semibold text-rose-700"
+                    role="alert"
+                    aria-live="assertive"
+                  >
+                    {parsedHourly.error}
+                  </p>
+                ) : parsedHourly.warnings.length ? (
+                  <div
+                    className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900"
+                    role="status"
+                    aria-live="polite"
+                  >
+                    <div className="font-semibold">
+                      Input interpretation note
+                    </div>
+                    <ul className="mt-1 list-disc space-y-1 pl-5">
+                      {parsedHourly.warnings.map((w, i) => (
+                        <li key={i}>{w}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+              </div>
+            </div>
+
+            <div
+              className="rounded-2xl border border-slate-200 bg-sky-50/60 p-5 shadow-sm sm:px-6 rc-print-block"
+              aria-live="polite"
+              role="region"
+              aria-label="Annual amount results"
             >
-              Print / Save as PDF
-            </button>
-          </div>
+              <div className="h-1.5 rounded-full bg-gradient-to-r from-sky-500 to-emerald-400" />
 
-          <Rounding
-            roundDisplay={roundDisplay}
-            setRoundDisplay={setRoundDisplay}
-            displayDecimals={displayDecimals}
-            setDisplayDecimals={setDisplayDecimals as any}
-          />
+              <div className="mt-4 flex items-center gap-2">
+                <div
+                  className="h-2 w-2 rounded-full bg-sky-600"
+                  aria-hidden="true"
+                />
+                <div className="text-sm font-semibold text-slate-900">
+                  Annual amount
+                </div>
+              </div>
+
+              {!canShowResults ? (
+                <div className="mt-3 rounded-xl border border-slate-200 bg-white/95 px-4 py-4 text-slate-700 shadow-sm">
+                  <div className="font-semibold text-slate-900">
+                    No result to show yet
+                  </div>
+                  <p className="mt-1 text-sm leading-relaxed text-slate-600">
+                    Enter a valid hourly amount. If you choose paid-hours mode,
+                    enter valid hours per week too.
+                  </p>
+                </div>
+              ) : (
+                <>
+                  <div className="mt-3 flex flex-col gap-2">
+                    <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-4">
+                      <div className="min-h-[3.5rem] sm:min-h-[4rem]">
+                        <div className="whitespace-nowrap text-3xl font-extrabold tabular-nums text-emerald-800 sm:text-5xl">
+                          {fmt(displayedAnnualScaled)}
+                        </div>
+                      </div>
+
+                      <p className="mt-2 text-sm text-emerald-700">
+                        {hourMode === "clock"
+                          ? "Based on hourly rent multiplied by 24 hours and 365 days."
+                          : "Based on hourly rent multiplied by paid hours per week and 52 weeks."}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                    {(
+                      [
+                        [
+                          PERIOD_LABEL.hourly,
+                          breakdownScaled!.hourly,
+                          "hourly",
+                        ],
+                        [PERIOD_LABEL.daily, breakdownScaled!.daily, "daily"],
+                        [
+                          PERIOD_LABEL.weekly,
+                          breakdownScaled!.weekly,
+                          "weekly",
+                        ],
+                        [
+                          PERIOD_LABEL.biweekly,
+                          breakdownScaled!.biweekly,
+                          "biweekly",
+                        ],
+                        [
+                          PERIOD_LABEL.every_4_weeks,
+                          breakdownScaled!.every4w,
+                          "every_4_weeks",
+                        ],
+                        [
+                          PERIOD_LABEL.monthly,
+                          breakdownScaled!.monthly,
+                          "monthly",
+                        ],
+                      ] as const
+                    ).map(([label, val, key]) => (
+                      <div
+                        key={key}
+                        className="rounded-xl border border-slate-200 bg-white/95 px-4 py-3 shadow-sm"
+                      >
+                        <div className="text-xs font-medium text-slate-600">
+                          {label}
+                        </div>
+                        <div className="mt-1 whitespace-nowrap text-lg font-bold tabular-nums text-slate-900">
+                          {fmt(val)}
+                        </div>
+                      </div>
+                    ))}
+
+                    {hourMode === "paid" ? (
+                      <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 shadow-sm">
+                        <div className="text-xs font-medium text-emerald-700">
+                          Paid-hours comparison
+                        </div>
+
+                        <div className="mt-2 grid gap-2 sm:grid-cols-3">
+                          <div className="rounded-xl border border-emerald-200 bg-white/90 px-4 py-3">
+                            <div className="text-xs text-slate-600">
+                              24/7 annual
+                            </div>
+                            <div className="mt-1 text-sm font-bold text-slate-900">
+                              {fmt(breakdownScaled!.annualClock)}
+                            </div>
+                          </div>
+
+                          <div className="rounded-xl border border-emerald-200 bg-white/90 px-4 py-3">
+                            <div className="text-xs text-slate-600">
+                              Paid-hours annual
+                            </div>
+                            <div className="mt-1 text-sm font-bold text-slate-900">
+                              {fmt(breakdownScaled!.annualPaidScaled)}
+                            </div>
+                          </div>
+
+                          <div className="rounded-xl border border-emerald-200 bg-white/90 px-4 py-3">
+                            <div className="text-xs text-slate-600">
+                              Difference
+                            </div>
+                            <div className="mt-1 text-sm font-bold text-slate-900">
+                              {fmt(breakdownScaled!.annualPaidMinusClock)}
+                            </div>
+                            <div className="mt-1 text-xs text-slate-600">
+                              ≈{" "}
+                              {formatPercent(
+                                breakdownScaled!.annualPaidMinusClockPct,
+                                2,
+                              )}
+                            </div>
+                          </div>
+                        </div>
+
+                        <p className="mt-2 text-xs text-slate-600">
+                          Paid-hours mode uses hours per week × 52.
+                        </p>
+                      </div>
+                    ) : null}
+
+                    {breakdownScaled && (
+                      <FourWeekVsMonthly
+                        monthlyMinus4w={breakdownScaled.monthlyMinus4w}
+                        monthlyMinus4wPct={breakdownScaled.monthlyMinus4wPct}
+                        fmt={fmt}
+                        formatPercent={formatPercent as any}
+                      />
+                    )}
+                  </div>
+                </>
+              )}
+            </div>
+
+            <Assumptions />
+
+            <div className="rounded-xl border border-slate-200 bg-white/90 p-4 shadow-sm rc-no-print">
+              <div className="mb-3 text-sm font-semibold text-slate-900">
+                Display rounding
+              </div>
+
+              <Rounding
+                roundDisplay={roundDisplay}
+                setRoundDisplay={setRoundDisplay}
+                displayDecimals={displayDecimals}
+                setDisplayDecimals={setDisplayDecimals as any}
+              />
+            </div>
+          </div>
         </div>
       </section>
 
       <HowItWorks />
 
       <section className="mt-8 mb-4 rc-no-print hidden sm:block">
-        <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-600">
+        <nav className="mx-auto max-w-6xl px-6 text-sm text-slate-600">
           <a
             href={safeHref("/")}
-            className="hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
+            className="cursor-pointer rounded text-sky-800 transition hover:text-sky-900 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
           >
             Home
           </a>{" "}
@@ -1089,22 +1309,27 @@ export default function HourlyToAnnualRent() {
 
       <ToolFit />
 
-      <section id="faq" className="max-w-5xl mx-auto pb-16 px-6">
-        <h2 className="text-3xl font-bold text-center mb-3 text-sky-800 tracking-tight">
+      <section id="faq" className="mx-auto max-w-5xl px-6 pb-16">
+        <h2 className="mb-3 text-center text-3xl font-bold tracking-tight text-sky-800">
           Frequently Asked Questions
         </h2>
 
-        <div className="divide-y divide-slate-200">
+        <p className="mx-auto mb-6 max-w-3xl text-center text-slate-600">
+          These answers explain 24/7 annualization, paid-hours mode, and how to
+          read the related breakdowns.
+        </p>
+
+        <div className="divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white/90 px-4 shadow-sm">
           {faqData.map((f, i) => (
             <details key={i} className="group py-4">
-              <summary className="cursor-pointer list-none font-semibold text-lg text-sky-800 flex items-center justify-between hover:text-sky-900">
+              <summary className="flex cursor-pointer list-none items-center justify-between rounded text-lg font-semibold text-sky-800 transition hover:text-sky-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400">
                 <span>{f.q}</span>
                 <span className="ml-4 text-slate-400 transition-transform group-open:rotate-180">
                   ▾
                 </span>
               </summary>
 
-              <div className="mt-2 text-slate-700 leading-relaxed max-w-prose">
+              <div className="mt-2 max-w-prose leading-relaxed text-slate-700">
                 {f.a}
               </div>
             </details>

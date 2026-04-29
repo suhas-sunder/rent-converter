@@ -184,8 +184,14 @@ export default [
     "500-per-week-to-monthly-rent",
     "routes/500-per-week-to-monthly-rent.tsx",
   ),
-  route("170-per-week-to-monthly-rent", "routes/170-per-week-to-monthly.tsx"),
-  route("180-per-week-to-monthly-rent", "routes/180-per-week-to-monthly.tsx"),
+  route(
+    "170-per-week-to-monthly-rent",
+    "routes/170-per-week-to-monthly-rent.tsx",
+  ),
+  route(
+    "180-per-week-to-monthly-rent",
+    "routes/180-per-week-to-monthly-rent.tsx",
+  ),
 
   //International variants
   route("weekly-to-monthly-rent-uk", "routes/weekly-to-monthly-rent-uk.tsx"),

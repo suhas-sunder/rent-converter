@@ -301,7 +301,6 @@ export default function NavBar() {
 
   const primaryLinks: NavItem[] = useMemo(() => {
     const desiredOrder: string[] = [
-      "/",
       "/weekly-to-monthly-rent-converter",
       "/rent-per-paycheck-calculator",
       "/how-much-rent-can-i-afford-calculator",
@@ -313,17 +312,19 @@ export default function NavBar() {
     for (const to of desiredOrder) {
       const item = byTo.get(to);
       if (item) primary.push(item);
-      if (primary.length >= 4) break;
+      if (primary.length >= 3) break;
     }
 
-    if (primary.length < 4) {
+    if (primary.length < 3) {
       for (const t of tools) {
-        if (primary.length >= 4) break;
-        if (!primary.some((p) => p.to === t.to)) primary.push(t);
+        if (primary.length >= 3) break;
+        if (t.to !== "/" && !primary.some((p) => p.to === t.to)) {
+          primary.push(t);
+        }
       }
     }
 
-    return primary.slice(0, 4);
+    return primary.slice(0, 3);
   }, [tools]);
 
   const desktopMoreList: NavItem[] = useMemo(() => {
@@ -467,9 +468,12 @@ export default function NavBar() {
 
   function scrollToAllTools(onDone?: () => void) {
     onDone?.();
-    const el = document.getElementById("all-tools");
-    if (!el) return;
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    window.setTimeout(() => {
+      const el = document.getElementById("all-tools");
+      if (!el) return;
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 0);
   }
 
   function NavLinkItem({
@@ -537,11 +541,17 @@ export default function NavBar() {
     );
   }
 
-  function AllToolsButton({ variant }: { variant: "dropdown" | "mobile" }) {
+  function AllToolsButton({
+    variant,
+  }: {
+    variant: "desktop" | "dropdown" | "mobile";
+  }) {
     const classes =
-      variant === "dropdown"
-        ? "block w-full cursor-pointer select-none px-5 py-3.5 text-left text-base text-slate-700 transition-colors hover:bg-sky-50 hover:text-sky-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-inset"
-        : "block w-full cursor-pointer select-none px-5 py-4 text-left text-base font-semibold text-slate-700 transition-colors hover:bg-sky-50 hover:text-sky-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-inset";
+      variant === "desktop"
+        ? "inline-flex cursor-pointer select-none items-center rounded-xl bg-sky-50 px-3 py-2 text-sm font-semibold text-sky-800 transition-colors hover:bg-sky-100 hover:text-sky-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+        : variant === "dropdown"
+          ? "block w-full cursor-pointer select-none px-5 py-3.5 text-left text-base font-semibold text-sky-800 transition-colors hover:bg-sky-50 hover:text-sky-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-inset"
+          : "block w-full cursor-pointer select-none px-5 py-4 text-left text-base font-semibold text-sky-800 transition-colors hover:bg-sky-50 hover:text-sky-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-inset";
 
     return (
       <button
@@ -549,7 +559,7 @@ export default function NavBar() {
         className={classes}
         onClick={() => scrollToAllTools(closeAll)}
       >
-        All tools (full list)
+        All tools
       </button>
     );
   }
@@ -614,7 +624,9 @@ export default function NavBar() {
           </button>
 
           <nav className="hidden sm:flex items-center gap-2 text-sm">
-            {primaryLinks.slice(0, 4).map((l) => (
+            <AllToolsButton variant="desktop" />
+
+            {primaryLinks.map((l) => (
               <NavLinkItem
                 key={l.to}
                 item={l}
@@ -679,6 +691,10 @@ export default function NavBar() {
               <div
                 className={`${SCROLL_CLASS} max-h-[min(60vh,520px)] overflow-y-auto`}
               >
+                <div className="border-b border-slate-200 bg-sky-50/60">
+                  <AllToolsButton variant="dropdown" />
+                </div>
+
                 {desktopMoreList.length === 0 ? (
                   <div className="px-5 py-6 text-sm text-slate-600">
                     No pages match “{desktopQuery.trim()}”.
@@ -693,10 +709,6 @@ export default function NavBar() {
                     />
                   ))
                 )}
-
-                <div className="border-t border-slate-200">
-                  <AllToolsButton variant="dropdown" />
-                </div>
               </div>
             </div>,
             document.body,
@@ -767,6 +779,10 @@ export default function NavBar() {
 
             <div className="flex-1 min-h-0">
               <div className={`${SCROLL_CLASS} h-full overflow-y-auto`}>
+                <div className="border-b border-slate-200 bg-sky-50/60">
+                  <AllToolsButton variant="mobile" />
+                </div>
+
                 {filteredMobileTools.length === 0 ? (
                   <div className="px-5 py-6 text-sm text-slate-600">
                     No pages match “{mobileQuery.trim()}”.
@@ -781,10 +797,6 @@ export default function NavBar() {
                     />
                   ))
                 )}
-
-                <div className="border-t border-slate-200">
-                  <AllToolsButton variant="mobile" />
-                </div>
 
                 <div className="h-[env(safe-area-inset-bottom)]" />
               </div>

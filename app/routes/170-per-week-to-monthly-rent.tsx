@@ -1,20 +1,15 @@
 import { useMemo, useState } from "react";
-import type { Route } from "./+types/500-per-week-to-monthly-rent";
-import HowItWorks from "~/client/components/500-per-week-to-monthly-rent/HowItWorks";
-import ToolFit from "~/client/components/500-per-week-to-monthly-rent/ToolFit";
-import FAQ from "~/client/components/500-per-week-to-monthly-rent/FAQ";
-
-function safeToFixed(n: number, digits: number): string {
-  if (!Number.isFinite(n)) return "—";
-  return n.toFixed(digits);
-}
+import type { Route } from "./+types/170-per-week-to-monthly-rent";
+import HowItWorks from "~/client/components/170-per-week-to-monthly-rent/HowItWorks";
+import ToolFit from "~/client/components/170-per-week-to-monthly-rent/ToolFit";
+import FAQ from "~/client/components/170-per-week-to-monthly-rent/FAQ";
 
 export const meta: Route.MetaFunction = () => {
-  const url = "https://www.rentconverter.com/500-per-week-to-monthly-rent";
+  const url = "https://www.rentconverter.com/170-per-week-to-monthly-rent";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
-  const title = "$500 Per Week to Monthly Rent | RentConverter.com";
+  const title = "$170 Per Week to Monthly Rent | RentConverter.com";
   const description =
-    "Convert $500 per week to monthly rent using the standard weekly to monthly rent formula. See the true calendar-month equivalent, 4-week comparison, and currency options.";
+    "Convert $170 per week to monthly rent using the standard weekly to monthly rent formula. See the true calendar-month equivalent, 4-week comparison, and currency options.";
 
   return [
     { title },
@@ -222,39 +217,37 @@ function fromAnnualScaled(annualScaled: bigint, to: Period): bigint {
   return annualScaled;
 }
 
-export default function FiveHundredPerWeekToMonthlyRent() {
-  const canonicalUrl =
-    "https://www.rentconverter.com/500-per-week-to-monthly-rent";
-
+export default function OneSeventyPerWeekToMonthlyRent() {
   const [currency, setCurrency] = useState<Currency>("USD");
-  const [roundDisplay, setRoundDisplay] = useState<boolean>(true);
-  const [displayDecimals, setDisplayDecimals] = useState<number>(2);
+  const [roundDisplay] = useState<boolean>(true);
+  const [displayDecimals] = useState<number>(2);
 
-  const parsed = useMemo(() => {
-    const scaled = 500n * SCALE;
-    return { ok: true as const, scaled };
+  const weeklyScaled = 170n * SCALE;
+
+  const monthlyScaled = useMemo(() => {
+    const annual = annualizeScaled(weeklyScaled, "weekly");
+    return fromAnnualScaled(annual, "monthly");
   }, []);
 
-  const computed = useMemo(() => {
-    const weekly = parsed.scaled;
-    const annual = annualizeScaled(weekly, "weekly");
-    const monthly = fromAnnualScaled(annual, "monthly");
-    return { weekly, monthly };
-  }, [parsed]);
+  const fourWeekScaled = weeklyScaled * 4n;
 
   const money = (scaled: bigint) =>
     formatCurrencyFromScaled(scaled, currency, roundDisplay, displayDecimals);
 
-  const fourWeekScaled = computed.weekly * 4n;
-  const weeklyToMonthlyMultiplier = safeToFixed(365 / 7 / 12, 6);
+  const fmt = (scaled: bigint) =>
+    roundDisplay
+      ? formatCurrencyFromScaled(scaled, currency, true, displayDecimals)
+      : formatCurrencyFromScaled(scaled, currency, false, displayDecimals);
+
+  const pageUrl = "https://www.rentconverter.com/170-per-week-to-monthly-rent";
 
   const webPageSchema = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    name: "$500 Per Week to Monthly Rent",
+    name: "$170 Per Week to Monthly Rent",
     description:
-      "Convert $500 per week to monthly rent using annual equivalence and compare it with a simple 4-week rent calculation.",
-    url: canonicalUrl,
+      "Convert $170 per week to monthly rent using annual equivalence and compare it with a simple 4-week rent calculation.",
+    url: pageUrl,
     isPartOf: {
       "@type": "WebSite",
       name: "RentConverter.com",
@@ -272,18 +265,18 @@ export default function FiveHundredPerWeekToMonthlyRent() {
     mainEntity: [
       {
         "@type": "Question",
-        name: "How much is $500 per week per month?",
+        name: "How much is $170 per week per month?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "$500 per week is about $2,172.62 per calendar month using annual equivalence: weekly rent multiplied by 365, divided by 7, then divided by 12.",
+          text: "$170 per week is about $738.21 per calendar month using annual equivalence: weekly rent multiplied by 365, divided by 7, then divided by 12.",
         },
       },
       {
         "@type": "Question",
-        name: "Why is $500 per week not just $2,000 per month?",
+        name: "Why is $170 per week not just $680 per month?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "$2,000 is four weeks of rent, but most calendar months are longer than exactly four weeks. A calendar-month equivalent spreads weekly rent across the full year and divides it by 12.",
+          text: "$680 is four weeks of rent, but most calendar months are longer than exactly four weeks. A calendar-month equivalent spreads weekly rent across the full year and divides it by 12.",
         },
       },
       {
@@ -310,24 +303,22 @@ export default function FiveHundredPerWeekToMonthlyRent() {
 
       <section className="mx-auto max-w-6xl px-4 pb-8 pt-4 sm:px-6 sm:pb-10 sm:pt-8">
         <div className="rounded-2xl border border-slate-200 bg-white/95 p-5 shadow-sm sm:p-8">
-          <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
-            <div className="max-w-3xl">
-              <p className="inline-flex rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-sky-700">
-                Weekly to monthly rent answer
-              </p>
+          <div className="max-w-3xl">
+            <p className="inline-flex rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-sky-700">
+              Weekly to monthly rent answer
+            </p>
 
-              <h1 className="mt-4 text-center text-2xl font-bold tracking-tight text-sky-900 sm:text-left sm:text-4xl">
-                {money(computed.weekly)} per Week to Monthly Rent
-              </h1>
+            <h1 className="mt-4 text-center text-2xl font-bold tracking-tight text-sky-900 sm:text-left sm:text-4xl">
+              {fmt(weeklyScaled)} per Week to Monthly Rent
+            </h1>
 
-              <p className="mt-3 text-base leading-7 text-slate-700 sm:text-lg">
-                A rent of {money(computed.weekly)} per week is equivalent to{" "}
-                <strong className="font-semibold text-slate-900">
-                  {money(computed.monthly)} per calendar month
-                </strong>{" "}
-                using the standard annual-equivalence method.
-              </p>
-            </div>
+            <p className="mt-3 text-base leading-7 text-slate-700 sm:text-lg">
+              A rent of {fmt(weeklyScaled)} per week is equivalent to{" "}
+              <strong className="font-semibold text-slate-900">
+                {money(monthlyScaled)} per calendar month
+              </strong>{" "}
+              using the standard annual-equivalence method.
+            </p>
           </div>
 
           <div className="mt-6 overflow-hidden rounded-2xl border border-emerald-200 bg-white shadow-sm">
@@ -339,16 +330,12 @@ export default function FiveHundredPerWeekToMonthlyRent() {
               </div>
 
               <div className="mt-2 text-4xl font-extrabold tracking-tight text-emerald-800 sm:text-5xl">
-                {money(computed.monthly)}
+                {money(monthlyScaled)}
               </div>
 
               <div className="mt-2 text-sm text-slate-600">
-                {roundDisplay
-                  ? `Rounded to ${displayDecimals} decimal ${
-                      displayDecimals === 1 ? "place" : "places"
-                    } for display.`
-                  : "Showing the unrounded fixed-point value."}{" "}
-                The calculation uses annual equivalence based on a 365-day year.
+                Rounded to {displayDecimals} decimal places for display. The
+                calculation uses annual equivalence based on a 365-day year.
               </div>
 
               <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -370,7 +357,7 @@ export default function FiveHundredPerWeekToMonthlyRent() {
                     True monthly average
                   </div>
                   <div className="mt-1 text-lg font-semibold text-emerald-800">
-                    {money(computed.monthly)}
+                    {money(monthlyScaled)}
                   </div>
                   <p className="mt-1 text-xs leading-5 text-slate-600">
                     This accounts for the fact that a year has more than 48
@@ -380,9 +367,36 @@ export default function FiveHundredPerWeekToMonthlyRent() {
               </div>
 
               <div className="mt-5 flex flex-wrap items-center gap-3">
+                <div className="flex items-center gap-2">
+                  <label
+                    htmlFor="currency"
+                    className="text-xs font-semibold text-slate-700"
+                  >
+                    Currency
+                  </label>
+                  <select
+                    id="currency"
+                    value={currency}
+                    onChange={(e) =>
+                      setCurrency(
+                        isCurrency(e.target.value)
+                          ? (e.target.value as Currency)
+                          : "USD",
+                      )
+                    }
+                    className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-900 outline-none transition hover:border-sky-400 hover:bg-sky-50 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                  >
+                    {SUPPORTED_CURRENCIES.map((c) => (
+                      <option key={c} value={c}>
+                        {c}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
                 <a
                   href="/weekly-to-monthly-rent-converter"
-                  className="inline-flex cursor-pointer items-center rounded-xl border border-slate-300 bg-white px-4 py-2 text-xs font-semibold text-slate-900 transition hover:border-sky-300 hover:bg-sky-50 hover:text-sky-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+                  className="inline-flex cursor-pointer items-center rounded-xl border border-slate-300 bg-white px-4 py-2 text-xs font-semibold text-slate-900 transition hover:border-sky-300 hover:bg-sky-50 hover:text-sky-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 sm:ml-auto"
                 >
                   Convert a different weekly amount →
                 </a>
@@ -390,76 +404,6 @@ export default function FiveHundredPerWeekToMonthlyRent() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white/90 p-4 mt-6 shadow-sm">
-            <div className="text-xs font-semibold uppercase tracking-wide text-slate-600">
-              Display settings
-            </div>
-
-            <div className="mt-3 flex flex-wrap items-center gap-3">
-              <div className="flex items-center gap-2">
-                <label
-                  htmlFor="currency"
-                  className="text-xs font-semibold text-slate-700"
-                >
-                  Currency
-                </label>
-                <select
-                  id="currency"
-                  value={currency}
-                  onChange={(e) =>
-                    setCurrency(
-                      isCurrency(e.target.value)
-                        ? (e.target.value as Currency)
-                        : "USD",
-                    )
-                  }
-                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-900 outline-none transition hover:border-sky-400 hover:bg-sky-50 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
-                >
-                  {SUPPORTED_CURRENCIES.map((c) => (
-                    <option key={c} value={c}>
-                      {c}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <label className="flex cursor-pointer items-center gap-2 rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-900 transition hover:border-sky-400 hover:bg-sky-50">
-                <input
-                  type="checkbox"
-                  checked={roundDisplay}
-                  onChange={(e) => setRoundDisplay(e.target.checked)}
-                  className="h-4 w-4 cursor-pointer rounded border-slate-300 text-sky-600 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
-                />
-                Round display
-              </label>
-
-              <div className="flex items-center gap-2">
-                <label
-                  htmlFor="displayDecimals"
-                  className="text-xs font-semibold text-slate-700"
-                >
-                  Decimals
-                </label>
-                <select
-                  id="displayDecimals"
-                  value={displayDecimals}
-                  onChange={(e) => setDisplayDecimals(Number(e.target.value))}
-                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-900 outline-none transition hover:border-sky-400 hover:bg-sky-50 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
-                >
-                  {[0, 1, 2, 3, 4].map((digits) => (
-                    <option key={digits} value={digits}>
-                      {digits}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <p className="mt-3 text-xs leading-5 text-slate-600">
-              Rounding changes display only. The conversion keeps fixed-point
-              precision internally.
-            </p>
-          </div>
           <section className="mt-6 rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm sm:p-5">
             <h2 className="text-xl font-bold text-sky-800">
               How the monthly amount is calculated
@@ -468,59 +412,20 @@ export default function FiveHundredPerWeekToMonthlyRent() {
               This page converts weekly rent to monthly rent by first converting
               the weekly amount into an annual amount, then dividing by 12. For{" "}
               <strong className="font-semibold text-slate-900">
-                {money(computed.weekly)} per week
+                {fmt(weeklyScaled)} per week
               </strong>
               , the calculation is{" "}
               <strong className="font-semibold text-slate-900">
-                {money(computed.weekly)} × 365 ÷ 7 ÷ 12 ={" "}
-                {money(computed.monthly)}
+                {fmt(weeklyScaled)} × 365 ÷ 7 ÷ 12 = {money(monthlyScaled)}
               </strong>
               .
             </p>
             <p className="mt-2 text-sm leading-6 text-slate-700">
-              Another way to think about it is multiplying weekly rent by about{" "}
-              <strong className="font-semibold text-slate-900">
-                {weeklyToMonthlyMultiplier}
-              </strong>
-              . This is different from multiplying by four. Four weeks is only
-              28 days, while most calendar months are about 30 or 31 days. That
-              is why the true monthly equivalent is higher than{" "}
+              This is different from multiplying by four. Four weeks is only 28
+              days, while most calendar months are about 30 or 31 days. That is
+              why the true monthly equivalent is higher than{" "}
               {money(fourWeekScaled)}.
             </p>
-          </section>
-
-          <section className="mt-6 rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm sm:p-5">
-            <h2 className="text-xl font-bold text-sky-800">
-              Example comparison
-            </h2>
-            <div className="mt-3 grid gap-3 sm:grid-cols-3">
-              <div className="rounded-xl border border-slate-200 bg-white/95 p-4 shadow-sm">
-                <div className="text-xs font-semibold uppercase tracking-wide text-slate-600">
-                  Weekly rent
-                </div>
-                <div className="mt-1 text-lg font-bold text-slate-900">
-                  {money(computed.weekly)}
-                </div>
-              </div>
-
-              <div className="rounded-xl border border-slate-200 bg-white/95 p-4 shadow-sm">
-                <div className="text-xs font-semibold uppercase tracking-wide text-slate-600">
-                  Four-week total
-                </div>
-                <div className="mt-1 text-lg font-bold text-slate-900">
-                  {money(fourWeekScaled)}
-                </div>
-              </div>
-
-              <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 shadow-sm">
-                <div className="text-xs font-semibold uppercase tracking-wide text-emerald-700">
-                  Calendar-month equivalent
-                </div>
-                <div className="mt-1 text-lg font-bold text-emerald-800">
-                  {money(computed.monthly)}
-                </div>
-              </div>
-            </div>
           </section>
         </div>
       </section>

@@ -1,40 +1,44 @@
 // routes/contact.tsx
 import type { Route } from "./+types/contact";
 
+const SITE_URL = "https://www.rentconverter.com";
+const PAGE_PATH = "/contact";
+const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
+
 export const meta: Route.MetaFunction = () => [
   { title: "Contact | RentConverter.com" },
   {
     name: "description",
     content:
-      "Contact RentConverter.com for feedback, corrections, or questions about our rent conversion tools and assumptions.",
+      "Contact RentConverter.com with feedback, corrections, or questions about rent conversion tools and assumptions.",
   },
   { name: "robots", content: "index,follow" },
-  { tagName: "link", rel: "canonical", href: "https://www.rentconverter.com/contact" },
+  { tagName: "link", rel: "canonical", href: PAGE_URL },
 
-  // Open Graph
   { property: "og:type", content: "website" },
   { property: "og:title", content: "Contact | RentConverter.com" },
   {
     property: "og:description",
     content:
-      "Send feedback, corrections, or questions about our rent conversion tools and assumptions.",
+      "Send feedback, corrections, or questions about RentConverter.com tools and assumptions.",
   },
-  { property: "og:url", content: "https://www.rentconverter.com/contact" },
+  { property: "og:url", content: PAGE_URL },
   { property: "og:site_name", content: "RentConverter.com" },
+  { property: "og:image", content: `${SITE_URL}/og-image.jpg` },
 
-  // Twitter
-  { name: "twitter:card", content: "summary" },
+  { name: "twitter:card", content: "summary_large_image" },
   { name: "twitter:title", content: "Contact | RentConverter.com" },
   {
     name: "twitter:description",
     content:
-      "Send feedback, corrections, or questions about our rent conversion tools and assumptions.",
+      "Send feedback, corrections, or questions about RentConverter.com tools and assumptions.",
   },
+  { name: "twitter:image", content: `${SITE_URL}/og-image.jpg` },
 ];
 
 export default function Contact() {
   const pageName = "Contact";
-  const canonicalUrl = "https://www.rentconverter.com/contact";
+  const canonicalUrl = PAGE_URL;
 
   const breadcrumbSchema = {
     "@context": "https://schema.org",
@@ -44,7 +48,7 @@ export default function Contact() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.rentconverter.com/",
+        item: SITE_URL,
       },
       {
         "@type": "ListItem",
@@ -59,75 +63,90 @@ export default function Contact() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "RentConverter.com",
-    url: "https://www.rentconverter.com/",
+    url: SITE_URL,
   };
 
   const webPageSchema = {
     "@context": "https://schema.org",
-    "@type": "WebPage",
+    "@type": "ContactPage",
     name: pageName,
     url: canonicalUrl,
+    description:
+      "Contact RentConverter.com with feedback, corrections, or questions about rent conversion tools and assumptions.",
+    isPartOf: {
+      "@type": "WebSite",
+      name: "RentConverter.com",
+      url: SITE_URL,
+    },
   };
 
   return (
+    <main className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-slate-50 text-slate-700 antialiased">
+      <section className="mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-14">
+        <div className="rounded-2xl border border-slate-200 bg-white/95 px-4 py-6 shadow-sm sm:px-8 sm:py-8">
+          <div className="mx-auto max-w-3xl text-center">
+            <div className="mx-auto mb-3 inline-flex rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-800">
+              Contact RentConverter.com
+            </div>
 
-    <main className="bg-white text-slate-700 antialiased min-h-screen">
-      <section className="max-w-5xl mx-auto px-6 py-12 flex items-center">
-        <div className="w-full">
-          <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 tracking-tight text-center">
-            Contact
-          </h1>
-          <p className="mt-4 text-slate-700 text-center max-w-2xl mx-auto leading-relaxed">
-            This page is for feedback and corrections. If something looks off in
-            a conversion, include the rent amount, the “from” period, the “to”
-            period, and what you expected.
-          </p>
+            <h1 className="text-3xl font-bold tracking-tight text-sky-900 sm:text-4xl">
+              Contact
+            </h1>
 
-          <div className="mt-10 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm max-w-2xl mx-auto">
-            <h2 className="text-lg font-semibold text-slate-900">Email</h2>
-            <p className="mt-2 text-sm text-slate-600 leading-relaxed">
-              Send us a message at:
+            <p className="mx-auto mt-3 max-w-2xl leading-relaxed text-slate-600">
+              Send feedback, corrections, or questions about the rent
+              conversion tools.
+            </p>
+          </div>
+
+          <div className="mx-auto mt-6 max-w-2xl rounded-2xl border border-slate-200 bg-white/95 p-5 shadow-sm sm:p-6">
+            <h2 className="text-lg font-semibold text-sky-800">Email</h2>
+
+            <p className="mt-2 text-sm leading-relaxed text-slate-600">
+              Send a message to:
             </p>
 
             <p className="mt-4 text-base font-semibold text-slate-900">
               <a
                 href="mailto:hello@rentconverter.com"
-                className="cursor-pointer text-sky-700 hover:text-sky-800 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-sm"
+                className="cursor-pointer rounded text-sky-800 underline underline-offset-2 transition hover:text-sky-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
               >
                 hello@rentconverter.com
               </a>
             </p>
 
-            <div className="mt-8 border-t border-slate-200 pt-6">
+            <div className="mt-6 rounded-xl border border-slate-200 bg-sky-50/60 px-4 py-4">
               <h3 className="text-sm font-semibold text-slate-900">
                 What to include
               </h3>
-              <ul className="mt-2 list-disc ml-5 text-sm text-slate-700 space-y-1 leading-relaxed">
+
+              <ul className="mt-2 list-disc space-y-1 pl-5 text-sm leading-relaxed text-slate-700">
                 <li>Rent amount and currency</li>
                 <li>From period and to period</li>
-                <li>Your expected result (and why)</li>
-                <li>Country/region if relevant</li>
-                <li>A screenshot or URL of the page (optional)</li>
+                <li>Your expected result</li>
+                <li>Country or region if relevant</li>
+                <li>Page URL or screenshot if useful</li>
               </ul>
             </div>
 
-            <div className="mt-8 border-t border-slate-200 pt-6">
-              <h3 className="text-sm font-semibold text-slate-900">Notes</h3>
-              <p className="mt-2 text-sm text-slate-700 leading-relaxed">
-                RentConverter.com uses a time-length model (365-day year and
-                average month = 365 ÷ 12 days) for comparison. If your lease
-                follows calendar-exact rules, results may differ slightly.
+            <div className="mt-6 rounded-xl border border-slate-200 bg-white px-4 py-4 shadow-sm">
+              <h3 className="text-sm font-semibold text-slate-900">Note</h3>
+
+              <p className="mt-2 text-sm leading-relaxed text-slate-700">
+                RentConverter.com uses a 365-day year and average month length
+                for comparison. Actual lease payments can differ based on due
+                dates, prorations, fees, utilities, and local rules.
               </p>
             </div>
           </div>
 
-          <p className="mt-10 text-xs text-slate-600 text-center leading-relaxed">
+          <p className="mx-auto mt-6 max-w-2xl text-center text-xs leading-relaxed text-slate-600">
             Tools on this site are for budgeting and comparison. Always confirm
             payment schedules and lease terms in your agreement.
           </p>
         </div>
       </section>
-    
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
@@ -140,6 +159,6 @@ export default function Contact() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
       />
-</main>
+    </main>
   );
 }

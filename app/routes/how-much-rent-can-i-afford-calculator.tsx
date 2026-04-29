@@ -5,14 +5,15 @@ import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/how-much-rent-can-i-afford-calculator/HowItWorks";
 import ToolFit from "~/client/components/how-much-rent-can-i-afford-calculator/ToolFit";
 
-export const meta: Route.MetaFunction = () => {
-  const title = "Free Rent Affordability Calculator";
-  const description =
-    "Calculate how much rent you can afford based on income. See monthly, weekly, and 4-week rent limits with instant results and export options.";
+const SITE_URL = "https://www.rentconverter.com";
+const PAGE_PATH = "/how-much-rent-can-i-afford-calculator";
+const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
+const OG_IMAGE_URL = `${SITE_URL}/og-image.jpg`;
 
-  const url =
-    "https://www.rentconverter.com/how-much-rent-can-i-afford-calculator";
-  const ogImage = "https://www.rentconverter.com/og-image.jpg";
+export const meta: Route.MetaFunction = () => {
+  const title = "How Much Rent Can I Afford? | Rent Calculator";
+  const description =
+    "Estimate how much rent you can afford based on income. Compare monthly, weekly, and 4-week rent targets.";
 
   return [
     { title },
@@ -24,21 +25,21 @@ export const meta: Route.MetaFunction = () => {
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
-    { name: "theme-color", content: "#f8fafc" },
+    { name: "theme-color", content: "#f0f9ff" },
 
     { property: "og:type", content: "website" },
     { property: "og:title", content: title },
     { property: "og:description", content: description },
-    { property: "og:url", content: url },
+    { property: "og:url", content: PAGE_URL },
     { property: "og:site_name", content: "RentConverter.com" },
-    { property: "og:image", content: ogImage },
+    { property: "og:image", content: OG_IMAGE_URL },
 
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
-    { name: "twitter:image", content: ogImage },
+    { name: "twitter:image", content: OG_IMAGE_URL },
 
-    { tagName: "link", rel: "canonical", href: url },
+    { tagName: "link", rel: "canonical", href: PAGE_URL },
   ];
 };
 
@@ -255,7 +256,7 @@ function formatCurrencyFromScaled(
   const { negative, intStr, fracStr } = scaledToDecimalStrings(
     scaledForDisplay,
     digits,
-    !roundDisplay, // trim only when not rounding to fixed digits
+    !roundDisplay,
   );
 
   const groupedInt = groupInt(intStr, group);
@@ -507,6 +508,32 @@ function fromAnnualScaled(annualScaled: bigint, to: Period): bigint {
   return annualScaled;
 }
 
+function buildCsvRow(cols: string[]): string {
+  return cols
+    .map((c) => {
+      const s = String(c ?? "");
+      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
+      return s;
+    })
+    .join(",");
+}
+
+function downloadTextFile(
+  filename: string,
+  content: string,
+  mime = "text/plain;charset=utf-8",
+) {
+  const blob = new Blob([content], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
 function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   if (raw === null) return fallback;
   try {
@@ -643,43 +670,79 @@ export default function HowMuchRentCanIAfford() {
   const canShowResults =
     parsedIncome.ok && !!annualIncomeScaled && !!affordability;
 
+  const incomeInterpreted = useMemo(() => {
+    if (!parsedIncome.ok) return null;
+    return fmt(incomeScaled);
+  }, [parsedIncome.ok, incomeScaled, currency, roundDisplay, displayDecimals]);
+
   const handlePrint = () => {
     if (typeof window === "undefined") return;
     window.print();
   };
 
+  const handleCsvExport = () => {
+    if (typeof window === "undefined") return;
+    if (!parsedIncome.ok || !annualIncomeScaled || !affordability) return;
+
+    const rows: string[][] = [
+      ["How Much Rent Can I Afford Calculator"],
+      ["Input income", incomeInterpreted ?? ""],
+      ["Income period", PERIOD_LABEL[period]],
+      ["Annualized income", fmt(annualIncomeScaled)],
+      ["Currency", currency],
+      ["Display rounding", roundDisplay ? `On (${displayDecimals} decimals)` : "Off"],
+      [],
+      ["Target", "Rent share", "Monthly", "Weekly", "4 weeks", "Annual"],
+      ...affordability.map((row) => [
+        row.label,
+        formatPercent(row.ratio, 0),
+        fmt(row.monthly),
+        fmt(row.weekly),
+        fmt(row.every4w),
+        fmt(row.annual),
+      ]),
+    ];
+
+    const csv = rows.map(buildCsvRow).join("\n");
+    downloadTextFile(
+      "rent-affordability-estimate.csv",
+      csv,
+      "text/csv;charset=utf-8",
+    );
+  };
+
   const faqData = [
     {
       q: "What does this calculator estimate?",
-      a: "It estimates rent amounts that correspond to different shares of your income, using annualized income as the consistent comparison base across pay cycles.",
+      a: "It estimates rent targets based on different shares of your income.",
     },
     {
       q: "Is this telling me what rent I should pay?",
-      a: "No. The results show how rent levels relate to income. Actual affordability depends on your full budget, savings goals, and obligations beyond income alone.",
+      a: "No. It shows income-based rent targets. Your actual budget may be lower depending on debt, savings, utilities, transportation, and other costs.",
     },
     {
-      q: "Why does the calculator use annual income?",
-      a: "Annualizing income lets monthly, weekly, biweekly, and 4-week pay cycles be compared on the same basis instead of mixing calendar periods.",
+      q: "Why does the calculator annualize income?",
+      a: "Annualizing income lets different income periods be compared on the same basis.",
     },
     {
       q: "Why are multiple percentages shown?",
-      a: "Different households target different rent-to-income ranges. Showing multiple percentages illustrates how rent levels change as the income share changes.",
+      a: "Different households use different rent-to-income targets. Showing 25%, 30%, and 35% makes the tradeoff easier to compare.",
     },
     {
       q: "Does this include utilities or other housing costs?",
-      a: "No. This compares rent to income only. Utilities, insurance, parking, internet, debt payments, and other costs can materially change what feels affordable.",
+      a: "No. It compares rent to income only. Add utilities, parking, insurance, internet, and other housing costs separately.",
     },
     {
       q: "Why does every 4 weeks differ from monthly?",
-      a: "A 4-week period is always 28 days, while an average month is about 30.42 days (365 ÷ 12). Over a year, that difference changes totals.",
+      a: "A 4-week period is 28 days. An average month is about 30.42 days.",
     },
     {
       q: "Can this be used with hourly or variable income?",
-      a: "It can provide estimates, but irregular income makes any fixed-period comparison less representative. Treat results as a starting point, not a rule.",
+      a: "It can provide estimates, but irregular income makes fixed-period comparisons less reliable.",
     },
     {
       q: "What assumptions are used?",
-      a: "Assumptions: 1 year = 365 days and 1 month = 365 ÷ 12 days (average). Real pay schedules and billing rules vary.",
+      a: "The calculator uses 365 days per year and 365 ÷ 12 days per average month.",
     },
   ];
 
@@ -691,13 +754,13 @@ export default function HowMuchRentCanIAfford() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.rentconverter.com",
+        item: SITE_URL,
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "How Much Rent Can I Afford?",
-        item: "https://www.rentconverter.com/how-much-rent-can-i-afford-calculator",
+        item: PAGE_URL,
       },
     ],
   };
@@ -716,7 +779,7 @@ export default function HowMuchRentCanIAfford() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "RentConverter.com",
-    url: "https://www.rentconverter.com",
+    url: SITE_URL,
   };
 
   const webPageSchema = {
@@ -724,12 +787,21 @@ export default function HowMuchRentCanIAfford() {
     "@type": "WebPage",
     name: "How Much Rent Can I Afford?",
     description:
-      "Estimate rent affordability from income using annual equivalence (365-day year). Compare affordable rent across monthly, weekly, and every 4 weeks, and print or save as PDF.",
-    url: "https://www.rentconverter.com/how-much-rent-can-i-afford-calculator",
+      "Estimate rent affordability from income and compare monthly, weekly, and 4-week rent targets.",
+    url: PAGE_URL,
+    isPartOf: {
+      "@type": "WebSite",
+      name: "RentConverter.com",
+      url: SITE_URL,
+    },
+    about: {
+      "@type": "Thing",
+      name: "Rent affordability calculation",
+    },
   };
 
   return (
-    <main className="bg-white text-slate-700 scroll-smooth">
+    <main className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-slate-50 text-slate-700 scroll-smooth">
       <style
         dangerouslySetInnerHTML={{
           __html: `
@@ -745,259 +817,288 @@ export default function HowMuchRentCanIAfford() {
 
       <section
         id="converter"
-        className="mx-auto max-w-6xl px-6 pb-6 mt-2 sm:mt-6"
+        className="mx-auto max-w-6xl px-4 sm:px-6 pb-6 pt-3 sm:pt-6"
       >
-        <div className="rounded-2xl pb-6 bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8">
-          <div className="pt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <h1 className="text-center mb-1 sm:mb-0 sm:text-left text-2xl sm:text-3xl capitalize font-bold text-sky-800 tracking-tight">
-              Income & Rent Affordability Calculator
-            </h1>
+        <div className="rounded-2xl border border-slate-200 bg-white/95 px-4 py-5 shadow-sm sm:px-8 sm:py-7">
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div className="min-w-0">
+                <div className="mb-2 inline-flex rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-800">
+                  Rent affordability calculator
+                </div>
 
-            <div
-              id="export-controls"
-              className="hidden sm:flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
-            >
-              <div className="flex flex-wrap gap-2">
+                <h1 className="text-2xl font-bold tracking-tight text-sky-900 sm:text-3xl">
+                  How Much Rent Can I Afford?
+                </h1>
+
+                <p className="mt-2 max-w-4xl text-base text-slate-600">
+                  Estimate rent targets from your income. Compare monthly,
+                  weekly, and 4-week rent amounts.
+                </p>
+              </div>
+
+              <div
+                id="export-controls"
+                className="rc-no-print flex flex-wrap gap-2 sm:justify-end"
+              >
                 <button
                   type="button"
-                  onClick={() => {
-                    if (typeof window === "undefined") return;
-                    window.print();
-                  }}
-                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fbff]"
+                  onClick={handlePrint}
+                  className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 shadow-sm transition hover:border-sky-300 hover:bg-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
                 >
                   Print / Save PDF
                 </button>
+
+                <button
+                  type="button"
+                  onClick={handleCsvExport}
+                  disabled={!canShowResults}
+                  className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 shadow-sm transition hover:border-sky-300 hover:bg-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-slate-200 disabled:hover:bg-white"
+                >
+                  Export CSV
+                </button>
               </div>
             </div>
-          </div>
 
-          <p className="hidden md:flex w-full py-2 text-base text-slate-600">
-            Estimate how much rent you can afford based on your income using
-            common affordability guidelines. Clear calculations, no sign-up
-            required.
-          </p>
+            <div className="grid gap-5 md:grid-cols-12">
+              <div className="md:col-span-5">
+                <label className="mb-2 block text-sm font-semibold text-slate-700">
+                  Income amount
+                </label>
 
-          <div className="grid gap-6 md:grid-cols-12">
-            <div className="md:col-span-5">
-              <label className="block text-sm font-semibold text-slate-800 mb-2">
-                Income amount
-              </label>
+                <input
+                  inputMode="decimal"
+                  value={incomePreviewValue}
+                  onFocus={() => setIncomeFocused(true)}
+                  onBlur={() => setIncomeFocused(false)}
+                  onChange={(e) => {
+                    const el = e.currentTarget;
+                    const next = el.value;
 
-              <input
-                inputMode="decimal"
-                value={incomePreviewValue}
-                onFocus={() => setIncomeFocused(true)}
-                onBlur={() => setIncomeFocused(false)}
-                onChange={(e) => {
-                  const el = e.currentTarget;
-                  const next = el.value;
+                    if (next.includes(",")) {
+                      const start = el.selectionStart ?? next.length;
+                      const before = next.slice(0, start);
+                      const cleaned = sanitizeRawAmountForState(next);
+                      const newPos = sanitizeRawAmountForState(before).length;
 
-                  if (next.includes(",")) {
-                    const start = el.selectionStart ?? next.length;
-                    const before = next.slice(0, start);
-                    const cleaned = sanitizeRawAmountForState(next);
-                    const newPos = sanitizeRawAmountForState(before).length;
+                      setIncome(cleaned);
 
-                    setIncome(cleaned);
+                      requestAnimationFrame(() => {
+                        try {
+                          el.setSelectionRange(newPos, newPos);
+                        } catch {
+                          // ignore
+                        }
+                      });
 
-                    requestAnimationFrame(() => {
-                      try {
-                        el.setSelectionRange(newPos, newPos);
-                      } catch {
-                        // ignore
-                      }
-                    });
+                      return;
+                    }
 
-                    return;
+                    setIncome(next);
+                  }}
+                  className="w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-base text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                  placeholder="e.g. 6000 or 6000.00"
+                  aria-invalid={!parsedIncome.ok}
+                  aria-describedby="rc-income-help rc-income-error"
+                />
+
+                <p id="rc-income-help" className="mt-2 text-xs text-slate-600">
+                  Enter your income for the selected period. Currency symbols,
+                  commas, and decimals are accepted.
+                </p>
+
+                {!parsedIncome.ok ? (
+                  <p
+                    id="rc-income-error"
+                    className="mt-2 text-sm font-semibold text-rose-700"
+                    role="alert"
+                    aria-live="assertive"
+                  >
+                    {parsedIncome.error}
+                  </p>
+                ) : parsedIncome.warnings.length ? (
+                  <div
+                    className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900"
+                    role="status"
+                    aria-live="polite"
+                  >
+                    <div className="font-semibold">Input interpretation note</div>
+                    <ul className="mt-1 list-disc space-y-1 pl-5">
+                      {parsedIncome.warnings.map((w, i) => (
+                        <li key={i}>{w}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+              </div>
+
+              <div className="md:col-span-4">
+                <label className="mb-2 block text-sm font-semibold text-slate-700">
+                  Income period
+                </label>
+
+                <select
+                  value={period}
+                  onChange={(e) =>
+                    setPeriod(
+                      isPeriod(e.target.value)
+                        ? (e.target.value as Period)
+                        : "monthly",
+                    )
                   }
-
-                  setIncome(next);
-                }}
-                className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2.5 text-base text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus:border-sky-500"
-                placeholder="e.g. 6000 or 6000.00"
-                aria-invalid={!parsedIncome.ok}
-                aria-describedby="rc-income-help rc-income-error"
-              />
-
-              {!parsedIncome.ok ? (
-                <p
-                  id="rc-income-error"
-                  className="mt-2 text-sm font-semibold text-rose-700"
-                  role="alert"
-                  aria-live="assertive"
+                  className="w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-slate-900 outline-none transition hover:border-sky-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                  aria-label="Income period"
                 >
-                  {parsedIncome.error}
-                </p>
-              ) : parsedIncome.warnings.length ? (
-                <div
-                  className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900"
-                  role="status"
-                  aria-live="polite"
+                  {(Object.entries(PERIOD_LABEL) as Array<[Period, string]>).map(
+                    ([k, v]) => (
+                      <option key={k} value={k}>
+                        {v}
+                      </option>
+                    ),
+                  )}
+                </select>
+              </div>
+
+              <div className="md:col-span-3">
+                <label className="mb-2 block text-sm font-semibold text-slate-700">
+                  Currency
+                </label>
+
+                <select
+                  value={currency}
+                  onChange={(e) =>
+                    setCurrency(
+                      isCurrency(e.target.value)
+                        ? (e.target.value as Currency)
+                        : "USD",
+                    )
+                  }
+                  className="w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-slate-900 outline-none transition hover:border-sky-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                  aria-label="Currency"
                 >
-                  <div className="font-semibold">Input interpretation note</div>
-                  <ul className="mt-1 list-disc pl-5 space-y-1">
-                    {parsedIncome.warnings.map((w, i) => (
-                      <li key={i}>{w}</li>
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
-            </div>
-
-            <div className="md:col-span-4">
-              <label className="block text-sm font-semibold text-slate-800 mb-2">
-                Income period
-              </label>
-
-              <select
-                value={period}
-                onChange={(e) =>
-                  setPeriod(
-                    isPeriod(e.target.value)
-                      ? (e.target.value as Period)
-                      : "monthly",
-                  )
-                }
-                className="w-full rounded-xl border border-slate-300 px-4 py-2.5 bg-white text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus:border-sky-500"
-                aria-label="Income period"
-              >
-                {(Object.entries(PERIOD_LABEL) as Array<[Period, string]>).map(
-                  ([k, v]) => (
-                    <option key={k} value={k}>
-                      {v}
+                  {SUPPORTED_CURRENCIES.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
                     </option>
-                  ),
-                )}
-              </select>
-            </div>
-
-            <div className="md:col-span-3">
-              <label className="block text-sm font-semibold text-slate-800 mb-2">
-                Currency and display
-              </label>
-
-              <select
-                value={currency}
-                onChange={(e) =>
-                  setCurrency(
-                    isCurrency(e.target.value)
-                      ? (e.target.value as Currency)
-                      : "USD",
-                  )
-                }
-                className="w-full rounded-xl border border-slate-300 px-4 py-2.5 bg-white text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus:border-sky-500"
-                aria-label="Currency"
-              >
-                {SUPPORTED_CURRENCIES.map((c) => (
-                  <option key={c} value={c}>
-                    {c}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:x-6 rc-print-block border-l-4 border-l-sky-200">
-            <div className="flex items-center gap-2">
-              <div
-                className="h-2 w-2 rounded-full bg-sky-600"
-                aria-hidden="true"
-              />
-              <div className="text-sm font-semibold text-slate-800">
-                Affordability results
-              </div>
-            </div>
-            <div className="mt-1 text-4xl sm:text-6xl font-extrabold text-emerald-700 tabular-nums whitespace-nowrap">
-              {canShowResults ? fmt(annualIncomeScaled as bigint) : "-"}
-            </div>
-            {!canShowResults ? (
-              <div className="mt-3 rounded-xl border border-slate-200 bg-white px-4 py-4 text-slate-800">
-                <div className="font-semibold">No results to show</div>
-                <p className="mt-1 text-sm text-slate-700 leading-relaxed">
-                  Enter a valid income amount to see affordability estimates.
-                </p>
-              </div>
-            ) : (
-              <>
-                <div className="mt-3 grid gap-4 sm:grid-cols-3 rc-print-block">
-                  {affordability!.map((row) => (
-                    <div
-                      key={row.ratio}
-                      className="rounded-xl border border-slate-200 p-4 bg-white shadow-sm"
-                    >
-                      <div className="text-sm text-slate-600">
-                        <strong className="text-slate-900">
-                          {Math.round(row.ratio * 100)}%
-                        </strong>{" "}
-                        of income{" "}
-                        <span className="text-slate-500">({row.label})</span>
-                      </div>
-
-                      <div className="mt-2 text-xl font-extrabold text-slate-900 tabular-nums whitespace-nowrap">
-                        {fmt(row.monthly)} / month
-                      </div>
-
-                      <div className="mt-2 text-sm text-slate-800 tabular-nums whitespace-nowrap">
-                        {fmt(row.weekly)} / week
-                      </div>
-
-                      <div className="text-sm text-slate-800 tabular-nums whitespace-nowrap">
-                        {fmt(row.every4w)} / 4 weeks
-                      </div>
-
-                      <div className="mt-3 text-xs text-slate-600 tabular-nums whitespace-nowrap">
-                        Annual rent equivalent: {fmt(row.annual)}
-                      </div>
-
-                      <div className="mt-2 text-xs text-slate-600">
-                        Rent share: {formatPercent(row.ratio, 0)} of annualized
-                        income
-                      </div>
-                    </div>
                   ))}
-                </div>
+                </select>
+              </div>
+            </div>
 
-                <div className="mt-4 sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-2 shadow-sm">
-                  <p className="text-sm text-slate-600 leading-relaxed">
-                    These are income-share targets, not guarantees. Real
-                    affordability depends on utilities, debt, savings,
-                    insurance, location, and lease terms.
+            <div
+              className="rounded-2xl border border-slate-200 bg-sky-50/60 p-5 shadow-sm sm:px-6 rc-print-block"
+              aria-live="polite"
+              role="region"
+              aria-label="Rent affordability results"
+            >
+              <div className="h-1.5 rounded-full bg-gradient-to-r from-sky-500 to-emerald-400" />
+
+              <div className="mt-4 flex items-center gap-2">
+                <div
+                  className="h-2 w-2 rounded-full bg-sky-600"
+                  aria-hidden="true"
+                />
+                <div className="text-sm font-semibold text-slate-900">
+                  Rent targets
+                </div>
+              </div>
+
+              {!canShowResults ? (
+                <div className="mt-3 rounded-xl border border-slate-200 bg-white/95 px-4 py-4 text-slate-700 shadow-sm">
+                  <div className="font-semibold text-slate-900">
+                    No results to show yet
+                  </div>
+                  <p className="mt-1 text-sm leading-relaxed text-slate-600">
+                    Enter a valid income amount to see rent affordability
+                    estimates.
                   </p>
                 </div>
-              </>
-            )}
-          </div>
-          <Assumptions />
-        </div>
+              ) : (
+                <>
+                  <div className="mt-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-4">
+                    <div className="text-xs font-medium text-emerald-700">
+                      Annualized income
+                    </div>
+                    <div className="mt-1 whitespace-nowrap text-3xl font-extrabold tabular-nums text-emerald-800 sm:text-5xl">
+                      {fmt(annualIncomeScaled as bigint)}
+                    </div>
+                    <p className="mt-2 text-sm text-emerald-700">
+                      Based on the income amount and period selected above.
+                    </p>
+                  </div>
 
-        <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4">
-          <div className="rc-no-print md:hidden flex flex-col sm:flex-row gap-2 mb-4">
-            <button
-              type="button"
-              onClick={handlePrint}
-              className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-            >
-              Print / Save as PDF
-            </button>
-          </div>
+                  <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                    {affordability!.map((row) => (
+                      <div
+                        key={row.ratio}
+                        className="rounded-xl border border-slate-200 bg-white/95 px-4 py-4 shadow-sm"
+                      >
+                        <div className="text-sm text-slate-600">
+                          <strong className="text-slate-900">
+                            {Math.round(row.ratio * 100)}%
+                          </strong>{" "}
+                          of income{" "}
+                          <span className="text-slate-500">({row.label})</span>
+                        </div>
 
-          <Rounding
-            roundDisplay={roundDisplay}
-            setRoundDisplay={setRoundDisplay}
-            displayDecimals={displayDecimals}
-            setDisplayDecimals={setDisplayDecimals as any}
-          />
+                        <div className="mt-2 whitespace-nowrap text-xl font-extrabold tabular-nums text-slate-900">
+                          {fmt(row.monthly)} / month
+                        </div>
+
+                        <div className="mt-2 whitespace-nowrap text-sm tabular-nums text-slate-800">
+                          {fmt(row.weekly)} / week
+                        </div>
+
+                        <div className="whitespace-nowrap text-sm tabular-nums text-slate-800">
+                          {fmt(row.every4w)} / 4 weeks
+                        </div>
+
+                        <div className="mt-3 whitespace-nowrap text-xs tabular-nums text-slate-600">
+                          Annual rent: {fmt(row.annual)}
+                        </div>
+
+                        <div className="mt-2 text-xs text-slate-600">
+                          Rent share: {formatPercent(row.ratio, 0)}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 shadow-sm">
+                    <p className="text-sm leading-relaxed text-slate-700">
+                      These are income-share estimates. Actual affordability
+                      depends on your full budget.
+                    </p>
+                  </div>
+                </>
+              )}
+            </div>
+
+            <Assumptions />
+
+            <div className="rounded-xl border border-slate-200 bg-white/90 p-4 shadow-sm rc-no-print">
+              <div className="mb-3 text-sm font-semibold text-slate-900">
+                Display rounding
+              </div>
+
+              <Rounding
+                roundDisplay={roundDisplay}
+                setRoundDisplay={setRoundDisplay}
+                displayDecimals={displayDecimals}
+                setDisplayDecimals={setDisplayDecimals as any}
+              />
+            </div>
+          </div>
         </div>
       </section>
 
       <HowItWorks />
 
       <section className="mt-8 mb-4 hidden sm:block">
-        <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-600">
+        <nav className="mx-auto max-w-6xl px-6 text-sm text-slate-600">
           <a
             href={safeHref("/")}
-            className="hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 rounded"
+            className="cursor-pointer rounded text-sky-800 transition hover:text-sky-900 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
           >
             Home
           </a>{" "}
@@ -1007,22 +1108,27 @@ export default function HowMuchRentCanIAfford() {
 
       <ToolFit />
 
-      <section id="faq" className="max-w-5xl mx-auto pb-16 px-6">
-        <h2 className="text-3xl font-bold text-center mb-3 text-sky-800 tracking-tight">
+      <section id="faq" className="mx-auto max-w-5xl px-6 pb-16">
+        <h2 className="mb-3 text-center text-3xl font-bold tracking-tight text-sky-800">
           Frequently Asked Questions
         </h2>
 
-        <div className="divide-y divide-slate-200">
+        <p className="mx-auto mb-6 max-w-3xl text-center text-slate-600">
+          These answers explain how rent targets are estimated from income and
+          why actual affordability can differ.
+        </p>
+
+        <div className="divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white/90 px-4 shadow-sm">
           {faqData.map((f, i) => (
             <details key={i} className="group py-4">
-              <summary className="cursor-pointer list-none font-semibold text-lg text-sky-800 flex items-center justify-between hover:text-sky-900">
+              <summary className="flex cursor-pointer list-none items-center justify-between rounded text-lg font-semibold text-sky-800 transition hover:text-sky-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400">
                 <span>{f.q}</span>
                 <span className="ml-4 text-slate-400 transition-transform group-open:rotate-180">
                   ▾
                 </span>
               </summary>
 
-              <div className="mt-2 text-slate-700 leading-relaxed max-w-prose">
+              <div className="mt-2 max-w-prose leading-relaxed text-slate-700">
                 {f.a}
               </div>
             </details>
