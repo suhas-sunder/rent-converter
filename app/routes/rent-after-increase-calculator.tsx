@@ -11,9 +11,9 @@ function safeToFixed(n: number, digits: number): string {
 }
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Free Rent Increase Calculator";
+  const title = "Rent After Increase Calculator | RentConverter.com";
   const description =
-    "Calculate your new rent after a percent or fixed increase. See the rent increase formula, instant result, monthly impact, annual total, and export options.";
+    "Calculate new rent after a percentage or fixed increase. See the result by billing period, annual impact, and rent breakdowns.";
 
   const url = "https://www.rentconverter.com/rent-after-increase-calculator";
   const image = "https://www.rentconverter.com/og-image.jpg";
@@ -24,7 +24,7 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "keywords",
       content:
-        "rent after increase, rent increase calculator, new rent after increase, percent rent increase calculator, rent raise calculator, rent increase amount calculator",
+        "rent after increase, rent increase calculator, new rent after increase, percent rent increase calculator, fixed rent increase calculator, rent raise calculator, rent increase amount calculator",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
@@ -65,6 +65,26 @@ const PERIOD_LABEL: Record<Period, string> = {
   every_4_weeks: "Every 4 weeks (28 days)",
   monthly: "Monthly",
   annual: "Annual",
+};
+
+const PERIOD_RESULT_LABEL: Record<Period, string> = {
+  hourly: "Hourly rent after increase",
+  daily: "Daily rent after increase",
+  weekly: "Weekly rent after increase",
+  biweekly: "Every 2 weeks rent after increase",
+  every_4_weeks: "Every 4 weeks rent after increase",
+  monthly: "Monthly rent after increase",
+  annual: "Annual rent after increase",
+};
+
+const PERIOD_CARD_LABEL: Record<Period, string> = {
+  hourly: "Hourly rent",
+  daily: "Daily rent",
+  weekly: "Weekly rent",
+  biweekly: "Every 2 weeks rent",
+  every_4_weeks: "Every 4 weeks rent",
+  monthly: "Monthly rent",
+  annual: "Annual rent",
 };
 
 // Only include routes that exist in your app.
@@ -781,18 +801,13 @@ export default function RentAfterIncrease() {
 
     const currentScaled = currentParsed.scaled as bigint;
 
-    // Annualize current rent from selected billing period
+    // Annualize current rent from the selected billing period.
     const annualCurrent = convertScaled(currentScaled, period, "annual");
 
-    // Annualize increase
+    // Annualize increase from the same selected billing period for fixed-amount mode.
     let annualIncrease = 0n;
     if (mode === "percent") {
-      // pctScaled is percent in SCALE units: "5" => 5*SCALE
       const pctScaled = pctParsed.scaled as bigint;
-
-      // annualIncrease = annualCurrent * (pct / 100)
-      // pctScaled represents pct * SCALE, so:
-      // annualCurrent * pctScaled / (100 * SCALE)
       annualIncrease = mulDivInt(annualCurrent, pctScaled, 100n * SCALE);
     } else {
       const incScaled = amtParsed.scaled as bigint;
@@ -801,7 +816,6 @@ export default function RentAfterIncrease() {
 
     const annualNew = annualCurrent + annualIncrease;
 
-    // Effective percent (safe bigint math, 2 decimals)
     const pctTimes100 =
       annualCurrent > 0n
         ? mulDivInt(annualIncrease, 10_000n, annualCurrent)
@@ -825,9 +839,12 @@ export default function RentAfterIncrease() {
       return { p, oldVal, newVal, delta };
     });
 
-    const newPerSelected = convertScaled(annualNew, "annual", period);
-    const oldPerSelected = convertScaled(annualCurrent, "annual", period);
-    const deltaPerSelected = newPerSelected - oldPerSelected;
+    const selectedRow = breakdown.find((row) => row.p === period);
+    const otherBreakdown = breakdown.filter((row) => row.p !== period);
+
+    const newPerSelected = selectedRow?.newVal ?? annualNew;
+    const oldPerSelected = selectedRow?.oldVal ?? annualCurrent;
+    const deltaPerSelected = selectedRow?.delta ?? annualIncrease;
 
     const oldMonthlyAvg = convertScaled(annualCurrent, "annual", "monthly");
     const old4w = convertScaled(annualCurrent, "annual", "every_4_weeks");
@@ -842,6 +859,7 @@ export default function RentAfterIncrease() {
       annualIncrease,
       effectivePctNum,
       breakdown,
+      otherBreakdown,
       newPerSelected,
       deltaPerSelected,
       oldMonthlyAvg,
@@ -868,32 +886,32 @@ export default function RentAfterIncrease() {
 
   const faqData = [
     {
-      q: "What does this calculator output?",
-      a: "It estimates your new rent after an increase and shows the annual impact. It also displays equivalents across common pay cycles so changes are comparable even when listings use different periods.",
-    },
-    {
-      q: "How do I enter the increase?",
-      a: "Choose percent if the increase is a rate (for example, 5%). Choose amount if the increase is a fixed add-on per billing period (for example, $100 per month).",
+      q: "How do you calculate rent after an increase?",
+      a: "Enter the current rent, billing period, and increase. The calculator applies the increase to that billing period, then shows the new rent and converts it into other common periods.",
     },
     {
       q: "What does the billing period apply to?",
-      a: "The billing period applies to the current rent and to the increase amount in fixed-amount mode. The calculator converts values to annual totals to keep comparisons consistent.",
+      a: "The billing period applies to the current rent and, in fixed amount mode, to the increase amount. It also controls the large result shown at the top.",
+    },
+    {
+      q: "What formula does the percent rent increase calculation use?",
+      a: "For percent mode, the formula is new rent = current rent × (1 + increase percent ÷ 100). The calculator also converts the result into other periods.",
+    },
+    {
+      q: "What formula does the fixed amount increase calculation use?",
+      a: "For fixed amount mode, the formula is new rent = current rent + increase amount for the selected billing period.",
     },
     {
       q: "Why are monthly and every 4 weeks shown separately?",
-      a: "Every 4 weeks is always 28 days. A calendar month is longer on average (365 ÷ 12 days). Showing both avoids treating them as interchangeable when comparing costs.",
+      a: "Every 4 weeks is 28 days. An average month is about 30.42 days. Showing both avoids treating two different billing periods as the same.",
     },
     {
-      q: "Does this include utilities, fees, or taxes?",
-      a: "No. It compares rent amounts only. If a listing bundles other costs, treat the result as a baseline comparison rather than a full housing-cost total.",
+      q: "Does this include utilities, fees, taxes, or rent-control rules?",
+      a: "No. It compares rent amounts only. Legal limits, utilities, fees, taxes, deposits, and lease-specific rules are not included.",
     },
     {
       q: "Will this match the first payment after an increase takes effect?",
-      a: "Not necessarily. This shows a full-period estimate. Proration, mid-cycle effective dates, and lease-specific rules can change the first payment.",
-    },
-    {
-      q: "What time assumptions does this page use?",
-      a: "Assumptions: year = 365 days, week = 7 days, every 4 weeks = 28 days, and month = 365 ÷ 12 days (average). Actual billing schedules vary by agreement.",
+      a: "Not always. A first payment can be affected by proration, mid-cycle effective dates, or lease terms. This calculator shows full-period estimates.",
     },
   ];
 
@@ -938,7 +956,7 @@ export default function RentAfterIncrease() {
     "@type": "WebPage",
     name: "Rent After Increase Calculator",
     description:
-      "Calculate your new rent after an increase (percent or fixed amount) using annual equivalence (365-day year). Includes annual impact and pay-cycle breakdowns.",
+      "Calculate new rent after a percentage or fixed increase. Includes result-by-period conversions, annual impact, and rent breakdowns.",
     url: "https://www.rentconverter.com/rent-after-increase-calculator",
   };
 
@@ -956,7 +974,7 @@ export default function RentAfterIncrease() {
     : "rc-inc-help";
 
   return (
-    <main className="bg-white text-slate-700 scroll-smooth">
+    <main className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-slate-50 text-slate-700 scroll-smooth">
       <style
         dangerouslySetInnerHTML={{
           __html: `
@@ -972,452 +990,495 @@ export default function RentAfterIncrease() {
 
       <section
         id="converter"
-        className="mx-auto max-w-6xl px-6 pb-6 mt-2 sm:mt-6"
+        className="mx-auto max-w-6xl px-6 pb-6 pt-4 sm:pt-6"
       >
-        <div className="rounded-2xl pb-6 bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8">
-          <div className="pt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <h1 className="text-center mb-1 sm:mb-0 sm:text-left text-2xl sm:text-3xl capitalize font-bold text-sky-800 tracking-tight">
-              Rent Increase Calculator
-            </h1>
+        <div className="rounded-2xl border border-slate-200 bg-white/95 p-5 shadow-sm sm:p-8">
+          <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div className="min-w-0">
+                <div className="inline-flex items-center rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-700">
+                  Rent after increase
+                </div>
 
-            <div
-              id="export-controls"
-              className="hidden sm:flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
-            >
-              <div className="flex flex-wrap gap-2">
+                <h1 className="mt-3 text-2xl font-bold tracking-tight text-sky-900 sm:text-3xl">
+                  Rent After Increase Calculator
+                </h1>
+
+                <p className="mt-2 max-w-6xl text-base leading-relaxed text-slate-600">
+                  Calculate new rent after a percentage or fixed increase. The
+                  selected billing period controls the main result.
+                </p>
+              </div>
+
+              <div
+                id="export-controls"
+                className="rc-no-print flex shrink-0 flex-wrap gap-2 sm:justify-end"
+              >
                 <button
                   type="button"
                   onClick={() => {
                     if (typeof window === "undefined") return;
                     window.print();
                   }}
-                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fbff]"
+                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                 >
                   Print / Save PDF
                 </button>
               </div>
             </div>
-          </div>
 
-          <p className="hidden md:flex w-full py-2 text-base text-slate-600">
-            Calculate your new rent after a percentage or dollar increase. See
-            the updated amount instantly with a clear breakdown.
-          </p>
+            <div className="mt-2 grid gap-x-5 gap-y-4 md:grid-cols-12">
+              <div className="md:col-span-6">
+                <label className="mb-2 block text-sm font-semibold text-slate-700">
+                  Current rent
+                </label>
 
-          <div className="grid gap-x-5 gap-y-4 md:grid-cols-12">
-            <div className="md:col-span-6">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
-                Current rent
-              </label>
-              <input
-                inputMode="decimal"
-                value={currentDisplayValue}
-                onFocus={() => setIsCurrentFocused(true)}
-                onBlur={() => setIsCurrentFocused(false)}
-                onChange={(e) =>
-                  setCurrentRent(e.target.value.replace(/,/g, ""))
-                }
-                placeholder="e.g. 2000 or 2000.00"
-                className=" w-full rounded-xl border border-slate-300 px-4 py-2 text-lg cursor-pointer outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
-                aria-invalid={currentInvalid}
-                aria-describedby={currentDescribedBy}
+                <div className="flex gap-2">
+                  <input
+                    inputMode="decimal"
+                    value={currentDisplayValue}
+                    onFocus={() => setIsCurrentFocused(true)}
+                    onBlur={() => setIsCurrentFocused(false)}
+                    onChange={(e) =>
+                      setCurrentRent(e.target.value.replace(/,/g, ""))
+                    }
+                    placeholder="e.g. 2000 or 2000.00"
+                    className="w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg text-slate-900 outline-none transition placeholder:text-slate-400 hover:border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                    aria-invalid={currentInvalid}
+                    aria-describedby={currentDescribedBy}
+                  />
+
+                  <select
+                    value={currency}
+                    onChange={(e) =>
+                      setCurrency(
+                        isCurrency(e.target.value) ? e.target.value : "USD",
+                      )
+                    }
+                    className="w-28 shrink-0 cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition hover:border-sky-300 hover:bg-sky-50 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                    aria-label="Currency"
+                  >
+                    {SUPPORTED_CURRENCIES.map((c) => (
+                      <option key={c} value={c}>
+                        {c}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <p id="rc-current-help" className="mt-2 text-sm text-slate-600">
+                  Enter the rent amount before the increase.
+                </p>
+
+                {currentDisplayError ? (
+                  <p
+                    id="rc-current-error"
+                    className="mt-2 text-sm font-semibold text-rose-700"
+                    role="alert"
+                  >
+                    That rent value is incomplete or ambiguous (trailing decimal
+                    separator).
+                  </p>
+                ) : !currentParsed.ok ? (
+                  <p
+                    id="rc-current-error"
+                    className="mt-2 text-sm font-semibold text-rose-700"
+                    role="alert"
+                  >
+                    {currentParsed.error}
+                  </p>
+                ) : currentParsed.warnings.length ? (
+                  <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                    <div className="font-semibold">
+                      Input interpretation note
+                    </div>
+                    <ul className="mt-1 list-disc space-y-1 pl-5">
+                      {currentParsed.warnings.map((w, i) => (
+                        <li key={i}>{w}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+              </div>
+
+              <div className="md:col-span-6">
+                <label className="mb-2 block text-sm font-semibold text-slate-700">
+                  Billing period
+                </label>
+                <select
+                  value={period}
+                  onChange={(e) =>
+                    setPeriod(
+                      isPeriod(e.target.value) ? e.target.value : "monthly",
+                    )
+                  }
+                  className="w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-lg font-semibold text-slate-900 outline-none transition hover:border-sky-300 hover:bg-sky-50 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                  aria-label="Billing period"
+                >
+                  {Object.entries(PERIOD_LABEL).map(([k, v]) => (
+                    <option key={k} value={k}>
+                      {v}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="md:col-span-6">
+                <label className="mb-2 block text-sm font-semibold text-slate-700">
+                  Increase type
+                </label>
+                <select
+                  value={mode}
+                  onChange={(e) =>
+                    setMode(isMode(e.target.value) ? e.target.value : "percent")
+                  }
+                  className="w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-lg font-semibold text-slate-900 outline-none transition hover:border-sky-300 hover:bg-sky-50 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                  aria-label="Increase type"
+                >
+                  <option value="percent">Percent increase</option>
+                  <option value="amount">Fixed amount increase</option>
+                </select>
+              </div>
+
+              <div className="md:col-span-6">
+                <label className="mb-2 block text-sm font-semibold text-slate-700">
+                  {mode === "percent" ? "Increase percent" : "Increase amount"}
+                </label>
+
+                {mode === "percent" ? (
+                  <>
+                    <input
+                      inputMode="decimal"
+                      value={increasePercent}
+                      onChange={(e) => setIncreasePercent(e.target.value)}
+                      placeholder="e.g. 5 or 2.5"
+                      className="w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg text-slate-900 outline-none transition placeholder:text-slate-400 hover:border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                      aria-invalid={!pctParsed.ok}
+                      aria-describedby={increaseDescribedBy}
+                    />
+                    <p id="rc-inc-help" className="mt-2 text-sm text-slate-600">
+                      Enter the increase as a percent, such as 5 or 2.5.
+                    </p>
+                    {!pctParsed.ok ? (
+                      <p
+                        id="rc-inc-error"
+                        className="mt-2 text-sm font-semibold text-rose-700"
+                        role="alert"
+                      >
+                        {pctParsed.error}
+                      </p>
+                    ) : pctParsed.warnings.length ? (
+                      <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                        <div className="font-semibold">
+                          Input interpretation note
+                        </div>
+                        <ul className="mt-1 list-disc space-y-1 pl-5">
+                          {pctParsed.warnings.map((w, i) => (
+                            <li key={i}>{w}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ) : null}
+                  </>
+                ) : (
+                  <>
+                    <input
+                      inputMode="decimal"
+                      value={increaseAmountDisplayValue}
+                      onFocus={() => setIsIncreaseAmtFocused(true)}
+                      onBlur={() => setIsIncreaseAmtFocused(false)}
+                      onChange={(e) =>
+                        setIncreaseAmount(e.target.value.replace(/,/g, ""))
+                      }
+                      placeholder="e.g. 100 or 100.00"
+                      className="w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg text-slate-900 outline-none transition placeholder:text-slate-400 hover:border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                      aria-invalid={!amtParsed.ok || amtDisplayError}
+                      aria-describedby={increaseDescribedBy}
+                    />
+                    <p id="rc-inc-help" className="mt-2 text-sm text-slate-600">
+                      Enter the increase as an amount per the selected billing
+                      period.
+                    </p>
+                    {amtDisplayError ? (
+                      <p
+                        id="rc-inc-error"
+                        className="mt-2 text-sm font-semibold text-rose-700"
+                        role="alert"
+                      >
+                        That increase amount is incomplete or ambiguous
+                        (trailing decimal separator).
+                      </p>
+                    ) : !amtParsed.ok ? (
+                      <p
+                        id="rc-inc-error"
+                        className="mt-2 text-sm font-semibold text-rose-700"
+                        role="alert"
+                      >
+                        {amtParsed.error}
+                      </p>
+                    ) : amtParsed.warnings.length ? (
+                      <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                        <div className="font-semibold">
+                          Input interpretation note
+                        </div>
+                        <ul className="mt-1 list-disc space-y-1 pl-5">
+                          {amtParsed.warnings.map((w, i) => (
+                            <li key={i}>{w}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ) : null}
+                  </>
+                )}
+              </div>
+            </div>
+
+            <div className="mt-3 overflow-hidden rounded-2xl border border-slate-200 bg-sky-50/60 shadow-sm rc-print-block">
+              <div
+                className="h-1 bg-gradient-to-r from-sky-500 to-emerald-400"
+                aria-hidden="true"
               />
 
-              {currentDisplayError ? (
-                <p
-                  id="rc-current-error"
-                  className="mt-2 text-sm font-semibold text-rose-700"
-                  role="alert"
-                >
-                  That rent value is incomplete or ambiguous (trailing decimal
-                  separator).
-                </p>
-              ) : !currentParsed.ok ? (
-                <p
-                  id="rc-current-error"
-                  className="mt-2 text-sm font-semibold text-rose-700"
-                  role="alert"
-                >
-                  {currentParsed.error}
-                </p>
-              ) : currentParsed.warnings.length ? (
-                <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
-                  <div className="font-semibold">Input interpretation note</div>
-                  <ul className="mt-1 list-disc pl-5 space-y-1">
-                    {currentParsed.warnings.map((w, i) => (
-                      <li key={i}>{w}</li>
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
-            </div>
-
-            <div className="md:col-span-6">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
-                Billing period
-              </label>
-              <select
-                value={period}
-                onChange={(e) =>
-                  setPeriod(
-                    isPeriod(e.target.value) ? e.target.value : "monthly",
-                  )
-                }
-                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-lg cursor-pointer font-semibold outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
-                aria-label="Billing period"
-              >
-                {Object.entries(PERIOD_LABEL).map(([k, v]) => (
-                  <option key={k} value={k}>
-                    {v}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="md:col-span-6">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
-                Increase type (% applies to annualized rent)
-              </label>
-              <select
-                value={mode}
-                onChange={(e) =>
-                  setMode(isMode(e.target.value) ? e.target.value : "percent")
-                }
-                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-lg cursor-pointer font-semibold outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
-                aria-label="Increase type"
-              >
-                <option value="percent">Percent increase</option>
-                <option value="amount">Fixed amount increase</option>
-              </select>
-            </div>
-
-            <div className="md:col-span-6">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
-                {mode === "percent" ? "Increase percent" : "Increase amount"}{" "}
-                (Enter a %: eg. 2.5)
-              </label>
-
-              {mode === "percent" ? (
-                <>
-                  <input
-                    inputMode="decimal"
-                    value={increasePercent}
-                    onChange={(e) => setIncreasePercent(e.target.value)}
-                    placeholder="e.g. 5 or 2.5"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg cursor-pointer outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
-                    aria-invalid={!pctParsed.ok}
-                    aria-describedby={increaseDescribedBy}
-                  />
-                  {!pctParsed.ok ? (
-                    <p
-                      id="rc-inc-error"
-                      className="mt-2 text-sm font-semibold text-rose-700"
-                      role="alert"
-                    >
-                      {pctParsed.error}
-                    </p>
-                  ) : pctParsed.warnings.length ? (
-                    <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
-                      <div className="font-semibold">
-                        Input interpretation note
-                      </div>
-                      <ul className="mt-1 list-disc pl-5 space-y-1">
-                        {pctParsed.warnings.map((w, i) => (
-                          <li key={i}>{w}</li>
-                        ))}
-                      </ul>
+              <div className="p-5 sm:p-6">
+                {!computed.ok ? (
+                  <div className="rounded-xl border border-slate-200 bg-white/95 p-4">
+                    <div className="font-semibold text-slate-900">
+                      No results to show
                     </div>
-                  ) : null}
-                </>
-              ) : (
-                <>
-                  <input
-                    inputMode="decimal"
-                    value={increaseAmountDisplayValue}
-                    onFocus={() => setIsIncreaseAmtFocused(true)}
-                    onBlur={() => setIsIncreaseAmtFocused(false)}
-                    onChange={(e) =>
-                      setIncreaseAmount(e.target.value.replace(/,/g, ""))
-                    }
-                    placeholder="e.g. 100 or 100.00"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-2 text-lg cursor-pointer outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
-                    aria-invalid={!amtParsed.ok || amtDisplayError}
-                    aria-describedby={increaseDescribedBy}
-                  />
-                  <p id="rc-inc-help" className="mt-2 text-xs text-slate-500">
-                    Enter the increase as an amount per the same billing period
-                    as the current rent. If invalid, results are not shown.
-                  </p>
-                  {amtDisplayError ? (
-                    <p
-                      id="rc-inc-error"
-                      className="mt-2 text-sm font-semibold text-rose-700"
-                      role="alert"
-                    >
-                      That increase amount is incomplete or ambiguous (trailing
-                      decimal separator).
+                    <p className="mt-1 text-sm text-slate-600">
+                      Fix the inputs below to see the updated rent and annual
+                      impact.
                     </p>
-                  ) : !amtParsed.ok ? (
-                    <p
-                      id="rc-inc-error"
-                      className="mt-2 text-sm font-semibold text-rose-700"
-                      role="alert"
-                    >
-                      {amtParsed.error}
-                    </p>
-                  ) : amtParsed.warnings.length ? (
-                    <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
-                      <div className="font-semibold">
-                        Input interpretation note
-                      </div>
-                      <ul className="mt-1 list-disc pl-5 space-y-1">
-                        {amtParsed.warnings.map((w, i) => (
-                          <li key={i}>{w}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  ) : null}
-                </>
-              )}
-            </div>
-
-            <div className="md:col-span-12">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
-                Currency
-              </label>
-              <select
-                value={currency}
-                onChange={(e) =>
-                  setCurrency(
-                    isCurrency(e.target.value) ? e.target.value : "USD",
-                  )
-                }
-                className="w-full rounded-xl border cursor-pointer border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
-                aria-label="Currency"
-              >
-                {SUPPORTED_CURRENCIES.map((c) => (
-                  <option key={c} value={c}>
-                    {c}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
-            {!computed.ok ? (
-              <div className="rounded-xl border border-slate-200 bg-white p-4">
-                <div className="font-semibold text-slate-800">
-                  No results to show
-                </div>
-                <p className="mt-1 text-sm text-slate-600">
-                  Fix the inputs below to see the updated rent and annual
-                  impact.
-                </p>
-                <ul className="mt-3 list-disc pl-5 space-y-1 text-sm text-rose-700">
-                  {computed.errors.map((e, i) => (
-                    <li key={i}>{e}</li>
-                  ))}
-                </ul>
-                {computed.warnings.length ? (
-                  <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
-                    <div className="font-semibold">Notes</div>
-                    <ul className="mt-1 list-disc pl-5 space-y-1">
-                      {computed.warnings.map((w, i) => (
-                        <li key={i}>{w}</li>
+                    <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-rose-700">
+                      {computed.errors.map((e, i) => (
+                        <li key={i}>{e}</li>
                       ))}
                     </ul>
+                    {computed.warnings.length ? (
+                      <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                        <div className="font-semibold">Notes</div>
+                        <ul className="mt-1 list-disc space-y-1 pl-5">
+                          {computed.warnings.map((w, i) => (
+                            <li key={i}>{w}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ) : null}
                   </div>
-                ) : null}
+                ) : (
+                  <>
+                    <div className="flex items-center gap-2">
+                      <div
+                        className="h-2 w-2 rounded-full bg-sky-600"
+                        aria-hidden="true"
+                      />
+                      <div className="text-sm font-semibold text-slate-900">
+                        {PERIOD_RESULT_LABEL[period]}
+                      </div>
+                    </div>
+
+                    <div className="mt-2 flex flex-col gap-2">
+                      <div className="tabular-nums text-3xl font-extrabold tracking-tight text-emerald-700 sm:text-5xl">
+                        {fmt(computed.newPerSelected)}
+                      </div>
+                      <p className="text-sm text-slate-600">
+                        Based on {PERIOD_LABEL[period].toLowerCase()} rent and
+                        the selected increase.
+                      </p>
+                    </div>
+
+                    <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                      {computed.otherBreakdown.map((row) => (
+                        <div
+                          key={row.p}
+                          className="rounded-xl border border-slate-200 bg-white/95 px-4 py-3 shadow-sm"
+                        >
+                          <div className="text-xs font-medium text-slate-600">
+                            {PERIOD_CARD_LABEL[row.p]}
+                          </div>
+                          <div className="mt-1 tabular-nums text-lg font-bold text-slate-900">
+                            {fmt(row.newVal)}
+                          </div>
+                        </div>
+                      ))}
+
+                      <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 shadow-sm sm:col-span-2 lg:col-span-3 rc-print-block">
+                        <div className="text-xs font-medium text-slate-600">
+                          Increase summary
+                        </div>
+                        <div className="mt-2 grid gap-3 sm:grid-cols-3">
+                          <div>
+                            <div className="text-xs text-slate-600">
+                              Estimated percent change
+                            </div>
+                            <div className="mt-1 tabular-nums text-sm font-bold text-slate-900">
+                              {safeToFixed(computed.effectivePctNum, 2)}%
+                            </div>
+                          </div>
+                          <div>
+                            <div className="text-xs text-slate-600">
+                              Change per selected period
+                            </div>
+                            <div className="mt-1 tabular-nums text-sm font-bold text-slate-900">
+                              {fmt(computed.deltaPerSelected)}
+                            </div>
+                          </div>
+                          <div>
+                            <div className="text-xs text-slate-600">
+                              Annual increase
+                            </div>
+                            <div className="mt-1 tabular-nums text-sm font-bold text-slate-900">
+                              {fmt(computed.annualIncrease)}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="rounded-xl border border-slate-200 bg-white/95 px-4 py-3 shadow-sm sm:col-span-2 lg:col-span-3 rc-print-block">
+                        <div className="text-xs font-medium text-slate-600">
+                          Annual totals
+                        </div>
+                        <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                          <div className="text-sm text-slate-700">
+                            Current annual rent:{" "}
+                            <strong className="tabular-nums text-slate-900">
+                              {fmt(computed.annualCurrent)}
+                            </strong>
+                          </div>
+                          <div className="text-sm text-slate-700">
+                            New annual rent:{" "}
+                            <strong className="tabular-nums text-slate-900">
+                              {fmt(computed.annualNew)}
+                            </strong>
+                          </div>
+                          <div className="text-sm text-slate-700">
+                            Difference:{" "}
+                            <strong className="tabular-nums text-slate-900">
+                              {fmt(computed.annualNew - computed.annualCurrent)}
+                            </strong>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-3 shadow-sm sm:col-span-2 lg:col-span-3 rc-print-block">
+                        <div className="text-xs font-medium text-slate-600">
+                          Monthly vs 4-week before and after
+                        </div>
+
+                        <div className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+                          <div className="rounded-lg border border-slate-200 bg-white/70 px-3 py-2">
+                            <div className="text-[11px] text-slate-600">
+                              Current · monthly
+                            </div>
+                            <div className="mt-0.5 whitespace-nowrap tabular-nums text-sm font-bold text-slate-900">
+                              {fmt(computed.oldMonthlyAvg)}
+                            </div>
+                          </div>
+
+                          <div className="rounded-lg border border-slate-200 bg-white/70 px-3 py-2">
+                            <div className="text-[11px] text-slate-600">
+                              Current · 4-week
+                            </div>
+                            <div className="mt-0.5 whitespace-nowrap tabular-nums text-sm font-bold text-slate-900">
+                              {fmt(computed.old4w)}
+                            </div>
+                          </div>
+
+                          <div className="rounded-lg border border-slate-200 bg-white/70 px-3 py-2">
+                            <div className="text-[11px] text-slate-600">
+                              New · monthly
+                            </div>
+                            <div className="mt-0.5 whitespace-nowrap tabular-nums text-sm font-bold text-slate-900">
+                              {fmt(computed.newMonthlyAvg)}
+                            </div>
+                          </div>
+
+                          <div className="rounded-lg border border-slate-200 bg-white/70 px-3 py-2">
+                            <div className="text-[11px] text-slate-600">
+                              New · 4-week
+                            </div>
+                            <div className="mt-0.5 whitespace-nowrap tabular-nums text-sm font-bold text-slate-900">
+                              {fmt(computed.new4w)}
+                            </div>
+                          </div>
+                        </div>
+
+                        <p className="mt-2 text-xs text-slate-600">
+                          4-week = 28 days. Average month ={" "}
+                          {safeToFixed(computed.avgMonthDays, 2)} days (365 ÷
+                          12).
+                        </p>
+                      </div>
+                    </div>
+
+                    {computed.warnings.length ? (
+                      <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                        <div className="font-semibold">Notes</div>
+                        <ul className="mt-1 list-disc space-y-1 pl-5">
+                          {computed.warnings.map((w, i) => (
+                            <li key={i}>{w}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ) : null}
+                  </>
+                )}
               </div>
-            ) : (
-              <>
-                <div className="flex items-center gap-2">
-                  <div
-                    className="h-2 w-2 rounded-full bg-sky-600"
-                    aria-hidden="true"
-                  />
-                  <div className="text-sm font-semibold text-slate-800">
-                    New rent after increase
-                  </div>
-                </div>
+            </div>
 
-                <div className="mt-2 flex flex-col gap-2">
-                  <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700 tabular-nums tracking-tight">
-                    {fmt(computed.newPerSelected)}
-                  </div>
-                </div>
+            {computed.ok ? (
+              <div className="mt-3 rounded-2xl border border-slate-200 bg-white/95 p-5 shadow-sm sm:p-6 rc-print-block">
+                <h3 className="mb-3 text-lg font-bold text-sky-800">
+                  Full breakdown across periods
+                </h3>
+                <p className="mb-4 text-sm leading-relaxed text-slate-600">
+                  This table converts the current rent and new rent into common
+                  billing periods.
+                </p>
 
-                <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2">
-                    <div className="text-xs text-slate-500">
-                      Estimated percent change
-                    </div>
-                    <div className="mt-1 text-lg font-bold text-slate-800 tabular-nums">
-                      {safeToFixed(computed.effectivePctNum, 2)}%
-                    </div>
-                  </div>
-
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2">
-                    <div className="text-xs text-slate-500">
-                      Change per selected period
-                    </div>
-                    <div className="mt-1 text-lg font-bold text-slate-800 tabular-nums">
-                      {fmt(computed.deltaPerSelected)}
-                    </div>
-                  </div>
-
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2">
-                    <div className="text-xs text-slate-500">
-                      Annual increase (annualized)
-                    </div>
-                    <div className="mt-1 text-lg font-bold text-slate-800 tabular-nums">
-                      {fmt(computed.annualIncrease)}
-                    </div>
-                  </div>
-
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-2 rc-print-block">
-                    <div className="text-xs text-slate-500">Annual totals</div>
-                    <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                      <div className="text-sm text-slate-700">
-                        Current annual rent:{" "}
-                        <strong className="text-slate-900 tabular-nums">
-                          {fmt(computed.annualCurrent)}
-                        </strong>
-                      </div>
-                      <div className="text-sm text-slate-700">
-                        New annual rent:{" "}
-                        <strong className="text-slate-900 tabular-nums">
-                          {fmt(computed.annualNew)}
-                        </strong>
-                      </div>
-                      <div className="text-sm text-slate-700">
-                        Difference:{" "}
-                        <strong className="text-slate-900 tabular-nums">
-                          {fmt(computed.annualNew - computed.annualCurrent)}
-                        </strong>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-3 py-2 rc-print-block">
-                    <div className="text-[11px] text-slate-500">
-                      Monthly vs 4-week (before/after)
-                    </div>
-
-                    <div className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-                      <div className="rounded-lg border border-slate-200 bg-white/50 px-3 py-2">
-                        <div className="text-[11px] text-slate-600">
-                          Current · monthly
-                        </div>
-                        <div className="mt-0.5 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
-                          {fmt(computed.oldMonthlyAvg)}
-                        </div>
-                      </div>
-
-                      <div className="rounded-lg border border-slate-200 bg-white/50 px-3 py-2">
-                        <div className="text-[11px] text-slate-600">
-                          Current · 4-week
-                        </div>
-                        <div className="mt-0.5 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
-                          {fmt(computed.old4w)}
-                        </div>
-                      </div>
-
-                      <div className="rounded-lg border border-slate-200 bg-white/50 px-3 py-2">
-                        <div className="text-[11px] text-slate-600">
-                          New · monthly
-                        </div>
-                        <div className="mt-0.5 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
-                          {fmt(computed.newMonthlyAvg)}
-                        </div>
-                      </div>
-
-                      <div className="rounded-lg border border-slate-200 bg-white/50 px-3 py-2">
-                        <div className="text-[11px] text-slate-600">
-                          New · 4-week
-                        </div>
-                        <div className="mt-0.5 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
-                          {fmt(computed.new4w)}
-                        </div>
-                      </div>
-                    </div>
-
-                    <p className="mt-1.5 text-[11px] text-slate-500">
-                      4-week = 28 days. Avg month ={" "}
-                      {safeToFixed(computed.avgMonthDays, 2)} days (365 ÷ 12).
-                    </p>
-                  </div>
-                </div>
-
-                {computed.warnings.length ? (
-                  <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
-                    <div className="font-semibold">Notes</div>
-                    <ul className="mt-1 list-disc pl-5 space-y-1">
-                      {computed.warnings.map((w, i) => (
-                        <li key={i}>{w}</li>
-                      ))}
-                    </ul>
-                  </div>
-                ) : null}
-              </>
-            )}
-          </div>
-
-          {computed.ok ? (
-            <div className="mt-3 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 rc-print-block">
-              <h3 className="text-lg font-bold text-slate-900 mb-3">
-                Full breakdown across periods (annual-equivalent)
-              </h3>
-              <p className="text-sm text-slate-600 mb-4 leading-relaxed">
-                This table annualizes the current rent and the new rent first,
-                then expresses both as hourly, daily, weekly, 4-week, monthly,
-                and annual equivalents. This helps compare the increase across
-                different pay cycles without mixing assumptions.
-              </p>
-
-              <div className="overflow-x-auto">
-                <table className="min-w-[820px] w-full text-sm">
-                  <thead>
-                    <tr className="text-left text-slate-500 border-b border-slate-200">
-                      <th className="py-2 pr-4">Period</th>
-                      <th className="py-2 pr-4">Current</th>
-                      <th className="py-2 pr-4">New</th>
-                      <th className="py-2 pr-4">Difference</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {computed.breakdown.map((row) => (
-                      <tr key={row.p} className="border-b border-slate-100">
-                        <td className="py-2 pr-4 font-semibold text-slate-800">
-                          {PERIOD_LABEL[row.p]}
-                        </td>
-                        <td className="py-2 pr-4 text-slate-800 tabular-nums">
-                          {fmt(row.oldVal)}
-                        </td>
-                        <td className="py-2 pr-4 text-slate-800 tabular-nums">
-                          {fmt(row.newVal)}
-                        </td>
-                        <td className="py-2 pr-4 text-slate-800 tabular-nums">
-                          {fmt(row.delta)}
-                        </td>
+                <div className="overflow-x-auto">
+                  <table className="min-w-[820px] w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-slate-200 text-left text-slate-600">
+                        <th className="py-2 pr-4 font-semibold">Period</th>
+                        <th className="py-2 pr-4 font-semibold">Current</th>
+                        <th className="py-2 pr-4 font-semibold">New</th>
+                        <th className="py-2 pr-4 font-semibold">Difference</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {computed.breakdown.map((row) => (
+                        <tr key={row.p} className="border-b border-slate-100">
+                          <td className="py-2 pr-4 font-semibold text-slate-900">
+                            {PERIOD_LABEL[row.p]}
+                          </td>
+                          <td className="py-2 pr-4 tabular-nums text-slate-700">
+                            {fmt(row.oldVal)}
+                          </td>
+                          <td className="py-2 pr-4 tabular-nums text-slate-700">
+                            {fmt(row.newVal)}
+                          </td>
+                          <td className="py-2 pr-4 tabular-nums text-slate-700">
+                            {fmt(row.delta)}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
-            </div>
-          ) : null}
+            ) : null}
 
-          <Assumptions />
+            <Assumptions />
+          </div>
         </div>
 
-        <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4">
-          <div className="rc-no-print md:hidden flex flex-col sm:flex-row gap-2 mb-4">
+        <div className="mt-4 rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm">
+          <div className="rc-no-print mb-4 flex flex-col gap-2 md:hidden sm:flex-row">
             <button
               type="button"
               onClick={handlePrint}
-              className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+              className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
             >
               Print / Save as PDF
             </button>
@@ -1435,12 +1496,12 @@ export default function RentAfterIncrease() {
 
       <section className="mt-8 mb-4 hidden sm:block">
         <nav
-          className="max-w-6xl mx-auto px-6 text-sm text-slate-500"
+          className="mx-auto max-w-6xl px-6 text-sm text-slate-600"
           aria-label="Breadcrumb"
         >
           <a
             href={safeHref("/")}
-            className="hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded"
+            className="cursor-pointer rounded text-sky-700 transition hover:text-sky-900 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
           >
             Home
           </a>{" "}
@@ -1450,26 +1511,28 @@ export default function RentAfterIncrease() {
 
       <ToolFit />
 
-      <section id="faq" className="max-w-5xl mx-auto pb-16 px-6">
-        <h2 className="text-3xl font-bold text-center mb-3 text-sky-800 tracking-tight">
-          Frequently Asked Questions
-        </h2>
+      <section id="faq" className="mx-auto max-w-5xl px-6 pb-16">
+        <div className="rounded-2xl border border-slate-200 bg-white/90 p-5 shadow-sm sm:p-8">
+          <h2 className="mb-3 text-center text-3xl font-bold tracking-tight text-sky-800">
+            Frequently Asked Questions
+          </h2>
 
-        <div className="divide-y divide-slate-200">
-          {faqData.map((f, i) => (
-            <details key={i} className="group py-4">
-              <summary className="cursor-pointer list-none font-semibold text-lg text-sky-800 flex items-center justify-between hover:text-sky-900">
-                <span>{f.q}</span>
-                <span className="ml-4 text-slate-400 transition-transform group-open:rotate-180">
-                  ▾
-                </span>
-              </summary>
+          <div className="divide-y divide-slate-200">
+            {faqData.map((f, i) => (
+              <details key={i} className="group py-4">
+                <summary className="flex cursor-pointer list-none items-center justify-between text-lg font-semibold text-sky-800 transition hover:text-sky-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white">
+                  <span>{f.q}</span>
+                  <span className="ml-4 text-slate-400 transition-transform group-open:rotate-180">
+                    ▾
+                  </span>
+                </summary>
 
-              <div className="mt-2 text-slate-700 leading-relaxed max-w-prose">
-                {f.a}
-              </div>
-            </details>
-          ))}
+                <div className="mt-2 max-w-prose leading-relaxed text-slate-700">
+                  {f.a}
+                </div>
+              </details>
+            ))}
+          </div>
         </div>
       </section>
 

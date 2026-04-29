@@ -1110,7 +1110,7 @@ export default function DailyToMonthlyRent() {
           Frequently Asked Questions
         </h2>
 
-        <p className="mx-auto mb-6 max-w-3xl text-center text-slate-600">
+        <p className="mx-auto mb-6 max-w-6xl text-center text-slate-600">
           These answers explain how daily rent is converted to monthly rent and
           why a 30-day shortcut can differ.
         </p>

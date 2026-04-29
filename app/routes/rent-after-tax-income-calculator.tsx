@@ -4,15 +4,16 @@ import Assumptions from "~/client/components/layout/Assumptions";
 import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/rent-after-tax-income-calculator/HowItWorks";
 import ToolFit from "~/client/components/rent-after-tax-income-calculator/ToolFit";
+
 function safeToFixed(n: number, digits: number): string {
   if (!Number.isFinite(n)) return "-";
   return n.toFixed(digits);
 }
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Free Rent vs Take-Home Pay Calculator";
+  const title = "Rent After-Tax Income Calculator | RentConverter.com";
   const description =
-    "Calculate rent as a percentage of take-home pay. See rent vs after-tax income, net income impact, pay-cycle breakdowns, and export options.";
+    "Estimate rent as a percentage of after-tax income. Enter income, tax rate, and rent to compare rent with take-home pay.";
 
   const url = "https://www.rentconverter.com/rent-after-tax-income-calculator";
   const image = "https://www.rentconverter.com/og-image.jpg";
@@ -785,36 +786,36 @@ export default function RentAfterTaxIncome() {
 
   const faqData = [
     {
-      q: "What is an effective tax rate in this calculator?",
-      a: "It’s a single percentage used to estimate take-home income from pre-tax income. It’s a simplification and can differ from actual withholding and year-end taxes.",
+      q: "What does this calculator measure?",
+      a: "It estimates rent as a percentage of after-tax income. It also shows pre-tax income, estimated take-home income, rent, and income left after rent across common periods.",
     },
     {
-      q: "What does this page calculate?",
-      a: "It estimates annual after-tax income, annual rent, rent as a percentage of after-tax income, and how much take-home income remains after rent. Per-period equivalents are derived from the same annual totals.",
+      q: "What is an effective tax rate?",
+      a: "It is a single percentage used to estimate take-home income from pre-tax income. Actual tax withholding and final tax owed can differ.",
     },
     {
-      q: "Why does the calculator use annual equivalence?",
-      a: "Annualizing both income and rent keeps comparisons consistent across time periods and avoids mixing monthly assumptions with 4-week or weekly cycles.",
+      q: "How is rent as a percentage of after-tax income calculated?",
+      a: "The calculator estimates annual after-tax income, annualizes rent, then divides annual rent by annual after-tax income.",
+    },
+    {
+      q: "Can I use different periods for income and rent?",
+      a: "Yes. For example, you can enter annual income and monthly rent. Each input is converted to an annual amount before the percentage is calculated.",
     },
     {
       q: "Why does every 4 weeks differ from monthly?",
-      a: "A 4-week period is always 28 days, while an average month is about 30.42 days (365 ÷ 12). Over a year, that difference changes totals.",
+      a: "A 4-week period is 28 days. An average month is about 30.42 days. Over a year, those periods do not produce the same totals.",
     },
     {
-      q: "Does this include utilities, parking, or other housing costs?",
-      a: "No. It compares rent to income only. If you want to account for bundled housing costs, add them to the rent input.",
+      q: "Does this include utilities, parking, debt, or other expenses?",
+      a: "No. It compares rent with estimated after-tax income only. Add bundled housing costs to the rent input if you want them included.",
+    },
+    {
+      q: "Is this a tax calculator?",
+      a: "No. It uses the tax rate you enter as a simplified estimate. It does not calculate actual tax brackets, credits, deductions, or payroll rules.",
     },
     {
       q: "Is this a budgeting recommendation?",
-      a: "No. The results show how rent relates to estimated take-home income. Actual affordability depends on debts, household size, location, and other expenses.",
-    },
-    {
-      q: "Can I mix periods (for example monthly rent and annual income)?",
-      a: "Yes. Each input is annualized using its selected period before the percentage is calculated.",
-    },
-    {
-      q: "What time assumptions does this page use?",
-      a: "Assumptions: year = 365 days, week = 7 days, every 4 weeks = 28 days, and month = 365 ÷ 12 days (average). Actual pay dates and billing rules vary.",
+      a: "No. It shows the relationship between rent and estimated take-home income. Real affordability depends on other expenses, debt, household size, location, and savings needs.",
     },
   ];
 
@@ -859,12 +860,26 @@ export default function RentAfterTaxIncome() {
     "@type": "WebPage",
     name: "Rent After-Tax Income Calculator",
     description:
-      "Estimate take-home income from pre-tax income and an effective tax rate, then compare rent to after-tax income using annual equivalence (365-day year).",
+      "Estimate rent as a percentage of after-tax income using income, rent, and an effective tax rate. Includes annual totals and period breakdowns.",
     url: "https://www.rentconverter.com/rent-after-tax-income-calculator",
   };
 
+  const grossInvalid = !grossParsed.ok;
+  const rentInvalid = !rentParsed.ok;
+  const taxInvalid = !taxParsed.ok;
+
+  const grossDescribedBy = grossInvalid
+    ? "rc-gross-help rc-gross-error"
+    : "rc-gross-help";
+  const rentDescribedBy = rentInvalid
+    ? "rc-rent-help rc-rent-error"
+    : "rc-rent-help";
+  const taxDescribedBy = taxInvalid
+    ? "rc-tax-help rc-tax-error"
+    : "rc-tax-help";
+
   return (
-    <main className="bg-white text-slate-700 scroll-smooth">
+    <main className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-slate-50 text-slate-700 scroll-smooth">
       <style
         dangerouslySetInnerHTML={{
           __html: `
@@ -880,412 +895,465 @@ export default function RentAfterTaxIncome() {
 
       <section
         id="converter"
-        className="mx-auto max-w-6xl px-6 pb-6 mt-2 sm:mt-6"
+        className="mx-auto max-w-6xl px-6 pb-6 pt-4 sm:pt-6"
       >
-        <div className="rounded-2xl pb-6 bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8">
-          <div className="pt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <h1 className="text-center mb-1 sm:mb-0 sm:text-left text-2xl sm:text-3xl capitalize font-bold text-sky-800 tracking-tight">
-              Rent Share Calculator (After-Tax Income)
-            </h1>
+        <div className="rounded-2xl border border-slate-200 bg-white/95 p-5 shadow-sm sm:p-8">
+          <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div className="min-w-0">
+                <div className="inline-flex items-center rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-700">
+                  After-tax income
+                </div>
 
-            <div
-              id="export-controls"
-              className="hidden sm:flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
-            >
-              <div className="flex flex-wrap gap-2">
+                <h1 className="mt-3 text-2xl font-bold tracking-tight text-sky-900 sm:text-3xl">
+                  Rent After-Tax Income Calculator
+                </h1>
+
+                <p className="mt-2 max-w-6xl text-base leading-relaxed text-slate-600">
+                  Estimate how much of your after-tax income goes to rent. Enter
+                  income, tax rate, and rent to compare the numbers.
+                </p>
+              </div>
+
+              <div
+                id="export-controls"
+                className="rc-no-print flex shrink-0 flex-wrap gap-2 sm:justify-end"
+              >
                 <button
                   type="button"
                   onClick={() => {
                     if (typeof window === "undefined") return;
                     window.print();
                   }}
-                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fbff]"
+                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                 >
                   Print / Save PDF
                 </button>
               </div>
             </div>
-          </div>
 
-          <p className="hidden md:flex w-full py-2 text-base text-slate-600">
-            Estimate how much of your after-tax income goes to rent. See your
-            rent share percentage instantly with clear calculations.
-          </p>
-
-          <div className="grid gap-x-5 gap-y-3 md:grid-cols-12">
-            <div className="md:col-span-6">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
-                Pre-tax income
-              </label>
-              <div className="grid grid-cols-12 gap-2">
-                <input
-                  inputMode="decimal"
-                  value={grossPreview}
-                  onChange={(e) =>
-                    setGrossIncome(e.target.value.replace(/,/g, ""))
-                  }
-                  onFocus={() => setIsGrossFocused(true)}
-                  onBlur={() => setIsGrossFocused(false)}
-                  placeholder="e.g. 60000 or 5000.50"
-                  className="cursor-pointer col-span-7 rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
-                  aria-invalid={!grossParsed.ok}
-                />
-                <select
-                  value={incomePeriod}
-                  onChange={(e) =>
-                    setIncomePeriod(
-                      isPeriod(e.target.value) ? e.target.value : "annual",
-                    )
-                  }
-                  className="col-span-5 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
-                  aria-label="Income period"
-                >
-                  {Object.entries(PERIOD_LABEL).map(([k, v]) => (
-                    <option key={k} value={k}>
-                      {v}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {!grossParsed.ok ? (
-                <p className="mt-2 text-sm font-semibold text-rose-700">
-                  {grossParsed.error}
-                </p>
-              ) : grossParsed.warnings.length ? (
-                <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
-                  <div className="font-semibold">Input interpretation note</div>
-                  <ul className="mt-1 list-disc pl-5 space-y-1">
-                    {grossParsed.warnings.map((w, i) => (
-                      <li key={i}>{w}</li>
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
-            </div>
-
-            <div className="md:col-span-6">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
-                Effective tax rate (Simplified estimate)
-              </label>
-              <div className="grid grid-cols-12 gap-2">
-                <input
-                  inputMode="decimal"
-                  value={taxRate}
-                  onChange={(e) => setTaxRate(e.target.value)}
-                  placeholder="e.g. 25 or 12.5"
-                  className="col-span-7 rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
-                  aria-invalid={!taxParsed.ok}
-                />
-                <div className="col-span-5 rounded-xl bg-white py-2 flex items-center text-sm font-bold text-slate-700">
-                  %
-                </div>
-              </div>
-              {!taxParsed.ok ? (
-                <p className="mt-2 text-sm font-semibold text-rose-700">
-                  {taxParsed.error}
-                </p>
-              ) : taxParsed.warnings.length ? (
-                <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
-                  <div className="font-semibold">Note</div>
-                  <ul className="mt-1 list-disc pl-5 space-y-1">
-                    {taxParsed.warnings.map((w, i) => (
-                      <li key={i}>{w}</li>
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
-            </div>
-
-            <div className="md:col-span-6">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
-                Rent
-              </label>
-              <div className="grid grid-cols-12 gap-2">
-                <input
-                  inputMode="decimal"
-                  value={rentPreview}
-                  onChange={(e) =>
-                    setRentAmount(e.target.value.replace(/,/g, ""))
-                  }
-                  onFocus={() => setIsRentFocused(true)}
-                  onBlur={() => setIsRentFocused(false)}
-                  placeholder="e.g. 2200 or 2200.00"
-                  className="cursor-pointer col-span-7 rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
-                  aria-invalid={!rentParsed.ok}
-                />
-                <select
-                  value={rentPeriod}
-                  onChange={(e) =>
-                    setRentPeriod(
-                      isPeriod(e.target.value) ? e.target.value : "monthly",
-                    )
-                  }
-                  className="col-span-5 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
-                  aria-label="Rent period"
-                >
-                  {Object.entries(PERIOD_LABEL).map(([k, v]) => (
-                    <option key={k} value={k}>
-                      {v}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              {!rentParsed.ok ? (
-                <p className="mt-2 text-sm font-semibold text-rose-700">
-                  {rentParsed.error}
-                </p>
-              ) : rentParsed.warnings.length ? (
-                <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
-                  <div className="font-semibold">Input interpretation note</div>
-                  <ul className="mt-1 list-disc pl-5 space-y-1">
-                    {rentParsed.warnings.map((w, i) => (
-                      <li key={i}>{w}</li>
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
-            </div>
-
-            <div className="md:col-span-6">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
-                Currency
-              </label>
-              <select
-                value={currency}
-                onChange={(e) =>
-                  setCurrency(
-                    isCurrency(e.target.value) ? e.target.value : "USD",
-                  )
-                }
-                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-lg font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
-                aria-label="Currency"
-              >
-                {SUPPORTED_CURRENCIES.map((c) => (
-                  <option key={c} value={c}>
-                    {c}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:px-6 rc-print-block">
-            {!computed.ok ? (
-              <div className="rounded-xl border border-slate-200 bg-white p-4">
-                <div className="font-semibold text-slate-800">
-                  No results to show
-                </div>
-                <p className="mt-1 text-sm text-slate-600">
-                  Fix the inputs below to see rent share and net income after
-                  rent.
-                </p>
-                <ul className="mt-3 list-disc pl-5 space-y-1 text-sm text-rose-700">
-                  {computed.errors.map((e, i) => (
-                    <li key={i}>{e}</li>
-                  ))}
-                </ul>
-                {computed.warnings.length ? (
-                  <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
-                    <div className="font-semibold">Notes</div>
-                    <ul className="mt-1 list-disc pl-5 space-y-1">
-                      {computed.warnings.map((w, i) => (
-                        <li key={i}>{w}</li>
-                      ))}
-                    </ul>
-                  </div>
-                ) : null}
-              </div>
-            ) : (
-              <>
-                <div className="flex items-center gap-2">
-                  <div
-                    className="h-2 w-2 rounded-full bg-sky-600"
-                    aria-hidden="true"
+            <div className="mt-2 grid gap-x-5 gap-y-4 md:grid-cols-12">
+              <div className="md:col-span-6">
+                <label className="mb-2 block text-sm font-semibold text-slate-700">
+                  Pre-tax income
+                </label>
+                <div className="grid grid-cols-12 gap-2">
+                  <input
+                    inputMode="decimal"
+                    value={grossPreview}
+                    onChange={(e) =>
+                      setGrossIncome(e.target.value.replace(/,/g, ""))
+                    }
+                    onFocus={() => setIsGrossFocused(true)}
+                    onBlur={() => setIsGrossFocused(false)}
+                    placeholder="e.g. 60000 or 5000.50"
+                    className="col-span-7 cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg text-slate-900 outline-none transition placeholder:text-slate-400 hover:border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                    aria-invalid={grossInvalid}
+                    aria-describedby={grossDescribedBy}
                   />
-                  <div className="text-sm font-semibold text-slate-800">
-                    Rent share of estimated after-tax income
-                  </div>
+                  <select
+                    value={incomePeriod}
+                    onChange={(e) =>
+                      setIncomePeriod(
+                        isPeriod(e.target.value) ? e.target.value : "annual",
+                      )
+                    }
+                    className="col-span-5 cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition hover:border-sky-300 hover:bg-sky-50 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                    aria-label="Income period"
+                  >
+                    {Object.entries(PERIOD_LABEL).map(([k, v]) => (
+                      <option key={k} value={k}>
+                        {v}
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
-                <div className="mt-2 flex flex-col gap-2">
-                  <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700">
-                    {safeToFixed(computed.rentShareNetPct, 2)}%
-                  </div>
-                </div>
+                <p id="rc-gross-help" className="mt-2 text-sm text-slate-600">
+                  Enter income before tax for the selected period.
+                </p>
 
-                <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2">
-                    <div className="text-xs text-slate-500">
-                      Annual pre-tax income (annualized)
+                {!grossParsed.ok ? (
+                  <p
+                    id="rc-gross-error"
+                    className="mt-2 text-sm font-semibold text-rose-700"
+                    role="alert"
+                  >
+                    {grossParsed.error}
+                  </p>
+                ) : grossParsed.warnings.length ? (
+                  <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                    <div className="font-semibold">
+                      Input interpretation note
                     </div>
-                    <div className="mt-1 text-lg font-bold text-slate-800">
-                      {fmtMoney(computed.annualGross)}
-                    </div>
-                  </div>
-
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2">
-                    <div className="text-xs text-slate-500">
-                      Annual after-tax income (estimated)
-                    </div>
-                    <div className="mt-1 text-lg font-bold text-slate-800">
-                      {fmtMoney(computed.annualNet)}
-                    </div>
-                  </div>
-
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2">
-                    <div className="text-xs text-slate-500">
-                      Annual after-tax income left after rent
-                    </div>
-                    <div className="mt-1 text-lg font-bold text-slate-800">
-                      {fmtMoney(computed.annualNetAfterRent)}
-                    </div>
-                  </div>
-
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-3 py-2 rc-print-block">
-                    <div className="text-[11px] text-slate-500">
-                      Monthly vs 4-week (from annual totals)
-                    </div>
-
-                    <div className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-                      <div className="rounded-lg border border-slate-200 bg-white/50 px-3 py-2">
-                        <div className="text-[11px] text-slate-600">
-                          Net · monthly
-                        </div>
-                        <div className="mt-0.5 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
-                          {fmtMoney(
-                            convertScaled(
-                              computed.annualNet,
-                              "annual",
-                              "monthly",
-                            ),
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="rounded-lg border border-slate-200 bg-white/50 px-3 py-2">
-                        <div className="text-[11px] text-slate-600">
-                          Net · 4-week
-                        </div>
-                        <div className="mt-0.5 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
-                          {fmtMoney(
-                            convertScaled(
-                              computed.annualNet,
-                              "annual",
-                              "every_4_weeks",
-                            ),
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="rounded-lg border border-slate-200 bg-white/50 px-3 py-2">
-                        <div className="text-[11px] text-slate-600">
-                          Rent · monthly
-                        </div>
-                        <div className="mt-0.5 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
-                          {fmtMoney(
-                            convertScaled(
-                              computed.annualRent,
-                              "annual",
-                              "monthly",
-                            ),
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="rounded-lg border border-slate-200 bg-white/50 px-3 py-2">
-                        <div className="text-[11px] text-slate-600">
-                          Rent · 4-week
-                        </div>
-                        <div className="mt-0.5 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
-                          {fmtMoney(
-                            convertScaled(
-                              computed.annualRent,
-                              "annual",
-                              "every_4_weeks",
-                            ),
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
-                    <p className="mt-1.5 text-[11px] text-slate-500">
-                      4-week = 28 days. Avg month ={" "}
-                      {safeToFixed(computed.avgMonthDays, 2)} days (365 ÷ 12).
-                    </p>
-                  </div>
-                </div>
-
-                {computed.warnings.length ? (
-                  <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
-                    <div className="font-semibold">Notes</div>
-                    <ul className="mt-1 list-disc pl-5 space-y-1">
-                      {computed.warnings.map((w, i) => (
+                    <ul className="mt-1 list-disc space-y-1 pl-5">
+                      {grossParsed.warnings.map((w, i) => (
                         <li key={i}>{w}</li>
                       ))}
                     </ul>
                   </div>
                 ) : null}
-              </>
-            )}
-          </div>
+              </div>
 
-          {computed.ok ? (
-            <div className="mt-3 rounded-2xl border border-slate-200 bg-white p-5 sm:px-6 rc-print-block">
-              <h3 className="text-lg font-bold text-slate-900 mb-3">
-                Full breakdown across periods (annual-equivalent)
-              </h3>
-              <p className="text-sm text-slate-600 mb-4">
-                This table converts income and rent through annual totals first,
-                then expresses gross income, estimated net income, rent, and net
-                income after rent across common periods.
-              </p>
+              <div className="md:col-span-6">
+                <label className="mb-2 block text-sm font-semibold text-slate-700">
+                  Effective tax rate
+                </label>
+                <div className="grid grid-cols-12 gap-2">
+                  <input
+                    inputMode="decimal"
+                    value={taxRate}
+                    onChange={(e) => setTaxRate(e.target.value)}
+                    placeholder="e.g. 25 or 12.5"
+                    className="col-span-7 cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg text-slate-900 outline-none transition placeholder:text-slate-400 hover:border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                    aria-invalid={taxInvalid}
+                    aria-describedby={taxDescribedBy}
+                  />
+                  <div className="col-span-5 flex items-center rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-700">
+                    %
+                  </div>
+                </div>
 
-              <div className="overflow-x-auto">
-                <table className="min-w-[920px] w-full text-sm">
-                  <thead>
-                    <tr className="text-left text-slate-500 border-b border-slate-200">
-                      <th className="py-2 pr-4">Period</th>
-                      <th className="py-2 pr-4">Gross</th>
-                      <th className="py-2 pr-4">Net (est.)</th>
-                      <th className="py-2 pr-4">Rent</th>
-                      <th className="py-2 pr-4">Net after rent</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {computed.breakdown.map((row) => (
-                      <tr key={row.p} className="border-b border-slate-100">
-                        <td className="py-2 pr-4 font-semibold text-slate-800">
-                          {PERIOD_LABEL[row.p]}
-                        </td>
-                        <td className="py-2 pr-4 text-slate-800">
-                          {fmtMoney(row.grossP)}
-                        </td>
-                        <td className="py-2 pr-4 text-slate-800">
-                          {fmtMoney(row.netP)}
-                        </td>
-                        <td className="py-2 pr-4 text-slate-800">
-                          {fmtMoney(row.rentP)}
-                        </td>
-                        <td className="py-2 pr-4 text-slate-800">
-                          {fmtMoney(row.leftP)}
-                        </td>
-                      </tr>
+                <p id="rc-tax-help" className="mt-2 text-sm text-slate-600">
+                  Use a simplified tax percentage, such as 25 or 12.5.
+                </p>
+
+                {!taxParsed.ok ? (
+                  <p
+                    id="rc-tax-error"
+                    className="mt-2 text-sm font-semibold text-rose-700"
+                    role="alert"
+                  >
+                    {taxParsed.error}
+                  </p>
+                ) : taxParsed.warnings.length ? (
+                  <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                    <div className="font-semibold">Note</div>
+                    <ul className="mt-1 list-disc space-y-1 pl-5">
+                      {taxParsed.warnings.map((w, i) => (
+                        <li key={i}>{w}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+              </div>
+
+              <div className="md:col-span-6">
+                <label className="mb-2 block text-sm font-semibold text-slate-700">
+                  Rent
+                </label>
+                <div className="grid grid-cols-12 gap-2">
+                  <input
+                    inputMode="decimal"
+                    value={rentPreview}
+                    onChange={(e) =>
+                      setRentAmount(e.target.value.replace(/,/g, ""))
+                    }
+                    onFocus={() => setIsRentFocused(true)}
+                    onBlur={() => setIsRentFocused(false)}
+                    placeholder="e.g. 2200 or 2200.00"
+                    className="col-span-7 cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg text-slate-900 outline-none transition placeholder:text-slate-400 hover:border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                    aria-invalid={rentInvalid}
+                    aria-describedby={rentDescribedBy}
+                  />
+                  <select
+                    value={rentPeriod}
+                    onChange={(e) =>
+                      setRentPeriod(
+                        isPeriod(e.target.value) ? e.target.value : "monthly",
+                      )
+                    }
+                    className="col-span-5 cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition hover:border-sky-300 hover:bg-sky-50 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                    aria-label="Rent period"
+                  >
+                    {Object.entries(PERIOD_LABEL).map(([k, v]) => (
+                      <option key={k} value={k}>
+                        {v}
+                      </option>
                     ))}
-                  </tbody>
-                </table>
+                  </select>
+                </div>
+
+                <p id="rc-rent-help" className="mt-2 text-sm text-slate-600">
+                  Enter rent for the selected rent period.
+                </p>
+
+                {!rentParsed.ok ? (
+                  <p
+                    id="rc-rent-error"
+                    className="mt-2 text-sm font-semibold text-rose-700"
+                    role="alert"
+                  >
+                    {rentParsed.error}
+                  </p>
+                ) : rentParsed.warnings.length ? (
+                  <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                    <div className="font-semibold">
+                      Input interpretation note
+                    </div>
+                    <ul className="mt-1 list-disc space-y-1 pl-5">
+                      {rentParsed.warnings.map((w, i) => (
+                        <li key={i}>{w}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+              </div>
+
+              <div className="md:col-span-6">
+                <label className="mb-2 block text-sm font-semibold text-slate-700">
+                  Currency
+                </label>
+                <select
+                  value={currency}
+                  onChange={(e) =>
+                    setCurrency(
+                      isCurrency(e.target.value) ? e.target.value : "USD",
+                    )
+                  }
+                  className="w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-lg font-semibold text-slate-900 outline-none transition hover:border-sky-300 hover:bg-sky-50 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                  aria-label="Currency"
+                >
+                  {SUPPORTED_CURRENCIES.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
-          ) : null}
-          <Assumptions />
+
+            <div className="mt-3 overflow-hidden rounded-2xl border border-slate-200 bg-sky-50/60 shadow-sm rc-print-block">
+              <div
+                className="h-1 bg-gradient-to-r from-sky-500 to-emerald-400"
+                aria-hidden="true"
+              />
+
+              <div className="p-5 sm:px-6">
+                {!computed.ok ? (
+                  <div className="rounded-xl border border-slate-200 bg-white/95 p-4">
+                    <div className="font-semibold text-slate-900">
+                      No results to show
+                    </div>
+                    <p className="mt-1 text-sm text-slate-600">
+                      Fix the inputs below to see rent share and income left
+                      after rent.
+                    </p>
+                    <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-rose-700">
+                      {computed.errors.map((e, i) => (
+                        <li key={i}>{e}</li>
+                      ))}
+                    </ul>
+                    {computed.warnings.length ? (
+                      <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                        <div className="font-semibold">Notes</div>
+                        <ul className="mt-1 list-disc space-y-1 pl-5">
+                          {computed.warnings.map((w, i) => (
+                            <li key={i}>{w}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ) : null}
+                  </div>
+                ) : (
+                  <>
+                    <div className="flex items-center gap-2">
+                      <div
+                        className="h-2 w-2 rounded-full bg-sky-600"
+                        aria-hidden="true"
+                      />
+                      <div className="text-sm font-semibold text-slate-900">
+                        Rent share of estimated after-tax income
+                      </div>
+                    </div>
+
+                    <div className="mt-2 flex flex-col gap-2">
+                      <div className="text-3xl font-extrabold tracking-tight text-emerald-700 sm:text-5xl">
+                        {safeToFixed(computed.rentShareNetPct, 2)}%
+                      </div>
+                      <p className="text-sm text-slate-600">
+                        Based on annual rent divided by estimated annual
+                        after-tax income.
+                      </p>
+                    </div>
+
+                    <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                      <div className="rounded-xl border border-slate-200 bg-white/95 px-4 py-3 shadow-sm">
+                        <div className="text-xs font-medium text-slate-600">
+                          Annual pre-tax income
+                        </div>
+                        <div className="mt-1 text-lg font-bold text-slate-900">
+                          {fmtMoney(computed.annualGross)}
+                        </div>
+                      </div>
+
+                      <div className="rounded-xl border border-slate-200 bg-white/95 px-4 py-3 shadow-sm">
+                        <div className="text-xs font-medium text-slate-600">
+                          Estimated annual after-tax income
+                        </div>
+                        <div className="mt-1 text-lg font-bold text-slate-900">
+                          {fmtMoney(computed.annualNet)}
+                        </div>
+                      </div>
+
+                      <div className="rounded-xl border border-slate-200 bg-white/95 px-4 py-3 shadow-sm">
+                        <div className="text-xs font-medium text-slate-600">
+                          Annual income left after rent
+                        </div>
+                        <div className="mt-1 text-lg font-bold text-slate-900">
+                          {fmtMoney(computed.annualNetAfterRent)}
+                        </div>
+                      </div>
+
+                      <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-3 shadow-sm sm:col-span-2 lg:col-span-3 rc-print-block">
+                        <div className="text-xs font-medium text-slate-600">
+                          Monthly vs 4-week comparison
+                        </div>
+
+                        <div className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+                          <div className="rounded-lg border border-slate-200 bg-white/70 px-3 py-2">
+                            <div className="text-[11px] text-slate-600">
+                              Net · monthly
+                            </div>
+                            <div className="mt-0.5 whitespace-nowrap tabular-nums text-sm font-bold text-slate-900">
+                              {fmtMoney(
+                                convertScaled(
+                                  computed.annualNet,
+                                  "annual",
+                                  "monthly",
+                                ),
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="rounded-lg border border-slate-200 bg-white/70 px-3 py-2">
+                            <div className="text-[11px] text-slate-600">
+                              Net · 4-week
+                            </div>
+                            <div className="mt-0.5 whitespace-nowrap tabular-nums text-sm font-bold text-slate-900">
+                              {fmtMoney(
+                                convertScaled(
+                                  computed.annualNet,
+                                  "annual",
+                                  "every_4_weeks",
+                                ),
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="rounded-lg border border-slate-200 bg-white/70 px-3 py-2">
+                            <div className="text-[11px] text-slate-600">
+                              Rent · monthly
+                            </div>
+                            <div className="mt-0.5 whitespace-nowrap tabular-nums text-sm font-bold text-slate-900">
+                              {fmtMoney(
+                                convertScaled(
+                                  computed.annualRent,
+                                  "annual",
+                                  "monthly",
+                                ),
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="rounded-lg border border-slate-200 bg-white/70 px-3 py-2">
+                            <div className="text-[11px] text-slate-600">
+                              Rent · 4-week
+                            </div>
+                            <div className="mt-0.5 whitespace-nowrap tabular-nums text-sm font-bold text-slate-900">
+                              {fmtMoney(
+                                convertScaled(
+                                  computed.annualRent,
+                                  "annual",
+                                  "every_4_weeks",
+                                ),
+                              )}
+                            </div>
+                          </div>
+                        </div>
+
+                        <p className="mt-2 text-xs text-slate-600">
+                          4-week = 28 days. Average month ={" "}
+                          {safeToFixed(computed.avgMonthDays, 2)} days (365 ÷
+                          12).
+                        </p>
+                      </div>
+                    </div>
+
+                    {computed.warnings.length ? (
+                      <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                        <div className="font-semibold">Notes</div>
+                        <ul className="mt-1 list-disc space-y-1 pl-5">
+                          {computed.warnings.map((w, i) => (
+                            <li key={i}>{w}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ) : null}
+                  </>
+                )}
+              </div>
+            </div>
+
+            {computed.ok ? (
+              <div className="mt-3 rounded-2xl border border-slate-200 bg-white/95 p-5 shadow-sm sm:px-6 rc-print-block">
+                <h3 className="mb-3 text-lg font-bold text-sky-800">
+                  Full breakdown across periods
+                </h3>
+                <p className="mb-4 text-sm leading-relaxed text-slate-600">
+                  This table annualizes income and rent first, then shows gross
+                  income, estimated net income, rent, and income left after rent
+                  across common periods.
+                </p>
+
+                <div className="overflow-x-auto">
+                  <table className="min-w-[920px] w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-slate-200 text-left text-slate-600">
+                        <th className="py-2 pr-4 font-semibold">Period</th>
+                        <th className="py-2 pr-4 font-semibold">Gross</th>
+                        <th className="py-2 pr-4 font-semibold">Net est.</th>
+                        <th className="py-2 pr-4 font-semibold">Rent</th>
+                        <th className="py-2 pr-4 font-semibold">
+                          Net after rent
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {computed.breakdown.map((row) => (
+                        <tr key={row.p} className="border-b border-slate-100">
+                          <td className="py-2 pr-4 font-semibold text-slate-900">
+                            {PERIOD_LABEL[row.p]}
+                          </td>
+                          <td className="py-2 pr-4 tabular-nums text-slate-700">
+                            {fmtMoney(row.grossP)}
+                          </td>
+                          <td className="py-2 pr-4 tabular-nums text-slate-700">
+                            {fmtMoney(row.netP)}
+                          </td>
+                          <td className="py-2 pr-4 tabular-nums text-slate-700">
+                            {fmtMoney(row.rentP)}
+                          </td>
+                          <td className="py-2 pr-4 tabular-nums text-slate-700">
+                            {fmtMoney(row.leftP)}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            ) : null}
+            <Assumptions />
+          </div>
         </div>
 
-        <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4">
-          <div className="rc-no-print md:hidden flex flex-col sm:flex-row gap-2 mb-4">
+        <div className="mt-4 rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm">
+          <div className="rc-no-print mb-4 flex flex-col gap-2 md:hidden sm:flex-row">
             <button
               type="button"
               onClick={handlePrint}
-              className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+              className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
             >
               Print / Save as PDF
             </button>
@@ -1302,8 +1370,14 @@ export default function RentAfterTaxIncome() {
       <HowItWorks />
 
       <section className="mt-8 mb-4 hidden sm:block">
-        <nav className="cursor-pointer max-w-6xl mx-auto px-6 text-sm text-slate-500">
-          <a href={safeHref("/")} className="hover:underline">
+        <nav
+          className="mx-auto max-w-6xl px-6 text-sm text-slate-600"
+          aria-label="Breadcrumb"
+        >
+          <a
+            href={safeHref("/")}
+            className="cursor-pointer rounded text-sky-700 transition hover:text-sky-900 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+          >
             Home
           </a>{" "}
           / Rent After-Tax Income Calculator
@@ -1312,26 +1386,28 @@ export default function RentAfterTaxIncome() {
 
       <ToolFit />
 
-      <section id="faq" className="max-w-5xl mx-auto pb-16 px-6">
-        <h2 className="text-3xl font-bold text-center mb-3 text-sky-800 tracking-tight">
-          Frequently Asked Questions
-        </h2>
+      <section id="faq" className="mx-auto max-w-5xl px-6 pb-16">
+        <div className="rounded-2xl border border-slate-200 bg-white/90 p-5 shadow-sm sm:p-8">
+          <h2 className="mb-3 text-center text-3xl font-bold tracking-tight text-sky-800">
+            Frequently Asked Questions
+          </h2>
 
-        <div className="divide-y divide-slate-200">
-          {faqData.map((f, i) => (
-            <details key={i} className="group py-4">
-              <summary className="cursor-pointer list-none font-semibold text-lg text-sky-800 flex items-center justify-between hover:text-sky-900">
-                <span>{f.q}</span>
-                <span className="ml-4 text-slate-400 transition-transform group-open:rotate-180">
-                  ▾
-                </span>
-              </summary>
+          <div className="divide-y divide-slate-200">
+            {faqData.map((f, i) => (
+              <details key={i} className="group py-4">
+                <summary className="flex cursor-pointer list-none items-center justify-between text-lg font-semibold text-sky-800 transition hover:text-sky-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white">
+                  <span>{f.q}</span>
+                  <span className="ml-4 text-slate-400 transition-transform group-open:rotate-180">
+                    ▾
+                  </span>
+                </summary>
 
-              <div className="mt-2 text-slate-700 leading-relaxed max-w-prose">
-                {f.a}
-              </div>
-            </details>
-          ))}
+                <div className="mt-2 max-w-prose leading-relaxed text-slate-700">
+                  {f.a}
+                </div>
+              </details>
+            ))}
+          </div>
         </div>
       </section>
 

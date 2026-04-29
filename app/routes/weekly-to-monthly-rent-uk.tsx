@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { Route } from "./+types/weekly-to-monthly-rent-uk";
+import Assumptions from "~/client/components/layout/Assumptions";
+import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/weekly-to-monthly-rent-uk/HowItWorks";
 import ToolFit from "~/client/components/weekly-to-monthly-rent-uk/ToolFit";
 import FAQ from "~/client/components/weekly-to-monthly-rent-uk/FAQ";
@@ -10,42 +12,57 @@ function safeToFixed(n: number, digits: number): string {
 }
 
 export const meta: Route.MetaFunction = () => {
+  const title = "Free Weekly to Monthly Rent Calculator UK";
+  const description =
+    "Convert weekly rent to monthly rent in the UK. See the 4-week comparison and related rent breakdowns.";
   const url = "https://www.rentconverter.com/weekly-to-monthly-rent-uk";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
 
   return [
-    { title: "Free Weekly/Monthly Rental Rate Calculator UK" },
+    { title },
+    { charset: "utf-8" },
+    { name: "viewport", content: "width=device-width,initial-scale=1" },
+
     {
       name: "description",
+      content: description,
+    },
+    {
+      name: "keywords",
       content:
-        "Convert weekly rent to rent per calendar month in the UK. See the weekly to monthly rent formula, instant result, 4-week comparison, and export options.",
+        "weekly to monthly rent UK, weekly rent to monthly rent, UK rent calculator, rent per calendar month UK, weekly rent monthly equivalent",
     },
     { name: "robots", content: "index,follow" },
+    { name: "author", content: "RentConverter.com" },
+    { name: "theme-color", content: "#f0f9ff" },
+
+    { tagName: "link", rel: "canonical", href: url },
+
     { property: "og:type", content: "website" },
+    { property: "og:site_name", content: "RentConverter.com" },
+    { property: "og:url", content: url },
     {
       property: "og:title",
-      content: "Free Weekly/Monthly Rental Rate Calculator UK",
+      content: title,
     },
     {
       property: "og:description",
-      content:
-        "Convert weekly rent to monthly rent in the UK with a weekly/monthly rental rate calculator and 4-week comparison.",
+      content: description,
     },
-    { property: "og:url", content: url },
-    { property: "og:site_name", content: "RentConverter.com" },
     { property: "og:image", content: ogImage },
+    { property: "og:image:alt", content: "RentConverter.com preview image" },
+
     { name: "twitter:card", content: "summary_large_image" },
     {
       name: "twitter:title",
-      content: "Free Weekly/Monthly Rental Rate Calculator UK",
+      content: title,
     },
     {
       name: "twitter:description",
-      content:
-        "Convert weekly rent to monthly rent in the UK with instant results and clear breakdowns.",
+      content: description,
     },
     { name: "twitter:image", content: ogImage },
-    { tagName: "link", rel: "canonical", href: url },
+    { name: "twitter:image:alt", content: "RentConverter.com preview image" },
   ];
 };
 
@@ -85,6 +102,50 @@ function isCurrency(x: string): x is Currency {
   return (SUPPORTED_CURRENCIES as readonly string[]).includes(x);
 }
 
+const ROUTE_WHITELIST = new Set<string>([
+  "/",
+  "/rent-converter",
+  "/monthly-to-weekly-rent-converter",
+  "/weekly-to-monthly-rent-converter",
+  "/weekly-to-annual-rent-converter",
+  "/weekly-to-biweekly-rent-converter",
+  "/biweekly-to-weekly-rent-converter",
+  "/biweekly-to-monthly-rent-converter",
+  "/biweekly-to-annual-rent-converter",
+  "/monthly-to-annual-rent-converter",
+  "/annual-to-monthly-rent-converter",
+  "/monthly-to-daily-rent-converter",
+  "/daily-to-monthly-rent-converter",
+  "/monthly-to-hourly-rent-converter",
+  "/hourly-to-monthly-rent-converter",
+  "/hourly-to-annual-rent-converter",
+  "/annual-to-hourly-rent-converter",
+  "/annual-to-weekly-rent-converter",
+  "/annual-to-biweekly-rent-converter",
+  "/monthly-to-biweekly-rent-converter",
+  "/rent-calculator",
+  "/rent-per-day-calculator",
+  "/rent-per-week-calculator",
+  "/rent-paid-every-4-weeks-calculator",
+  "/rent-per-paycheck-calculator",
+  "/rent-split-calculator",
+  "/rent-due-date-calculator",
+  "/rent-affordability-calculator",
+  "/rent-as-percentage-of-income-calculator",
+  "/how-much-rent-can-i-afford-calculator",
+  "/rent-after-tax-income-calculator",
+  "/rent-vs-take-home-pay-calculator",
+  "/rent-increase-calculator",
+  "/rent-increase-percentage-calculator",
+  "/rent-after-increase-calculator",
+  "/rent-vs-buy-calculator",
+  "/rent-paid-weekly-vs-monthly",
+]);
+
+function safeHref(path: string): string {
+  return ROUTE_WHITELIST.has(path) ? path : "/";
+}
+
 const MAX_DECIMALS = 12n;
 const SCALE = 10n ** MAX_DECIMALS;
 
@@ -109,7 +170,8 @@ function absBigInt(x: bigint): bigint {
 
 function toNumberSafe(scaled: bigint): number {
   const a = absBigInt(scaled);
-  if (a > MAX_SAFE_INT_FOR_NUMBER) return Number.NaN;
+  const limit = MAX_SAFE_INT_FOR_NUMBER * SCALE;
+  if (a > limit) return Number.NaN;
   return Number(scaled) / Number(SCALE);
 }
 
@@ -119,7 +181,7 @@ function groupInt(intStr: string, groupSep: string): string {
 }
 
 function getNumberSeparators(): { group: string; decimal: string } {
-  const parts = new Intl.NumberFormat(undefined, {
+  const parts = new Intl.NumberFormat("en-GB", {
     useGrouping: true,
   }).formatToParts(1000.1);
   const group = parts.find((p) => p.type === "group")?.value ?? ",";
@@ -168,7 +230,6 @@ function formatPlainNumberFromScaled(
 
   const negative = scaled < 0n;
   const a = absBigInt(scaled);
-  const intPart = a / SCALE;
   const fracPart = a % SCALE;
 
   let digits = 0;
@@ -179,7 +240,6 @@ function formatPlainNumberFromScaled(
   }
 
   const { intStr, fracStr } = scaledToDecimalStrings(scaled, digits, true);
-
   const groupedInt = groupInt(intStr, group);
 
   if (digits > 0 && fracStr.length > 0) {
@@ -224,7 +284,7 @@ function formatCurrencyFromScaled(
 
   const groupedInt = groupInt(intStr, group);
 
-  const fmt = new Intl.NumberFormat(undefined, {
+  const fmt = new Intl.NumberFormat("en-GB", {
     style: "currency",
     currency,
     minimumFractionDigits: digits,
@@ -425,6 +485,7 @@ function parseStrictDisplayDecimals(raw: string | null): number {
 }
 
 export default function WeeklyToMonthlyRentUK() {
+  const pageName = "Weekly to Monthly Rent Calculator UK";
   const canonicalUrl =
     "https://www.rentconverter.com/weekly-to-monthly-rent-uk";
 
@@ -540,8 +601,84 @@ export default function WeeklyToMonthlyRentUK() {
     window.print();
   };
 
+  const faqData = [
+    {
+      q: "How do you convert weekly rent to monthly rent in the UK?",
+      a: "Convert weekly rent to an annual amount, then divide by 12. This gives a calendar-month estimate instead of simply multiplying weekly rent by 4.",
+    },
+    {
+      q: "Why is weekly rent times 4 different from monthly rent?",
+      a: "Four weeks is 28 days. An average calendar month is about 30.42 days based on 365 days divided by 12, so the monthly amount is usually higher than a 4-week amount.",
+    },
+    {
+      q: "What formula does this calculator use?",
+      a: "The calculator uses weekly rent × 365 ÷ 7 ÷ 12. This keeps weekly, monthly, and 4-week amounts on the same 365-day basis.",
+    },
+    {
+      q: "Is UK rent usually listed weekly or monthly?",
+      a: "UK listings can show rent weekly or monthly depending on the listing source and property type. This calculator helps compare a weekly listing against a monthly budget.",
+    },
+    {
+      q: "Does this calculate exact lease payments?",
+      a: "No. It gives a rent conversion estimate. Exact payments can depend on tenancy wording, due dates, proration rules, fees, and local billing practices.",
+    },
+    {
+      q: "What costs are included?",
+      a: "Only the rent amount you enter. Utilities, council tax, internet, insurance, and fees are not included unless you add them to the weekly amount.",
+    },
+  ];
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "@id": `${canonicalUrl}#breadcrumb`,
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://www.rentconverter.com",
+      },
+      { "@type": "ListItem", position: 2, name: pageName, item: canonicalUrl },
+    ],
+  };
+
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "RentConverter.com",
+    url: "https://www.rentconverter.com",
+  };
+
+  const webPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: pageName,
+    description:
+      "Convert weekly rent to monthly rent in the UK. See the 4-week comparison and related rent breakdowns.",
+    url: canonicalUrl,
+    isPartOf: { "@type": "WebSite", url: "https://www.rentconverter.com" },
+    breadcrumb: { "@id": `${canonicalUrl}#breadcrumb` },
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntityOfPage: canonicalUrl,
+    mainEntity: faqData.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  };
+
+  const amountInputId = "rc-wtm-uk-weekly-rent";
+  const amountHelpId = "rc-wtm-uk-weekly-rent-help";
+  const amountErrorId = "rc-wtm-uk-weekly-rent-error";
+  const currencySelectId = "rc-wtm-uk-currency";
+
   return (
-    <main className="bg-white text-slate-700 scroll-smooth">
+    <main className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-slate-50 text-slate-700 scroll-smooth antialiased">
       <style
         dangerouslySetInnerHTML={{
           __html: `
@@ -557,26 +694,37 @@ export default function WeeklyToMonthlyRentUK() {
 
       <section
         id="converter"
-        className="mx-auto max-w-6xl px-6 pb-6 mt-2 sm:mt-6"
+        className="mx-auto max-w-6xl px-6 py-6"
       >
-        <div className="rounded-2xl pb-6 bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8">
-          <div className="pt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <h1 className="text-center mb-1 sm:mb-0 sm:text-left text-2xl sm:text-3xl capitalize font-bold text-sky-800 tracking-tight">
-              Weekly to Monthly Rent (UK)
-            </h1>
+        <div className="rounded-2xl bg-white/95 pb-6 shadow-sm border border-slate-200 sm:px-8">
+          <div className="pt-5 sm:pt-6">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div className="min-w-0">
+                <div className="inline-flex rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-800">
+                  UK rent tool
+                </div>
 
-            <div
-              id="export-controls"
-              className="hidden sm:flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
-            >
-              <div className="flex flex-wrap gap-2">
+                <h1 className="mt-3 text-center sm:text-left text-2xl sm:text-3xl capitalize font-bold text-sky-900 tracking-tight">
+                  Weekly to Monthly Rent Calculator UK
+                </h1>
+
+                <p className="mt-2 max-w-4xl text-base text-slate-700">
+                  Convert weekly rent into a monthly amount in the UK. The
+                  calculator also shows the 4-week comparison.
+                </p>
+              </div>
+
+              <div
+                id="export-controls"
+                className="rc-no-print flex shrink-0 justify-start sm:justify-end"
+              >
                 <button
                   type="button"
                   onClick={() => {
                     if (typeof window === "undefined") return;
                     window.print();
                   }}
-                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fbff]"
+                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2"
                 >
                   Print / Save PDF
                 </button>
@@ -584,19 +732,18 @@ export default function WeeklyToMonthlyRentUK() {
             </div>
           </div>
 
-          <p className="hidden md:flex w-full py-2 text-base text-slate-600">
-            Convert weekly rent to monthly rent in the UK instantly. Clear
-            calculations, no sign-up required.
-          </p>
-
-          <div className="grid gap-x-5 gap-y-3">
+          <div className="mt-5 grid gap-x-5 gap-y-4">
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label
+                htmlFor={amountInputId}
+                className="block text-sm font-semibold text-slate-700 mb-2"
+              >
                 Weekly rent amount
               </label>
 
               <div className="flex gap-2">
                 <input
+                  id={amountInputId}
                   inputMode="decimal"
                   value={amountInputValue}
                   onChange={(e) => setAmount(e.target.value)}
@@ -606,11 +753,17 @@ export default function WeeklyToMonthlyRentUK() {
                     setAmountTouched(true);
                   }}
                   placeholder="e.g. 500"
-                  className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className={`w-full min-w-0 rounded-xl border bg-white px-4 py-2.5 text-lg text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 ${
+                    amountTouched && !parsed.ok
+                      ? "border-rose-300"
+                      : "border-slate-300"
+                  }`}
                   aria-invalid={amountTouched && !parsed.ok}
+                  aria-describedby={`${amountHelpId}${amountTouched && !parsed.ok ? ` ${amountErrorId}` : ""}`}
                 />
 
                 <select
+                  id={currencySelectId}
                   value={currency}
                   onChange={(e) =>
                     setCurrency(
@@ -619,7 +772,7 @@ export default function WeeklyToMonthlyRentUK() {
                         : "GBP",
                     )
                   }
-                  className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm font-semibold text-slate-900 outline-none transition hover:border-sky-300 hover:bg-sky-50 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2"
                   aria-label="Currency"
                 >
                   {SUPPORTED_CURRENCIES.map((c) => (
@@ -630,45 +783,63 @@ export default function WeeklyToMonthlyRentUK() {
                 </select>
               </div>
 
+              <p id={amountHelpId} className="mt-1 text-xs text-slate-600">
+                Enter the weekly rent shown on the listing.
+              </p>
+
               {amountTouched && !parsed.ok ? (
-                <div className="mt-3 rounded-xl border border-rose-200 bg-rose-50 px-4 py-2 text-sm text-rose-800">
-                  <div className="font-semibold">Invalid amount</div>
-                  <ul className="mt-1 list-disc pl-5 space-y-1">
-                    {parsed.errors.map((e, i) => (
-                      <li key={i}>{e}</li>
-                    ))}
-                  </ul>
-                </div>
+                <p
+                  id={amountErrorId}
+                  className="mt-2 text-sm font-semibold text-rose-700"
+                  role="alert"
+                >
+                  {parsed.errors.join(" ")}
+                </p>
               ) : null}
             </div>
           </div>
 
-          {!parsed.ok ? (
-            <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 sm:px-6">
-              <div className="font-semibold text-slate-900">
-                No results to show
+          {!computed.ok ? (
+            <div
+              className="mt-5 overflow-hidden rounded-2xl border border-slate-200 bg-sky-50/60 shadow-sm rc-print-block"
+              role="region"
+              aria-label="Results"
+              aria-live="polite"
+            >
+              <div className="h-1 bg-gradient-to-r from-sky-500 to-emerald-400" />
+
+              <div className="p-5 sm:px-6">
+                <div className="rounded-xl border border-slate-200 bg-white/95 p-4 shadow-sm">
+                  <div className="font-semibold text-slate-900">
+                    No results to show
+                  </div>
+                  <p className="mt-1 text-sm text-slate-600">
+                    Fix the input to calculate monthly rent.
+                  </p>
+                  <ul className="mt-3 list-disc pl-5 space-y-1 text-sm text-rose-700">
+                    {computed.errors.map((e, i) => (
+                      <li key={i}>{e}</li>
+                    ))}
+                  </ul>
+                  {computed.warnings.length ? (
+                    <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                      <div className="font-semibold">Notes</div>
+                      <ul className="mt-1 list-disc pl-5 space-y-1">
+                        {computed.warnings.map((w, i) => (
+                          <li key={i}>{w}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+                </div>
               </div>
-              <p className="mt-1 text-sm text-slate-600">
-                Fix the input to calculate.
-              </p>
-              <ul className="mt-3 list-disc pl-5 space-y-1 text-sm text-rose-700">
-                {parsed.errors.map((e, i) => (
-                  <li key={i}>{e}</li>
-                ))}
-              </ul>
-              {parsed.warnings.length ? (
-                <ul className="mt-3 list-disc pl-5 space-y-1 text-sm text-amber-700">
-                  {parsed.warnings.map((w, i) => (
-                    <li key={i}>{w}</li>
-                  ))}
-                </ul>
-              ) : null}
             </div>
-          ) : computed.ok ? (
+          ) : (
             <>
               {computed.warnings.length ? (
-                <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
-                  <ul className="list-disc pl-5 space-y-1">
+                <div className="mt-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                  <div className="font-semibold">Notes</div>
+                  <ul className="mt-1 list-disc pl-5 space-y-1">
                     {computed.warnings.map((w, i) => (
                       <li key={i}>{w}</li>
                     ))}
@@ -676,80 +847,157 @@ export default function WeeklyToMonthlyRentUK() {
                 </div>
               ) : null}
 
-              <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:px-6 rc-print-block">
-                <div className="flex items-center gap-2">
-                  <div
-                    className="h-2 w-2 rounded-full bg-sky-600"
-                    aria-hidden="true"
-                  />
-                  <div className="text-sm font-semibold text-slate-800">
-                    Monthly equivalent
-                  </div>
-                </div>
+              <div
+                className="mt-5 overflow-hidden rounded-2xl border border-slate-200 bg-sky-50/60 shadow-sm rc-print-block"
+                role="region"
+                aria-label="Results"
+                aria-live="polite"
+              >
+                <div className="h-1 bg-gradient-to-r from-sky-500 to-emerald-400" />
 
-                <div className="mt-2 flex flex-col gap-2">
-                  <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700">
-                    {money(computed.monthly)}
-                  </div>
-                </div>
-
-                <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                  {(
-                    [
-                      ["Hourly", computed.hourly, "hourly"],
-                      ["Daily", computed.daily, "daily"],
-                      ["Weekly", computed.weekly, "weekly"],
-                      ["2 weeks", computed.biweekly, "biweekly"],
-                      [
-                        "4 weeks (28 days)",
-                        computed.every_4_weeks,
-                        "every_4_weeks",
-                      ],
-                      ["Monthly (average)", computed.monthly, "monthly"],
-                    ] as const
-                  ).map(([label, val, key]) => (
+                <div className="p-5 sm:px-6">
+                  <div className="flex items-center gap-2">
                     <div
-                      key={key}
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-2"
-                    >
-                      <div className="text-xs text-slate-500">{label}</div>
-                      <div className="mt-1 text-lg font-bold text-slate-800">
-                        {money(val)}
-                      </div>
+                      className="h-2 w-2 rounded-full bg-emerald-600"
+                      aria-hidden="true"
+                    />
+                    <div className="text-sm font-semibold text-slate-900">
+                      Monthly rent
                     </div>
-                  ))}
+                  </div>
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-2">
-                    <div className="text-xs text-slate-500">
-                      4-week (28-day) vs monthly comparison
+                  <div className="mt-2 flex flex-col gap-2">
+                    <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700">
+                      {money(computed.monthly)}
                     </div>
-                    <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                      <div className="text-sm text-slate-700">
-                        Monthly minus 4-week ={" "}
-                        <strong className="text-slate-900">
-                          {money(computed.monthlyMinus4w)}
-                        </strong>
+                    <p className="text-sm text-slate-600">
+                      Based on weekly rent annualized over 365 days, then
+                      divided by 12.
+                    </p>
+                  </div>
+
+                  <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                    {(
+                      [
+                        ["Hourly", computed.hourly, "hourly"],
+                        ["Daily", computed.daily, "daily"],
+                        ["Weekly", computed.weekly, "weekly"],
+                        ["2 weeks", computed.biweekly, "biweekly"],
+                        [
+                          "4 weeks (28 days)",
+                          computed.every_4_weeks,
+                          "every_4_weeks",
+                        ],
+                        ["Monthly (average)", computed.monthly, "monthly"],
+                      ] as const
+                    ).map(([label, val, key]) => (
+                      <div
+                        key={key}
+                        className="rounded-xl border border-slate-200 bg-white/95 px-4 py-2 shadow-sm"
+                      >
+                        <div className="text-xs text-slate-600">{label}</div>
+                        <div className="mt-1 text-lg font-bold text-slate-900">
+                          {money(val)}
+                        </div>
                       </div>
-                      <div className="text-sm text-slate-700">
-                        Difference ≈{" "}
-                        <strong className="text-slate-900">
-                          {Number.isFinite(computed.monthlyMinus4wPct)
-                            ? safeToFixed(computed.monthlyMinus4wPct * 100, 2)
-                            : "N/A"}
-                          %
-                        </strong>
+                    ))}
+
+                    <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 shadow-sm">
+                      <div className="text-xs font-semibold text-emerald-800">
+                        4-week vs monthly comparison
+                      </div>
+                      <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                        <div className="text-sm text-slate-700">
+                          Monthly minus 4-week:{" "}
+                          <strong className="text-slate-900">
+                            {money(computed.monthlyMinus4w)}
+                          </strong>
+                        </div>
+                        <div className="text-sm text-slate-700">
+                          Difference:{" "}
+                          <strong className="text-slate-900">
+                            {Number.isFinite(computed.monthlyMinus4wPct)
+                              ? safeToFixed(
+                                  computed.monthlyMinus4wPct * 100,
+                                  2,
+                                )
+                              : "N/A"}
+                            %
+                          </strong>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+
+              <Assumptions />
             </>
-          ) : null}
+          )}
+        </div>
+
+        <div className="mt-3 rounded-xl border border-slate-200 bg-white/90 px-4 py-3 shadow-sm rc-no-print">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <Rounding
+              roundDisplay={roundDisplay}
+              setRoundDisplay={setRoundDisplay}
+              displayDecimals={displayDecimals}
+              setDisplayDecimals={setDisplayDecimals as any}
+            />
+
+            <button
+              type="button"
+              onClick={handlePrint}
+              className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 md:hidden"
+            >
+              Print / Save PDF
+            </button>
+          </div>
+
+          <p className="mt-2 text-xs text-slate-600 leading-relaxed">
+            Calculations preserve decimals internally up to 12 places. Only the
+            display is rounded.
+          </p>
         </div>
       </section>
+
       <HowItWorks />
+
+      <section className="mt-8 mb-4 hidden sm:block">
+        <nav
+          className="max-w-6xl mx-auto px-6 text-sm text-slate-600"
+          aria-label="Breadcrumb"
+        >
+          <a
+            href={safeHref("/")}
+            className="cursor-pointer rounded text-sky-700 hover:text-sky-900 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2"
+          >
+            Home
+          </a>{" "}
+          / <span className="text-slate-800">{pageName}</span>
+        </nav>
+      </section>
+
       <ToolFit />
+
       <FAQ />
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
+      />
     </main>
   );
 }

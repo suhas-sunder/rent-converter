@@ -6,52 +6,42 @@ import HowItWorks from "~/client/components/weekly-to-annual-rent-converter/HowI
 import ToolFit from "~/client/components/weekly-to-annual-rent-converter/ToolFit";
 
 export const meta: Route.MetaFunction = () => {
+  const title = "Free Weekly to Annual Rent Converter";
+  const description =
+    "Convert weekly rent into an annual rent amount. See related monthly, 4-week, daily, and hourly breakdowns.";
   const url = "https://www.rentconverter.com/weekly-to-annual-rent-converter";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
 
   return [
-    { title: "Free Weekly/Annual Rental Rate Calculator" },
-    {
-      name: "description",
-      content:
-        "Convert weekly rent to rent per year. See the weekly to annual rent formula, instant result, 52-week total, 365-day comparison, and export options.",
-    },
+    { title },
+    { charset: "utf-8" },
+    { name: "viewport", content: "width=device-width,initial-scale=1" },
+
+    { name: "description", content: description },
     {
       name: "keywords",
       content:
-        "weekly to annual rent, convert weekly rent to annual, true annual cost of weekly rent, weekly rent yearly total, 52 weeks vs 365 days rent, weekly rent annualized",
+        "weekly to annual rent, convert weekly rent to annual, weekly rent yearly total, weekly rent annualized, weekly rent per year",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
-    { name: "theme-color", content: "#f8fafc" },
-
-    { property: "og:type", content: "website" },
-    {
-      property: "og:title",
-      content: "Free Weekly/Annual Rental Rate Calculator",
-    },
-    {
-      property: "og:description",
-      content:
-        "Convert weekly rent to rent per year with a weekly to annual rent formula, 52-week total, and 365-day comparison.",
-    },
-    { property: "og:url", content: url },
-    { property: "og:site_name", content: "RentConverter.com" },
-    { property: "og:image", content: ogImage },
-
-    { name: "twitter:card", content: "summary_large_image" },
-    {
-      name: "twitter:title",
-      content: "Free Weekly/Annual Rental Rate Calculator",
-    },
-    {
-      name: "twitter:description",
-      content:
-        "Convert weekly rent to annual rent instantly with a simple weekly/annual rental rate calculator.",
-    },
-    { name: "twitter:image", content: ogImage },
+    { name: "theme-color", content: "#f0f9ff" },
 
     { tagName: "link", rel: "canonical", href: url },
+
+    { property: "og:type", content: "website" },
+    { property: "og:site_name", content: "RentConverter.com" },
+    { property: "og:url", content: url },
+    { property: "og:title", content: title },
+    { property: "og:description", content: description },
+    { property: "og:image", content: ogImage },
+    { property: "og:image:alt", content: "RentConverter.com preview image" },
+
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: description },
+    { name: "twitter:image", content: ogImage },
+    { name: "twitter:image:alt", content: "RentConverter.com preview image" },
   ];
 };
 
@@ -699,34 +689,39 @@ export default function WeeklyToAnnualRent() {
 
   const faqData = [
     {
-      q: "How does this convert weekly rent to an annual total?",
-      a: "It uses annual equivalence. Your weekly amount is converted to a daily rate (weekly ÷ 7), then scaled to a 365-day year to produce an annual total. All other period equivalents on the page come from that same annual total.",
+      q: "How do I convert weekly rent to annual rent?",
+      a: "Convert the weekly amount to a daily rate, then multiply by 365. This gives an annual rent amount on a 365-day basis.",
     },
     {
-      q: "Why is weekly rent × 52 not always the same as the annual result here?",
-      a: "Weekly × 52 assumes exactly 52 weekly payments. A 365-day year is about 52.14 weeks, so a time-based annual equivalent can be slightly higher than the payment-count shortcut.",
+      q: "Why is weekly rent multiplied by 52 sometimes different?",
+      a: "Weekly rent multiplied by 52 assumes exactly 52 weekly payments. A 365-day year is about 52.14 weeks, so a day-based annual amount can be slightly higher.",
     },
     {
-      q: "What does the “52 payments” comparison represent?",
-      a: "It shows a payment-count interpretation (52 weekly payments) next to the 365-day annual-equivalence interpretation so you can see both without mixing assumptions.",
+      q: "What does the 52-payment comparison mean?",
+      a: "It shows the simple payment-count method beside the 365-day annual amount. This helps you see the difference between weekly payment counting and day-based annualization.",
     },
     {
-      q: "How does weekly rent relate to 4-week (28-day) pricing?",
-      a: "A 4-week period is always 28 days. Converting both to annual totals lets you compare weekly listings to 4-week pricing without treating 4 weeks as a calendar month.",
+      q: "Can I use this to compare weekly rent with monthly rent?",
+      a: "Yes. The calculator converts weekly rent to an annual amount first, then derives monthly, 4-week, biweekly, daily, and hourly amounts from the same annual total.",
     },
     {
-      q: "Does this match exact lease totals and due dates?",
-      a: "No. This is an annual-equivalent estimate for comparison and budgeting. Exact totals depend on the lease schedule, start date, and any proration rules.",
+      q: "Is every 4 weeks the same as monthly rent?",
+      a: "No. Every 4 weeks is 28 days. An average month is about 30.42 days based on 365 days divided by 12.",
     },
     {
-      q: "What costs are included in the conversion?",
-      a: "Only the rent amount entered. Utilities, parking, insurance, fees, and one-time charges are excluded unless you add them into the amount before converting.",
+      q: "Does this match exact lease due dates?",
+      a: "No. This is a rent conversion estimate. Exact lease totals can depend on start dates, due dates, proration rules, and lease wording.",
+    },
+    {
+      q: "What costs are included?",
+      a: "Only the rent amount you enter. Utilities, parking, insurance, fees, and one-time charges are not included unless you add them to the weekly amount yourself.",
     },
   ];
 
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
+    mainEntityOfPage: canonicalUrl,
     mainEntity: faqData.map((f) => ({
       "@type": "Question",
       name: f.q,
@@ -737,19 +732,38 @@ export default function WeeklyToAnnualRent() {
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
+    "@id": `${canonicalUrl}#breadcrumb`,
     itemListElement: [
       {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.rentconverter.com/",
+        item: "https://www.rentconverter.com",
       },
       { "@type": "ListItem", position: 2, name: pageName, item: canonicalUrl },
     ],
   };
 
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "RentConverter.com",
+    url: "https://www.rentconverter.com",
+  };
+
+  const webPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: pageName,
+    description:
+      "Convert weekly rent into an annual rent amount. See related monthly, 4-week, daily, and hourly breakdowns.",
+    url: canonicalUrl,
+    isPartOf: { "@type": "WebSite", url: "https://www.rentconverter.com" },
+    breadcrumb: { "@id": `${canonicalUrl}#breadcrumb` },
+  };
+
   return (
-    <main className="bg-white text-slate-700 scroll-smooth">
+    <main className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-slate-50 text-slate-700 scroll-smooth antialiased">
       <style
         dangerouslySetInnerHTML={{
           __html: `
@@ -765,26 +779,37 @@ export default function WeeklyToAnnualRent() {
 
       <section
         id="converter"
-        className="mx-auto max-w-6xl px-6 pb-6 mt-2 sm:mt-6"
+        className="mx-auto max-w-6xl px-6 py-6"
       >
-        <div className="rounded-2xl pb-6 bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8">
-          <div className="pt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <h1 className="text-center mb-1 sm:mb-0 sm:text-left text-2xl sm:text-3xl capitalize font-bold text-sky-800 tracking-tight">
-              Weekly to Annual Rent Converter
-            </h1>
+        <div className="rounded-2xl bg-white/95 pb-6 shadow-sm border border-slate-200 sm:px-8">
+          <div className="pt-5 sm:pt-6">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div className="min-w-0">
+                <div className="inline-flex rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-800">
+                  Weekly rent tool
+                </div>
 
-            <div
-              id="export-controls"
-              className="hidden sm:flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
-            >
-              <div className="flex flex-wrap gap-2">
+                <h1 className="mt-3 text-center sm:text-left text-2xl sm:text-3xl capitalize font-bold text-sky-900 tracking-tight">
+                  Weekly to Annual Rent Converter
+                </h1>
+
+                <p className="mt-2 max-w-4xl text-base text-slate-700">
+                  Convert weekly rent into an annual amount. The calculator also
+                  shows monthly, 4-week, daily, and hourly rent breakdowns.
+                </p>
+              </div>
+
+              <div
+                id="export-controls"
+                className="rc-no-print flex shrink-0 justify-start sm:justify-end"
+              >
                 <button
                   type="button"
                   onClick={() => {
                     if (typeof window === "undefined") return;
                     window.print();
                   }}
-                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fbff]"
+                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2"
                 >
                   Print / Save PDF
                 </button>
@@ -792,12 +817,7 @@ export default function WeeklyToAnnualRent() {
             </div>
           </div>
 
-          <p className="hidden md:flex w-full py-2 text-base text-slate-600">
-            Convert weekly rent into an annual total instantly. Clear
-            calculations, no sign-up required.
-          </p>
-
-          <div className="grid gap-x-5 gap-y-3">
+          <div className="mt-5 grid gap-x-5 gap-y-4">
             <div>
               <label className="block text-sm font-semibold text-slate-700 mb-2">
                 Weekly rent amount
@@ -811,7 +831,7 @@ export default function WeeklyToAnnualRent() {
                   onFocus={() => setIsAmountFocused(true)}
                   onBlur={() => setIsAmountFocused(false)}
                   placeholder="e.g. 550"
-                  className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-lg text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2"
                   aria-invalid={!parsed.ok}
                   aria-describedby={!parsed.ok ? "rc-wta-errors" : undefined}
                 />
@@ -823,7 +843,7 @@ export default function WeeklyToAnnualRent() {
                       isCurrency(e.target.value) ? e.target.value : "USD",
                     )
                   }
-                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm font-semibold text-slate-900 outline-none transition hover:border-sky-300 hover:bg-sky-50 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2"
                   aria-label="Currency"
                 >
                   {SUPPORTED_CURRENCIES.map((c) => (
@@ -833,38 +853,55 @@ export default function WeeklyToAnnualRent() {
                   ))}
                 </select>
               </div>
+
+              <p className="mt-1 text-xs text-slate-600">
+                Enter the weekly rent amount you want to convert.
+              </p>
             </div>
           </div>
 
           {!parsed.ok ? (
             <div
               id="rc-wta-errors"
-              className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 sm:px-6"
+              className="mt-5 overflow-hidden rounded-2xl border border-slate-200 bg-sky-50/60 shadow-sm rc-print-block"
+              role="region"
+              aria-label="Results"
+              aria-live="polite"
             >
-              <div className="font-semibold text-slate-900">
-                No results to show
+              <div className="h-1 bg-gradient-to-r from-sky-500 to-emerald-400" />
+
+              <div className="p-5 sm:px-6">
+                <div className="rounded-xl border border-slate-200 bg-white/95 p-4 shadow-sm">
+                  <div className="font-semibold text-slate-900">
+                    No results to show
+                  </div>
+                  <p className="mt-1 text-sm text-slate-600">
+                    Fix the input to calculate annual rent.
+                  </p>
+                  <ul className="mt-3 list-disc pl-5 space-y-1 text-sm text-rose-700">
+                    {parsed.errors.map((e, i) => (
+                      <li key={i}>{e}</li>
+                    ))}
+                  </ul>
+                  {parsed.warnings.length ? (
+                    <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                      <div className="font-semibold">Notes</div>
+                      <ul className="mt-1 list-disc pl-5 space-y-1">
+                        {parsed.warnings.map((w, i) => (
+                          <li key={i}>{w}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+                </div>
               </div>
-              <p className="mt-1 text-sm text-slate-600">
-                Fix the input to calculate.
-              </p>
-              <ul className="mt-3 list-disc pl-5 space-y-1 text-sm text-rose-700">
-                {parsed.errors.map((e, i) => (
-                  <li key={i}>{e}</li>
-                ))}
-              </ul>
-              {parsed.warnings.length ? (
-                <ul className="mt-3 list-disc pl-5 space-y-1 text-sm text-amber-700">
-                  {parsed.warnings.map((w, i) => (
-                    <li key={i}>{w}</li>
-                  ))}
-                </ul>
-              ) : null}
             </div>
           ) : computed.ok ? (
             <>
               {computed.warnings.length ? (
-                <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
-                  <ul className="list-disc pl-5 space-y-1">
+                <div className="mt-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                  <div className="font-semibold">Notes</div>
+                  <ul className="mt-1 list-disc pl-5 space-y-1">
                     {computed.warnings.map((w, i) => (
                       <li key={i}>{w}</li>
                     ))}
@@ -872,70 +909,82 @@ export default function WeeklyToAnnualRent() {
                 </div>
               ) : null}
 
-              <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:px-6 rc-print-block">
-                <div className="flex items-center gap-2">
-                  <div
-                    className="h-2 w-2 rounded-full bg-sky-600"
-                    aria-hidden="true"
-                  />
-                  <div className="text-sm font-semibold text-slate-800">
-                    Annual equivalent
-                  </div>
-                </div>
+              <div
+                className="mt-5 overflow-hidden rounded-2xl border border-slate-200 bg-sky-50/60 shadow-sm rc-print-block"
+                role="region"
+                aria-label="Results"
+                aria-live="polite"
+              >
+                <div className="h-1 bg-gradient-to-r from-sky-500 to-emerald-400" />
 
-                <div className="mt-2 flex flex-col gap-2">
-                  <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700">
-                    {money(computed.annual)}
-                  </div>
-                </div>
-
-                <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                  {(
-                    [
-                      ["Hourly", computed.hourly, "hourly"],
-                      ["Daily", computed.daily, "daily"],
-                      ["Weekly", computed.weekly, "weekly"],
-                      ["2 weeks", computed.biweekly, "biweekly"],
-                      [
-                        "4 weeks (28 days)",
-                        computed.fourWeeks,
-                        "every_4_weeks",
-                      ],
-                      ["Monthly (average)", computed.monthly, "monthly"],
-                    ] as const
-                  ).map(([label, val, key]) => (
+                <div className="p-5 sm:px-6">
+                  <div className="flex items-center gap-2">
                     <div
-                      key={key}
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-2"
-                    >
-                      <div className="text-xs text-slate-500">{label}</div>
-                      <div className="mt-1 text-lg font-bold text-slate-800">
-                        {money(val)}
-                      </div>
+                      className="h-2 w-2 rounded-full bg-emerald-600"
+                      aria-hidden="true"
+                    />
+                    <div className="text-sm font-semibold text-slate-900">
+                      Annual rent
                     </div>
-                  ))}
+                  </div>
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-2">
-                    <div className="text-xs text-slate-500">
-                      4-week vs monthly context
+                  <div className="mt-2 flex flex-col gap-2">
+                    <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700">
+                      {money(computed.annual)}
                     </div>
-                    <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                      <div className="text-sm text-slate-700">
-                        Monthly minus 4-week ={" "}
-                        <strong className="text-slate-900">
-                          {money(computed.monthlyMinus4w)}
-                        </strong>
+                    <p className="text-sm text-slate-600">
+                      Based on weekly rent annualized over a 365-day year.
+                    </p>
+                  </div>
+
+                  <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                    {(
+                      [
+                        ["Hourly", computed.hourly, "hourly"],
+                        ["Daily", computed.daily, "daily"],
+                        ["Weekly", computed.weekly, "weekly"],
+                        ["2 weeks", computed.biweekly, "biweekly"],
+                        [
+                          "4 weeks (28 days)",
+                          computed.fourWeeks,
+                          "every_4_weeks",
+                        ],
+                        ["Monthly (average)", computed.monthly, "monthly"],
+                      ] as const
+                    ).map(([label, val, key]) => (
+                      <div
+                        key={key}
+                        className="rounded-xl border border-slate-200 bg-white/95 px-4 py-2 shadow-sm"
+                      >
+                        <div className="text-xs text-slate-600">{label}</div>
+                        <div className="mt-1 text-lg font-bold text-slate-900">
+                          {money(val)}
+                        </div>
                       </div>
-                      <div className="text-sm text-slate-700">
-                        Difference ≈{" "}
-                        <strong className="text-slate-900">
-                          {formatPercentFromRatioScaled(
-                            computed.monthlyMinus4w,
-                            computed.fourWeeks,
-                            2,
-                          )}
-                          %
-                        </strong>
+                    ))}
+
+                    <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 shadow-sm">
+                      <div className="text-xs font-semibold text-emerald-800">
+                        Monthly vs every 4 weeks
+                      </div>
+                      <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                        <div className="text-sm text-slate-700">
+                          Monthly minus 4-week:{" "}
+                          <strong className="text-slate-900">
+                            {money(computed.monthlyMinus4w)}
+                          </strong>
+                        </div>
+                        <div className="text-sm text-slate-700">
+                          Difference:{" "}
+                          <strong className="text-slate-900">
+                            {formatPercentFromRatioScaled(
+                              computed.monthlyMinus4w,
+                              computed.fourWeeks,
+                              2,
+                            )}
+                            %
+                          </strong>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -947,47 +996,59 @@ export default function WeeklyToAnnualRent() {
           ) : null}
         </div>
 
-        <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 rc-no-print">
-          <div className="rc-no-print md:hidden flex flex-col sm:flex-row gap-2 mb-4">
+        <div className="mt-3 rounded-xl border border-slate-200 bg-white/90 px-4 py-3 shadow-sm rc-no-print">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <Rounding
+              roundDisplay={roundDisplay}
+              setRoundDisplay={setRoundDisplay}
+              displayDecimals={displayDecimals}
+              setDisplayDecimals={setDisplayDecimals as any}
+            />
+
             <button
               type="button"
               onClick={handlePrint}
-              className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+              className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 md:hidden"
             >
-              Print / Save as PDF
+              Print / Save PDF
             </button>
           </div>
-          <Rounding
-            roundDisplay={roundDisplay}
-            setRoundDisplay={setRoundDisplay}
-            displayDecimals={displayDecimals}
-            setDisplayDecimals={setDisplayDecimals as any}
-          />
+
+          <p className="mt-2 text-xs text-slate-600 leading-relaxed">
+            Calculations preserve decimals internally up to 12 places. Only the
+            display is rounded.
+          </p>
         </div>
       </section>
 
       <HowItWorks />
 
       <section className="mt-8 mb-4 hidden sm:block">
-        <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-500">
-          <a href={safeHref("/")} className="hover:underline">
+        <nav
+          className="max-w-6xl mx-auto px-6 text-sm text-slate-600"
+          aria-label="Breadcrumb"
+        >
+          <a
+            href={safeHref("/")}
+            className="cursor-pointer rounded text-sky-700 hover:text-sky-900 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2"
+          >
             Home
           </a>{" "}
-          / Weekly to Annual Rent Converter
+          / <span className="text-slate-800">{pageName}</span>
         </nav>
       </section>
 
       <ToolFit />
 
-      <section id="faq" className="max-w-5xl mx-auto pb-16 px-6">
-        <h2 className="text-3xl font-bold text-center mb-3 text-sky-800 tracking-tight">
+      <section id="faq" className="max-w-5xl mx-auto py-16 px-6">
+        <h2 className="text-3xl font-bold text-center mb-10 text-sky-800 tracking-tight">
           Frequently Asked Questions
         </h2>
 
-        <div className="divide-y divide-slate-200">
+        <div className="divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white/90 px-5 shadow-sm">
           {faqData.map((f, i) => (
             <details key={i} className="group py-4">
-              <summary className="cursor-pointer list-none font-semibold text-lg text-sky-800 flex items-center justify-between hover:text-sky-900">
+              <summary className="cursor-pointer list-none font-semibold text-lg text-sky-800 flex items-center justify-between rounded hover:text-sky-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2">
                 <span>{f.q}</span>
                 <span className="ml-4 text-slate-400 transition-transform group-open:rotate-180">
                   ▾
@@ -1009,6 +1070,14 @@ export default function WeeklyToAnnualRent() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
       />
     </main>
   );

@@ -1157,7 +1157,7 @@ export default function MonthlyToAnnualRent() {
           Frequently Asked Questions
         </h2>
 
-        <p className="mx-auto mb-6 max-w-3xl text-center text-slate-600">
+        <p className="mx-auto mb-6 max-w-6xl text-center text-slate-600">
           These answers explain monthly-to-annual rent conversion and how to
           compare monthly rent with 4-week rent.
         </p>

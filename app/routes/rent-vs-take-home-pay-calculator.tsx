@@ -5,60 +5,47 @@ import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/rent-vs-take-home-pay-calculator/HowItWorks";
 import ToolFit from "~/client/components/rent-vs-take-home-pay-calculator/ToolFit";
 
-export const meta: Route.MetaFunction = () => [
-  { title: "Free Rent vs Take-Home Pay Calculator" },
-  {
-    name: "description",
-    content:
-      "Calculate rent as a percentage of take-home pay. See rent vs after-tax income, net income impact, pay-cycle breakdowns, and export options.",
-  },
-  {
-    name: "keywords",
-    content:
-      "rent vs take home pay, rent percentage of take home pay, rent to net income, rent vs after tax income, take home pay rent calculator",
-  },
-  { name: "robots", content: "index,follow" },
-  { name: "author", content: "RentConverter.com" },
-  { name: "theme-color", content: "#f8fafc" },
+export const meta: Route.MetaFunction = () => {
+  const title = "Free Rent vs Take-Home Pay Calculator";
+  const description =
+    "Calculate rent as a percentage of take-home pay and see how much income remains after rent.";
 
-  { property: "og:type", content: "website" },
-  {
-    property: "og:title",
-    content: "Free Rent vs Take-Home Pay Calculator",
-  },
-  {
-    property: "og:description",
-    content:
-      "Calculate rent as a percentage of your take-home pay and see how much income remains after rent across common pay cycles.",
-  },
-  {
-    property: "og:url",
-    content: "https://www.rentconverter.com/rent-vs-take-home-pay-calculator",
-  },
-  { property: "og:site_name", content: "RentConverter.com" },
-  {
-    property: "og:image",
-    content: "https://www.rentconverter.com/og-image.jpg",
-  },
+  const canonicalUrl =
+    "https://www.rentconverter.com/rent-vs-take-home-pay-calculator";
+  const ogImage = "https://www.rentconverter.com/og-image.jpg";
 
-  { name: "twitter:card", content: "summary_large_image" },
-  { name: "twitter:title", content: "Free Rent vs Take-Home Pay Calculator" },
-  {
-    name: "twitter:description",
-    content:
-      "Calculate rent as a percentage of take-home pay and see what you actually keep.",
-  },
-  {
-    name: "twitter:image",
-    content: "https://www.rentconverter.com/og-image.jpg",
-  },
+  return [
+    { title },
+    { charset: "utf-8" },
+    { name: "viewport", content: "width=device-width,initial-scale=1" },
 
-  {
-    tagName: "link",
-    rel: "canonical",
-    href: "https://www.rentconverter.com/rent-vs-take-home-pay-calculator",
-  },
-];
+    { name: "description", content: description },
+    {
+      name: "keywords",
+      content:
+        "rent vs take home pay, rent percentage of take home pay, rent to net income, rent vs after tax income, take home pay rent calculator",
+    },
+    { name: "robots", content: "index,follow" },
+    { name: "author", content: "RentConverter.com" },
+    { name: "theme-color", content: "#f0f9ff" },
+
+    { tagName: "link", rel: "canonical", href: canonicalUrl },
+
+    { property: "og:type", content: "website" },
+    { property: "og:site_name", content: "RentConverter.com" },
+    { property: "og:url", content: canonicalUrl },
+    { property: "og:title", content: title },
+    { property: "og:description", content: description },
+    { property: "og:image", content: ogImage },
+    { property: "og:image:alt", content: "RentConverter.com preview image" },
+
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: description },
+    { name: "twitter:image", content: ogImage },
+    { name: "twitter:image:alt", content: "RentConverter.com preview image" },
+  ];
+};
 
 type Period =
   | "hourly"
@@ -242,7 +229,8 @@ function absBigInt(x: bigint): bigint {
 
 function toNumberSafe(scaled: bigint): number {
   const a = absBigInt(scaled);
-  if (a > MAX_SAFE_INT_FOR_NUMBER) return Number.NaN;
+  const limit = MAX_SAFE_INT_FOR_NUMBER * SCALE;
+  if (a > limit) return Number.NaN;
   return Number(scaled) / Number(SCALE);
 }
 
@@ -611,7 +599,7 @@ function formatAmountPreviewFromRaw(raw: string): {
 export default function RentVsTakeHomePay() {
   const pageName = "Rent vs Take-Home Pay Calculator";
   const canonicalUrl =
-    "https://www.rentconverter.comrent-vs-take-home-pay-calculator";
+    "https://www.rentconverter.com/rent-vs-take-home-pay-calculator";
 
   const [takeHomePay, setTakeHomePay] = useState<string>(() => {
     if (typeof window === "undefined") return "5000";
@@ -807,38 +795,39 @@ export default function RentVsTakeHomePay() {
 
   const faqData = [
     {
-      q: "What is “take-home pay” on this page?",
-      a: "Take-home pay is your net income after payroll deductions such as taxes and other withholdings. This calculator treats the income input as a net amount.",
+      q: "What is take-home pay?",
+      a: "Take-home pay is your net income after payroll deductions such as taxes, benefits, and other withholdings. Enter the amount you actually receive.",
     },
     {
-      q: "What does this tool calculate?",
-      a: "It annualizes take-home pay and rent using a 365-day year, then calculates rent as a percentage of take-home pay and the estimated amount left after rent. It also shows monthly, weekly, and 4-week equivalents from the same annual totals.",
+      q: "How do I calculate rent as a percentage of take-home pay?",
+      a: "Divide rent by take-home pay for the same time period, then multiply by 100. This calculator annualizes both amounts first so different pay and rent periods can be compared consistently.",
     },
     {
-      q: "Why convert everything to an annual total?",
-      a: "Annualizing both values keeps comparisons consistent when rent and pay use different periods. It avoids mixing calendar months with fixed-week or 28-day cycles.",
+      q: "Can I compare monthly rent with biweekly take-home pay?",
+      a: "Yes. Select the correct period for each input. The calculator converts both values to annual totals before calculating the rent percentage and the amount left after rent.",
     },
     {
       q: "Why do monthly and every 4 weeks differ?",
-      a: "A 4-week period is 28 days. An average month is about 30.42 days (365 ÷ 12). Over a year, that difference changes totals.",
+      a: "A 4-week period is 28 days. An average month is about 30.42 days based on 365 days divided by 12. Those are different billing cycles.",
     },
     {
-      q: "Can I mix periods (for example monthly rent and biweekly pay)?",
-      a: "Yes. Each input is annualized from its selected period, then the percentage and leftover amount are computed from the annual totals.",
+      q: "Does this include utilities or other bills?",
+      a: "No. The result is take-home pay minus rent only. Add utilities or other housing costs to the rent input if you want a combined housing-cost estimate.",
     },
     {
-      q: "Does “left after rent” include utilities or other bills?",
-      a: "No. It is take-home pay minus rent only.",
+      q: "What if rent is more than take-home pay?",
+      a: "The calculator can show a negative amount left after rent. That means the entered rent is higher than the entered take-home pay on an annualized basis.",
     },
     {
-      q: "What time assumptions does this page use?",
-      a: "Assumptions: year = 365 days, week = 7 days, every 4 weeks = 28 days, and month = 365 ÷ 12 days (average). Actual pay schedules and billing rules vary.",
+      q: "What assumptions does this page use?",
+      a: "The calculator uses 365 days per year, 7 days per week, 14 days for biweekly amounts, 28 days for every 4 weeks, and 365 ÷ 12 days for an average month.",
     },
   ];
 
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
+    mainEntityOfPage: canonicalUrl,
     mainEntity: faqData.map((f) => ({
       "@type": "Question",
       name: f.q,
@@ -849,24 +838,43 @@ export default function RentVsTakeHomePay() {
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
+    "@id": `${canonicalUrl}#breadcrumb`,
     itemListElement: [
       {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.rentconverter.com/",
+        item: "https://www.rentconverter.com",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: pageName,
-        item: "https://www.rentconverter.com/rent-vs-take-home-pay-calculator",
+        item: canonicalUrl,
       },
     ],
   };
 
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "RentConverter.com",
+    url: "https://www.rentconverter.com",
+  };
+
+  const webPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: pageName,
+    description:
+      "Calculate rent as a percentage of take-home pay and see how much income remains after rent.",
+    url: canonicalUrl,
+    isPartOf: { "@type": "WebSite", url: "https://www.rentconverter.com" },
+    breadcrumb: { "@id": `${canonicalUrl}#breadcrumb` },
+  };
+
   return (
-    <main className="bg-white text-slate-700 scroll-smooth">
+    <main className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-slate-50 text-slate-700 scroll-smooth antialiased">
       <style
         dangerouslySetInnerHTML={{
           __html: `
@@ -882,26 +890,37 @@ export default function RentVsTakeHomePay() {
 
       <section
         id="converter"
-        className="mx-auto max-w-6xl px-6 pb-6 mt-2 sm:mt-6"
+        className="mx-auto max-w-6xl px-6 py-6"
       >
-        <div className="rounded-2xl pb-6 bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8">
-          <div className="pt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <h1 className="text-center mb-1 sm:mb-0 sm:text-left text-2xl sm:text-3xl capitalize font-bold text-sky-800 tracking-tight">
-              Compare Rent to Take-Home Pay
-            </h1>
+        <div className="rounded-2xl bg-white/95 pb-6 shadow-sm border border-slate-200 sm:px-8">
+          <div className="pt-5 sm:pt-6">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div className="min-w-0">
+                <div className="inline-flex rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-800">
+                  Take-home pay tool
+                </div>
 
-            <div
-              id="export-controls"
-              className="hidden sm:flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
-            >
-              <div className="flex flex-wrap gap-2">
+                <h1 className="mt-3 text-center sm:text-left text-2xl sm:text-3xl capitalize font-bold text-sky-900 tracking-tight">
+                  Rent vs Take-Home Pay Calculator
+                </h1>
+
+                <p className="mt-2 max-w-4xl text-base text-slate-700">
+                  Calculate rent as a percentage of take-home pay. See how much
+                  income remains after rent.
+                </p>
+              </div>
+
+              <div
+                id="export-controls"
+                className="rc-no-print flex shrink-0 justify-start sm:justify-end"
+              >
                 <button
                   type="button"
                   onClick={() => {
                     if (typeof window === "undefined") return;
                     window.print();
                   }}
-                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fbff]"
+                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2"
                 >
                   Print / Save PDF
                 </button>
@@ -909,12 +928,7 @@ export default function RentVsTakeHomePay() {
             </div>
           </div>
 
-          <p className="hidden md:flex w-full py-2 text-base text-slate-600">
-            Compare your rent to your take-home pay to see what percentage of
-            your net income goes to housing.
-          </p>
-
-          <div className="grid gap-x-5 gap-y-3 md:grid-cols-12">
+          <div className="mt-5 grid gap-x-5 gap-y-4 md:grid-cols-12">
             <div className="md:col-span-6">
               <label className="block text-sm font-semibold text-slate-700 mb-2">
                 Take-home pay (net)
@@ -937,7 +951,7 @@ export default function RentVsTakeHomePay() {
                   }}
                   onChange={(e) => setTakeHomePay(stripCommas(e.target.value))}
                   placeholder="e.g. 5000"
-                  className="cursor-pointer col-span-7 rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="col-span-7 rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2"
                   aria-invalid={!parsed.takeHome.ok}
                 />
                 <select
@@ -947,7 +961,7 @@ export default function RentVsTakeHomePay() {
                       isPeriod(e.target.value) ? e.target.value : "monthly",
                     )
                   }
-                  className="col-span-5 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="cursor-pointer col-span-5 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition hover:border-sky-300 hover:bg-sky-50 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2"
                   aria-label="Take-home pay period"
                 >
                   {Object.entries(PERIOD_LABEL).map(([k, v]) => (
@@ -986,7 +1000,7 @@ export default function RentVsTakeHomePay() {
                   }}
                   onChange={(e) => setRentAmount(stripCommas(e.target.value))}
                   placeholder="e.g. 1800"
-                  className="cursor-pointer col-span-7 rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="col-span-7 rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2"
                   aria-invalid={!parsed.rent.ok}
                 />
                 <select
@@ -996,7 +1010,7 @@ export default function RentVsTakeHomePay() {
                       isPeriod(e.target.value) ? e.target.value : "monthly",
                     )
                   }
-                  className="col-span-5 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="cursor-pointer col-span-5 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition hover:border-sky-300 hover:bg-sky-50 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2"
                   aria-label="Rent period"
                 >
                   {Object.entries(PERIOD_LABEL).map(([k, v]) => (
@@ -1024,7 +1038,7 @@ export default function RentVsTakeHomePay() {
                     isCurrency(e.target.value) ? e.target.value : "USD",
                   )
                 }
-                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                className="cursor-pointer w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition hover:border-sky-300 hover:bg-sky-50 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2"
                 aria-label="Currency"
               >
                 {SUPPORTED_CURRENCIES.map((c) => (
@@ -1037,31 +1051,47 @@ export default function RentVsTakeHomePay() {
           </div>
 
           {!parsed.ok ? (
-            <div className="mt-3 rounded-2xl border border-slate-200 bg-white p-5 sm:px-6">
-              <div className="font-semibold text-slate-900">
-                No results to show
+            <div
+              className="mt-5 overflow-hidden rounded-2xl border border-slate-200 bg-sky-50/60 shadow-sm rc-print-block"
+              role="region"
+              aria-label="Results"
+              aria-live="polite"
+            >
+              <div className="h-1 bg-gradient-to-r from-sky-500 to-emerald-400" />
+
+              <div className="p-5 sm:px-6">
+                <div className="rounded-xl border border-slate-200 bg-white/95 p-4 shadow-sm">
+                  <div className="font-semibold text-slate-900">
+                    No results to show
+                  </div>
+                  <p className="mt-1 text-sm text-slate-600">
+                    Fix the inputs to calculate rent as a percentage of
+                    take-home pay.
+                  </p>
+                  <ul className="mt-3 list-disc pl-5 space-y-1 text-sm text-rose-700">
+                    {parsed.errors.map((e, i) => (
+                      <li key={i}>{e}</li>
+                    ))}
+                  </ul>
+                  {parsed.warnings.length ? (
+                    <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                      <div className="font-semibold">Notes</div>
+                      <ul className="mt-1 list-disc pl-5 space-y-1">
+                        {parsed.warnings.map((w, i) => (
+                          <li key={i}>{w}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+                </div>
               </div>
-              <p className="mt-1 text-sm text-slate-600">
-                Fix the inputs to calculate.
-              </p>
-              <ul className="mt-3 list-disc pl-5 space-y-1 text-sm text-rose-700">
-                {parsed.errors.map((e, i) => (
-                  <li key={i}>{e}</li>
-                ))}
-              </ul>
-              {parsed.warnings.length ? (
-                <ul className="mt-3 list-disc pl-5 space-y-1 text-sm text-amber-700">
-                  {parsed.warnings.map((w, i) => (
-                    <li key={i}>{w}</li>
-                  ))}
-                </ul>
-              ) : null}
             </div>
           ) : computed.ok ? (
             <>
               {computed.warnings.length ? (
-                <div className="mt-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
-                  <ul className="list-disc pl-5 space-y-1">
+                <div className="mt-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                  <div className="font-semibold">Notes</div>
+                  <ul className="mt-1 list-disc pl-5 space-y-1">
                     {computed.warnings.map((w, i) => (
                       <li key={i}>{w}</li>
                     ))}
@@ -1069,131 +1099,142 @@ export default function RentVsTakeHomePay() {
                 </div>
               ) : null}
 
-              <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:px-6 rc-print-block">
-                <div className="flex items-center gap-2">
-                  <div
-                    className="h-2 w-2 rounded-full bg-sky-600"
-                    aria-hidden="true"
-                  />
-                  <div className="text-sm font-semibold text-slate-800">
-                    Rent share of take-home pay
-                  </div>
-                </div>
+              <div
+                className="mt-5 overflow-hidden rounded-2xl border border-slate-200 bg-sky-50/60 shadow-sm rc-print-block"
+                role="region"
+                aria-label="Results"
+                aria-live="polite"
+              >
+                <div className="h-1 bg-gradient-to-r from-sky-500 to-emerald-400" />
 
-                <div className="mt-2 flex flex-col gap-2">
-                  <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700">
-                    {computed.rentPctText}%
-                  </div>
-                </div>
-
-                <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2">
-                    <div className="text-xs text-slate-500">
-                      Take-home pay (annualized)
-                    </div>
-                    <div className="mt-1 text-lg font-bold text-slate-800">
-                      {money(computed.annualTakeHome)}
+                <div className="p-5 sm:px-6">
+                  <div className="flex items-center gap-2">
+                    <div
+                      className="h-2 w-2 rounded-full bg-emerald-600"
+                      aria-hidden="true"
+                    />
+                    <div className="text-sm font-semibold text-slate-900">
+                      Rent share of take-home pay
                     </div>
                   </div>
 
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2">
-                    <div className="text-xs text-slate-500">
-                      Rent (annualized)
+                  <div className="mt-2 flex flex-col gap-2">
+                    <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700">
+                      {computed.rentPctText}%
                     </div>
-                    <div className="mt-1 text-lg font-bold text-slate-800">
-                      {money(computed.annualRent)}
-                    </div>
+                    <p className="text-sm text-slate-600">
+                      Based on annualized take-home pay and rent.
+                    </p>
                   </div>
 
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2">
-                    <div className="text-xs text-slate-500">
-                      Take-home pay left after rent (annualized)
-                    </div>
-                    <div className="mt-1 text-lg font-bold text-slate-800">
-                      {money(computed.annualLeft)}
-                    </div>
-                  </div>
-
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-2">
-                    <div className="text-xs text-slate-500">
-                      Monthly, weekly, and 4-week equivalents (from annual
-                      totals)
-                    </div>
-
-                    <div className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                      <div className="text-sm text-slate-700">
-                        Take-home per month (avg):{" "}
-                        <strong className="text-slate-900">
-                          {money(computed.takeHomeMonthly)}
-                        </strong>
+                  <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                    <div className="rounded-xl border border-slate-200 bg-white/95 px-4 py-2 shadow-sm">
+                      <div className="text-xs text-slate-600">
+                        Take-home pay annualized
                       </div>
-                      <div className="text-sm text-slate-700">
-                        Rent per month (avg):{" "}
-                        <strong className="text-slate-900">
-                          {money(computed.rentMonthly)}
-                        </strong>
-                      </div>
-                      <div className="text-sm text-slate-700">
-                        Left per month (avg):{" "}
-                        <strong className="text-slate-900">
-                          {money(computed.leftMonthly)}
-                        </strong>
-                      </div>
-
-                      <div className="text-sm text-slate-700">
-                        Take-home per week:{" "}
-                        <strong className="text-slate-900">
-                          {money(computed.takeHomeWeekly)}
-                        </strong>
-                      </div>
-                      <div className="text-sm text-slate-700">
-                        Rent per week:{" "}
-                        <strong className="text-slate-900">
-                          {money(computed.rentWeekly)}
-                        </strong>
-                      </div>
-                      <div className="text-sm text-slate-700">
-                        Left per week:{" "}
-                        <strong className="text-slate-900">
-                          {money(computed.leftWeekly)}
-                        </strong>
-                      </div>
-
-                      <div className="text-sm text-slate-700">
-                        Take-home per 4 weeks:{" "}
-                        <strong className="text-slate-900">
-                          {money(computed.takeHome4w)}
-                        </strong>
-                      </div>
-                      <div className="text-sm text-slate-700">
-                        Rent per 4 weeks:{" "}
-                        <strong className="text-slate-900">
-                          {money(computed.rent4w)}
-                        </strong>
-                      </div>
-                      <div className="text-sm text-slate-700">
-                        Left per 4 weeks:{" "}
-                        <strong className="text-slate-900">
-                          {money(computed.left4w)}
-                        </strong>
+                      <div className="mt-1 text-lg font-bold text-slate-900">
+                        {money(computed.annualTakeHome)}
                       </div>
                     </div>
-                  </div>
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-2">
-                    <div className="text-xs text-slate-500">
-                      Monthly vs every 4 weeks (rent)
+                    <div className="rounded-xl border border-slate-200 bg-white/95 px-4 py-2 shadow-sm">
+                      <div className="text-xs text-slate-600">
+                        Rent annualized
+                      </div>
+                      <div className="mt-1 text-lg font-bold text-slate-900">
+                        {money(computed.annualRent)}
+                      </div>
                     </div>
-                    <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                      <div className="text-sm text-slate-700">
-                        Monthly rent (avg) minus 4-week rent:{" "}
+
+                    <div className="rounded-xl border border-slate-200 bg-white/95 px-4 py-2 shadow-sm">
+                      <div className="text-xs text-slate-600">
+                        Left after rent annualized
+                      </div>
+                      <div className="mt-1 text-lg font-bold text-slate-900">
+                        {money(computed.annualLeft)}
+                      </div>
+                    </div>
+
+                    <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white/95 px-4 py-3 shadow-sm">
+                      <div className="text-xs font-semibold text-slate-600">
+                        Monthly, weekly, and 4-week amounts
+                      </div>
+
+                      <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                        <div className="rounded-lg border border-slate-200 bg-slate-50/50 px-3 py-2 text-sm text-slate-700">
+                          Take-home per month:{" "}
+                          <strong className="text-slate-900">
+                            {money(computed.takeHomeMonthly)}
+                          </strong>
+                        </div>
+                        <div className="rounded-lg border border-slate-200 bg-slate-50/50 px-3 py-2 text-sm text-slate-700">
+                          Rent per month:{" "}
+                          <strong className="text-slate-900">
+                            {money(computed.rentMonthly)}
+                          </strong>
+                        </div>
+                        <div className="rounded-lg border border-slate-200 bg-slate-50/50 px-3 py-2 text-sm text-slate-700">
+                          Left per month:{" "}
+                          <strong className="text-slate-900">
+                            {money(computed.leftMonthly)}
+                          </strong>
+                        </div>
+
+                        <div className="rounded-lg border border-slate-200 bg-slate-50/50 px-3 py-2 text-sm text-slate-700">
+                          Take-home per week:{" "}
+                          <strong className="text-slate-900">
+                            {money(computed.takeHomeWeekly)}
+                          </strong>
+                        </div>
+                        <div className="rounded-lg border border-slate-200 bg-slate-50/50 px-3 py-2 text-sm text-slate-700">
+                          Rent per week:{" "}
+                          <strong className="text-slate-900">
+                            {money(computed.rentWeekly)}
+                          </strong>
+                        </div>
+                        <div className="rounded-lg border border-slate-200 bg-slate-50/50 px-3 py-2 text-sm text-slate-700">
+                          Left per week:{" "}
+                          <strong className="text-slate-900">
+                            {money(computed.leftWeekly)}
+                          </strong>
+                        </div>
+
+                        <div className="rounded-lg border border-slate-200 bg-slate-50/50 px-3 py-2 text-sm text-slate-700">
+                          Take-home per 4 weeks:{" "}
+                          <strong className="text-slate-900">
+                            {money(computed.takeHome4w)}
+                          </strong>
+                        </div>
+                        <div className="rounded-lg border border-slate-200 bg-slate-50/50 px-3 py-2 text-sm text-slate-700">
+                          Rent per 4 weeks:{" "}
+                          <strong className="text-slate-900">
+                            {money(computed.rent4w)}
+                          </strong>
+                        </div>
+                        <div className="rounded-lg border border-slate-200 bg-slate-50/50 px-3 py-2 text-sm text-slate-700">
+                          Left per 4 weeks:{" "}
+                          <strong className="text-slate-900">
+                            {money(computed.left4w)}
+                          </strong>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 shadow-sm">
+                      <div className="text-xs font-semibold text-emerald-800">
+                        Monthly vs every 4 weeks rent
+                      </div>
+                      <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                        <div className="text-sm text-slate-700">
+                          Monthly rent minus 4-week rent:{" "}
+                          <strong className="text-slate-900">
+                            {money(computed.monthMinus4wRent)}
+                          </strong>
+                        </div>
                         <strong className="text-slate-900">
-                          {money(computed.monthMinus4wRent)}
+                          {computed.monthMinus4wRentPctText}%
                         </strong>
                       </div>
-                      <strong className="text-slate-900">
-                        {computed.monthMinus4wRentPctText}%
-                      </strong>
                     </div>
                   </div>
                 </div>
@@ -1204,47 +1245,59 @@ export default function RentVsTakeHomePay() {
           ) : null}
         </div>
 
-        <div className="mt-3 rounded-2xl border border-slate-200 bg-white p-5 rc-no-print">
-          <div className="rc-no-print md:hidden flex flex-col sm:flex-row gap-2 mb-4">
+        <div className="mt-3 rounded-xl border border-slate-200 bg-white/90 px-4 py-3 shadow-sm rc-no-print">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <Rounding
+              roundDisplay={roundDisplay}
+              setRoundDisplay={setRoundDisplay}
+              displayDecimals={displayDecimals}
+              setDisplayDecimals={setDisplayDecimals as any}
+            />
+
             <button
               type="button"
               onClick={handlePrint}
-              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+              className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 md:hidden"
             >
-              Print / Save as PDF
+              Print / Save PDF
             </button>
           </div>
-          <Rounding
-            roundDisplay={roundDisplay}
-            setRoundDisplay={setRoundDisplay}
-            displayDecimals={displayDecimals}
-            setDisplayDecimals={setDisplayDecimals as any}
-          />
+
+          <p className="mt-2 text-xs text-slate-600 leading-relaxed">
+            Calculations preserve decimals internally up to 12 places. Only the
+            display is rounded.
+          </p>
         </div>
       </section>
 
       <HowItWorks />
 
       <section className="mt-8 mb-4 hidden sm:block">
-        <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-500">
-          <a href={safeHref("/")} className="hover:underline">
+        <nav
+          className="max-w-6xl mx-auto px-6 text-sm text-slate-600"
+          aria-label="Breadcrumb"
+        >
+          <a
+            href={safeHref("/")}
+            className="cursor-pointer rounded text-sky-700 hover:text-sky-900 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2"
+          >
             Home
           </a>{" "}
-          / {pageName}
+          / <span className="text-slate-800">{pageName}</span>
         </nav>
       </section>
 
       <ToolFit />
 
-      <section id="faq" className="max-w-5xl mx-auto pb-16 px-6">
-        <h2 className="text-3xl font-bold text-center mb-3 text-sky-800 tracking-tight">
+      <section id="faq" className="max-w-5xl mx-auto py-16 px-6">
+        <h2 className="text-3xl font-bold text-center mb-10 text-sky-800 tracking-tight">
           Frequently Asked Questions
         </h2>
 
-        <div className="divide-y divide-slate-200">
+        <div className="divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white/90 px-5 shadow-sm">
           {faqData.map((f, i) => (
             <details key={i} className="group py-4">
-              <summary className="cursor-pointer list-none font-semibold text-lg text-sky-800 flex items-center justify-between hover:text-sky-900">
+              <summary className="cursor-pointer list-none font-semibold text-lg text-sky-800 flex items-center justify-between rounded hover:text-sky-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2">
                 <span>{f.q}</span>
                 <span className="ml-4 text-slate-400 transition-transform group-open:rotate-180">
                   ▾
@@ -1266,6 +1319,14 @@ export default function RentVsTakeHomePay() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
       />
     </main>
   );

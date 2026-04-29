@@ -8,7 +8,7 @@ import ToolFit from "~/client/components/rent-vs-buy-calculator/ToolFit";
 export const meta: Route.MetaFunction = () => {
   const title = "Free Rent vs Buy Calculator";
   const description =
-    "Compare renting vs buying and see when buying breaks even. Estimate total rent paid, ownership costs, equity, year-by-year results, and export options.";
+    "Compare renting vs buying over time. Estimate rent paid, ownership costs, equity, and break-even timing.";
 
   const canonicalUrl = "https://www.rentconverter.com/rent-vs-buy-calculator";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
@@ -26,7 +26,7 @@ export const meta: Route.MetaFunction = () => {
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
-    { name: "theme-color", content: "#f8fafc" },
+    { name: "theme-color", content: "#f0f9ff" },
 
     { tagName: "link", rel: "canonical", href: canonicalUrl },
 
@@ -150,7 +150,8 @@ function absBigInt(x: bigint): bigint {
 
 function toNumberSafe(scaled: bigint): number {
   const a = absBigInt(scaled);
-  if (a > MAX_SAFE_INT_FOR_NUMBER) return Number.NaN;
+  const limit = MAX_SAFE_INT_FOR_NUMBER * SCALE;
+  if (a > limit) return Number.NaN;
   return Number(scaled) / Number(SCALE);
 }
 
@@ -1124,6 +1125,24 @@ export default function RentVsBuyCalculator() {
     ],
   };
 
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "RentConverter.com",
+    url: "https://www.rentconverter.com",
+  };
+
+  const webPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: pageName,
+    description:
+      "Compare renting and buying using rent, mortgage, ownership costs, equity, and selling costs.",
+    url: canonicalUrl,
+    isPartOf: { "@type": "WebSite", url: "https://www.rentconverter.com" },
+    breadcrumb: { "@id": `${canonicalUrl}#breadcrumb` },
+  };
+
   const monthlyRentDisplayValue = rentFocused
     ? monthlyRent
     : parsed.rent.ok
@@ -1161,7 +1180,7 @@ export default function RentVsBuyCalculator() {
       : buyClosingCosts;
 
   return (
-    <main className="bg-white text-slate-700 scroll-smooth">
+    <main className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-slate-50 text-slate-700 scroll-smooth antialiased">
       <style
         dangerouslySetInnerHTML={{
           __html: `
@@ -1177,26 +1196,37 @@ export default function RentVsBuyCalculator() {
 
       <section
         id="converter"
-        className="mx-auto max-w-6xl px-6 pb-6 mt-2 sm:mt-6"
+        className="mx-auto max-w-6xl px-6 py-6"
       >
-        <div className="rounded-2xl pb-6 bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8">
-          <div className="pt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <h1 className="text-center mb-1 sm:mb-0 sm:text-left text-2xl sm:text-3xl capitalize font-bold text-sky-800 tracking-tight">
-              Compare Rent Costs Over Time
-            </h1>
+        <div className="rounded-2xl bg-white/95 pb-6 shadow-sm border border-slate-200 sm:px-8">
+          <div className="pt-5 sm:pt-6">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div className="min-w-0">
+                <div className="inline-flex rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-800">
+                  Rent vs buy tool
+                </div>
 
-            <div
-              id="export-controls"
-              className="hidden sm:flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
-            >
-              <div className="flex flex-wrap gap-2">
+                <h1 className="mt-3 text-center sm:text-left text-2xl sm:text-3xl capitalize font-bold text-sky-900 tracking-tight">
+                  Rent vs Buy Calculator
+                </h1>
+
+                <p className="mt-2 max-w-3xl text-base text-slate-700">
+                  Compare renting and buying over time. The calculator estimates
+                  rent paid, ownership costs, equity, and break-even timing.
+                </p>
+              </div>
+
+              <div
+                id="export-controls"
+                className="rc-no-print flex shrink-0 justify-start sm:justify-end"
+              >
                 <button
                   type="button"
                   onClick={() => {
                     if (typeof window === "undefined") return;
                     window.print();
                   }}
-                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fbff]"
+                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2"
                 >
                   Print / Save PDF
                 </button>
@@ -1204,14 +1234,9 @@ export default function RentVsBuyCalculator() {
             </div>
           </div>
 
-          <p className="hidden md:flex w-full py-2 text-base text-slate-600">
-            Compare rent totals across different time periods to see what you’ll
-            pay over time. Clear calculations, no sign-up required.
-          </p>
-
-          <div className="grid gap-6 lg:grid-cols-12">
-            <div className="lg:col-span-4 rounded-2xl border border-slate-200 bg-white p-5">
-              <h3 className="text-lg font-bold text-slate-900 mb-3">
+          <div className="mt-5 grid gap-5 lg:grid-cols-12">
+            <div className="lg:col-span-4 rounded-2xl border border-slate-200 bg-white/95 p-5 shadow-sm">
+              <h3 className="text-lg font-bold text-sky-800 mb-3">
                 Rent assumptions
               </h3>
 
@@ -1228,17 +1253,20 @@ export default function RentVsBuyCalculator() {
                   setRentTouched(true);
                 }}
                 placeholder="e.g. 2200"
-                className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                className={`w-full rounded-xl border bg-white px-4 py-2 text-lg text-slate-900 placeholder:text-slate-400 outline-none transition focus:ring-2 focus:ring-sky-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 ${
+                  parsed.rent.ok
+                    ? "border-slate-300 focus:border-sky-500"
+                    : "border-rose-300 focus:border-rose-500"
+                }`}
                 aria-invalid={!parsed.rent.ok}
               />
               {rentTouched && !rentFocused && !parsed.rent.ok ? (
-                <p className="mt-2 text-xs text-rose-700">
+                <p className="mt-2 text-xs font-semibold text-rose-700">
                   {parsed.rent.error ?? "Enter monthly rent."}
                 </p>
               ) : (
-                <p className="mt-2 text-xs text-slate-500">
-                  Accepted inputs: $2,200, 2200.00, .5, 12., 2200,50 (comma
-                  decimal).
+                <p className="mt-2 text-xs text-slate-600">
+                  Accepted inputs: $2,200, 2200.00, .5, 12., 2200,50.
                 </p>
               )}
 
@@ -1251,11 +1279,15 @@ export default function RentVsBuyCalculator() {
                   value={rentIncreasePct}
                   onChange={(e) => setRentIncreasePct(e.target.value)}
                   placeholder="e.g. 3"
-                  className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className={`w-full rounded-xl border bg-white px-4 py-2 text-lg text-slate-900 placeholder:text-slate-400 outline-none transition focus:ring-2 focus:ring-sky-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 ${
+                    parsed.rentIncrease.ok
+                      ? "border-slate-300 focus:border-sky-500"
+                      : "border-rose-300 focus:border-rose-500"
+                  }`}
                   aria-invalid={!parsed.rentIncrease.ok}
                 />
-                <p className="mt-2 text-xs text-slate-500">
-                  Applied once per year in the model.
+                <p className="mt-2 text-xs text-slate-600">
+                  Applied once per year.
                 </p>
               </div>
 
@@ -1270,7 +1302,7 @@ export default function RentVsBuyCalculator() {
                       isCurrency(e.target.value) ? e.target.value : "USD",
                     )
                   }
-                  className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="cursor-pointer w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition hover:border-sky-300 hover:bg-sky-50 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2"
                   aria-label="Currency"
                 >
                   {SUPPORTED_CURRENCIES.map((c) => (
@@ -1280,10 +1312,28 @@ export default function RentVsBuyCalculator() {
                   ))}
                 </select>
               </div>
+
+              <div className="mt-4">
+                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  Time horizon (years)
+                </label>
+                <input
+                  inputMode="numeric"
+                  value={horizonYears}
+                  onChange={(e) => setHorizonYears(e.target.value)}
+                  placeholder="e.g. 7"
+                  className={`w-full rounded-xl border bg-white px-4 py-2 text-lg text-slate-900 placeholder:text-slate-400 outline-none transition focus:ring-2 focus:ring-sky-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 ${
+                    parsed.years.ok
+                      ? "border-slate-300 focus:border-sky-500"
+                      : "border-rose-300 focus:border-rose-500"
+                  }`}
+                  aria-invalid={!parsed.years.ok}
+                />
+              </div>
             </div>
 
-            <div className="lg:col-span-8 rounded-2xl border border-slate-200 bg-white p-5">
-              <h3 className="text-lg font-bold text-slate-900 mb-3">
+            <div className="lg:col-span-8 rounded-2xl border border-slate-200 bg-white/95 p-5 shadow-sm">
+              <h3 className="text-lg font-bold text-sky-800 mb-3">
                 Buy assumptions
               </h3>
 
@@ -1300,11 +1350,15 @@ export default function RentVsBuyCalculator() {
                   setHomePriceTouched(true);
                 }}
                 placeholder="e.g. 550000"
-                className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                className={`w-full rounded-xl border bg-white px-4 py-2 text-lg text-slate-900 placeholder:text-slate-400 outline-none transition focus:ring-2 focus:ring-sky-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 ${
+                  parsed.price.ok
+                    ? "border-slate-300 focus:border-sky-500"
+                    : "border-rose-300 focus:border-rose-500"
+                }`}
                 aria-invalid={!parsed.price.ok}
               />
               {homePriceTouched && !homePriceFocused && !parsed.price.ok ? (
-                <p className="mt-2 text-xs text-rose-700">
+                <p className="mt-2 text-xs font-semibold text-rose-700">
                   {parsed.price.error ?? "Enter home price."}
                 </p>
               ) : null}
@@ -1319,7 +1373,11 @@ export default function RentVsBuyCalculator() {
                     value={downPaymentPct}
                     onChange={(e) => setDownPaymentPct(e.target.value)}
                     placeholder="e.g. 20"
-                    className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className={`w-full rounded-xl border bg-white px-4 py-2 text-lg text-slate-900 placeholder:text-slate-400 outline-none transition focus:ring-2 focus:ring-sky-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 ${
+                      parsed.downPct.ok
+                        ? "border-slate-300 focus:border-sky-500"
+                        : "border-rose-300 focus:border-rose-500"
+                    }`}
                     aria-invalid={!parsed.downPct.ok}
                   />
                 </div>
@@ -1332,7 +1390,11 @@ export default function RentVsBuyCalculator() {
                     value={mortgageRatePct}
                     onChange={(e) => setMortgageRatePct(e.target.value)}
                     placeholder="e.g. 5.5"
-                    className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className={`w-full rounded-xl border bg-white px-4 py-2 text-lg text-slate-900 placeholder:text-slate-400 outline-none transition focus:ring-2 focus:ring-sky-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 ${
+                      parsed.ratePct.ok
+                        ? "border-slate-300 focus:border-sky-500"
+                        : "border-rose-300 focus:border-rose-500"
+                    }`}
                     aria-invalid={!parsed.ratePct.ok}
                   />
                 </div>
@@ -1348,7 +1410,11 @@ export default function RentVsBuyCalculator() {
                     value={mortgageTermYears}
                     onChange={(e) => setMortgageTermYears(e.target.value)}
                     placeholder="e.g. 25"
-                    className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className={`w-full rounded-xl border bg-white px-4 py-2 text-lg text-slate-900 placeholder:text-slate-400 outline-none transition focus:ring-2 focus:ring-sky-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 ${
+                      parsed.termYears.ok
+                        ? "border-slate-300 focus:border-sky-500"
+                        : "border-rose-300 focus:border-rose-500"
+                    }`}
                     aria-invalid={!parsed.termYears.ok}
                   />
                 </div>
@@ -1361,7 +1427,11 @@ export default function RentVsBuyCalculator() {
                     value={homeAppreciationPct}
                     onChange={(e) => setHomeAppreciationPct(e.target.value)}
                     placeholder="e.g. 3"
-                    className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className={`w-full rounded-xl border bg-white px-4 py-2 text-lg text-slate-900 placeholder:text-slate-400 outline-none transition focus:ring-2 focus:ring-sky-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 ${
+                      parsed.appPct.ok
+                        ? "border-slate-300 focus:border-sky-500"
+                        : "border-rose-300 focus:border-rose-500"
+                    }`}
                     aria-invalid={!parsed.appPct.ok}
                   />
                 </div>
@@ -1377,7 +1447,11 @@ export default function RentVsBuyCalculator() {
                     value={propertyTaxPct}
                     onChange={(e) => setPropertyTaxPct(e.target.value)}
                     placeholder="e.g. 1.0"
-                    className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className={`w-full rounded-xl border bg-white px-4 py-2 text-lg text-slate-900 placeholder:text-slate-400 outline-none transition focus:ring-2 focus:ring-sky-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 ${
+                      parsed.propTax.ok
+                        ? "border-slate-300 focus:border-sky-500"
+                        : "border-rose-300 focus:border-rose-500"
+                    }`}
                     aria-invalid={!parsed.propTax.ok}
                   />
                 </div>
@@ -1390,7 +1464,11 @@ export default function RentVsBuyCalculator() {
                     value={maintenancePct}
                     onChange={(e) => setMaintenancePct(e.target.value)}
                     placeholder="e.g. 1.0"
-                    className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className={`w-full rounded-xl border bg-white px-4 py-2 text-lg text-slate-900 placeholder:text-slate-400 outline-none transition focus:ring-2 focus:ring-sky-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 ${
+                      parsed.maint.ok
+                        ? "border-slate-300 focus:border-sky-500"
+                        : "border-rose-300 focus:border-rose-500"
+                    }`}
                     aria-invalid={!parsed.maint.ok}
                   />
                 </div>
@@ -1411,13 +1489,17 @@ export default function RentVsBuyCalculator() {
                       setHomeInsuranceTouched(true);
                     }}
                     placeholder="e.g. 1200"
-                    className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className={`w-full rounded-xl border bg-white px-4 py-2 text-lg text-slate-900 placeholder:text-slate-400 outline-none transition focus:ring-2 focus:ring-sky-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 ${
+                      parsed.insAnnual.ok
+                        ? "border-slate-300 focus:border-sky-500"
+                        : "border-rose-300 focus:border-rose-500"
+                    }`}
                     aria-invalid={!parsed.insAnnual.ok}
                   />
                   {homeInsuranceTouched &&
                   !homeInsuranceFocused &&
                   !parsed.insAnnual.ok ? (
-                    <p className="mt-2 text-xs text-rose-700">
+                    <p className="mt-2 text-xs font-semibold text-rose-700">
                       {parsed.insAnnual.error ?? "Enter annual home insurance."}
                     </p>
                   ) : null}
@@ -1436,11 +1518,15 @@ export default function RentVsBuyCalculator() {
                       setHoaTouched(true);
                     }}
                     placeholder="e.g. 0"
-                    className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className={`w-full rounded-xl border bg-white px-4 py-2 text-lg text-slate-900 placeholder:text-slate-400 outline-none transition focus:ring-2 focus:ring-sky-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 ${
+                      parsed.hoa.ok
+                        ? "border-slate-300 focus:border-sky-500"
+                        : "border-rose-300 focus:border-rose-500"
+                    }`}
                     aria-invalid={!parsed.hoa.ok}
                   />
                   {hoaTouched && !hoaFocused && !parsed.hoa.ok ? (
-                    <p className="mt-2 text-xs text-rose-700">
+                    <p className="mt-2 text-xs font-semibold text-rose-700">
                       {parsed.hoa.error ?? "Enter HOA."}
                     </p>
                   ) : null}
@@ -1462,13 +1548,17 @@ export default function RentVsBuyCalculator() {
                       setBuyClosingTouched(true);
                     }}
                     placeholder="e.g. 8000"
-                    className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className={`w-full rounded-xl border bg-white px-4 py-2 text-lg text-slate-900 placeholder:text-slate-400 outline-none transition focus:ring-2 focus:ring-sky-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 ${
+                      parsed.buyClose.ok
+                        ? "border-slate-300 focus:border-sky-500"
+                        : "border-rose-300 focus:border-rose-500"
+                    }`}
                     aria-invalid={!parsed.buyClose.ok}
                   />
                   {buyClosingTouched &&
                   !buyClosingFocused &&
                   !parsed.buyClose.ok ? (
-                    <p className="mt-2 text-xs text-rose-700">
+                    <p className="mt-2 text-xs font-semibold text-rose-700">
                       {parsed.buyClose.error ?? "Enter buy closing costs."}
                     </p>
                   ) : null}
@@ -1482,7 +1572,11 @@ export default function RentVsBuyCalculator() {
                     value={sellCostPct}
                     onChange={(e) => setSellCostPct(e.target.value)}
                     placeholder="e.g. 5"
-                    className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className={`w-full rounded-xl border bg-white px-4 py-2 text-lg text-slate-900 placeholder:text-slate-400 outline-none transition focus:ring-2 focus:ring-sky-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 ${
+                      parsed.sellPct.ok
+                        ? "border-slate-300 focus:border-sky-500"
+                        : "border-rose-300 focus:border-rose-500"
+                    }`}
                     aria-invalid={!parsed.sellPct.ok}
                   />
                 </div>
@@ -1491,31 +1585,45 @@ export default function RentVsBuyCalculator() {
           </div>
 
           {!parsed.ok ? (
-            <div className="mt-3 rounded-2xl border border-slate-200 bg-white p-5 sm:px-6">
-              <div className="font-semibold text-slate-900">
-                No results to show
+            <div
+              className="mt-5 overflow-hidden rounded-2xl border border-slate-200 bg-sky-50/60 shadow-sm rc-print-block"
+              role="region"
+              aria-label="Results"
+              aria-live="polite"
+            >
+              <div className="h-1 bg-gradient-to-r from-sky-500 to-emerald-400" />
+              <div className="p-5 sm:px-6">
+                <div className="rounded-xl border border-slate-200 bg-white/95 p-4 shadow-sm">
+                  <div className="font-semibold text-slate-900">
+                    No results to show
+                  </div>
+                  <p className="mt-1 text-sm text-slate-600">
+                    Fix the inputs to calculate.
+                  </p>
+                  <ul className="mt-3 list-disc pl-5 space-y-1 text-sm text-rose-700">
+                    {parsed.errors.map((e, i) => (
+                      <li key={i}>{e}</li>
+                    ))}
+                  </ul>
+                  {parsed.warnings.length ? (
+                    <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                      <div className="font-semibold">Notes</div>
+                      <ul className="mt-1 list-disc pl-5 space-y-1">
+                        {parsed.warnings.map((w, i) => (
+                          <li key={i}>{w}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+                </div>
               </div>
-              <p className="mt-1 text-sm text-slate-600">
-                Fix the inputs to calculate.
-              </p>
-              <ul className="mt-3 list-disc pl-5 space-y-1 text-sm text-rose-700">
-                {parsed.errors.map((e, i) => (
-                  <li key={i}>{e}</li>
-                ))}
-              </ul>
-              {parsed.warnings.length ? (
-                <ul className="mt-3 list-disc pl-5 space-y-1 text-sm text-amber-700">
-                  {parsed.warnings.map((w, i) => (
-                    <li key={i}>{w}</li>
-                  ))}
-                </ul>
-              ) : null}
             </div>
           ) : (
             <>
               {computed.ok && computed.warnings.length ? (
-                <div className="mt-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
-                  <ul className="list-disc pl-5 space-y-1">
+                <div className="mt-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                  <div className="font-semibold">Notes</div>
+                  <ul className="mt-1 list-disc pl-5 space-y-1">
                     {computed.warnings.map((w, i) => (
                       <li key={i}>{w}</li>
                     ))}
@@ -1525,117 +1633,185 @@ export default function RentVsBuyCalculator() {
 
               {computed.ok ? (
                 <>
-                  <div className="mt-6 grid gap-4 lg:grid-cols-3 rc-print-block">
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5">
-                      <div className="text-sm font-semibold text-slate-700">
-                        Rent total (estimated)
-                      </div>
-                      <div className="mt-2 text-3xl font-extrabold text-emerald-700">
-                        {money(computed.totalRentCostScaled)}
-                      </div>
-                      <p className="mt-2 text-xs text-slate-500">
-                        Total rent paid over {computed.inputs.horizon} years
-                        (rent grows annually by{" "}
-                        {formatPercent(computed.inputs.rentIncreasePct, 2)}).
-                      </p>
-                    </div>
+                  <div
+                    className="mt-5 overflow-hidden rounded-2xl border border-slate-200 bg-sky-50/60 shadow-sm rc-print-block"
+                    role="region"
+                    aria-label="Results"
+                    aria-live="polite"
+                  >
+                    <div className="h-1 bg-gradient-to-r from-sky-500 to-emerald-400" />
 
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5">
-                      <div className="text-sm font-semibold text-slate-700">
-                        Ownership net cost (estimated)
+                    <div className="p-5 sm:px-6">
+                      <div className="flex items-center gap-2">
+                        <div
+                          className="h-2 w-2 rounded-full bg-emerald-600"
+                          aria-hidden="true"
+                        />
+                        <div className="text-sm font-semibold text-slate-900">
+                          Rent vs buy estimate
+                        </div>
                       </div>
-                      <div className="mt-2 text-3xl font-extrabold text-emerald-700">
-                        {money(computed.ownershipNetCostScaled)}
-                      </div>
-                      <p className="mt-2 text-xs text-slate-500">
-                        Ownership outflow (including upfront costs) minus
-                        estimated net sale proceeds at the end of the horizon.
-                      </p>
-                    </div>
 
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5">
-                      <div className="text-sm font-semibold text-slate-700">
-                        Estimated break-even year
+                      <div className="mt-4 grid gap-3 lg:grid-cols-3">
+                        <div className="rounded-xl border border-slate-200 bg-white/95 px-4 py-3 shadow-sm">
+                          <div className="text-xs text-slate-600">
+                            Rent total
+                          </div>
+                          <div className="mt-1 text-2xl font-extrabold text-emerald-700 tabular-nums break-words">
+                            {money(computed.totalRentCostScaled)}
+                          </div>
+                          <p className="mt-2 text-xs text-slate-600">
+                            Over {computed.inputs.horizon} years, with rent
+                            increasing by{" "}
+                            {formatPercent(computed.inputs.rentIncreasePct, 2)}
+                            annually.
+                          </p>
+                        </div>
+
+                        <div className="rounded-xl border border-slate-200 bg-white/95 px-4 py-3 shadow-sm">
+                          <div className="text-xs text-slate-600">
+                            Ownership net cost
+                          </div>
+                          <div className="mt-1 text-2xl font-extrabold text-emerald-700 tabular-nums break-words">
+                            {money(computed.ownershipNetCostScaled)}
+                          </div>
+                          <p className="mt-2 text-xs text-slate-600">
+                            Ownership outflow minus estimated net sale proceeds.
+                          </p>
+                        </div>
+
+                        <div className="rounded-xl border border-slate-200 bg-white/95 px-4 py-3 shadow-sm">
+                          <div className="text-xs text-slate-600">
+                            Break-even year
+                          </div>
+                          <div className="mt-1 text-2xl font-extrabold text-slate-900 tabular-nums break-words">
+                            {computed.breakEvenYear === null
+                              ? "N/A"
+                              : computed.breakEvenYear}
+                          </div>
+                          <p className="mt-2 text-xs text-slate-600">
+                            First year buying is estimated to cost no more than
+                            renting in this model.
+                          </p>
+                        </div>
                       </div>
-                      <div className="mt-2 text-3xl font-extrabold text-slate-900">
-                        {computed.breakEvenYear === null
-                          ? "N/A"
-                          : computed.breakEvenYear}
+
+                      <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                        <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-2 shadow-sm">
+                          <div className="text-xs text-emerald-800">
+                            Monthly mortgage payment
+                          </div>
+                          <div className="mt-1 text-lg font-bold text-slate-900 tabular-nums whitespace-nowrap">
+                            {money(computed.monthlyMortgagePaymentScaled)}
+                          </div>
+                        </div>
+                        <div className="rounded-xl border border-slate-200 bg-white/95 px-4 py-2 shadow-sm">
+                          <div className="text-xs text-slate-600">
+                            Down payment
+                          </div>
+                          <div className="mt-1 text-lg font-bold text-slate-900 tabular-nums whitespace-nowrap">
+                            {money(computed.downPaymentScaled)}
+                          </div>
+                        </div>
+                        <div className="rounded-xl border border-slate-200 bg-white/95 px-4 py-2 shadow-sm">
+                          <div className="text-xs text-slate-600">
+                            Loan principal
+                          </div>
+                          <div className="mt-1 text-lg font-bold text-slate-900 tabular-nums whitespace-nowrap">
+                            {money(computed.loanPrincipalScaled)}
+                          </div>
+                        </div>
+                        <div className="rounded-xl border border-slate-200 bg-white/95 px-4 py-2 shadow-sm">
+                          <div className="text-xs text-slate-600">
+                            Net sale proceeds
+                          </div>
+                          <div className="mt-1 text-lg font-bold text-slate-900 tabular-nums whitespace-nowrap">
+                            {money(computed.estimatedNetSaleProceedsScaled)}
+                          </div>
+                        </div>
                       </div>
-                      <p className="mt-2 text-xs text-slate-500">
-                        First year where (cumulative outflow + upfront costs −
-                        estimated equity) is less than or equal to cumulative
-                        rent.
-                      </p>
                     </div>
                   </div>
 
-                  <div className="my-6 rounded-2xl border border-slate-200 bg-white p-5 rc-print-block">
-                    <h3 className="text-lg font-bold text-slate-900 mb-3">
+                  <div className="my-6 rounded-2xl border border-slate-200 bg-white/95 p-5 rc-print-block shadow-sm">
+                    <h3 className="text-lg font-bold text-sky-800 mb-2">
                       Year-by-year comparison
                     </h3>
                     <p className="text-sm text-slate-600 mb-4">
-                      Shows rent paid, ownership cash outflow, and the equity
-                      estimate as the mortgage balance falls and home value
-                      changes.
+                      Shows rent paid, ownership cash outflow, and estimated
+                      equity for each year.
                     </p>
 
                     <div className="overflow-x-auto">
                       <table className="min-w-[1060px] w-full text-sm">
                         <thead>
-                          <tr className="text-left text-slate-500 border-b border-slate-200">
-                            <th className="py-2 pr-4">Year</th>
-                            <th className="py-2 pr-4">Rent (annual)</th>
-                            <th className="py-2 pr-4">Rent (cumulative)</th>
-                            <th className="py-2 pr-4">Home value</th>
-                            <th className="py-2 pr-4">
-                              Mortgage balance (end)
+                          <tr className="text-left text-slate-600 border-b border-slate-200">
+                            <th className="py-2 pr-4 font-semibold">Year</th>
+                            <th className="py-2 pr-4 font-semibold">
+                              Rent annual
                             </th>
-                            <th className="py-2 pr-4">
-                              Ownership outflow (annual)
+                            <th className="py-2 pr-4 font-semibold">
+                              Rent cumulative
                             </th>
-                            <th className="py-2 pr-4">
-                              Ownership outflow (cumulative)
+                            <th className="py-2 pr-4 font-semibold">
+                              Home value
                             </th>
-                            <th className="py-2 pr-4">Interest paid (year)</th>
-                            <th className="py-2 pr-4">Principal paid (year)</th>
-                            <th className="py-2 pr-4">Equity (end)</th>
+                            <th className="py-2 pr-4 font-semibold">
+                              Mortgage balance
+                            </th>
+                            <th className="py-2 pr-4 font-semibold">
+                              Ownership outflow annual
+                            </th>
+                            <th className="py-2 pr-4 font-semibold">
+                              Ownership outflow cumulative
+                            </th>
+                            <th className="py-2 pr-4 font-semibold">
+                              Interest paid
+                            </th>
+                            <th className="py-2 pr-4 font-semibold">
+                              Principal paid
+                            </th>
+                            <th className="py-2 pr-4 font-semibold">
+                              Equity end
+                            </th>
                           </tr>
                         </thead>
                         <tbody>
-                          {computed.rows.map((r) => (
+                          {computed.rows.map((r, index) => (
                             <tr
                               key={r.year}
-                              className="border-b border-slate-100"
+                              className={`border-b border-slate-100 ${
+                                index % 2 === 1 ? "bg-slate-50/50" : ""
+                              }`}
                             >
-                              <td className="py-2 pr-4 font-semibold text-slate-800">
+                              <td className="py-2 pr-4 font-semibold text-slate-900">
                                 {r.year}
                               </td>
-                              <td className="py-2 pr-4">
+                              <td className="py-2 pr-4 text-slate-900 tabular-nums whitespace-nowrap">
                                 {money(r.rentAnnual)}
                               </td>
-                              <td className="py-2 pr-4">
+                              <td className="py-2 pr-4 text-slate-900 tabular-nums whitespace-nowrap">
                                 {money(r.rentCumulative)}
                               </td>
-                              <td className="py-2 pr-4">
+                              <td className="py-2 pr-4 text-slate-900 tabular-nums whitespace-nowrap">
                                 {money(r.homeValue)}
                               </td>
-                              <td className="py-2 pr-4">
+                              <td className="py-2 pr-4 text-slate-900 tabular-nums whitespace-nowrap">
                                 {money(r.mortgageBalanceEnd)}
                               </td>
-                              <td className="py-2 pr-4">
+                              <td className="py-2 pr-4 text-slate-900 tabular-nums whitespace-nowrap">
                                 {money(r.ownershipAnnualOutflow)}
                               </td>
-                              <td className="py-2 pr-4">
+                              <td className="py-2 pr-4 text-slate-900 tabular-nums whitespace-nowrap">
                                 {money(r.ownershipCumulativeOutflow)}
                               </td>
-                              <td className="py-2 pr-4">
+                              <td className="py-2 pr-4 text-slate-900 tabular-nums whitespace-nowrap">
                                 {money(r.interestPaidThisYear)}
                               </td>
-                              <td className="py-2 pr-4">
+                              <td className="py-2 pr-4 text-slate-900 tabular-nums whitespace-nowrap">
                                 {money(r.principalPaidThisYear)}
                               </td>
-                              <td className="py-2 pr-4">
+                              <td className="py-2 pr-4 text-slate-900 tabular-nums whitespace-nowrap">
                                 {money(r.equityEnd)}
                               </td>
                             </tr>
@@ -1644,61 +1820,72 @@ export default function RentVsBuyCalculator() {
                       </table>
                     </div>
 
-                    <p className="mt-4 text-xs text-slate-500">
-                      The annual ownership outflow does not include the
-                      end-of-horizon sale event. Upfront costs (down payment and
-                      buying closing costs) are included in the ownership totals
-                      above.
+                    <p className="mt-4 text-xs text-slate-600">
+                      Annual ownership outflow does not include the final sale
+                      event. Upfront costs are included in the ownership totals.
                     </p>
                   </div>
                 </>
               ) : null}
             </>
           )}
-        </div>
-        <Assumptions />
 
-        <div className="mb-6  rounded-2xl border border-slate-200 bg-white p-5 rc-no-print mt-6">
-          <div className="rc-no-print md:hidden flex flex-col sm:flex-row gap-2 mb-4">
-            <button
-              type="button"
-              onClick={handlePrint}
-              className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
-            >
-              Print / Save as PDF
-            </button>
+          <Assumptions />
+
+          <div className="mt-3 rounded-xl border border-slate-200 bg-white/90 px-4 py-3 shadow-sm rc-no-print">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <Rounding
+                roundDisplay={roundDisplay}
+                setRoundDisplay={setRoundDisplay}
+                displayDecimals={displayDecimals}
+                setDisplayDecimals={setDisplayDecimals as any}
+              />
+
+              <button
+                type="button"
+                onClick={handlePrint}
+                className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 md:hidden"
+              >
+                Print / Save PDF
+              </button>
+            </div>
+
+            <p className="mt-2 text-xs text-slate-600 leading-relaxed">
+              Calculations preserve decimals internally up to 12 places. Only
+              the display is rounded.
+            </p>
           </div>
-          <Rounding
-            roundDisplay={roundDisplay}
-            setRoundDisplay={setRoundDisplay}
-            displayDecimals={displayDecimals}
-            setDisplayDecimals={setDisplayDecimals as any}
-          />
         </div>
       </section>
 
       <HowItWorks />
 
       <section className="mt-8 mb-4 hidden sm:block">
-        <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-500">
-          <a href={safeHref("/")} className="cursor-pointer hover:underline">
+        <nav
+          className="max-w-6xl mx-auto px-6 text-sm text-slate-600"
+          aria-label="Breadcrumb"
+        >
+          <a
+            href={safeHref("/")}
+            className="cursor-pointer rounded text-sky-700 hover:text-sky-900 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2"
+          >
             Home
           </a>{" "}
-          / {pageName}
+          / <span className="text-slate-800">{pageName}</span>
         </nav>
       </section>
 
       <ToolFit />
 
-      <section id="faq" className="max-w-5xl mx-auto pb-16 px-6">
-        <h2 className="text-3xl font-bold text-center mb-3 text-sky-800 tracking-tight">
+      <section id="faq" className="max-w-5xl mx-auto py-16 px-6">
+        <h2 className="text-3xl font-bold text-center mb-10 text-sky-800 tracking-tight">
           Frequently Asked Questions
         </h2>
 
-        <div className="divide-y divide-slate-200">
+        <div className="divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white/90 px-5 shadow-sm">
           {faqData.map((f, i) => (
             <details key={i} className="group py-4">
-              <summary className="cursor-pointer list-none font-semibold text-lg text-sky-800 flex items-center justify-between hover:text-sky-900">
+              <summary className="cursor-pointer list-none font-semibold text-lg text-sky-800 flex items-center justify-between rounded hover:text-sky-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2">
                 <span>{f.q}</span>
                 <span className="ml-4 text-slate-400 transition-transform group-open:rotate-180">
                   ▾
@@ -1720,6 +1907,14 @@ export default function RentVsBuyCalculator() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
       />
     </main>
   );

@@ -1314,7 +1314,7 @@ export default function HourlyToAnnualRent() {
           Frequently Asked Questions
         </h2>
 
-        <p className="mx-auto mb-6 max-w-3xl text-center text-slate-600">
+        <p className="mx-auto mb-6 max-w-6xl text-center text-slate-600">
           These answers explain 24/7 annualization, paid-hours mode, and how to
           read the related breakdowns.
         </p>

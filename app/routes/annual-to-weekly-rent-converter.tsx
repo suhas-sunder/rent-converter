@@ -1059,7 +1059,7 @@ export default function AnnualToWeeklyRentConverter() {
           Frequently Asked Questions
         </h2>
 
-        <p className="mx-auto mb-6 max-w-3xl text-center text-slate-600">
+        <p className="mx-auto mb-6 max-w-6xl text-center text-slate-600">
           These answers explain the difference between annual ÷ 52 and a 365-day
           weekly equivalent, plus how to use the weekly rent result for
           budgeting and rent-cycle comparisons.

@@ -1091,7 +1091,7 @@ export default function BiweeklyToAnnualRent() {
           Frequently Asked Questions
         </h2>
 
-        <p className="mx-auto mb-6 max-w-3xl text-center text-slate-600">
+        <p className="mx-auto mb-6 max-w-6xl text-center text-slate-600">
           These answers explain how biweekly rent is annualized and why the
           result can differ from multiplying by 26.
         </p>

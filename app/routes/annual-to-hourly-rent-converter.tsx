@@ -1325,7 +1325,7 @@ export default function AnnualToHourlyRent() {
           Frequently Asked Questions
         </h2>
 
-        <p className="mx-auto mb-6 max-w-3xl text-center text-slate-600">
+        <p className="mx-auto mb-6 max-w-6xl text-center text-slate-600">
           These answers explain how the annual to hourly rent conversion works,
           what the hourly equivalent means, and when the optional paid-hours
           comparison is useful.

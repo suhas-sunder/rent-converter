@@ -1299,7 +1299,7 @@ export default function IncomeRequiredForRentCalculator() {
           Frequently Asked Questions
         </h2>
 
-        <p className="mx-auto mb-6 max-w-3xl text-center text-slate-600">
+        <p className="mx-auto mb-6 max-w-6xl text-center text-slate-600">
           These answers explain income multiplier rules, reverse mode, and what
           the result does not guarantee.
         </p>

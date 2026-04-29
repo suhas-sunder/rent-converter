@@ -2,10 +2,11 @@ import { useMemo, useEffect, useRef, useState } from "react";
 import type { Route } from "./+types/rent-increase-calculator";
 import HowItWorks from "~/client/components/rent-increase-calculator/HowItWorks";
 import ToolFit from "~/client/components/rent-increase-calculator/ToolFit";
+
 export const meta: Route.MetaFunction = () => {
   const title = "Free Rent Increase Calculator";
   const description =
-    "Calculate your new rent after a percent or fixed increase. See the rent increase formula, instant result, monthly impact, annual total, and export options.";
+    "Calculate new rent after a percentage or fixed increase. See the monthly, weekly, 4-week, and annual impact.";
 
   const canonicalUrl = "https://www.rentconverter.com/rent-increase-calculator";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
@@ -23,7 +24,7 @@ export const meta: Route.MetaFunction = () => {
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
-    { name: "theme-color", content: "#f8fafc" },
+    { name: "theme-color", content: "#f0f9ff" },
 
     { tagName: "link", rel: "canonical", href: canonicalUrl },
 
@@ -90,6 +91,7 @@ type Currency = (typeof SUPPORTED_CURRENCIES)[number];
 function isCurrency(x: string): x is Currency {
   return (SUPPORTED_CURRENCIES as readonly string[]).includes(x);
 }
+
 function isPeriod(x: string): x is Period {
   return (
     x === "hourly" ||
@@ -101,6 +103,7 @@ function isPeriod(x: string): x is Period {
     x === "annual"
   );
 }
+
 function isMode(x: string): x is IncreaseMode {
   return x === "percent" || x === "fixed";
 }
@@ -284,7 +287,7 @@ function formatCurrencyFromScaled(
   const { negative, intStr, fracStr } = scaledToDecimalStrings(
     scaledForDisplay,
     digits,
-    !roundDisplay, // trim only when not rounding to fixed digits
+    !roundDisplay,
   );
 
   const groupedInt = groupInt(intStr, group);
@@ -947,32 +950,32 @@ export default function RentIncreaseCalculator() {
 
   const faqData = [
     {
-      q: "What does this rent increase calculator output?",
-      a: "It estimates your new rent after a percent or fixed increase and shows the annual and per-period impact. Results are derived from annual totals so different pay and billing cycles can be compared consistently.",
+      q: "What does this rent increase calculator show?",
+      a: "It shows the new rent after a percentage or fixed increase. It also shows the annual impact, average monthly amount, weekly amount, and 4-week amount.",
     },
     {
-      q: "How are percent increases applied when there are multiple increases?",
-      a: "Percent increases are compounded in sequence. For example, two 3% increases are applied as 1.03 × 1.03 to the annualized rent.",
+      q: "How are percentage rent increases calculated?",
+      a: "Percentage increases are applied to the current rent. If you project more than one increase, each increase compounds from the previous result.",
     },
     {
-      q: "How are fixed increases applied when there are multiple increases?",
-      a: "A fixed increase is added each time in the same billing period as the rent input. The calculator annualizes that fixed amount and applies it for the number of increases selected.",
+      q: "How are fixed rent increases calculated?",
+      a: "A fixed increase is added in the same billing period as the rent you entered. The calculator annualizes that amount so the results can be compared across monthly, weekly, and 4-week periods.",
     },
     {
-      q: "Why do the monthly and 4-week equivalents differ?",
-      a: "A 4-week period is 28 days. An average month is about 30.42 days (365 ÷ 12). Showing both avoids treating them as interchangeable.",
+      q: "Why are monthly rent and 4-week rent different?",
+      a: "A 4-week period is 28 days. An average month is about 30.42 days based on 365 days divided by 12. That difference changes the annual total.",
     },
     {
-      q: "Does this reflect proration, mid-lease changes, or partial periods?",
-      a: "No. It estimates full-period equivalents. Proration rules and effective dates can change the first payment after an increase.",
+      q: "Does this calculate prorated rent after an increase?",
+      a: "No. This page estimates full-period rent after an increase. If an increase starts partway through a billing period, the first payment may need a separate proration calculation.",
     },
     {
-      q: "Can this be used to compare two listings after an increase?",
-      a: "It helps compare estimated totals on a consistent basis. Actual costs can differ if utilities, fees, parking, or incentives are included in one listing and not the other.",
+      q: "Can I use this for lease renewal planning?",
+      a: "Yes. It is useful for estimating the cost of a proposed rent increase before renewing a lease, comparing options, or checking the annual impact of a rent change.",
     },
     {
-      q: "What time assumptions does this page use?",
-      a: "Assumptions: year = 365 days, week = 7 days, every 4 weeks = 28 days, and month = 365 ÷ 12 days (average). Billing schedules vary by agreement.",
+      q: "What assumptions does this page use?",
+      a: "The calculator uses 365 days per year, 7 days per week, 14 days for biweekly rent, 28 days for every 4 weeks, and 365 ÷ 12 days for an average month.",
     },
   ];
 
@@ -989,7 +992,7 @@ export default function RentIncreaseCalculator() {
     name: pageName,
     url: canonicalUrl,
     description:
-      "Instantly calculate your new rent after a percent or fixed increase. See the monthly, weekly, and 4-week (28-day) equivalents, the annual impact, and optional multi-increase projections.",
+      "Calculate new rent after a percentage or fixed increase. See the monthly, weekly, 4-week, and annual impact.",
     isPartOf: { "@type": "WebSite", url: "https://www.rentconverter.com" },
     breadcrumb: { "@id": `${canonicalUrl}#breadcrumb` },
   };
@@ -1026,7 +1029,7 @@ export default function RentIncreaseCalculator() {
   };
 
   return (
-    <main className="bg-white text-slate-700 scroll-smooth">
+    <main className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-slate-50 text-slate-700 scroll-smooth">
       <style
         dangerouslySetInnerHTML={{
           __html: `
@@ -1040,37 +1043,36 @@ export default function RentIncreaseCalculator() {
         }}
       />
 
-      <section className="max-w-6xl mx-auto px-6 mt-4 hidden sm:block">
-        <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-500">
-          <a href={safeHref("/")} className="hover:underline cursor-pointer">
-            Home
-          </a>{" "}
-          / {pageName}
-        </nav>
-      </section>
+      <section id="converter" className="mx-auto max-w-6xl px-6 pb-6 pt-6">
+        <div className="rounded-2xl bg-white/95 shadow-sm border border-slate-200 px-0 pb-6 sm:px-8">
+          <div className="pt-5 sm:pt-6">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div className="min-w-0">
+                <div className="inline-flex rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-800">
+                  Rent increase tool
+                </div>
 
-      <section
-        id="converter"
-        className="mx-auto max-w-6xl px-6 pb-6 mt-2 sm:mt-6"
-      >
-        <div className="rounded-2xl pb-6 bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8">
-          <div className="pt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <h1 className="text-center mb-1 sm:mb-0 sm:text-left text-2xl sm:text-3xl capitalize font-bold text-sky-800 tracking-tight">
-              Rent Increase Calculator
-            </h1>
+                <h1 className="mt-3 text-center sm:text-left text-2xl sm:text-3xl capitalize font-bold text-sky-900 tracking-tight">
+                  Rent Increase Calculator
+                </h1>
 
-            <div
-              id="export-controls"
-              className="hidden sm:flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
-            >
-              <div className="flex flex-wrap gap-2">
+                <p className="mt-2 max-w-3xl text-base text-slate-700">
+                  Calculate your new rent after a percentage or fixed increase.
+                  The calculator also shows the annual and per-period impact.
+                </p>
+              </div>
+
+              <div
+                id="export-controls"
+                className="rc-no-print flex shrink-0 justify-start sm:justify-end"
+              >
                 <button
                   type="button"
                   onClick={() => {
                     if (typeof window === "undefined") return;
                     window.print();
                   }}
-                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fbff]"
+                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2"
                 >
                   Print / Save PDF
                 </button>
@@ -1078,12 +1080,7 @@ export default function RentIncreaseCalculator() {
             </div>
           </div>
 
-          <p className="hidden md:flex w-full py-2 text-base text-slate-600">
-            Calculate your new rent after a percentage or dollar increase. See
-            the updated amount instantly with a clear breakdown.
-          </p>
-
-          <div className="grid gap-x-5 gap-y-3 md:grid-cols-12">
+          <div className="mt-5 grid gap-x-5 gap-y-4 md:grid-cols-12">
             <div className="md:col-span-6">
               <label className="block text-sm font-semibold text-slate-700 mb-2">
                 Current rent
@@ -1098,7 +1095,7 @@ export default function RentIncreaseCalculator() {
                     setRentAmount(e.target.value.replace(/,/g, ""))
                   }
                   placeholder="e.g. 2200 or 2200.00"
-                  className="col-span-7 rounded-xl border border-slate-300 px-4 py-2 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="col-span-7 rounded-xl border border-slate-300 bg-white px-4 py-2 text-base text-slate-900 placeholder:text-slate-400 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!rentParsed.ok}
                 />
                 <select
@@ -1108,7 +1105,7 @@ export default function RentIncreaseCalculator() {
                       isPeriod(e.target.value) ? e.target.value : "monthly",
                     )
                   }
-                  className="cursor-pointer col-span-5 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 hover:bg-slate-50 transition"
+                  className="cursor-pointer col-span-5 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition hover:border-sky-300 hover:bg-sky-50 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
                   aria-label="Rent period"
                 >
                   {Object.entries(PERIOD_LABEL).map(([k, v]) => (
@@ -1143,35 +1140,35 @@ export default function RentIncreaseCalculator() {
                 <button
                   type="button"
                   onClick={() => setMode("percent")}
-                  className={`cursor-pointer rounded-xl border px-4 py-2 text-left transition hover:bg-slate-50 ${
+                  className={`cursor-pointer rounded-xl border px-4 py-2 text-left transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 ${
                     mode === "percent"
-                      ? "border-sky-300 bg-sky-50 hover:bg-sky-100"
-                      : "border-slate-200 bg-white hover:bg-slate-50"
+                      ? "border-sky-300 bg-sky-50 hover:border-sky-400 hover:bg-sky-100"
+                      : "border-slate-200 bg-white hover:border-sky-300 hover:bg-sky-50"
                   }`}
                 >
-                  <div className="text-xs text-slate-500">Mode</div>
-                  <div className="mt-1 text-sm font-semibold text-slate-800">
+                  <div className="text-xs text-slate-600">Mode</div>
+                  <div className="mt-1 text-sm font-semibold text-slate-900">
                     Percent increase
                   </div>
                 </button>
                 <button
                   type="button"
                   onClick={() => setMode("fixed")}
-                  className={`cursor-pointer rounded-xl border px-4 py-2 text-left transition hover:bg-slate-50 ${
+                  className={`cursor-pointer rounded-xl border px-4 py-2 text-left transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 ${
                     mode === "fixed"
-                      ? "border-sky-300 bg-sky-50 hover:bg-sky-100"
-                      : "border-slate-200 bg-white hover:bg-slate-50"
+                      ? "border-sky-300 bg-sky-50 hover:border-sky-400 hover:bg-sky-100"
+                      : "border-slate-200 bg-white hover:border-sky-300 hover:bg-sky-50"
                   }`}
                 >
-                  <div className="text-xs text-slate-500">Mode</div>
-                  <div className="mt-1 text-sm font-semibold text-slate-800">
+                  <div className="text-xs text-slate-600">Mode</div>
+                  <div className="mt-1 text-sm font-semibold text-slate-900">
                     Fixed amount increase
                   </div>
                 </button>
               </div>
             </div>
 
-            <div className="md:col-span-6">
+            <div className="lg:col-span-4 md:col-span-6">
               <label className="block text-sm font-semibold text-slate-700 mb-2">
                 Increase value ({PERIOD_LABEL[rentPeriod]})
               </label>
@@ -1183,15 +1180,15 @@ export default function RentIncreaseCalculator() {
                     value={percentIncrease}
                     onChange={(e) => setPercentIncrease(e.target.value)}
                     placeholder="e.g. 3 or 3.5"
-                    className="col-span-7 rounded-xl border border-slate-300 px-4 py-2 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className="col-span-8 rounded-xl border border-slate-300 bg-white px-4 py-2 text-base text-slate-900 placeholder:text-slate-400 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                     aria-invalid={!pctParsed.ok}
                   />
-                  <div className="col-span-5 rounded-xl border border-slate-200 bg-white px-4 py-2 flex items-center text-sm font-semibold text-slate-700">
+                  <div className="col-span-4 rounded-xl border border-slate-200 bg-white px-4 py-2 flex items-center text-sm font-semibold text-slate-700">
                     %
                   </div>
                 </div>
               ) : (
-                <div className="grid  gap-2">
+                <div className="grid gap-2">
                   <input
                     inputMode="decimal"
                     value={fixedDisplayValue}
@@ -1201,7 +1198,7 @@ export default function RentIncreaseCalculator() {
                       setFixedIncrease(e.target.value.replace(/,/g, ""))
                     }
                     placeholder="e.g. 100 or 100.00"
-                    className="col-span-7 rounded-xl border border-slate-300 px-4 py-2 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                    className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-base text-slate-900 placeholder:text-slate-400 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                     aria-invalid={!fixedParsed.ok}
                   />
                 </div>
@@ -1220,9 +1217,9 @@ export default function RentIncreaseCalculator() {
               ) : null}
             </div>
 
-            <div className="md:col-span-6">
+            <div className="lg:col-span-4 md:col-span-6">
               <label className="block text-sm font-semibold text-slate-700 mb-2">
-                Number of increases to project (steps (1 to 50))
+                Number of increases to project (steps 1 to 50)
               </label>
               <div className="grid gap-2">
                 <input
@@ -1230,7 +1227,7 @@ export default function RentIncreaseCalculator() {
                   value={numIncreases}
                   onChange={(e) => setNumIncreases(e.target.value)}
                   placeholder="e.g. 1"
-                  className="rounded-xl border border-slate-300 px-4 py-2 text-base outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                  className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-base text-slate-900 placeholder:text-slate-400 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
                   aria-invalid={!nParsed.ok}
                 />
               </div>
@@ -1241,7 +1238,7 @@ export default function RentIncreaseCalculator() {
               ) : null}
             </div>
 
-            <div className="md:col-span-12">
+            <div className="lg:col-span-4 md:col-span-12">
               <label className="block text-sm font-semibold text-slate-700 mb-2">
                 Currency
               </label>
@@ -1252,7 +1249,7 @@ export default function RentIncreaseCalculator() {
                     isCurrency(e.target.value) ? e.target.value : "USD",
                   )
                 }
-                className="cursor-pointer w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 hover:bg-slate-50 transition"
+                className="cursor-pointer w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition hover:border-sky-300 hover:bg-sky-50 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
                 aria-label="Currency"
               >
                 {SUPPORTED_CURRENCIES.map((c) => (
@@ -1264,282 +1261,288 @@ export default function RentIncreaseCalculator() {
             </div>
           </div>
 
-          <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:p-6 rc-print-block">
-            {!computed.ok ? (
-              <div className="rounded-xl border border-slate-200 bg-white p-4">
-                <div className="font-semibold text-slate-800">
-                  No results to show
+          <div className="mt-5 overflow-hidden rounded-2xl border border-slate-200 bg-sky-50/60 shadow-sm rc-print-block">
+            <div className="h-1 bg-gradient-to-r from-sky-500 to-emerald-400" />
+
+            <div className="p-5 sm:p-6">
+              {!computed.ok ? (
+                <div className="rounded-xl border border-slate-200 bg-white/95 p-4">
+                  <div className="font-semibold text-slate-900">
+                    No results to show
+                  </div>
+                  <p className="mt-1 text-sm text-slate-600">
+                    Fix the inputs to calculate the increase.
+                  </p>
+                  <ul className="mt-3 list-disc pl-5 space-y-1 text-sm text-rose-700">
+                    {computed.errors.map((e, i) => (
+                      <li key={i}>{e}</li>
+                    ))}
+                  </ul>
+                  {computed.warnings.length ? (
+                    <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                      <div className="font-semibold">Notes</div>
+                      <ul className="mt-1 list-disc pl-5 space-y-1">
+                        {computed.warnings.map((w, i) => (
+                          <li key={i}>{w}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
                 </div>
-                <p className="mt-1 text-sm text-slate-600">
-                  Fix the inputs to calculate the increase.
-                </p>
-                <ul className="mt-3 list-disc pl-5 space-y-1 text-sm text-rose-700">
-                  {computed.errors.map((e, i) => (
-                    <li key={i}>{e}</li>
-                  ))}
-                </ul>
-                {computed.warnings.length ? (
-                  <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
-                    <div className="font-semibold">Notes</div>
-                    <ul className="mt-1 list-disc pl-5 space-y-1">
-                      {computed.warnings.map((w, i) => (
-                        <li key={i}>{w}</li>
-                      ))}
-                    </ul>
-                  </div>
-                ) : null}
-              </div>
-            ) : (
-              <>
-                <div className="flex items-center gap-2">
-                  <div
-                    className="h-2 w-2 rounded-full bg-sky-600"
-                    aria-hidden="true"
-                  />
-                  <div className="text-sm font-semibold text-slate-800">
-                    New rent after increase
-                  </div>
-                </div>
-
-                <div className="mt-2 flex flex-col gap-2">
-                  <div className="text-4xl sm:text-5xl font-extrabold text-emerald-700">
-                    {fmtMoney(computed.newPerPeriodScaled)}
-                  </div>
-                </div>
-
-                <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2">
-                    <div className="text-xs text-slate-500">
-                      Increase (effective)
-                    </div>
-                    <div className="mt-1 text-lg font-bold text-slate-800">
-                      {fmtPct(computed.effectivePct)}
+              ) : (
+                <>
+                  <div className="flex items-center gap-2">
+                    <div
+                      className="h-2 w-2 rounded-full bg-emerald-600"
+                      aria-hidden="true"
+                    />
+                    <div className="text-sm font-semibold text-slate-900">
+                      New rent after increase
                     </div>
                   </div>
 
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2">
-                    <div className="text-xs text-slate-500">
-                      Annual before (annualized)
+                  <div className="mt-2 flex flex-col gap-2">
+                    <div className="text-4xl sm:text-5xl font-extrabold text-emerald-700">
+                      {fmtMoney(computed.newPerPeriodScaled)}
                     </div>
-                    <div className="mt-1 text-lg font-bold text-slate-800">
-                      {fmtMoney(computed.annualBaseScaled)}
-                    </div>
-                  </div>
-
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2">
-                    <div className="text-xs text-slate-500">
-                      Annual after (annualized)
-                    </div>
-                    <div className="mt-1 text-lg font-bold text-slate-800">
-                      {fmtMoney(computed.annualNewScaled)}
-                    </div>
-                  </div>
-
-                  <div className=" sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white p-4">
-                    <div className=" grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                      <div className="text-sm text-slate-700">
-                        Annual difference:{" "}
-                        <strong className="text-slate-900">
-                          {fmtMoney(computed.annualDeltaScaled)}
-                        </strong>
-                      </div>
-                      <div className="text-sm text-slate-700">
-                        Monthly (avg) difference:{" "}
-                        <strong className="text-slate-900">
-                          {fmtMoney(
-                            computed.newMonthlyAvgScaled -
-                              computed.baseMonthlyAvgScaled,
-                          )}
-                        </strong>
-                      </div>
-                      <div className="text-sm text-slate-700">
-                        Weekly difference:{" "}
-                        <strong className="text-slate-900">
-                          {fmtMoney(
-                            computed.newWeeklyScaled -
-                              computed.baseWeeklyScaled,
-                          )}
-                        </strong>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-2">
-                    <div className="text-xs text-slate-500">
-                      Monthly vs every 4 weeks (before and after)
-                    </div>
-                    <div className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-                      <div className="text-sm text-slate-700">
-                        Before (monthly avg):{" "}
-                        <strong className="text-slate-900">
-                          {fmtMoney(computed.baseMonthlyAvgScaled)}
-                        </strong>
-                      </div>
-                      <div className="text-sm text-slate-700">
-                        Before (4 weeks):{" "}
-                        <strong className="text-slate-900">
-                          {fmtMoney(computed.base4wScaled)}
-                        </strong>
-                      </div>
-                      <div className="text-sm text-slate-700">
-                        After (monthly avg):{" "}
-                        <strong className="text-slate-900">
-                          {fmtMoney(computed.newMonthlyAvgScaled)}
-                        </strong>
-                      </div>
-                      <div className="text-sm text-slate-700">
-                        After (4 weeks):{" "}
-                        <strong className="text-slate-900">
-                          {fmtMoney(computed.new4wScaled)}
-                        </strong>
-                      </div>
-                    </div>
-
-                    <p className="mt-2 text-xs text-slate-500">
-                      Monthly (average) and 4-week cycles are not
-                      interchangeable. The difference here is shown explicitly:
-                      before {fmtMoney(computed.monthMinus4wBaseScaled)}, after{" "}
-                      {fmtMoney(computed.monthMinus4wNewScaled)}.
+                    <p className="text-sm text-slate-600">
+                      Based on the rent period selected above.
                     </p>
                   </div>
-                </div>
 
-                <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 rc-print-block">
-                  <h3 className="text-lg font-bold text-slate-900 mb-3">
-                    Projection by increase step
-                  </h3>
-                  <p className="text-sm text-slate-600 mb-4">
-                    Percent mode compounds; fixed mode adds the same annualized
-                    increment each step.
-                  </p>
+                  <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                    <div className="rounded-xl border border-slate-200 bg-white/95 px-4 py-2 shadow-sm">
+                      <div className="text-xs text-slate-600">
+                        Increase (effective)
+                      </div>
+                      <div className="mt-1 text-lg font-bold text-slate-900">
+                        {fmtPct(computed.effectivePct)}
+                      </div>
+                    </div>
 
-                  <div className="overflow-x-auto">
-                    <table className="min-w-[860px] w-full text-sm">
-                      <thead>
-                        <tr className="text-left text-slate-500 border-b border-slate-200">
-                          <th className="py-2 pr-4">Step</th>
-                          <th className="py-2 pr-4">
-                            Rent ({PERIOD_LABEL[rentPeriod]})
-                          </th>
-                          <th className="py-2 pr-4">Annualized</th>
-                          <th className="py-2 pr-4">Monthly (avg)</th>
-                          <th className="py-2 pr-4">Every 4 weeks</th>
-                          <th className="py-2 pr-4">Weekly</th>
-                          <th className="py-2 pr-4">Delta vs prior (annual)</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {computed.steps.map((s) => (
-                          <tr
-                            key={s.step}
-                            className="border-b border-slate-100"
-                          >
-                            <td className="py-2 pr-4 font-semibold text-slate-800">
-                              {s.step === 0 ? "Current" : `+${s.step}`}
-                            </td>
-                            <td className="py-2 pr-4 text-slate-800">
-                              {fmtMoney(s.perPeriodScaled)}
-                            </td>
-                            <td className="py-2 pr-4 text-slate-800">
-                              {fmtMoney(s.annualScaled)}
-                            </td>
-                            <td className="py-2 pr-4 text-slate-800">
-                              {fmtMoney(s.monthlyAvgScaled)}
-                            </td>
-                            <td className="py-2 pr-4 text-slate-800">
-                              {fmtMoney(s.every4wScaled)}
-                            </td>
-                            <td className="py-2 pr-4 text-slate-800">
-                              {fmtMoney(s.weeklyScaled)}
-                            </td>
-                            <td className="py-2 pr-4 text-slate-800">
-                              {s.step === 0
-                                ? "-"
-                                : fmtMoney(s.deltaAnnualFromPrevScaled)}
-                            </td>
+                    <div className="rounded-xl border border-slate-200 bg-white/95 px-4 py-2 shadow-sm">
+                      <div className="text-xs text-slate-600">
+                        Annual before
+                      </div>
+                      <div className="mt-1 text-lg font-bold text-slate-900">
+                        {fmtMoney(computed.annualBaseScaled)}
+                      </div>
+                    </div>
+
+                    <div className="rounded-xl border border-slate-200 bg-white/95 px-4 py-2 shadow-sm">
+                      <div className="text-xs text-slate-600">Annual after</div>
+                      <div className="mt-1 text-lg font-bold text-slate-900">
+                        {fmtMoney(computed.annualNewScaled)}
+                      </div>
+                    </div>
+
+                    <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white/95 p-4 shadow-sm">
+                      <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                        <div className="text-sm text-slate-700">
+                          Annual difference:{" "}
+                          <strong className="text-slate-900">
+                            {fmtMoney(computed.annualDeltaScaled)}
+                          </strong>
+                        </div>
+                        <div className="text-sm text-slate-700">
+                          Monthly difference:{" "}
+                          <strong className="text-slate-900">
+                            {fmtMoney(
+                              computed.newMonthlyAvgScaled -
+                                computed.baseMonthlyAvgScaled,
+                            )}
+                          </strong>
+                        </div>
+                        <div className="text-sm text-slate-700">
+                          Weekly difference:{" "}
+                          <strong className="text-slate-900">
+                            {fmtMoney(
+                              computed.newWeeklyScaled -
+                                computed.baseWeeklyScaled,
+                            )}
+                          </strong>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3">
+                      <div className="text-xs font-semibold text-emerald-800">
+                        Monthly vs every 4 weeks
+                      </div>
+                      <div className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+                        <div className="text-sm text-slate-700">
+                          Before monthly:{" "}
+                          <strong className="text-slate-900">
+                            {fmtMoney(computed.baseMonthlyAvgScaled)}
+                          </strong>
+                        </div>
+                        <div className="text-sm text-slate-700">
+                          Before 4 weeks:{" "}
+                          <strong className="text-slate-900">
+                            {fmtMoney(computed.base4wScaled)}
+                          </strong>
+                        </div>
+                        <div className="text-sm text-slate-700">
+                          After monthly:{" "}
+                          <strong className="text-slate-900">
+                            {fmtMoney(computed.newMonthlyAvgScaled)}
+                          </strong>
+                        </div>
+                        <div className="text-sm text-slate-700">
+                          After 4 weeks:{" "}
+                          <strong className="text-slate-900">
+                            {fmtMoney(computed.new4wScaled)}
+                          </strong>
+                        </div>
+                      </div>
+
+                      <p className="mt-2 text-xs text-slate-600">
+                        Monthly and 4-week cycles are different. Difference:
+                        before {fmtMoney(computed.monthMinus4wBaseScaled)},
+                        after {fmtMoney(computed.monthMinus4wNewScaled)}.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-6 rounded-2xl border border-slate-200 bg-white/95 p-5 sm:p-6 shadow-sm rc-print-block">
+                    <h3 className="text-lg font-bold text-sky-800 mb-2">
+                      Projection by increase step
+                    </h3>
+                    <p className="text-sm text-slate-600 mb-4">
+                      Percent mode compounds. Fixed mode adds the same
+                      annualized amount each step.
+                    </p>
+
+                    <div className="overflow-x-auto">
+                      <table className="min-w-[860px] w-full text-sm">
+                        <thead>
+                          <tr className="text-left text-slate-600 border-b border-slate-200">
+                            <th className="py-2 pr-4">Step</th>
+                            <th className="py-2 pr-4">
+                              Rent ({PERIOD_LABEL[rentPeriod]})
+                            </th>
+                            <th className="py-2 pr-4">Annualized</th>
+                            <th className="py-2 pr-4">Monthly</th>
+                            <th className="py-2 pr-4">Every 4 weeks</th>
+                            <th className="py-2 pr-4">Weekly</th>
+                            <th className="py-2 pr-4">Delta vs prior annual</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                        </thead>
+                        <tbody>
+                          {computed.steps.map((s) => (
+                            <tr
+                              key={s.step}
+                              className="border-b border-slate-100"
+                            >
+                              <td className="py-2 pr-4 font-semibold text-slate-900">
+                                {s.step === 0 ? "Current" : `+${s.step}`}
+                              </td>
+                              <td className="py-2 pr-4 text-slate-800">
+                                {fmtMoney(s.perPeriodScaled)}
+                              </td>
+                              <td className="py-2 pr-4 text-slate-800">
+                                {fmtMoney(s.annualScaled)}
+                              </td>
+                              <td className="py-2 pr-4 text-slate-800">
+                                {fmtMoney(s.monthlyAvgScaled)}
+                              </td>
+                              <td className="py-2 pr-4 text-slate-800">
+                                {fmtMoney(s.every4wScaled)}
+                              </td>
+                              <td className="py-2 pr-4 text-slate-800">
+                                {fmtMoney(s.weeklyScaled)}
+                              </td>
+                              <td className="py-2 pr-4 text-slate-800">
+                                {s.step === 0
+                                  ? "-"
+                                  : fmtMoney(s.deltaAnnualFromPrevScaled)}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
-                </div>
 
-                {computed.warnings.length ? (
-                  <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900 rc-no-print">
-                    <div className="font-semibold">Notes</div>
-                    <ul className="mt-1 list-disc pl-5 space-y-1">
-                      {computed.warnings.map((w, i) => (
-                        <li key={i}>{w}</li>
-                      ))}
-                    </ul>
-                  </div>
-                ) : null}
-              </>
-            )}
+                  {computed.warnings.length ? (
+                    <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900 rc-no-print">
+                      <div className="font-semibold">Notes</div>
+                      <ul className="mt-1 list-disc pl-5 space-y-1">
+                        {computed.warnings.map((w, i) => (
+                          <li key={i}>{w}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+                </>
+              )}
+            </div>
           </div>
 
-          <div className="my-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-2 text-sm text-slate-700">
-            <div className="font-semibold">Assumptions used on this page</div>
+          <div className="mt-4 rounded-xl border border-slate-200 bg-white/90 px-4 py-3 text-sm text-slate-700 shadow-sm">
+            <div className="font-semibold text-slate-900">
+              Assumptions used on this page
+            </div>
             <ul className="mt-1 list-disc pl-5 space-y-1 text-xs text-slate-600">
               <li>1 year = 365 days</li>
               <li>Biweekly = 14 days</li>
               <li>4-week rent = 28 days</li>
               <li>Month = 365 ÷ 12 days (average)</li>
               <li>
-                This tool does not assume what is included in “rent” (fees,
-                utilities, taxes). Enter the total you want to budget with.
+                This tool does not assume what is included in “rent” such as
+                fees, utilities, or taxes. Enter the total you want to budget
+                with.
               </li>
             </ul>
           </div>
-        </div>
 
-        <div className="md:col-span-6 mt-6">
-          <div className="rounded-xl border border-slate-200 bg-white p-4">
-            <div className="rc-no-print md:hidden flex flex-col sm:flex-row gap-2 mb-4">
+          <div className="mt-3 rounded-xl border border-slate-200 bg-white/90 px-4 py-3 shadow-sm rc-no-print">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+                <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-700">
+                  <input
+                    type="checkbox"
+                    checked={roundDisplay}
+                    onChange={(e) => setRoundDisplay(e.target.checked)}
+                    className="h-4 w-4 cursor-pointer rounded border-slate-300 text-sky-600 focus:ring-sky-400"
+                  />
+                  Round displayed values
+                </label>
+
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-slate-600">
+                    Displayed decimals
+                  </span>
+                  <select
+                    value={displayDecimals}
+                    onChange={(e) => {
+                      const allowed = new Set([0, 2, 4, 6]);
+                      const v = Number(e.target.value);
+                      const t = Number.isFinite(v) ? Math.trunc(v) : 2;
+                      setDisplayDecimals(allowed.has(t) ? t : 2);
+                    }}
+                    className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition hover:border-sky-300 hover:bg-sky-50 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                  >
+                    <option value={0}>0</option>
+                    <option value={2}>2</option>
+                    <option value={4}>4</option>
+                    <option value={6}>6</option>
+                  </select>
+                </div>
+              </div>
+
               <button
                 type="button"
                 onClick={handlePrint}
-                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 md:hidden"
               >
-                Print / Save as PDF
+                Print / Save PDF
               </button>
             </div>
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <label className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={roundDisplay}
-                  onChange={(e) => setRoundDisplay(e.target.checked)}
-                  className="h-4 w-4 cursor-pointer"
-                />
-                Round displayed values (display only)
-              </label>
 
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-slate-500">
-                  Displayed decimals
-                </span>
-                <select
-                  value={displayDecimals}
-                  onChange={(e) => {
-                    const allowed = new Set([0, 2, 4, 6]);
-                    const v = Number(e.target.value);
-                    const t = Number.isFinite(v) ? Math.trunc(v) : 2;
-                    setDisplayDecimals(allowed.has(t) ? t : 2);
-                  }}
-                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none hover:bg-slate-50 transition"
-                >
-                  <option value={0}>0</option>
-                  <option value={2}>2</option>
-                  <option value={4}>4</option>
-                  <option value={6}>6</option>
-                </select>
-              </div>
-            </div>
-
-            <p className="mt-2 text-xs text-slate-500">
-              Calculations preserve decimals internally (up to 12). Only the
-              display is rounded.
+            <p className="mt-2 text-xs text-slate-600">
+              Calculations preserve decimals internally up to 12 places. Only
+              the display is rounded.
             </p>
           </div>
         </div>
@@ -1547,6 +1550,17 @@ export default function RentIncreaseCalculator() {
 
       <HowItWorks safeHref={safeHref} />
 
+      <section className="max-w-6xl mx-auto px-6 pt-4 hidden sm:block">
+        <nav className="text-sm text-slate-600">
+          <a
+            href={safeHref("/")}
+            className="cursor-pointer text-sky-700 hover:text-sky-900 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 rounded"
+          >
+            Home
+          </a>{" "}
+          / {pageName}
+        </nav>
+      </section>
       <ToolFit />
 
       <section id="faq" className="max-w-5xl mx-auto py-16 px-6">
@@ -1554,10 +1568,10 @@ export default function RentIncreaseCalculator() {
           Frequently Asked Questions
         </h2>
 
-        <div className="divide-y divide-slate-200">
+        <div className="divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white/90 px-5 shadow-sm">
           {faqData.map((f, i) => (
             <details key={i} className="group py-4">
-              <summary className="cursor-pointer list-none font-semibold text-lg text-sky-800 flex items-center justify-between hover:text-sky-900">
+              <summary className="cursor-pointer list-none font-semibold text-lg text-sky-800 flex items-center justify-between hover:text-sky-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 rounded">
                 <span>{f.q}</span>
                 <span className="ml-4 text-slate-400 transition-transform group-open:rotate-180">
                   ▾

@@ -11,9 +11,9 @@ function safeToFixed(n: number, digits: number): string {
 }
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Free Monthly/Hourly Rental Rate Calculator";
+  const title = "Monthly to Hourly Rent Converter | RentConverter.com";
   const description =
-    "Convert monthly rent to rent per hour. See the monthly to hourly rent formula, instant result, average-month comparison, 30-day view, and export options.";
+    "Convert monthly rent to an hourly amount. See the hourly rent formula, average-month result, 30-day comparison, and related rent breakdowns.";
 
   const url = "https://www.rentconverter.com/monthly-to-hourly-rent-converter";
   const image = "https://www.rentconverter.com/og-image.jpg";
@@ -24,7 +24,7 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "keywords",
       content:
-        "monthly to hourly rent, convert monthly rent to hourly, true hourly rent from monthly, hourly equivalent of monthly rent, month to hour rent converter, rent per month to per hour, monthly rent hourly rate",
+        "monthly to hourly rent, convert monthly rent to hourly, hourly rent calculator, hourly equivalent of monthly rent, monthly rent hourly rate, rent per month to per hour",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
@@ -152,7 +152,7 @@ function clampScaled(v: bigint, min: bigint, max: bigint): bigint {
   return v;
 }
 
-const MAX_SAFE_INT_FOR_NUMBER = 9_000_000_000_000_000n; // ~9e15, JS Number integer precision limit
+const MAX_SAFE_INT_FOR_NUMBER = 9_000_000_000_000_000n;
 
 function absBigInt(x: bigint): bigint {
   return x < 0n ? -x : x;
@@ -223,7 +223,6 @@ function formatCurrencyFromScaled(
   if (roundDisplay) {
     digits = Math.max(0, Math.min(12, displayDecimals));
   } else {
-    // Show up to 12 decimals but trim trailing zeros for display.
     const a = absBigInt(scaled);
     const fracPart = a % SCALE;
     if (fracPart === 0n) {
@@ -243,7 +242,7 @@ function formatCurrencyFromScaled(
   const { negative, intStr, fracStr } = scaledToDecimalStrings(
     scaledForDisplay,
     digits,
-    !roundDisplay, // trim only when not rounding to fixed digits
+    !roundDisplay,
   );
 
   const groupedInt = groupInt(intStr, group);
@@ -255,7 +254,6 @@ function formatCurrencyFromScaled(
     maximumFractionDigits: digits,
   });
 
-  // Build by parts so we keep locale currency placement and symbols without using floats for the value.
   const parts = fmt.formatToParts(-1);
   let out = "";
   for (const p of parts) {
@@ -268,7 +266,6 @@ function formatCurrencyFromScaled(
       continue;
     }
     if (p.type === "group") {
-      // We already grouped ourselves.
       continue;
     }
     if (p.type === "decimal") {
@@ -373,15 +370,6 @@ function parseMoneyInputToScaled(raw: string): ParsedAmount {
       };
     intPart = split[0] ?? "";
     fracPart = split[1] ?? "";
-
-    if (fracPart === "") {
-      return {
-        ok: false,
-        error:
-          "That number is incomplete. Add digits after the decimal (example: 12.0).",
-        warnings,
-      };
-    }
   }
 
   if (decimalSep === ".") intPart = intPart.replace(/,/g, "");
@@ -588,32 +576,32 @@ export default function MonthlyToHourlyRent() {
 
   const faqData = [
     {
-      q: "How does this convert monthly rent to an hourly equivalent?",
-      a: "This page uses annual equivalence. The monthly amount is first expressed on an annual basis using an average month length (365 ÷ 12 days), then converted to an hourly amount using 24 hours per day.",
+      q: "How do you convert monthly rent to hourly rent?",
+      a: "This calculator uses annual equivalence. It treats one month as 365 ÷ 12 days, then divides that monthly amount across the hours in an average month.",
     },
     {
-      q: "Why isn’t the converter based on a 30-day month?",
-      a: "A fixed 30-day month is a shortcut that changes assumptions. Using an average month length keeps hourly results consistent with daily, weekly, biweekly, 4-week, and annual equivalents.",
+      q: "What formula does the monthly to hourly rent converter use?",
+      a: "The main formula is monthly rent × 12 ÷ 365 ÷ 24. For example, $2,000 per month is about $2.74 per hour before display rounding.",
     },
     {
-      q: "What does an hourly rent equivalent mean for a monthly lease?",
-      a: "It’s a comparison number. It shows what the monthly amount represents per hour under the same annual-equivalence assumptions. Billing and due dates still follow the lease.",
+      q: "Why is the 30-day hourly result different?",
+      a: "A 30-day month is a shortcut. The main hourly result uses the average month length from a 365-day year, while the 30-day comparison uses exactly 720 hours.",
     },
     {
-      q: "Is this the same as an hourly rate for short stays?",
-      a: "No. Short stays often include minimum charges, fees, utilities, or different terms. This tool converts the rent amount only using time-period equivalence.",
+      q: "What does an hourly rent amount mean for a monthly lease?",
+      a: "It is a comparison amount only. It helps show how monthly rent spreads across time, but your billing schedule still follows your lease.",
     },
     {
-      q: "How does monthly compare to rent billed every 4 weeks (28 days)?",
-      a: "A 4-week period is 28 days, while an average month is about 30.42 days (365 ÷ 12). Different period lengths lead to different annual totals and hourly equivalents.",
+      q: "Is this the same as an hourly short-stay rental rate?",
+      a: "No. Short stays may include fees, minimum charges, utilities, deposits, or different pricing rules. This page only converts the rent amount across time periods.",
     },
     {
-      q: "Why can the hourly equivalent look small?",
-      a: "Monthly rent is spread across many hours in an average month. The breakdown shows daily and weekly equivalents so the scaling to hourly is transparent.",
+      q: "How does monthly rent compare with rent paid every 4 weeks?",
+      a: "A 4-week period is 28 days, while an average month is about 30.42 days. Because those periods are not the same length, their annual and hourly equivalents differ.",
     },
     {
-      q: "Does this match exact totals for partial months or specific due dates?",
-      a: "No. These are equivalences for comparison. Actual totals depend on lease terms, proration rules, and due dates.",
+      q: "Does this calculate exact rent for a partial month?",
+      a: "No. For partial-month rent, use the lease terms or the landlord’s proration rule. This calculator is for comparing monthly rent with hourly, daily, weekly, and annual amounts.",
     },
   ];
 
@@ -641,7 +629,7 @@ export default function MonthlyToHourlyRent() {
         "@type": "ListItem",
         position: 2,
         name: "Monthly to Hourly Rent Converter",
-        item: "https://www.rentconverter.commonthly-to-hourly-rent-converter",
+        item: "https://www.rentconverter.com/monthly-to-hourly-rent-converter",
       },
     ],
   };
@@ -658,8 +646,8 @@ export default function MonthlyToHourlyRent() {
     "@type": "WebPage",
     name: "Monthly to Hourly Rent Converter",
     description:
-      "Convert monthly rent to an hourly equivalent using annual equivalence (365-day year and average month length). Includes full breakdowns and a month-length comparison.",
-    url: "https://www.rentconverter.commonthly-to-hourly-rent-converter",
+      "Convert monthly rent to an hourly amount using annual equivalence. Includes average-month results, a 30-day comparison, and related rent breakdowns.",
+    url: "https://www.rentconverter.com/monthly-to-hourly-rent-converter",
   };
 
   const amountDescribedBy = parsedAmount.ok
@@ -667,7 +655,7 @@ export default function MonthlyToHourlyRent() {
     : "rc-amt-help rc-amt-error";
 
   return (
-    <main className="bg-white text-slate-700 scroll-smooth">
+    <main className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-slate-50 text-slate-700 scroll-smooth">
       <style
         dangerouslySetInnerHTML={{
           __html: `
@@ -683,188 +671,221 @@ export default function MonthlyToHourlyRent() {
 
       <section
         id="converter"
-        className="mx-auto max-w-6xl px-6 pb-6 mt-2 sm:mt-6"
+        className="mx-auto max-w-6xl px-6 pb-6 pt-4 sm:pt-6"
       >
-        <div className="rounded-2xl pb-6 bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8">
-          <div className="pt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <h1 className="text-center mb-1 sm:mb-0 sm:text-left text-2xl sm:text-3xl capitalize font-bold text-sky-800 tracking-tight">
-              Monthly to Hourly Rent Converter
-            </h1>
+        <div className="rounded-2xl border border-slate-200 bg-white/95 p-5 shadow-sm sm:p-8">
+          <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div className="min-w-0">
+                <div className="inline-flex items-center rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-700">
+                  Monthly to hourly rent
+                </div>
 
-            <div
-              id="export-controls"
-              className="hidden sm:flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
-            >
-              <div className="flex flex-wrap gap-2">
+                <h1 className="mt-3 text-2xl font-bold tracking-tight text-sky-900 sm:text-3xl">
+                  Monthly to Hourly Rent Converter
+                </h1>
+
+                <p className="mt-2 max-w-6xl text-base leading-relaxed text-slate-600">
+                  Convert monthly rent into an hourly amount. The calculator also
+                  shows daily, weekly, 4-week, and annual breakdowns for
+                  comparison.
+                </p>
+              </div>
+
+              <div
+                id="export-controls"
+                className="rc-no-print flex shrink-0 flex-wrap gap-2 sm:justify-end"
+              >
                 <button
                   type="button"
                   onClick={() => {
                     if (typeof window === "undefined") return;
                     window.print();
                   }}
-                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fbff]"
+                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                 >
                   Print / Save PDF
                 </button>
               </div>
             </div>
-          </div>
 
-          <p className="hidden md:flex w-full py-2 text-base text-slate-600">
-            Convert monthly rent into an hourly rate instantly. Clear
-            calculations, no sign-up required.
-          </p>
+            <div className="mt-2 grid gap-5">
+              <div>
+                <label className="mb-2 block text-sm font-semibold text-slate-700">
+                  Monthly rent
+                </label>
 
-          <div className="grid gap-5">
-            <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
-                Monthly
-              </label>
-
-              <div className="flex gap-2">
-                <input
-                  inputMode="decimal"
-                  value={amountDisplayValue}
-                  onChange={(e) =>
-                    setAmount((e.target.value ?? "").replace(/,/g, ""))
-                  }
-                  onFocus={() => setIsAmountFocused(true)}
-                  onBlur={() => setIsAmountFocused(false)}
-                  placeholder="e.g. 2000 or 2000.00"
-                  className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg leading-6 outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
-                  aria-invalid={!parsedAmount.ok}
-                  aria-describedby={amountDescribedBy}
-                />
-
-                <select
-                  value={currency}
-                  onChange={(e) =>
-                    setCurrency(
-                      isCurrency(e.target.value)
-                        ? (e.target.value as Currency)
-                        : "USD",
-                    )
-                  }
-                  className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-100"
-                  aria-label="Currency"
-                >
-                  {SUPPORTED_CURRENCIES.map((c) => (
-                    <option key={c} value={c}>
-                      {c}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {!parsedAmount.ok ? (
-                <p
-                  id="rc-amt-error"
-                  className="mt-2 text-sm font-semibold text-rose-700"
-                  role="alert"
-                >
-                  {parsedAmount.error}
-                </p>
-              ) : parsedAmount.warnings.length ? (
-                <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
-                  <div className="font-semibold">Input interpretation note</div>
-                  <ul className="mt-1 list-disc pl-5 space-y-1">
-                    {parsedAmount.warnings.map((w, i) => (
-                      <li key={i}>{w}</li>
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
-            </div>
-          </div>
-
-          <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:px-6 rc-print-block min-h-[240px]">
-            {!canShowResults || !breakdown ? (
-              <div className="rounded-xl border border-slate-200 bg-white p-4">
-                <div className="font-semibold text-slate-800">
-                  No results to show
-                </div>
-                <p className="mt-1 text-sm text-slate-600">
-                  Enter a valid monthly rent amount to see the hourly equivalent
-                  and breakdown.
-                </p>
-              </div>
-            ) : (
-              <>
-                <div className="flex items-center gap-2">
-                  <div
-                    className="h-2 w-2 rounded-full bg-sky-600"
-                    aria-hidden="true"
+                <div className="flex gap-2">
+                  <input
+                    inputMode="decimal"
+                    value={amountDisplayValue}
+                    onChange={(e) =>
+                      setAmount((e.target.value ?? "").replace(/,/g, ""))
+                    }
+                    onFocus={() => setIsAmountFocused(true)}
+                    onBlur={() => setIsAmountFocused(false)}
+                    placeholder="e.g. 2000 or 2000.00"
+                    className="w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg leading-6 text-slate-900 outline-none transition placeholder:text-slate-400 hover:border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                    aria-invalid={!parsedAmount.ok}
+                    aria-describedby={amountDescribedBy}
                   />
-                  <div className="text-sm font-semibold text-slate-800">
-                    Hourly
-                  </div>
+
+                  <select
+                    value={currency}
+                    onChange={(e) =>
+                      setCurrency(
+                        isCurrency(e.target.value)
+                          ? (e.target.value as Currency)
+                          : "USD",
+                      )
+                    }
+                    className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition hover:border-sky-300 hover:bg-sky-50 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                    aria-label="Currency"
+                  >
+                    {SUPPORTED_CURRENCIES.map((c) => (
+                      <option key={c} value={c}>
+                        {c}
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
-                <div className="mt-2 flex flex-col gap-2">
-                  <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700 tabular-nums tracking-tight">
-                    {fmt(breakdown.hourly)}
+                <p id="rc-amt-help" className="mt-2 text-sm text-slate-600">
+                  Enter the monthly rent amount before fees or deposits.
+                </p>
+
+                {!parsedAmount.ok ? (
+                  <p
+                    id="rc-amt-error"
+                    className="mt-2 text-sm font-semibold text-rose-700"
+                    role="alert"
+                  >
+                    {parsedAmount.error}
+                  </p>
+                ) : parsedAmount.warnings.length ? (
+                  <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                    <div className="font-semibold">
+                      Input interpretation note
+                    </div>
+                    <ul className="mt-1 list-disc space-y-1 pl-5">
+                      {parsedAmount.warnings.map((w, i) => (
+                        <li key={i}>{w}</li>
+                      ))}
+                    </ul>
                   </div>
-                </div>
+                ) : null}
+              </div>
+            </div>
 
-                <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                  {(
-                    [
-                      ["Daily", breakdown.daily, "daily"],
-                      ["Weekly", breakdown.weekly, "weekly"],
-                      ["2 weeks (14 days)", breakdown.biweekly, "biweekly"],
-                      ["4 weeks (28 days)", breakdown.every4w, "every_4_weeks"],
-                      ["Monthly (average)", breakdown.monthly, "monthly"],
-                      ["Annual", breakdown.annualEquiv, "annual"],
-                    ] as const
-                  ).map(([label, val, key]) => (
-                    <div
-                      key={key}
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-2"
-                    >
-                      <div className="text-xs text-slate-500">{label}</div>
-                      <div className="mt-1 text-lg font-bold text-slate-800 tabular-nums">
-                        {fmt(val)}
-                      </div>
-                    </div>
-                  ))}
+            <div className="mt-3 overflow-hidden rounded-2xl border border-slate-200 bg-sky-50/60 shadow-sm rc-print-block">
+              <div
+                className="h-1 bg-gradient-to-r from-sky-500 to-emerald-400"
+                aria-hidden="true"
+              />
 
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-2 rc-print-block">
-                    <div className="text-xs text-slate-500">
-                      Monthly vs 4-week context
+              <div className="p-5 sm:px-6">
+                {!canShowResults || !breakdown ? (
+                  <div className="rounded-xl border border-slate-200 bg-white/95 p-4">
+                    <div className="font-semibold text-slate-900">
+                      No results to show
                     </div>
-                    <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                      <div className="text-sm text-slate-700">
-                        Monthly minus 4-week amount:{" "}
-                        <strong className="text-slate-900 tabular-nums">
-                          {fmt(breakdown.monthlyMinus4w)}
-                        </strong>
-                      </div>
-                      <div className="text-sm text-slate-700">
-                        Difference:{" "}
-                        <strong className="text-slate-900 tabular-nums">
-                          {safeToFixed(breakdown.monthlyMinus4wPct * 100, 2)}%
-                        </strong>
-                      </div>
-                    </div>
-                    <p className="mt-2 text-xs text-slate-500 leading-relaxed">
-                      28-day 4-week periods vs ~30.42-day months cause different
-                      equivalents.
+                    <p className="mt-1 text-sm text-slate-600">
+                      Enter a valid monthly rent amount to see the hourly result
+                      and breakdown.
                     </p>
                   </div>
-                </div>
-              </>
-            )}
-          </div>
+                ) : (
+                  <>
+                    <div className="flex items-center gap-2">
+                      <div
+                        className="h-2 w-2 rounded-full bg-sky-600"
+                        aria-hidden="true"
+                      />
+                      <div className="text-sm font-semibold text-slate-900">
+                        Hourly rent amount
+                      </div>
+                    </div>
 
-          <Assumptions />
+                    <div className="mt-2 flex flex-col gap-2">
+                      <div className="tabular-nums text-3xl font-extrabold tracking-tight text-emerald-700 sm:text-5xl">
+                        {fmt(breakdown.hourly)}
+                      </div>
+                      <p className="text-sm text-slate-600">
+                        Based on monthly rent × 12 ÷ 365 ÷ 24.
+                      </p>
+                    </div>
+
+                    <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                      {(
+                        [
+                          ["Daily", breakdown.daily, "daily"],
+                          ["Weekly", breakdown.weekly, "weekly"],
+                          ["2 weeks (14 days)", breakdown.biweekly, "biweekly"],
+                          [
+                            "4 weeks (28 days)",
+                            breakdown.every4w,
+                            "every_4_weeks",
+                          ],
+                          ["Monthly (average)", breakdown.monthly, "monthly"],
+                          ["Annual", breakdown.annualEquiv, "annual"],
+                        ] as const
+                      ).map(([label, val, key]) => (
+                        <div
+                          key={key}
+                          className="rounded-xl border border-slate-200 bg-white/95 px-4 py-3 shadow-sm"
+                        >
+                          <div className="text-xs font-medium text-slate-600">
+                            {label}
+                          </div>
+                          <div className="mt-1 tabular-nums text-lg font-bold text-slate-900">
+                            {fmt(val)}
+                          </div>
+                        </div>
+                      ))}
+
+                      <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 shadow-sm sm:col-span-2 lg:col-span-3 rc-print-block">
+                        <div className="text-xs font-medium text-slate-600">
+                          Monthly vs 4-week context
+                        </div>
+                        <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                          <div className="text-sm text-slate-700">
+                            Monthly minus 4-week amount:{" "}
+                            <strong className="tabular-nums text-slate-900">
+                              {fmt(breakdown.monthlyMinus4w)}
+                            </strong>
+                          </div>
+                          <div className="text-sm text-slate-700">
+                            Difference:{" "}
+                            <strong className="tabular-nums text-slate-900">
+                              {safeToFixed(
+                                breakdown.monthlyMinus4wPct * 100,
+                                2,
+                              )}
+                              %
+                            </strong>
+                          </div>
+                        </div>
+                        <p className="mt-2 text-xs leading-relaxed text-slate-600">
+                          A 4-week period is 28 days. An average month is about
+                          30.42 days.
+                        </p>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+
+            <Assumptions />
+          </div>
         </div>
 
-        <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4">
-          <div className="rc-no-print md:hidden flex flex-col sm:flex-row gap-2 mb-4">
+        <div className="mt-4 rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm">
+          <div className="rc-no-print mb-4 flex flex-col gap-2 md:hidden sm:flex-row">
             <button
               type="button"
               onClick={handlePrint}
-              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+              className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
             >
               Print / Save as PDF
             </button>
@@ -879,14 +900,15 @@ export default function MonthlyToHourlyRent() {
       </section>
 
       <HowItWorks />
+
       <section className="mt-8 mb-4 hidden sm:block">
         <nav
-          className="max-w-6xl mx-auto px-6 text-sm text-slate-500"
+          className="mx-auto max-w-6xl px-6 text-sm text-slate-600"
           aria-label="Breadcrumb"
         >
           <a
             href={safeHref("/")}
-            className="hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded"
+            className="cursor-pointer rounded text-sky-700 transition hover:text-sky-900 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
           >
             Home
           </a>{" "}
@@ -896,26 +918,28 @@ export default function MonthlyToHourlyRent() {
 
       <ToolFit />
 
-      <section id="faq" className="max-w-5xl mx-auto pb-16 px-6">
-        <h2 className="text-3xl font-bold text-center mb-3 text-sky-800 tracking-tight">
-          Frequently Asked Questions
-        </h2>
+      <section id="faq" className="mx-auto max-w-5xl px-6 pb-16">
+        <div className="rounded-2xl border border-slate-200 bg-white/90 p-5 shadow-sm sm:p-8">
+          <h2 className="mb-3 text-center text-3xl font-bold tracking-tight text-sky-800">
+            Frequently Asked Questions
+          </h2>
 
-        <div className="divide-y divide-slate-200">
-          {faqData.map((f, i) => (
-            <details key={i} className="group py-4">
-              <summary className="cursor-pointer list-none font-semibold text-lg text-sky-800 flex items-center justify-between hover:text-sky-900">
-                <span>{f.q}</span>
-                <span className="ml-4 text-slate-400 transition-transform group-open:rotate-180">
-                  ▾
-                </span>
-              </summary>
+          <div className="divide-y divide-slate-200">
+            {faqData.map((f, i) => (
+              <details key={i} className="group py-4">
+                <summary className="flex cursor-pointer list-none items-center justify-between text-lg font-semibold text-sky-800 transition hover:text-sky-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white">
+                  <span>{f.q}</span>
+                  <span className="ml-4 text-slate-400 transition-transform group-open:rotate-180">
+                    ▾
+                  </span>
+                </summary>
 
-              <div className="mt-2 text-slate-700 leading-relaxed max-w-prose">
-                {f.a}
-              </div>
-            </details>
-          ))}
+                <div className="mt-2 max-w-prose leading-relaxed text-slate-700">
+                  {f.a}
+                </div>
+              </details>
+            ))}
+          </div>
         </div>
       </section>
 

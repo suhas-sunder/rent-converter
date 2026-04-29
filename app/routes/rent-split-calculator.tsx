@@ -8,7 +8,7 @@ import ToolFit from "~/client/components/rent-split-calculator/ToolFit";
 export const meta: Route.MetaFunction = () => {
   const title = "Free Rent Split Calculator";
   const description =
-    "Calculate how much each roommate pays for rent. Split rent equally and see per-person monthly, weekly, 4-week, and yearly breakdowns.";
+    "Calculate how much each roommate pays when rent is split equally.";
 
   const canonicalUrl = "https://www.rentconverter.com/rent-split-calculator";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
@@ -26,7 +26,7 @@ export const meta: Route.MetaFunction = () => {
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
-    { name: "theme-color", content: "#f8fafc" },
+    { name: "theme-color", content: "#f0f9ff" },
 
     { tagName: "link", rel: "canonical", href: canonicalUrl },
 
@@ -45,6 +45,7 @@ export const meta: Route.MetaFunction = () => {
     { name: "twitter:image:alt", content: "RentConverter.com preview image" },
   ];
 };
+
 type Period =
   | "hourly"
   | "daily"
@@ -717,32 +718,32 @@ export default function RentPerPerson() {
 
   const faqData = [
     {
-      q: "What does rent per person mean on this page?",
-      a: "It is an equal split of the rent amount you entered. The page also shows annual equivalents so the per-person share stays comparable across billing cycles.",
+      q: "How do I split rent equally?",
+      a: "Enter the total rent and the number of people. The calculator divides the rent evenly and shows each person's share for the selected rent period.",
     },
     {
-      q: "What if rent is listed monthly but paid every 4 weeks?",
-      a: "Monthly and every 4 weeks are different time lengths. This page shows both so per-person costs can be compared without treating them as interchangeable.",
+      q: "Can I split monthly rent between roommates?",
+      a: "Yes. Select monthly rent, enter the total rent, and enter the number of people. The result shows the monthly amount per person and related breakdowns.",
     },
     {
-      q: "Does the calculator handle uneven splits?",
-      a: "No. It calculates equal splits only. If one person pays more due to room size, shared rooms, or other agreements, use this as a baseline and adjust outside the tool.",
+      q: "Does this calculator handle uneven rent splits?",
+      a: "No. It calculates equal splits only. If one person pays more because of room size, parking, or a separate agreement, use this result as a baseline and adjust manually.",
     },
     {
-      q: "Why does the tool convert everything through annual totals?",
-      a: "Annual equivalence keeps comparisons consistent and avoids mixing assumptions when rent is discussed in one period but budgeted in another.",
+      q: "What if the rent does not divide evenly to the cent?",
+      a: "The page shows the cents remainder for the selected period. You can assign the small remainder to one person or rotate it over time.",
     },
     {
-      q: "What if the split does not divide evenly to the cent?",
-      a: "Rent often does not split perfectly. You can assign the small remainder to one person or rotate it over time. The page shows any cents remainder for the selected period.",
+      q: "Why does the page show monthly and every 4 weeks separately?",
+      a: "Monthly rent and 4-week rent are not the same. A 4-week period is 28 days, while an average month is about 30.42 days.",
     },
     {
       q: "Does this include utilities, parking, or fees?",
-      a: "No. This is rent-only. Add shared bills to the rent input or calculate them separately and combine totals.",
+      a: "No. This is rent-only. Add shared bills to the rent input if you want to split a combined total.",
     },
     {
-      q: "What time assumptions does this page use?",
-      a: "Assumptions: year = 365 days, week = 7 days, every 4 weeks = 28 days, and month = 365 ÷ 12 days (average). Billing schedules vary by agreement.",
+      q: "What assumptions does this page use?",
+      a: "The calculator uses 365 days per year, 7 days per week, 14 days for biweekly rent, 28 days for every 4 weeks, and 365 ÷ 12 days for an average month.",
     },
   ];
 
@@ -773,7 +774,7 @@ export default function RentPerPerson() {
     "@type": "WebPage",
     name: pageName,
     description:
-      "Split rent per person using annual equivalence on a 365-day basis and compare monthly (average) vs every 4 weeks.",
+      "Calculate how much each roommate pays when rent is split equally.",
     url: canonicalUrl,
     isPartOf: { "@type": "WebSite", url: "https://www.rentconverter.com" },
     breadcrumb: { "@id": `${canonicalUrl}#breadcrumb` },
@@ -804,7 +805,7 @@ export default function RentPerPerson() {
   const decimalsId = "rpp_decimals";
 
   return (
-    <main className="bg-white text-slate-700 scroll-smooth antialiased">
+    <main className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-slate-50 text-slate-700 scroll-smooth antialiased">
       <style
         dangerouslySetInnerHTML={{
           __html: `
@@ -818,28 +819,36 @@ export default function RentPerPerson() {
         }}
       />
 
-      <section
-        id="converter"
-        className="mx-auto max-w-6xl px-6 pb-6 mt-2 sm:mt-6"
-      >
-        <div className="rounded-2xl pb-6 bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8">
-          <div className="pt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <h1 className="text-center mb-1 sm:mb-0 sm:text-left text-2xl sm:text-3xl capitalize font-bold text-sky-800 tracking-tight">
-              Split Rent Equally Calculator
-            </h1>
+      <section id="converter" className="mx-auto max-w-6xl px-6 py-6">
+        <div className="rounded-2xl bg-white/95 pb-6 shadow-sm border border-slate-200 sm:px-8">
+          <div className="pt-5 sm:pt-6">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div className="min-w-0">
+                <div className="inline-flex rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-800">
+                  Roommate rent tool
+                </div>
 
-            <div
-              id="export-controls"
-              className="hidden sm:flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
-            >
-              <div className="flex flex-wrap gap-2">
+                <h1 className="mt-3 text-center sm:text-left text-2xl sm:text-3xl capitalize font-bold text-sky-900 tracking-tight">
+                  Rent Split Calculator
+                </h1>
+
+                <p className="mt-2 max-w-3xl text-base text-slate-700">
+                  Split rent evenly between roommates. The calculator shows each
+                  person’s share and related rent breakdowns.
+                </p>
+              </div>
+
+              <div
+                id="export-controls"
+                className="rc-no-print flex shrink-0 justify-start sm:justify-end"
+              >
                 <button
                   type="button"
                   onClick={() => {
                     if (typeof window === "undefined") return;
                     window.print();
                   }}
-                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fbff]"
+                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2"
                 >
                   Print / Save PDF
                 </button>
@@ -847,16 +856,11 @@ export default function RentPerPerson() {
             </div>
           </div>
 
-          <p className="hidden md:flex w-full py-2 text-base text-slate-600">
-            Split rent evenly between roommates and see each person’s share
-            instantly. Clear calculations, no sign-up required.
-          </p>
-
-          <div className="grid gap-x-5 gap-y-3 md:grid-cols-12">
+          <div className="mt-5 grid gap-x-5 gap-y-4 md:grid-cols-12">
             <div className="md:col-span-5">
               <label
                 htmlFor={totalRentId}
-                className="block text-sm font-semibold text-slate-800 mb-2"
+                className="block text-sm font-semibold text-slate-700 mb-2"
               >
                 Total rent
               </label>
@@ -869,10 +873,17 @@ export default function RentPerPerson() {
                 onBlur={() => setIsTotalRentFocused(false)}
                 onChange={(e) => handleTotalRentChange(e.target.value)}
                 placeholder="e.g. 2400 or 2400.00"
-                className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
+                className={`w-full rounded-xl border bg-white px-4 py-2 text-lg text-slate-900 placeholder:text-slate-400 outline-none transition focus:ring-2 focus:ring-sky-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 ${
+                  parsedRent.ok
+                    ? "border-slate-300 focus:border-sky-500"
+                    : "border-rose-300 focus:border-rose-500"
+                }`}
                 aria-invalid={!parsedRent.ok}
                 aria-describedby={`${totalRentHelpId}${!parsedRent.ok ? ` ${totalRentErrorId}` : ""}`}
               />
+              <p id={totalRentHelpId} className="mt-1 text-xs text-slate-600">
+                Enter the total rent before splitting.
+              </p>
 
               {!parsedRent.ok ? (
                 <p
@@ -888,7 +899,7 @@ export default function RentPerPerson() {
             <div className="md:col-span-3">
               <label
                 htmlFor={periodId}
-                className="block text-sm font-semibold text-slate-800 mb-2"
+                className="block text-sm font-semibold text-slate-700 mb-2"
               >
                 Rent is listed as
               </label>
@@ -900,7 +911,7 @@ export default function RentPerPerson() {
                     isPeriod(e.target.value) ? e.target.value : "monthly",
                   )
                 }
-                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
+                className="cursor-pointer w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg text-slate-900 outline-none transition hover:border-sky-300 hover:bg-sky-50 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2"
               >
                 {(Object.keys(PERIOD_LABEL) as Period[]).map((p) => (
                   <option key={p} value={p}>
@@ -913,7 +924,7 @@ export default function RentPerPerson() {
             <div className="md:col-span-2">
               <label
                 htmlFor={peopleId}
-                className="block text-sm font-semibold text-slate-800 mb-2"
+                className="block text-sm font-semibold text-slate-700 mb-2"
               >
                 People
               </label>
@@ -923,10 +934,18 @@ export default function RentPerPerson() {
                 value={people}
                 onChange={(e) => setPeople(e.target.value)}
                 placeholder="e.g. 3"
-                className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-2 text-lg text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
+                className={`w-full rounded-xl border bg-white px-4 py-2 text-lg text-slate-900 placeholder:text-slate-400 outline-none transition focus:ring-2 focus:ring-sky-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 ${
+                  parsedPeople.ok
+                    ? "border-slate-300 focus:border-sky-500"
+                    : "border-rose-300 focus:border-rose-500"
+                }`}
                 aria-invalid={!parsedPeople.ok}
                 aria-describedby={`${peopleHelpId}${!parsedPeople.ok ? ` ${peopleErrorId}` : ""}`}
               />
+              <p id={peopleHelpId} className="mt-1 text-xs text-slate-600">
+                Enter how many people are splitting rent.
+              </p>
+
               {!parsedPeople.ok ? (
                 <p
                   id={peopleErrorId}
@@ -941,7 +960,7 @@ export default function RentPerPerson() {
             <div className="md:col-span-2">
               <label
                 htmlFor={currencyId}
-                className="block text-sm font-semibold text-slate-800 mb-2"
+                className="block text-sm font-semibold text-slate-700 mb-2"
               >
                 Currency
               </label>
@@ -953,7 +972,7 @@ export default function RentPerPerson() {
                     isCurrency(e.target.value) ? e.target.value : "USD",
                   )
                 }
-                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg font-semibold text-slate-900 outline-none transition focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2"
+                className="cursor-pointer w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg font-semibold text-slate-900 outline-none transition hover:border-sky-300 hover:bg-sky-50 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2"
                 aria-label="Currency"
               >
                 {SUPPORTED_CURRENCIES.map((c) => (
@@ -966,179 +985,197 @@ export default function RentPerPerson() {
           </div>
 
           <div
-            className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:px-6 rc-print-block"
+            className="mt-5 overflow-hidden rounded-2xl border border-slate-200 bg-sky-50/60 shadow-sm rc-print-block"
             role="region"
             aria-label="Results"
             aria-live="polite"
             aria-atomic="true"
           >
-            {!computed.ok ? (
-              <div className="rounded-xl border border-slate-200 bg-[#f7fbff] p-4">
-                <div className="font-semibold text-slate-950">
-                  No results to show
-                </div>
-                <p className="mt-1 text-sm text-slate-700 leading-relaxed">
-                  Fix the input to calculate rent per person.
-                </p>
-                <ul className="mt-3 list-disc pl-5 space-y-1 text-sm text-rose-700">
-                  {computed.errors.map((e, i) => (
-                    <li key={i}>{e}</li>
-                  ))}
-                </ul>
-                {computed.warnings.length ? (
-                  <ul className="mt-3 list-disc pl-5 space-y-1 text-sm text-amber-800">
-                    {computed.warnings.map((w, i) => (
-                      <li key={i}>{w}</li>
+            <div className="h-1 bg-gradient-to-r from-sky-500 to-emerald-400" />
+
+            <div className="p-5 sm:px-6">
+              {!computed.ok ? (
+                <div className="rounded-xl border border-slate-200 bg-white/95 p-4 shadow-sm">
+                  <div className="font-semibold text-slate-900">
+                    No results to show
+                  </div>
+                  <p className="mt-1 text-sm text-slate-600 leading-relaxed">
+                    Fix the input to calculate rent per person.
+                  </p>
+                  <ul className="mt-3 list-disc pl-5 space-y-1 text-sm text-rose-700">
+                    {computed.errors.map((e, i) => (
+                      <li key={i}>{e}</li>
                     ))}
                   </ul>
-                ) : null}
-              </div>
-            ) : (
-              <>
-                {computed.warnings.length ? (
-                  <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
-                    <ul className="list-disc pl-5 space-y-1">
-                      {computed.warnings.map((w, i) => (
-                        <li key={i}>{w}</li>
-                      ))}
-                    </ul>
-                  </div>
-                ) : null}
-                <div className="flex items-center gap-2">
-                  <div
-                    className="h-2 w-2 rounded-full bg-sky-600"
-                    aria-hidden="true"
-                  />
-                  <div className="text-sm font-semibold text-slate-800">
-                    Per-person rent (equal split)
-                  </div>
-                </div>
-
-                <div className="mt-2 flex flex-col gap-2">
-                  <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700 tabular-nums break-words">
-                    {fmtMoney(computed.perSelectedPeriodScaled)}
-                  </div>
-                </div>
-
-                <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2 shadow-sm">
-                    <div className="text-xs text-slate-600">
-                      Annual per person (annualized)
-                    </div>
-                    <div className="mt-1 text-lg font-bold text-slate-900 tabular-nums whitespace-nowrap">
-                      {fmtMoney(computed.annualPerPersonScaled)}
-                    </div>
-                  </div>
-
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2 shadow-sm">
-                    <div className="text-xs text-slate-600">
-                      Annual total (annualized)
-                    </div>
-                    <div className="mt-1 text-lg font-bold text-slate-900 tabular-nums whitespace-nowrap">
-                      {fmtMoney(computed.annualTotalScaled)}
-                    </div>
-                  </div>
-
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2 shadow-sm">
-                    <div className="text-xs text-slate-600">
-                      Cents remainder for the split
-                    </div>
-                    <div className="mt-1 text-lg font-bold text-slate-900 tabular-nums whitespace-nowrap">
-                      {computed.leftoverCents}¢
-                    </div>
-                    <div className="mt-1 text-xs text-slate-600 leading-relaxed">
-                      After splitting the selected period amount to cents.
-                    </div>
-                  </div>
-
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-2 shadow-sm">
-                    <div className="text-xs text-slate-600">
-                      Monthly (average) vs every 4 weeks (per person)
-                    </div>
-                    <div className="mt-2 grid gap-2 sm:grid-cols-2">
-                      <div className="text-sm text-slate-800 leading-relaxed">
-                        Monthly (average):{" "}
-                        <strong className="text-slate-950 tabular-nums whitespace-nowrap">
-                          {fmtMoney(computed.monthlyAvgPerPersonScaled)}
-                        </strong>
-                      </div>
-                      <div className="text-sm text-slate-800 leading-relaxed">
-                        Every 4 weeks (28 days):{" "}
-                        <strong className="text-slate-950 tabular-nums whitespace-nowrap">
-                          {fmtMoney(computed.fourWeekPerPersonScaled)}
-                        </strong>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-3 rounded-2xl border border-slate-200 bg-white p-5 sm:px-6 rc-print-block shadow-sm">
-                  <h3 className="text-lg font-bold text-slate-950 mb-3">
-                    Full breakdown (annual-equivalent totals and per person)
-                  </h3>
-                  <p className="text-sm text-slate-700 mb-4 leading-relaxed">
-                    The table annualizes the total rent first, then expresses
-                    the total and per-person values across common periods.
-                  </p>
-
-                  <div className="overflow-x-auto">
-                    <table className="min-w-[860px] w-full text-sm">
-                      <thead>
-                        <tr className="text-left text-slate-700 border-b border-slate-200">
-                          <th className="py-2 pr-4 font-semibold">Period</th>
-                          <th className="py-2 pr-4 font-semibold">
-                            Total rent
-                          </th>
-                          <th className="py-2 pr-4 font-semibold">
-                            Per person
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {computed.breakdown.map((row) => (
-                          <tr
-                            key={row.period}
-                            className="border-b border-slate-100"
-                          >
-                            <td className="py-2 pr-4 font-semibold text-slate-900">
-                              {PERIOD_LABEL[row.period]}
-                            </td>
-                            <td className="py-2 pr-4 text-slate-800 tabular-nums whitespace-nowrap">
-                              {fmtMoney(row.totalScaled)}
-                            </td>
-                            <td className="py-2 pr-4 text-slate-800 tabular-nums whitespace-nowrap">
-                              {fmtMoney(row.perPersonScaled)}
-                            </td>
-                          </tr>
+                  {computed.warnings.length ? (
+                    <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                      <div className="font-semibold">Notes</div>
+                      <ul className="mt-1 list-disc pl-5 space-y-1">
+                        {computed.warnings.map((w, i) => (
+                          <li key={i}>{w}</li>
                         ))}
-                      </tbody>
-                    </table>
-                  </div>
+                      </ul>
+                    </div>
+                  ) : null}
                 </div>
-              </>
-            )}
+              ) : (
+                <>
+                  {computed.warnings.length ? (
+                    <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                      <div className="font-semibold">Notes</div>
+                      <ul className="mt-1 list-disc pl-5 space-y-1">
+                        {computed.warnings.map((w, i) => (
+                          <li key={i}>{w}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+
+                  <div className="flex items-center gap-2">
+                    <div
+                      className="h-2 w-2 rounded-full bg-emerald-600"
+                      aria-hidden="true"
+                    />
+                    <div className="text-sm font-semibold text-slate-900">
+                      Per-person rent
+                    </div>
+                  </div>
+
+                  <div className="mt-2 flex flex-col gap-2">
+                    <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700 tabular-nums break-words">
+                      {fmtMoney(computed.perSelectedPeriodScaled)}
+                    </div>
+                    <p className="text-sm text-slate-600">
+                      Equal split for {computed.peopleN}{" "}
+                      {computed.peopleN === 1 ? "person" : "people"} in the
+                      selected rent period.
+                    </p>
+                  </div>
+
+                  <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                    <div className="rounded-xl border border-slate-200 bg-white/95 px-4 py-2 shadow-sm">
+                      <div className="text-xs text-slate-600">
+                        Annual per person
+                      </div>
+                      <div className="mt-1 text-lg font-bold text-slate-900 tabular-nums whitespace-nowrap">
+                        {fmtMoney(computed.annualPerPersonScaled)}
+                      </div>
+                    </div>
+
+                    <div className="rounded-xl border border-slate-200 bg-white/95 px-4 py-2 shadow-sm">
+                      <div className="text-xs text-slate-600">Annual total</div>
+                      <div className="mt-1 text-lg font-bold text-slate-900 tabular-nums whitespace-nowrap">
+                        {fmtMoney(computed.annualTotalScaled)}
+                      </div>
+                    </div>
+
+                    <div className="rounded-xl border border-slate-200 bg-white/95 px-4 py-2 shadow-sm">
+                      <div className="text-xs text-slate-600">
+                        Cents remainder
+                      </div>
+                      <div className="mt-1 text-lg font-bold text-slate-900 tabular-nums whitespace-nowrap">
+                        {computed.leftoverCents}¢
+                      </div>
+                      <div className="mt-1 text-xs text-slate-600 leading-relaxed">
+                        After splitting the selected period amount to cents.
+                      </div>
+                    </div>
+
+                    <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 shadow-sm">
+                      <div className="text-xs font-semibold text-emerald-800">
+                        Monthly vs every 4 weeks per person
+                      </div>
+                      <div className="mt-2 grid gap-2 sm:grid-cols-2">
+                        <div className="rounded-lg border border-emerald-200 bg-white/70 px-3 py-2 text-sm text-slate-700 leading-relaxed">
+                          Monthly average:{" "}
+                          <strong className="text-slate-900 tabular-nums whitespace-nowrap">
+                            {fmtMoney(computed.monthlyAvgPerPersonScaled)}
+                          </strong>
+                        </div>
+                        <div className="rounded-lg border border-emerald-200 bg-white/70 px-3 py-2 text-sm text-slate-700 leading-relaxed">
+                          Every 4 weeks:{" "}
+                          <strong className="text-slate-900 tabular-nums whitespace-nowrap">
+                            {fmtMoney(computed.fourWeekPerPersonScaled)}
+                          </strong>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-5 rounded-2xl border border-slate-200 bg-white/95 p-5 sm:px-6 rc-print-block shadow-sm">
+                    <h3 className="text-lg font-bold text-sky-800 mb-2">
+                      Full breakdown
+                    </h3>
+                    <p className="text-sm text-slate-600 mb-4 leading-relaxed">
+                      The table annualizes the total rent first, then shows the
+                      total and per-person amounts across common periods.
+                    </p>
+
+                    <div className="overflow-x-auto">
+                      <table className="min-w-[860px] w-full text-sm">
+                        <thead>
+                          <tr className="text-left text-slate-600 border-b border-slate-200">
+                            <th className="py-2 pr-4 font-semibold">Period</th>
+                            <th className="py-2 pr-4 font-semibold">
+                              Total rent
+                            </th>
+                            <th className="py-2 pr-4 font-semibold">
+                              Per person
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {computed.breakdown.map((row, index) => (
+                            <tr
+                              key={row.period}
+                              className={`border-b border-slate-100 ${
+                                index % 2 === 1 ? "bg-slate-50/50" : ""
+                              }`}
+                            >
+                              <td className="py-2 pr-4 font-semibold text-slate-900">
+                                {PERIOD_LABEL[row.period]}
+                              </td>
+                              <td className="py-2 pr-4 text-slate-900 tabular-nums whitespace-nowrap">
+                                {fmtMoney(row.totalScaled)}
+                              </td>
+                              <td className="py-2 pr-4 text-slate-900 tabular-nums whitespace-nowrap">
+                                {fmtMoney(row.perPersonScaled)}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
 
           <Assumptions />
-        </div>
 
-        <div className="md:col-span-12 mt-6">
-          <div className="rounded-xl border border-slate-200 bg-white p-4">
-            <div className="rc-no-print md:hidden flex flex-col sm:flex-row gap-2 mb-4">
+          <div className="mt-3 rounded-xl border border-slate-200 bg-white/90 px-4 py-3 shadow-sm rc-no-print">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <Rounding
+                roundDisplay={roundDisplay}
+                setRoundDisplay={setRoundDisplay}
+                displayDecimals={displayDecimals}
+                setDisplayDecimals={setDisplayDecimals as any}
+              />
+
               <button
                 type="button"
                 onClick={handlePrint}
-                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 md:hidden"
               >
-                Print / Save as PDF
+                Print / Save PDF
               </button>
             </div>
-            <Rounding
-              roundDisplay={roundDisplay}
-              setRoundDisplay={setRoundDisplay}
-              displayDecimals={displayDecimals}
-              setDisplayDecimals={setDisplayDecimals as any}
-            />
+
+            <p className="mt-2 text-xs text-slate-600 leading-relaxed">
+              Calculations preserve decimals internally up to 12 places. Only
+              the display is rounded.
+            </p>
           </div>
         </div>
       </section>
@@ -1152,7 +1189,7 @@ export default function RentPerPerson() {
         >
           <a
             href={safeHref("/")}
-            className="hover:underline text-slate-700 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
+            className="cursor-pointer rounded text-sky-700 hover:text-sky-900 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2"
           >
             Home
           </a>{" "}
@@ -1162,15 +1199,15 @@ export default function RentPerPerson() {
 
       <ToolFit />
 
-      <section id="faq" className="max-w-5xl mx-auto pb-16 px-6">
-        <h2 className="text-3xl font-bold text-center mb-3 text-sky-800 tracking-tight">
+      <section id="faq" className="max-w-5xl mx-auto py-16 px-6">
+        <h2 className="text-3xl font-bold text-center mb-10 text-sky-800 tracking-tight">
           Frequently Asked Questions
         </h2>
 
-        <div className="divide-y divide-slate-200">
+        <div className="divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white/90 px-5 shadow-sm">
           {faqData.map((f, i) => (
             <details key={i} className="group py-4">
-              <summary className="cursor-pointer list-none font-semibold text-lg text-sky-800 flex items-center justify-between hover:text-sky-900">
+              <summary className="cursor-pointer list-none font-semibold text-lg text-sky-800 flex items-center justify-between rounded hover:text-sky-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2">
                 <span>{f.q}</span>
                 <span className="ml-4 text-slate-400 transition-transform group-open:rotate-180">
                   ▾

@@ -311,7 +311,7 @@ export default function FiveHundredPerWeekToMonthlyRent() {
       <section className="mx-auto max-w-6xl px-4 pb-8 pt-4 sm:px-6 sm:pb-10 sm:pt-8">
         <div className="rounded-2xl border border-slate-200 bg-white/95 p-5 shadow-sm sm:p-8">
           <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
-            <div className="max-w-3xl">
+            <div className="max-w-6xl">
               <p className="inline-flex rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-sky-700">
                 Weekly to monthly rent answer
               </p>

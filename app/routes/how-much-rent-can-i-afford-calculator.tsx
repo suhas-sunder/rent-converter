@@ -1113,7 +1113,7 @@ export default function HowMuchRentCanIAfford() {
           Frequently Asked Questions
         </h2>
 
-        <p className="mx-auto mb-6 max-w-3xl text-center text-slate-600">
+        <p className="mx-auto mb-6 max-w-6xl text-center text-slate-600">
           These answers explain how rent targets are estimated from income and
           why actual affordability can differ.
         </p>

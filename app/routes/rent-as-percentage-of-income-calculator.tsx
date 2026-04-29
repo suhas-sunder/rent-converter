@@ -4,15 +4,16 @@ import Assumptions from "~/client/components/layout/Assumptions";
 import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/rent-as-percentage-of-income-calculator/HowItWorks";
 import ToolFit from "~/client/components/rent-as-percentage-of-income-calculator/ToolFit";
+
 function safeToFixed(n: number, digits: number): string {
   if (!Number.isFinite(n)) return "-";
   return n.toFixed(digits);
 }
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Free Rent-to-Income Ratio Calculator";
+  const title = "Rent as Percentage of Income Calculator | RentConverter.com";
   const description =
-    "Calculate rent as a percentage of income. See your rent-to-income ratio, monthly impact, weekly pay-cycle breakdowns, 4-week view, and export options.";
+    "Calculate rent as a percentage of income. Enter rent and income amounts to compare rent with your income across common periods.";
 
   const url =
     "https://www.rentconverter.com/rent-as-percentage-of-income-calculator";
@@ -732,36 +733,36 @@ export default function RentAsPercentageOfIncome() {
 
   const faqData = [
     {
-      q: "What does rent as a percentage of income represent?",
-      a: "It shows what share of your income is associated with rent over the same time horizon. This page annualizes both values so different pay cycles can be compared consistently.",
+      q: "What does rent as a percentage of income mean?",
+      a: "It shows what share of income goes to rent. The calculator converts both inputs to annual amounts first, then calculates the percentage.",
+    },
+    {
+      q: "How do you calculate rent as a percentage of income?",
+      a: "The formula is annual rent ÷ annual income × 100. For example, $24,000 annual rent and $80,000 annual income equals 30%.",
+    },
+    {
+      q: "Can I use different periods for rent and income?",
+      a: "Yes. You can compare monthly rent with annual, weekly, biweekly, or hourly income. Each input is converted to an annual amount before the percentage is calculated.",
     },
     {
       q: "How does this handle weekly, biweekly, and 4-week pay?",
-      a: "Both rent and income are converted to annual totals using a 365-day year, then the ratio is calculated from those annual totals. This avoids mixing 12-month assumptions with 28-day pay cycles.",
+      a: "The calculator uses a 365-day year. Weekly means 7 days, biweekly means 14 days, and every 4 weeks means 28 days.",
     },
     {
       q: "Why does every 4 weeks differ from monthly?",
-      a: "A 4-week period is 28 days, while an average month is about 30.42 days (365 ÷ 12). Over a year, that difference changes totals and therefore the percentage.",
+      a: "A 4-week period is 28 days. An average month is about 30.42 days. Over a full year, those periods produce different totals.",
     },
     {
-      q: "Can I mix periods (for example monthly rent and hourly income)?",
-      a: "Yes. Each input is annualized using its selected period, then compared on the same annual basis.",
-    },
-    {
-      q: "Is this based on take-home pay or gross pay?",
-      a: "Either works, as long as the income number matches what you want to compare against. Taxes, deductions, and irregular income can make real cash flow differ from a simple ratio.",
+      q: "Is this based on gross income or take-home income?",
+      a: "Use whichever income number you want to compare against. If you enter take-home income, the result is based on take-home pay. If you enter gross income, the result is based on gross pay.",
     },
     {
       q: "Does this include utilities, parking, or fees?",
-      a: "No. This compares rent to income only. If housing costs include add-ons, include them in the rent input to estimate a combined housing percentage.",
+      a: "No. It compares rent to income only. If you want to include other housing costs, add them to the rent amount before calculating.",
     },
     {
       q: "What happens if income is zero or invalid?",
-      a: "No result is shown. Enter a valid income greater than 0 to compute a meaningful percentage.",
-    },
-    {
-      q: "What time assumptions does this page use?",
-      a: "Assumptions: year = 365 days, week = 7 days, biweekly = 14 days, every 4 weeks = 28 days, and month = 365 ÷ 12 days (average). Actual pay schedules and billing rules vary.",
+      a: "No result is shown. Enter an income amount greater than 0 to calculate a meaningful percentage.",
     },
   ];
 
@@ -806,12 +807,22 @@ export default function RentAsPercentageOfIncome() {
     "@type": "WebPage",
     name: "Rent as Percentage of Income Calculator",
     description:
-      "Calculate rent as a percentage of income using annual equivalence (365-day year). Compare pay cycles with annualized breakdowns.",
+      "Calculate rent as a percentage of income using annualized rent and income amounts. Compare monthly, weekly, biweekly, 4-week, hourly, and annual periods.",
     url: "https://www.rentconverter.com/rent-as-percentage-of-income-calculator",
   };
 
+  const rentInvalid = !rentParsed.ok;
+  const incomeInvalid = !incomeParsed.ok;
+
+  const rentDescribedBy = rentInvalid
+    ? "rc-rent-help rc-rent-error"
+    : "rc-rent-help";
+  const incomeDescribedBy = incomeInvalid
+    ? "rc-income-help rc-income-error"
+    : "rc-income-help";
+
   return (
-    <main className="bg-white text-slate-700 scroll-smooth">
+    <main className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-slate-50 text-slate-700 scroll-smooth">
       <style
         dangerouslySetInnerHTML={{
           __html: `
@@ -827,318 +838,362 @@ export default function RentAsPercentageOfIncome() {
 
       <section
         id="converter"
-        className="mx-auto max-w-6xl px-6 pb-6 mt-2 sm:mt-6"
+        className="mx-auto max-w-6xl px-6 pb-6 pt-4 sm:pt-6"
       >
-        <div className="rounded-2xl pb-6 bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8">
-          <div className="pt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <h1 className="text-center mb-1 sm:mb-0 sm:text-left text-2xl sm:text-3xl capitalize font-bold text-sky-800 tracking-tight">
-              Rent as a Percentage of Income Calculator
-            </h1>
+        <div className="rounded-2xl border border-slate-200 bg-white/95 p-5 shadow-sm sm:p-8">
+          <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div className="min-w-0">
+                <div className="inline-flex items-center rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-700">
+                  Rent to income
+                </div>
 
-            <div
-              id="export-controls"
-              className="hidden sm:flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
-            >
-              <div className="flex flex-wrap gap-2">
+                <h1 className="mt-3 text-2xl font-bold tracking-tight text-sky-900 sm:text-3xl">
+                  Rent as Percentage of Income Calculator
+                </h1>
+
+                <p className="mt-2 max-w-3xl text-base leading-relaxed text-slate-600">
+                  Calculate what percentage of your income goes to rent. Enter
+                  rent and income amounts to compare the same time period.
+                </p>
+              </div>
+
+              <div
+                id="export-controls"
+                className="rc-no-print flex shrink-0 flex-wrap gap-2 sm:justify-end"
+              >
                 <button
                   type="button"
                   onClick={() => {
                     if (typeof window === "undefined") return;
                     window.print();
                   }}
-                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fbff]"
+                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                 >
                   Print / Save PDF
                 </button>
               </div>
             </div>
-          </div>
 
-          <p className="hidden md:flex w-full py-2 text-base text-slate-600">
-            Calculate what percentage of your income goes to rent. See the
-            result instantly with clear calculations.
-          </p>
-
-          <div className="grid gap-x-5 gap-y-3 md:grid-cols-4">
-            <div className="md:col-span-4">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
-                Rent amount
-              </label>
-              <div className="grid grid-cols-12 gap-2">
-                <input
-                  ref={rentInputRef}
-                  inputMode="decimal"
-                  value={rentDisplayValue}
-                  onFocus={() => setRentFocused(true)}
-                  onBlur={() => setRentFocused(false)}
-                  onChange={(e) =>
-                    handleAmountChange(e, setRentAmount, rentInputRef)
-                  }
-                  placeholder="e.g. 2200 or 2200.00"
-                  className="cursor-pointer col-span-7 rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
-                  aria-invalid={!rentParsed.ok}
-                />
-                <select
-                  value={rentPeriod}
-                  onChange={(e) =>
-                    setRentPeriod(
-                      isPeriod(e.target.value) ? e.target.value : "monthly",
-                    )
-                  }
-                  className="col-span-5 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
-                  aria-label="Rent period"
-                >
-                  {Object.entries(PERIOD_LABEL).map(([k, v]) => (
-                    <option key={k} value={k}>
-                      {v}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {!rentParsed.ok ? (
-                <p className="mt-2 text-sm font-semibold text-rose-700">
-                  {rentParsed.error}
-                </p>
-              ) : rentParsed.warnings.length ? (
-                <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
-                  <div className="font-semibold">Input interpretation note</div>
-                  <ul className="mt-1 list-disc pl-5 space-y-1">
-                    {rentParsed.warnings.map((w, i) => (
-                      <li key={i}>{w}</li>
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
-            </div>
-
-            <div className="md:col-span-4">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
-                Income amount
-              </label>
-              <div className="grid grid-cols-12 gap-2">
-                <input
-                  ref={incomeInputRef}
-                  inputMode="decimal"
-                  value={incomeDisplayValue}
-                  onFocus={() => setIncomeFocused(true)}
-                  onBlur={() => setIncomeFocused(false)}
-                  onChange={(e) =>
-                    handleAmountChange(e, setIncomeAmount, incomeInputRef)
-                  }
-                  placeholder="e.g. 6500 or 6500.00"
-                  className="cursor-pointer col-span-7 rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
-                  aria-invalid={!incomeParsed.ok}
-                />
-                <select
-                  value={incomePeriod}
-                  onChange={(e) =>
-                    setIncomePeriod(
-                      isPeriod(e.target.value) ? e.target.value : "monthly",
-                    )
-                  }
-                  className="col-span-5 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
-                  aria-label="Income period"
-                >
-                  {Object.entries(PERIOD_LABEL).map(([k, v]) => (
-                    <option key={k} value={k}>
-                      {v}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="mt-3 grid gap-3 md:col-span-4">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-600 mb-2">
-                    Currency
-                  </label>
-                  <select
-                    value={currency}
+            <div className="mt-2 grid gap-x-5 gap-y-4 md:grid-cols-12">
+              <div className="md:col-span-6">
+                <label className="mb-2 block text-sm font-semibold text-slate-700">
+                  Rent amount
+                </label>
+                <div className="grid grid-cols-12 gap-2">
+                  <input
+                    ref={rentInputRef}
+                    inputMode="decimal"
+                    value={rentDisplayValue}
+                    onFocus={() => setRentFocused(true)}
+                    onBlur={() => setRentFocused(false)}
                     onChange={(e) =>
-                      setCurrency(
-                        isCurrency(e.target.value) ? e.target.value : "USD",
+                      handleAmountChange(e, setRentAmount, rentInputRef)
+                    }
+                    placeholder="e.g. 2200 or 2200.00"
+                    className="col-span-7 cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg text-slate-900 outline-none transition placeholder:text-slate-400 hover:border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                    aria-invalid={rentInvalid}
+                    aria-describedby={rentDescribedBy}
+                  />
+                  <select
+                    value={rentPeriod}
+                    onChange={(e) =>
+                      setRentPeriod(
+                        isPeriod(e.target.value) ? e.target.value : "monthly",
                       )
                     }
-                    className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
-                    aria-label="Currency"
+                    className="col-span-5 cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition hover:border-sky-300 hover:bg-sky-50 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                    aria-label="Rent period"
                   >
-                    {SUPPORTED_CURRENCIES.map((c) => (
-                      <option key={c} value={c}>
-                        {c}
+                    {Object.entries(PERIOD_LABEL).map(([k, v]) => (
+                      <option key={k} value={k}>
+                        {v}
                       </option>
                     ))}
                   </select>
                 </div>
-              </div>
 
-              {!incomeParsed.ok ? (
-                <p className="mt-2 text-sm font-semibold text-rose-700">
-                  {incomeParsed.error}
+                <p id="rc-rent-help" className="mt-2 text-sm text-slate-600">
+                  Enter rent for the selected period.
                 </p>
-              ) : incomeParsed.warnings.length ? (
-                <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
-                  <div className="font-semibold">Input interpretation note</div>
-                  <ul className="mt-1 list-disc pl-5 space-y-1">
-                    {incomeParsed.warnings.map((w, i) => (
-                      <li key={i}>{w}</li>
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
-            </div>
-          </div>
 
-          <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:px-6 rc-print-block">
-            {!computed.ok ? (
-              <div className="rounded-xl border border-slate-200 bg-white p-4">
-                <div className="font-semibold text-slate-800">
-                  No results to show
-                </div>
-                <p className="mt-1 text-sm text-slate-600">
-                  Fix the inputs below to compute a meaningful percentage.
-                </p>
-                <ul className="mt-3 list-disc pl-5 space-y-1 text-sm text-rose-700">
-                  {computed.errors.map((e, i) => (
-                    <li key={i}>{e}</li>
-                  ))}
-                </ul>
-                {computed.warnings.length ? (
-                  <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
-                    <div className="font-semibold">Notes</div>
-                    <ul className="mt-1 list-disc pl-5 space-y-1">
-                      {computed.warnings.map((w, i) => (
+                {!rentParsed.ok ? (
+                  <p
+                    id="rc-rent-error"
+                    className="mt-2 text-sm font-semibold text-rose-700"
+                    role="alert"
+                  >
+                    {rentParsed.error}
+                  </p>
+                ) : rentParsed.warnings.length ? (
+                  <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                    <div className="font-semibold">
+                      Input interpretation note
+                    </div>
+                    <ul className="mt-1 list-disc space-y-1 pl-5">
+                      {rentParsed.warnings.map((w, i) => (
                         <li key={i}>{w}</li>
                       ))}
                     </ul>
                   </div>
                 ) : null}
               </div>
-            ) : (
-              <>
-                <div className="flex items-center gap-2">
-                  <div
-                    className="h-2 w-2 rounded-full bg-sky-600"
-                    aria-hidden="true"
+
+              <div className="md:col-span-6">
+                <label className="mb-2 block text-sm font-semibold text-slate-700">
+                  Income amount
+                </label>
+                <div className="grid grid-cols-12 gap-2">
+                  <input
+                    ref={incomeInputRef}
+                    inputMode="decimal"
+                    value={incomeDisplayValue}
+                    onFocus={() => setIncomeFocused(true)}
+                    onBlur={() => setIncomeFocused(false)}
+                    onChange={(e) =>
+                      handleAmountChange(e, setIncomeAmount, incomeInputRef)
+                    }
+                    placeholder="e.g. 6500 or 6500.00"
+                    className="col-span-7 cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg text-slate-900 outline-none transition placeholder:text-slate-400 hover:border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                    aria-invalid={incomeInvalid}
+                    aria-describedby={incomeDescribedBy}
                   />
-                  <div className="text-sm font-semibold text-slate-800">
-                    Estimated rent share
-                  </div>
+                  <select
+                    value={incomePeriod}
+                    onChange={(e) =>
+                      setIncomePeriod(
+                        isPeriod(e.target.value) ? e.target.value : "monthly",
+                      )
+                    }
+                    className="col-span-5 cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition hover:border-sky-300 hover:bg-sky-50 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                    aria-label="Income period"
+                  >
+                    {Object.entries(PERIOD_LABEL).map(([k, v]) => (
+                      <option key={k} value={k}>
+                        {v}
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
-                <div className="mt-2 flex flex-col gap-2">
-                  <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700">
-                    {safeToFixed(computed.ratioPct, 2)}%
-                  </div>
-                </div>
+                <p id="rc-income-help" className="mt-2 text-sm text-slate-600">
+                  Enter income for the selected period.
+                </p>
 
-                <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2">
-                    <div className="text-xs text-slate-500">
-                      Annualized rent
+                {!incomeParsed.ok ? (
+                  <p
+                    id="rc-income-error"
+                    className="mt-2 text-sm font-semibold text-rose-700"
+                    role="alert"
+                  >
+                    {incomeParsed.error}
+                  </p>
+                ) : incomeParsed.warnings.length ? (
+                  <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                    <div className="font-semibold">
+                      Input interpretation note
                     </div>
-                    <div className="mt-1 text-lg font-bold text-slate-800">
-                      {fmtMoney(computed.annualRent)}
-                    </div>
-                  </div>
-
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2">
-                    <div className="text-xs text-slate-500">
-                      Annualized income
-                    </div>
-                    <div className="mt-1 text-lg font-bold text-slate-800">
-                      {fmtMoney(computed.annualIncome)}
-                    </div>
-                  </div>
-
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2">
-                    <div className="text-xs text-slate-500">
-                      Rent share (annual basis)
-                    </div>
-                    <div className="mt-1 text-lg font-bold text-slate-800">
-                      {safeToFixed(computed.ratioPct, 2)}%
-                    </div>
-                  </div>
-
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white px-4 py-2 rc-print-block">
-                    <div className=" grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-                      <div className="text-sm text-slate-700">
-                        Rent per week:{" "}
-                        <strong className="text-slate-900">
-                          {fmtMoney(computed.rentWeekly)}
-                        </strong>
-                      </div>
-                      <div className="text-sm text-slate-700">
-                        Income per week:{" "}
-                        <strong className="text-slate-900">
-                          {fmtMoney(computed.incomeWeekly)}
-                        </strong>
-                      </div>
-                      <div className="text-sm text-slate-700">
-                        Rent per 4 weeks:{" "}
-                        <strong className="text-slate-900">
-                          {fmtMoney(computed.rent4w)}
-                        </strong>
-                      </div>
-                      <div className="text-sm text-slate-700">
-                        Income per 4 weeks:{" "}
-                        <strong className="text-slate-900">
-                          {fmtMoney(computed.income4w)}
-                        </strong>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-emerald-50 px-4 py-2 rc-print-block">
-                    <div className="text-xs text-slate-500">
-                      Monthly vs every 4 weeks (derived from annual totals)
-                    </div>
-                    <div className="mt-2 grid gap-2 lg:grid-cols-3">
-                      <div className="text-sm text-slate-700">
-                        Rent per month (avg):{" "}
-                        <strong className="text-slate-900">
-                          {fmtMoney(computed.rentMonthly)}
-                        </strong>
-                      </div>
-                      <div className="text-sm text-slate-700">
-                        Rent per 4 weeks:{" "}
-                        <strong className="text-slate-900">
-                          {fmtMoney(computed.rent4w)}
-                        </strong>
-                      </div>
-                      <div className="text-sm text-slate-700">
-                        Ratio on 4-week basis:{" "}
-                        <strong className="text-slate-900">
-                          {safeToFixed(computed.ratioOn4wBasis, 2)}%
-                        </strong>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {computed.warnings.length ? (
-                  <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
-                    <div className="font-semibold">Notes</div>
-                    <ul className="mt-1 list-disc pl-5 space-y-1">
-                      {computed.warnings.map((w, i) => (
+                    <ul className="mt-1 list-disc space-y-1 pl-5">
+                      {incomeParsed.warnings.map((w, i) => (
                         <li key={i}>{w}</li>
                       ))}
                     </ul>
                   </div>
                 ) : null}
-              </>
-            )}
-          </div>
+              </div>
 
-          <Assumptions />
+              <div className="md:col-span-6">
+                <label className="mb-2 block text-sm font-semibold text-slate-700">
+                  Currency
+                </label>
+                <select
+                  value={currency}
+                  onChange={(e) =>
+                    setCurrency(
+                      isCurrency(e.target.value) ? e.target.value : "USD",
+                    )
+                  }
+                  className="w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition hover:border-sky-300 hover:bg-sky-50 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                  aria-label="Currency"
+                >
+                  {SUPPORTED_CURRENCIES.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="mt-3 overflow-hidden rounded-2xl border border-slate-200 bg-sky-50/60 shadow-sm rc-print-block">
+              <div
+                className="h-1 bg-gradient-to-r from-sky-500 to-emerald-400"
+                aria-hidden="true"
+              />
+
+              <div className="p-5 sm:px-6">
+                {!computed.ok ? (
+                  <div className="rounded-xl border border-slate-200 bg-white/95 p-4">
+                    <div className="font-semibold text-slate-900">
+                      No results to show
+                    </div>
+                    <p className="mt-1 text-sm text-slate-600">
+                      Fix the inputs below to compute a meaningful percentage.
+                    </p>
+                    <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-rose-700">
+                      {computed.errors.map((e, i) => (
+                        <li key={i}>{e}</li>
+                      ))}
+                    </ul>
+                    {computed.warnings.length ? (
+                      <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                        <div className="font-semibold">Notes</div>
+                        <ul className="mt-1 list-disc space-y-1 pl-5">
+                          {computed.warnings.map((w, i) => (
+                            <li key={i}>{w}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ) : null}
+                  </div>
+                ) : (
+                  <>
+                    <div className="flex items-center gap-2">
+                      <div
+                        className="h-2 w-2 rounded-full bg-sky-600"
+                        aria-hidden="true"
+                      />
+                      <div className="text-sm font-semibold text-slate-900">
+                        Estimated rent share
+                      </div>
+                    </div>
+
+                    <div className="mt-2 flex flex-col gap-2">
+                      <div className="text-3xl font-extrabold tracking-tight text-emerald-700 sm:text-5xl">
+                        {safeToFixed(computed.ratioPct, 2)}%
+                      </div>
+                      <p className="text-sm text-slate-600">
+                        Based on annual rent divided by annual income.
+                      </p>
+                    </div>
+
+                    <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                      <div className="rounded-xl border border-slate-200 bg-white/95 px-4 py-3 shadow-sm">
+                        <div className="text-xs font-medium text-slate-600">
+                          Annualized rent
+                        </div>
+                        <div className="mt-1 text-lg font-bold text-slate-900">
+                          {fmtMoney(computed.annualRent)}
+                        </div>
+                      </div>
+
+                      <div className="rounded-xl border border-slate-200 bg-white/95 px-4 py-3 shadow-sm">
+                        <div className="text-xs font-medium text-slate-600">
+                          Annualized income
+                        </div>
+                        <div className="mt-1 text-lg font-bold text-slate-900">
+                          {fmtMoney(computed.annualIncome)}
+                        </div>
+                      </div>
+
+                      <div className="rounded-xl border border-slate-200 bg-white/95 px-4 py-3 shadow-sm">
+                        <div className="text-xs font-medium text-slate-600">
+                          Rent share
+                        </div>
+                        <div className="mt-1 text-lg font-bold text-slate-900">
+                          {safeToFixed(computed.ratioPct, 2)}%
+                        </div>
+                      </div>
+
+                      <div className="rounded-xl border border-slate-200 bg-white/95 px-4 py-3 shadow-sm sm:col-span-2 lg:col-span-3 rc-print-block">
+                        <div className="text-xs font-medium text-slate-600">
+                          Weekly and 4-week view
+                        </div>
+                        <div className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+                          <div className="text-sm text-slate-700">
+                            Rent per week:{" "}
+                            <strong className="tabular-nums text-slate-900">
+                              {fmtMoney(computed.rentWeekly)}
+                            </strong>
+                          </div>
+                          <div className="text-sm text-slate-700">
+                            Income per week:{" "}
+                            <strong className="tabular-nums text-slate-900">
+                              {fmtMoney(computed.incomeWeekly)}
+                            </strong>
+                          </div>
+                          <div className="text-sm text-slate-700">
+                            Rent per 4 weeks:{" "}
+                            <strong className="tabular-nums text-slate-900">
+                              {fmtMoney(computed.rent4w)}
+                            </strong>
+                          </div>
+                          <div className="text-sm text-slate-700">
+                            Income per 4 weeks:{" "}
+                            <strong className="tabular-nums text-slate-900">
+                              {fmtMoney(computed.income4w)}
+                            </strong>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 shadow-sm sm:col-span-2 lg:col-span-3 rc-print-block">
+                        <div className="text-xs font-medium text-slate-600">
+                          Monthly vs every 4 weeks
+                        </div>
+                        <div className="mt-2 grid gap-2 lg:grid-cols-3">
+                          <div className="text-sm text-slate-700">
+                            Rent per month:{" "}
+                            <strong className="tabular-nums text-slate-900">
+                              {fmtMoney(computed.rentMonthly)}
+                            </strong>
+                          </div>
+                          <div className="text-sm text-slate-700">
+                            Rent per 4 weeks:{" "}
+                            <strong className="tabular-nums text-slate-900">
+                              {fmtMoney(computed.rent4w)}
+                            </strong>
+                          </div>
+                          <div className="text-sm text-slate-700">
+                            Ratio on 4-week basis:{" "}
+                            <strong className="tabular-nums text-slate-900">
+                              {safeToFixed(computed.ratioOn4wBasis, 2)}%
+                            </strong>
+                          </div>
+                        </div>
+                        <p className="mt-2 text-xs text-slate-600">
+                          4-week = 28 days. Average month ={" "}
+                          {safeToFixed(computed.avgMonthDays, 2)} days (365 ÷
+                          12).
+                        </p>
+                      </div>
+                    </div>
+
+                    {computed.warnings.length ? (
+                      <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                        <div className="font-semibold">Notes</div>
+                        <ul className="mt-1 list-disc space-y-1 pl-5">
+                          {computed.warnings.map((w, i) => (
+                            <li key={i}>{w}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ) : null}
+                  </>
+                )}
+              </div>
+            </div>
+
+            <Assumptions />
+          </div>
         </div>
 
-        <div className="rounded-xl border border-slate-200 bg-white p-4 mt-6">
-          <div className="rc-no-print md:hidden flex flex-col sm:flex-row gap-2 mb-4">
+        <div className="mt-4 rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm">
+          <div className="rc-no-print mb-4 flex flex-col gap-2 md:hidden sm:flex-row">
             <button
               type="button"
               onClick={handlePrint}
-              className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+              className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
             >
               Print / Save as PDF
             </button>
@@ -1161,8 +1216,14 @@ export default function RentAsPercentageOfIncome() {
       />
 
       <section className="mt-8 mb-4 hidden sm:block">
-        <nav className="cursor-pointer max-w-6xl mx-auto px-6 text-sm text-slate-500">
-          <a href={safeHref("/")} className="hover:underline">
+        <nav
+          className="mx-auto max-w-6xl px-6 text-sm text-slate-600"
+          aria-label="Breadcrumb"
+        >
+          <a
+            href={safeHref("/")}
+            className="cursor-pointer rounded text-sky-700 transition hover:text-sky-900 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+          >
             Home
           </a>{" "}
           / Rent as Percentage of Income Calculator
@@ -1171,26 +1232,28 @@ export default function RentAsPercentageOfIncome() {
 
       <ToolFit />
 
-      <section id="faq" className="max-w-5xl mx-auto pb-16 px-6">
-        <h2 className="text-3xl font-bold text-center mb-3 text-sky-800 tracking-tight">
-          Frequently Asked Questions
-        </h2>
+      <section id="faq" className="mx-auto max-w-5xl px-6 pb-16">
+        <div className="rounded-2xl border border-slate-200 bg-white/90 p-5 shadow-sm sm:p-8">
+          <h2 className="mb-3 text-center text-3xl font-bold tracking-tight text-sky-800">
+            Frequently Asked Questions
+          </h2>
 
-        <div className="divide-y divide-slate-200">
-          {faqData.map((f, i) => (
-            <details key={i} className="group py-4">
-              <summary className="cursor-pointer list-none font-semibold text-lg text-sky-800 flex items-center justify-between hover:text-sky-900">
-                <span>{f.q}</span>
-                <span className="ml-4 text-slate-400 transition-transform group-open:rotate-180">
-                  ▾
-                </span>
-              </summary>
+          <div className="divide-y divide-slate-200">
+            {faqData.map((f, i) => (
+              <details key={i} className="group py-4">
+                <summary className="flex cursor-pointer list-none items-center justify-between text-lg font-semibold text-sky-800 transition hover:text-sky-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white">
+                  <span>{f.q}</span>
+                  <span className="ml-4 text-slate-400 transition-transform group-open:rotate-180">
+                    ▾
+                  </span>
+                </summary>
 
-              <div className="mt-2 text-slate-700 leading-relaxed max-w-prose">
-                {f.a}
-              </div>
-            </details>
-          ))}
+                <div className="mt-2 max-w-prose leading-relaxed text-slate-700">
+                  {f.a}
+                </div>
+              </details>
+            ))}
+          </div>
         </div>
       </section>
 
