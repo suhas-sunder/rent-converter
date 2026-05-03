@@ -805,7 +805,7 @@ export default function Home() {
         <div className="overflow-hidden rounded-[1.75rem] bg-white">
           <div className="flex flex-col gap-3 px-5 pb-2 pt-7 sm:flex-row sm:items-start sm:justify-between sm:px-8 sm:pt-8">
             <div>
-              <p className="mb-2 text-center sm:text-left text-xs font-bold uppercase tracking-[0.18em] text-sky-700">
+              <p className="mx-auto mb-2 rc-page-eyebrow sm:mx-0">
                 Rent conversion calculator
               </p>
               <h1 className="text-center mb-1 sm:mb-0 sm:text-left text-2xl sm:text-3xl capitalize font-bold text-sky-900 tracking-tight">
@@ -829,7 +829,7 @@ export default function Home() {
                     if (typeof window === "undefined") return;
                     window.print();
                   }}
-                  className="cursor-pointer rounded-xl bg-sky-100 px-4 py-2 text-sm font-semibold text-sky-950 transition hover:bg-sky-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                  className="rc-print-button"
                 >
                   Print / Save PDF
                 </button>

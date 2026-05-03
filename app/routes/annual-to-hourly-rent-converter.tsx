@@ -622,10 +622,6 @@ export default function AnnualToHourlyRent() {
   const fmt = (scaled: bigint) =>
     formatCurrencyFromScaled(scaled, currency);
 
-  const annualInterpreted = useMemo(() => {
-    if (!parsedAnnual.ok) return null;
-    return fmt(annualScaled);
-  }, [parsedAnnual.ok, annualScaled, currency]);
 
   const canShowAnnualResults = parsedAnnual.ok;
 
@@ -711,63 +707,6 @@ export default function AnnualToHourlyRent() {
   const handlePrint = () => {
     if (typeof window === "undefined") return;
     window.print();
-  };
-
-  const handleCsvExport = () => {
-    if (typeof window === "undefined") return;
-    if (!parsedAnnual.ok || !breakdownScaled) return;
-
-    const rows: string[][] = [
-      ["Annual to Hourly Rent Converter"],
-      ["Input annual rent", annualInterpreted ?? ""],
-      ["Currency", currency],
-      ["Display note", "Money values rounded to cents"],
-      [],
-      ["Period", "Amount"],
-      [PERIOD_LABEL.hourly, fmt(breakdownScaled.hourly)],
-      [PERIOD_LABEL.daily, fmt(breakdownScaled.daily)],
-      [PERIOD_LABEL.weekly, fmt(breakdownScaled.weekly)],
-      [PERIOD_LABEL.biweekly, fmt(breakdownScaled.biweekly)],
-      [PERIOD_LABEL.every_4_weeks, fmt(breakdownScaled.every4w)],
-      [PERIOD_LABEL.monthly, fmt(breakdownScaled.monthly)],
-      [PERIOD_LABEL.annual, fmt(breakdownScaled.annual)],
-    ];
-
-    if (canShowPaidScenario) {
-      rows.push(
-        [],
-        ["Paid-hours scenario", ""],
-        ["Paid hours per year", breakdownScaled.paidHoursPerYearLabel ?? ""],
-        ["Time-based hourly", fmt(breakdownScaled.hourly)],
-        ["Paid-hours hourly", fmt(breakdownScaled.paidHourly as bigint)],
-        ["Difference", fmt(breakdownScaled.paidMinusClock as bigint)],
-        [
-          "Difference percentage",
-          formatPercent(breakdownScaled.paidMinusClockPct as number),
-        ],
-      );
-    }
-
-    const csv = rows
-      .map((row) =>
-        row
-          .map((cell) => {
-            const value = String(cell ?? "");
-            return `"${value.replace(/"/g, '""')}"`;
-          })
-          .join(","),
-      )
-      .join("\n");
-
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
-    const objectUrl = window.URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = objectUrl;
-    link.download = "annual-to-hourly-rent-conversion.csv";
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    window.URL.revokeObjectURL(objectUrl);
   };
 
   const faqData = [
@@ -871,7 +810,7 @@ export default function AnnualToHourlyRent() {
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div className="min-w-0">
-                <div className="mb-2 inline-flex rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-800">
+                <div className="mb-2 rc-page-eyebrow">
                   Annual rent per hour calculator
                 </div>
 
@@ -891,19 +830,11 @@ export default function AnnualToHourlyRent() {
                 <button
                   type="button"
                   onClick={handlePrint}
-                  className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+                  className="rc-print-button"
                 >
                   Print / Save as PDF
                 </button>
 
-                <button
-                  type="button"
-                  onClick={handleCsvExport}
-                  disabled={!canShowAnnualResults}
-                  className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-slate-200 disabled:hover:bg-white"
-                >
-                  Export CSV
-                </button>
               </div>
             </div>
 

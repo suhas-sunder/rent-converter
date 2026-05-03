@@ -465,32 +465,6 @@ function fromAnnualScaled(annualScaled: bigint, to: Period): bigint {
   return annualScaled;
 }
 
-function buildCsvRow(cols: string[]): string {
-  return cols
-    .map((c) => {
-      const s = String(c ?? "");
-      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
-      return s;
-    })
-    .join(",");
-}
-
-function downloadTextFile(
-  filename: string,
-  content: string,
-  mime = "text/plain;charset=utf-8",
-) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
 function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   if (raw === null) return fallback;
   try {
@@ -598,45 +572,10 @@ export default function HowMuchRentCanIAfford() {
   const canShowResults =
     parsedIncome.ok && !!annualIncomeScaled && !!affordability;
 
-  const incomeInterpreted = useMemo(() => {
-    if (!parsedIncome.ok) return null;
-    return fmt(incomeScaled);
-  }, [parsedIncome.ok, incomeScaled, currency]);
 
   const handlePrint = () => {
     if (typeof window === "undefined") return;
     window.print();
-  };
-
-  const handleCsvExport = () => {
-    if (typeof window === "undefined") return;
-    if (!parsedIncome.ok || !annualIncomeScaled || !affordability) return;
-
-    const rows: string[][] = [
-      ["How Much Rent Can I Afford Calculator"],
-      ["Input income", incomeInterpreted ?? ""],
-      ["Income period", PERIOD_LABEL[period]],
-      ["Annualized income", fmt(annualIncomeScaled)],
-      ["Currency", currency],
-      ["Display note", "Money values rounded to cents"],
-      [],
-      ["Target", "Rent share", "Monthly", "Weekly", "4 weeks", "Annual"],
-      ...affordability.map((row) => [
-        row.label,
-        formatPercent(row.ratio),
-        fmt(row.monthly),
-        fmt(row.weekly),
-        fmt(row.every4w),
-        fmt(row.annual),
-      ]),
-    ];
-
-    const csv = rows.map(buildCsvRow).join("\n");
-    downloadTextFile(
-      "rent-affordability-estimate.csv",
-      csv,
-      "text/csv;charset=utf-8",
-    );
   };
 
   const faqData = [
@@ -751,7 +690,7 @@ export default function HowMuchRentCanIAfford() {
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div className="min-w-0">
-                <div className="mb-2 inline-flex rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-800">
+                <div className="mb-2 rc-page-eyebrow">
                   Rent affordability calculator
                 </div>
 
@@ -773,19 +712,11 @@ export default function HowMuchRentCanIAfford() {
                 <button
                   type="button"
                   onClick={handlePrint}
-                  className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+                  className="rc-print-button"
                 >
                   Print / Save PDF
                 </button>
 
-                <button
-                  type="button"
-                  onClick={handleCsvExport}
-                  disabled={!canShowResults}
-                  className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-slate-200 disabled:hover:bg-white"
-                >
-                  Export CSV
-                </button>
               </div>
             </div>
 
@@ -1016,11 +947,11 @@ export default function HowMuchRentCanIAfford() {
 
       <HowItWorks />
 
-      <section className="mt-8 mb-4 hidden sm:block">
-        <nav className="mx-auto max-w-6xl px-6 text-sm text-slate-700">
+      <section className="rc-breadcrumb-section rc-no-print">
+        <nav aria-label="Breadcrumb" className="rc-breadcrumb-nav">
           <a
             href={safeHref("/")}
-            className="cursor-pointer rounded text-sky-800 transition hover:text-sky-900 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+            className="rc-breadcrumb-link"
           >
             Home
           </a>{" "}

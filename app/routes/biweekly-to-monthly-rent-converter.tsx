@@ -400,32 +400,6 @@ function biweeklyToPeriodScaled(
   }
 }
 
-function buildCsvRow(cols: string[]): string {
-  return cols
-    .map((c) => {
-      const s = String(c ?? "");
-      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
-      return s;
-    })
-    .join(",");
-}
-
-function downloadTextFile(
-  filename: string,
-  content: string,
-  mime = "text/plain;charset=utf-8",
-) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
 function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   if (raw === null) return fallback;
   try {
@@ -577,61 +551,10 @@ export default function BiweeklyToMonthlyRent() {
 
   const monthlyHeadlineScaled = breakdownScaled?.monthly ?? 0n;
 
-  const biweeklyInterpreted = useMemo(() => {
-    if (!parsedBiweekly.ok) return null;
-    return fmt(biweeklyScaled);
-  }, [parsedBiweekly.ok, biweeklyScaled, currency]);
 
   const handlePrint = () => {
     if (typeof window === "undefined") return;
     window.print();
-  };
-
-  const handleCsvExport = () => {
-    if (typeof window === "undefined") return;
-    if (!parsedBiweekly.ok || !breakdownScaled) return;
-
-    const rows: string[][] = [
-      ["Biweekly to Monthly Rent Converter"],
-      ["Input biweekly rent", biweeklyInterpreted ?? ""],
-      ["Currency", currency],
-      ["Display note", "Money values rounded to cents"],
-      [],
-      ["Period", "Amount"],
-      ["Hourly", fmt(breakdownScaled.hourly)],
-      ["Daily", fmt(breakdownScaled.daily)],
-      ["Weekly", fmt(breakdownScaled.weekly)],
-      ["2 weeks (14 days)", fmt(breakdownScaled.biweekly)],
-      ["4 weeks (28 days)", fmt(breakdownScaled.every4w)],
-      ["Monthly", fmt(breakdownScaled.monthly)],
-      ["Annual", fmt(breakdownScaled.annual)],
-      [],
-      ["Comparison", "Amount"],
-      ["Monthly minus 4-week amount", fmt(breakdownScaled.monthlyMinus4w)],
-      [
-        "Monthly minus 4-week percentage",
-        formatPercent(breakdownScaled.monthlyMinus4wPct),
-      ],
-    ];
-
-    if (paymentMath) {
-      rows.push(
-        [],
-        ["26-payment context", ""],
-        ["Payments per year", String(paymentMath.paymentsPerYear)],
-        ["Annual from 26 payments", fmt(paymentMath.annualFromPayments)],
-        ["Shortcut monthly", fmt(paymentMath.monthlyFromPayments)],
-        ["Delta vs converter", fmt(paymentMath.deltaVsConverter)],
-        ["Delta percentage", formatPercent(paymentMath.pctVsConverter)],
-      );
-    }
-
-    const csv = rows.map(buildCsvRow).join("\n");
-    downloadTextFile(
-      "biweekly-to-monthly-rent-conversion.csv",
-      csv,
-      "text/csv;charset=utf-8",
-    );
   };
 
   const faqData = [
@@ -746,7 +669,7 @@ export default function BiweeklyToMonthlyRent() {
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div className="min-w-0">
-                <div className="mb-2 inline-flex rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-800">
+                <div className="mb-2 rc-page-eyebrow">
                   Biweekly to monthly rent calculator
                 </div>
 
@@ -768,19 +691,11 @@ export default function BiweeklyToMonthlyRent() {
                 <button
                   type="button"
                   onClick={handlePrint}
-                  className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+                  className="rc-print-button"
                 >
                   Print / Save PDF
                 </button>
 
-                <button
-                  type="button"
-                  onClick={handleCsvExport}
-                  disabled={!canShowResults}
-                  className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-slate-200 disabled:hover:bg-white"
-                >
-                  Export CSV
-                </button>
               </div>
             </div>
 
@@ -1006,11 +921,11 @@ export default function BiweeklyToMonthlyRent() {
 
       <HowItWorks />
 
-      <section className="mt-8 mb-4 hidden sm:block">
-        <nav className="mx-auto max-w-6xl px-6 text-sm text-slate-700">
+      <section className="rc-breadcrumb-section rc-no-print">
+        <nav aria-label="Breadcrumb" className="rc-breadcrumb-nav">
           <a
             href={safeHref("/")}
-            className="cursor-pointer rounded text-sky-800 hover:text-sky-900 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+            className="rc-breadcrumb-link"
           >
             Home
           </a>{" "}

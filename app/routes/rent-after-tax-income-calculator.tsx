@@ -841,7 +841,7 @@ export default function RentAfterTaxIncome() {
                     if (typeof window === "undefined") return;
                     window.print();
                   }}
-                  className="cursor-pointer rounded-xl bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                  className="rc-print-button"
                 >
                   Print / Save PDF
                 </button>
@@ -1269,7 +1269,7 @@ export default function RentAfterTaxIncome() {
             <button
               type="button"
               onClick={handlePrint}
-              className="cursor-pointer rounded-xl bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+              className="rc-print-button"
             >
               Print / Save as PDF
             </button>
@@ -1282,14 +1282,14 @@ export default function RentAfterTaxIncome() {
 
       <HowItWorks />
 
-      <section className="mt-8 mb-4 hidden sm:block">
+      <section className="rc-breadcrumb-section rc-no-print">
         <nav
-          className="mx-auto max-w-6xl px-6 text-sm text-slate-700"
+
           aria-label="Breadcrumb"
-        >
+         className="rc-breadcrumb-nav">
           <a
             href={safeHref("/")}
-            className="cursor-pointer rounded text-sky-700 transition hover:text-sky-900 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+            className="rc-breadcrumb-link"
           >
             Home
           </a>{" "}

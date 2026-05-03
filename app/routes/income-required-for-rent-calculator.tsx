@@ -438,32 +438,6 @@ function divScaledByScaled(
   return (numeratorScaled * SCALE) / denomScaled;
 }
 
-function buildCsvRow(cols: string[]): string {
-  return cols
-    .map((c) => {
-      const s = String(c ?? "");
-      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
-      return s;
-    })
-    .join(",");
-}
-
-function downloadTextFile(
-  filename: string,
-  content: string,
-  mime = "text/plain;charset=utf-8",
-) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
 export default function IncomeRequiredForRentCalculator() {
   const [modeReverse, setModeReverse] = useState<boolean>(() => {
     if (typeof window === "undefined") return false;
@@ -750,35 +724,6 @@ export default function IncomeRequiredForRentCalculator() {
     window.print();
   };
 
-  const handleCsvExport = () => {
-    if (typeof window === "undefined") return;
-    if (!canShowResults || !resultsScaled) return;
-
-    const rows: string[][] = [
-      ["Income Required for Rent Calculator"],
-      [
-        "Mode",
-        modeReverse ? "Income to maximum rent" : "Rent to required income",
-      ],
-      ["Currency", currency],
-      ["Multiplier", resultsScaled.rowB.valueText],
-      ["Display note", "Money values rounded to cents"],
-      [],
-      ["Result", "Amount"],
-      [resultsScaled.headlineLabel, fmt(resultsScaled.headlineValue)],
-      [resultsScaled.rowA.label, fmt(resultsScaled.rowA.value)],
-      [resultsScaled.rowB.label, resultsScaled.rowB.valueText],
-      [resultsScaled.rowC.label, fmt(resultsScaled.rowC.value)],
-    ];
-
-    const csv = rows.map(buildCsvRow).join("\n");
-    downloadTextFile(
-      "income-required-for-rent-calculation.csv",
-      csv,
-      "text/csv;charset=utf-8",
-    );
-  };
-
   const activeError = useMemo(() => {
     if (!multiplierParsed.ok)
       return multiplierParsed.error ?? "Enter a valid multiplier.";
@@ -842,7 +787,7 @@ export default function IncomeRequiredForRentCalculator() {
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div className="min-w-0">
-                <div className="mb-2 inline-flex rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-800">
+                <div className="mb-2 rc-page-eyebrow">
                   Rent income rule calculator
                 </div>
 
@@ -865,19 +810,11 @@ export default function IncomeRequiredForRentCalculator() {
                 <button
                   type="button"
                   onClick={handlePrint}
-                  className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+                  className="rc-print-button"
                 >
                   Print / Save PDF
                 </button>
 
-                <button
-                  type="button"
-                  onClick={handleCsvExport}
-                  disabled={!canShowResults}
-                  className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-slate-200 disabled:hover:bg-white"
-                >
-                  Export CSV
-                </button>
               </div>
             </div>
 

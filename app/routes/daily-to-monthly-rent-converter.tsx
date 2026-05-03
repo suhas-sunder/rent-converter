@@ -457,32 +457,6 @@ function ratioToNumber(numer: bigint, denom: bigint, precision = 8): number {
   return Number(scaled) / 10 ** p;
 }
 
-function buildCsvRow(cols: string[]): string {
-  return cols
-    .map((c) => {
-      const s = String(c ?? "");
-      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
-      return s;
-    })
-    .join(",");
-}
-
-function downloadTextFile(
-  filename: string,
-  content: string,
-  mime = "text/plain;charset=utf-8",
-) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
 export default function DailyToMonthlyRent() {
   const [amount, setAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "70";
@@ -586,71 +560,10 @@ export default function DailyToMonthlyRent() {
 
   const monthlyHeadlineScaled = breakdownScaled?.monthly ?? 0n;
 
-  const dailyInterpreted = useMemo(() => {
-    if (!parsedDaily.ok) return null;
-    return fmt(dailyScaled);
-  }, [parsedDaily.ok, dailyScaled, currency]);
 
   const handlePrint = () => {
     if (typeof window === "undefined") return;
     window.print();
-  };
-
-  const handleCsvExport = () => {
-    if (typeof window === "undefined") return;
-    if (!parsedDaily.ok || !breakdownScaled) return;
-
-    const rows: string[][] = [
-      ["Daily to Monthly Rent Converter"],
-      ["Input daily rent", dailyInterpreted ?? ""],
-      ["Currency", currency],
-      ["Display note", "Money values rounded to cents"],
-      [],
-      ["Period", "Amount"],
-      ["Hourly", fmt(breakdownScaled.hourly)],
-      ["Daily", fmt(breakdownScaled.daily)],
-      ["Weekly", fmt(breakdownScaled.weekly)],
-      ["2 weeks (14 days)", fmt(breakdownScaled.biweekly)],
-      ["4 weeks (28 days)", fmt(breakdownScaled.every4w)],
-      ["Monthly", fmt(breakdownScaled.monthly)],
-      ["Annual", fmt(breakdownScaled.annual)],
-      [],
-      ["Comparison", "Amount"],
-      ["30-day month", fmt(breakdownScaled.monthByThirty)],
-      ["Average month", fmt(breakdownScaled.monthByAverage)],
-      [
-        "Average month minus 30-day month",
-        fmt(breakdownScaled.monthByThirtyDiff),
-      ],
-      ["Monthly minus 4-week amount", fmt(breakdownScaled.monthlyMinus4w)],
-      [
-        "Monthly minus 4-week percentage",
-        formatPercent(breakdownScaled.monthlyMinus4wPct),
-      ],
-      [
-        "Annual from 52 weekly payments",
-        fmt(breakdownScaled.annualFromWeekly52),
-      ],
-      [
-        "Annual from 12 monthly payments",
-        fmt(breakdownScaled.annualFromMonthly12),
-      ],
-      [
-        "365-day annual vs 52 weekly percentage",
-        formatPercent(breakdownScaled.pctVsAnnual52),
-      ],
-      [
-        "365-day annual vs 12 monthly percentage",
-        formatPercent(breakdownScaled.pctVsAnnual12),
-      ],
-    ];
-
-    const csv = rows.map(buildCsvRow).join("\n");
-    downloadTextFile(
-      "daily-to-monthly-rent-conversion.csv",
-      csv,
-      "text/csv;charset=utf-8",
-    );
   };
 
   const faqData = [
@@ -757,7 +670,7 @@ export default function DailyToMonthlyRent() {
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div className="min-w-0">
-                <div className="mb-2 inline-flex rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-800">
+                <div className="mb-2 rc-page-eyebrow">
                   Daily to monthly rent calculator
                 </div>
 
@@ -779,19 +692,11 @@ export default function DailyToMonthlyRent() {
                 <button
                   type="button"
                   onClick={handlePrint}
-                  className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+                  className="rc-print-button"
                 >
                   Print / Save PDF
                 </button>
 
-                <button
-                  type="button"
-                  onClick={handleCsvExport}
-                  disabled={!canShowResults}
-                  className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-slate-200 disabled:hover:bg-white"
-                >
-                  Export CSV
-                </button>
               </div>
             </div>
 
@@ -1007,11 +912,11 @@ export default function DailyToMonthlyRent() {
 
       <HowItWorks />
 
-      <section className="mt-8 mb-4 hidden sm:block">
-        <nav className="mx-auto max-w-6xl px-6 text-sm text-slate-700">
+      <section className="rc-breadcrumb-section rc-no-print">
+        <nav aria-label="Breadcrumb" className="rc-breadcrumb-nav">
           <a
             href={safeHref("/")}
-            className="cursor-pointer rounded text-sky-800 transition hover:text-sky-900 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+            className="rc-breadcrumb-link"
           >
             Home
           </a>{" "}

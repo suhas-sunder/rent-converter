@@ -277,7 +277,7 @@ export default function OneSeventyPerWeekToMonthlyRent() {
       <section className="mx-auto max-w-6xl px-4 pb-8 pt-4 sm:px-6 sm:pb-10 sm:pt-8">
         <div className="rounded-[1.75rem] bg-white p-5 sm:p-8">
           <div className="max-w-6xl">
-            <p className="inline-flex rounded-full bg-sky-100 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-sky-700">
+            <p className="rc-page-eyebrow">
               Weekly to monthly rent answer
             </p>
 

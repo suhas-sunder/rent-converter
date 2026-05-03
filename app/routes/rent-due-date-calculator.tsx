@@ -934,7 +934,7 @@ export default function RentDueDateCalculator() {
                     if (typeof window === "undefined") return;
                     window.print();
                   }}
-                  className="cursor-pointer rounded-xl bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-950 hover:bg-sky-50 hover:border-sky-200 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fbff]"
+                  className="rc-print-button"
                 >
                   Print / Save PDF
                 </button>
@@ -1370,7 +1370,7 @@ export default function RentDueDateCalculator() {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:border-sky-200 transition"
+                className="rc-print-button"
               >
                 Print / Save as PDF
               </button>
@@ -1384,9 +1384,9 @@ export default function RentDueDateCalculator() {
 
       <HowItWorks relatedLinks={relatedLinks} safeHref={safeHref} />
 
-      <section className="max-w-6xl mx-auto px-6 mt-4 hidden sm:block">
-        <nav className="cursor-pointer text-sm text-slate-700 rc-no-print">
-          <a href={safeHref("/")} className="hover:underline text-slate-700">
+      <section className="rc-breadcrumb-section rc-no-print">
+        <nav aria-label="Breadcrumb" className="rc-breadcrumb-nav">
+          <a href={safeHref("/")} className="rc-breadcrumb-link">
             Home
           </a>{" "}
           / <span className="text-slate-700">{pageName}</span>

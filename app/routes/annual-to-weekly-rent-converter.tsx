@@ -413,32 +413,6 @@ function formatGroupedPreviewFromNormalized(normalized: string): string {
   return `${groupedInt}.${fracRaw}`;
 }
 
-function buildCsvRow(cols: string[]): string {
-  return cols
-    .map((c) => {
-      const s = String(c ?? "");
-      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
-      return s;
-    })
-    .join(",");
-}
-
-function downloadTextFile(
-  filename: string,
-  content: string,
-  mime = "text/plain;charset=utf-8",
-) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
 export default function AnnualToWeeklyRentConverter() {
   const [amount, setAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "24000";
@@ -543,81 +517,10 @@ export default function AnnualToWeeklyRentConverter() {
 
   const weeklyHeadlineScaled = breakdownScaled?.weeklyBudget ?? 0n;
 
-  const annualInterpreted = useMemo(() => {
-    if (!parsedAnnual.ok) return null;
-    return fmt(annualScaled);
-  }, [parsedAnnual.ok, annualScaled, currency]);
 
   const handlePrint = () => {
     if (typeof window === "undefined") return;
     window.print();
-  };
-
-  const handleCsvExport = () => {
-    if (typeof window === "undefined") return;
-    if (!parsedAnnual.ok || !breakdownScaled) return;
-
-    const rows: string[][] = [
-      ["Annual to Weekly Rent Converter"],
-      ["Input annual rent", annualInterpreted ?? ""],
-      ["Currency", currency],
-      ["Display note", "Money values rounded to cents"],
-      [],
-      ["Period", "Amount"],
-      ["Weekly (annual ÷ 52)", fmt(breakdownScaled.weeklyBudget)],
-      ["Weekly (annual × 7 ÷ 365)", fmt(breakdownScaled.weekly365)],
-      ["Hourly (365-day year)", fmt(breakdownScaled.hourly)],
-      ["Daily (365-day year)", fmt(breakdownScaled.daily)],
-      ["2 weeks (14 days)", fmt(breakdownScaled.biweekly)],
-      ["4 weeks (28 days)", fmt(breakdownScaled.every4w)],
-      ["Monthly (annual ÷ 12)", fmt(breakdownScaled.monthly)],
-      ["Annual", fmt(breakdownScaled.annual)],
-      [],
-      ["Comparison", "Amount"],
-      [
-        "(Annual ÷ 52) − (Annual × 7 ÷ 365)",
-        fmt(breakdownScaled.weeklyBudgetMinus365),
-      ],
-      [
-        "Weekly definition difference percentage",
-        formatPercent(breakdownScaled.weeklyBudgetMinus365Pct),
-      ],
-      [
-        "Implied annual from 52 weekly payments",
-        fmt(breakdownScaled.impliedAnnualWeekly52),
-      ],
-      [
-        "Implied annual from 365-day weekly amount",
-        fmt(breakdownScaled.impliedAnnualWeekly365),
-      ],
-      [
-        "Implied annual from 13 4-week payments",
-        fmt(breakdownScaled.impliedAnnual4w13),
-      ],
-      [
-        "13 4-week payments minus 52 weekly payments",
-        fmt(breakdownScaled.diff4w13_vs_weekly52),
-      ],
-      [
-        "13 4-week vs 52 weekly percentage",
-        formatPercent(breakdownScaled.diff4w13_vs_weekly52Pct),
-      ],
-      [
-        "Reconstruction gap, weekly ÷ 52",
-        fmt(breakdownScaled.reconstructionGapWeekly52),
-      ],
-      [
-        "Reconstruction gap, weekly 365-day",
-        fmt(breakdownScaled.reconstructionGapWeekly365),
-      ],
-    ];
-
-    const csv = rows.map(buildCsvRow).join("\n");
-    downloadTextFile(
-      "annual-to-weekly-rent-conversion.csv",
-      csv,
-      "text/csv;charset=utf-8",
-    );
   };
 
   const faqData = [
@@ -721,7 +624,7 @@ export default function AnnualToWeeklyRentConverter() {
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div className="min-w-0">
-                <div className="mb-2 inline-flex rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-800">
+                <div className="mb-2 rc-page-eyebrow">
                   Yearly rent to weekly rent calculator
                 </div>
 
@@ -744,19 +647,11 @@ export default function AnnualToWeeklyRentConverter() {
                 <button
                   type="button"
                   onClick={handlePrint}
-                  className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+                  className="rc-print-button"
                 >
                   Print / Save PDF
                 </button>
 
-                <button
-                  type="button"
-                  onClick={handleCsvExport}
-                  disabled={!canShowResults}
-                  className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-slate-200 disabled:hover:bg-white"
-                >
-                  Export CSV
-                </button>
               </div>
             </div>
 
@@ -975,11 +870,11 @@ export default function AnnualToWeeklyRentConverter() {
 
       <HowItWorks />
 
-      <section className="mt-8 mb-4 hidden sm:block">
-        <nav className="mx-auto max-w-6xl px-6 text-sm text-slate-700">
+      <section className="rc-breadcrumb-section rc-no-print">
+        <nav aria-label="Breadcrumb" className="rc-breadcrumb-nav">
           <a
             href={safeHref("/")}
-            className="cursor-pointer rounded text-sky-800 hover:text-sky-900 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+            className="rc-breadcrumb-link"
           >
             Home
           </a>{" "}

@@ -1308,7 +1308,7 @@ export default function TermsOfService() {
           <p>admin@morsewords.com</p>
         </section>
       </div>
-    
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}

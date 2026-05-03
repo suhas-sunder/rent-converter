@@ -1,73 +1,40 @@
-import { Link } from "react-router";
+import { SeoToolFit } from "~/client/components/layout/SeoSupport";
+
+const toolFit = {
+  title: "When this annual-to-biweekly comparison helps",
+  bestFor: [
+    "Comparing an annual rent listing with a biweekly budget or another listing.",
+    "Checking whether a rent quote still fits after you put it on the same time basis as your income or budget.",
+    "Explaining the difference to a roommate, partner, landlord, or agent without rebuilding the math by hand."
+  ],
+  notFor: [
+    "Exact lease billing can still depend on due dates, proration, local rules, and fees.",
+    "This does not decide affordability by itself; it only makes the rent periods comparable."
+  ],
+  nextSteps: [
+    {
+      to: "/rent-converter",
+      label: "All rent periods"
+    },
+    {
+      to: "/rent-as-percentage-of-income-calculator",
+      label: "Rent as percentage of income"
+    },
+    {
+      to: "/weekly-to-monthly-rent-converter",
+      label: "Weekly to monthly"
+    },
+    {
+      to: "/monthly-to-weekly-rent-converter",
+      label: "Monthly to weekly"
+    },
+    {
+      to: "/rent-paid-every-4-weeks-calculator",
+      label: "4-week rent"
+    }
+  ]
+};
 
 export default function ToolFit() {
-  return (
-    <section id="tool-fit" className="max-w-5xl mx-auto py-8 px-6">
-      <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
-        <div className="bg-[#f7fbff] border-b border-slate-200 px-6 py-5">
-          <div className="flex items-center gap-2">
-           
-            <h2 className="text-2xl sm:text-3xl font-bold text-sky-800 tracking-tight">
-              Who this tool is for (and not for)
-            </h2>
-          </div>
-          <p className="mt-2 text-slate-700 leading-relaxed ">
-            Quick scope check so you use the right calculator for the job.
-          </p>
-        </div>
-
-        <div className="grid gap-4 p-6 sm:p-8">
-          <div className="rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-sm">
-            <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-              This tool is for
-            </div>
-            <p className="mt-2 text-slate-800 leading-relaxed ">
-              Converting an annual rent total into a true biweekly (14-day) rent
-              amount so you can compare quotes and budget on an every-2-weeks
-              schedule.
-            </p>
-          </div>
-
-          <div className="rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-sm">
-            <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-              Why this tool is different
-            </div>
-            <p className="mt-2 text-slate-800 leading-relaxed ">
-              It uses a consistent 365-day year (annual × 14 ÷ 365) and
-              preserves decimals end-to-end, instead of generic shortcuts like
-              dividing by 26 that can drift from a true day-rate equivalent.
-            </p>
-          </div>
-
-          <div className="rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-sm">
-            <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-              This tool is not for
-            </div>
-            <p className="mt-2 text-slate-800 leading-relaxed ">
-              Predicting your exact lease invoice schedule or total move-in cost
-              (utilities, fees, deposits, parking, taxes) unless you include
-              those amounts in the number you enter.
-            </p>
-          </div>
-
-          <div className="rounded-xl border border-slate-200 bg-[#f7fbff] px-5 py-4 shadow-sm">
-            <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-              When to use another tool
-            </div>
-            <p className="mt-2 text-slate-800 leading-relaxed ">
-              If you’re trying to decide what rent fits your income (not just
-              convert an annual total), use the{" "}
-              <Link
-                to="/how-much-rent-can-i-afford-calculator"
-                className="cursor-pointer font-semibold text-sky-800 hover:text-sky-900 underline underline-offset-2"
-              >
-                how much rent can I afford calculator
-              </Link>
-              .
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+  return <SeoToolFit {...toolFit} />;
 }

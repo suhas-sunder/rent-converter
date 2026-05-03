@@ -655,7 +655,7 @@ export default function AnnualToBiweeklyRent() {
         <div className="overflow-hidden rounded-[1.75rem] bg-white px-5 pb-6 pt-6 sm:px-8">
           <div className="flex flex-col gap-4">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <p className="inline-flex rounded-full bg-sky-100 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-sky-700">
+              <p className="rc-page-eyebrow">
                 Annual to biweekly rent converter
               </p>
 
@@ -663,7 +663,7 @@ export default function AnnualToBiweeklyRent() {
                 <button
                   type="button"
                   onClick={handlePrint}
-                  className="cursor-pointer rounded-xl bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-sky-50 hover:text-sky-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+                  className="rc-print-button"
                 >
                   Print / Save PDF
                 </button>

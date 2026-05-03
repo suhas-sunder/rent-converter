@@ -287,7 +287,7 @@ export default function FiveHundredPerWeekToMonthlyRent() {
         <div className="rounded-[1.75rem] bg-white p-5 sm:p-8">
           <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
             <div className="max-w-6xl">
-              <p className="inline-flex rounded-full bg-sky-100 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-sky-700">
+              <p className="rc-page-eyebrow">
                 Weekly to monthly rent answer
               </p>
 

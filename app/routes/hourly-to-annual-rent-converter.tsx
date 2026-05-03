@@ -431,32 +431,6 @@ function hourlyToPeriodScaled(hourlyScaled: bigint, period: Period): bigint {
   }
 }
 
-function buildCsvRow(cols: string[]): string {
-  return cols
-    .map((c) => {
-      const s = String(c ?? "");
-      if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
-      return s;
-    })
-    .join(",");
-}
-
-function downloadTextFile(
-  filename: string,
-  content: string,
-  mime = "text/plain;charset=utf-8",
-) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
 function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   if (raw === null) return fallback;
   try {
@@ -659,74 +633,10 @@ export default function HourlyToAnnualRent() {
       : breakdownScaled.annualPaidScaled;
   }, [hourMode, breakdownScaled]);
 
-  const hourlyInterpreted = useMemo(() => {
-    if (!parsedHourly.ok) return null;
-    return fmt(hourlyScaled);
-  }, [parsedHourly.ok, hourlyScaled, currency]);
 
   const handlePrint = () => {
     if (typeof window === "undefined") return;
     window.print();
-  };
-
-  const handleCsvExport = () => {
-    if (typeof window === "undefined") return;
-    if (!parsedHourly.ok || !breakdownScaled) return;
-
-    const rows: string[][] = [
-      ["Hourly to Annual Rent Converter"],
-      ["Input hourly amount", hourlyInterpreted ?? ""],
-      ["Currency", currency],
-      ["Hour mode", hourMode === "clock" ? "24/7 hours" : "Paid hours"],
-      ["Display note", "Money values rounded to cents"],
-      [],
-      ["Period", "Amount"],
-      [PERIOD_LABEL.hourly, fmt(breakdownScaled.hourly)],
-      [PERIOD_LABEL.daily, fmt(breakdownScaled.daily)],
-      [PERIOD_LABEL.weekly, fmt(breakdownScaled.weekly)],
-      [PERIOD_LABEL.biweekly, fmt(breakdownScaled.biweekly)],
-      [PERIOD_LABEL.every_4_weeks, fmt(breakdownScaled.every4w)],
-      [PERIOD_LABEL.monthly, fmt(breakdownScaled.monthly)],
-      ["Annual (24/7 hours)", fmt(breakdownScaled.annualClock)],
-    ];
-
-    if (hourMode === "paid") {
-      rows.push(
-        [],
-        ["Paid-hours comparison", ""],
-        [
-          "Paid hours per week",
-          parsedPaidHours.ok ? formatNumber(parsedPaidHours.hours) : "",
-        ],
-        ["Annual using paid hours", fmt(breakdownScaled.annualPaidScaled)],
-        ["Monthly using paid hours", fmt(breakdownScaled.monthlyPaidScaled)],
-        [
-          "Difference vs 24/7 annual",
-          fmt(breakdownScaled.annualPaidMinusClock),
-        ],
-        [
-          "Difference percentage",
-          formatPercent(breakdownScaled.annualPaidMinusClockPct),
-        ],
-      );
-    }
-
-    rows.push(
-      [],
-      ["Comparison", "Amount"],
-      ["Monthly minus 4-week amount", fmt(breakdownScaled.monthlyMinus4w)],
-      [
-        "Monthly minus 4-week percentage",
-        formatPercent(breakdownScaled.monthlyMinus4wPct),
-      ],
-    );
-
-    const csv = rows.map(buildCsvRow).join("\n");
-    downloadTextFile(
-      "hourly-to-annual-rent-conversion.csv",
-      csv,
-      "text/csv;charset=utf-8",
-    );
   };
 
   const faqData = [
@@ -838,7 +748,7 @@ export default function HourlyToAnnualRent() {
             <div className="flex flex-col gap-3">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                 <div className="min-w-0">
-                  <div className="mb-2 inline-flex rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-800">
+                  <div className="mb-2 rc-page-eyebrow">
                     Hourly to yearly rent calculator
                   </div>
 
@@ -860,19 +770,11 @@ export default function HourlyToAnnualRent() {
                   <button
                     type="button"
                     onClick={handlePrint}
-                    className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+                    className="rc-print-button"
                   >
                     Print / Save PDF
                   </button>
 
-                  <button
-                    type="button"
-                    onClick={handleCsvExport}
-                    disabled={!canShowResults}
-                    className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-slate-200 disabled:hover:bg-white"
-                  >
-                    Export CSV
-                  </button>
                 </div>
               </div>
 
@@ -1203,11 +1105,11 @@ export default function HourlyToAnnualRent() {
 
       <HowItWorks />
 
-      <section className="mt-8 mb-4 rc-no-print hidden sm:block">
-        <nav className="mx-auto max-w-6xl px-6 text-sm text-slate-700">
+      <section className="rc-breadcrumb-section rc-no-print">
+        <nav aria-label="Breadcrumb" className="rc-breadcrumb-nav">
           <a
             href={safeHref("/")}
-            className="cursor-pointer rounded text-sky-800 transition hover:text-sky-900 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+            className="rc-breadcrumb-link"
           >
             Home
           </a>{" "}
