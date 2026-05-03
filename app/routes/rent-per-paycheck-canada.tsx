@@ -560,13 +560,13 @@ export default function RentPerPaycheckCanada() {
 
       <section
         id="converter"
-        className="mx-auto max-w-6xl px-6 py-6"
+        className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8"
       >
-        <div className="rounded-2xl bg-white/95 pb-6 shadow-sm border border-slate-200 sm:px-8">
+        <div className="overflow-hidden rounded-[1.75rem] bg-white px-5 pb-6 sm:px-8">
           <div className="pt-5 sm:pt-6">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div className="min-w-0">
-                <div className="inline-flex rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-800">
+                <div className="inline-flex rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-800">
                   Canadian paycheque rent tool
                 </div>
 
@@ -591,7 +591,7 @@ export default function RentPerPaycheckCanada() {
                     if (typeof window === "undefined") return;
                     window.print();
                   }}
-                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2"
+                  className="cursor-pointer rounded-xl bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2"
                 >
                   Print / Save PDF
                 </button>
@@ -619,12 +619,12 @@ export default function RentPerPaycheckCanada() {
                   setAmountTouched(true);
                 }}
                 placeholder="e.g. 2000"
-                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg text-slate-900 placeholder:text-slate-400 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                className="w-full rounded-xl bg-slate-100 px-4 py-2 text-lg text-slate-950 placeholder:text-slate-700 outline-none focus:bg-white focus:ring-2 focus:ring-sky-200"
                 aria-invalid={amountTouched && !parsed.ok}
                 aria-describedby={`${amountHelpId}${amountTouched && !parsed.ok ? ` ${amountErrorId}` : ""}`}
               />
 
-              <p id={amountHelpId} className="mt-1 text-xs text-slate-600">
+              <p id={amountHelpId} className="mt-1 text-xs text-slate-700">
                 Enter the monthly rent amount you want to split across
                 paycheques.
               </p>
@@ -648,7 +648,7 @@ export default function RentPerPaycheckCanada() {
                       : "CAD",
                   )
                 }
-                className="cursor-pointer w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition hover:border-sky-300 hover:bg-sky-50 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                className="cursor-pointer w-full rounded-xl bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-950 outline-none transition hover:bg-sky-50 focus:bg-white focus:ring-2 focus:ring-sky-200 focus-visible:ring-2 focus-visible:ring-sky-400"
                 aria-label="Currency"
               >
                 {SUPPORTED_CURRENCIES.map((c) => (
@@ -681,7 +681,7 @@ export default function RentPerPaycheckCanada() {
                       : "biweekly",
                   );
                 }}
-                className="cursor-pointer w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 outline-none transition hover:border-sky-300 hover:bg-sky-50 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                className="cursor-pointer w-full rounded-xl bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-950 outline-none transition hover:bg-sky-50 focus:bg-white focus:ring-2 focus:ring-sky-200 focus-visible:ring-2 focus-visible:ring-sky-400"
                 aria-label="Pay schedule"
               >
                 <option value="weekly">Weekly (52 paycheques/year)</option>
@@ -712,15 +712,15 @@ export default function RentPerPaycheckCanada() {
           ) : null}
 
           {!parsed.ok ? (
-            <div className="mt-5 overflow-hidden rounded-2xl border border-slate-200 bg-sky-50/60 shadow-sm rc-print-block">
+            <div className="mt-5 overflow-hidden rounded-[1.5rem] bg-sky-50 rc-print-block">
               <div className="h-1 bg-gradient-to-r from-sky-500 to-emerald-400" />
 
               <div className="p-5 sm:px-6">
-                <div className="rounded-xl border border-slate-200 bg-white/95 p-4 shadow-sm">
-                  <div className="font-semibold text-slate-900">
+                <div className="rounded-2xl bg-white p-4">
+                  <div className="font-semibold text-slate-950">
                     No results to show
                   </div>
-                  <p className="mt-1 text-sm text-slate-600">
+                  <p className="mt-1 text-sm text-slate-700">
                     Fix the input to calculate rent per paycheque.
                   </p>
                   <ul className="mt-3 list-disc pl-5 space-y-1 text-sm text-rose-700">
@@ -729,7 +729,7 @@ export default function RentPerPaycheckCanada() {
                     ))}
                   </ul>
                   {parsed.warnings.length ? (
-                    <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                    <div className="mt-3 rounded-2xl bg-amber-50 px-4 py-2 text-sm text-amber-900">
                       <div className="font-semibold">Notes</div>
                       <ul className="mt-1 list-disc pl-5 space-y-1">
                         {parsed.warnings.map((w, i) => (
@@ -744,7 +744,7 @@ export default function RentPerPaycheckCanada() {
           ) : computed.ok ? (
             <>
               {computed.warnings.length ? (
-                <div className="mt-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                <div className="mt-5 rounded-2xl bg-amber-50 px-4 py-2 text-sm text-amber-900">
                   <div className="font-semibold">Notes</div>
                   <ul className="mt-1 list-disc pl-5 space-y-1">
                     {computed.warnings.map((w, i) => (
@@ -755,7 +755,7 @@ export default function RentPerPaycheckCanada() {
               ) : null}
 
               <div
-                className="mt-5 overflow-hidden rounded-2xl border border-slate-200 bg-sky-50/60 shadow-sm rc-print-block"
+                className="mt-5 overflow-hidden rounded-[1.5rem] bg-sky-50 rc-print-block"
                 role="region"
                 aria-label="Results"
                 aria-live="polite"
@@ -768,7 +768,7 @@ export default function RentPerPaycheckCanada() {
                       className="h-2 w-2 rounded-full bg-emerald-600"
                       aria-hidden="true"
                     />
-                    <div className="text-sm font-semibold text-slate-900">
+                    <div className="text-sm font-semibold text-slate-950">
                       Rent per paycheque
                     </div>
                   </div>
@@ -777,13 +777,13 @@ export default function RentPerPaycheckCanada() {
                     <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700">
                       {money(computed.selected)}
                     </div>
-                    <div className="text-sm text-slate-600">
+                    <div className="text-sm text-slate-700">
                       {labelForPeriod(computed.payPeriod)}
                       {Number.isFinite(computed.selectedPctOfMonthly) ? (
                         <>
                           {" "}
                           (about{" "}
-                          <span className="font-semibold text-slate-900">
+                          <span className="font-semibold text-slate-950">
                             {safeToFixed(
                               computed.selectedPctOfMonthly * 100,
                               2,
@@ -797,27 +797,27 @@ export default function RentPerPaycheckCanada() {
                   </div>
 
                   <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                    <div className="rounded-xl border border-slate-200 bg-white/95 px-4 py-2 shadow-sm">
-                      <div className="text-xs text-slate-600">
+                    <div className="rounded-2xl bg-white px-4 py-3">
+                      <div className="text-xs text-slate-700">
                         Monthly rent
                       </div>
-                      <div className="mt-1 text-lg font-bold text-slate-900">
+                      <div className="mt-1 text-lg font-bold text-slate-950">
                         {money(computed.monthly)}
                       </div>
                     </div>
 
-                    <div className="rounded-xl border border-slate-200 bg-white/95 px-4 py-2 shadow-sm">
-                      <div className="text-xs text-slate-600">Annual rent</div>
-                      <div className="mt-1 text-lg font-bold text-slate-900">
+                    <div className="rounded-2xl bg-white px-4 py-3">
+                      <div className="text-xs text-slate-700">Annual rent</div>
+                      <div className="mt-1 text-lg font-bold text-slate-950">
                         {money(computed.annual)}
                       </div>
                     </div>
 
-                    <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-2 shadow-sm sm:col-span-2 lg:col-span-1">
+                    <div className="rounded-2xl bg-emerald-50 px-4 py-2 sm:col-span-2 lg:col-span-1">
                       <div className="text-xs text-emerald-800">
                         Selected schedule
                       </div>
-                      <div className="mt-1 text-lg font-bold text-slate-900">
+                      <div className="mt-1 text-lg font-bold text-slate-950">
                         {labelForPeriod(computed.payPeriod)}
                       </div>
                     </div>
@@ -850,12 +850,12 @@ export default function RentPerPaycheckCanada() {
                         ).map(([label, val, key]) => (
                           <div
                             key={key}
-                            className="rounded-xl border border-emerald-200 bg-white/70 px-4 py-2 shadow-sm"
+                            className="rounded-xl bg-white/70 px-4 py-2"
                           >
-                            <div className="text-xs text-slate-600">
+                            <div className="text-xs text-slate-700">
                               {label}
                             </div>
-                            <div className="mt-1 text-lg font-bold text-slate-900">
+                            <div className="mt-1 text-lg font-bold text-slate-950">
                               {money(val)}
                             </div>
                           </div>
@@ -871,27 +871,12 @@ export default function RentPerPaycheckCanada() {
           ) : null}
         </div>
 
-        <div className="mt-3 rounded-xl border border-slate-200 bg-white/90 px-4 py-3 shadow-sm rc-no-print">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Calculations preserve precision internally, while displayed money values are rounded to cents.
-              </p>
-
-            <button
-              type="button"
-              onClick={handlePrint}
-              className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 md:hidden"
-            >
-              Print / Save PDF
-            </button>
-          </div>
-        </div>
       </section>
 
       <HowItWorks />
 
       <section className="mt-8 mb-4 hidden sm:block">
-        <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-600">
+        <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-700">
           <a
             href={safeHref("/")}
             className="cursor-pointer rounded text-sky-700 hover:text-sky-900 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2"

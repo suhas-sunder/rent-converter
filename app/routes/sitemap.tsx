@@ -326,7 +326,7 @@ export default function SitemapPage() {
 
       <section className="border-b border-sky-100 bg-white">
         <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
-          <nav className="mb-6 text-sm text-slate-600" aria-label="Breadcrumb">
+          <nav className="mb-6 text-sm text-slate-700" aria-label="Breadcrumb">
             <ol className="flex flex-wrap items-center gap-2">
               <li>
                 <Link
@@ -337,7 +337,7 @@ export default function SitemapPage() {
                 </Link>
               </li>
               <li aria-hidden="true">/</li>
-              <li className="font-medium text-slate-900">HTML Sitemap</li>
+              <li className="font-medium text-slate-950">HTML Sitemap</li>
             </ol>
           </nav>
 
@@ -362,7 +362,7 @@ export default function SitemapPage() {
           <h2 className="text-xl font-semibold text-sky-950">
             Quick directory
           </h2>
-          <p className="mt-2 text-sm leading-6 text-slate-600">
+          <p className="mt-2 text-sm leading-6 text-slate-700">
             Use the sections below to jump to the rent tool or page you need.
             For search engines, the XML sitemap remains available separately;
             this page is built for users who want a readable site index.
@@ -385,7 +385,7 @@ export default function SitemapPage() {
                 >
                   {section.title}
                 </h2>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
+                <p className="mt-2 text-sm leading-6 text-slate-700">
                   {section.description}
                 </p>
               </div>
@@ -395,13 +395,13 @@ export default function SitemapPage() {
                   <li key={link.href}>
                     <Link
                       to={link.href}
-                      className="group flex h-full cursor-pointer flex-col rounded-xl border border-slate-200 bg-slate-50 p-4 transition hover:border-sky-300 hover:bg-sky-50 hover:shadow-sm"
+                      className="group flex h-full cursor-pointer flex-col rounded-xl border border-slate-200 bg-slate-50 p-4 transition hover:bg-sky-50 hover:shadow-sm"
                     >
                       <span className="font-semibold text-slate-950 group-hover:text-sky-800">
                         {link.label}
                       </span>
                       {link.description ? (
-                        <span className="mt-1 text-sm leading-5 text-slate-600">
+                        <span className="mt-1 text-sm leading-5 text-slate-700">
                           {link.description}
                         </span>
                       ) : null}

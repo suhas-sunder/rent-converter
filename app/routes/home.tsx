@@ -850,7 +850,7 @@ export default function Home() {
                   onBlur={() => setAmountFocused(false)}
                   onChange={(e) => setAmount(e.target.value)}
                   placeholder="e.g. 500 or 1250.50"
-                  className="cursor-pointer w-full min-w-0 rounded-xl bg-slate-100 px-4 py-3 text-base text-slate-950 placeholder:text-slate-600 outline-none transition hover:bg-sky-50 focus:bg-white focus:ring-2 focus:ring-sky-200 focus-visible:ring-sky-400"
+                  className="cursor-pointer w-full min-w-0 rounded-xl bg-slate-100 px-4 py-3 text-base text-slate-950 placeholder:text-slate-700 outline-none transition hover:bg-sky-50 focus:bg-white focus:ring-2 focus:ring-sky-200 focus-visible:ring-sky-400"
                   aria-invalid={!validation.ok}
                   aria-describedby={`${amountHelpId} ${amountStatusId}`}
                 />
@@ -938,14 +938,15 @@ export default function Home() {
 
           <div
             id={resultRegionId}
-            className="relative mx-5 mb-6 rounded-[1.5rem] bg-sky-50 p-5 sm:mx-8 sm:p-6"
+            className="mx-5 mb-6 overflow-hidden rounded-[1.5rem] bg-sky-50 sm:mx-8"
             role="region"
             aria-label="Converted rent"
             aria-live="polite"
           >
-            <div className="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-sky-500 to-emerald-400 rounded-t-2xl" />
+            <div className="h-1 bg-gradient-to-r from-sky-500 to-emerald-400" />
 
-            {(() => {
+            <div className="p-5 sm:p-6">
+              {(() => {
               const selectedLabel =
                 (PERIOD_LABEL as any)?.[to] ??
                 (PERIOD_LABEL as any)?.[from] ??
@@ -1045,7 +1046,8 @@ export default function Home() {
 
                 </>
               );
-            })()}
+              })()}
+            </div>
           </div>
         </div>
         <div className="home-assumptions-clean">
@@ -1070,7 +1072,7 @@ export default function Home() {
               >
                 <summary className="cursor-pointer list-none font-semibold text-lg text-sky-800 flex items-center justify-between hover:text-sky-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50">
                   <span>{f.q}</span>
-                  <span className="ml-4 text-slate-600 transition-transform group-open:rotate-180">
+                  <span className="ml-4 text-slate-700 transition-transform group-open:rotate-180">
                     ▾
                   </span>
                 </summary>

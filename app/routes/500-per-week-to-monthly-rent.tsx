@@ -284,10 +284,10 @@ export default function FiveHundredPerWeekToMonthlyRent() {
       />
 
       <section className="mx-auto max-w-6xl px-4 pb-8 pt-4 sm:px-6 sm:pb-10 sm:pt-8">
-        <div className="rounded-2xl border border-slate-200 bg-white/95 p-5 shadow-sm sm:p-8">
+        <div className="rounded-[1.75rem] bg-white p-5 sm:p-8">
           <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
             <div className="max-w-6xl">
-              <p className="inline-flex rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-sky-700">
+              <p className="inline-flex rounded-full bg-sky-100 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-sky-700">
                 Weekly to monthly rent answer
               </p>
 
@@ -297,7 +297,7 @@ export default function FiveHundredPerWeekToMonthlyRent() {
 
               <p className="mt-3 text-base leading-7 text-slate-700 sm:text-lg">
                 A rent of {money(computed.weekly)} per week is equivalent to{" "}
-                <strong className="font-semibold text-slate-900">
+                <strong className="font-semibold text-slate-950">
                   {money(computed.monthly)} per calendar month
                 </strong>{" "}
                 using the standard annual-equivalence method.
@@ -305,44 +305,44 @@ export default function FiveHundredPerWeekToMonthlyRent() {
             </div>
           </div>
 
-          <div className="mt-6 overflow-hidden rounded-2xl border border-emerald-200 bg-white shadow-sm">
-            <div className="h-1.5 bg-gradient-to-r from-sky-500 to-emerald-400" />
+          <div className="mt-6 overflow-hidden rounded-[1.5rem] bg-sky-50">
+            <div className="h-1 bg-gradient-to-r from-sky-500 to-emerald-400" />
 
-            <div className="bg-emerald-50 p-4 sm:p-6">
-              <div className="text-xs font-semibold uppercase tracking-wide text-emerald-700">
+            <div className="p-4 sm:p-6">
+              <div className="text-xs font-semibold uppercase tracking-wide text-slate-800">
                 Monthly equivalent, calendar month
               </div>
 
-              <div className="mt-2 text-4xl font-extrabold tracking-tight text-emerald-800 sm:text-5xl">
+              <div className="mt-2 text-4xl font-extrabold tracking-tight text-emerald-700 sm:text-5xl">
                 {money(computed.monthly)}
               </div>
 
-              <div className="mt-2 text-sm text-slate-600">
+              <div className="mt-2 text-sm text-slate-700">
                 Calculations preserve precision internally, while displayed money values are rounded to cents. The calculation uses annual equivalence based on a 365-day year.
               </div>
 
               <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <div className="rounded-xl border border-slate-200 bg-white/95 px-4 py-3 shadow-sm">
-                  <div className="text-xs font-medium text-slate-600">
+                <div className="rounded-2xl bg-white px-4 py-3">
+                  <div className="text-xs font-medium text-slate-700">
                     4 weeks only, 28 days
                   </div>
-                  <div className="mt-1 text-lg font-semibold text-slate-900">
+                  <div className="mt-1 text-lg font-semibold text-slate-950">
                     {money(fourWeekScaled)}
                   </div>
-                  <p className="mt-1 text-xs leading-5 text-slate-600">
+                  <p className="mt-1 text-xs leading-5 text-slate-700">
                     This is a simple four-week total, not a true calendar-month
                     equivalent.
                   </p>
                 </div>
 
-                <div className="rounded-xl border border-emerald-200 bg-white/95 px-4 py-3 shadow-sm">
+                <div className="rounded-2xl bg-white px-4 py-3">
                   <div className="text-xs font-medium text-emerald-700">
                     True monthly average
                   </div>
-                  <div className="mt-1 text-lg font-semibold text-emerald-800">
+                  <div className="mt-1 text-lg font-semibold text-slate-950">
                     {money(computed.monthly)}
                   </div>
-                  <p className="mt-1 text-xs leading-5 text-slate-600">
+                  <p className="mt-1 text-xs leading-5 text-slate-700">
                     This accounts for the fact that a year has more than 48
                     weeks.
                   </p>
@@ -352,7 +352,7 @@ export default function FiveHundredPerWeekToMonthlyRent() {
               <div className="mt-5 flex flex-wrap items-center gap-3">
                 <a
                   href="/weekly-to-monthly-rent-converter"
-                  className="inline-flex cursor-pointer items-center rounded-xl border border-slate-300 bg-white px-4 py-2 text-xs font-semibold text-slate-900 transition hover:border-sky-300 hover:bg-sky-50 hover:text-sky-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+                  className="inline-flex cursor-pointer items-center rounded-xl bg-slate-100 px-4 py-2 text-xs font-semibold text-slate-950 transition hover:bg-sky-50 hover:text-sky-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
                 >
                   Convert a different weekly amount
                 </a>
@@ -362,9 +362,9 @@ export default function FiveHundredPerWeekToMonthlyRent() {
 
           <div
             data-nosnippet
-            className="rounded-2xl border border-slate-200 bg-white/90 p-4 mt-6 shadow-sm"
+            className="rounded-2xl bg-white p-4 mt-6"
           >
-            <div className="text-xs font-semibold uppercase tracking-wide text-slate-600">
+            <div className="text-xs font-semibold uppercase tracking-wide text-slate-700">
               Currency
             </div>
 
@@ -386,7 +386,7 @@ export default function FiveHundredPerWeekToMonthlyRent() {
                         : "USD",
                     )
                   }
-                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-900 outline-none transition hover:border-sky-400 hover:bg-sky-50 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                  className="cursor-pointer rounded-xl bg-slate-100 px-3 py-2 text-xs font-semibold text-slate-950 outline-none transition hover:border-sky-400 hover:bg-sky-50 focus:bg-white focus:ring-2 focus:ring-sky-200 focus-visible:ring-2 focus-visible:ring-sky-400"
                 >
                   {SUPPORTED_CURRENCIES.map((c) => (
                     <option key={c} value={c}>
@@ -397,23 +397,23 @@ export default function FiveHundredPerWeekToMonthlyRent() {
               </div>
             </div>
 
-            <p className="mt-3 text-xs leading-5 text-slate-600">
+            <p className="mt-3 text-xs leading-5 text-slate-700">
               Calculations preserve precision internally, while displayed money
               values are rounded to cents.
             </p>
           </div>
-          <section className="mt-6 rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm sm:p-5">
+          <section className="mt-6 rounded-2xl bg-white p-4 sm:p-5">
             <h2 className="text-xl font-bold text-sky-800">
               How the monthly amount is calculated
             </h2>
             <p className="mt-2 text-sm leading-6 text-slate-700">
               This page converts weekly rent to monthly rent by first converting
               the weekly amount into an annual amount, then dividing by 12. For{" "}
-              <strong className="font-semibold text-slate-900">
+              <strong className="font-semibold text-slate-950">
                 {money(computed.weekly)} per week
               </strong>
               , the calculation is{" "}
-              <strong className="font-semibold text-slate-900">
+              <strong className="font-semibold text-slate-950">
                 {money(computed.weekly)} × 365 ÷ 7 ÷ 12 ={" "}
                 {money(computed.monthly)}
               </strong>
@@ -421,7 +421,7 @@ export default function FiveHundredPerWeekToMonthlyRent() {
             </p>
             <p className="mt-2 text-sm leading-6 text-slate-700">
               Another way to think about it is multiplying weekly rent by about{" "}
-              <strong className="font-semibold text-slate-900">
+              <strong className="font-semibold text-slate-950">
                 {weeklyToMonthlyMultiplier}
               </strong>
               . This is different from multiplying by four. Four weeks is only
@@ -431,31 +431,31 @@ export default function FiveHundredPerWeekToMonthlyRent() {
             </p>
           </section>
 
-          <section className="mt-6 rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm sm:p-5">
+          <section className="mt-6 rounded-2xl bg-white p-4 sm:p-5">
             <h2 className="text-xl font-bold text-sky-800">
               Example comparison
             </h2>
             <div className="mt-3 grid gap-3 sm:grid-cols-3">
-              <div className="rounded-xl border border-slate-200 bg-white/95 p-4 shadow-sm">
-                <div className="text-xs font-semibold uppercase tracking-wide text-slate-600">
+              <div className="rounded-2xl bg-white p-4">
+                <div className="text-xs font-semibold uppercase tracking-wide text-slate-700">
                   Weekly rent
                 </div>
-                <div className="mt-1 text-lg font-bold text-slate-900">
+                <div className="mt-1 text-lg font-bold text-slate-950">
                   {money(computed.weekly)}
                 </div>
               </div>
 
-              <div className="rounded-xl border border-slate-200 bg-white/95 p-4 shadow-sm">
-                <div className="text-xs font-semibold uppercase tracking-wide text-slate-600">
+              <div className="rounded-2xl bg-white p-4">
+                <div className="text-xs font-semibold uppercase tracking-wide text-slate-700">
                   Four-week total
                 </div>
-                <div className="mt-1 text-lg font-bold text-slate-900">
+                <div className="mt-1 text-lg font-bold text-slate-950">
                   {money(fourWeekScaled)}
                 </div>
               </div>
 
-              <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 shadow-sm">
-                <div className="text-xs font-semibold uppercase tracking-wide text-emerald-700">
+              <div className="rounded-2xl bg-emerald-50 p-4">
+                <div className="text-xs font-semibold uppercase tracking-wide text-slate-800">
                   Calendar-month equivalent
                 </div>
                 <div className="mt-1 text-lg font-bold text-emerald-800">

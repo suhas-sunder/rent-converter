@@ -607,7 +607,7 @@ export default function MonthlyToWeeklyRent() {
         id="converter"
         className="mx-auto max-w-6xl px-6 pb-6 pt-4 sm:pt-6"
       >
-        <div className="rounded-2xl border border-slate-200 bg-white/95 p-5 shadow-sm sm:p-8">
+        <div className="rounded-[1.75rem] bg-white p-5 sm:p-8">
           <div className="flex flex-col gap-3">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div className="min-w-0">
@@ -619,7 +619,7 @@ export default function MonthlyToWeeklyRent() {
                   Monthly to Weekly Rent Converter
                 </h1>
 
-                <p className="mt-2 max-w-6xl text-base leading-relaxed text-slate-600">
+                <p className="mt-2 max-w-6xl text-base leading-relaxed text-slate-700">
                   Convert monthly rent into a weekly amount. The calculator also
                   shows hourly, daily, 4-week, and annual breakdowns for
                   comparison.
@@ -637,7 +637,7 @@ export default function MonthlyToWeeklyRent() {
                     if (typeof window === "undefined") return;
                     window.print();
                   }}
-                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                  className="cursor-pointer rounded-xl bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                 >
                   Print / Save PDF
                 </button>
@@ -658,7 +658,7 @@ export default function MonthlyToWeeklyRent() {
                     onFocus={() => setIsAmountFocused(true)}
                     onBlur={() => setIsAmountFocused(false)}
                     placeholder="e.g. 2000 or 2000.00"
-                    className="w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg leading-6 text-slate-900 outline-none transition placeholder:text-slate-400 hover:border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                    className="w-full cursor-pointer rounded-xl bg-slate-100 px-4 py-2 text-lg leading-6 text-slate-950 outline-none transition placeholder:text-slate-700 hover:border-sky-300 focus:bg-white focus:ring-2 focus:ring-sky-200 focus-visible:ring-2 focus-visible:ring-sky-400"
                     aria-invalid={!parsedAmount.ok}
                     aria-describedby={amountDescribedBy}
                   />
@@ -672,7 +672,7 @@ export default function MonthlyToWeeklyRent() {
                           : "USD",
                       )
                     }
-                    className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition hover:border-sky-300 hover:bg-sky-50 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                    className="cursor-pointer rounded-xl bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-950 outline-none transition hover:bg-sky-50 focus:bg-white focus:ring-2 focus:ring-sky-200 focus-visible:ring-2 focus-visible:ring-sky-400"
                     aria-label="Currency"
                   >
                     {SUPPORTED_CURRENCIES.map((c) => (
@@ -683,7 +683,7 @@ export default function MonthlyToWeeklyRent() {
                   </select>
                 </div>
 
-                <p id="rc-amt-help" className="mt-2 text-sm text-slate-600">
+                <p id="rc-amt-help" className="mt-2 text-sm text-slate-700">
                   Enter the monthly rent amount before fees or deposits.
                 </p>
 
@@ -696,7 +696,7 @@ export default function MonthlyToWeeklyRent() {
                     {parsedAmount.error}
                   </p>
                 ) : parsedAmount.warnings.length ? (
-                  <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                  <div className="mt-2 rounded-2xl bg-amber-50 px-4 py-2 text-sm text-amber-900">
                     <div className="font-semibold">
                       Input interpretation note
                     </div>
@@ -710,7 +710,7 @@ export default function MonthlyToWeeklyRent() {
               </div>
             </div>
 
-            <div className="mt-3 overflow-hidden rounded-2xl border border-slate-200 bg-sky-50/60 shadow-sm rc-print-block">
+            <div className="mt-3 overflow-hidden rounded-[1.5rem] bg-sky-50 rc-print-block">
               <div
                 className="h-1 bg-gradient-to-r from-sky-500 to-emerald-400"
                 aria-hidden="true"
@@ -718,11 +718,11 @@ export default function MonthlyToWeeklyRent() {
 
               <div className="p-5 sm:px-6">
                 {!canShowResults || !breakdown ? (
-                  <div className="rounded-xl border border-slate-200 bg-white/95 p-4">
-                    <div className="font-semibold text-slate-900">
+                  <div className="rounded-2xl bg-white p-4">
+                    <div className="font-semibold text-slate-950">
                       No results to show
                     </div>
-                    <p className="mt-1 text-sm text-slate-600">
+                    <p className="mt-1 text-sm text-slate-700">
                       Enter a valid monthly rent amount to see the weekly result
                       and breakdown.
                     </p>
@@ -734,7 +734,7 @@ export default function MonthlyToWeeklyRent() {
                         className="h-2 w-2 rounded-full bg-sky-600"
                         aria-hidden="true"
                       />
-                      <div className="text-sm font-semibold text-slate-900">
+                      <div className="text-sm font-semibold text-slate-950">
                         Weekly rent amount
                       </div>
                     </div>
@@ -743,7 +743,7 @@ export default function MonthlyToWeeklyRent() {
                       <div className="tabular-nums text-3xl font-extrabold tracking-tight text-emerald-700 sm:text-5xl">
                         {fmt(breakdown.weekly)}
                       </div>
-                      <p className="text-sm text-slate-600">
+                      <p className="text-sm text-slate-700">
                         Based on monthly rent × 12 ÷ 52.
                       </p>
                     </div>
@@ -765,31 +765,31 @@ export default function MonthlyToWeeklyRent() {
                       ).map(([label, val, key]) => (
                         <div
                           key={key}
-                          className="rounded-xl border border-slate-200 bg-white/95 px-4 py-3 shadow-sm"
+                          className="rounded-2xl bg-white px-4 py-3"
                         >
-                          <div className="text-xs font-medium text-slate-600">
+                          <div className="text-xs font-medium text-slate-700">
                             {label}
                           </div>
-                          <div className="mt-1 tabular-nums text-lg font-bold text-slate-900">
+                          <div className="mt-1 tabular-nums text-lg font-bold text-slate-950">
                             {fmt(val)}
                           </div>
                         </div>
                       ))}
 
-                      <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 shadow-sm sm:col-span-2 lg:col-span-3 rc-print-block">
-                        <div className="text-xs font-medium text-slate-600">
+                      <div className="rounded-2xl bg-emerald-50 px-4 py-3 sm:col-span-2 lg:col-span-3 rc-print-block">
+                        <div className="text-xs font-medium text-slate-700">
                           Monthly vs 4-week comparison
                         </div>
                         <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                           <div className="text-sm text-slate-700">
                             Monthly minus 4-week amount:{" "}
-                            <strong className="tabular-nums text-slate-900">
+                            <strong className="tabular-nums text-slate-950">
                               {fmt(breakdown.monthlyMinus4w)}
                             </strong>
                           </div>
                           <div className="text-sm text-slate-700">
                             Difference:{" "}
-                            <strong className="tabular-nums text-slate-900">
+                            <strong className="tabular-nums text-slate-950">
                               {safeToFixed(
                                 breakdown.monthlyMinus4wPct * 100,
                                 2,
@@ -798,7 +798,7 @@ export default function MonthlyToWeeklyRent() {
                             </strong>
                           </div>
                         </div>
-                        <p className="mt-2 text-xs leading-relaxed text-slate-600">
+                        <p className="mt-2 text-xs leading-relaxed text-slate-700">
                           A 4-week period is 28 days. An average month is about
                           30.42 days.
                         </p>
@@ -818,12 +818,12 @@ export default function MonthlyToWeeklyRent() {
             <button
               type="button"
               onClick={handlePrint}
-              className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+              className="cursor-pointer rounded-xl bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
             >
               Print / Save as PDF
             </button>
           </div>
-              <p className="text-xs text-slate-600 leading-relaxed">
+              <p className="text-xs text-slate-700 leading-relaxed">
                 Calculations preserve precision internally, while displayed money values are rounded to cents.
               </p>
         </div>
@@ -833,7 +833,7 @@ export default function MonthlyToWeeklyRent() {
 
       <section className="mt-8 mb-4 hidden sm:block">
         <nav
-          className="mx-auto max-w-6xl px-6 text-sm text-slate-600"
+          className="mx-auto max-w-6xl px-6 text-sm text-slate-700"
           aria-label="Breadcrumb"
         >
           <a
@@ -856,10 +856,10 @@ export default function MonthlyToWeeklyRent() {
 
           <div className="divide-y divide-slate-200">
             {faqData.map((f, i) => (
-              <details key={i} className="group py-4">
+              <details key={i} className="group rounded-2xl bg-slate-50 px-5 py-4">
                 <summary className="flex cursor-pointer list-none items-center justify-between text-lg font-semibold text-sky-800 transition hover:text-sky-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white">
                   <span>{f.q}</span>
-                  <span className="ml-4 text-slate-400 transition-transform group-open:rotate-180">
+                  <span className="ml-4 text-slate-600 transition-transform group-open:rotate-180">
                     ▾
                   </span>
                 </summary>

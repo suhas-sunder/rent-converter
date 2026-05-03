@@ -82,7 +82,7 @@ export default function PrivacyPolicy() {
   return (
     <main className="bg-white text-slate-700 scroll-smooth antialiased">
       <section className="max-w-6xl mx-auto px-6 pt-8">
-        <nav className="text-sm text-slate-600 mb-4" aria-label="Breadcrumb">
+        <nav className="text-sm text-slate-700 mb-4" aria-label="Breadcrumb">
           <Link
             to="/"
             className="inline-flex items-center gap-2 rounded-md text-slate-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
@@ -93,8 +93,8 @@ export default function PrivacyPolicy() {
         </nav>
 
         <div className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6 sm:p-8">
-          <h1 className="text-4xl font-bold text-slate-900 mb-3">{pageName}</h1>
-          <p className="text-slate-600 text-sm">
+          <h1 className="text-4xl font-bold text-slate-950 mb-3">{pageName}</h1>
+          <p className="text-slate-700 text-sm">
             Last updated January 24, 2026
           </p>
 
@@ -171,7 +171,7 @@ export default function PrivacyPolicy() {
             </Section>
 
             <Section title="1. WHAT INFORMATION DO WE COLLECT?">
-              <h3 className="text-lg font-bold text-slate-900">
+              <h3 className="text-lg font-bold text-slate-950">
                 Personal information you disclose to us
               </h3>
               <p>
@@ -200,7 +200,7 @@ export default function PrivacyPolicy() {
                 collect or process sensitive information.
               </p>
 
-              <h3 className="text-lg font-bold text-slate-900 mt-8">
+              <h3 className="text-lg font-bold text-slate-950 mt-8">
                 Information automatically collected
               </h3>
               <p>
@@ -297,7 +297,7 @@ export default function PrivacyPolicy() {
                 to fulfill our legitimate interests.
               </p>
 
-              <h3 className="text-lg font-bold text-slate-900">
+              <h3 className="text-lg font-bold text-slate-950">
                 If you are located in the EU or UK
               </h3>
               <p>
@@ -324,7 +324,7 @@ export default function PrivacyPolicy() {
                 </li>
               </ul>
 
-              <h3 className="text-lg font-bold text-slate-900 mt-6">
+              <h3 className="text-lg font-bold text-slate-950 mt-6">
                 If you are located in Canada
               </h3>
               <p>
@@ -386,7 +386,7 @@ export default function PrivacyPolicy() {
                 you interact with.
               </p>
 
-              <h3 className="text-lg font-bold text-slate-900">
+              <h3 className="text-lg font-bold text-slate-950">
                 Advertising (Google AdSense and other ad networks)
               </h3>
               <ul>
@@ -499,7 +499,7 @@ export default function PrivacyPolicy() {
       </section>
 
       <section className="max-w-6xl mx-auto px-6 pb-10">
-        <p className="text-xs text-slate-600 text-center leading-relaxed">
+        <p className="text-xs text-slate-700 text-center leading-relaxed">
           <em>
             Tools on this site are for budgeting and comparison. Always confirm
             payment schedules, fees, and lease terms in your rental agreement.
@@ -532,7 +532,7 @@ function Section({
 }) {
   return (
     <section className="mt-10 first:mt-0">
-      <h2 className="text-lg md:text-xl font-bold text-slate-900">{title}</h2>
+      <h2 className="text-lg md:text-xl font-bold text-slate-950">{title}</h2>
       <div className="mt-3 text-sm md:text-base text-slate-700 leading-relaxed space-y-4">
         {children}
       </div>

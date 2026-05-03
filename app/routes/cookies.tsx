@@ -97,7 +97,7 @@ export default function CookiesPolicy() {
       <div className="max-w-6xl mx-auto px-6 pt-8 pb-12">
         {/* Header */}
         <header className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm">
-          <nav className="text-sm text-slate-600 mb-4" aria-label="Breadcrumb">
+          <nav className="text-sm text-slate-700 mb-4" aria-label="Breadcrumb">
             <ol className="flex flex-wrap items-center gap-2">
               <li>
                 <Link
@@ -116,8 +116,8 @@ export default function CookiesPolicy() {
             </ol>
           </nav>
 
-          <h1 className="text-4xl font-bold text-slate-900 mb-2">{pageName}</h1>
-          <p className="text-sm text-slate-600">
+          <h1 className="text-4xl font-bold text-slate-950 mb-2">{pageName}</h1>
+          <p className="text-sm text-slate-700">
             Last updated January 24, 2026
           </p>
 
@@ -204,7 +204,7 @@ export default function CookiesPolicy() {
                 relevant to your interests.
               </p>
 
-              <h3 className="text-lg font-bold text-slate-900 mt-6">
+              <h3 className="text-lg font-bold text-slate-950 mt-6">
                 Google advertising cookies
               </h3>
               <p>
@@ -220,7 +220,7 @@ export default function CookiesPolicy() {
                   href="https://policies.google.com/technologies/cookies"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-slate-900 hover:underline underline-offset-4"
+                  className="text-sm text-slate-950 hover:underline underline-offset-4"
                 >
                   Find out how Google uses cookies...
                 </a>
@@ -228,7 +228,7 @@ export default function CookiesPolicy() {
                   href="https://adssettings.google.com/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-slate-900 hover:underline underline-offset-4"
+                  className="text-sm text-slate-950 hover:underline underline-offset-4"
                 >
                   Manage Google Ads Settings...
                 </a>
@@ -236,7 +236,7 @@ export default function CookiesPolicy() {
                   href="https://optout.aboutads.info/?c=2&lang=EN"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-slate-900 hover:underline underline-offset-4"
+                  className="text-sm text-slate-950 hover:underline underline-offset-4"
                 >
                   Opt out via aboutads.info...
                 </a>
@@ -324,7 +324,7 @@ export default function CookiesPolicy() {
         </article>
 
         <section className="mt-6">
-          <p className="text-xs text-slate-600 leading-relaxed text-center">
+          <p className="text-xs text-slate-700 leading-relaxed text-center">
             <em>
               Tools on this site are for budgeting and comparison. Always
               confirm payment schedules, fees, and lease terms in your rental
@@ -359,7 +359,7 @@ function Section({
 }) {
   return (
     <section className="mt-10 first:mt-0">
-      <h2 className="text-lg md:text-xl font-bold text-slate-900">{title}</h2>
+      <h2 className="text-lg md:text-xl font-bold text-slate-950">{title}</h2>
       <div className="mt-3 text-sm md:text-base text-slate-700 leading-relaxed space-y-4">
         {children}
       </div>

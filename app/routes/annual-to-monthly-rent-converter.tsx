@@ -737,11 +737,11 @@ export default function AnnualToMonthlyRent() {
         id="converter"
         className="mx-auto max-w-6xl px-4 sm:px-6 pb-6 pt-3 sm:pt-6"
       >
-        <div className="rounded-2xl border border-slate-200 bg-white/95 px-4 py-5 shadow-sm sm:px-8 sm:py-7">
+        <div className="overflow-hidden rounded-[1.75rem] bg-white px-5 py-6 sm:px-8 sm:py-7">
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div className="min-w-0">
-                <div className="mb-2 inline-flex rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-800">
+                <div className="mb-2 inline-flex rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-800">
                   Yearly rent to monthly rent calculator
                 </div>
 
@@ -749,7 +749,7 @@ export default function AnnualToMonthlyRent() {
                   Annual to Monthly Rent Converter
                 </h1>
 
-                <p className="mt-2 max-w-4xl text-base text-slate-600">
+                <p className="mt-2 max-w-4xl text-base text-slate-700">
                   Convert an annual rent total into a monthly amount using
                   annual ÷ 12. The breakdown also shows hourly, daily, weekly,
                   biweekly, 4-week, and annual equivalents so you can compare
@@ -765,7 +765,7 @@ export default function AnnualToMonthlyRent() {
                 <button
                   type="button"
                   onClick={handlePrint}
-                  className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 shadow-sm transition hover:border-sky-300 hover:bg-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+                  className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
                 >
                   Print / Save PDF
                 </button>
@@ -774,7 +774,7 @@ export default function AnnualToMonthlyRent() {
                   type="button"
                   onClick={handleCsvExport}
                   disabled={!canShowResults}
-                  className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 shadow-sm transition hover:border-sky-300 hover:bg-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-slate-200 disabled:hover:bg-white"
+                  className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-slate-200 disabled:hover:bg-white"
                 >
                   Export CSV
                 </button>
@@ -795,7 +795,7 @@ export default function AnnualToMonthlyRent() {
                     onFocus={() => setAmountFocused(true)}
                     onBlur={() => setAmountFocused(false)}
                     placeholder="e.g. 24000 or 24000.50"
-                    className="w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                    className="w-full cursor-pointer rounded-xl bg-slate-100 px-4 py-2 text-lg text-slate-950 placeholder:text-slate-700 outline-none transition focus:bg-white focus:ring-2 focus:ring-sky-200 focus-visible:ring-2 focus-visible:ring-sky-400"
                     aria-invalid={!parsedAnnual.ok}
                     aria-describedby="rc-amount-help rc-amount-error"
                   />
@@ -809,7 +809,7 @@ export default function AnnualToMonthlyRent() {
                           : "USD",
                       )
                     }
-                    className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition hover:border-sky-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                    className="cursor-pointer rounded-xl bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-950 outline-none transition hover:border-sky-400 focus:bg-white focus:ring-2 focus:ring-sky-200 focus-visible:ring-2 focus-visible:ring-sky-400"
                     aria-label="Currency"
                   >
                     {SUPPORTED_CURRENCIES.map((c) => (
@@ -820,7 +820,7 @@ export default function AnnualToMonthlyRent() {
                   </select>
                 </div>
 
-                <p id="rc-amount-help" className="mt-2 text-xs text-slate-600">
+                <p id="rc-amount-help" className="mt-2 text-xs text-slate-700">
                   Enter the yearly rent amount you want to convert. Currency
                   symbols, commas, and decimals are accepted.
                 </p>
@@ -833,7 +833,7 @@ export default function AnnualToMonthlyRent() {
                     {parsedAnnual.error}
                   </p>
                 ) : parsedAnnual.warnings.length ? (
-                  <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                  <div className="mt-2 rounded-2xl bg-amber-50 px-4 py-2 text-sm text-amber-900">
                     <div className="font-semibold">Amount input note</div>
                     <ul className="mt-1 list-disc space-y-1 pl-5">
                       {parsedAnnual.warnings.map((w, i) => (
@@ -846,27 +846,30 @@ export default function AnnualToMonthlyRent() {
             </div>
 
             <div
-              className="rounded-2xl border border-slate-200 bg-sky-50/60 p-5 shadow-sm sm:px-6 rc-print-block"
+              className="overflow-hidden rounded-[1.5rem] bg-sky-50 rc-print-block"
               aria-live="polite"
             >
-              <div className="h-1.5 rounded-full bg-gradient-to-r from-sky-500 to-emerald-400" />
+              <div className="h-1 bg-gradient-to-r from-sky-500 to-emerald-400" />
 
-              <div className="mt-4 flex items-center gap-2">
+
+              <div className="p-5 sm:px-6">
+
+              <div className="flex items-center gap-2">
                 <div
                   className="h-2 w-2 rounded-full bg-sky-600"
                   aria-hidden="true"
                 />
-                <div className="text-sm font-semibold text-slate-900">
+                <div className="text-sm font-semibold text-slate-950">
                   Monthly equivalent
                 </div>
               </div>
 
               {!canShowResults ? (
-                <div className="mt-3 rounded-xl border border-slate-200 bg-white/95 px-4 py-4 text-slate-700">
-                  <div className="font-semibold text-slate-900">
+                <div className="mt-3 rounded-2xl bg-white px-4 py-4 text-slate-700">
+                  <div className="font-semibold text-slate-950">
                     No result to show yet
                   </div>
-                  <p className="mt-1 text-sm text-slate-600">
+                  <p className="mt-1 text-sm text-slate-700">
                     Enter a valid annual rent total above to see the monthly
                     equivalent and breakdown.
                   </p>
@@ -874,11 +877,11 @@ export default function AnnualToMonthlyRent() {
               ) : (
                 <>
                   <div className="mt-3 flex flex-col gap-2">
-                    <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-4">
-                      <div className="text-3xl font-extrabold text-emerald-800 sm:text-5xl">
+                    <div>
+                      <div className="text-3xl font-extrabold text-emerald-700 sm:text-5xl">
                         {fmt(monthlyHeadlineScaled)}
                       </div>
-                      <p className="mt-2 text-sm text-emerald-700">
+                      <p className="mt-2 text-sm text-slate-700">
                         Based on annual rent divided by 12 months.
                       </p>
                     </div>
@@ -905,12 +908,12 @@ export default function AnnualToMonthlyRent() {
                     ).map(([label, val, key]) => (
                       <div
                         key={key}
-                        className="rounded-xl border border-slate-200 bg-white/95 px-4 py-3 shadow-sm"
+                        className="rounded-2xl bg-white px-4 py-3"
                       >
-                        <div className="text-xs font-medium text-slate-600">
+                        <div className="text-xs font-medium text-slate-700">
                           {label}
                         </div>
-                        <div className="mt-1 text-lg font-bold text-slate-900">
+                        <div className="mt-1 text-lg font-bold text-slate-950">
                           {fmt(val)}
                         </div>
                       </div>
@@ -927,18 +930,12 @@ export default function AnnualToMonthlyRent() {
                   </div>
                 </>
               )}
-            </div>
+
+
+              </div></div>
 
             <Assumptions />
 
-            <div className="rounded-xl border border-slate-200 bg-white/90 p-4 shadow-sm rc-no-print">
-              <div className="mb-3 text-sm font-semibold text-slate-900">
-                Precision note
-              </div>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Calculations preserve precision internally, while displayed money values are rounded to cents.
-              </p>
-            </div>
           </div>
         </div>
       </section>
@@ -946,7 +943,7 @@ export default function AnnualToMonthlyRent() {
       <HowItWorks />
 
       <section className="mt-8 mb-4 hidden sm:block">
-        <nav className="mx-auto max-w-6xl px-6 text-sm text-slate-600">
+        <nav className="mx-auto max-w-6xl px-6 text-sm text-slate-700">
           <SafeLink
             href="/"
             className="cursor-pointer rounded text-sky-800 hover:text-sky-900 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
@@ -964,18 +961,18 @@ export default function AnnualToMonthlyRent() {
           Frequently Asked Questions
         </h2>
 
-        <p className="mx-auto mb-6 max-w-6xl text-center text-slate-600">
+        <p className="mx-auto mb-6 max-w-6xl text-center text-slate-700">
           These answers explain how annual to monthly rent conversion works,
           why monthly and 4-week rent are different, and how to interpret the
           displayed results.
         </p>
 
-        <div className="divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white/90 px-4 shadow-sm">
+        <div className="space-y-3">
           {faqData.map((f, i) => (
-            <details key={i} className="group py-4">
+            <details key={i} className="group rounded-2xl bg-slate-50 px-5 py-4">
               <summary className="flex cursor-pointer list-none items-center justify-between rounded text-lg font-semibold text-sky-800 transition hover:text-sky-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400">
                 <span>{f.q}</span>
-                <span className="ml-4 text-slate-400 transition-transform group-open:rotate-180">
+                <span className="ml-4 text-slate-600 transition-transform group-open:rotate-180">
                   ▾
                 </span>
               </summary>

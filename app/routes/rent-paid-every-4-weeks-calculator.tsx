@@ -669,12 +669,12 @@ export default function RentPaidEvery4Weeks() {
         }}
       />
 
-      <section id="converter" className="mx-auto max-w-6xl px-6 py-6">
-        <div className="rounded-2xl bg-white/95 pb-6 shadow-sm border border-slate-200 sm:px-8">
+      <section id="converter" className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+        <div className="overflow-hidden rounded-[1.75rem] bg-white px-5 pb-6 sm:px-8">
           <div className="pt-5 sm:pt-6">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div className="min-w-0">
-                <div className="inline-flex rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-800">
+                <div className="inline-flex rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-800">
                   28-day rent tool
                 </div>
 
@@ -700,7 +700,7 @@ export default function RentPaidEvery4Weeks() {
                     if (typeof window === "undefined") return;
                     window.print();
                   }}
-                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2"
+                  className="cursor-pointer rounded-xl bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2"
                 >
                   Print / Save PDF
                 </button>
@@ -745,9 +745,9 @@ export default function RentPaidEvery4Weeks() {
                     }
                   }}
                   placeholder="e.g. 650 or 650.00"
-                  className={`w-full rounded-xl border bg-white px-4 py-2.5 text-lg text-slate-900 placeholder:text-slate-400 outline-none transition focus:ring-2 focus:ring-sky-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 ${
+                  className={`w-full rounded-xl bg-slate-100 px-4 py-2.5 text-lg text-slate-950 placeholder:text-slate-700 outline-none transition focus:ring-2 focus:ring-sky-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 ${
                     parsed.ok
-                      ? "border-slate-300 focus:border-sky-500"
+                      ? "focus:bg-white"
                       : "border-rose-300 focus:border-rose-500"
                   }`}
                   aria-invalid={!parsed.ok}
@@ -769,7 +769,7 @@ export default function RentPaidEvery4Weeks() {
                       isCurrency(e.target.value) ? e.target.value : "USD",
                     )
                   }
-                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm font-semibold text-slate-900 outline-none transition hover:border-sky-300 hover:bg-sky-50 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2"
+                  className="cursor-pointer rounded-xl bg-slate-100 px-3.5 py-2.5 text-sm font-semibold text-slate-950 outline-none transition hover:bg-sky-50 focus:bg-white focus:ring-2 focus:ring-sky-200 focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2"
                   aria-label="Currency"
                 >
                   {SUPPORTED_CURRENCIES.map((c) => (
@@ -780,7 +780,7 @@ export default function RentPaidEvery4Weeks() {
                 </select>
               </div>
 
-              <p id={amountHelpId} className="mt-1 text-xs text-slate-600">
+              <p id={amountHelpId} className="mt-1 text-xs text-slate-700">
                 Enter the rent due every 28 days.
               </p>
 
@@ -792,7 +792,7 @@ export default function RentPaidEvery4Weeks() {
                   {parsed.error}
                 </p>
               ) : parsed.warnings.length ? (
-                <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                <div className="mt-2 rounded-2xl bg-amber-50 px-4 py-2 text-sm text-amber-900">
                   <div className="font-semibold">Input interpretation note</div>
                   <ul className="mt-1 list-disc pl-5 space-y-1">
                     {parsed.warnings.map((w: string, i: number) => (
@@ -806,7 +806,7 @@ export default function RentPaidEvery4Weeks() {
 
           {/* Results */}
           <div
-            className="mt-5 overflow-hidden rounded-2xl border border-slate-200 bg-sky-50/60 shadow-sm rc-print-block"
+            className="mt-5 overflow-hidden rounded-[1.5rem] bg-sky-50 rc-print-block"
             role="region"
             aria-label="Results"
             aria-live="polite"
@@ -815,11 +815,11 @@ export default function RentPaidEvery4Weeks() {
 
             <div className="p-5 sm:px-6">
               {!computed.ok ? (
-                <div className="rounded-xl border border-slate-200 bg-white/95 p-4 shadow-sm">
-                  <div className="font-semibold text-slate-900">
+                <div className="rounded-2xl bg-white p-4">
+                  <div className="font-semibold text-slate-950">
                     No results to show
                   </div>
-                  <p className="mt-1 text-sm text-slate-600">
+                  <p className="mt-1 text-sm text-slate-700">
                     Fix the input to calculate amounts.
                   </p>
                   <ul className="mt-3 list-disc pl-5 space-y-1 text-sm text-rose-700">
@@ -828,7 +828,7 @@ export default function RentPaidEvery4Weeks() {
                     ))}
                   </ul>
                   {computed.warnings.length ? (
-                    <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                    <div className="mt-3 rounded-2xl bg-amber-50 px-4 py-2 text-sm text-amber-900">
                       <div className="font-semibold">Notes</div>
                       <ul className="mt-1 list-disc pl-5 space-y-1">
                         {computed.warnings.map((w, i) => (
@@ -845,7 +845,7 @@ export default function RentPaidEvery4Weeks() {
                       className="h-2 w-2 rounded-full bg-emerald-600"
                       aria-hidden="true"
                     />
-                    <div className="text-sm font-semibold text-slate-900">
+                    <div className="text-sm font-semibold text-slate-950">
                       Monthly amount
                     </div>
                   </div>
@@ -854,7 +854,7 @@ export default function RentPaidEvery4Weeks() {
                     <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700 tabular-nums whitespace-nowrap">
                       {fmtMoney(computed.monthlyScaled)}
                     </div>
-                    <p className="text-sm text-slate-600">
+                    <p className="text-sm text-slate-700">
                       Based on the 4-week amount converted to an annual total,
                       then divided by 12.
                     </p>
@@ -877,10 +877,10 @@ export default function RentPaidEvery4Weeks() {
                     ).map(([label, val, key]) => (
                       <div
                         key={key}
-                        className="rounded-xl border border-slate-200 bg-white/95 px-4 py-2.5 shadow-sm"
+                        className="rounded-2xl bg-white px-4 py-3.5 shadow-sm"
                       >
-                        <div className="text-xs text-slate-600">{label}</div>
-                        <div className="mt-1 text-lg font-bold text-slate-900 tabular-nums whitespace-nowrap">
+                        <div className="text-xs text-slate-700">{label}</div>
+                        <div className="mt-1 text-lg font-bold text-slate-950 tabular-nums whitespace-nowrap">
                           {fmtMoney(val)}
                         </div>
                       </div>
@@ -892,38 +892,38 @@ export default function RentPaidEvery4Weeks() {
                       </div>
 
                       <div className="mt-2 grid gap-2 sm:grid-cols-3">
-                        <div className="rounded-lg border border-emerald-200 bg-white/70 px-3 py-2">
-                          <div className="text-[11px] text-slate-600">
+                        <div className="rounded-xl bg-white/70 px-3 py-2">
+                          <div className="text-[11px] text-slate-700">
                             4-week
                           </div>
-                          <div className="mt-0.5 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
+                          <div className="mt-0.5 text-sm font-bold text-slate-950 tabular-nums whitespace-nowrap">
                             {fmtMoney(computed.every4wScaled)}
                           </div>
-                          <div className="mt-0.5 text-[11px] text-slate-600">
+                          <div className="mt-0.5 text-[11px] text-slate-700">
                             28-day period
                           </div>
                         </div>
 
-                        <div className="rounded-lg border border-emerald-200 bg-white/70 px-3 py-2">
-                          <div className="text-[11px] text-slate-600">
+                        <div className="rounded-xl bg-white/70 px-3 py-2">
+                          <div className="text-[11px] text-slate-700">
                             Monthly
                           </div>
-                          <div className="mt-0.5 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
+                          <div className="mt-0.5 text-sm font-bold text-slate-950 tabular-nums whitespace-nowrap">
                             {fmtMoney(computed.monthlyScaled)}
                           </div>
-                          <div className="mt-0.5 text-[11px] text-slate-600">
+                          <div className="mt-0.5 text-[11px] text-slate-700">
                             Annual total ÷ 12
                           </div>
                         </div>
 
-                        <div className="rounded-lg border border-emerald-200 bg-white/70 px-3 py-2">
-                          <div className="text-[11px] text-slate-600">
+                        <div className="rounded-xl bg-white/70 px-3 py-2">
+                          <div className="text-[11px] text-slate-700">
                             Difference
                           </div>
-                          <div className="mt-0.5 text-sm font-bold text-slate-900 tabular-nums whitespace-nowrap">
+                          <div className="mt-0.5 text-sm font-bold text-slate-950 tabular-nums whitespace-nowrap">
                             {fmtMoney(computed.monthlyMinus4wScaled)}
                           </div>
-                          <div className="mt-0.5 text-[11px] text-slate-600 tabular-nums">
+                          <div className="mt-0.5 text-[11px] text-slate-700 tabular-nums">
                             ≈ {safeToFixed(computed.monthlyMinus4wPct, 2)}% of
                             4-week
                           </div>
@@ -933,7 +933,7 @@ export default function RentPaidEvery4Weeks() {
                   </div>
 
                   {computed.warnings.length ? (
-                    <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900 rc-no-print">
+                    <div className="mt-4 rounded-2xl bg-amber-50 px-4 py-2 text-sm text-amber-900 rc-no-print">
                       <div className="font-semibold">Notes</div>
                       <ul className="mt-1 list-disc pl-5 space-y-1">
                         {computed.warnings.map((w, i) => (
@@ -949,29 +949,14 @@ export default function RentPaidEvery4Weeks() {
 
           <Assumptions />
 
-          <div className="mt-3 rounded-xl border border-slate-200 bg-white/90 px-4 py-3 shadow-sm rc-no-print">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Calculations preserve precision internally, while displayed money values are rounded to cents.
-              </p>
-
-              <button
-                type="button"
-                onClick={handlePrint}
-                className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 md:hidden"
-              >
-                Print / Save PDF
-              </button>
-            </div>
-          </div>
         </div>
       </section>
 
       <section
         id="payment-counts"
-        className="mx-auto max-w-6xl px-6 py-6 rc-no-print"
+        className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8 rc-no-print"
       >
-        <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white/95 shadow-sm">
+        <div className="relative overflow-hidden rounded-[1.75rem] bg-white">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-0"
@@ -1013,7 +998,7 @@ export default function RentPaidEvery4Weeks() {
                   </thead>
                   <tbody>
                     <tr className="border-t border-slate-200">
-                      <td className="px-4 py-2 text-sm text-slate-900 font-semibold">
+                      <td className="px-4 py-2 text-sm text-slate-950 font-semibold">
                         Monthly
                       </td>
                       <td className="px-4 py-2 text-sm text-slate-800">
@@ -1028,7 +1013,7 @@ export default function RentPaidEvery4Weeks() {
                     </tr>
 
                     <tr className="border-t border-slate-200 bg-slate-50/50">
-                      <td className="px-4 py-2 text-sm text-slate-900 font-semibold">
+                      <td className="px-4 py-2 text-sm text-slate-950 font-semibold">
                         Every 4 weeks (28 days)
                       </td>
                       <td className="px-4 py-2 text-sm text-slate-800 tabular-nums">
@@ -1043,7 +1028,7 @@ export default function RentPaidEvery4Weeks() {
                     </tr>
 
                     <tr className="border-t border-slate-200">
-                      <td className="px-4 py-2 text-sm text-slate-900 font-semibold">
+                      <td className="px-4 py-2 text-sm text-slate-950 font-semibold">
                         Biweekly (every 2 weeks)
                       </td>
                       <td className="px-4 py-2 text-sm text-slate-800 tabular-nums">
@@ -1058,7 +1043,7 @@ export default function RentPaidEvery4Weeks() {
                     </tr>
 
                     <tr className="border-t border-slate-200 bg-slate-50/50">
-                      <td className="px-4 py-2 text-sm text-slate-900 font-semibold">
+                      <td className="px-4 py-2 text-sm text-slate-950 font-semibold">
                         Weekly
                       </td>
                       <td className="px-4 py-2 text-sm text-slate-800 tabular-nums">
@@ -1075,7 +1060,7 @@ export default function RentPaidEvery4Weeks() {
                 </table>
               </div>
 
-              <p className="mt-3 text-xs text-slate-600 leading-relaxed">
+              <p className="mt-3 text-xs text-slate-700 leading-relaxed">
                 These counts are for comparison. Real billing can depend on
                 lease start date, due-date rules, proration, fees, and how
                 partial periods are handled.
@@ -1087,19 +1072,19 @@ export default function RentPaidEvery4Weeks() {
                 </div>
                 <ul className="mt-2 list-disc pl-5 space-y-2 text-slate-700 leading-relaxed">
                   <li>
-                    <strong className="text-slate-900">
+                    <strong className="text-slate-950">
                       4-week rent is a fixed 28-day schedule.
                     </strong>{" "}
                     It is not the same as calendar-month billing.
                   </li>
                   <li>
-                    <strong className="text-slate-900">
+                    <strong className="text-slate-950">
                       13 payments is a 52-week framing.
                     </strong>{" "}
                     A 365-day year is slightly longer than 52 weeks.
                   </li>
                   <li>
-                    <strong className="text-slate-900">
+                    <strong className="text-slate-950">
                       Monthly rent is calendar-based.
                     </strong>{" "}
                     It does not have one fixed day length.
@@ -1115,7 +1100,7 @@ export default function RentPaidEvery4Weeks() {
 
       {/* Breadcrumbs */}
       <section className="mt-8 mb-4 hidden sm:block">
-        <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-600">
+        <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-700">
           <a
             href={safeHref("/")}
             className="cursor-pointer rounded text-sky-700 hover:text-sky-900 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2"
@@ -1133,12 +1118,12 @@ export default function RentPaidEvery4Weeks() {
           Frequently Asked Questions
         </h2>
 
-        <div className="divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white/90 px-5 shadow-sm">
+        <div className="space-y-3">
           {faqData.map((f, i) => (
-            <details key={i} className="group py-4">
+            <details key={i} className="group rounded-2xl bg-slate-50 px-5 py-4">
               <summary className="cursor-pointer list-none font-semibold text-lg text-sky-800 flex items-center justify-between rounded hover:text-sky-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2">
                 <span>{f.q}</span>
-                <span className="ml-4 text-slate-400 transition-transform group-open:rotate-180">
+                <span className="ml-4 text-slate-600 transition-transform group-open:rotate-180">
                   ▾
                 </span>
               </summary>

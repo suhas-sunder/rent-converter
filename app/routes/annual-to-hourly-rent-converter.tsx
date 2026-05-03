@@ -867,11 +867,11 @@ export default function AnnualToHourlyRent() {
         id="converter"
         className="mx-auto max-w-6xl px-4 sm:px-6 pb-6 pt-3 sm:pt-6"
       >
-        <div className="rounded-2xl border border-slate-200 bg-white/95 shadow-sm px-4 py-5 sm:px-8 sm:py-7">
+        <div className="rounded-[1.75rem] bg-white px-4 py-5 sm:px-8 sm:py-7">
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div className="min-w-0">
-                <div className="mb-2 inline-flex rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-800">
+                <div className="mb-2 inline-flex rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-800">
                   Annual rent per hour calculator
                 </div>
 
@@ -879,7 +879,7 @@ export default function AnnualToHourlyRent() {
                   Annual to Hourly Rent Converter
                 </h1>
 
-                <p className="mt-2 max-w-4xl text-base text-slate-600">
+                <p className="mt-2 max-w-4xl text-base text-slate-700">
                   Convert an annual rent total into an hourly equivalent using a
                   365-day year. The tool also shows daily, weekly, biweekly,
                   4-week, monthly, and annual breakdowns so you can compare rent
@@ -891,7 +891,7 @@ export default function AnnualToHourlyRent() {
                 <button
                   type="button"
                   onClick={handlePrint}
-                  className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 shadow-sm transition hover:border-sky-300 hover:bg-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+                  className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
                 >
                   Print / Save as PDF
                 </button>
@@ -900,7 +900,7 @@ export default function AnnualToHourlyRent() {
                   type="button"
                   onClick={handleCsvExport}
                   disabled={!canShowAnnualResults}
-                  className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 shadow-sm transition hover:border-sky-300 hover:bg-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-slate-200 disabled:hover:bg-white"
+                  className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-slate-200 disabled:hover:bg-white"
                 >
                   Export CSV
                 </button>
@@ -910,10 +910,10 @@ export default function AnnualToHourlyRent() {
             <div className="rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm rc-no-print">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <div className="text-sm font-semibold text-slate-900">
+                  <div className="text-sm font-semibold text-slate-950">
                     Paid-hours scenario
                   </div>
-                  <p className="mt-1 text-sm text-slate-600">
+                  <p className="mt-1 text-sm text-slate-700">
                     Optional comparison using hours per week × 52 instead of the
                     full 8,760-hour year.
                   </p>
@@ -950,11 +950,11 @@ export default function AnnualToHourlyRent() {
                     onFocus={() => setPaidHoursFocused(true)}
                     onBlur={() => setPaidHoursFocused(false)}
                     placeholder="e.g. 40 or 37.5"
-                    className="w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-base text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                    className="w-full cursor-pointer rounded-xl bg-slate-100 px-4 py-2 text-base text-slate-950 placeholder:text-slate-700 outline-none transition focus:bg-white focus:ring-2 focus:ring-sky-200 focus-visible:ring-2 focus-visible:ring-sky-400"
                     aria-invalid={Boolean(parsedHours && !parsedHours.ok)}
                     aria-describedby="rc-hours-help rc-hours-error"
                   />
-                  <p id="rc-hours-help" className="mt-2 text-xs text-slate-600">
+                  <p id="rc-hours-help" className="mt-2 text-xs text-slate-700">
                     Valid range is 0 to 168 hours/week. This is only an
                     illustrative comparison.
                   </p>
@@ -967,7 +967,7 @@ export default function AnnualToHourlyRent() {
                       {parsedHours.error}
                     </p>
                   ) : parsedHours && parsedHours.warnings.length ? (
-                    <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                    <div className="mt-2 rounded-2xl bg-amber-50 px-4 py-2 text-sm text-amber-900">
                       <div className="font-semibold">Hours input note</div>
                       <ul className="mt-1 list-disc pl-5 space-y-1">
                         {parsedHours.warnings.map((w, i) => (
@@ -994,7 +994,7 @@ export default function AnnualToHourlyRent() {
                     onFocus={() => setAmountFocused(true)}
                     onBlur={() => setAmountFocused(false)}
                     placeholder="e.g. 30000 or 30000.50"
-                    className="w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                    className="w-full cursor-pointer rounded-xl bg-slate-100 px-4 py-2 text-lg text-slate-950 placeholder:text-slate-700 outline-none transition focus:bg-white focus:ring-2 focus:ring-sky-200 focus-visible:ring-2 focus-visible:ring-sky-400"
                     aria-invalid={!parsedAnnual.ok}
                     aria-describedby="rc-amount-help rc-amount-error"
                   />
@@ -1008,7 +1008,7 @@ export default function AnnualToHourlyRent() {
                           : "USD",
                       )
                     }
-                    className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition hover:border-sky-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                    className="cursor-pointer rounded-xl bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-950 outline-none transition hover:border-sky-400 focus:bg-white focus:ring-2 focus:ring-sky-200 focus-visible:ring-2 focus-visible:ring-sky-400"
                     aria-label="Currency"
                   >
                     {SUPPORTED_CURRENCIES.map((c) => (
@@ -1019,7 +1019,7 @@ export default function AnnualToHourlyRent() {
                   </select>
                 </div>
 
-                <p id="rc-amount-help" className="mt-2 text-xs text-slate-600">
+                <p id="rc-amount-help" className="mt-2 text-xs text-slate-700">
                   Enter the yearly rent amount you want to analyze. Currency
                   symbols, commas, and decimals are accepted.
                 </p>
@@ -1032,7 +1032,7 @@ export default function AnnualToHourlyRent() {
                     {parsedAnnual.error}
                   </p>
                 ) : parsedAnnual.warnings.length ? (
-                  <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                  <div className="mt-2 rounded-2xl bg-amber-50 px-4 py-2 text-sm text-amber-900">
                     <div className="font-semibold">Amount input note</div>
                     <ul className="mt-1 list-disc pl-5 space-y-1">
                       {parsedAnnual.warnings.map((w, i) => (
@@ -1045,27 +1045,30 @@ export default function AnnualToHourlyRent() {
             </div>
 
             <div
-              className="rounded-2xl border border-slate-200 bg-sky-50/60 p-5 shadow-sm sm:px-6 rc-print-block"
+              className="overflow-hidden rounded-[1.5rem] bg-sky-50 rc-print-block"
               aria-live="polite"
             >
-              <div className="h-1.5 rounded-full bg-gradient-to-r from-sky-500 to-emerald-400" />
+              <div className="h-1 bg-gradient-to-r from-sky-500 to-emerald-400" />
 
-              <div className="mt-4 flex items-center gap-2">
+
+              <div className="p-5 sm:px-6">
+
+              <div className="flex items-center gap-2">
                 <div
                   className="h-2 w-2 rounded-full bg-sky-600"
                   aria-hidden="true"
                 />
-                <div className="text-sm font-semibold text-slate-900">
+                <div className="text-sm font-semibold text-slate-950">
                   Hourly equivalent
                 </div>
               </div>
 
               {!canShowAnnualResults ? (
-                <div className="mt-3 rounded-xl border border-slate-200 bg-white/95 px-4 py-4 text-slate-700">
-                  <div className="font-semibold text-slate-900">
+                <div className="mt-3 rounded-2xl bg-white px-4 py-4 text-slate-700">
+                  <div className="font-semibold text-slate-950">
                     No result to show yet
                   </div>
-                  <p className="mt-1 text-sm text-slate-600">
+                  <p className="mt-1 text-sm text-slate-700">
                     Enter a valid annual rent total above to see the hourly
                     equivalent and breakdown.
                   </p>
@@ -1073,11 +1076,11 @@ export default function AnnualToHourlyRent() {
               ) : (
                 <>
                   <div className="mt-3 flex flex-col gap-2">
-                    <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-4">
-                      <div className="text-3xl sm:text-5xl font-extrabold text-emerald-800">
+                    <div>
+                      <div className="text-3xl sm:text-5xl font-extrabold text-emerald-700">
                         {fmt(headlineHourlyScaled)}
                       </div>
-                      <p className="mt-2 text-sm text-emerald-700">
+                      <p className="mt-2 text-sm text-slate-700">
                         Based on annual rent divided by 8,760 hours.
                       </p>
                     </div>
@@ -1108,20 +1111,20 @@ export default function AnnualToHourlyRent() {
                     ).map(([label, val, key]) => (
                       <div
                         key={key}
-                        className="rounded-xl border border-slate-200 bg-white/95 px-4 py-3 shadow-sm"
+                        className="rounded-2xl bg-white px-4 py-3"
                       >
-                        <div className="text-xs font-medium text-slate-600">
+                        <div className="text-xs font-medium text-slate-700">
                           {label}
                         </div>
-                        <div className="mt-1 text-lg font-bold text-slate-900">
+                        <div className="mt-1 text-lg font-bold text-slate-950">
                           {fmt(val)}
                         </div>
                       </div>
                     ))}
 
                     {showPaidHoursScenario ? (
-                      <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-slate-200 bg-white/95 px-4 py-3 shadow-sm">
-                        <div className="text-xs font-medium text-slate-600">
+                      <div className="sm:col-span-2 lg:col-span-3 rounded-2xl bg-white px-4 py-3">
+                        <div className="text-xs font-medium text-slate-700">
                           Paid-hours hourly comparison (optional)
                         </div>
 
@@ -1137,19 +1140,19 @@ export default function AnnualToHourlyRent() {
                           </div>
                         ) : canShowPaidScenario ? (
                           <div className="mt-2 grid gap-2 sm:grid-cols-3">
-                            <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
-                              <div className="text-xs text-slate-600">
+                            <div className="rounded-2xl bg-white px-4 py-3">
+                              <div className="text-xs text-slate-700">
                                 Time-based hourly
                               </div>
-                              <div className="mt-1 text-sm font-bold text-slate-900">
+                              <div className="mt-1 text-sm font-bold text-slate-950">
                                 {fmt(breakdownScaled!.hourly)}
                               </div>
-                              <div className="mt-1 text-xs text-slate-600">
+                              <div className="mt-1 text-xs text-slate-700">
                                 Annual ÷ 8,760
                               </div>
                             </div>
 
-                            <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3">
+                            <div className="rounded-2xl bg-emerald-50 px-4 py-3">
                               <div className="text-xs text-emerald-700">
                                 Paid-hours hourly
                               </div>
@@ -1164,14 +1167,14 @@ export default function AnnualToHourlyRent() {
                               </div>
                             </div>
 
-                            <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
-                              <div className="text-xs text-slate-600">
+                            <div className="rounded-2xl bg-white px-4 py-3">
+                              <div className="text-xs text-slate-700">
                                 Difference
                               </div>
-                              <div className="mt-1 text-sm font-bold text-slate-900">
+                              <div className="mt-1 text-sm font-bold text-slate-950">
                                 {fmt(breakdownScaled!.paidMinusClock as bigint)}
                               </div>
-                              <div className="mt-1 text-xs text-slate-600">
+                              <div className="mt-1 text-xs text-slate-700">
                                 ≈{" "}
                                 {formatPercent(
                                   breakdownScaled!.paidMinusClockPct as number)}
@@ -1179,13 +1182,13 @@ export default function AnnualToHourlyRent() {
                             </div>
                           </div>
                         ) : (
-                          <p className="mt-2 text-sm text-slate-600">
+                          <p className="mt-2 text-sm text-slate-700">
                             Enter paid hours per week to see the paid-hours
                             scenario comparison.
                           </p>
                         )}
 
-                        <p className="mt-3 text-xs text-slate-600">
+                        <p className="mt-3 text-xs text-slate-700">
                           The paid-hours scenario is a comparison tool. It does
                           not replace the main time-based hourly equivalence.
                         </p>
@@ -1203,15 +1206,17 @@ export default function AnnualToHourlyRent() {
                   </div>
                 </>
               )}
-            </div>
+
+
+              </div></div>
 
             <Assumptions />
 
             <div className="rounded-xl border border-slate-200 bg-white/90 p-4 shadow-sm">
-              <div className="mb-3 text-sm font-semibold text-slate-900">
+              <div className="mb-3 text-sm font-semibold text-slate-950">
                 Precision note
               </div>
-              <p className="text-xs text-slate-600 leading-relaxed">
+              <p className="text-xs text-slate-700 leading-relaxed">
                 Calculations preserve precision internally, while displayed money values are rounded to cents.
               </p>
             </div>
@@ -1222,7 +1227,7 @@ export default function AnnualToHourlyRent() {
       <HowItWorks />
 
       <section className="mt-8 mb-4 hidden sm:block">
-        <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-600">
+        <nav className="max-w-6xl mx-auto px-6 text-sm text-slate-700">
           <SafeLink
             href="/"
             className="cursor-pointer text-sky-800 hover:text-sky-900 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 rounded"
@@ -1240,18 +1245,18 @@ export default function AnnualToHourlyRent() {
           Frequently Asked Questions
         </h2>
 
-        <p className="mx-auto mb-6 max-w-6xl text-center text-slate-600">
+        <p className="mx-auto mb-6 max-w-6xl text-center text-slate-700">
           These answers explain how the annual to hourly rent conversion works,
           what the hourly equivalent means, and when the optional paid-hours
           comparison is useful.
         </p>
 
-        <div className="divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white/90 px-4 shadow-sm">
+        <div className="space-y-3">
           {faqData.map((f, i) => (
-            <details key={i} className="group py-4">
+            <details key={i} className="group rounded-2xl bg-slate-50 px-5 py-4">
               <summary className="flex cursor-pointer list-none items-center justify-between text-lg font-semibold text-sky-800 transition hover:text-sky-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 rounded">
                 <span>{f.q}</span>
-                <span className="ml-4 text-slate-400 transition-transform group-open:rotate-180">
+                <span className="ml-4 text-slate-600 transition-transform group-open:rotate-180">
                   ▾
                 </span>
               </summary>

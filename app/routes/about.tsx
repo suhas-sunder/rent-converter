@@ -193,7 +193,7 @@ export default function About() {
       />
 
       <section className="mx-auto max-w-6xl px-4 sm:px-6 pb-10 pt-3 sm:pt-6">
-        <div className="rounded-2xl border border-slate-200 bg-white/95 px-4 py-5 shadow-sm sm:px-8 sm:py-7">
+        <div className="overflow-hidden rounded-[1.75rem] bg-white px-5 py-6 sm:px-8 sm:py-7">
           <div className="flex flex-col gap-3">
             <div className="inline-flex w-fit rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-800">
               About the site
@@ -203,7 +203,7 @@ export default function About() {
               About RentConverter.com | Rent Math and Assumptions
             </h1>
 
-            <p className="max-w-3xl text-base leading-relaxed text-slate-600">
+            <p className="max-w-3xl text-base leading-relaxed text-slate-700">
               RentConverter.com helps compare rent across different payment
               periods. Enter a rent amount, choose the period, and see the
               matching daily, weekly, biweekly, 4-week, monthly, hourly, or
@@ -214,14 +214,14 @@ export default function About() {
               {highlightCards.map((c) => (
                 <div
                   key={c.title}
-                  className="rounded-2xl border border-slate-200 bg-sky-50/60 p-4 shadow-sm"
+                  className="rounded-2xl bg-sky-50 p-4"
                 >
                   <div className="flex items-center gap-2">
                     <div
                       className="h-2 w-2 rounded-full bg-sky-600"
                       aria-hidden="true"
                     />
-                    <div className="text-sm font-semibold text-slate-900">
+                    <div className="text-sm font-semibold text-slate-950">
                       {c.title}
                     </div>
                   </div>
@@ -235,7 +235,7 @@ export default function About() {
 
           <div className="mt-6 grid gap-4 md:grid-cols-12">
             <div className="md:col-span-7">
-              <div className="rounded-2xl border border-slate-200 bg-white/95 p-5 shadow-sm sm:p-6">
+              <div className="rounded-2xl bg-white p-5 sm:p-6">
                 <h2 className="text-xl font-bold tracking-tight text-sky-800">
                   What the site does
                 </h2>
@@ -274,13 +274,13 @@ export default function About() {
                 </ul>
 
                 <div className="mt-5 rounded-xl border border-slate-200 bg-sky-50/60 px-4 py-4">
-                  <div className="text-sm font-semibold text-slate-900">
+                  <div className="text-sm font-semibold text-slate-950">
                     What’s included
                   </div>
 
                   <div className="mt-3 grid gap-3 sm:grid-cols-2">
-                    <div className="rounded-xl border border-slate-200 bg-white/95 px-4 py-3 shadow-sm">
-                      <div className="text-xs font-medium text-slate-600">
+                    <div className="rounded-2xl bg-white px-4 py-3">
+                      <div className="text-xs font-medium text-slate-700">
                         Included
                       </div>
                       <ul className="mt-2 space-y-1 text-sm leading-relaxed text-slate-700">
@@ -296,8 +296,8 @@ export default function About() {
                       </ul>
                     </div>
 
-                    <div className="rounded-xl border border-slate-200 bg-white/95 px-4 py-3 shadow-sm">
-                      <div className="text-xs font-medium text-slate-600">
+                    <div className="rounded-2xl bg-white px-4 py-3">
+                      <div className="text-xs font-medium text-slate-700">
                         Not included by default
                       </div>
                       <ul className="mt-2 space-y-1 text-sm leading-relaxed text-slate-700">
@@ -314,16 +314,16 @@ export default function About() {
                     </div>
                   </div>
 
-                  <p className="mt-3 text-xs leading-relaxed text-slate-600">
+                  <p className="mt-3 text-xs leading-relaxed text-slate-700">
                     If you want utilities or fees included, add them into the
                     amount you enter.
                   </p>
                 </div>
               </div>
 
-              <div className="relative mt-4 rounded-2xl border border-slate-200 bg-white/95 p-5 shadow-sm sm:p-6">
+              <div className="relative mt-4 rounded-2xl bg-white p-5 sm:p-6">
                 <div
-                  className="absolute inset-x-0 top-0 h-1.5 rounded-t-2xl bg-gradient-to-r from-sky-500 to-emerald-400"
+                  className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-sky-500 to-emerald-400"
                   aria-hidden="true"
                 />
 
@@ -338,64 +338,64 @@ export default function About() {
                 </p>
 
                 <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
-                    <div className="text-xs font-medium text-slate-600">
+                  <div className="rounded-2xl bg-white px-4 py-3">
+                    <div className="text-xs font-medium text-slate-700">
                       Day counts used
                     </div>
                     <ul className="mt-2 space-y-1 text-sm leading-relaxed text-slate-700">
                       <li className="flex items-center justify-between gap-3">
                         <span>Daily</span>
-                        <span className="font-semibold tabular-nums text-slate-900">
+                        <span className="font-semibold tabular-nums text-slate-950">
                           1 day
                         </span>
                       </li>
                       <li className="flex items-center justify-between gap-3">
                         <span>Weekly</span>
-                        <span className="font-semibold tabular-nums text-slate-900">
+                        <span className="font-semibold tabular-nums text-slate-950">
                           7 days
                         </span>
                       </li>
                       <li className="flex items-center justify-between gap-3">
                         <span>Every 2 weeks</span>
-                        <span className="font-semibold tabular-nums text-slate-900">
+                        <span className="font-semibold tabular-nums text-slate-950">
                           14 days
                         </span>
                       </li>
                       <li className="flex items-center justify-between gap-3">
                         <span>Every 4 weeks</span>
-                        <span className="font-semibold tabular-nums text-slate-900">
+                        <span className="font-semibold tabular-nums text-slate-950">
                           28 days
                         </span>
                       </li>
                       <li className="flex items-center justify-between gap-3">
                         <span>Monthly</span>
-                        <span className="font-semibold tabular-nums text-slate-900">
+                        <span className="font-semibold tabular-nums text-slate-950">
                           365 ÷ 12 days
                         </span>
                       </li>
                       <li className="flex items-center justify-between gap-3">
                         <span>Annual</span>
-                        <span className="font-semibold tabular-nums text-slate-900">
+                        <span className="font-semibold tabular-nums text-slate-950">
                           365 days
                         </span>
                       </li>
                       <li className="flex items-center justify-between gap-3">
                         <span>Hourly</span>
-                        <span className="font-semibold tabular-nums text-slate-900">
+                        <span className="font-semibold tabular-nums text-slate-950">
                           24 hours/day
                         </span>
                       </li>
                     </ul>
                   </div>
 
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
-                    <div className="text-xs font-medium text-slate-600">
+                  <div className="rounded-2xl bg-white px-4 py-3">
+                    <div className="text-xs font-medium text-slate-700">
                       Why this matters
                     </div>
                     <p className="mt-2 text-sm leading-relaxed text-slate-700">
                       The shortcut “weekly × 4” assumes a month is 28 days. An
                       average month is about{" "}
-                      <strong className="tabular-nums text-slate-900">
+                      <strong className="tabular-nums text-slate-950">
                         30.42 days
                       </strong>
                       , so a 4-week amount and a monthly amount are not the
@@ -413,8 +413,8 @@ export default function About() {
                   </div>
                 </div>
 
-                <div className="mt-4 rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
-                  <div className="text-xs font-medium text-slate-600">
+                <div className="mt-4 rounded-2xl bg-white px-4 py-3">
+                  <div className="text-xs font-medium text-slate-700">
                     Precision and display
                   </div>
                   <p className="mt-1 text-sm leading-relaxed text-slate-700">
@@ -426,13 +426,13 @@ export default function About() {
             </div>
 
             <div className="md:col-span-5">
-              <div className="rounded-2xl border border-slate-200 bg-white/95 p-5 shadow-sm sm:p-6">
+              <div className="rounded-2xl bg-white p-5 sm:p-6">
                 <h2 className="text-xl font-bold tracking-tight text-sky-800">
                   Built and maintained by
                 </h2>
 
                 <div className="mt-3">
-                  <div className="text-lg font-bold text-slate-900">
+                  <div className="text-lg font-bold text-slate-950">
                     Suhas Sunder
                   </div>
                   <div className="text-sm font-semibold text-slate-700">
@@ -453,20 +453,20 @@ export default function About() {
                   <div className="mt-4 flex flex-wrap gap-2">
                     <a
                       href="https://suhassunder.com/"
-                      className="inline-flex cursor-pointer items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+                      className="inline-flex cursor-pointer items-center justify-center rounded-xl bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
                     >
                       suhasSunder.com
                     </a>
                     <a
                       href="/contact"
-                      className="inline-flex cursor-pointer items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+                      className="inline-flex cursor-pointer items-center justify-center rounded-xl bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
                     >
                       Contact
                     </a>
                   </div>
 
                   <div className="mt-4 rounded-xl border border-slate-200 bg-sky-50/60 px-4 py-3">
-                    <div className="text-xs font-medium text-slate-600">
+                    <div className="text-xs font-medium text-slate-700">
                       Accuracy note
                     </div>
                     <p className="mt-1 text-sm leading-relaxed text-slate-700">
@@ -478,7 +478,7 @@ export default function About() {
                 </div>
               </div>
 
-              <div className="mt-4 rounded-2xl border border-slate-200 bg-white/95 p-5 shadow-sm sm:p-6">
+              <div className="mt-4 rounded-2xl bg-white p-5 sm:p-6">
                 <h2 className="text-xl font-bold tracking-tight text-sky-800">
                   Privacy
                 </h2>
@@ -507,7 +507,7 @@ export default function About() {
                 <div className="mt-4">
                   <a
                     href="/contact"
-                    className="inline-flex cursor-pointer items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+                    className="inline-flex cursor-pointer items-center justify-center rounded-xl bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
                   >
                     Contact
                   </a>
@@ -523,17 +523,17 @@ export default function About() {
           Frequently Asked Questions
         </h2>
 
-        <p className="mx-auto mb-6 max-w-3xl text-center text-slate-600">
+        <p className="mx-auto mb-6 max-w-3xl text-center text-slate-700">
           These answers cover the site’s assumptions, rounding behavior, and
           intended use.
         </p>
 
-        <div className="divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white/90 px-4 shadow-sm">
+        <div className="space-y-3">
           {faqData.map((f, i) => (
-            <details key={i} className="group py-4">
+            <details key={i} className="group rounded-2xl bg-slate-50 px-5 py-4">
               <summary className="flex cursor-pointer list-none items-center justify-between rounded text-lg font-semibold text-sky-800 transition hover:text-sky-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400">
                 <span>{f.q}</span>
-                <span className="ml-4 text-slate-400 transition-transform group-open:rotate-180">
+                <span className="ml-4 text-slate-600 transition-transform group-open:rotate-180">
                   ▾
                 </span>
               </summary>

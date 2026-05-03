@@ -770,7 +770,7 @@ export default function RentAsPercentageOfIncome() {
         id="converter"
         className="mx-auto max-w-6xl px-6 pb-6 pt-4 sm:pt-6"
       >
-        <div className="rounded-2xl border border-slate-200 bg-white/95 p-5 shadow-sm sm:p-8">
+        <div className="rounded-[1.75rem] bg-white p-5 sm:p-8">
           <div className="flex flex-col gap-3">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div className="min-w-0">
@@ -782,7 +782,7 @@ export default function RentAsPercentageOfIncome() {
                   Rent as Percentage of Income Calculator
                 </h1>
 
-                <p className="mt-2 max-w-3xl text-base leading-relaxed text-slate-600">
+                <p className="mt-2 max-w-3xl text-base leading-relaxed text-slate-700">
                   Calculate what percentage of your income goes to rent. Enter
                   rent and income amounts to compare the same time period.
                 </p>
@@ -799,7 +799,7 @@ export default function RentAsPercentageOfIncome() {
                     if (typeof window === "undefined") return;
                     window.print();
                   }}
-                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                  className="cursor-pointer rounded-xl bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                 >
                   Print / Save PDF
                 </button>
@@ -822,7 +822,7 @@ export default function RentAsPercentageOfIncome() {
                       handleAmountChange(e, setRentAmount, rentInputRef)
                     }
                     placeholder="e.g. 2200 or 2200.00"
-                    className="col-span-7 cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg text-slate-900 outline-none transition placeholder:text-slate-400 hover:border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                    className="col-span-7 cursor-pointer rounded-xl bg-slate-100 px-4 py-2 text-lg text-slate-950 outline-none transition placeholder:text-slate-700 hover:border-sky-300 focus:bg-white focus:ring-2 focus:ring-sky-200 focus-visible:ring-2 focus-visible:ring-sky-400"
                     aria-invalid={rentInvalid}
                     aria-describedby={rentDescribedBy}
                   />
@@ -833,7 +833,7 @@ export default function RentAsPercentageOfIncome() {
                         isPeriod(e.target.value) ? e.target.value : "monthly",
                       )
                     }
-                    className="col-span-5 cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition hover:border-sky-300 hover:bg-sky-50 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                    className="col-span-5 cursor-pointer rounded-xl bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-950 outline-none transition hover:bg-sky-50 focus:bg-white focus:ring-2 focus:ring-sky-200 focus-visible:ring-2 focus-visible:ring-sky-400"
                     aria-label="Rent period"
                   >
                     {Object.entries(PERIOD_LABEL).map(([k, v]) => (
@@ -844,7 +844,7 @@ export default function RentAsPercentageOfIncome() {
                   </select>
                 </div>
 
-                <p id="rc-rent-help" className="mt-2 text-sm text-slate-600">
+                <p id="rc-rent-help" className="mt-2 text-sm text-slate-700">
                   Enter rent for the selected period.
                 </p>
 
@@ -857,7 +857,7 @@ export default function RentAsPercentageOfIncome() {
                     {rentParsed.error}
                   </p>
                 ) : rentParsed.warnings.length ? (
-                  <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                  <div className="mt-2 rounded-2xl bg-amber-50 px-4 py-2 text-sm text-amber-900">
                     <div className="font-semibold">
                       Input interpretation note
                     </div>
@@ -885,7 +885,7 @@ export default function RentAsPercentageOfIncome() {
                       handleAmountChange(e, setIncomeAmount, incomeInputRef)
                     }
                     placeholder="e.g. 6500 or 6500.00"
-                    className="col-span-7 cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-lg text-slate-900 outline-none transition placeholder:text-slate-400 hover:border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                    className="col-span-7 cursor-pointer rounded-xl bg-slate-100 px-4 py-2 text-lg text-slate-950 outline-none transition placeholder:text-slate-700 hover:border-sky-300 focus:bg-white focus:ring-2 focus:ring-sky-200 focus-visible:ring-2 focus-visible:ring-sky-400"
                     aria-invalid={incomeInvalid}
                     aria-describedby={incomeDescribedBy}
                   />
@@ -896,7 +896,7 @@ export default function RentAsPercentageOfIncome() {
                         isPeriod(e.target.value) ? e.target.value : "monthly",
                       )
                     }
-                    className="col-span-5 cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition hover:border-sky-300 hover:bg-sky-50 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                    className="col-span-5 cursor-pointer rounded-xl bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-950 outline-none transition hover:bg-sky-50 focus:bg-white focus:ring-2 focus:ring-sky-200 focus-visible:ring-2 focus-visible:ring-sky-400"
                     aria-label="Income period"
                   >
                     {Object.entries(PERIOD_LABEL).map(([k, v]) => (
@@ -907,7 +907,7 @@ export default function RentAsPercentageOfIncome() {
                   </select>
                 </div>
 
-                <p id="rc-income-help" className="mt-2 text-sm text-slate-600">
+                <p id="rc-income-help" className="mt-2 text-sm text-slate-700">
                   Enter income for the selected period.
                 </p>
 
@@ -920,7 +920,7 @@ export default function RentAsPercentageOfIncome() {
                     {incomeParsed.error}
                   </p>
                 ) : incomeParsed.warnings.length ? (
-                  <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                  <div className="mt-2 rounded-2xl bg-amber-50 px-4 py-2 text-sm text-amber-900">
                     <div className="font-semibold">
                       Input interpretation note
                     </div>
@@ -944,7 +944,7 @@ export default function RentAsPercentageOfIncome() {
                       isCurrency(e.target.value) ? e.target.value : "USD",
                     )
                   }
-                  className="w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition hover:border-sky-300 hover:bg-sky-50 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
+                  className="w-full cursor-pointer rounded-xl bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-950 outline-none transition hover:bg-sky-50 focus:bg-white focus:ring-2 focus:ring-sky-200 focus-visible:ring-2 focus-visible:ring-sky-400"
                   aria-label="Currency"
                 >
                   {SUPPORTED_CURRENCIES.map((c) => (
@@ -956,7 +956,7 @@ export default function RentAsPercentageOfIncome() {
               </div>
             </div>
 
-            <div className="mt-3 overflow-hidden rounded-2xl border border-slate-200 bg-sky-50/60 shadow-sm rc-print-block">
+            <div className="mt-3 overflow-hidden rounded-[1.5rem] bg-sky-50 rc-print-block">
               <div
                 className="h-1 bg-gradient-to-r from-sky-500 to-emerald-400"
                 aria-hidden="true"
@@ -964,11 +964,11 @@ export default function RentAsPercentageOfIncome() {
 
               <div className="p-5 sm:px-6">
                 {!computed.ok ? (
-                  <div className="rounded-xl border border-slate-200 bg-white/95 p-4">
-                    <div className="font-semibold text-slate-900">
+                  <div className="rounded-2xl bg-white p-4">
+                    <div className="font-semibold text-slate-950">
                       No results to show
                     </div>
-                    <p className="mt-1 text-sm text-slate-600">
+                    <p className="mt-1 text-sm text-slate-700">
                       Fix the inputs below to compute a meaningful percentage.
                     </p>
                     <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-rose-700">
@@ -977,7 +977,7 @@ export default function RentAsPercentageOfIncome() {
                       ))}
                     </ul>
                     {computed.warnings.length ? (
-                      <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                      <div className="mt-3 rounded-2xl bg-amber-50 px-4 py-2 text-sm text-amber-900">
                         <div className="font-semibold">Notes</div>
                         <ul className="mt-1 list-disc space-y-1 pl-5">
                           {computed.warnings.map((w, i) => (
@@ -994,7 +994,7 @@ export default function RentAsPercentageOfIncome() {
                         className="h-2 w-2 rounded-full bg-sky-600"
                         aria-hidden="true"
                       />
-                      <div className="text-sm font-semibold text-slate-900">
+                      <div className="text-sm font-semibold text-slate-950">
                         Estimated rent share
                       </div>
                     </div>
@@ -1003,96 +1003,96 @@ export default function RentAsPercentageOfIncome() {
                       <div className="text-3xl font-extrabold tracking-tight text-emerald-700 sm:text-5xl">
                         {safeToFixed(computed.ratioPct, 2)}%
                       </div>
-                      <p className="text-sm text-slate-600">
+                      <p className="text-sm text-slate-700">
                         Based on annual rent divided by annual income.
                       </p>
                     </div>
 
                     <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                      <div className="rounded-xl border border-slate-200 bg-white/95 px-4 py-3 shadow-sm">
-                        <div className="text-xs font-medium text-slate-600">
+                      <div className="rounded-2xl bg-white px-4 py-3">
+                        <div className="text-xs font-medium text-slate-700">
                           Annualized rent
                         </div>
-                        <div className="mt-1 text-lg font-bold text-slate-900">
+                        <div className="mt-1 text-lg font-bold text-slate-950">
                           {fmtMoney(computed.annualRent)}
                         </div>
                       </div>
 
-                      <div className="rounded-xl border border-slate-200 bg-white/95 px-4 py-3 shadow-sm">
-                        <div className="text-xs font-medium text-slate-600">
+                      <div className="rounded-2xl bg-white px-4 py-3">
+                        <div className="text-xs font-medium text-slate-700">
                           Annualized income
                         </div>
-                        <div className="mt-1 text-lg font-bold text-slate-900">
+                        <div className="mt-1 text-lg font-bold text-slate-950">
                           {fmtMoney(computed.annualIncome)}
                         </div>
                       </div>
 
-                      <div className="rounded-xl border border-slate-200 bg-white/95 px-4 py-3 shadow-sm">
-                        <div className="text-xs font-medium text-slate-600">
+                      <div className="rounded-2xl bg-white px-4 py-3">
+                        <div className="text-xs font-medium text-slate-700">
                           Rent share
                         </div>
-                        <div className="mt-1 text-lg font-bold text-slate-900">
+                        <div className="mt-1 text-lg font-bold text-slate-950">
                           {safeToFixed(computed.ratioPct, 2)}%
                         </div>
                       </div>
 
-                      <div className="rounded-xl border border-slate-200 bg-white/95 px-4 py-3 shadow-sm sm:col-span-2 lg:col-span-3 rc-print-block">
-                        <div className="text-xs font-medium text-slate-600">
+                      <div className="rounded-2xl bg-white px-4 py-3 sm:col-span-2 lg:col-span-3 rc-print-block">
+                        <div className="text-xs font-medium text-slate-700">
                           Weekly and 4-week view
                         </div>
                         <div className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
                           <div className="text-sm text-slate-700">
                             Rent per week:{" "}
-                            <strong className="tabular-nums text-slate-900">
+                            <strong className="tabular-nums text-slate-950">
                               {fmtMoney(computed.rentWeekly)}
                             </strong>
                           </div>
                           <div className="text-sm text-slate-700">
                             Income per week:{" "}
-                            <strong className="tabular-nums text-slate-900">
+                            <strong className="tabular-nums text-slate-950">
                               {fmtMoney(computed.incomeWeekly)}
                             </strong>
                           </div>
                           <div className="text-sm text-slate-700">
                             Rent per 4 weeks:{" "}
-                            <strong className="tabular-nums text-slate-900">
+                            <strong className="tabular-nums text-slate-950">
                               {fmtMoney(computed.rent4w)}
                             </strong>
                           </div>
                           <div className="text-sm text-slate-700">
                             Income per 4 weeks:{" "}
-                            <strong className="tabular-nums text-slate-900">
+                            <strong className="tabular-nums text-slate-950">
                               {fmtMoney(computed.income4w)}
                             </strong>
                           </div>
                         </div>
                       </div>
 
-                      <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 shadow-sm sm:col-span-2 lg:col-span-3 rc-print-block">
-                        <div className="text-xs font-medium text-slate-600">
+                      <div className="rounded-2xl bg-emerald-50 px-4 py-3 sm:col-span-2 lg:col-span-3 rc-print-block">
+                        <div className="text-xs font-medium text-slate-700">
                           Monthly vs every 4 weeks
                         </div>
                         <div className="mt-2 grid gap-2 lg:grid-cols-3">
                           <div className="text-sm text-slate-700">
                             Rent per month:{" "}
-                            <strong className="tabular-nums text-slate-900">
+                            <strong className="tabular-nums text-slate-950">
                               {fmtMoney(computed.rentMonthly)}
                             </strong>
                           </div>
                           <div className="text-sm text-slate-700">
                             Rent per 4 weeks:{" "}
-                            <strong className="tabular-nums text-slate-900">
+                            <strong className="tabular-nums text-slate-950">
                               {fmtMoney(computed.rent4w)}
                             </strong>
                           </div>
                           <div className="text-sm text-slate-700">
                             Ratio on 4-week basis:{" "}
-                            <strong className="tabular-nums text-slate-900">
+                            <strong className="tabular-nums text-slate-950">
                               {safeToFixed(computed.ratioOn4wBasis, 2)}%
                             </strong>
                           </div>
                         </div>
-                        <p className="mt-2 text-xs text-slate-600">
+                        <p className="mt-2 text-xs text-slate-700">
                           4-week = 28 days. Average month ={" "}
                           {safeToFixed(computed.avgMonthDays, 2)} days (365 ÷
                           12).
@@ -1101,7 +1101,7 @@ export default function RentAsPercentageOfIncome() {
                     </div>
 
                     {computed.warnings.length ? (
-                      <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                      <div className="mt-4 rounded-2xl bg-amber-50 px-4 py-2 text-sm text-amber-900">
                         <div className="font-semibold">Notes</div>
                         <ul className="mt-1 list-disc space-y-1 pl-5">
                           {computed.warnings.map((w, i) => (
@@ -1124,12 +1124,12 @@ export default function RentAsPercentageOfIncome() {
             <button
               type="button"
               onClick={handlePrint}
-              className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+              className="cursor-pointer rounded-xl bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
             >
               Print / Save as PDF
             </button>
           </div>
-              <p className="text-xs text-slate-600 leading-relaxed">
+              <p className="text-xs text-slate-700 leading-relaxed">
                 Calculations preserve precision internally, while displayed money values are rounded to cents.
               </p>
         </div>
@@ -1145,7 +1145,7 @@ export default function RentAsPercentageOfIncome() {
 
       <section className="mt-8 mb-4 hidden sm:block">
         <nav
-          className="mx-auto max-w-6xl px-6 text-sm text-slate-600"
+          className="mx-auto max-w-6xl px-6 text-sm text-slate-700"
           aria-label="Breadcrumb"
         >
           <a
@@ -1168,10 +1168,10 @@ export default function RentAsPercentageOfIncome() {
 
           <div className="divide-y divide-slate-200">
             {faqData.map((f, i) => (
-              <details key={i} className="group py-4">
+              <details key={i} className="group rounded-2xl bg-slate-50 px-5 py-4">
                 <summary className="flex cursor-pointer list-none items-center justify-between text-lg font-semibold text-sky-800 transition hover:text-sky-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white">
                   <span>{f.q}</span>
-                  <span className="ml-4 text-slate-400 transition-transform group-open:rotate-180">
+                  <span className="ml-4 text-slate-600 transition-transform group-open:rotate-180">
                     ▾
                   </span>
                 </summary>

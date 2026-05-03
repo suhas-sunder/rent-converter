@@ -85,7 +85,7 @@ export default function Contact() {
       <section className="mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-14">
         <div className="rounded-2xl border border-slate-200 bg-white/95 px-4 py-6 shadow-sm sm:px-8 sm:py-8">
           <div className="mx-auto max-w-3xl text-center">
-            <div className="mx-auto mb-3 inline-flex rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-800">
+            <div className="mx-auto mb-3 inline-flex rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-800">
               Contact RentConverter.com
             </div>
 
@@ -93,20 +93,20 @@ export default function Contact() {
               Contact
             </h1>
 
-            <p className="mx-auto mt-3 max-w-2xl leading-relaxed text-slate-600">
+            <p className="mx-auto mt-3 max-w-2xl leading-relaxed text-slate-700">
               Send feedback, corrections, or questions about the rent
               conversion tools.
             </p>
           </div>
 
-          <div className="mx-auto mt-6 max-w-2xl rounded-2xl border border-slate-200 bg-white/95 p-5 shadow-sm sm:p-6">
+          <div className="mx-auto mt-6 max-w-2xl rounded-2xl bg-white p-5 sm:p-6">
             <h2 className="text-lg font-semibold text-sky-800">Email</h2>
 
-            <p className="mt-2 text-sm leading-relaxed text-slate-600">
+            <p className="mt-2 text-sm leading-relaxed text-slate-700">
               Send a message to:
             </p>
 
-            <p className="mt-4 text-base font-semibold text-slate-900">
+            <p className="mt-4 text-base font-semibold text-slate-950">
               <a
                 href="mailto:hello@rentconverter.com"
                 className="cursor-pointer rounded text-sky-800 underline underline-offset-2 transition hover:text-sky-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
@@ -116,7 +116,7 @@ export default function Contact() {
             </p>
 
             <div className="mt-6 rounded-xl border border-slate-200 bg-sky-50/60 px-4 py-4">
-              <h3 className="text-sm font-semibold text-slate-900">
+              <h3 className="text-sm font-semibold text-slate-950">
                 What to include
               </h3>
 
@@ -130,7 +130,7 @@ export default function Contact() {
             </div>
 
             <div className="mt-6 rounded-xl border border-slate-200 bg-white px-4 py-4 shadow-sm">
-              <h3 className="text-sm font-semibold text-slate-900">Note</h3>
+              <h3 className="text-sm font-semibold text-slate-950">Note</h3>
 
               <p className="mt-2 text-sm leading-relaxed text-slate-700">
                 RentConverter.com uses a 365-day year and average month length
@@ -140,7 +140,7 @@ export default function Contact() {
             </div>
           </div>
 
-          <p className="mx-auto mt-6 max-w-2xl text-center text-xs leading-relaxed text-slate-600">
+          <p className="mx-auto mt-6 max-w-2xl text-center text-xs leading-relaxed text-slate-700">
             Tools on this site are for budgeting and comparison. Always confirm
             payment schedules and lease terms in your agreement.
           </p>

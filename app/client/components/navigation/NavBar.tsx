@@ -565,7 +565,7 @@ export default function NavBar() {
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 text-slate-700 shadow-sm backdrop-blur">
+    <header className="sticky top-0 z-50 bg-white/95 text-slate-700 backdrop-blur">
       <style>{`
         .${SCROLL_CLASS} {
           scrollbar-width: thin;
@@ -660,10 +660,10 @@ export default function NavBar() {
             <div
               ref={moreMenuRef}
               role="menu"
-              className="overflow-hidden rounded-2xl border border-slate-200 bg-white/95 shadow-xl backdrop-blur"
+              className="overflow-hidden rounded-2xl bg-white/95 backdrop-blur"
               style={dropdownStyle}
             >
-              <div className="border-b border-slate-200 bg-white/95 p-3">
+              <div className="bg-white/95 p-3">
                 <label className="sr-only" htmlFor="desktop-tool-search">
                   Search rent tools
                 </label>
@@ -691,7 +691,7 @@ export default function NavBar() {
               <div
                 className={`${SCROLL_CLASS} max-h-[min(60vh,520px)] overflow-y-auto`}
               >
-                <div className="border-b border-slate-200 bg-sky-50/60">
+                <div className="bg-sky-50/60">
                   <AllToolsButton variant="dropdown" />
                 </div>
 
@@ -721,12 +721,12 @@ export default function NavBar() {
 
           <div
             ref={mobilePanelRef}
-            className="absolute inset-y-0 right-0 flex w-[92vw] max-w-sm flex-col border-l border-slate-200 bg-white shadow-2xl"
+            className="absolute inset-y-0 right-0 flex w-[92vw] max-w-sm flex-col bg-white"
             role="dialog"
             aria-modal="true"
             aria-label="Menu"
           >
-            <div className="shrink-0 border-b border-slate-200 bg-white/95 backdrop-blur">
+            <div className="shrink-0 bg-white/95 backdrop-blur">
               <div className="flex items-center justify-between px-4 py-3">
                 <Link
                   to="/"
@@ -779,7 +779,7 @@ export default function NavBar() {
 
             <div className="flex-1 min-h-0">
               <div className={`${SCROLL_CLASS} h-full overflow-y-auto`}>
-                <div className="border-b border-slate-200 bg-sky-50/60">
+                <div className="bg-sky-50/60">
                   <AllToolsButton variant="mobile" />
                 </div>
 

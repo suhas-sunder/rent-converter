@@ -80,13 +80,13 @@ export default function TermsOfService() {
           <li>
             <Link
               to="/"
-              className="cursor-pointer text-slate-600 hover:text-slate-900 hover:underline"
+              className="cursor-pointer text-slate-700 hover:text-slate-950 hover:underline"
             >
               Home
             </Link>
           </li>
           <li className="opacity-60">›</li>
-          <li aria-current="page" className="text-slate-900">
+          <li aria-current="page" className="text-slate-950">
             Terms of Service
           </li>
         </ol>
@@ -94,10 +94,10 @@ export default function TermsOfService() {
 
       {/* Header */}
       <header className="mb-10">
-        <h1 className="text-3xl font-semibold text-slate-900">
+        <h1 className="text-3xl font-semibold text-slate-950">
           Terms of Service
         </h1>
-        <p className="mt-2 text-sm text-slate-600">
+        <p className="mt-2 text-sm text-slate-700">
           Last updated January 10, 2026
         </p>
       </header>
@@ -105,7 +105,7 @@ export default function TermsOfService() {
       {/* Content */}
       <div className="flex flex-col gap-8 leading-relaxed">
         <section className="flex flex-col gap-4">
-          <h2 className="text-xl font-semibold text-slate-900">
+          <h2 className="text-xl font-semibold text-slate-950">
             AGREEMENT TO OUR LEGAL TERMS
           </h2>
 
@@ -161,7 +161,7 @@ export default function TermsOfService() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-semibold text-slate-900">
+          <h2 className="text-2xl font-semibold text-slate-950">
             1. OUR SERVICES
           </h2>
           <p>
@@ -187,11 +187,11 @@ export default function TermsOfService() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-semibold text-slate-900">
+          <h2 className="text-2xl font-semibold text-slate-950">
             2. INTELLECTUAL PROPERTY RIGHTS
           </h2>
 
-          <h3 className="text-lg font-semibold text-slate-900">
+          <h3 className="text-lg font-semibold text-slate-950">
             Our intellectual property
           </h3>
           <p>
@@ -213,7 +213,7 @@ export default function TermsOfService() {
             IS" for your personal, non-commercial use only.
           </p>
 
-          <h3 className="text-lg font-semibold text-slate-900">
+          <h3 className="text-lg font-semibold text-slate-950">
             Your use of our Services
           </h3>
           <div className="flex flex-col gap-4">
@@ -263,7 +263,7 @@ export default function TermsOfService() {
             Services will terminate immediately.
           </p>
 
-          <h3 className="text-lg font-semibold text-slate-900">
+          <h3 className="text-lg font-semibold text-slate-950">
             Your submissions and contributions
           </h3>
           <p>
@@ -377,7 +377,7 @@ export default function TermsOfService() {
             report you to the authorities.
           </p>
 
-          <h3 className="text-lg font-semibold text-slate-900">
+          <h3 className="text-lg font-semibold text-slate-950">
             Copyright infringement
           </h3>
           <p>
@@ -389,7 +389,7 @@ export default function TermsOfService() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-semibold text-slate-900">
+          <h2 className="text-2xl font-semibold text-slate-950">
             3. USER REPRESENTATIONS
           </h2>
           <p>
@@ -415,7 +415,7 @@ export default function TermsOfService() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-semibold text-slate-900">
+          <h2 className="text-2xl font-semibold text-slate-950">
             4. USER REGISTRATION
           </h2>
           <p>
@@ -438,7 +438,7 @@ export default function TermsOfService() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-semibold text-slate-900">5. PRODUCTS</h2>
+          <h2 className="text-2xl font-semibold text-slate-950">5. PRODUCTS</h2>
           <p>
             All products are subject to availability. We reserve the right to
             discontinue any products at any time for any reason. Prices for all
@@ -452,7 +452,7 @@ export default function TermsOfService() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-semibold text-slate-900">
+          <h2 className="text-2xl font-semibold text-slate-950">
             6. PURCHASES AND PAYMENT
           </h2>
           <p>
@@ -491,7 +491,7 @@ export default function TermsOfService() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-semibold text-slate-900">
+          <h2 className="text-2xl font-semibold text-slate-950">
             7. REFUNDS POLICY
           </h2>
           <p>
@@ -502,7 +502,7 @@ export default function TermsOfService() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-semibold text-slate-900">
+          <h2 className="text-2xl font-semibold text-slate-950">
             8. PROHIBITED ACTIVITIES
           </h2>
           <p>
@@ -632,7 +632,7 @@ export default function TermsOfService() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-semibold text-slate-900">
+          <h2 className="text-2xl font-semibold text-slate-950">
             9. USER GENERATED CONTRIBUTIONS
           </h2>
           <p>
@@ -728,7 +728,7 @@ export default function TermsOfService() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-semibold text-slate-900">
+          <h2 className="text-2xl font-semibold text-slate-950">
             10. CONTRIBUTION LICENSE
           </h2>
           <p>
@@ -780,7 +780,7 @@ export default function TermsOfService() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-semibold text-slate-900">
+          <h2 className="text-2xl font-semibold text-slate-950">
             11. GUIDELINES FOR REVIEWS
           </h2>
           <p>
@@ -816,7 +816,7 @@ export default function TermsOfService() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-semibold text-slate-900">
+          <h2 className="text-2xl font-semibold text-slate-950">
             12. SOCIAL MEDIA
           </h2>
           <p>
@@ -872,7 +872,7 @@ export default function TermsOfService() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-semibold text-slate-900">
+          <h2 className="text-2xl font-semibold text-slate-950">
             13. THIRD-PARTY WEBSITES AND CONTENT
           </h2>
           <p>
@@ -913,7 +913,7 @@ export default function TermsOfService() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-semibold text-slate-900">
+          <h2 className="text-2xl font-semibold text-slate-950">
             14. ADVERTISERS
           </h2>
           <p>
@@ -926,7 +926,7 @@ export default function TermsOfService() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-semibold text-slate-900">
+          <h2 className="text-2xl font-semibold text-slate-950">
             15. SERVICES MANAGEMENT
           </h2>
           <p>
@@ -948,7 +948,7 @@ export default function TermsOfService() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-semibold text-slate-900">
+          <h2 className="text-2xl font-semibold text-slate-950">
             16. PRIVACY POLICY
           </h2>
           <p>
@@ -967,7 +967,7 @@ export default function TermsOfService() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-semibold text-slate-900">
+          <h2 className="text-2xl font-semibold text-slate-950">
             17. COPYRIGHT INFRINGEMENTS
           </h2>
           <p>
@@ -986,7 +986,7 @@ export default function TermsOfService() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-semibold text-slate-900">
+          <h2 className="text-2xl font-semibold text-slate-950">
             18. TERM AND TERMINATION
           </h2>
           <p>
@@ -1016,7 +1016,7 @@ export default function TermsOfService() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-semibold text-slate-900">
+          <h2 className="text-2xl font-semibold text-slate-950">
             19. MODIFICATIONS AND INTERRUPTIONS
           </h2>
           <p>
@@ -1044,7 +1044,7 @@ export default function TermsOfService() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-semibold text-slate-900">
+          <h2 className="text-2xl font-semibold text-slate-950">
             20. GOVERNING LAW
           </h2>
           <p>
@@ -1058,11 +1058,11 @@ export default function TermsOfService() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-semibold text-slate-900">
+          <h2 className="text-2xl font-semibold text-slate-950">
             21. DISPUTE RESOLUTION
           </h2>
 
-          <h3 className="text-lg font-semibold text-slate-900">
+          <h3 className="text-lg font-semibold text-slate-950">
             Informal Negotiations
           </h3>
           <p>
@@ -1077,7 +1077,7 @@ export default function TermsOfService() {
             other Party.
           </p>
 
-          <h3 className="text-lg font-semibold text-slate-900">
+          <h3 className="text-lg font-semibold text-slate-950">
             Binding Arbitration
           </h3>
           <p>
@@ -1087,7 +1087,7 @@ export default function TermsOfService() {
             submit to the personal jurisdiction of those courts.
           </p>
 
-          <h3 className="text-lg font-semibold text-slate-900">Restrictions</h3>
+          <h3 className="text-lg font-semibold text-slate-950">Restrictions</h3>
           <p>
             The Parties agree that any Dispute shall be limited to the Dispute
             between the Parties individually. To the full extent permitted by
@@ -1099,7 +1099,7 @@ export default function TermsOfService() {
             any other persons.
           </p>
 
-          <h3 className="text-lg font-semibold text-slate-900">
+          <h3 className="text-lg font-semibold text-slate-950">
             Exceptions to Informal Negotiations
           </h3>
           <p>
@@ -1114,7 +1114,7 @@ export default function TermsOfService() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-semibold text-slate-900">
+          <h2 className="text-2xl font-semibold text-slate-950">
             22. CORRECTIONS
           </h2>
           <p>
@@ -1128,7 +1128,7 @@ export default function TermsOfService() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-semibold text-slate-900">
+          <h2 className="text-2xl font-semibold text-slate-950">
             23. DISCLAIMER
           </h2>
           <p>
@@ -1167,7 +1167,7 @@ export default function TermsOfService() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-semibold text-slate-900">
+          <h2 className="text-2xl font-semibold text-slate-950">
             24. LIMITATIONS OF LIABILITY
           </h2>
           <p>
@@ -1189,7 +1189,7 @@ export default function TermsOfService() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-semibold text-slate-900">
+          <h2 className="text-2xl font-semibold text-slate-950">
             25. INDEMNIFICATION
           </h2>
           <p>
@@ -1214,7 +1214,7 @@ export default function TermsOfService() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-semibold text-slate-900">
+          <h2 className="text-2xl font-semibold text-slate-950">
             26. USER DATA
           </h2>
           <p>
@@ -1231,7 +1231,7 @@ export default function TermsOfService() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-semibold text-slate-900">
+          <h2 className="text-2xl font-semibold text-slate-950">
             27. ELECTRONIC COMMUNICATIONS, TRANSACTIONS, AND SIGNATURES
           </h2>
           <p>
@@ -1253,7 +1253,7 @@ export default function TermsOfService() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-semibold text-slate-900">
+          <h2 className="text-2xl font-semibold text-slate-950">
             28. CALIFORNIA USERS AND RESIDENTS
           </h2>
           <p>
@@ -1266,7 +1266,7 @@ export default function TermsOfService() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-semibold text-slate-900">
+          <h2 className="text-2xl font-semibold text-slate-950">
             29. MISCELLANEOUS
           </h2>
           <p>
@@ -1294,7 +1294,7 @@ export default function TermsOfService() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-semibold text-slate-900">
+          <h2 className="text-2xl font-semibold text-slate-950">
             30. CONTACT US
           </h2>
           <p>

@@ -147,10 +147,7 @@ export default function Footer() {
   return (
     <footer className="bg-slate-950 text-slate-200">
       <div className="mx-auto max-w-6xl px-4 py-10">
-        <div
-          id="all-tools"
-          className="rounded-3xl bg-slate-900/80 p-6"
-        >
+        <div id="all-tools" className="bg-slate-900/80 px-5 py-6 sm:px-6">
           <div className="flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center">
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-sky-300">
@@ -166,12 +163,12 @@ export default function Footer() {
           </div>
 
           {/* Keep cards compact and avoid stretched empty boxes */}
-          <div className="mt-5 grid grid-cols-1 items-start gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-5 grid grid-cols-1 items-start gap-x-8 gap-y-7 sm:grid-cols-2 lg:grid-cols-3">
             {categories.map((cat) => (
               <div
                 key={cat.title}
                 className={[
-                  "rounded-2xl bg-slate-800/60 p-4",
+                  "min-w-0",
                   cat.cardClassName || "",
                 ].join(" ")}
               >
