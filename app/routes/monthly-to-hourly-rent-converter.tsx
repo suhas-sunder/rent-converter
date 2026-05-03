@@ -1,7 +1,6 @@
 import { useMemo, useEffect, useRef, useState } from "react";
 import type { Route } from "./+types/monthly-to-hourly-rent-converter";
 import Assumptions from "~/client/components/layout/Assumptions";
-import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/monthly-to-hourly-rent-converter/HowItWorks";
 import ToolFit from "~/client/components/monthly-to-hourly-rent-converter/ToolFit";
 
@@ -11,9 +10,9 @@ function safeToFixed(n: number, digits: number): string {
 }
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Monthly to Hourly Rent Converter | RentConverter.com";
+  const title = "Monthly to Hourly Rent Converter | Rent Per Hour";
   const description =
-    "Convert monthly rent to an hourly amount. See the hourly rent formula, average-month result, 30-day comparison, and related rent breakdowns.";
+    "Convert monthly rent to an hourly equivalent using a 365-day year. See hourly, daily, weekly, and 30-day month comparisons.";
 
   const url = "https://www.rentconverter.com/monthly-to-hourly-rent-converter";
   const image = "https://www.rentconverter.com/og-image.jpg";
@@ -215,34 +214,15 @@ function scaledToDecimalStrings(
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
-  roundDisplay: boolean,
-  displayDecimals: number,
 ): string {
-  let digits = 12;
-
-  if (roundDisplay) {
-    digits = Math.max(0, Math.min(12, displayDecimals));
-  } else {
-    const a = absBigInt(scaled);
-    const fracPart = a % SCALE;
-    if (fracPart === 0n) {
-      digits = 0;
-    } else {
-      const fracFull = fracPart.toString().padStart(12, "0");
-      const trimmed = fracFull.replace(/0+$/g, "");
-      digits = Math.min(12, Math.max(0, trimmed.length));
-    }
-  }
-
-  const scaledForDisplay = roundDisplay
-    ? roundScaledToDecimals(scaled, digits)
-    : scaled;
+  const digits = 2;
+  const scaledForDisplay = roundScaledToDecimals(scaled, digits);
 
   const { group, decimal } = getNumberSeparators();
   const { negative, intStr, fracStr } = scaledToDecimalStrings(
     scaledForDisplay,
     digits,
-    !roundDisplay,
+    false,
   );
 
   const groupedInt = groupInt(intStr, group);
@@ -254,32 +234,12 @@ function formatCurrencyFromScaled(
     maximumFractionDigits: digits,
   });
 
-  const parts = fmt.formatToParts(-1);
-  let out = "";
-  for (const p of parts) {
-    if (p.type === "minusSign") {
-      if (negative) out += p.value;
-      continue;
-    }
-    if (p.type === "integer") {
-      out += groupedInt;
-      continue;
-    }
-    if (p.type === "group") {
-      continue;
-    }
-    if (p.type === "decimal") {
-      if (digits > 0 && fracStr.length > 0) out += decimal;
-      continue;
-    }
-    if (p.type === "fraction") {
-      if (digits > 0 && fracStr.length > 0) out += fracStr;
-      continue;
-    }
-    out += p.value;
-  }
+  const parts = fmt.formatToParts(0);
+  const currencyPart = parts.find((p) => p.type === "currency");
+  const symbol = currencyPart?.value ?? "";
+  const minus = negative ? "-" : "";
 
-  return out || "-";
+  return minus + symbol + groupedInt + (digits > 0 ? decimal + fracStr.padEnd(digits, "0") : "");
 }
 
 function groupEnUsInteger(intStr: string): string {
@@ -471,24 +431,6 @@ export default function MonthlyToHourlyRent() {
     return saved && isCurrency(saved) ? saved : "USD";
   });
 
-  const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
-    if (typeof window === "undefined") return true;
-    return safeParseBoolean(
-      window.localStorage.getItem("rc_mth_round_display"),
-      true,
-    );
-  });
-
-  const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
-    const allowed = new Set([0, 2, 4, 6]);
-    if (typeof window === "undefined") return 2;
-    const saved = window.localStorage.getItem("rc_mth_display_decimals");
-    const n = saved !== null ? Number(saved) : 2;
-    if (!Number.isFinite(n)) return 2;
-    const t = Math.trunc(n);
-    return allowed.has(t) ? t : 2;
-  });
-
   const parsedAmount = useMemo(() => parseMoneyInputToScaled(amount), [amount]);
   const monthlyScaled = parsedAmount.ok ? (parsedAmount.scaled as bigint) : 0n;
 
@@ -497,21 +439,13 @@ export default function MonthlyToHourlyRent() {
     try {
       window.localStorage.setItem("rc_mth_amount", amount);
       window.localStorage.setItem("rc_mth_currency", currency);
-      window.localStorage.setItem(
-        "rc_mth_round_display",
-        JSON.stringify(roundDisplay),
-      );
-      window.localStorage.setItem(
-        "rc_mth_display_decimals",
-        String(displayDecimals),
-      );
     } catch {
       // ignore
     }
-  }, [amount, currency, roundDisplay, displayDecimals]);
+  }, [amount, currency]);
 
   const fmt = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, roundDisplay, displayDecimals);
+    formatCurrencyFromScaled(scaled, currency);
 
   const amountDisplayValue = useMemo(() => {
     if (isAmountFocused) return amount;
@@ -694,6 +628,7 @@ export default function MonthlyToHourlyRent() {
 
               <div
                 id="export-controls"
+                data-nosnippet
                 className="rc-no-print flex shrink-0 flex-wrap gap-2 sm:justify-end"
               >
                 <button
@@ -890,12 +825,9 @@ export default function MonthlyToHourlyRent() {
               Print / Save as PDF
             </button>
           </div>
-          <Rounding
-            roundDisplay={roundDisplay}
-            setRoundDisplay={setRoundDisplay}
-            displayDecimals={displayDecimals}
-            setDisplayDecimals={setDisplayDecimals as any}
-          />
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Calculations preserve precision internally, while displayed money values are rounded to cents.
+              </p>
         </div>
       </section>
 

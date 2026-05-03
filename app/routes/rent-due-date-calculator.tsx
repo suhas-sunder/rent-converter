@@ -1,18 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Route } from "./+types/rent-due-date-calculator";
 import Assumptions from "~/client/components/layout/Assumptions";
-import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/rent-due-date-calculator/HowItWorks";
 import ToolFit from "~/client/components/rent-due-date-calculator/ToolFit";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Free Rent Due Date Calculator";
+  const title = "Rent Due Date Calculator | Next Rent Payment Date";
   const description =
-    "Calculate your next rent due date and payment schedule. See monthly, weekly, biweekly, and 28-day rent dates, monthly totals, and export options.";
+    "Calculate upcoming rent due dates and payment totals. Build monthly, weekly, biweekly, or 28-day rent schedules and print the result.";
 
-  const ogTitle = "Free Rent Due Date Calculator";
-  const ogDescription =
-    "Find your next rent due date and view payment schedules, monthly totals, and cumulative rent paid.";
+  const ogTitle = "Rent Due Date Calculator | Next Rent Payment Date";
+  const ogDescription = "Calculate upcoming rent due dates and payment totals. Build monthly, weekly, biweekly, or 28-day rent schedules and print the result.";
 
   const canonical = "https://www.rentconverter.com/rent-due-date-calculator";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
@@ -171,16 +169,6 @@ function safeParseInt(value: string, fallback: number) {
   return n;
 }
 
-const ALLOWED_DISPLAY_DECIMALS = new Set<number>([0, 2, 4, 6]);
-
-function parseDisplayDecimals(raw: string | null): number {
-  if (!raw) return 2;
-  const n = Number(raw);
-  if (!Number.isFinite(n)) return 2;
-  const t = Math.trunc(n);
-  return ALLOWED_DISPLAY_DECIMALS.has(t) ? t : 2;
-}
-
 /** Decimal-safe fixed point (up to 12 decimals). */
 const MAX_DECIMALS = 12n;
 const SCALE = 10n ** MAX_DECIMALS;
@@ -262,35 +250,15 @@ function scaledToDecimalStrings(
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
-  roundDisplay: boolean,
-  displayDecimals: number,
 ): string {
-  let digits = 12;
-
-  if (roundDisplay) {
-    digits = Math.max(0, Math.min(12, displayDecimals));
-  } else {
-    // Show up to 12 decimals but trim trailing zeros for display.
-    const a = absBigInt(scaled);
-    const fracPart = a % SCALE;
-    if (fracPart === 0n) {
-      digits = 0;
-    } else {
-      const fracFull = fracPart.toString().padStart(12, "0");
-      const trimmed = fracFull.replace(/0+$/g, "");
-      digits = Math.min(12, Math.max(0, trimmed.length));
-    }
-  }
-
-  const scaledForDisplay = roundDisplay
-    ? roundScaledToDecimals(scaled, digits)
-    : scaled;
+  const digits = 2;
+  const scaledForDisplay = roundScaledToDecimals(scaled, digits);
 
   const { group, decimal } = getNumberSeparators();
   const { negative, intStr, fracStr } = scaledToDecimalStrings(
     scaledForDisplay,
     digits,
-    !roundDisplay, // trim only when not rounding to fixed digits
+    false,
   );
 
   const groupedInt = groupInt(intStr, group);
@@ -302,34 +270,12 @@ function formatCurrencyFromScaled(
     maximumFractionDigits: digits,
   });
 
-  // Build by parts so we keep locale currency placement and symbols without using floats for the value.
-  const parts = fmt.formatToParts(-1);
-  let out = "";
-  for (const p of parts) {
-    if (p.type === "minusSign") {
-      if (negative) out += p.value;
-      continue;
-    }
-    if (p.type === "integer") {
-      out += groupedInt;
-      continue;
-    }
-    if (p.type === "group") {
-      // We already grouped ourselves.
-      continue;
-    }
-    if (p.type === "decimal") {
-      if (digits > 0 && fracStr.length > 0) out += decimal;
-      continue;
-    }
-    if (p.type === "fraction") {
-      if (digits > 0 && fracStr.length > 0) out += fracStr;
-      continue;
-    }
-    out += p.value;
-  }
+  const parts = fmt.formatToParts(0);
+  const currencyPart = parts.find((p) => p.type === "currency");
+  const symbol = currencyPart?.value ?? "";
+  const minus = negative ? "-" : "";
 
-  return out || "-";
+  return minus + symbol + groupedInt + (digits > 0 ? decimal + fracStr.padEnd(digits, "0") : "");
 }
 
 function formatGroupedPreviewFromNormalized(normalized: string): string {
@@ -673,22 +619,6 @@ export default function RentDueDateCalculator() {
     return isCurrency(saved) ? saved : "USD";
   });
 
-  // Display-only rounding
-  const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
-    if (typeof window === "undefined") return true;
-    return safeParseBoolean(
-      window.localStorage.getItem("rdd2_round_display"),
-      true,
-    );
-  });
-
-  const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
-    if (typeof window === "undefined") return 2;
-    return parseDisplayDecimals(
-      window.localStorage.getItem("rdd2_display_decimals"),
-    );
-  });
-
   const [asOfDate, setAsOfDate] = useState<string>(() => {
     const d = new Date();
     if (typeof window === "undefined") return toISODateInputValue(d);
@@ -732,14 +662,6 @@ export default function RentDueDateCalculator() {
       window.localStorage.setItem("rdd2_cycle", cycle);
       window.localStorage.setItem("rdd2_amount", amount);
       window.localStorage.setItem("rdd2_currency", currency);
-      window.localStorage.setItem(
-        "rdd2_round_display",
-        JSON.stringify(roundDisplay),
-      );
-      window.localStorage.setItem(
-        "rdd2_display_decimals",
-        String(displayDecimals),
-      );
       window.localStorage.setItem("rdd2_asOf", asOfDate);
       window.localStorage.setItem("rdd2_horizonMode", horizonMode);
       window.localStorage.setItem("rdd2_yearsAhead", yearsAhead);
@@ -753,8 +675,6 @@ export default function RentDueDateCalculator() {
     cycle,
     amount,
     currency,
-    roundDisplay,
-    displayDecimals,
     asOfDate,
     horizonMode,
     yearsAhead,
@@ -812,7 +732,7 @@ export default function RentDueDateCalculator() {
   }, [cycle, parsedAsOf, computedEnd, parsedAnchor, dueDay]);
 
   const fmtMoney = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, roundDisplay, displayDecimals);
+    formatCurrencyFromScaled(scaled, currency);
 
   const computed = useMemo(() => {
     const errors: string[] = [];
@@ -999,11 +919,12 @@ export default function RentDueDateCalculator() {
         <div className="rounded-2xl pb-6 bg-white sm:shadow-sm sm:border border-slate-200 sm:px-8">
           <div className="pt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <h1 className="text-center mb-1 sm:mb-0 sm:text-left text-2xl sm:text-3xl capitalize font-bold text-sky-800 tracking-tight">
-              Rent Due Dates & Payment Totals
+              Rent Due Date Calculator
             </h1>
 
             <div
               id="export-controls"
+              data-nosnippet
               className="hidden sm:flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
             >
               <div className="flex flex-wrap gap-2">
@@ -1022,8 +943,9 @@ export default function RentDueDateCalculator() {
           </div>
 
           <p className="hidden md:flex w-full py-2 text-base text-slate-600">
-            Generate a rent payment schedule with due dates and totals. See
-            upcoming payments and period totals instantly.
+            Calculate upcoming rent due dates for monthly, weekly, biweekly, or
+            28-day rent. See the next payment date, schedule totals, and monthly
+            rollups.
           </p>
 
           <div className="grid gap-x-5 gap-y-3 md:grid-cols-12">
@@ -1453,12 +1375,9 @@ export default function RentDueDateCalculator() {
                 Print / Save as PDF
               </button>
             </div>
-            <Rounding
-              roundDisplay={roundDisplay}
-              setRoundDisplay={setRoundDisplay}
-              displayDecimals={displayDecimals}
-              setDisplayDecimals={setDisplayDecimals as any}
-            />
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Calculations preserve precision internally, while displayed money values are rounded to cents.
+              </p>
           </div>
         </div>
       </section>

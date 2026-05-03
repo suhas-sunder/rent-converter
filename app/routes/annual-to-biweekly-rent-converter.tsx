@@ -9,9 +9,9 @@ const SITE_URL = "https://www.rentconverter.com";
 const PAGE_PATH = "/annual-to-biweekly-rent-converter";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Annual to Biweekly Rent Converter | RentConverter.com";
+  const title = "Annual to Biweekly Rent Converter | 14-Day Rent Amount";
   const description =
-    "Convert annual rent to biweekly rent using a 14-day equivalent. See the annual to biweekly rent formula, monthly comparison, 4-week comparison, and printable breakdown.";
+    "Convert annual rent into a biweekly 14-day amount. See monthly, weekly, 4-week, and annual comparisons with printable cents-rounded results.";
 
   const url = `${SITE_URL}${PAGE_PATH}`;
 
@@ -242,34 +242,15 @@ function scaledToDecimalStrings(
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
-  roundDisplay: boolean,
-  displayDecimals: number,
 ): string {
-  let digits = 12;
-
-  if (roundDisplay) {
-    digits = Math.max(0, Math.min(12, displayDecimals));
-  } else {
-    const a = absBigInt(scaled);
-    const fracPart = a % SCALE;
-    if (fracPart === 0n) {
-      digits = 0;
-    } else {
-      const fracFull = fracPart.toString().padStart(12, "0");
-      const trimmed = fracFull.replace(/0+$/g, "");
-      digits = Math.min(12, Math.max(0, trimmed.length));
-    }
-  }
-
-  const scaledForDisplay = roundDisplay
-    ? roundScaledToDecimals(scaled, digits)
-    : scaled;
+  const digits = 2;
+  const scaledForDisplay = roundScaledToDecimals(scaled, digits);
 
   const { group, decimal } = getNumberSeparators();
   const { negative, intStr, fracStr } = scaledToDecimalStrings(
     scaledForDisplay,
     digits,
-    !roundDisplay,
+    false,
   );
 
   const groupedInt = groupInt(intStr, group);
@@ -281,37 +262,17 @@ function formatCurrencyFromScaled(
     maximumFractionDigits: digits,
   });
 
-  const parts = fmt.formatToParts(-1);
-  let out = "";
-  for (const p of parts) {
-    if (p.type === "minusSign") {
-      if (negative) out += p.value;
-      continue;
-    }
-    if (p.type === "integer") {
-      out += groupedInt;
-      continue;
-    }
-    if (p.type === "group") {
-      continue;
-    }
-    if (p.type === "decimal") {
-      if (digits > 0 && fracStr.length > 0) out += decimal;
-      continue;
-    }
-    if (p.type === "fraction") {
-      if (digits > 0 && fracStr.length > 0) out += fracStr;
-      continue;
-    }
-    out += p.value;
-  }
+  const parts = fmt.formatToParts(0);
+  const currencyPart = parts.find((p) => p.type === "currency");
+  const symbol = currencyPart?.value ?? "";
+  const minus = negative ? "-" : "";
 
-  return out || "-";
+  return minus + symbol + groupedInt + (digits > 0 ? decimal + fracStr.padEnd(digits, "0") : "");
 }
 
-function formatPercent(n: number, displayDecimals: number): string {
+function formatPercent(n: number): string {
   if (!Number.isFinite(n)) return "-";
-  return `${(n * 100).toFixed(Math.max(0, Math.min(6, displayDecimals)))}%`;
+  return (n * 100).toFixed(2) + "%";
 }
 
 function parseMoneyInputToScaled(raw: string): ParsedAmount {
@@ -479,15 +440,6 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   }
 }
 
-function validateDisplayDecimals(raw: string | null): 0 | 2 | 4 | 6 {
-  if (raw === null) return 2;
-  const n = Number(raw);
-  if (!Number.isFinite(n)) return 2;
-  const t = Math.trunc(n);
-  if (t === 0 || t === 2 || t === 4 || t === 6) return t;
-  return 2;
-}
-
 function groupDigitsFromNormalized(normalized: string): string {
   const s = String(normalized ?? "").trim();
   if (!s) return "";
@@ -516,19 +468,6 @@ export default function AnnualToBiweeklyRent() {
     return saved && isCurrency(saved) ? saved : "USD";
   });
 
-  const [displayDecimals, setDisplayDecimals] = useState<0 | 2 | 4 | 6>(() => {
-    if (typeof window === "undefined") return 2;
-    return validateDisplayDecimals(
-      window.localStorage.getItem("rc_atbw_display_decimals"),
-    );
-  });
-
-  const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
-    if (typeof window === "undefined") return true;
-    const saved = window.localStorage.getItem("rc_atbw_round_display");
-    return safeParseBoolean(saved, true);
-  });
-
   const copyTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -536,18 +475,10 @@ export default function AnnualToBiweeklyRent() {
     try {
       window.localStorage.setItem("rc_atbw_amount", amount);
       window.localStorage.setItem("rc_atbw_currency", currency);
-      window.localStorage.setItem(
-        "rc_atbw_display_decimals",
-        String(displayDecimals),
-      );
-      window.localStorage.setItem(
-        "rc_atbw_round_display",
-        JSON.stringify(roundDisplay),
-      );
     } catch {
       // ignore storage failures
     }
-  }, [amount, currency, displayDecimals, roundDisplay]);
+  }, [amount, currency]);
 
   useEffect(() => {
     return () => {
@@ -560,14 +491,12 @@ export default function AnnualToBiweeklyRent() {
   const annualScaled = parsed.ok ? (parsed.scaled as bigint) : 0n;
 
   const fmt = (scaled: bigint) =>
-    roundDisplay
-      ? formatCurrencyFromScaled(scaled, currency, true, displayDecimals)
-      : formatCurrencyFromScaled(scaled, currency, false, displayDecimals);
+    formatCurrencyFromScaled(scaled, currency);
 
   const interpretationLine = useMemo(() => {
     if (!parsed.ok) return null;
     return fmt(annualScaled);
-  }, [parsed.ok, annualScaled, currency, roundDisplay, displayDecimals]);
+  }, [parsed.ok, annualScaled, currency]);
 
   const amountPreview = useMemo(() => {
     if (!parsed.ok) return null;
@@ -911,38 +840,8 @@ export default function AnnualToBiweeklyRent() {
               )}
             </div>
           </div>
-
-          <div className="rc-no-print mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-slate-600">
-            <label className="inline-flex cursor-pointer items-center gap-2 font-medium text-slate-700">
-              <input
-                type="checkbox"
-                checked={roundDisplay}
-                onChange={(e) => setRoundDisplay(e.target.checked)}
-                className="h-4 w-4 cursor-pointer rounded border-slate-300 text-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
-              />
-              Round results
-            </label>
-
-            <label className="inline-flex items-center gap-2 font-medium text-slate-700">
-              <span>Decimals</span>
-              <select
-                value={displayDecimals}
-                onChange={(e) =>
-                  setDisplayDecimals(validateDisplayDecimals(e.target.value))
-                }
-                className="cursor-pointer rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-sm font-semibold text-slate-900 outline-none transition hover:border-sky-400 hover:bg-sky-50 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
-                aria-label="Display decimals"
-              >
-                <option value={0}>0</option>
-                <option value={2}>2</option>
-                <option value={4}>4</option>
-                <option value={6}>6</option>
-              </select>
-            </label>
-
-            <span className="text-xs text-slate-500">
-              Display only. Calculations keep fixed-point precision.
-            </span>
+          <div className="rc-no-print mt-3 rounded-xl border border-slate-200 bg-white/90 px-4 py-3 text-xs leading-relaxed text-slate-600 shadow-sm" data-nosnippet>
+            Calculations preserve precision internally, while displayed money values are rounded to cents.
           </div>
 
           <section className="mt-6 rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm sm:p-5">

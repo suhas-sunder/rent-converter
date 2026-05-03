@@ -4,9 +4,9 @@ import HowItWorks from "~/client/components/rent-increase-calculator/HowItWorks"
 import ToolFit from "~/client/components/rent-increase-calculator/ToolFit";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Free Rent Increase Calculator";
+  const title = "Rent Increase Calculator | New Rent and Percent Change";
   const description =
-    "Calculate new rent after a percentage or fixed increase. See the monthly, weekly, 4-week, and annual impact.";
+    "Calculate the new rent after a fixed or percentage increase. Compare the old rent, new rent, monthly change, and yearly impact.";
 
   const canonicalUrl = "https://www.rentconverter.com/rent-increase-calculator";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
@@ -259,35 +259,15 @@ function scaledToDecimalStrings(
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
-  roundDisplay: boolean,
-  displayDecimals: number,
 ): string {
-  let digits = 12;
-
-  if (roundDisplay) {
-    digits = Math.max(0, Math.min(12, displayDecimals));
-  } else {
-    // Show up to 12 decimals but trim trailing zeros for display.
-    const a = absBigInt(scaled);
-    const fracPart = a % SCALE;
-    if (fracPart === 0n) {
-      digits = 0;
-    } else {
-      const fracFull = fracPart.toString().padStart(12, "0");
-      const trimmed = fracFull.replace(/0+$/g, "");
-      digits = Math.min(12, Math.max(0, trimmed.length));
-    }
-  }
-
-  const scaledForDisplay = roundDisplay
-    ? roundScaledToDecimals(scaled, digits)
-    : scaled;
+  const digits = 2;
+  const scaledForDisplay = roundScaledToDecimals(scaled, digits);
 
   const { group, decimal } = getNumberSeparators();
   const { negative, intStr, fracStr } = scaledToDecimalStrings(
     scaledForDisplay,
     digits,
-    !roundDisplay,
+    false,
   );
 
   const groupedInt = groupInt(intStr, group);
@@ -299,51 +279,22 @@ function formatCurrencyFromScaled(
     maximumFractionDigits: digits,
   });
 
-  // Build by parts so we keep locale currency placement and symbols without using floats for the value.
-  const parts = fmt.formatToParts(-1);
-  let out = "";
-  for (const p of parts) {
-    if (p.type === "minusSign") {
-      if (negative) out += p.value;
-      continue;
-    }
-    if (p.type === "integer") {
-      out += groupedInt;
-      continue;
-    }
-    if (p.type === "group") {
-      // We already grouped ourselves.
-      continue;
-    }
-    if (p.type === "decimal") {
-      if (digits > 0 && fracStr.length > 0) out += decimal;
-      continue;
-    }
-    if (p.type === "fraction") {
-      if (digits > 0 && fracStr.length > 0) out += fracStr;
-      continue;
-    }
-    out += p.value;
-  }
+  const parts = fmt.formatToParts(0);
+  const currencyPart = parts.find((p) => p.type === "currency");
+  const symbol = currencyPart?.value ?? "";
+  const minus = negative ? "-" : "";
 
-  return out || "-";
+  return minus + symbol + groupedInt + (digits > 0 ? decimal + fracStr.padEnd(digits, "0") : "");
 }
 
-function formatPercentValue(
-  value: number,
-  roundDisplay: boolean,
-  displayDecimals: number,
-): string {
+function formatPercentValue(value: number): string {
   const n = Number(value);
   if (!Number.isFinite(n)) return "-";
 
-  const allowed = new Set([0, 2, 4, 6]);
-  const digits = allowed.has(displayDecimals) ? displayDecimals : 2;
-
   return (
     new Intl.NumberFormat(undefined, {
-      minimumFractionDigits: roundDisplay ? digits : 0,
-      maximumFractionDigits: roundDisplay ? digits : 12,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
     }).format(n) + "%"
   );
 }
@@ -582,15 +533,6 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   }
 }
 
-function parseDisplayDecimalsStrict(raw: string | null): number {
-  const allowed = new Set([0, 2, 4, 6]);
-  if (raw === null) return 2;
-  const n = Number(raw);
-  if (!Number.isFinite(n)) return 2;
-  const t = Math.trunc(n);
-  return allowed.has(t) ? t : 2;
-}
-
 /**
  * Percent compounding without floats.
  * We convert the percent into "micros" (1e-6) and apply factor as a rational:
@@ -667,19 +609,6 @@ export default function RentIncreaseCalculator() {
     return isCurrency(saved) ? saved : "USD";
   });
 
-  // display-only rounding
-  const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
-    if (typeof window === "undefined") return true;
-    return safeParseBoolean(localStorage.getItem("rc_ri_round_display"), true);
-  });
-
-  const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
-    if (typeof window === "undefined") return 2;
-    return parseDisplayDecimalsStrict(
-      localStorage.getItem("rc_ri_display_decimals"),
-    );
-  });
-
   const [rentFocused, setRentFocused] = useState(false);
   const [fixedFocused, setFixedFocused] = useState(false);
 
@@ -693,8 +622,6 @@ export default function RentIncreaseCalculator() {
       localStorage.setItem("rc_ri_fixed", fixedIncrease);
       localStorage.setItem("rc_ri_n", numIncreases);
       localStorage.setItem("rc_ri_currency", currency);
-      localStorage.setItem("rc_ri_round_display", JSON.stringify(roundDisplay));
-      localStorage.setItem("rc_ri_display_decimals", String(displayDecimals));
     } catch {
       // ignore
     }
@@ -706,8 +633,6 @@ export default function RentIncreaseCalculator() {
     fixedIncrease,
     numIncreases,
     currency,
-    roundDisplay,
-    displayDecimals,
   ]);
 
   const rentParsed = useMemo(
@@ -749,10 +674,10 @@ export default function RentIncreaseCalculator() {
   }, [numIncreases]);
 
   const fmtMoney = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, roundDisplay, displayDecimals);
+    formatCurrencyFromScaled(scaled, currency);
 
   const fmtPct = (n: number) =>
-    formatPercentValue(n, roundDisplay, displayDecimals);
+    formatPercentValue(n);
 
   const rentDisplayValue = useMemo(() => {
     if (rentFocused) return rentAmount;
@@ -992,7 +917,7 @@ export default function RentIncreaseCalculator() {
     name: pageName,
     url: canonicalUrl,
     description:
-      "Calculate new rent after a percentage or fixed increase. See the monthly, weekly, 4-week, and annual impact.",
+      "Calculate the new rent after a fixed or percentage increase. Compare the old rent, new rent, monthly change, and yearly impact.",
     isPartOf: { "@type": "WebSite", url: "https://www.rentconverter.com" },
     breadcrumb: { "@id": `${canonicalUrl}#breadcrumb` },
   };
@@ -1064,6 +989,7 @@ export default function RentIncreaseCalculator() {
 
               <div
                 id="export-controls"
+                data-nosnippet
                 className="rc-no-print flex shrink-0 justify-start sm:justify-end"
               >
                 <button
@@ -1499,36 +1425,9 @@ export default function RentIncreaseCalculator() {
           <div className="mt-3 rounded-xl border border-slate-200 bg-white/90 px-4 py-3 shadow-sm rc-no-print">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-                <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-700">
-                  <input
-                    type="checkbox"
-                    checked={roundDisplay}
-                    onChange={(e) => setRoundDisplay(e.target.checked)}
-                    className="h-4 w-4 cursor-pointer rounded border-slate-300 text-sky-600 focus:ring-sky-400"
-                  />
-                  Round displayed values
-                </label>
-
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-slate-600">
-                    Displayed decimals
-                  </span>
-                  <select
-                    value={displayDecimals}
-                    onChange={(e) => {
-                      const allowed = new Set([0, 2, 4, 6]);
-                      const v = Number(e.target.value);
-                      const t = Number.isFinite(v) ? Math.trunc(v) : 2;
-                      setDisplayDecimals(allowed.has(t) ? t : 2);
-                    }}
-                    className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition hover:border-sky-300 hover:bg-sky-50 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
-                  >
-                    <option value={0}>0</option>
-                    <option value={2}>2</option>
-                    <option value={4}>4</option>
-                    <option value={6}>6</option>
-                  </select>
-                </div>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Calculations preserve precision internally, while displayed money values are rounded to cents.
+                </p>
               </div>
 
               <button
@@ -1541,8 +1440,7 @@ export default function RentIncreaseCalculator() {
             </div>
 
             <p className="mt-2 text-xs text-slate-600">
-              Calculations preserve decimals internally up to 12 places. Only
-              the display is rounded.
+              Calculations preserve precision internally, while displayed money values are rounded to cents.
             </p>
           </div>
         </div>

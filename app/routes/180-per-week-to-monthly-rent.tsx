@@ -98,20 +98,15 @@ function getNumberSeparators() {
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
-  roundDisplay: boolean,
-  displayDecimals: number,
 ): string {
-  let digits = roundDisplay ? displayDecimals : 12;
-
-  const scaledForDisplay = roundDisplay
-    ? roundScaledToDecimals(scaled, digits)
-    : scaled;
+  const digits = 2;
+  const scaledForDisplay = roundScaledToDecimals(scaled, digits);
 
   const { group, decimal } = getNumberSeparators();
   const { negative, intStr, fracStr } = scaledToDecimalStrings(
     scaledForDisplay,
     digits,
-    !roundDisplay,
+    false,
   );
 
   const groupedInt = groupInt(intStr, group);
@@ -123,30 +118,12 @@ function formatCurrencyFromScaled(
     maximumFractionDigits: digits,
   });
 
-  const parts = fmt.formatToParts(-1);
-  let out = "";
-  for (const p of parts) {
-    if (p.type === "minusSign") {
-      if (negative) out += p.value;
-      continue;
-    }
-    if (p.type === "integer") {
-      out += groupedInt;
-      continue;
-    }
-    if (p.type === "decimal") {
-      if (digits > 0 && fracStr.length > 0) out += decimal;
-      continue;
-    }
-    if (p.type === "fraction") {
-      if (digits > 0 && fracStr.length > 0) out += fracStr;
-      continue;
-    }
-    if (p.type === "group") continue;
-    out += p.value;
-  }
+  const parts = fmt.formatToParts(0);
+  const currencyPart = parts.find((p) => p.type === "currency");
+  const symbol = currencyPart?.value ?? "";
+  const minus = negative ? "-" : "";
 
-  return out || "—";
+  return minus + symbol + groupedInt + (digits > 0 ? decimal + fracStr.padEnd(digits, "0") : "");
 }
 
 function mulDivRound(a: bigint, num: bigint, den: bigint): bigint {
@@ -175,9 +152,9 @@ function fromAnnualScaled(annualScaled: bigint, to: Period): bigint {
 export const meta: Route.MetaFunction = () => {
   const url = "https://www.rentconverter.com/180-per-week-to-monthly-rent";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
-  const title = "$180 Per Week to Monthly Rent | RentConverter.com";
+  const title = "180 Per Week to Monthly Rent | True Monthly Equivalent";
   const description =
-    "Convert $180 per week to monthly rent using the standard weekly to monthly rent formula. See the true calendar-month equivalent, 4-week comparison, and currency options.";
+    "Convert $180 per week to a true monthly rent amount using a 365-day year. See the calendar-month result, 4-week comparison, and cents-rounded display.";
 
   return [
     { title },
@@ -219,8 +196,6 @@ export const meta: Route.MetaFunction = () => {
 
 export default function OneEightyPerWeekToMonthlyRent() {
   const [currency, setCurrency] = useState<Currency>("USD");
-  const [roundDisplay] = useState<boolean>(true);
-  const [displayDecimals] = useState<number>(2);
 
   const weeklyScaled = 180n * SCALE;
 
@@ -232,12 +207,10 @@ export default function OneEightyPerWeekToMonthlyRent() {
   const fourWeekScaled = weeklyScaled * 4n;
 
   const money = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, roundDisplay, displayDecimals);
+    formatCurrencyFromScaled(scaled, currency);
 
   const fmt = (scaled: bigint) =>
-    roundDisplay
-      ? formatCurrencyFromScaled(scaled, currency, true, displayDecimals)
-      : formatCurrencyFromScaled(scaled, currency, false, displayDecimals);
+    formatCurrencyFromScaled(scaled, currency);
 
   const pageUrl = "https://www.rentconverter.com/180-per-week-to-monthly-rent";
 
@@ -334,8 +307,7 @@ export default function OneEightyPerWeekToMonthlyRent() {
               </div>
 
               <div className="mt-2 text-sm text-slate-600">
-                Rounded to {displayDecimals} decimal places for display. The
-                calculation uses annual equivalence based on a 365-day year.
+                Calculations preserve precision internally, while displayed money values are rounded to cents. The calculation uses annual equivalence based on a 365-day year.
               </div>
 
               <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">

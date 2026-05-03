@@ -6,30 +6,30 @@ const PAGE_PATH = "/about";
 const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
 
 export const meta: Route.MetaFunction = () => [
-  { title: "About RentConverter.com" },
+  { title: "About RentConverter.com | Rent Math and Assumptions" },
   {
     name: "description",
     content:
-      "Learn what RentConverter.com does, how the rent conversion math works, and what assumptions the calculators use.",
+      "Learn how RentConverter.com handles weekly, monthly, 4-week, annual, and affordability rent math with clear assumptions and browser-based calculators.",
   },
 
   { property: "og:type", content: "website" },
-  { property: "og:title", content: "About RentConverter.com" },
+  { property: "og:title", content: "About RentConverter.com | Rent Math and Assumptions" },
   {
     property: "og:description",
     content:
-      "Learn what RentConverter.com does, how the rent conversion math works, and what assumptions the calculators use.",
+      "Learn how RentConverter.com handles weekly, monthly, 4-week, annual, and affordability rent math with clear assumptions and browser-based calculators.",
   },
   { property: "og:url", content: PAGE_URL },
   { property: "og:site_name", content: "RentConverter.com" },
   { property: "og:image", content: `${SITE_URL}/og-image.jpg` },
 
   { name: "twitter:card", content: "summary_large_image" },
-  { name: "twitter:title", content: "About RentConverter.com" },
+  { name: "twitter:title", content: "About RentConverter.com | Rent Math and Assumptions" },
   {
     name: "twitter:description",
     content:
-      "Learn what RentConverter.com does, how the rent conversion math works, and what assumptions the calculators use.",
+      "Learn how RentConverter.com handles weekly, monthly, 4-week, annual, and affordability rent math with clear assumptions and browser-based calculators.",
   },
   { name: "twitter:image", content: `${SITE_URL}/og-image.jpg` },
 
@@ -48,8 +48,8 @@ export default function About() {
         body: "The tools use consistent day counts so weekly, biweekly, 4-week, monthly, hourly, and annual amounts can be compared.",
       },
       {
-        title: "Display-only rounding",
-        body: "Calculations preserve decimals. Rounding only changes what is shown on screen.",
+        title: "Cent-rounded display",
+        body: "Calculations preserve precision internally, while displayed money values are rounded to cents.",
       },
     ],
     [],
@@ -83,11 +83,11 @@ export default function About() {
       },
       {
         q: "Do the calculators round the math?",
-        a: "Rounding is display-only. The calculators keep decimal precision through the calculation, then round only the values shown on screen when rounding is enabled.",
+        a: "Calculations preserve precision through the calculation, then display money values rounded to cents.",
       },
       {
         q: "Do you store my inputs?",
-        a: "No account is required. Your browser may store last-used settings locally, such as currency and rounding preferences.",
+        a: "No account is required. Your browser may store last-used settings locally, such as currency and calculator inputs.",
       },
       {
         q: "Is this financial or legal advice?",
@@ -124,9 +124,9 @@ export default function About() {
     () => ({
       "@context": "https://schema.org",
       "@type": "AboutPage",
-      name: "About RentConverter.com",
+      name: "About RentConverter.com | Rent Math and Assumptions",
       description:
-        "Learn what RentConverter.com does, how the rent conversion math works, and what assumptions the calculators use.",
+        "Learn how RentConverter.com handles weekly, monthly, 4-week, annual, and affordability rent math with clear assumptions and browser-based calculators.",
       url: PAGE_URL,
       isPartOf: {
         "@type": "WebSite",
@@ -200,7 +200,7 @@ export default function About() {
             </div>
 
             <h1 className="text-2xl font-bold tracking-tight text-sky-900 sm:text-3xl">
-              About RentConverter.com
+              About RentConverter.com | Rent Math and Assumptions
             </h1>
 
             <p className="max-w-3xl text-base leading-relaxed text-slate-600">
@@ -415,7 +415,7 @@ export default function About() {
 
                 <div className="mt-4 rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
                   <div className="text-xs font-medium text-slate-600">
-                    Precision and rounding
+                    Precision and display
                   </div>
                   <p className="mt-1 text-sm leading-relaxed text-slate-700">
                     Calculations preserve decimals end-to-end. If rounding is
@@ -485,7 +485,7 @@ export default function About() {
                 <p className="mt-3 leading-relaxed text-slate-700">
                   RentConverter does not require an account. Some settings may
                   be stored locally in your browser for convenience, such as
-                  currency and rounding settings. For details, see the{" "}
+                  currency and calculator settings. For details, see the{" "}
                   <a
                     href="/privacy-policy"
                     className="cursor-pointer rounded font-semibold text-sky-800 underline underline-offset-2 transition hover:text-sky-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"

@@ -2,7 +2,6 @@ import { useMemo, useEffect, useRef, useState } from "react";
 import type { Route } from "./+types/biweekly-to-weekly-rent-converter";
 import Assumptions from "~/client/components/layout/Assumptions";
 import FourWeekVsMonthly from "~/client/components/layout/FourWeekVsMonthly";
-import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/biweekly-to-weekly-rent-converter/HowItWorks";
 import ToolFit from "~/client/components/biweekly-to-weekly-rent-converter/ToolFit";
 
@@ -11,9 +10,9 @@ const ROUTE_PATH = `/${ROUTE_SLUG}` as const;
 const PAGE_URL = `https://www.rentconverter.com${ROUTE_PATH}` as const;
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Biweekly to Weekly Rent Converter | Rent Calculator";
+  const title = "Biweekly to Weekly Rent Converter | Two-Week Rent";
   const description =
-    "Convert biweekly rent to weekly rent. See the weekly amount, related breakdowns, and export options.";
+    "Convert rent paid every two weeks into a weekly amount. See monthly, annual, and 4-week comparisons with clear 14-day assumptions.";
 
   return [
     { title },
@@ -223,41 +222,20 @@ function scaledToDecimalStrings(
 
 /**
  * IMPORTANT:
- * - If displayDecimals is N, we force exactly N decimals so values like 900.50 show properly.
  * - This is display-only; internal math stays fixed-point with up to 12 decimals.
  */
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
-  roundDisplay: boolean,
-  displayDecimals: number,
 ): string {
-  let digits = 12;
-
-  if (roundDisplay) {
-    digits = Math.max(0, Math.min(12, displayDecimals));
-  } else {
-    // Show up to 12 decimals but trim trailing zeros for display.
-    const a = absBigInt(scaled);
-    const fracPart = a % SCALE;
-    if (fracPart === 0n) {
-      digits = 0;
-    } else {
-      const fracFull = fracPart.toString().padStart(12, "0");
-      const trimmed = fracFull.replace(/0+$/g, "");
-      digits = Math.min(12, Math.max(0, trimmed.length));
-    }
-  }
-
-  const scaledForDisplay = roundDisplay
-    ? roundScaledToDecimals(scaled, digits)
-    : scaled;
+  const digits = 2;
+  const scaledForDisplay = roundScaledToDecimals(scaled, digits);
 
   const { group, decimal } = getNumberSeparators();
   const { negative, intStr, fracStr } = scaledToDecimalStrings(
     scaledForDisplay,
     digits,
-    !roundDisplay, // trim only when not rounding to fixed digits
+    false,
   );
 
   const groupedInt = groupInt(intStr, group);
@@ -269,34 +247,12 @@ function formatCurrencyFromScaled(
     maximumFractionDigits: digits,
   });
 
-  // Build by parts so we keep locale currency placement and symbols without using floats for the value.
-  const parts = fmt.formatToParts(-1);
-  let out = "";
-  for (const p of parts) {
-    if (p.type === "minusSign") {
-      if (negative) out += p.value;
-      continue;
-    }
-    if (p.type === "integer") {
-      out += groupedInt;
-      continue;
-    }
-    if (p.type === "group") {
-      // We already grouped ourselves.
-      continue;
-    }
-    if (p.type === "decimal") {
-      if (digits > 0 && fracStr.length > 0) out += decimal;
-      continue;
-    }
-    if (p.type === "fraction") {
-      if (digits > 0 && fracStr.length > 0) out += fracStr;
-      continue;
-    }
-    out += p.value;
-  }
+  const parts = fmt.formatToParts(0);
+  const currencyPart = parts.find((p) => p.type === "currency");
+  const symbol = currencyPart?.value ?? "";
+  const minus = negative ? "-" : "";
 
-  return out || "-";
+  return minus + symbol + groupedInt + (digits > 0 ? decimal + fracStr.padEnd(digits, "0") : "");
 }
 
 function formatCurrencyFromScaledFlexible(
@@ -313,10 +269,9 @@ function formatCurrencyFromScaledFlexible(
   }).format(n);
 }
 
-function formatPercent(n: number, displayDecimals: number): string {
+function formatPercent(n: number): string {
   if (!Number.isFinite(n)) return "-";
-  const d = Math.max(0, Math.min(6, Math.trunc(displayDecimals)));
-  return `${(n * 100).toFixed(d)}%`;
+  return (n * 100).toFixed(2) + "%";
 }
 
 /**
@@ -507,14 +462,6 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   }
 }
 
-function readDisplayDecimalsStrict(saved: string | null): number {
-  const allowed = new Set<number>([0, 2, 4, 6]);
-  const n = saved === null ? 2 : Number(saved);
-  if (!Number.isFinite(n)) return 2;
-  const t = Math.trunc(n);
-  return allowed.has(t) ? t : 2;
-}
-
 function formatPreviewFromNormalizedEnUS(normalized: string): string {
   const s = (normalized ?? "").trim();
   if (!s) return s;
@@ -567,18 +514,6 @@ export default function BiweeklyToWeeklyRent() {
     return saved && isCurrency(saved) ? saved : "USD";
   });
 
-  const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
-    if (typeof window === "undefined") return 2;
-    const saved = window.localStorage.getItem("rc_btw_display_decimals");
-    return readDisplayDecimalsStrict(saved);
-  });
-
-  const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
-    if (typeof window === "undefined") return true;
-    const saved = window.localStorage.getItem("rc_btw_round_display");
-    return safeParseBoolean(saved, true);
-  });
-
   const copyTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -586,18 +521,10 @@ export default function BiweeklyToWeeklyRent() {
     try {
       window.localStorage.setItem("rc_btw_amount", amount);
       window.localStorage.setItem("rc_btw_currency", currency);
-      window.localStorage.setItem(
-        "rc_btw_display_decimals",
-        String(displayDecimals),
-      );
-      window.localStorage.setItem(
-        "rc_btw_round_display",
-        JSON.stringify(roundDisplay),
-      );
     } catch {
       // ignore
     }
-  }, [amount, currency, displayDecimals, roundDisplay]);
+  }, [amount, currency]);
 
   useEffect(() => {
     return () => {
@@ -677,16 +604,7 @@ export default function BiweeklyToWeeklyRent() {
   }, [parsedBiweekly.ok, biweeklyScaled]);
 
   const fmt = (scaled: bigint) => {
-    // If rounding is enabled, force exactly displayDecimals digits so decimals show properly.
-    // If disabled, show up to 12 decimals without forcing trailing zeros.
-    return roundDisplay
-      ? formatCurrencyFromScaled(
-          scaled,
-          currency,
-          roundDisplay,
-          displayDecimals,
-        )
-      : formatCurrencyFromScaledFlexible(scaled, currency);
+    return formatCurrencyFromScaled(scaled, currency);
   };
 
   const weeklyHeadlineScaled = breakdownScaled?.weekly ?? 0n;
@@ -698,8 +616,6 @@ export default function BiweeklyToWeeklyRent() {
     parsedBiweekly.ok,
     biweeklyScaled,
     currency,
-    displayDecimals,
-    roundDisplay,
   ]);
 
   const handlePrint = () => {
@@ -715,10 +631,7 @@ export default function BiweeklyToWeeklyRent() {
       ["Biweekly to Weekly Rent Converter"],
       ["Input biweekly rent", biweeklyInterpreted ?? ""],
       ["Currency", currency],
-      [
-        "Display rounding",
-        roundDisplay ? `On (${displayDecimals} decimals)` : "Off",
-      ],
+      ["Display note", "Money values rounded to cents"],
       [],
       ["Period", "Amount"],
       ["Hourly", fmt(breakdownScaled.hourly)],
@@ -733,7 +646,7 @@ export default function BiweeklyToWeeklyRent() {
       ["Monthly minus 4-week amount", fmt(breakdownScaled.monthlyMinus4w)],
       [
         "Monthly minus 4-week percentage",
-        formatPercent(breakdownScaled.monthlyMinus4wPct, 2),
+        formatPercent(breakdownScaled.monthlyMinus4wPct),
       ],
       [
         "Annual from 52 weekly payments",
@@ -753,11 +666,11 @@ export default function BiweeklyToWeeklyRent() {
       ],
       [
         "365-day annual vs 52 weekly percentage",
-        formatPercent(breakdownScaled.pctVs52, 2),
+        formatPercent(breakdownScaled.pctVs52),
       ],
       [
         "365-day annual vs 26 biweekly percentage",
-        formatPercent(breakdownScaled.pctVs26, 2),
+        formatPercent(breakdownScaled.pctVs26),
       ],
     ];
 
@@ -889,6 +802,7 @@ export default function BiweeklyToWeeklyRent() {
 
               <div
                 id="export-controls"
+                data-nosnippet
                 className="rc-no-print flex flex-wrap gap-2 sm:justify-end"
               >
                 <button
@@ -1065,14 +979,11 @@ export default function BiweeklyToWeeklyRent() {
 
             <div className="rounded-xl border border-slate-200 bg-white/90 p-4 shadow-sm rc-no-print">
               <div className="mb-3 text-sm font-semibold text-slate-900">
-                Display rounding
+                Precision note
               </div>
-              <Rounding
-                roundDisplay={roundDisplay}
-                setRoundDisplay={setRoundDisplay}
-                displayDecimals={displayDecimals}
-                setDisplayDecimals={setDisplayDecimals as any}
-              />
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Calculations preserve precision internally, while displayed money values are rounded to cents.
+              </p>
             </div>
           </div>
         </div>

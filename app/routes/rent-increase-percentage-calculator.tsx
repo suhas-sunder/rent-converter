@@ -1,14 +1,13 @@
 import { useMemo, useEffect, useRef, useState } from "react";
 import type { Route } from "./+types/rent-increase-percentage-calculator";
 import Assumptions from "~/client/components/layout/Assumptions";
-import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/rent-increase-percentage-calculator/HowItWorks";
 import ToolFit from "~/client/components/rent-increase-percentage-calculator/ToolFit";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Free Rent Increase Percentage Calculator";
+  const title = "Rent Increase Percentage Calculator | Before and After Rent";
   const description =
-    "Calculate the percentage increase between old rent and new rent. See the rent change, annual impact, and common period breakdowns.";
+    "Calculate the percentage increase between old rent and new rent. See the rent change, annual impact, and common billing-period breakdowns.";
 
   const canonicalUrl =
     "https://www.rentconverter.com/rent-increase-percentage-calculator";
@@ -258,35 +257,15 @@ function scaledToDecimalStrings(
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
-  roundDisplay: boolean,
-  displayDecimals: number,
 ): string {
-  let digits = 12;
-
-  if (roundDisplay) {
-    digits = Math.max(0, Math.min(12, displayDecimals));
-  } else {
-    // Show up to 12 decimals but trim trailing zeros for display.
-    const a = absBigInt(scaled);
-    const fracPart = a % SCALE;
-    if (fracPart === 0n) {
-      digits = 0;
-    } else {
-      const fracFull = fracPart.toString().padStart(12, "0");
-      const trimmed = fracFull.replace(/0+$/g, "");
-      digits = Math.min(12, Math.max(0, trimmed.length));
-    }
-  }
-
-  const scaledForDisplay = roundDisplay
-    ? roundScaledToDecimals(scaled, digits)
-    : scaled;
+  const digits = 2;
+  const scaledForDisplay = roundScaledToDecimals(scaled, digits);
 
   const { group, decimal } = getNumberSeparators();
   const { negative, intStr, fracStr } = scaledToDecimalStrings(
     scaledForDisplay,
     digits,
-    !roundDisplay, // trim only when not rounding to fixed digits
+    false,
   );
 
   const groupedInt = groupInt(intStr, group);
@@ -298,34 +277,12 @@ function formatCurrencyFromScaled(
     maximumFractionDigits: digits,
   });
 
-  // Build by parts so we keep locale currency placement and symbols without using floats for the value.
-  const parts = fmt.formatToParts(-1);
-  let out = "";
-  for (const p of parts) {
-    if (p.type === "minusSign") {
-      if (negative) out += p.value;
-      continue;
-    }
-    if (p.type === "integer") {
-      out += groupedInt;
-      continue;
-    }
-    if (p.type === "group") {
-      // We already grouped ourselves.
-      continue;
-    }
-    if (p.type === "decimal") {
-      if (digits > 0 && fracStr.length > 0) out += decimal;
-      continue;
-    }
-    if (p.type === "fraction") {
-      if (digits > 0 && fracStr.length > 0) out += fracStr;
-      continue;
-    }
-    out += p.value;
-  }
+  const parts = fmt.formatToParts(0);
+  const currencyPart = parts.find((p) => p.type === "currency");
+  const symbol = currencyPart?.value ?? "";
+  const minus = negative ? "-" : "";
 
-  return out || "-";
+  return minus + symbol + groupedInt + (digits > 0 ? decimal + fracStr.padEnd(digits, "0") : "");
 }
 
 function formatPercentFromScaled(
@@ -538,17 +495,6 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   }
 }
 
-function safeParseDisplayDecimals(
-  raw: string | null,
-  fallback: number,
-): number {
-  if (raw === null) return fallback;
-  const n = Number(raw);
-  if (!Number.isFinite(n)) return fallback;
-  const t = Math.trunc(n);
-  return t === 0 || t === 2 || t === 4 || t === 6 ? t : fallback;
-}
-
 export default function RentIncreasePercentage() {
   const pageName = "Rent Increase Percentage Calculator";
   const canonicalUrl =
@@ -574,19 +520,6 @@ export default function RentIncreasePercentage() {
     if (typeof window === "undefined") return "USD";
     const saved = localStorage.getItem("rc_rip_currency") ?? "USD";
     return isCurrency(saved) ? saved : "USD";
-  });
-
-  const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
-    if (typeof window === "undefined") return true;
-    return safeParseBoolean(localStorage.getItem("rc_rip_round_display"), true);
-  });
-
-  const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
-    if (typeof window === "undefined") return 2;
-    return safeParseDisplayDecimals(
-      localStorage.getItem("rc_rip_display_decimals"),
-      2,
-    );
   });
 
   const [oldFocused, setOldFocused] = useState(false);
@@ -616,15 +549,10 @@ export default function RentIncreasePercentage() {
       localStorage.setItem("rc_rip_new", newRent);
       localStorage.setItem("rc_rip_period", period);
       localStorage.setItem("rc_rip_currency", currency);
-      localStorage.setItem(
-        "rc_rip_round_display",
-        JSON.stringify(roundDisplay),
-      );
-      localStorage.setItem("rc_rip_display_decimals", String(displayDecimals));
     } catch {
       // ignore
     }
-  }, [oldRent, newRent, period, currency, roundDisplay, displayDecimals]);
+  }, [oldRent, newRent, period, currency]);
 
   useEffect(() => {
     if (oldFocused) return;
@@ -649,7 +577,7 @@ export default function RentIncreasePercentage() {
   ]);
 
   const fmtMoney = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, roundDisplay, displayDecimals);
+    formatCurrencyFromScaled(scaled, currency);
 
   const computed = useMemo(() => {
     const errors: string[] = [];
@@ -797,7 +725,7 @@ export default function RentIncreasePercentage() {
     "@type": "WebPage",
     name: pageName,
     description:
-      "Calculate the percentage increase between old rent and new rent. See the rent change, annual impact, and common period breakdowns.",
+      "Calculate the percentage increase between old rent and new rent. See the rent change, annual impact, and common billing-period breakdowns.",
     url: canonicalUrl,
     isPartOf: { "@type": "WebSite", url: "https://www.rentconverter.com" },
     breadcrumb: { "@id": `${canonicalUrl}#breadcrumb` },
@@ -876,6 +804,7 @@ export default function RentIncreasePercentage() {
 
               <div
                 id="export-controls"
+                data-nosnippet
                 className="rc-no-print flex shrink-0 justify-start sm:justify-end"
               >
                 <button
@@ -1318,12 +1247,9 @@ export default function RentIncreasePercentage() {
 
           <div className="mt-3 rounded-xl border border-slate-200 bg-white/90 px-4 py-3 shadow-sm rc-no-print">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <Rounding
-                roundDisplay={roundDisplay}
-                setRoundDisplay={setRoundDisplay}
-                displayDecimals={displayDecimals}
-                setDisplayDecimals={setDisplayDecimals as any}
-              />
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Calculations preserve precision internally, while displayed money values are rounded to cents.
+              </p>
 
               <button
                 type="button"

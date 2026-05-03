@@ -4,9 +4,9 @@ import type { Route } from "./+types/terms-of-service";
 export const meta: Route.MetaFunction = () => {
   const canonical = "https://www.rentconverter.com/terms-of-service";
 
-  const title = "Terms of Service | RentConverter";
+  const title = "Terms of Service | RentConverter.com";
   const description =
-    "Read the RentConverter Terms of Service. Learn about your rights and responsibilities when using RentConverter.com.";
+    "Read the RentConverter.com Terms of Service, including acceptable use, calculator limitations, and site responsibilities.";
 
   const ogImage = "https://www.rentconverter.com/og/rentconverter-terms.jpg";
 

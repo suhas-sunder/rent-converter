@@ -6,17 +6,17 @@ const PAGE_PATH = "/contact";
 const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
 
 export const meta: Route.MetaFunction = () => [
-  { title: "Contact | RentConverter.com" },
+  { title: "Contact RentConverter.com | Feedback and Corrections" },
   {
     name: "description",
     content:
-      "Contact RentConverter.com with feedback, corrections, or questions about rent conversion tools and assumptions.",
+      "Contact RentConverter.com with calculator feedback, corrections, or questions about rent conversion assumptions and rental math pages.",
   },
   { name: "robots", content: "index,follow" },
   { tagName: "link", rel: "canonical", href: PAGE_URL },
 
   { property: "og:type", content: "website" },
-  { property: "og:title", content: "Contact | RentConverter.com" },
+  { property: "og:title", content: "Contact RentConverter.com | Feedback and Corrections" },
   {
     property: "og:description",
     content:
@@ -27,7 +27,7 @@ export const meta: Route.MetaFunction = () => [
   { property: "og:image", content: `${SITE_URL}/og-image.jpg` },
 
   { name: "twitter:card", content: "summary_large_image" },
-  { name: "twitter:title", content: "Contact | RentConverter.com" },
+  { name: "twitter:title", content: "Contact RentConverter.com | Feedback and Corrections" },
   {
     name: "twitter:description",
     content:
@@ -72,7 +72,7 @@ export default function Contact() {
     name: pageName,
     url: canonicalUrl,
     description:
-      "Contact RentConverter.com with feedback, corrections, or questions about rent conversion tools and assumptions.",
+      "Contact RentConverter.com with calculator feedback, corrections, or questions about rent conversion assumptions and rental math pages.",
     isPartOf: {
       "@type": "WebSite",
       name: "RentConverter.com",

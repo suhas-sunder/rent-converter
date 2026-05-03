@@ -1,7 +1,6 @@
 import { useMemo, useEffect, useRef, useState } from "react";
 import type { Route } from "./+types/monthly-to-daily-rent-converter";
 import Assumptions from "~/client/components/layout/Assumptions";
-import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/monthly-to-daily-rent-converter/HowItWorks";
 import ToolFit from "~/client/components/monthly-to-daily-rent-converter/ToolFit";
 
@@ -16,9 +15,9 @@ const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
 const OG_IMAGE_URL = `${SITE_URL}/og-image.jpg`;
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Monthly to Daily Rent Converter | Rent Calculator";
+  const title = "Monthly to Daily Rent Converter | Rent Per Day";
   const description =
-    "Convert monthly rent to daily rent. See the daily amount, related breakdowns, and 30-day comparison.";
+    "Convert monthly rent to a daily amount using an average 365-day month. Compare daily rent with weekly, 4-week, and annual totals.";
 
   return [
     { title },
@@ -223,41 +222,20 @@ function scaledToDecimalStrings(
  * Formatting rules:
  * - preserve decimals end-to-end
  * - rounding is display-only and clearly labeled
- * - if rounding enabled: show exactly `displayDecimals` decimals (including trailing zeros)
  * - if rounding disabled: show up to 12 decimals (no forced trailing zeros)
  */
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
-  roundDisplay: boolean,
-  displayDecimals: number,
 ): string {
-  let digits = 12;
-
-  if (roundDisplay) {
-    digits = Math.max(0, Math.min(12, displayDecimals));
-  } else {
-    // Show up to 12 decimals but trim trailing zeros for display.
-    const a = absBigInt(scaled);
-    const fracPart = a % SCALE;
-    if (fracPart === 0n) {
-      digits = 0;
-    } else {
-      const fracFull = fracPart.toString().padStart(12, "0");
-      const trimmed = fracFull.replace(/0+$/g, "");
-      digits = Math.min(12, Math.max(0, trimmed.length));
-    }
-  }
-
-  const scaledForDisplay = roundDisplay
-    ? roundScaledToDecimals(scaled, digits)
-    : scaled;
+  const digits = 2;
+  const scaledForDisplay = roundScaledToDecimals(scaled, digits);
 
   const { group, decimal } = getNumberSeparators();
   const { negative, intStr, fracStr } = scaledToDecimalStrings(
     scaledForDisplay,
     digits,
-    !roundDisplay, // trim only when not rounding to fixed digits
+    false,
   );
 
   const groupedInt = groupInt(intStr, group);
@@ -269,34 +247,12 @@ function formatCurrencyFromScaled(
     maximumFractionDigits: digits,
   });
 
-  // Build by parts so we keep locale currency placement and symbols without using floats for the value.
-  const parts = fmt.formatToParts(-1);
-  let out = "";
-  for (const p of parts) {
-    if (p.type === "minusSign") {
-      if (negative) out += p.value;
-      continue;
-    }
-    if (p.type === "integer") {
-      out += groupedInt;
-      continue;
-    }
-    if (p.type === "group") {
-      // We already grouped ourselves.
-      continue;
-    }
-    if (p.type === "decimal") {
-      if (digits > 0 && fracStr.length > 0) out += decimal;
-      continue;
-    }
-    if (p.type === "fraction") {
-      if (digits > 0 && fracStr.length > 0) out += fracStr;
-      continue;
-    }
-    out += p.value;
-  }
+  const parts = fmt.formatToParts(0);
+  const currencyPart = parts.find((p) => p.type === "currency");
+  const symbol = currencyPart?.value ?? "";
+  const minus = negative ? "-" : "";
 
-  return out || "-";
+  return minus + symbol + groupedInt + (digits > 0 ? decimal + fracStr.padEnd(digits, "0") : "");
 }
 
 /**
@@ -485,18 +441,9 @@ function formatPreviewFromNormalized(normalized: string): string {
   return groupedInt;
 }
 
-function strictReadDisplayDecimals(saved: string | null): number {
-  if (saved === null) return 2;
-  const n = Number(saved);
-  if (!Number.isFinite(n)) return 2;
-  const v = Math.trunc(n);
-  return v === 0 || v === 2 || v === 4 || v === 6 ? v : 2;
-}
-
-function formatPercent(n: number, displayDecimals: number): string {
+function formatPercent(n: number): string {
   if (!Number.isFinite(n)) return "-";
-  const d = Math.max(0, Math.min(6, Math.trunc(displayDecimals)));
-  return `${(n * 100).toFixed(d)}%`;
+  return (n * 100).toFixed(2) + "%";
 }
 
 function buildCsvRow(cols: string[]): string {
@@ -539,20 +486,6 @@ export default function MonthlyToDailyRent() {
   });
 
   // Rounding is display-only and labeled
-  const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
-    if (typeof window === "undefined") return true;
-    return safeParseBoolean(
-      window.localStorage.getItem("rc_mtd_round_display"),
-      true,
-    );
-  });
-
-  const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
-    if (typeof window === "undefined") return 2;
-    return strictReadDisplayDecimals(
-      window.localStorage.getItem("rc_mtd_display_decimals"),
-    );
-  });
 
   const copyTimerRef = useRef<number | null>(null);
 
@@ -574,18 +507,10 @@ export default function MonthlyToDailyRent() {
     try {
       window.localStorage.setItem("rc_mtd_amount", amount);
       window.localStorage.setItem("rc_mtd_currency", currency);
-      window.localStorage.setItem(
-        "rc_mtd_round_display",
-        JSON.stringify(roundDisplay),
-      );
-      window.localStorage.setItem(
-        "rc_mtd_display_decimals",
-        String(displayDecimals),
-      );
     } catch {
       // ignore
     }
-  }, [amount, currency, roundDisplay, displayDecimals]);
+  }, [amount, currency]);
 
   useEffect(() => {
     return () => {
@@ -594,7 +519,7 @@ export default function MonthlyToDailyRent() {
   }, []);
 
   const fmt = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, roundDisplay, displayDecimals);
+    formatCurrencyFromScaled(scaled, currency);
 
   const breakdown = useMemo(() => {
     if (!parsedAmount.ok) return null;
@@ -648,7 +573,7 @@ export default function MonthlyToDailyRent() {
   const monthlyInterpreted = useMemo(() => {
     if (!parsedAmount.ok) return null;
     return fmt(monthlyScaled);
-  }, [parsedAmount.ok, monthlyScaled, currency, roundDisplay, displayDecimals]);
+  }, [parsedAmount.ok, monthlyScaled, currency]);
 
   const handlePrint = () => {
     if (typeof window === "undefined") return;
@@ -663,7 +588,7 @@ export default function MonthlyToDailyRent() {
       ["Monthly to Daily Rent Converter"],
       ["Input monthly rent", monthlyInterpreted ?? ""],
       ["Currency", currency],
-      ["Display rounding", roundDisplay ? `On (${displayDecimals} decimals)` : "Off"],
+      ["Display note", "Money values rounded to cents"],
       [],
       ["Period", "Amount"],
       ["Hourly", fmt(breakdown.hourly)],
@@ -680,12 +605,12 @@ export default function MonthlyToDailyRent() {
       ["Average daily minus 30-day daily", fmt(breakdown.dailyAverageMinus30Day)],
       [
         "Average daily vs 30-day daily percentage",
-        formatPercent(breakdown.dailyAverageMinus30DayPct, 2),
+        formatPercent(breakdown.dailyAverageMinus30DayPct),
       ],
       ["Monthly minus 4-week amount", fmt(breakdown.monthlyMinus4w)],
       [
         "Monthly minus 4-week percentage",
-        formatPercent(breakdown.monthlyMinus4wPct, 2),
+        formatPercent(breakdown.monthlyMinus4wPct),
       ],
       ["12 monthly payments", fmt(breakdown.annualFromMonthly12)],
       ["52 weekly payments", fmt(breakdown.annualFromWeekly52)],
@@ -819,6 +744,7 @@ export default function MonthlyToDailyRent() {
 
               <div
                 id="export-controls"
+                data-nosnippet
                 className="rc-no-print flex flex-wrap gap-2 sm:justify-end"
               >
                 <button
@@ -1009,9 +935,7 @@ export default function MonthlyToDailyRent() {
                           <div className="mt-1 text-xs text-slate-600">
                             ≈{" "}
                             {formatPercent(
-                              breakdown.dailyAverageMinus30DayPct,
-                              2,
-                            )}
+                              breakdown.dailyAverageMinus30DayPct)}
                           </div>
                         </div>
                       </div>
@@ -1070,14 +994,11 @@ export default function MonthlyToDailyRent() {
 
             <div className="rounded-xl border border-slate-200 bg-white/90 p-4 shadow-sm rc-no-print">
               <div className="mb-3 text-sm font-semibold text-slate-900">
-                Display rounding
+                Precision note
               </div>
-              <Rounding
-                roundDisplay={roundDisplay}
-                setRoundDisplay={setRoundDisplay}
-                displayDecimals={displayDecimals}
-                setDisplayDecimals={setDisplayDecimals as any}
-              />
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Calculations preserve precision internally, while displayed money values are rounded to cents.
+              </p>
             </div>
           </div>
         </div>

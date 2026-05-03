@@ -2,7 +2,6 @@ import { useMemo, useEffect, useRef, useState } from "react";
 import type { Route } from "./+types/hourly-to-annual-rent-converter";
 import Assumptions from "~/client/components/layout/Assumptions";
 import FourWeekVsMonthly from "~/client/components/layout/FourWeekVsMonthly";
-import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/hourly-to-annual-rent-converter/HowItWorks";
 import ToolFit from "~/client/components/hourly-to-annual-rent-converter/ToolFit";
 
@@ -12,9 +11,9 @@ const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
 const OG_IMAGE_URL = `${SITE_URL}/og-image.jpg`;
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Hourly to Annual Rent Converter | Rent Calculator";
+  const title = "Hourly to Annual Rent Converter | Yearly Rent Equivalent";
   const description =
-    "Convert hourly rent to annual rent. See the yearly amount, related breakdowns, and paid-hours comparison.";
+    "Convert hourly rent to an annual rent equivalent using a 365-day year. Compare clock-hour and paid-hour scenarios with monthly and weekly results.";
 
   return [
     { title },
@@ -251,35 +250,15 @@ function formatPreviewFromParsed(parsed: ParsedAmount): string {
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
-  roundDisplay: boolean,
-  displayDecimals: number,
 ): string {
-  let digits = 12;
-
-  if (roundDisplay) {
-    digits = Math.max(0, Math.min(12, displayDecimals));
-  } else {
-    // Show up to 12 decimals but trim trailing zeros for display.
-    const a = absBigInt(scaled);
-    const fracPart = a % SCALE;
-    if (fracPart === 0n) {
-      digits = 0;
-    } else {
-      const fracFull = fracPart.toString().padStart(12, "0");
-      const trimmed = fracFull.replace(/0+$/g, "");
-      digits = Math.min(12, Math.max(0, trimmed.length));
-    }
-  }
-
-  const scaledForDisplay = roundDisplay
-    ? roundScaledToDecimals(scaled, digits)
-    : scaled;
+  const digits = 2;
+  const scaledForDisplay = roundScaledToDecimals(scaled, digits);
 
   const { group, decimal } = getNumberSeparators();
   const { negative, intStr, fracStr } = scaledToDecimalStrings(
     scaledForDisplay,
     digits,
-    !roundDisplay, // trim only when not rounding to fixed digits
+    false,
   );
 
   const groupedInt = groupInt(intStr, group);
@@ -291,44 +270,22 @@ function formatCurrencyFromScaled(
     maximumFractionDigits: digits,
   });
 
-  // Build by parts so we keep locale currency placement and symbols without using floats for the value.
-  const parts = fmt.formatToParts(-1);
-  let out = "";
-  for (const p of parts) {
-    if (p.type === "minusSign") {
-      if (negative) out += p.value;
-      continue;
-    }
-    if (p.type === "integer") {
-      out += groupedInt;
-      continue;
-    }
-    if (p.type === "group") {
-      // We already grouped ourselves.
-      continue;
-    }
-    if (p.type === "decimal") {
-      if (digits > 0 && fracStr.length > 0) out += decimal;
-      continue;
-    }
-    if (p.type === "fraction") {
-      if (digits > 0 && fracStr.length > 0) out += fracStr;
-      continue;
-    }
-    out += p.value;
-  }
+  const parts = fmt.formatToParts(0);
+  const currencyPart = parts.find((p) => p.type === "currency");
+  const symbol = currencyPart?.value ?? "";
+  const minus = negative ? "-" : "";
 
-  return out || "-";
+  return minus + symbol + groupedInt + (digits > 0 ? decimal + fracStr.padEnd(digits, "0") : "");
 }
 
-function formatNumber(n: number, displayDecimals: number): string {
+function formatNumber(n: number): string {
   if (!Number.isFinite(n)) return "-";
-  return n.toFixed(Math.max(0, Math.min(6, displayDecimals)));
+  return n.toFixed(2);
 }
 
-function formatPercent(n: number, displayDecimals: number): string {
+function formatPercent(n: number): string {
   if (!Number.isFinite(n)) return "-";
-  return `${(n * 100).toFixed(Math.max(0, Math.min(6, displayDecimals)))}%`;
+  return (n * 100).toFixed(2) + "%";
 }
 
 function parseMoneyInputToScaled(raw: string): ParsedAmount {
@@ -519,18 +476,6 @@ function safeParseEnum<T extends string>(
   return (allowed as readonly string[]).includes(raw) ? (raw as T) : fallback;
 }
 
-function safeParseDisplayDecimals(
-  raw: string | null,
-  fallback: number,
-): number {
-  const allowed = new Set<number>([0, 2, 4, 6]);
-  if (!raw) return fallback;
-  const n = Number(raw);
-  if (!Number.isFinite(n)) return fallback;
-  const t = Math.trunc(n);
-  return allowed.has(t) ? t : fallback;
-}
-
 export default function HourlyToAnnualRent() {
   const [amount, setAmount] = useState<string>(() => {
     if (typeof window === "undefined") return "25";
@@ -544,22 +489,6 @@ export default function HourlyToAnnualRent() {
     if (typeof window === "undefined") return "USD";
     const saved = window.localStorage.getItem("rc_hta_currency");
     return saved && isCurrency(saved) ? saved : "USD";
-  });
-
-  const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
-    if (typeof window === "undefined") return 2;
-    return safeParseDisplayDecimals(
-      window.localStorage.getItem("rc_hta_display_decimals"),
-      2,
-    );
-  });
-
-  const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
-    if (typeof window === "undefined") return true;
-    return safeParseBoolean(
-      window.localStorage.getItem("rc_hta_round_display"),
-      true,
-    );
   });
 
   const [hourMode, setHourMode] = useState<"clock" | "paid">(() => {
@@ -588,14 +517,6 @@ export default function HourlyToAnnualRent() {
     try {
       window.localStorage.setItem("rc_hta_amount", amount);
       window.localStorage.setItem("rc_hta_currency", currency);
-      window.localStorage.setItem(
-        "rc_hta_display_decimals",
-        String(displayDecimals),
-      );
-      window.localStorage.setItem(
-        "rc_hta_round_display",
-        JSON.stringify(roundDisplay),
-      );
       window.localStorage.setItem("rc_hta_hour_mode", hourMode);
       window.localStorage.setItem("rc_hta_paid_hours_week", paidHoursPerWeek);
     } catch {
@@ -604,8 +525,6 @@ export default function HourlyToAnnualRent() {
   }, [
     amount,
     currency,
-    displayDecimals,
-    roundDisplay,
     hourMode,
     paidHoursPerWeek,
   ]);
@@ -731,7 +650,7 @@ export default function HourlyToAnnualRent() {
   ]);
 
   const fmt = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, roundDisplay, displayDecimals);
+    formatCurrencyFromScaled(scaled, currency);
 
   const displayedAnnualScaled = useMemo(() => {
     if (!breakdownScaled) return 0n;
@@ -743,7 +662,7 @@ export default function HourlyToAnnualRent() {
   const hourlyInterpreted = useMemo(() => {
     if (!parsedHourly.ok) return null;
     return fmt(hourlyScaled);
-  }, [parsedHourly.ok, hourlyScaled, currency, displayDecimals, roundDisplay]);
+  }, [parsedHourly.ok, hourlyScaled, currency]);
 
   const handlePrint = () => {
     if (typeof window === "undefined") return;
@@ -759,10 +678,7 @@ export default function HourlyToAnnualRent() {
       ["Input hourly amount", hourlyInterpreted ?? ""],
       ["Currency", currency],
       ["Hour mode", hourMode === "clock" ? "24/7 hours" : "Paid hours"],
-      [
-        "Display rounding",
-        roundDisplay ? `On (${displayDecimals} decimals)` : "Off",
-      ],
+      ["Display note", "Money values rounded to cents"],
       [],
       ["Period", "Amount"],
       [PERIOD_LABEL.hourly, fmt(breakdownScaled.hourly)],
@@ -780,7 +696,7 @@ export default function HourlyToAnnualRent() {
         ["Paid-hours comparison", ""],
         [
           "Paid hours per week",
-          parsedPaidHours.ok ? formatNumber(parsedPaidHours.hours, 2) : "",
+          parsedPaidHours.ok ? formatNumber(parsedPaidHours.hours) : "",
         ],
         ["Annual using paid hours", fmt(breakdownScaled.annualPaidScaled)],
         ["Monthly using paid hours", fmt(breakdownScaled.monthlyPaidScaled)],
@@ -790,7 +706,7 @@ export default function HourlyToAnnualRent() {
         ],
         [
           "Difference percentage",
-          formatPercent(breakdownScaled.annualPaidMinusClockPct, 2),
+          formatPercent(breakdownScaled.annualPaidMinusClockPct),
         ],
       );
     }
@@ -801,7 +717,7 @@ export default function HourlyToAnnualRent() {
       ["Monthly minus 4-week amount", fmt(breakdownScaled.monthlyMinus4w)],
       [
         "Monthly minus 4-week percentage",
-        formatPercent(breakdownScaled.monthlyMinus4wPct, 2),
+        formatPercent(breakdownScaled.monthlyMinus4wPct),
       ],
     );
 
@@ -938,6 +854,7 @@ export default function HourlyToAnnualRent() {
 
                 <div
                   id="export-controls"
+                  data-nosnippet
                   className="rc-no-print flex flex-wrap gap-2 sm:justify-end"
                 >
                   <button
@@ -1249,9 +1166,7 @@ export default function HourlyToAnnualRent() {
                             <div className="mt-1 text-xs text-slate-600">
                               ≈{" "}
                               {formatPercent(
-                                breakdownScaled!.annualPaidMinusClockPct,
-                                2,
-                              )}
+                                breakdownScaled!.annualPaidMinusClockPct)}
                             </div>
                           </div>
                         </div>
@@ -1279,15 +1194,11 @@ export default function HourlyToAnnualRent() {
 
             <div className="rounded-xl border border-slate-200 bg-white/90 p-4 shadow-sm rc-no-print">
               <div className="mb-3 text-sm font-semibold text-slate-900">
-                Display rounding
+                Precision note
               </div>
-
-              <Rounding
-                roundDisplay={roundDisplay}
-                setRoundDisplay={setRoundDisplay}
-                displayDecimals={displayDecimals}
-                setDisplayDecimals={setDisplayDecimals as any}
-              />
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Calculations preserve precision internally, while displayed money values are rounded to cents.
+              </p>
             </div>
           </div>
         </div>

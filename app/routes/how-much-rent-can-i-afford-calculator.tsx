@@ -1,7 +1,6 @@
 import { useMemo, useEffect, useRef, useState } from "react";
 import type { Route } from "./+types/how-much-rent-can-i-afford-calculator";
 import Assumptions from "~/client/components/layout/Assumptions";
-import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/how-much-rent-can-i-afford-calculator/HowItWorks";
 import ToolFit from "~/client/components/how-much-rent-can-i-afford-calculator/ToolFit";
 
@@ -11,9 +10,9 @@ const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
 const OG_IMAGE_URL = `${SITE_URL}/og-image.jpg`;
 
 export const meta: Route.MetaFunction = () => {
-  const title = "How Much Rent Can I Afford? | Rent Calculator";
+  const title = "Rent Affordability Calculator | Income to Rent Ratio";
   const description =
-    "Estimate how much rent you can afford based on income. Compare monthly, weekly, and 4-week rent targets.";
+    "Estimate how much rent you can afford from income and a target rent ratio. Compare monthly, weekly, 4-week, and annual rent targets.";
 
   return [
     { title },
@@ -228,35 +227,15 @@ function scaledToDecimalStrings(
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
-  roundDisplay: boolean,
-  displayDecimals: number,
 ): string {
-  let digits = 12;
-
-  if (roundDisplay) {
-    digits = Math.max(0, Math.min(12, displayDecimals));
-  } else {
-    // Show up to 12 decimals but trim trailing zeros for display.
-    const a = absBigInt(scaled);
-    const fracPart = a % SCALE;
-    if (fracPart === 0n) {
-      digits = 0;
-    } else {
-      const fracFull = fracPart.toString().padStart(12, "0");
-      const trimmed = fracFull.replace(/0+$/g, "");
-      digits = Math.min(12, Math.max(0, trimmed.length));
-    }
-  }
-
-  const scaledForDisplay = roundDisplay
-    ? roundScaledToDecimals(scaled, digits)
-    : scaled;
+  const digits = 2;
+  const scaledForDisplay = roundScaledToDecimals(scaled, digits);
 
   const { group, decimal } = getNumberSeparators();
   const { negative, intStr, fracStr } = scaledToDecimalStrings(
     scaledForDisplay,
     digits,
-    !roundDisplay,
+    false,
   );
 
   const groupedInt = groupInt(intStr, group);
@@ -268,39 +247,17 @@ function formatCurrencyFromScaled(
     maximumFractionDigits: digits,
   });
 
-  // Build by parts so we keep locale currency placement and symbols without using floats for the value.
-  const parts = fmt.formatToParts(-1);
-  let out = "";
-  for (const p of parts) {
-    if (p.type === "minusSign") {
-      if (negative) out += p.value;
-      continue;
-    }
-    if (p.type === "integer") {
-      out += groupedInt;
-      continue;
-    }
-    if (p.type === "group") {
-      // We already grouped ourselves.
-      continue;
-    }
-    if (p.type === "decimal") {
-      if (digits > 0 && fracStr.length > 0) out += decimal;
-      continue;
-    }
-    if (p.type === "fraction") {
-      if (digits > 0 && fracStr.length > 0) out += fracStr;
-      continue;
-    }
-    out += p.value;
-  }
+  const parts = fmt.formatToParts(0);
+  const currencyPart = parts.find((p) => p.type === "currency");
+  const symbol = currencyPart?.value ?? "";
+  const minus = negative ? "-" : "";
 
-  return out || "-";
+  return minus + symbol + groupedInt + (digits > 0 ? decimal + fracStr.padEnd(digits, "0") : "");
 }
 
-function formatPercent(n: number, displayDecimals: number): string {
+function formatPercent(n: number): string {
   if (!Number.isFinite(n)) return "-";
-  return `${(n * 100).toFixed(Math.max(0, Math.min(6, displayDecimals)))}%`;
+  return (n * 100).toFixed(2) + "%";
 }
 
 function groupThousandsEnUSInt(intStr: string): string {
@@ -548,13 +505,6 @@ function sanitizeRawAmountForState(raw: string): string {
   return (raw ?? "").replace(/,/g, "");
 }
 
-function normalizeDisplayDecimals(raw: unknown): number {
-  const n = typeof raw === "number" ? raw : Number(raw);
-  if (!Number.isFinite(n)) return 2;
-  const v = Math.trunc(n);
-  return v === 0 || v === 2 || v === 4 || v === 6 ? v : 2;
-}
-
 export default function HowMuchRentCanIAfford() {
   const [income, setIncome] = useState<string>(() => {
     if (typeof window === "undefined") return "6000";
@@ -576,20 +526,6 @@ export default function HowMuchRentCanIAfford() {
     return saved && isCurrency(saved) ? saved : "USD";
   });
 
-  const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
-    if (typeof window === "undefined") return true;
-    return safeParseBoolean(
-      window.localStorage.getItem("rc_aff_round_display"),
-      true,
-    );
-  });
-
-  const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
-    if (typeof window === "undefined") return 2;
-    const saved = window.localStorage.getItem("rc_aff_display_decimals");
-    return normalizeDisplayDecimals(saved ?? 2);
-  });
-
   const copyTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -598,18 +534,10 @@ export default function HowMuchRentCanIAfford() {
       window.localStorage.setItem("rc_aff_income", income);
       window.localStorage.setItem("rc_aff_period", period);
       window.localStorage.setItem("rc_aff_currency", currency);
-      window.localStorage.setItem(
-        "rc_aff_round_display",
-        JSON.stringify(roundDisplay),
-      );
-      window.localStorage.setItem(
-        "rc_aff_display_decimals",
-        String(displayDecimals),
-      );
     } catch {
       // ignore
     }
-  }, [income, period, currency, roundDisplay, displayDecimals]);
+  }, [income, period, currency]);
 
   useEffect(() => {
     return () => {
@@ -665,7 +593,7 @@ export default function HowMuchRentCanIAfford() {
   }, [annualIncomeScaled]);
 
   const fmt = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, roundDisplay, displayDecimals);
+    formatCurrencyFromScaled(scaled, currency);
 
   const canShowResults =
     parsedIncome.ok && !!annualIncomeScaled && !!affordability;
@@ -673,7 +601,7 @@ export default function HowMuchRentCanIAfford() {
   const incomeInterpreted = useMemo(() => {
     if (!parsedIncome.ok) return null;
     return fmt(incomeScaled);
-  }, [parsedIncome.ok, incomeScaled, currency, roundDisplay, displayDecimals]);
+  }, [parsedIncome.ok, incomeScaled, currency]);
 
   const handlePrint = () => {
     if (typeof window === "undefined") return;
@@ -690,12 +618,12 @@ export default function HowMuchRentCanIAfford() {
       ["Income period", PERIOD_LABEL[period]],
       ["Annualized income", fmt(annualIncomeScaled)],
       ["Currency", currency],
-      ["Display rounding", roundDisplay ? `On (${displayDecimals} decimals)` : "Off"],
+      ["Display note", "Money values rounded to cents"],
       [],
       ["Target", "Rent share", "Monthly", "Weekly", "4 weeks", "Annual"],
       ...affordability.map((row) => [
         row.label,
-        formatPercent(row.ratio, 0),
+        formatPercent(row.ratio),
         fmt(row.monthly),
         fmt(row.weekly),
         fmt(row.every4w),
@@ -839,6 +767,7 @@ export default function HowMuchRentCanIAfford() {
 
               <div
                 id="export-controls"
+                data-nosnippet
                 className="rc-no-print flex flex-wrap gap-2 sm:justify-end"
               >
                 <button
@@ -1058,7 +987,7 @@ export default function HowMuchRentCanIAfford() {
                         </div>
 
                         <div className="mt-2 text-xs text-slate-600">
-                          Rent share: {formatPercent(row.ratio, 0)}
+                          Rent share: {formatPercent(row.ratio)}
                         </div>
                       </div>
                     ))}
@@ -1078,15 +1007,11 @@ export default function HowMuchRentCanIAfford() {
 
             <div className="rounded-xl border border-slate-200 bg-white/90 p-4 shadow-sm rc-no-print">
               <div className="mb-3 text-sm font-semibold text-slate-900">
-                Display rounding
+                Precision note
               </div>
-
-              <Rounding
-                roundDisplay={roundDisplay}
-                setRoundDisplay={setRoundDisplay}
-                displayDecimals={displayDecimals}
-                setDisplayDecimals={setDisplayDecimals as any}
-              />
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Calculations preserve precision internally, while displayed money values are rounded to cents.
+              </p>
             </div>
           </div>
         </div>

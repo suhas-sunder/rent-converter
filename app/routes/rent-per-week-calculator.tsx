@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import type { Route } from "./+types/rent-per-week-calculator";
 import Assumptions from "~/client/components/layout/Assumptions";
-import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/rent-per-week-calculator/HowItWorks";
 
 function safeToFixed(n: number, digits: number): string {
@@ -10,9 +9,9 @@ function safeToFixed(n: number, digits: number): string {
 }
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Free Rent Per Week Calculator";
+  const title = "Rent Per Week Calculator | Weekly Rent Equivalent";
   const description =
-    "Calculate rent per week from monthly, 4-week, biweekly, daily, hourly, or annual rent.";
+    "Calculate rent per week from monthly, 4-week, biweekly, daily, hourly, or annual rent using clear period assumptions.";
 
   const canonicalUrl = "https://www.rentconverter.com/rent-per-week-calculator";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
@@ -254,35 +253,15 @@ function scaledToDecimalStrings(
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
-  roundDisplay: boolean,
-  displayDecimals: number,
 ): string {
-  let digits = 12;
-
-  if (roundDisplay) {
-    digits = Math.max(0, Math.min(12, displayDecimals));
-  } else {
-    // Show up to 12 decimals but trim trailing zeros for display.
-    const a = absBigInt(scaled);
-    const fracPart = a % SCALE;
-    if (fracPart === 0n) {
-      digits = 0;
-    } else {
-      const fracFull = fracPart.toString().padStart(12, "0");
-      const trimmed = fracFull.replace(/0+$/g, "");
-      digits = Math.min(12, Math.max(0, trimmed.length));
-    }
-  }
-
-  const scaledForDisplay = roundDisplay
-    ? roundScaledToDecimals(scaled, digits)
-    : scaled;
+  const digits = 2;
+  const scaledForDisplay = roundScaledToDecimals(scaled, digits);
 
   const { group, decimal } = getNumberSeparators();
   const { negative, intStr, fracStr } = scaledToDecimalStrings(
     scaledForDisplay,
     digits,
-    !roundDisplay, // trim only when not rounding to fixed digits
+    false,
   );
 
   const groupedInt = groupInt(intStr, group);
@@ -294,34 +273,12 @@ function formatCurrencyFromScaled(
     maximumFractionDigits: digits,
   });
 
-  // Build by parts so we keep locale currency placement and symbols without using floats for the value.
-  const parts = fmt.formatToParts(-1);
-  let out = "";
-  for (const p of parts) {
-    if (p.type === "minusSign") {
-      if (negative) out += p.value;
-      continue;
-    }
-    if (p.type === "integer") {
-      out += groupedInt;
-      continue;
-    }
-    if (p.type === "group") {
-      // We already grouped ourselves.
-      continue;
-    }
-    if (p.type === "decimal") {
-      if (digits > 0 && fracStr.length > 0) out += decimal;
-      continue;
-    }
-    if (p.type === "fraction") {
-      if (digits > 0 && fracStr.length > 0) out += fracStr;
-      continue;
-    }
-    out += p.value;
-  }
+  const parts = fmt.formatToParts(0);
+  const currencyPart = parts.find((p) => p.type === "currency");
+  const symbol = currencyPart?.value ?? "";
+  const minus = negative ? "-" : "";
 
-  return out || "-";
+  return minus + symbol + groupedInt + (digits > 0 ? decimal + fracStr.padEnd(digits, "0") : "");
 }
 
 /**
@@ -501,14 +458,6 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   }
 }
 
-function safeParseDisplayDecimals(raw: string | null): number {
-  if (raw === null) return 2;
-  const n = Number(raw);
-  if (!Number.isFinite(n)) return 2;
-  const t = Math.trunc(n);
-  return t === 0 || t === 2 || t === 4 || t === 6 ? t : 2;
-}
-
 function formatPreviewFromNormalized(normalized: string): string {
   const [intStr, fracStr] = normalized.split(".");
   const intNum = Number(intStr);
@@ -564,19 +513,6 @@ export default function RentPerWeekCalculator() {
     return isCurrency(saved) ? saved : "USD";
   });
 
-  // Display-only rounding controls (do not affect computation)
-  const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
-    if (typeof window === "undefined") return true;
-    return safeParseBoolean(localStorage.getItem("rpwc_round_display"), true);
-  });
-
-  const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
-    if (typeof window === "undefined") return 2;
-    return safeParseDisplayDecimals(
-      localStorage.getItem("rpwc_display_decimals"),
-    );
-  });
-
   const [weeksCount, setWeeksCount] = useState<string>(() => {
     if (typeof window === "undefined") return "4";
     return localStorage.getItem("rpwc_weeksCount") ?? "4";
@@ -587,10 +523,8 @@ export default function RentPerWeekCalculator() {
     localStorage.setItem("rpwc_amount", amount);
     localStorage.setItem("rpwc_from", from);
     localStorage.setItem("rpwc_currency", currency);
-    localStorage.setItem("rpwc_round_display", JSON.stringify(roundDisplay));
-    localStorage.setItem("rpwc_display_decimals", String(displayDecimals));
     localStorage.setItem("rpwc_weeksCount", weeksCount);
-  }, [amount, from, currency, roundDisplay, displayDecimals, weeksCount]);
+  }, [amount, from, currency, weeksCount]);
 
   const parsedWeeks = useMemo(
     () => parseNonNegInt(weeksCount, "number of weeks", 520),
@@ -657,7 +591,7 @@ export default function RentPerWeekCalculator() {
   }, [parsedRent, parsedWeeks, from]);
 
   const fmt = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, roundDisplay, displayDecimals);
+    formatCurrencyFromScaled(scaled, currency);
 
   const handlePrint = () => {
     if (typeof window === "undefined") return;
@@ -699,7 +633,7 @@ export default function RentPerWeekCalculator() {
     "@type": "WebPage",
     name: pageName,
     description:
-      "Calculate rent per week from monthly, 4-week, biweekly, daily, hourly, or annual rent.",
+      "Calculate rent per week from monthly, 4-week, biweekly, daily, hourly, or annual rent using clear period assumptions.",
     url: canonicalUrl,
     isPartOf: { "@type": "WebSite", url: "https://www.rentconverter.com" },
     breadcrumb: { "@id": `${canonicalUrl}#breadcrumb` },
@@ -738,8 +672,6 @@ export default function RentPerWeekCalculator() {
   const currencySelectId = "rpwc_currency_select";
   const weeksInputId = "rpwc_weeks_input";
   const weeksErrorId = "rpwc_weeks_error";
-  const roundCheckboxId = "rpwc_round_display";
-  const decimalsSelectId = "rpwc_display_decimals";
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-slate-50 text-slate-700 scroll-smooth antialiased">
@@ -769,17 +701,19 @@ export default function RentPerWeekCalculator() {
                 </div>
 
                 <h1 className="mt-3 text-center sm:text-left text-2xl sm:text-3xl capitalize font-bold text-sky-900 tracking-tight">
-                  Weekly Rent Calculator
+                  Rent Per Week Calculator
                 </h1>
 
                 <p className="mt-2 max-w-3xl text-base text-slate-700">
-                  Calculate rent per week from monthly, 4-week, biweekly, daily,
-                  hourly, or annual rent.
+                  Calculate rent per week from monthly, 4-week, biweekly,
+                  daily, hourly, or annual rent using the same period
+                  assumptions shown in the result.
                 </p>
               </div>
 
               <div
                 id="export-controls"
+                data-nosnippet
                 className="rc-no-print flex shrink-0 justify-start sm:justify-end"
               >
                 <button
@@ -1160,12 +1094,9 @@ export default function RentPerWeekCalculator() {
 
           <div className="mt-3 rounded-xl border border-slate-200 bg-white/90 px-4 py-3 shadow-sm rc-no-print">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <Rounding
-                roundDisplay={roundDisplay}
-                setRoundDisplay={setRoundDisplay}
-                displayDecimals={displayDecimals}
-                setDisplayDecimals={setDisplayDecimals as any}
-              />
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Calculations preserve precision internally, while displayed money values are rounded to cents.
+              </p>
 
               <button
                 type="button"
@@ -1177,8 +1108,7 @@ export default function RentPerWeekCalculator() {
             </div>
 
             <p className="mt-2 text-xs text-slate-600 leading-relaxed">
-              Calculations preserve decimals internally up to 12 places. Only
-              the display is rounded.
+              Calculations preserve precision internally, while displayed money values are rounded to cents.
             </p>
           </div>
         </div>

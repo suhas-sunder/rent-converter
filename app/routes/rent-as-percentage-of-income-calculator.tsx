@@ -1,7 +1,6 @@
 import { useMemo, useEffect, useRef, useState } from "react";
 import type { Route } from "./+types/rent-as-percentage-of-income-calculator";
 import Assumptions from "~/client/components/layout/Assumptions";
-import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/rent-as-percentage-of-income-calculator/HowItWorks";
 import ToolFit from "~/client/components/rent-as-percentage-of-income-calculator/ToolFit";
 
@@ -11,9 +10,9 @@ function safeToFixed(n: number, digits: number): string {
 }
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Rent as Percentage of Income Calculator | RentConverter.com";
+  const title = "Rent as Percentage of Income Calculator | Income Ratio";
   const description =
-    "Calculate rent as a percentage of income. Enter rent and income amounts to compare rent with your income across common periods.";
+    "Calculate rent as a percentage of income across monthly, weekly, 4-week, and annual periods. Useful for checking rent-to-income ratio.";
 
   const url =
     "https://www.rentconverter.com/rent-as-percentage-of-income-calculator";
@@ -251,35 +250,15 @@ function scaledToDecimalStrings(
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
-  roundDisplay: boolean,
-  displayDecimals: number,
 ): string {
-  let digits = 12;
-
-  if (roundDisplay) {
-    digits = Math.max(0, Math.min(12, displayDecimals));
-  } else {
-    // Show up to 12 decimals but trim trailing zeros for display.
-    const a = absBigInt(scaled);
-    const fracPart = a % SCALE;
-    if (fracPart === 0n) {
-      digits = 0;
-    } else {
-      const fracFull = fracPart.toString().padStart(12, "0");
-      const trimmed = fracFull.replace(/0+$/g, "");
-      digits = Math.min(12, Math.max(0, trimmed.length));
-    }
-  }
-
-  const scaledForDisplay = roundDisplay
-    ? roundScaledToDecimals(scaled, digits)
-    : scaled;
+  const digits = 2;
+  const scaledForDisplay = roundScaledToDecimals(scaled, digits);
 
   const { group, decimal } = getNumberSeparators();
   const { negative, intStr, fracStr } = scaledToDecimalStrings(
     scaledForDisplay,
     digits,
-    !roundDisplay, // trim only when not rounding to fixed digits
+    false,
   );
 
   const groupedInt = groupInt(intStr, group);
@@ -291,34 +270,12 @@ function formatCurrencyFromScaled(
     maximumFractionDigits: digits,
   });
 
-  // Build by parts so we keep locale currency placement and symbols without using floats for the value.
-  const parts = fmt.formatToParts(-1);
-  let out = "";
-  for (const p of parts) {
-    if (p.type === "minusSign") {
-      if (negative) out += p.value;
-      continue;
-    }
-    if (p.type === "integer") {
-      out += groupedInt;
-      continue;
-    }
-    if (p.type === "group") {
-      // We already grouped ourselves.
-      continue;
-    }
-    if (p.type === "decimal") {
-      if (digits > 0 && fracStr.length > 0) out += decimal;
-      continue;
-    }
-    if (p.type === "fraction") {
-      if (digits > 0 && fracStr.length > 0) out += fracStr;
-      continue;
-    }
-    out += p.value;
-  }
+  const parts = fmt.formatToParts(0);
+  const currencyPart = parts.find((p) => p.type === "currency");
+  const symbol = currencyPart?.value ?? "";
+  const minus = negative ? "-" : "";
 
-  return out || "-";
+  return minus + symbol + groupedInt + (digits > 0 ? decimal + fracStr.padEnd(digits, "0") : "");
 }
 
 function parseMoneyInputToScaled(raw: string): ParsedScaled {
@@ -539,23 +496,6 @@ export default function RentAsPercentageOfIncome() {
     return isCurrency(saved) ? saved : "USD";
   });
 
-  // Display-only rounding (math always preserves decimals)
-  const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
-    if (typeof window === "undefined") return true;
-    return safeParseBoolean(
-      window.localStorage.getItem("rc_rpi_round_display"),
-      true,
-    );
-  });
-
-  const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
-    if (typeof window === "undefined") return 2;
-    const saved = window.localStorage.getItem("rc_rpi_display_decimals");
-    const n = saved ? Number(saved) : 2;
-    const allowed = new Set<number>([0, 2, 4, 6]);
-    return allowed.has(n) ? n : 2;
-  });
-
   const [rentFocused, setRentFocused] = useState(false);
   const [incomeFocused, setIncomeFocused] = useState(false);
 
@@ -567,14 +507,6 @@ export default function RentAsPercentageOfIncome() {
       window.localStorage.setItem("rc_rpi_income_amount", incomeAmount);
       window.localStorage.setItem("rc_rpi_income_period", incomePeriod);
       window.localStorage.setItem("rc_rpi_currency", currency);
-      window.localStorage.setItem(
-        "rc_rpi_round_display",
-        JSON.stringify(roundDisplay),
-      );
-      window.localStorage.setItem(
-        "rc_rpi_display_decimals",
-        String(displayDecimals),
-      );
     } catch {
       // ignore
     }
@@ -584,8 +516,6 @@ export default function RentAsPercentageOfIncome() {
     incomeAmount,
     incomePeriod,
     currency,
-    roundDisplay,
-    displayDecimals,
   ]);
 
   const rentParsed = useMemo(
@@ -598,7 +528,7 @@ export default function RentAsPercentageOfIncome() {
   );
 
   const fmtMoney = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, roundDisplay, displayDecimals);
+    formatCurrencyFromScaled(scaled, currency);
 
   const computed = useMemo(() => {
     const errors: string[] = [];
@@ -860,6 +790,7 @@ export default function RentAsPercentageOfIncome() {
 
               <div
                 id="export-controls"
+                data-nosnippet
                 className="rc-no-print flex shrink-0 flex-wrap gap-2 sm:justify-end"
               >
                 <button
@@ -1198,12 +1129,9 @@ export default function RentAsPercentageOfIncome() {
               Print / Save as PDF
             </button>
           </div>
-          <Rounding
-            roundDisplay={roundDisplay}
-            setRoundDisplay={setRoundDisplay}
-            displayDecimals={displayDecimals}
-            setDisplayDecimals={setDisplayDecimals as any}
-          />
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Calculations preserve precision internally, while displayed money values are rounded to cents.
+              </p>
         </div>
       </section>
 

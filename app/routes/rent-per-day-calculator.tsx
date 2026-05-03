@@ -10,9 +10,9 @@ function safeToFixed(n: number, digits: number): string {
 }
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Free Rent Per Day Calculator";
+  const title = "Rent Per Day Calculator | Daily Rent Equivalent";
   const description =
-    "Calculate rent per day from monthly, weekly, 4-week, biweekly, hourly, or annual rent.";
+    "Calculate rent per day from monthly, weekly, 4-week, biweekly, hourly, or annual rent using stated 365-day assumptions.";
 
   const canonicalUrl = "https://www.rentconverter.com/rent-per-day-calculator";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
@@ -234,35 +234,15 @@ function scaledToDecimalStrings(
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
-  roundDisplay: boolean,
-  displayDecimals: number,
 ): string {
-  let digits = 12;
-
-  if (roundDisplay) {
-    digits = Math.max(0, Math.min(12, displayDecimals));
-  } else {
-    // Show up to 12 decimals but trim trailing zeros for display.
-    const a = absBigInt(scaled);
-    const fracPart = a % SCALE;
-    if (fracPart === 0n) {
-      digits = 0;
-    } else {
-      const fracFull = fracPart.toString().padStart(12, "0");
-      const trimmed = fracFull.replace(/0+$/g, "");
-      digits = Math.min(12, Math.max(0, trimmed.length));
-    }
-  }
-
-  const scaledForDisplay = roundDisplay
-    ? roundScaledToDecimals(scaled, digits)
-    : scaled;
+  const digits = 2;
+  const scaledForDisplay = roundScaledToDecimals(scaled, digits);
 
   const { group, decimal } = getNumberSeparators();
   const { negative, intStr, fracStr } = scaledToDecimalStrings(
     scaledForDisplay,
     digits,
-    !roundDisplay, // trim only when not rounding to fixed digits
+    false,
   );
 
   const groupedInt = groupInt(intStr, group);
@@ -274,34 +254,12 @@ function formatCurrencyFromScaled(
     maximumFractionDigits: digits,
   });
 
-  // Build by parts so we keep locale currency placement and symbols without using floats for the value.
-  const parts = fmt.formatToParts(-1);
-  let out = "";
-  for (const p of parts) {
-    if (p.type === "minusSign") {
-      if (negative) out += p.value;
-      continue;
-    }
-    if (p.type === "integer") {
-      out += groupedInt;
-      continue;
-    }
-    if (p.type === "group") {
-      // We already grouped ourselves.
-      continue;
-    }
-    if (p.type === "decimal") {
-      if (digits > 0 && fracStr.length > 0) out += decimal;
-      continue;
-    }
-    if (p.type === "fraction") {
-      if (digits > 0 && fracStr.length > 0) out += fracStr;
-      continue;
-    }
-    out += p.value;
-  }
+  const parts = fmt.formatToParts(0);
+  const currencyPart = parts.find((p) => p.type === "currency");
+  const symbol = currencyPart?.value ?? "";
+  const minus = negative ? "-" : "";
 
-  return out || "-";
+  return minus + symbol + groupedInt + (digits > 0 ? decimal + fracStr.padEnd(digits, "0") : "");
 }
 
 function formatGroupedPreviewFromNormalized(normalized: string): string {
@@ -490,15 +448,6 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   }
 }
 
-function safeParseDisplayDecimals(raw: string | null): number {
-  const fallback = 2;
-  if (raw === null) return fallback;
-  const n = Number(raw);
-  if (!Number.isFinite(n)) return fallback;
-  const t = Math.trunc(n);
-  return t === 0 || t === 2 || t === 4 || t === 6 ? t : fallback;
-}
-
 export default function RentPerDayCalculator() {
   const pageName = "Rent Per Day Calculator";
   const canonicalUrl = "https://www.rentconverter.com/rent-per-day-calculator";
@@ -528,18 +477,6 @@ export default function RentPerDayCalculator() {
     return isCurrency(saved) ? saved : "USD";
   });
 
-  const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
-    if (typeof window === "undefined") return true;
-    return safeParseBoolean(localStorage.getItem("rpdc_round_display"), true);
-  });
-
-  const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
-    if (typeof window === "undefined") return 2;
-    return safeParseDisplayDecimals(
-      localStorage.getItem("rpdc_display_decimals"),
-    );
-  });
-
   const [daysCount, setDaysCount] = useState<string>(() => {
     if (typeof window === "undefined") return "30";
     return localStorage.getItem("rpdc_daysCount") ?? "30";
@@ -551,13 +488,11 @@ export default function RentPerDayCalculator() {
       localStorage.setItem("rpdc_amount", amount);
       localStorage.setItem("rpdc_from", from);
       localStorage.setItem("rpdc_currency", currency);
-      localStorage.setItem("rpdc_round_display", JSON.stringify(roundDisplay));
-      localStorage.setItem("rpdc_display_decimals", String(displayDecimals));
       localStorage.setItem("rpdc_daysCount", daysCount);
     } catch {
       // ignore
     }
-  }, [amount, from, currency, roundDisplay, displayDecimals, daysCount]);
+  }, [amount, from, currency, daysCount]);
 
   const parsedAmount = useMemo(() => parseMoneyInputToScaled(amount), [amount]);
 
@@ -617,7 +552,7 @@ export default function RentPerDayCalculator() {
   }, [daysCount]);
 
   const fmtMoney = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, roundDisplay, displayDecimals);
+    formatCurrencyFromScaled(scaled, currency);
 
   const computed = useMemo(() => {
     const warnings: string[] = [];
@@ -722,7 +657,7 @@ export default function RentPerDayCalculator() {
     "@type": "WebPage",
     name: pageName,
     description:
-      "Calculate rent per day from monthly, weekly, 4-week, biweekly, hourly, or annual rent.",
+      "Calculate rent per day from monthly, weekly, 4-week, biweekly, hourly, or annual rent using stated 365-day assumptions.",
     url: canonicalUrl,
     isPartOf: { "@type": "WebSite", url: "https://www.rentconverter.com" },
     breadcrumb: { "@id": `${canonicalUrl}#breadcrumb` },
@@ -760,9 +695,6 @@ export default function RentPerDayCalculator() {
 
   const periodSelectId = "rpdc_period_select";
 
-  const roundCheckboxId = "rpdc_round_display";
-  const decimalsSelectId = "rpdc_display_decimals";
-
   const daysInputId = "rpdc_days_input";
   const daysErrorId = "rpdc_days_error";
 
@@ -794,18 +726,19 @@ export default function RentPerDayCalculator() {
                 </div>
 
                 <h1 className="mt-3 text-center sm:text-left text-2xl sm:text-3xl capitalize font-bold text-sky-900 tracking-tight">
-                  Daily Rent Equivalent Calculator
+                  Rent Per Day Calculator
                 </h1>
 
                 <p className="mt-2 max-w-3xl text-base text-slate-700">
-                  Calculate rent per day from monthly, weekly, 4-week,
-                  biweekly, hourly, or annual rent. You can also estimate a
-                  total for a chosen number of days.
+                  Calculate the daily equivalent of monthly, weekly, 4-week,
+                  biweekly, hourly, or annual rent. Use it for short stays,
+                  prorated comparisons, or day-by-day budgeting.
                 </p>
               </div>
 
               <div
                 id="export-controls"
+                data-nosnippet
                 className="rc-no-print flex shrink-0 justify-start sm:justify-end"
               >
                 <button
@@ -1129,44 +1062,9 @@ export default function RentPerDayCalculator() {
           <div className="mt-3 rounded-xl border border-slate-200 bg-white/90 px-4 py-3 shadow-sm rc-no-print">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-                <label
-                  htmlFor={roundCheckboxId}
-                  className="flex cursor-pointer items-center gap-2 text-sm text-slate-700"
-                >
-                  <input
-                    id={roundCheckboxId}
-                    type="checkbox"
-                    checked={roundDisplay}
-                    onChange={(e) => setRoundDisplay(e.target.checked)}
-                    className="cursor-pointer h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-400"
-                  />
-                  Round displayed values
-                </label>
-
-                <div className="flex items-center gap-2">
-                  <label
-                    htmlFor={decimalsSelectId}
-                    className="text-xs text-slate-600"
-                  >
-                    Displayed decimals
-                  </label>
-                  <select
-                    id={decimalsSelectId}
-                    value={displayDecimals}
-                    onChange={(e) => {
-                      const v = Math.trunc(Number(e.target.value));
-                      setDisplayDecimals(
-                        v === 0 || v === 2 || v === 4 || v === 6 ? v : 2,
-                      );
-                    }}
-                    className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition hover:border-sky-300 hover:bg-sky-50 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2"
-                  >
-                    <option value={0}>0</option>
-                    <option value={2}>2</option>
-                    <option value={4}>4</option>
-                    <option value={6}>6</option>
-                  </select>
-                </div>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Calculations preserve precision internally, while displayed money values are rounded to cents.
+                </p>
               </div>
 
               <button
@@ -1179,8 +1077,7 @@ export default function RentPerDayCalculator() {
             </div>
 
             <p className="mt-2 text-xs text-slate-600 leading-relaxed">
-              Calculations preserve decimals internally up to 12 places. Only
-              the display is rounded.
+              Calculations preserve precision internally, while displayed money values are rounded to cents.
             </p>
           </div>
         </div>

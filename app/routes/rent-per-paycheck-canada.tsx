@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import type { Route } from "./+types/rent-per-paycheck-canada";
 import Assumptions from "~/client/components/layout/Assumptions";
-import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/rent-per-paycheck-canada/HowItWorks";
 import ToolFit from "~/client/components/rent-per-paycheck-canada/ToolFit";
 import FAQ from "~/client/components/rent-per-paycheck-canada/FAQ";
@@ -14,9 +13,9 @@ function safeToFixed(n: number, digits: number): string {
 export const meta: Route.MetaFunction = () => {
   const url = "https://www.rentconverter.com/rent-per-paycheck-canada";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
-  const title = "Free Rent Per Paycheque Calculator Canada";
+  const title = "Rent Per Paycheque Calculator Canada | Pay Schedule Budget";
   const description =
-    "Calculate rent per paycheque in Canada from monthly rent and common pay schedules.";
+    "Calculate rent per paycheque in Canada from monthly rent and common pay schedules. Compare weekly, biweekly, semi-monthly, and monthly pay.";
 
   return [
     { title },
@@ -232,69 +231,32 @@ function formatPlainNumberFromScaled(
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
-  roundDisplay: boolean,
-  displayDecimals: number,
 ): string {
-  let digits = 12;
-
-  if (roundDisplay) {
-    digits = Math.max(0, Math.min(12, displayDecimals));
-  } else {
-    const a = absBigInt(scaled);
-    const fracPart = a % SCALE;
-    if (fracPart === 0n) {
-      digits = 0;
-    } else {
-      const fracFull = fracPart.toString().padStart(12, "0");
-      const trimmed = fracFull.replace(/0+$/g, "");
-      digits = Math.min(12, Math.max(0, trimmed.length));
-    }
-  }
-
-  const scaledForDisplay = roundDisplay
-    ? roundScaledToDecimals(scaled, digits)
-    : scaled;
+  const digits = 2;
+  const scaledForDisplay = roundScaledToDecimals(scaled, digits);
 
   const { group, decimal } = getNumberSeparators();
   const { negative, intStr, fracStr } = scaledToDecimalStrings(
     scaledForDisplay,
     digits,
-    !roundDisplay,
+    false,
   );
 
   const groupedInt = groupInt(intStr, group);
 
-  const fmt = new Intl.NumberFormat("en-CA", {
+  const fmt = new Intl.NumberFormat(undefined, {
     style: "currency",
     currency,
     minimumFractionDigits: digits,
     maximumFractionDigits: digits,
   });
 
-  const parts = fmt.formatToParts(-1);
-  let out = "";
-  for (const p of parts) {
-    if (p.type === "minusSign") {
-      if (negative) out += p.value;
-      continue;
-    }
-    if (p.type === "integer") {
-      out += groupedInt;
-      continue;
-    }
-    if (p.type === "group") continue;
-    if (p.type === "decimal") {
-      if (digits > 0 && fracStr.length > 0) out += decimal;
-      continue;
-    }
-    if (p.type === "fraction") {
-      if (digits > 0 && fracStr.length > 0) out += fracStr;
-      continue;
-    }
-    out += p.value;
-  }
+  const parts = fmt.formatToParts(0);
+  const currencyPart = parts.find((p) => p.type === "currency");
+  const symbol = currencyPart?.value ?? "";
+  const minus = negative ? "-" : "";
 
-  return out || "—";
+  return minus + symbol + groupedInt + (digits > 0 ? decimal + fracStr.padEnd(digits, "0") : "");
 }
 
 function parseMoneyInputToScaled(raw: string, label = "value"): ParsedScaled {
@@ -423,14 +385,6 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   }
 }
 
-function parseStrictDisplayDecimals(raw: string | null): number {
-  if (raw === null) return 2;
-  const n = Number(raw);
-  if (!Number.isFinite(n)) return 2;
-  const t = Math.trunc(n);
-  return t === 0 || t === 2 || t === 4 || t === 6 ? t : 2;
-}
-
 function paychequesPerYear(period: Period): bigint {
   if (period === "weekly") return 52n;
   if (period === "biweekly") return 26n;
@@ -474,36 +428,14 @@ export default function RentPerPaycheckCanada() {
     return isCurrency(saved) ? saved : "CAD";
   });
 
-  const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
-    if (typeof window === "undefined") return true;
-    const raw = localStorage.getItem("rc_rpc_ca_round_display");
-    if (raw !== null) return safeParseBoolean(raw, true);
-    return true;
-  });
-
-  const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
-    if (typeof window === "undefined") return 2;
-    return parseStrictDisplayDecimals(
-      localStorage.getItem("rc_rpc_ca_display_decimals"),
-    );
-  });
-
   useEffect(() => {
     if (typeof window === "undefined") return;
     try {
       localStorage.setItem("rc_rpc_ca_monthly_rent", monthlyRent);
       localStorage.setItem("rc_rpc_ca_pay_period", payPeriod);
       localStorage.setItem("rc_rpc_ca_currency", currency);
-      localStorage.setItem(
-        "rc_rpc_ca_round_display",
-        JSON.stringify(roundDisplay),
-      );
-      localStorage.setItem(
-        "rc_rpc_ca_display_decimals",
-        String(displayDecimals),
-      );
     } catch {}
-  }, [monthlyRent, payPeriod, currency, roundDisplay, displayDecimals]);
+  }, [monthlyRent, payPeriod, currency]);
 
   const parsed = useMemo(() => {
     const p = parseMoneyInputToScaled(monthlyRent, "monthly rent amount");
@@ -565,7 +497,7 @@ export default function RentPerPaycheckCanada() {
   }, [parsed, payPeriod]);
 
   const money = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, roundDisplay, displayDecimals);
+    formatCurrencyFromScaled(scaled, currency);
 
   const handlePrint = () => {
     if (typeof window === "undefined") return;
@@ -605,7 +537,7 @@ export default function RentPerPaycheckCanada() {
     "@type": "WebPage",
     name: pageName,
     description:
-      "Calculate rent per paycheque in Canada from monthly rent and common pay schedules.",
+      "Calculate rent per paycheque in Canada from monthly rent and common pay schedules. Compare weekly, biweekly, semi-monthly, and monthly pay.",
     url: canonicalUrl,
     isPartOf: { "@type": "WebSite", url: "https://www.rentconverter.com" },
     breadcrumb: { "@id": `${canonicalUrl}#breadcrumb` },
@@ -650,6 +582,7 @@ export default function RentPerPaycheckCanada() {
 
               <div
                 id="export-controls"
+                data-nosnippet
                 className="rc-no-print flex shrink-0 justify-start sm:justify-end"
               >
                 <button
@@ -940,12 +873,9 @@ export default function RentPerPaycheckCanada() {
 
         <div className="mt-3 rounded-xl border border-slate-200 bg-white/90 px-4 py-3 shadow-sm rc-no-print">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <Rounding
-              roundDisplay={roundDisplay}
-              setRoundDisplay={setRoundDisplay}
-              displayDecimals={displayDecimals}
-              setDisplayDecimals={setDisplayDecimals as any}
-            />
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Calculations preserve precision internally, while displayed money values are rounded to cents.
+              </p>
 
             <button
               type="button"

@@ -1,7 +1,6 @@
 import { useMemo, useEffect, useRef, useState } from "react";
 import type { Route } from "./+types/rent-after-increase-calculator";
 import Assumptions from "~/client/components/layout/Assumptions";
-import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/rent-after-increase-calculator/HowItWorks";
 import ToolFit from "~/client/components/rent-after-increase-calculator/ToolFit";
 
@@ -11,9 +10,9 @@ function safeToFixed(n: number, digits: number): string {
 }
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Rent After Increase Calculator | RentConverter.com";
+  const title = "Rent After Increase Calculator | New Rent Amount";
   const description =
-    "Calculate new rent after a percentage or fixed increase. See the result by billing period, annual impact, and rent breakdowns.";
+    "Calculate rent after a fixed or percentage increase. See the new rent by billing period, annual impact, and before-and-after breakdown.";
 
   const url = "https://www.rentconverter.com/rent-after-increase-calculator";
   const image = "https://www.rentconverter.com/og-image.jpg";
@@ -269,41 +268,19 @@ function scaledToDecimalStrings(
 
 /**
  * Money formatting rules:
- * - If displayDecimals === 12 (no display rounding mode), show up to 12 decimals (min 0).
- * - Otherwise, show exactly displayDecimals decimals (min = max = displayDecimals).
  */
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
-  roundDisplay: boolean,
-  displayDecimals: number,
 ): string {
-  let digits = 12;
-
-  if (roundDisplay) {
-    digits = Math.max(0, Math.min(12, displayDecimals));
-  } else {
-    // Show up to 12 decimals but trim trailing zeros for display.
-    const a = absBigInt(scaled);
-    const fracPart = a % SCALE;
-    if (fracPart === 0n) {
-      digits = 0;
-    } else {
-      const fracFull = fracPart.toString().padStart(12, "0");
-      const trimmed = fracFull.replace(/0+$/g, "");
-      digits = Math.min(12, Math.max(0, trimmed.length));
-    }
-  }
-
-  const scaledForDisplay = roundDisplay
-    ? roundScaledToDecimals(scaled, digits)
-    : scaled;
+  const digits = 2;
+  const scaledForDisplay = roundScaledToDecimals(scaled, digits);
 
   const { group, decimal } = getNumberSeparators();
   const { negative, intStr, fracStr } = scaledToDecimalStrings(
     scaledForDisplay,
     digits,
-    !roundDisplay, // trim only when not rounding to fixed digits
+    false,
   );
 
   const groupedInt = groupInt(intStr, group);
@@ -315,34 +292,12 @@ function formatCurrencyFromScaled(
     maximumFractionDigits: digits,
   });
 
-  // Build by parts so we keep locale currency placement and symbols without using floats for the value.
-  const parts = fmt.formatToParts(-1);
-  let out = "";
-  for (const p of parts) {
-    if (p.type === "minusSign") {
-      if (negative) out += p.value;
-      continue;
-    }
-    if (p.type === "integer") {
-      out += groupedInt;
-      continue;
-    }
-    if (p.type === "group") {
-      // We already grouped ourselves.
-      continue;
-    }
-    if (p.type === "decimal") {
-      if (digits > 0 && fracStr.length > 0) out += decimal;
-      continue;
-    }
-    if (p.type === "fraction") {
-      if (digits > 0 && fracStr.length > 0) out += fracStr;
-      continue;
-    }
-    out += p.value;
-  }
+  const parts = fmt.formatToParts(0);
+  const currencyPart = parts.find((p) => p.type === "currency");
+  const symbol = currencyPart?.value ?? "";
+  const minus = negative ? "-" : "";
 
-  return out || "-";
+  return minus + symbol + groupedInt + (digits > 0 ? decimal + fracStr.padEnd(digits, "0") : "");
 }
 
 /**
@@ -598,10 +553,6 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   }
 }
 
-function isAllowedDisplayDecimals(n: number): n is 0 | 2 | 4 | 6 {
-  return n === 0 || n === 2 || n === 4 || n === 6;
-}
-
 function hasTrailingAmbiguousDecimal(raw: string): boolean {
   const s = (raw ?? "").trim();
   return s.endsWith(".") || s.endsWith(",");
@@ -658,24 +609,6 @@ export default function RentAfterIncrease() {
   const [isCurrentFocused, setIsCurrentFocused] = useState(false);
   const [isIncreaseAmtFocused, setIsIncreaseAmtFocused] = useState(false);
 
-  // Display-only rounding
-  const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
-    if (typeof window === "undefined") return true;
-    return safeParseBoolean(
-      window.localStorage.getItem("rc_rai_round_display"),
-      true,
-    );
-  });
-
-  const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
-    if (typeof window === "undefined") return 2;
-    const saved = window.localStorage.getItem("rc_rai_display_decimals");
-    const n = saved ? Number(saved) : 2;
-    if (!Number.isFinite(n)) return 2;
-    const v = Math.trunc(n);
-    return isAllowedDisplayDecimals(v) ? v : 2;
-  });
-
   useEffect(() => {
     if (typeof window === "undefined") return;
     try {
@@ -685,14 +618,6 @@ export default function RentAfterIncrease() {
       window.localStorage.setItem("rc_rai_amount", increaseAmount);
       window.localStorage.setItem("rc_rai_period", period);
       window.localStorage.setItem("rc_rai_currency", currency);
-      window.localStorage.setItem(
-        "rc_rai_round_display",
-        JSON.stringify(roundDisplay),
-      );
-      window.localStorage.setItem(
-        "rc_rai_display_decimals",
-        String(displayDecimals),
-      );
     } catch {
       // ignore
     }
@@ -703,8 +628,6 @@ export default function RentAfterIncrease() {
     increaseAmount,
     period,
     currency,
-    roundDisplay,
-    displayDecimals,
   ]);
 
   const currentParsed = useMemo(
@@ -759,15 +682,8 @@ export default function RentAfterIncrease() {
     amtParsed.normalized,
     amtAmbiguous,
   ]);
-
-  const effectiveDisplayDecimals = roundDisplay ? displayDecimals : 12;
   const fmt = (scaled: bigint) =>
-    formatCurrencyFromScaled(
-      scaled,
-      currency,
-      roundDisplay,
-      effectiveDisplayDecimals,
-    );
+    formatCurrencyFromScaled(scaled, currency);
 
   const computed = useMemo(() => {
     const errors: string[] = [];
@@ -1012,6 +928,7 @@ export default function RentAfterIncrease() {
 
               <div
                 id="export-controls"
+                data-nosnippet
                 className="rc-no-print flex shrink-0 flex-wrap gap-2 sm:justify-end"
               >
                 <button
@@ -1483,12 +1400,9 @@ export default function RentAfterIncrease() {
               Print / Save as PDF
             </button>
           </div>
-          <Rounding
-            roundDisplay={roundDisplay}
-            setRoundDisplay={setRoundDisplay}
-            displayDecimals={displayDecimals}
-            setDisplayDecimals={setDisplayDecimals as any}
-          />
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Calculations preserve precision internally, while displayed money values are rounded to cents.
+              </p>
         </div>
       </section>
 

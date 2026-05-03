@@ -2,7 +2,6 @@
 import { useEffect, useMemo, useState } from "react";
 import type { Route } from "./+types/weekly-to-biweekly-rent-converter";
 import Assumptions from "~/client/components/layout/Assumptions";
-import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/weekly-to-biweekly-rent-converter/HowItWorks";
 import ToolFit from "~/client/components/weekly-to-biweekly-rent-converter/ToolFit";
 
@@ -12,9 +11,9 @@ function safeToFixed(n: number, digits: number): string {
 }
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Free Weekly to Biweekly Rent Converter";
+  const title = "Weekly to Biweekly Rent Converter | Every 2 Weeks";
   const description =
-    "Convert weekly rent into rent every 2 weeks. See monthly, 4-week, daily, and annual rent breakdowns.";
+    "Convert weekly rent into rent every two weeks. See biweekly, monthly, 4-week, daily, and annual rent breakdowns.";
   const url = "https://www.rentconverter.com/weekly-to-biweekly-rent-converter";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
 
@@ -269,34 +268,15 @@ function formatPlainNumberFromScaled(
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
-  roundDisplay: boolean,
-  displayDecimals: number,
 ): string {
-  let digits = 12;
-
-  if (roundDisplay) {
-    digits = Math.max(0, Math.min(12, displayDecimals));
-  } else {
-    const a = absBigInt(scaled);
-    const fracPart = a % SCALE;
-    if (fracPart === 0n) {
-      digits = 0;
-    } else {
-      const fracFull = fracPart.toString().padStart(12, "0");
-      const trimmed = fracFull.replace(/0+$/g, "");
-      digits = Math.min(12, Math.max(0, trimmed.length));
-    }
-  }
-
-  const scaledForDisplay = roundDisplay
-    ? roundScaledToDecimals(scaled, digits)
-    : scaled;
+  const digits = 2;
+  const scaledForDisplay = roundScaledToDecimals(scaled, digits);
 
   const { group, decimal } = getNumberSeparators();
   const { negative, intStr, fracStr } = scaledToDecimalStrings(
     scaledForDisplay,
     digits,
-    !roundDisplay,
+    false,
   );
 
   const groupedInt = groupInt(intStr, group);
@@ -308,32 +288,12 @@ function formatCurrencyFromScaled(
     maximumFractionDigits: digits,
   });
 
-  const parts = fmt.formatToParts(-1);
-  let out = "";
-  for (const p of parts) {
-    if (p.type === "minusSign") {
-      if (negative) out += p.value;
-      continue;
-    }
-    if (p.type === "integer") {
-      out += groupedInt;
-      continue;
-    }
-    if (p.type === "group") {
-      continue;
-    }
-    if (p.type === "decimal") {
-      if (digits > 0 && fracStr.length > 0) out += decimal;
-      continue;
-    }
-    if (p.type === "fraction") {
-      if (digits > 0 && fracStr.length > 0) out += fracStr;
-      continue;
-    }
-    out += p.value;
-  }
+  const parts = fmt.formatToParts(0);
+  const currencyPart = parts.find((p) => p.type === "currency");
+  const symbol = currencyPart?.value ?? "";
+  const minus = negative ? "-" : "";
 
-  return out || "—";
+  return minus + symbol + groupedInt + (digits > 0 ? decimal + fracStr.padEnd(digits, "0") : "");
 }
 
 /**
@@ -558,15 +518,6 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   }
 }
 
-function safeParseDisplayDecimals(raw: string | null, fallback = 2): number {
-  if (raw === null) return fallback;
-  const n = Number(raw);
-  if (!Number.isFinite(n)) return fallback;
-  const t = Math.trunc(n);
-  if (t === 0 || t === 2 || t === 4 || t === 6) return t;
-  return fallback;
-}
-
 export default function WeeklyToBiweeklyRent() {
   const pageName = "Weekly to Biweekly Rent Converter";
   const canonicalUrl =
@@ -583,42 +534,15 @@ export default function WeeklyToBiweeklyRent() {
     return isCurrency(saved) ? saved : "USD";
   });
 
-  // Display-only rounding controls (keeps old key rc_wtbw_rounding as fallback)
-  const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
-    if (typeof window === "undefined") return true;
-
-    const newKey = localStorage.getItem("rc_wtbw_round_display");
-    if (newKey !== null) return safeParseBoolean(newKey, true);
-
-    const oldKey = localStorage.getItem("rc_wtbw_rounding");
-    if (oldKey !== null) return safeParseBoolean(oldKey, true);
-
-    return true;
-  });
-
-  const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
-    if (typeof window === "undefined") return 2;
-    return safeParseDisplayDecimals(
-      localStorage.getItem("rc_wtbw_display_decimals"),
-      2,
-    );
-  });
-
   useEffect(() => {
     if (typeof window === "undefined") return;
     try {
       localStorage.setItem("rc_wtbw_amount", amount);
       localStorage.setItem("rc_wtbw_currency", currency);
-      localStorage.setItem(
-        "rc_wtbw_round_display",
-        JSON.stringify(roundDisplay),
-      );
-      localStorage.setItem("rc_wtbw_display_decimals", String(displayDecimals));
 
       // keep legacy key in sync
-      localStorage.setItem("rc_wtbw_rounding", JSON.stringify(roundDisplay));
     } catch {}
-  }, [amount, currency, roundDisplay, displayDecimals]);
+  }, [amount, currency]);
 
   const parsed = useMemo(() => {
     const p = parseMoneyInputToScaled(amount, "weekly rent amount");
@@ -683,7 +607,7 @@ export default function WeeklyToBiweeklyRent() {
   }, [parsed]);
 
   const money = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, roundDisplay, displayDecimals);
+    formatCurrencyFromScaled(scaled, currency);
 
   const handlePrint = () => {
     if (typeof window === "undefined") return;
@@ -804,7 +728,7 @@ export default function WeeklyToBiweeklyRent() {
     "@type": "WebPage",
     name: pageName,
     description:
-      "Convert weekly rent into rent every 2 weeks. See monthly, 4-week, daily, and annual rent breakdowns.",
+      "Convert weekly rent into rent every two weeks. See biweekly, monthly, 4-week, daily, and annual rent breakdowns.",
     url: canonicalUrl,
     isPartOf: { "@type": "WebSite", url: "https://www.rentconverter.com" },
     breadcrumb: { "@id": `${canonicalUrl}#breadcrumb` },
@@ -849,6 +773,7 @@ export default function WeeklyToBiweeklyRent() {
 
               <div
                 id="export-controls"
+                data-nosnippet
                 className="rc-no-print flex shrink-0 justify-start sm:justify-end"
               >
                 <button
@@ -1068,12 +993,9 @@ export default function WeeklyToBiweeklyRent() {
 
         <div className="mt-3 rounded-xl border border-slate-200 bg-white/90 px-4 py-3 shadow-sm rc-no-print">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <Rounding
-              roundDisplay={roundDisplay}
-              setRoundDisplay={setRoundDisplay}
-              displayDecimals={displayDecimals}
-              setDisplayDecimals={setDisplayDecimals as any}
-            />
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Calculations preserve precision internally, while displayed money values are rounded to cents.
+              </p>
 
             <button
               type="button"
@@ -1085,8 +1007,7 @@ export default function WeeklyToBiweeklyRent() {
           </div>
 
           <p className="mt-2 text-xs text-slate-600 leading-relaxed">
-            Calculations preserve decimals internally up to 12 places. Only the
-            display is rounded.
+            Calculations preserve precision internally, while displayed money values are rounded to cents.
           </p>
         </div>
       </section>

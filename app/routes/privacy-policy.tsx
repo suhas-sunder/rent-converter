@@ -75,7 +75,7 @@ export default function PrivacyPolicy() {
     "@type": "WebPage",
     name: pageName,
     description:
-      "Privacy policy describing how RentConverter.com collects, uses, and shares information and what choices users have.",
+      "Read how RentConverter.com handles privacy, browser storage, analytics, advertising, and calculator data.",
     url: canonicalUrl,
   };
 

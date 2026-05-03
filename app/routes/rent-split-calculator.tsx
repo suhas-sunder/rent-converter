@@ -1,14 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Route } from "./+types/rent-split-calculator";
 import Assumptions from "~/client/components/layout/Assumptions";
-import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/rent-split-calculator/HowItWorks";
 import ToolFit from "~/client/components/rent-split-calculator/ToolFit";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Free Rent Split Calculator";
+  const title = "Rent Split Calculator | Split Rent by Roommates";
   const description =
-    "Calculate how much each roommate pays when rent is split equally.";
+    "Split rent evenly among roommates and see each person?s share by month, week, 4-week period, and year, including cents remainder.";
 
   const canonicalUrl = "https://www.rentconverter.com/rent-split-calculator";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
@@ -250,35 +249,15 @@ function scaledToDecimalStrings(
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
-  roundDisplay: boolean,
-  displayDecimals: number,
 ): string {
-  let digits = 12;
-
-  if (roundDisplay) {
-    digits = Math.max(0, Math.min(12, displayDecimals));
-  } else {
-    // Show up to 12 decimals but trim trailing zeros for display.
-    const a = absBigInt(scaled);
-    const fracPart = a % SCALE;
-    if (fracPart === 0n) {
-      digits = 0;
-    } else {
-      const fracFull = fracPart.toString().padStart(12, "0");
-      const trimmed = fracFull.replace(/0+$/g, "");
-      digits = Math.min(12, Math.max(0, trimmed.length));
-    }
-  }
-
-  const scaledForDisplay = roundDisplay
-    ? roundScaledToDecimals(scaled, digits)
-    : scaled;
+  const digits = 2;
+  const scaledForDisplay = roundScaledToDecimals(scaled, digits);
 
   const { group, decimal } = getNumberSeparators();
   const { negative, intStr, fracStr } = scaledToDecimalStrings(
     scaledForDisplay,
     digits,
-    !roundDisplay, // trim only when not rounding to fixed digits
+    false,
   );
 
   const groupedInt = groupInt(intStr, group);
@@ -290,34 +269,12 @@ function formatCurrencyFromScaled(
     maximumFractionDigits: digits,
   });
 
-  // Build by parts so we keep locale currency placement and symbols without using floats for the value.
-  const parts = fmt.formatToParts(-1);
-  let out = "";
-  for (const p of parts) {
-    if (p.type === "minusSign") {
-      if (negative) out += p.value;
-      continue;
-    }
-    if (p.type === "integer") {
-      out += groupedInt;
-      continue;
-    }
-    if (p.type === "group") {
-      // We already grouped ourselves.
-      continue;
-    }
-    if (p.type === "decimal") {
-      if (digits > 0 && fracStr.length > 0) out += decimal;
-      continue;
-    }
-    if (p.type === "fraction") {
-      if (digits > 0 && fracStr.length > 0) out += fracStr;
-      continue;
-    }
-    out += p.value;
-  }
+  const parts = fmt.formatToParts(0);
+  const currencyPart = parts.find((p) => p.type === "currency");
+  const symbol = currencyPart?.value ?? "";
+  const minus = negative ? "-" : "";
 
-  return out || "-";
+  return minus + symbol + groupedInt + (digits > 0 ? decimal + fracStr.padEnd(digits, "0") : "");
 }
 
 function groupThousandsEnUS(intDigits: string): string {
@@ -525,14 +482,6 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   }
 }
 
-function safeParseDisplayDecimals(raw: string | null, fallback = 2): number {
-  if (raw === null) return fallback;
-  const n = Number(raw);
-  if (!Number.isFinite(n)) return fallback;
-  const t = Math.trunc(n);
-  return t === 0 || t === 2 || t === 4 || t === 6 ? t : fallback;
-}
-
 export default function RentPerPerson() {
   const pageName = "Rent Split Calculator";
   const canonicalUrl = "https://www.rentconverter.com/rent-split-calculator";
@@ -563,20 +512,6 @@ export default function RentPerPerson() {
     return isCurrency(saved) ? saved : "USD";
   });
 
-  // Display-only rounding controls (do not affect computation)
-  const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
-    if (typeof window === "undefined") return true;
-    return safeParseBoolean(localStorage.getItem("rc_rpp_round_display"), true);
-  });
-
-  const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
-    if (typeof window === "undefined") return 2;
-    return safeParseDisplayDecimals(
-      localStorage.getItem("rc_rpp_display_decimals"),
-      2,
-    );
-  });
-
   useEffect(() => {
     if (typeof window === "undefined") return;
     try {
@@ -584,15 +519,10 @@ export default function RentPerPerson() {
       localStorage.setItem("rc_rpp_period", period);
       localStorage.setItem("rc_rpp_people", people);
       localStorage.setItem("rc_rpp_currency", currency);
-      localStorage.setItem(
-        "rc_rpp_round_display",
-        JSON.stringify(roundDisplay),
-      );
-      localStorage.setItem("rc_rpp_display_decimals", String(displayDecimals));
     } catch {
       // ignore
     }
-  }, [totalRent, period, people, currency, roundDisplay, displayDecimals]);
+  }, [totalRent, period, people, currency]);
 
   const parsedRent = useMemo(
     () => parseMoneyInputToScaled(totalRent),
@@ -672,7 +602,7 @@ export default function RentPerPerson() {
   }, [parsedRent, parsedPeople, period]);
 
   const fmtMoney = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, roundDisplay, displayDecimals);
+    formatCurrencyFromScaled(scaled, currency);
 
   const avgMonthDays = 365 / 12;
 
@@ -774,7 +704,7 @@ export default function RentPerPerson() {
     "@type": "WebPage",
     name: pageName,
     description:
-      "Calculate how much each roommate pays when rent is split equally.",
+      "Split rent evenly among roommates and see each person?s share by month, week, 4-week period, and year, including cents remainder.",
     url: canonicalUrl,
     isPartOf: { "@type": "WebSite", url: "https://www.rentconverter.com" },
     breadcrumb: { "@id": `${canonicalUrl}#breadcrumb` },
@@ -801,8 +731,6 @@ export default function RentPerPerson() {
   const peopleErrorId = "rpp_people_error";
 
   const currencyId = "rpp_currency";
-  const roundId = "rpp_round";
-  const decimalsId = "rpp_decimals";
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-slate-50 text-slate-700 scroll-smooth antialiased">
@@ -840,6 +768,7 @@ export default function RentPerPerson() {
 
               <div
                 id="export-controls"
+                data-nosnippet
                 className="rc-no-print flex shrink-0 justify-start sm:justify-end"
               >
                 <button
@@ -1156,12 +1085,9 @@ export default function RentPerPerson() {
 
           <div className="mt-3 rounded-xl border border-slate-200 bg-white/90 px-4 py-3 shadow-sm rc-no-print">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <Rounding
-                roundDisplay={roundDisplay}
-                setRoundDisplay={setRoundDisplay}
-                displayDecimals={displayDecimals}
-                setDisplayDecimals={setDisplayDecimals as any}
-              />
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Calculations preserve precision internally, while displayed money values are rounded to cents.
+              </p>
 
               <button
                 type="button"
@@ -1173,8 +1099,7 @@ export default function RentPerPerson() {
             </div>
 
             <p className="mt-2 text-xs text-slate-600 leading-relaxed">
-              Calculations preserve decimals internally up to 12 places. Only
-              the display is rounded.
+              Calculations preserve precision internally, while displayed money values are rounded to cents.
             </p>
           </div>
         </div>

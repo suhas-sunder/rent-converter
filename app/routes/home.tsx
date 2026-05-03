@@ -8,23 +8,23 @@ const SITE_URL = "https://www.rentconverter.com/";
 
 export const meta: Route.MetaFunction = () => [
   {
-    title: "Rent Converter: Weekly, Monthly, Daily & Annual",
+    title: "Rent Converter Calculator | Weekly, Monthly, 4-Week & Annual Rent",
   },
   {
     name: "description",
     content:
-      "Convert rent between weekly, monthly, biweekly, 4-week, daily, hourly, and annual amounts. See true monthly cost, annual cost, and 4-week vs monthly differences. Free, private, no signup.",
+      "Convert rent between weekly, monthly, every 4 weeks, biweekly, daily, hourly, and annual periods. See true monthly cost, 4-week comparisons, and printable results.",
   },
 
   { property: "og:type", content: "website" },
   {
     property: "og:title",
-    content: "Rent Converter: Weekly, Monthly, Daily & Annual",
+    content: "Rent Converter Calculator | Weekly, Monthly, 4-Week & Annual Rent",
   },
   {
     property: "og:description",
     content:
-      "Convert rent across weekly, monthly, biweekly, 4-week, daily, hourly, and annual periods with clear assumptions, exact decimal-safe math, and side-by-side results.",
+      "Convert rent across weekly, monthly, biweekly, 4-week, daily, hourly, and annual periods with clear assumptions and cents-rounded results.",
   },
   { property: "og:url", content: SITE_URL },
   { property: "og:site_name", content: "RentConverter.com" },
@@ -33,12 +33,12 @@ export const meta: Route.MetaFunction = () => [
   { name: "twitter:card", content: "summary_large_image" },
   {
     name: "twitter:title",
-    content: "Rent Converter: Weekly, Monthly, Daily & Annual",
+    content: "Rent Converter Calculator | Weekly, Monthly, 4-Week & Annual Rent",
   },
   {
     name: "twitter:description",
     content:
-      "Find the true monthly, weekly, daily, hourly, and annual cost of rent with clear assumptions and decimal-safe calculations.",
+      "Find true monthly, weekly, 4-week, daily, hourly, and annual rent with clear assumptions and printable browser results.",
   },
   { name: "twitter:image", content: `${SITE_URL}og-image.jpg` },
 
@@ -175,16 +175,6 @@ function SafeLink({
   );
 }
 
-function safeJsonParseBoolean(value: string | null, fallback: boolean) {
-  if (value === null) return fallback;
-  try {
-    const parsed = JSON.parse(value);
-    return typeof parsed === "boolean" ? parsed : fallback;
-  } catch {
-    return fallback;
-  }
-}
-
 function safePeriod(value: string | null, fallback: Period): Period {
   if (!value) return fallback;
   const v = value as Period;
@@ -195,13 +185,6 @@ function safeCurrency(value: string | null, fallback: string): string {
   if (!value) return fallback;
   const v = value.toUpperCase();
   return CURRENCY_OPTIONS.some((c) => c.code === v) ? v : fallback;
-}
-
-function safeDisplayDecimals(value: string | null, fallback: 0 | 2 | 4 | 6) {
-  if (value === null) return fallback;
-  const n = Number(value);
-  if (n === 0 || n === 2 || n === 4 || n === 6) return n as 0 | 2 | 4 | 6;
-  return fallback;
 }
 
 /**
@@ -534,25 +517,13 @@ export default function Home() {
     return safeCurrency(localStorage.getItem("rc_currency"), "USD");
   });
 
-  const [roundForDisplay, setRoundForDisplay] = useState<boolean>(() => {
-    if (typeof window === "undefined") return true;
-    return safeJsonParseBoolean(localStorage.getItem("rc_rounding"), true);
-  });
-
-  const [displayDecimals, setDisplayDecimals] = useState<0 | 2 | 4 | 6>(() => {
-    if (typeof window === "undefined") return 2;
-    return safeDisplayDecimals(localStorage.getItem("rc_display_decimals"), 2);
-  });
-
   useEffect(() => {
     if (typeof window === "undefined") return;
     localStorage.setItem("rc_amount", amount);
     localStorage.setItem("rc_from", from);
     localStorage.setItem("rc_to", to);
     localStorage.setItem("rc_currency", currency);
-    localStorage.setItem("rc_rounding", JSON.stringify(roundForDisplay));
-    localStorage.setItem("rc_display_decimals", String(displayDecimals));
-  }, [amount, from, to, currency, roundForDisplay, displayDecimals]);
+  }, [amount, from, to, currency]);
 
   const hasInput = useMemo(() => amount.trim().length > 0, [amount]);
 
@@ -590,28 +561,17 @@ export default function Home() {
     return convertRational(amountR, from, to);
   }, [amountR, from, to]);
 
-  const roundingNote = roundForDisplay
-    ? `Display rounded to ${displayDecimals} decimals (math stays exact in decimals up to 6 places).`
-    : "No display rounding (shown with up to 12 decimals when available).";
-
   const displayMoney = useMemo(() => {
-    if (!rawResultR) return "—";
+    if (!rawResultR) return "-";
     const scaled = toScaledUnits(rawResultR);
-
-    const roundedScaled = roundForDisplay
-      ? roundScaledToDigits(scaled, displayDecimals)
-      : scaled;
-
-    const dec = scaledToDecimalString(roundedScaled, 6, {
-      fixed: roundForDisplay ? displayDecimals > 0 : false,
-      trimTrailingZeros: !roundForDisplay,
-    });
+    const roundedScaled = roundScaledToDigits(scaled, 2);
+    const dec = scaledToDecimalString(roundedScaled, 2, { fixed: true });
 
     return formatMoneyFromDecimalString(dec, currency, {
-      minimumFractionDigits: roundForDisplay ? displayDecimals : 0,
-      maximumFractionDigits: roundForDisplay ? displayDecimals : 12,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
     });
-  }, [rawResultR, roundForDisplay, displayDecimals, currency]);
+  }, [rawResultR, currency]);
 
   const inputGroupedDisplay = useMemo(() => {
     if (amountFocused) return amount;
@@ -707,21 +667,14 @@ export default function Home() {
   }, [amountR, from]);
 
   function formatRationalMoney(r: Rational | null) {
-    if (!r) return "—";
+    if (!r) return "-";
     const scaled = toScaledUnits(r);
-
-    const roundedScaled = roundForDisplay
-      ? roundScaledToDigits(scaled, displayDecimals)
-      : scaled;
-
-    const dec = scaledToDecimalString(roundedScaled, 6, {
-      fixed: roundForDisplay ? displayDecimals > 0 : false,
-      trimTrailingZeros: !roundForDisplay,
-    });
+    const roundedScaled = roundScaledToDigits(scaled, 2);
+    const dec = scaledToDecimalString(roundedScaled, 2, { fixed: true });
 
     return formatMoneyFromDecimalString(dec, currency, {
-      minimumFractionDigits: roundForDisplay ? displayDecimals : 0,
-      maximumFractionDigits: roundForDisplay ? displayDecimals : 12,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
     });
   }
 
@@ -782,7 +735,7 @@ export default function Home() {
     },
     {
       q: "Does the calculator preserve decimals?",
-      a: "Yes. The calculator uses decimal-safe math and preserves precision internally. Rounding is display-only, and the selected decimal setting controls how the final numbers are shown.",
+      a: "Yes. The calculator uses decimal-safe math and preserves precision internally. Displayed money values are rounded to cents, while internal calculations preserve precision.",
     },
     {
       q: "Can I save or share the result?",
@@ -810,9 +763,9 @@ export default function Home() {
   const webPageSchema = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    name: "Rent Converter: Weekly, Monthly, Daily, Hourly, Biweekly, 4-Week, and Annual Rent",
+    name: "Rent Converter Calculator",
     description:
-      "Convert rent between weekly, monthly, every 4 weeks, biweekly, daily, hourly, and annual periods. See true monthly rent, annual rent, and 4-week vs monthly differences with clear assumptions.",
+      "Convert rent between weekly, monthly, every 4 weeks, biweekly, daily, hourly, and annual periods. See true monthly rent, annual rent, and 4-week comparisons with clear assumptions.",
     url: SITE_URL,
   };
 
@@ -824,8 +777,6 @@ export default function Home() {
   const amountHelpId = "rent-amount-help";
   const amountStatusId = "rent-amount-status";
   const resultRegionId = "converted-rent-region";
-  const decimalsHelpId = "display-decimals-help";
-
   return (
     <main className="bg-gradient-to-b from-sky-50 via-white to-slate-50 text-slate-700 scroll-smooth antialiased">
       <style
@@ -853,16 +804,18 @@ export default function Home() {
                 Rent conversion calculator
               </p>
               <h1 className="text-center mb-1 sm:mb-0 sm:text-left text-2xl sm:text-3xl capitalize font-bold text-sky-900 tracking-tight">
-                Rent Converter: Daily, Weekly, Monthly & Annual
+                Rent Converter Calculator
               </h1>
               <p className="hidden md:flex w-full max-w-3xl py-2 text-slate-600 leading-relaxed">
-                Convert rent between daily, weekly, monthly, and yearly rates in
-                one click. No sign-up, instant results.
+                Convert rent between weekly, monthly, every 4 weeks, biweekly,
+                daily, hourly, and annual periods. Compare true monthly cost
+                without treating 4 weeks as a full month.
               </p>
             </div>
 
             <div
               id="export-controls-top"
+              data-nosnippet
               className="hidden sm:flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
             >
               <div className="flex flex-wrap gap-2">
@@ -879,10 +832,6 @@ export default function Home() {
               </div>
             </div>
           </div>
-
-          <p id={decimalsHelpId} className="sr-only">
-            Controls how many decimals to show when rounding is enabled.
-          </p>
 
           <div className="grid gap-y-3 gap-x-5 md:grid-cols-12">
             <div className="md:col-span-5">
@@ -1106,6 +1055,7 @@ export default function Home() {
                   <div className="flex flex-wrap items-center gap-3 mt-4">
                     <div
                       id="export-controls-bottom"
+                      data-nosnippet
                       className="mr-auto flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
                     >
                       <div className="flex flex-wrap gap-2">
@@ -1121,36 +1071,10 @@ export default function Home() {
                         </button>
                       </div>
                     </div>
-
-                    <label className="inline-flex items-center gap-2 text-sm font-medium text-slate-700 select-none">
-                      <input
-                        type="checkbox"
-                        checked={roundForDisplay}
-                        onChange={(e) => setRoundForDisplay(e.target.checked)}
-                        className="cursor-pointer h-4 w-4 rounded border-slate-300 text-sky-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-                      />
-                      Round results for display
-                    </label>
-
-                    <label className="inline-flex items-center gap-2 text-sm font-medium text-slate-700 select-none">
-                      <span className="sr-only">Display decimals</span>
-                      <select
-                        value={displayDecimals}
-                        onChange={(e) =>
-                          setDisplayDecimals(
-                            safeDisplayDecimals(e.target.value, 2),
-                          )
-                        }
-                        className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition hover:border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-sky-400"
-                        aria-describedby={decimalsHelpId}
-                        aria-label="Display decimals"
-                      >
-                        <option value={0}>0 decimals</option>
-                        <option value={2}>2 decimals</option>
-                        <option value={4}>4 decimals</option>
-                        <option value={6}>6 decimals</option>
-                      </select>
-                    </label>
+                    <p className="text-xs text-slate-600 leading-relaxed">
+                      Calculations preserve precision internally, while
+                      displayed money values are rounded to cents.
+                    </p>
                   </div>
                 </>
               );

@@ -11,9 +11,9 @@ const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
 const OG_IMAGE_URL = `${SITE_URL}/og-image.jpg`;
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Income Required for Rent Calculator | Rent Calculator";
+  const title = "Income Required for Rent Calculator | 2x 3x Rent Rule";
   const description =
-    "Calculate the income required for rent using 2x, 2.5x, 3x, or a custom rent rule.";
+    "Calculate the income required for rent using 2x, 2.5x, 3x, or a custom multiplier. See monthly and annual income targets with printable results.";
 
   return [
     { title },
@@ -215,34 +215,15 @@ function scaledToDecimalStrings(
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
-  roundDisplay: boolean,
-  displayDecimals: number,
 ): string {
-  let digits = 12;
-
-  if (roundDisplay) {
-    digits = Math.max(0, Math.min(12, displayDecimals));
-  } else {
-    const a = absBigInt(scaled);
-    const fracPart = a % SCALE;
-    if (fracPart === 0n) {
-      digits = 0;
-    } else {
-      const fracFull = fracPart.toString().padStart(12, "0");
-      const trimmed = fracFull.replace(/0+$/g, "");
-      digits = Math.min(12, Math.max(0, trimmed.length));
-    }
-  }
-
-  const scaledForDisplay = roundDisplay
-    ? roundScaledToDecimals(scaled, digits)
-    : scaled;
+  const digits = 2;
+  const scaledForDisplay = roundScaledToDecimals(scaled, digits);
 
   const { group, decimal } = getNumberSeparators();
   const { negative, intStr, fracStr } = scaledToDecimalStrings(
     scaledForDisplay,
     digits,
-    !roundDisplay,
+    false,
   );
 
   const groupedInt = groupInt(intStr, group);
@@ -254,37 +235,17 @@ function formatCurrencyFromScaled(
     maximumFractionDigits: digits,
   });
 
-  const parts = fmt.formatToParts(-1);
-  let out = "";
-  for (const p of parts) {
-    if (p.type === "minusSign") {
-      if (negative) out += p.value;
-      continue;
-    }
-    if (p.type === "integer") {
-      out += groupedInt;
-      continue;
-    }
-    if (p.type === "group") {
-      continue;
-    }
-    if (p.type === "decimal") {
-      if (digits > 0 && fracStr.length > 0) out += decimal;
-      continue;
-    }
-    if (p.type === "fraction") {
-      if (digits > 0 && fracStr.length > 0) out += fracStr;
-      continue;
-    }
-    out += p.value;
-  }
+  const parts = fmt.formatToParts(0);
+  const currencyPart = parts.find((p) => p.type === "currency");
+  const symbol = currencyPart?.value ?? "";
+  const minus = negative ? "-" : "";
 
-  return out || "-";
+  return minus + symbol + groupedInt + (digits > 0 ? decimal + fracStr.padEnd(digits, "0") : "");
 }
 
-function formatPercent(n: number, displayDecimals: number): string {
+function formatPercent(n: number): string {
   if (!Number.isFinite(n)) return "-";
-  return `${(n * 100).toFixed(Math.max(0, Math.min(6, displayDecimals)))}%`;
+  return (n * 100).toFixed(2) + "%";
 }
 
 function parseMoneyInputToScaled(raw: string): ParsedAmount {
@@ -422,15 +383,6 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   }
 }
 
-function validateDisplayDecimals(raw: string | null): 0 | 2 | 4 | 6 {
-  if (raw === null) return 2;
-  const n = Number(raw);
-  if (!Number.isFinite(n)) return 2;
-  const t = Math.trunc(n);
-  if (t === 0 || t === 2 || t === 4 || t === 6) return t;
-  return 2;
-}
-
 function groupDigitsFromNormalized(normalized: string): string {
   const s = String(normalized ?? "").trim();
   if (!s) return "";
@@ -554,19 +506,6 @@ export default function IncomeRequiredForRentCalculator() {
     return saved && isCurrency(saved) ? saved : "USD";
   });
 
-  const [displayDecimals, setDisplayDecimals] = useState<0 | 2 | 4 | 6>(() => {
-    if (typeof window === "undefined") return 2;
-    return validateDisplayDecimals(
-      window.localStorage.getItem("rc_ir_display_decimals"),
-    );
-  });
-
-  const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
-    if (typeof window === "undefined") return true;
-    const saved = window.localStorage.getItem("rc_ir_round_display");
-    return safeParseBoolean(saved, true);
-  });
-
   const copyTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -581,14 +520,6 @@ export default function IncomeRequiredForRentCalculator() {
       window.localStorage.setItem("rc_ir_multiplier_preset", multiplierPreset);
       window.localStorage.setItem("rc_ir_multiplier_custom", multiplierCustom);
       window.localStorage.setItem("rc_ir_currency", currency);
-      window.localStorage.setItem(
-        "rc_ir_display_decimals",
-        String(displayDecimals),
-      );
-      window.localStorage.setItem(
-        "rc_ir_round_display",
-        JSON.stringify(roundDisplay),
-      );
     } catch {
       // ignore storage failures
     }
@@ -599,8 +530,6 @@ export default function IncomeRequiredForRentCalculator() {
     multiplierPreset,
     multiplierCustom,
     currency,
-    displayDecimals,
-    roundDisplay,
   ]);
 
   useEffect(() => {
@@ -635,9 +564,7 @@ export default function IncomeRequiredForRentCalculator() {
     : 0n;
 
   const fmt = (scaled: bigint) =>
-    roundDisplay
-      ? formatCurrencyFromScaled(scaled, currency, true, displayDecimals)
-      : formatCurrencyFromScaled(scaled, currency, false, displayDecimals);
+    formatCurrencyFromScaled(scaled, currency);
 
   const rentPreview = useMemo(() => {
     if (!rentParsed.ok) return null;
@@ -835,10 +762,7 @@ export default function IncomeRequiredForRentCalculator() {
       ],
       ["Currency", currency],
       ["Multiplier", resultsScaled.rowB.valueText],
-      [
-        "Display rounding",
-        roundDisplay ? `On (${displayDecimals} decimals)` : "Off",
-      ],
+      ["Display note", "Money values rounded to cents"],
       [],
       ["Result", "Amount"],
       [resultsScaled.headlineLabel, fmt(resultsScaled.headlineValue)],
@@ -935,6 +859,7 @@ export default function IncomeRequiredForRentCalculator() {
 
               <div
                 id="export-controls"
+                data-nosnippet
                 className="rc-no-print flex flex-wrap gap-2 sm:justify-end"
               >
                 <button
@@ -1236,39 +1161,13 @@ export default function IncomeRequiredForRentCalculator() {
 
             <div className="rc-no-print rounded-xl border border-slate-200 bg-white/90 p-4 shadow-sm">
               <div className="mb-3 text-sm font-semibold text-slate-900">
-                Display rounding
+                Precision note
               </div>
 
-              <div className="flex flex-wrap items-center gap-3">
-                <label className="inline-flex cursor-pointer items-center gap-2 text-sm font-medium text-slate-700 select-none">
-                  <input
-                    type="checkbox"
-                    checked={roundDisplay}
-                    onChange={(e) => setRoundDisplay(e.target.checked)}
-                    className="cursor-pointer h-4 w-4 rounded border-slate-300 text-sky-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-                  />
-                  Round results for display
-                </label>
-
-                <label className="inline-flex cursor-pointer items-center gap-2 text-sm font-medium text-slate-700 select-none">
-                  <span className="sr-only">Display decimals</span>
-                  <select
-                    value={displayDecimals}
-                    onChange={(e) =>
-                      setDisplayDecimals(
-                        validateDisplayDecimals(e.target.value),
-                      )
-                    }
-                    className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition hover:border-sky-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-2 focus-visible:ring-sky-400"
-                    aria-label="Display decimals"
-                  >
-                    <option value={0}>0 decimals</option>
-                    <option value={2}>2 decimals</option>
-                    <option value={4}>4 decimals</option>
-                    <option value={6}>6 decimals</option>
-                  </select>
-                </label>
-              </div>
+              <p className="text-xs leading-relaxed text-slate-600">
+                Calculations preserve precision internally, while displayed
+                money values are rounded to cents.
+              </p>
             </div>
           </div>
         </div>

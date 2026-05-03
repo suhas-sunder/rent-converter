@@ -17,8 +17,8 @@ type SitemapSection = {
 
 const sitemapSections: SitemapSection[] = [
   {
-    title: "Main pages",
-    description: "Core RentConverter pages and general site information.",
+    title: "RentConverter Sitemap | Calculators and Pages",
+    description: "Browse RentConverter calculators and supporting pages for rent conversion, affordability, increases, splits, due dates, and paycheck planning.",
     links: [
       {
         label: "Home",

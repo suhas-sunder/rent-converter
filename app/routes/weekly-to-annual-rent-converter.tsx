@@ -1,14 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Route } from "./+types/weekly-to-annual-rent-converter";
 import Assumptions from "~/client/components/layout/Assumptions";
-import Rounding from "~/client/components/layout/Rounding";
 import HowItWorks from "~/client/components/weekly-to-annual-rent-converter/HowItWorks";
 import ToolFit from "~/client/components/weekly-to-annual-rent-converter/ToolFit";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Free Weekly to Annual Rent Converter";
+  const title = "Weekly to Annual Rent Converter | Yearly Rent";
   const description =
-    "Convert weekly rent into an annual rent amount. See related monthly, 4-week, daily, and hourly breakdowns.";
+    "Convert weekly rent into an annual rent amount using a 365-day year. See monthly, 4-week, daily, and hourly breakdowns.";
   const url = "https://www.rentconverter.com/weekly-to-annual-rent-converter";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
 
@@ -270,35 +269,15 @@ function formatNumberFromScaledForInput(
 function formatCurrencyFromScaled(
   scaled: bigint,
   currency: Currency,
-  roundDisplay: boolean,
-  displayDecimals: number,
 ): string {
-  let digits = 12;
-
-  if (roundDisplay) {
-    digits = Math.max(0, Math.min(12, displayDecimals));
-  } else {
-    // Show up to 12 decimals but trim trailing zeros for display.
-    const a = absBigInt(scaled);
-    const fracPart = a % SCALE;
-    if (fracPart === 0n) {
-      digits = 0;
-    } else {
-      const fracFull = fracPart.toString().padStart(12, "0");
-      const trimmed = fracFull.replace(/0+$/g, "");
-      digits = Math.min(12, Math.max(0, trimmed.length));
-    }
-  }
-
-  const scaledForDisplay = roundDisplay
-    ? roundScaledToDecimals(scaled, digits)
-    : scaled;
+  const digits = 2;
+  const scaledForDisplay = roundScaledToDecimals(scaled, digits);
 
   const { group, decimal } = getNumberSeparators();
   const { negative, intStr, fracStr } = scaledToDecimalStrings(
     scaledForDisplay,
     digits,
-    !roundDisplay,
+    false,
   );
 
   const groupedInt = groupInt(intStr, group);
@@ -310,33 +289,12 @@ function formatCurrencyFromScaled(
     maximumFractionDigits: digits,
   });
 
-  // Build by parts so we keep locale currency placement and symbols without using floats for the value.
-  const parts = fmt.formatToParts(-1);
-  let out = "";
-  for (const p of parts) {
-    if (p.type === "minusSign") {
-      if (negative) out += p.value;
-      continue;
-    }
-    if (p.type === "integer") {
-      out += groupedInt;
-      continue;
-    }
-    if (p.type === "group") {
-      continue;
-    }
-    if (p.type === "decimal") {
-      if (digits > 0 && fracStr.length > 0) out += decimal;
-      continue;
-    }
-    if (p.type === "fraction") {
-      if (digits > 0 && fracStr.length > 0) out += fracStr;
-      continue;
-    }
-    out += p.value;
-  }
+  const parts = fmt.formatToParts(0);
+  const currencyPart = parts.find((p) => p.type === "currency");
+  const symbol = currencyPart?.value ?? "";
+  const minus = negative ? "-" : "";
 
-  return out || "-";
+  return minus + symbol + groupedInt + (digits > 0 ? decimal + fracStr.padEnd(digits, "0") : "");
 }
 
 function formatPreviewFromParsedScaled(p: ParsedScaled): string {
@@ -532,22 +490,6 @@ function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
   }
 }
 
-function safeParseDisplayDecimals(
-  raw: string | null,
-  fallback: number,
-): number {
-  if (raw === null) return fallback;
-  const n = Number(raw);
-  if (!Number.isFinite(n)) return fallback;
-  const t = Math.trunc(n);
-  return t === 0 || t === 2 || t === 4 || t === 6 ? t : fallback;
-}
-
-function normalizeDisplayDecimals(n: number, fallback: number): number {
-  const t = Math.trunc(n);
-  return t === 0 || t === 2 || t === 4 || t === 6 ? t : fallback;
-}
-
 export default function WeeklyToAnnualRent() {
   const pageName = "Weekly to Annual Rent Converter";
   const canonicalUrl =
@@ -566,41 +508,15 @@ export default function WeeklyToAnnualRent() {
     return isCurrency(saved) ? saved : "USD";
   });
 
-  const [roundDisplay, setRoundDisplay] = useState<boolean>(() => {
-    if (typeof window === "undefined") return true;
-
-    const newKey = localStorage.getItem("rc_wta_round_display");
-    if (newKey !== null) return safeParseBoolean(newKey, true);
-
-    const oldKey = localStorage.getItem("rc_wta_rounding");
-    if (oldKey !== null) return safeParseBoolean(oldKey, true);
-
-    return true;
-  });
-
-  const [displayDecimals, setDisplayDecimals] = useState<number>(() => {
-    if (typeof window === "undefined") return 2;
-    return safeParseDisplayDecimals(
-      localStorage.getItem("rc_wta_display_decimals"),
-      2,
-    );
-  });
-
   useEffect(() => {
     if (typeof window === "undefined") return;
     try {
       localStorage.setItem("rc_wta_amount", amount);
       localStorage.setItem("rc_wta_currency", currency);
-      localStorage.setItem(
-        "rc_wta_round_display",
-        JSON.stringify(roundDisplay),
-      );
-      localStorage.setItem("rc_wta_display_decimals", String(displayDecimals));
 
       // Optional: keep old key in sync so you do not break any older code paths.
-      localStorage.setItem("rc_wta_rounding", JSON.stringify(roundDisplay));
     } catch {}
-  }, [amount, currency, roundDisplay, displayDecimals]);
+  }, [amount, currency]);
 
   const parsed = useMemo(() => {
     const p = parseMoneyInputToScaled(amount, "weekly rent amount");
@@ -680,7 +596,7 @@ export default function WeeklyToAnnualRent() {
   }, [parsed]);
 
   const money = (scaled: bigint) =>
-    formatCurrencyFromScaled(scaled, currency, roundDisplay, displayDecimals);
+    formatCurrencyFromScaled(scaled, currency);
 
   const handlePrint = () => {
     if (typeof window === "undefined") return;
@@ -756,7 +672,7 @@ export default function WeeklyToAnnualRent() {
     "@type": "WebPage",
     name: pageName,
     description:
-      "Convert weekly rent into an annual rent amount. See related monthly, 4-week, daily, and hourly breakdowns.",
+      "Convert weekly rent into an annual rent amount using a 365-day year. See monthly, 4-week, daily, and hourly breakdowns.",
     url: canonicalUrl,
     isPartOf: { "@type": "WebSite", url: "https://www.rentconverter.com" },
     breadcrumb: { "@id": `${canonicalUrl}#breadcrumb` },
@@ -801,6 +717,7 @@ export default function WeeklyToAnnualRent() {
 
               <div
                 id="export-controls"
+                data-nosnippet
                 className="rc-no-print flex shrink-0 justify-start sm:justify-end"
               >
                 <button
@@ -998,12 +915,9 @@ export default function WeeklyToAnnualRent() {
 
         <div className="mt-3 rounded-xl border border-slate-200 bg-white/90 px-4 py-3 shadow-sm rc-no-print">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <Rounding
-              roundDisplay={roundDisplay}
-              setRoundDisplay={setRoundDisplay}
-              displayDecimals={displayDecimals}
-              setDisplayDecimals={setDisplayDecimals as any}
-            />
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Calculations preserve precision internally, while displayed money values are rounded to cents.
+              </p>
 
             <button
               type="button"
@@ -1015,8 +929,7 @@ export default function WeeklyToAnnualRent() {
           </div>
 
           <p className="mt-2 text-xs text-slate-600 leading-relaxed">
-            Calculations preserve decimals internally up to 12 places. Only the
-            display is rounded.
+            Calculations preserve precision internally, while displayed money values are rounded to cents.
           </p>
         </div>
       </section>
