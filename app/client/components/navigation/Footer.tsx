@@ -145,11 +145,11 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="border-t border-slate-800 bg-slate-950 text-slate-300">
+    <footer className="bg-slate-950 text-slate-200">
       <div className="mx-auto max-w-6xl px-4 py-10">
         <div
           id="all-tools"
-          className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 shadow-sm"
+          className="rounded-3xl bg-slate-900/80 p-6"
         >
           <div className="flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center">
             <div>
@@ -160,7 +160,7 @@ export default function Footer() {
                 All Rental Tools
               </h2>
             </div>
-            <span className="text-sm font-medium text-slate-400">
+            <span className="text-sm font-medium text-slate-300">
               Browse rent converters, calculators, and comparison tools
             </span>
           </div>
@@ -171,11 +171,11 @@ export default function Footer() {
               <div
                 key={cat.title}
                 className={[
-                  "rounded-xl border border-white/10 bg-white/[0.04] p-4 shadow-sm",
+                  "rounded-2xl bg-slate-800/60 p-4",
                   cat.cardClassName || "",
                 ].join(" ")}
               >
-                <div className="text-sm font-bold uppercase tracking-wide text-sky-200">
+                <div className="text-sm font-bold uppercase tracking-wide text-sky-100">
                   {cat.title}
                 </div>
 
@@ -189,7 +189,7 @@ export default function Footer() {
                     <li key={item.to} className="min-w-0">
                       <Link
                         to={item.to}
-                        className="block cursor-pointer whitespace-normal break-words rounded-md text-slate-300 underline-offset-4 transition-colors hover:text-white hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+                        className="block cursor-pointer whitespace-normal break-words rounded-md text-slate-200 underline-offset-4 transition-colors hover:text-white hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
                       >
                         {item.label}
                       </Link>
@@ -207,7 +207,7 @@ export default function Footer() {
               <li>
                 <Link
                   to="/about"
-                  className="cursor-pointer text-slate-300 underline-offset-4 transition-colors hover:text-white hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+                  className="cursor-pointer text-slate-200 underline-offset-4 transition-colors hover:text-white hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
                 >
                   About
                 </Link>
@@ -215,7 +215,7 @@ export default function Footer() {
               <li>
                 <Link
                   to="/contact"
-                  className="cursor-pointer text-slate-300 underline-offset-4 transition-colors hover:text-white hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+                  className="cursor-pointer text-slate-200 underline-offset-4 transition-colors hover:text-white hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
                 >
                   Contact
                 </Link>
@@ -223,7 +223,7 @@ export default function Footer() {
               <li>
                 <Link
                   to="/sitemap"
-                  className="cursor-pointer text-slate-300 underline-offset-4 transition-colors hover:text-white hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+                  className="cursor-pointer text-slate-200 underline-offset-4 transition-colors hover:text-white hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
                 >
                   Sitemap
                 </Link>
@@ -231,7 +231,7 @@ export default function Footer() {
               <li>
                 <Link
                   to="/privacy-policy"
-                  className="cursor-pointer text-slate-300 underline-offset-4 transition-colors hover:text-white hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+                  className="cursor-pointer text-slate-200 underline-offset-4 transition-colors hover:text-white hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
                 >
                   Privacy Policy
                 </Link>
@@ -239,7 +239,7 @@ export default function Footer() {
               <li>
                 <Link
                   to="/terms-of-service"
-                  className="cursor-pointer text-slate-300 underline-offset-4 transition-colors hover:text-white hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+                  className="cursor-pointer text-slate-200 underline-offset-4 transition-colors hover:text-white hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
                 >
                   Terms of Service
                 </Link>
@@ -247,7 +247,7 @@ export default function Footer() {
               <li>
                 <Link
                   to="/cookies"
-                  className="cursor-pointer text-slate-300 underline-offset-4 transition-colors hover:text-white hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+                  className="cursor-pointer text-slate-200 underline-offset-4 transition-colors hover:text-white hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
                 >
                   Cookies
                 </Link>
@@ -255,11 +255,11 @@ export default function Footer() {
             </ul>
           </nav>
 
-          <p className="text-base font-medium text-slate-400">
+          <p className="text-base font-medium text-slate-300">
             © {year} RentConverter.com • Rent conversion and renter tools
           </p>
 
-          <p className="max-w-5xl text-sm leading-relaxed text-slate-500">
+          <p className="max-w-5xl text-sm leading-relaxed text-slate-400">
             Tools on this site are for informational, budgeting, and comparison
             purposes only. Always confirm payment schedules and lease terms in
             your rental agreement. This website does not provide financial,

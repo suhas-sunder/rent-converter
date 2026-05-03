@@ -778,7 +778,7 @@ export default function Home() {
   const amountStatusId = "rent-amount-status";
   const resultRegionId = "converted-rent-region";
   return (
-    <main className="bg-gradient-to-b from-sky-50 via-white to-slate-50 text-slate-700 scroll-smooth antialiased">
+    <main className="bg-sky-50 text-slate-700 scroll-smooth antialiased">
       <style
         dangerouslySetInnerHTML={{
           __html: `
@@ -786,8 +786,13 @@ export default function Home() {
               a[href]:after { content: ""; }
               #top-links, #bottom-nav, #export-controls-top, #export-controls-bottom { display: none !important; }
               #converter { padding-bottom: 0 !important; }
-              .shadow-sm { box-shadow: none !important; }
               body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            }
+            .home-assumptions-clean .border {
+              border-width: 0 !important;
+            }
+            .home-assumptions-clean > div {
+              background: #e0f2fe !important;
             }
           `,
         }}
@@ -795,10 +800,10 @@ export default function Home() {
 
       <section
         id="converter"
-        className="mx-auto max-w-6xl px-6 pb-6 pt-2 sm:pt-6"
+        className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8"
       >
-        <div className="rounded-2xl bg-white/95 pb-6 sm:border border-slate-200 sm:px-8 sm:shadow-sm">
-          <div className="pt-4 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+        <div className="overflow-hidden rounded-[1.75rem] bg-white">
+          <div className="flex flex-col gap-3 px-5 pb-2 pt-7 sm:flex-row sm:items-start sm:justify-between sm:px-8 sm:pt-8">
             <div>
               <p className="mb-2 text-center sm:text-left text-xs font-bold uppercase tracking-[0.18em] text-sky-700">
                 Rent conversion calculator
@@ -806,7 +811,7 @@ export default function Home() {
               <h1 className="text-center mb-1 sm:mb-0 sm:text-left text-2xl sm:text-3xl capitalize font-bold text-sky-900 tracking-tight">
                 Rent Converter Calculator
               </h1>
-              <p className="hidden md:flex w-full max-w-3xl py-2 text-slate-600 leading-relaxed">
+              <p className="hidden md:flex w-full max-w-3xl pt-2 text-slate-700 leading-relaxed">
                 Convert rent between weekly, monthly, every 4 weeks, biweekly,
                 daily, hourly, and annual periods. Compare true monthly cost
                 without treating 4 weeks as a full month.
@@ -825,7 +830,7 @@ export default function Home() {
                     if (typeof window === "undefined") return;
                     window.print();
                   }}
-                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                  className="cursor-pointer rounded-xl bg-sky-100 px-4 py-2 text-sm font-semibold text-sky-950 transition hover:bg-sky-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                 >
                   Print / Save PDF
                 </button>
@@ -833,7 +838,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="grid gap-y-3 gap-x-5 md:grid-cols-12">
+          <div className="grid gap-y-3 gap-x-5 px-5 pb-5 pt-2 sm:px-8 sm:pt-3 md:grid-cols-12">
             <div className="md:col-span-5">
               <label className="block text-sm font-semibold text-slate-800 mb-2">
                 Rent amount
@@ -846,14 +851,14 @@ export default function Home() {
                   onBlur={() => setAmountFocused(false)}
                   onChange={(e) => setAmount(e.target.value)}
                   placeholder="e.g. 500 or 1250.50"
-                  className="cursor-pointer w-full min-w-0 rounded-xl border border-slate-300 bg-white px-4 py-3 text-base text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-sky-400"
+                  className="cursor-pointer w-full min-w-0 rounded-xl bg-slate-100 px-4 py-3 text-base text-slate-950 placeholder:text-slate-600 outline-none transition hover:bg-sky-50 focus:bg-white focus:ring-2 focus:ring-sky-200 focus-visible:ring-sky-400"
                   aria-invalid={!validation.ok}
                   aria-describedby={`${amountHelpId} ${amountStatusId}`}
                 />
                 <select
                   value={currency}
                   onChange={(e) => setCurrency(e.target.value)}
-                  className="cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold text-slate-900 outline-none transition hover:border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-sky-400"
+                  className="cursor-pointer rounded-xl bg-slate-100 px-3 py-3 text-sm font-semibold text-slate-950 outline-none transition hover:bg-sky-50 focus:bg-white focus:ring-2 focus:ring-sky-200 focus-visible:ring-sky-400"
                   aria-label="Currency"
                 >
                   {CURRENCY_OPTIONS.map((c) => (
@@ -876,7 +881,7 @@ export default function Home() {
               ) : validation.message ? (
                 <p
                   id={amountStatusId}
-                  className="mt-2 text-sm text-slate-600"
+                  className="mt-2 text-sm text-slate-700"
                   aria-live="polite"
                 >
                   {validation.message}
@@ -886,7 +891,7 @@ export default function Home() {
               )}
 
               {interpretationLine ? (
-                <p className="mt-2 text-sm text-slate-600" aria-live="polite">
+                <p className="mt-2 text-sm text-slate-700" aria-live="polite">
                   <span className="font-semibold tabular-nums">
                     {interpretationLine}
                   </span>
@@ -894,14 +899,14 @@ export default function Home() {
               ) : null}
             </div>
 
-            <div className="md:col-span-3">
+            <div className="md:col-span-4">
               <label className="block text-sm font-semibold text-slate-800 mb-2">
                 From
               </label>
               <select
                 value={from}
                 onChange={(e) => setFrom(e.target.value as Period)}
-                className="cursor-pointer w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base font-medium text-slate-900 outline-none transition hover:border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-sky-400"
+                className="cursor-pointer w-full rounded-xl bg-slate-100 px-4 py-3 text-base font-medium text-slate-950 outline-none transition hover:bg-sky-50 focus:bg-white focus:ring-2 focus:ring-sky-200 focus-visible:ring-sky-400"
                 aria-label="From period"
               >
                 {PERIOD_ORDER.map((p) => (
@@ -919,7 +924,7 @@ export default function Home() {
               <select
                 value={to}
                 onChange={(e) => setTo(e.target.value as Period)}
-                className="cursor-pointer w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base font-medium text-slate-900 outline-none transition hover:border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-sky-400"
+                className="cursor-pointer w-full rounded-xl bg-slate-100 px-4 py-3 text-base font-medium text-slate-950 outline-none transition hover:bg-sky-50 focus:bg-white focus:ring-2 focus:ring-sky-200 focus-visible:ring-sky-400"
                 aria-label="To period"
               >
                 {PERIOD_ORDER.map((p) => (
@@ -930,24 +935,11 @@ export default function Home() {
               </select>
             </div>
 
-            <div className="md:col-span-1 hidden md:flex md:items-end">
-              <button
-                type="button"
-                onClick={() => {
-                  setFrom(to);
-                  setTo(from);
-                }}
-                className="cursor-pointer w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-semibold text-slate-900 transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-                aria-label="Swap from and to"
-              >
-                ⇄
-              </button>
-            </div>
           </div>
 
           <div
             id={resultRegionId}
-            className="mt-3 rounded-2xl border border-sky-100 bg-sky-50/60 p-5 sm:p-6 shadow-sm relative"
+            className="relative mx-5 mb-6 rounded-[1.5rem] bg-sky-50 p-5 sm:mx-8 sm:p-6"
             role="region"
             aria-label="Converted rent"
             aria-live="polite"
@@ -1013,25 +1005,25 @@ export default function Home() {
                     {gridItems.map(([label, val, key]) => (
                       <div
                         key={key}
-                        className="rounded-xl border border-slate-200 bg-white/95 px-4 py-3 shadow-sm"
+                        className="rounded-2xl bg-white px-4 py-3"
                       >
-                        <div className="text-xs font-semibold text-slate-600">
+                        <div className="text-xs font-semibold text-slate-700">
                           {label} rent
                         </div>
-                        <div className="mt-1 text-lg font-bold text-slate-900 tabular-nums whitespace-nowrap overflow-hidden text-ellipsis">
+                        <div className="mt-1 text-lg font-bold text-slate-950 tabular-nums whitespace-nowrap overflow-hidden text-ellipsis">
                           {validation.ok ? formatRationalMoney(val) : "—"}
                         </div>
                       </div>
                     ))}
 
-                    <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 shadow-sm">
+                    <div className="sm:col-span-2 lg:col-span-3 rounded-2xl bg-emerald-50 px-4 py-3">
                       <div className="text-xs font-semibold text-emerald-800">
                         4-week vs monthly
                       </div>
                       <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                         <div className="text-sm text-slate-800 leading-relaxed">
                           Monthly minus 4-week ={" "}
-                          <strong className="text-slate-900 tabular-nums whitespace-nowrap">
+                          <strong className="text-slate-950 tabular-nums whitespace-nowrap">
                             {validation.ok
                               ? formatRationalMoney(breakdown.monthlyMinus4w)
                               : "—"}
@@ -1039,12 +1031,12 @@ export default function Home() {
                         </div>
                         <div className="text-sm text-slate-800 leading-relaxed">
                           Difference ≈{" "}
-                          <strong className="text-slate-900 tabular-nums whitespace-nowrap">
+                          <strong className="text-slate-950 tabular-nums whitespace-nowrap">
                             {validation.ok ? monthlyMinus4wPctDisplay : "—"}
                           </strong>
                         </div>
                       </div>
-                      <p className="mt-2 text-xs text-slate-600 leading-relaxed">
+                      <p className="mt-2 text-xs text-slate-700 leading-relaxed">
                         A 4-week rent period is 28 days. A true average month is
                         about 30.42 days, so the monthly equivalent is
                         different.
@@ -1052,61 +1044,44 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-3 mt-4">
-                    <div
-                      id="export-controls-bottom"
-                      data-nosnippet
-                      className="mr-auto flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
-                    >
-                      <div className="flex flex-wrap gap-2">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            if (typeof window === "undefined") return;
-                            window.print();
-                          }}
-                          className="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-sky-50"
-                        >
-                          Print / Save PDF
-                        </button>
-                      </div>
-                    </div>
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                      Calculations preserve precision internally, while
-                      displayed money values are rounded to cents.
-                    </p>
-                  </div>
                 </>
               );
             })()}
           </div>
         </div>
-        <Assumptions />
+        <div className="home-assumptions-clean">
+          <Assumptions />
+        </div>
       </section>
 
       <HowItWorks />
       <ToolFit />
 
-      <section id="faq" className="max-w-5xl mx-auto py-16 px-6">
-        <h2 className="text-3xl font-bold text-center mb-10 text-sky-800 tracking-tight">
-          Frequently Asked Questions
-        </h2>
+      <section id="faq" className="bg-white px-6 py-16">
+        <div className="mx-auto max-w-5xl">
+          <h2 className="text-3xl font-bold text-center mb-10 text-sky-800 tracking-tight">
+            Frequently Asked Questions
+          </h2>
 
-        <div className="divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white/90 px-5 shadow-sm">
-          {faqData.map((f, i) => (
-            <details key={i} className="group py-4">
-              <summary className="cursor-pointer list-none font-semibold text-lg text-sky-800 flex items-center justify-between hover:text-sky-900">
-                <span>{f.q}</span>
-                <span className="ml-4 text-slate-400 transition-transform group-open:rotate-180">
-                  ▾
-                </span>
-              </summary>
+          <div className="space-y-3">
+            {faqData.map((f, i) => (
+              <details
+                key={i}
+                className="group rounded-2xl bg-slate-50 px-5 py-4"
+              >
+                <summary className="cursor-pointer list-none font-semibold text-lg text-sky-800 flex items-center justify-between hover:text-sky-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50">
+                  <span>{f.q}</span>
+                  <span className="ml-4 text-slate-600 transition-transform group-open:rotate-180">
+                    ▾
+                  </span>
+                </summary>
 
-              <div className="mt-2 text-slate-700 leading-relaxed max-w-prose">
-                {f.a}
-              </div>
-            </details>
-          ))}
+                <div className="mt-2 text-slate-700 leading-relaxed max-w-prose">
+                  {f.a}
+                </div>
+              </details>
+            ))}
+          </div>
         </div>
       </section>
 

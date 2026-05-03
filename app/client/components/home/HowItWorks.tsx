@@ -4,15 +4,9 @@ const HowItWorks = () => {
   return (
     <section
       id="how-it-works"
-      className="relative overflow-hidden rounded-3xl bg-white ring-1 ring-slate-200/70 shadow-sm"
+      className="bg-white px-6 py-16"
     >
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-sky-100/60 blur-3xl" />
-        <div className="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-slate-100/70 blur-3xl" />
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-sky-300/60 to-transparent" />
-      </div>
-
-      <div className="relative p-6 sm:p-10">
+      <div className="relative">
         <div className="mx-auto max-w-6xl">
           <div className="flex flex-col gap-4 sm:gap-5">
             <div className="flex items-start justify-between gap-4">
@@ -20,7 +14,7 @@ const HowItWorks = () => {
                 <h2 className="text-center sm:text-left text-3xl sm:text-4xl font-extrabold text-sky-800 tracking-tight leading-tight">
                   How the rent conversion calculator works
                 </h2>
-                <p className="text-center sm:text-left mt-2 text-slate-600 leading-7 max-w-2xl">
+                <p className="text-center sm:text-left mt-2 text-slate-700 leading-7 max-w-2xl">
                   This tool converts a rent amount from one billing period into
                   equivalent amounts for other periods using a consistent
                   day-based model. It is designed for direct comparison. You
@@ -30,11 +24,11 @@ const HowItWorks = () => {
               </div>
 
               <div className="hidden sm:flex flex-col items-end gap-2 shrink-0">
-                <span className="inline-flex items-center gap-2 rounded-full bg-sky-50 text-sky-700 ring-1 ring-sky-200/70 px-3 py-1 text-xs font-semibold">
+                <span className="inline-flex items-center gap-2 rounded-full bg-sky-100 text-sky-800 px-3 py-1 text-xs font-semibold">
                   <span className="h-2 w-2 rounded-full bg-sky-500" />
                   Day-based model
                 </span>
-                <span className="inline-flex items-center gap-2 rounded-full bg-slate-50 text-slate-700 ring-1 ring-slate-200 px-3 py-1 text-xs font-semibold">
+                <span className="inline-flex items-center gap-2 rounded-full bg-slate-100 text-slate-800 px-3 py-1 text-xs font-semibold">
                   <span className="h-2 w-2 rounded-full bg-slate-500" />
                   Decimals preserved
                 </span>
@@ -42,32 +36,32 @@ const HowItWorks = () => {
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
-                <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+              <div className="rounded-2xl bg-sky-50 p-4 transition hover:bg-sky-100">
+                <div className="text-xs font-semibold uppercase tracking-wide text-slate-700">
                   INPUT
                 </div>
                 <div className="mt-2 text-sm font-semibold text-slate-900">
                   Amount + period
                 </div>
               </div>
-              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
-                <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+              <div className="rounded-2xl bg-sky-50 p-4 transition hover:bg-sky-100">
+                <div className="text-xs font-semibold uppercase tracking-wide text-slate-700">
                   MODEL
                 </div>
                 <div className="mt-2 text-sm font-semibold text-slate-900">
                   Period → per-day
                 </div>
               </div>
-              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
-                <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+              <div className="rounded-2xl bg-sky-50 p-4 transition hover:bg-sky-100">
+                <div className="text-xs font-semibold uppercase tracking-wide text-slate-700">
                   OUTPUT
                 </div>
                 <div className="mt-2 text-sm font-semibold text-slate-900">
                   Converted values
                 </div>
               </div>
-              <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-4 hover:ring-sky-200/80 transition">
-                <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+              <div className="rounded-2xl bg-sky-50 p-4 transition hover:bg-sky-100">
+                <div className="text-xs font-semibold uppercase tracking-wide text-slate-700">
                   DETAILS
                 </div>
                 <div className="mt-2 text-sm font-semibold text-slate-900">
@@ -79,14 +73,14 @@ const HowItWorks = () => {
 
           <div className="mt-10 space-y-6 text-base text-slate-700 leading-7">
             {/* SectionCard: Related tools (near top) */}
-            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+            <div className="group relative rounded-3xl bg-slate-50">
               <div
                 aria-hidden="true"
                 className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
               />
               <div className="p-5 sm:p-6">
                 <div className="flex items-start gap-3">
-                  <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
+                  <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-100">
                     <svg
                       aria-hidden="true"
                       viewBox="0 0 24 24"
@@ -123,7 +117,7 @@ const HowItWorks = () => {
                   </p>
 
                   <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
+                    <div className="rounded-2xl bg-white/80 p-5">
                       <div className="text-sm font-bold text-slate-900">
                         Quick converters
                       </div>
@@ -146,7 +140,7 @@ const HowItWorks = () => {
                       </div>
                     </div>
 
-                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
+                    <div className="rounded-2xl bg-white/80 p-5">
                       <div className="text-sm font-bold text-slate-900">
                         Due date planning
                       </div>
@@ -169,14 +163,14 @@ const HowItWorks = () => {
             </div>
 
             {/* SectionCard: Examples (directly under Related tools) */}
-            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+            <div className="group relative rounded-3xl bg-slate-50">
               <div
                 aria-hidden="true"
                 className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
               />
               <div className="p-5 sm:p-6">
                 <div className="flex items-start gap-3">
-                  <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
+                  <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-100">
                     <svg
                       aria-hidden="true"
                       viewBox="0 0 24 24"
@@ -207,7 +201,7 @@ const HowItWorks = () => {
                   </p>
 
                   <div className="grid gap-3 sm:grid-cols-2">
-                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
+                    <div className="rounded-2xl bg-white/80 p-5">
                       <div className="text-sm font-bold text-slate-900">
                         Example 1 (weekly → monthly)
                       </div>
@@ -226,7 +220,7 @@ const HowItWorks = () => {
                       </div>
                     </div>
 
-                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
+                    <div className="rounded-2xl bg-white/80 p-5">
                       <div className="text-sm font-bold text-slate-900">
                         Example 2 (every 4 weeks → monthly)
                       </div>
@@ -242,13 +236,13 @@ const HowItWorks = () => {
                           2,172.62
                         </span>
                       </div>
-                      <div className="mt-2 text-sm text-slate-600">
+                      <div className="mt-2 text-sm text-slate-700">
                         Note: “4-week” is not “monthly.” The tool converts both
                         through the same annual basis so comparisons stay fair.
                       </div>
                     </div>
 
-                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
+                    <div className="rounded-2xl bg-white/80 p-5">
                       <div className="text-sm font-bold text-slate-900">
                         Example 3 (monthly → weekly)
                       </div>
@@ -267,7 +261,7 @@ const HowItWorks = () => {
                       </div>
                     </div>
 
-                    <div className="rounded-2xl bg-white ring-1 ring-slate-200/80 p-5">
+                    <div className="rounded-2xl bg-white/80 p-5">
                       <div className="text-sm font-bold text-slate-900">
                         Example 4 (decimals preserved)
                       </div>
@@ -289,7 +283,7 @@ const HowItWorks = () => {
                     </div>
                   </div>
 
-                  <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                  <div className="rounded-2xl bg-white/80 p-5">
                     <div className="text-sm font-bold text-slate-900">
                       Quick sanity checks
                     </div>
@@ -309,14 +303,14 @@ const HowItWorks = () => {
             </div>
 
             {/* SectionCard: What it does */}
-            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+            <div className="group relative rounded-3xl bg-slate-50">
               <div
                 aria-hidden="true"
                 className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
               />
               <div className="p-5 sm:p-6">
                 <div className="flex items-start gap-3">
-                  <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
+                  <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-100">
                     <svg
                       aria-hidden="true"
                       viewBox="0 0 24 24"
@@ -370,14 +364,14 @@ const HowItWorks = () => {
             </div>
 
             {/* SectionCard: Inputs */}
-            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+            <div className="group relative rounded-3xl bg-slate-50">
               <div
                 aria-hidden="true"
                 className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
               />
               <div className="p-5 sm:p-6">
                 <div className="flex items-start gap-3">
-                  <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
+                  <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-100">
                     <svg
                       aria-hidden="true"
                       viewBox="0 0 24 24"
@@ -408,7 +402,7 @@ const HowItWorks = () => {
                     converted.
                   </p>
 
-                  <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                  <div className="mt-4 rounded-2xl bg-white/80 p-5">
                     <div className="text-sm font-bold text-slate-900">
                       Examples of valid input
                     </div>
@@ -419,7 +413,7 @@ const HowItWorks = () => {
                       <li>$1,200.50</li>
                       <li>.5 (interpreted as 0.5)</li>
                     </ul>
-                    <p className="mt-3 text-sm text-slate-600">
+                    <p className="mt-3 text-sm text-slate-700">
                       If an input could reasonably mean two different numbers,
                       the correct behavior is a warning or an error instead of a
                       guessed output.
@@ -437,14 +431,14 @@ const HowItWorks = () => {
             </div>
 
             {/* SectionCard: Assumptions */}
-            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+            <div className="group relative rounded-3xl bg-slate-50">
               <div
                 aria-hidden="true"
                 className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
               />
               <div className="p-5 sm:p-6">
                 <div className="flex items-start gap-3">
-                  <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
+                  <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-100">
                     <svg
                       aria-hidden="true"
                       viewBox="0 0 24 24"
@@ -474,7 +468,7 @@ const HowItWorks = () => {
                     conversion on the site.
                   </p>
 
-                  <div className="mt-4 rounded-2xl bg-slate-50 ring-1 ring-slate-200 p-5">
+                  <div className="mt-4 rounded-2xl bg-white/80 p-5">
                     <div className="text-sm font-bold text-slate-900">
                       Period lengths
                     </div>
@@ -535,14 +529,14 @@ const HowItWorks = () => {
             </div>
 
             {/* SectionCard: Output + rounding */}
-            <div className="group relative rounded-3xl bg-white ring-1 ring-slate-200/80 shadow-sm">
+            <div className="group relative rounded-3xl bg-slate-50">
               <div
                 aria-hidden="true"
                 className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-sky-500/80 via-sky-400/50 to-transparent"
               />
               <div className="p-5 sm:p-6">
                 <div className="flex items-start gap-3">
-                  <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-200/60">
+                  <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-100">
                     <svg
                       aria-hidden="true"
                       viewBox="0 0 24 24"
@@ -579,7 +573,7 @@ const HowItWorks = () => {
                     not because precision was discarded during the math.
                   </p>
 
-                  <div className="mt-4 rounded-2xl bg-sky-50 ring-1 ring-sky-200/70 p-5">
+                  <div className="mt-4 rounded-2xl bg-sky-100/70 p-5">
                     <div className="text-sm font-bold text-slate-900">
                       Practical note for 4-week (28-day) listings
                     </div>
