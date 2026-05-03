@@ -425,7 +425,7 @@ function formatMoneyFromDecimalString(
   opts: { minimumFractionDigits: number; maximumFractionDigits: number },
 ) {
   const n = Number(decimalStr);
-  if (!Number.isFinite(n)) return "—";
+  if (!Number.isFinite(n)) return "-";
   return new Intl.NumberFormat(undefined, {
     style: "currency",
     currency,
@@ -770,7 +770,7 @@ export default function Home() {
   };
 
   const monthlyMinus4wPctDisplay = useMemo(() => {
-    if (!validation.ok || !breakdown.monthlyMinus4wPct) return "—";
+    if (!validation.ok || !breakdown.monthlyMinus4wPct) return "-";
     return percentStringFromRatio(breakdown.monthlyMinus4wPct, 2);
   }, [validation.ok, breakdown.monthlyMinus4wPct]);
 
@@ -997,7 +997,7 @@ export default function Home() {
                         ? formatRationalMoney(
                             selectedValue ?? breakdown.monthly,
                           )
-                        : "—"}
+                        : "-"}
                     </div>
                   </div>
 
@@ -1011,7 +1011,7 @@ export default function Home() {
                           {label} rent
                         </div>
                         <div className="mt-1 text-lg font-bold text-slate-950 tabular-nums whitespace-nowrap overflow-hidden text-ellipsis">
-                          {validation.ok ? formatRationalMoney(val) : "—"}
+                          {validation.ok ? formatRationalMoney(val) : "-"}
                         </div>
                       </div>
                     ))}
@@ -1026,13 +1026,13 @@ export default function Home() {
                           <strong className="text-slate-950 tabular-nums whitespace-nowrap">
                             {validation.ok
                               ? formatRationalMoney(breakdown.monthlyMinus4w)
-                              : "—"}
+                              : "-"}
                           </strong>
                         </div>
                         <div className="text-sm text-slate-800 leading-relaxed">
                           Difference ≈{" "}
                           <strong className="text-slate-950 tabular-nums whitespace-nowrap">
-                            {validation.ok ? monthlyMinus4wPctDisplay : "—"}
+                            {validation.ok ? monthlyMinus4wPctDisplay : "-"}
                           </strong>
                         </div>
                       </div>

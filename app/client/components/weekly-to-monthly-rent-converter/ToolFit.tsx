@@ -13,16 +13,16 @@ const toolFit = {
   ],
   nextSteps: [
     {
+      to: "/pw-to-pcm",
+      label: "PW to PCM"
+    },
+    {
       to: "/rent-paid-every-4-weeks-calculator",
       label: "4-week rent"
     },
     {
       to: "/monthly-to-weekly-rent-converter",
       label: "Monthly to weekly"
-    },
-    {
-      to: "/rent-as-percentage-of-income-calculator",
-      label: "Rent as percentage of income"
     }
   ]
 };

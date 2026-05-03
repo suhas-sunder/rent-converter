@@ -127,6 +127,7 @@ export default [
   ),
   route("rent-split-calculator", "routes/rent-split-calculator.tsx"),
   route("rent-due-date-calculator", "routes/rent-due-date-calculator.tsx"),
+  route("prorated-rent-calculator", "routes/prorated-rent-calculator.tsx"),
 
   // Rent calculators (redirect aliases, no "-calculator")
   route("rent-per-day", "routes/rent-per-day.tsx"),
@@ -162,6 +163,10 @@ export default [
   route("how-much-rent-can-i-afford", "routes/how-much-rent-can-i-afford.tsx"),
   route("rent-after-tax-income", "routes/rent-after-tax-income.tsx"),
   route("rent-vs-take-home-pay", "routes/rent-vs-take-home-pay.tsx"),
+  route(
+    "rent-affordability-calculator",
+    "routes/rent-affordability-calculator.tsx",
+  ),
 
   // Rent increases (canonical)
   route("rent-increase-calculator", "routes/rent-increase-calculator.tsx"),
@@ -177,6 +182,19 @@ export default [
   route(
     "income-required-for-rent-calculator",
     "routes/income-required-for-rent-calculator.tsx",
+  ),
+  route("3x-rent-calculator", "routes/3x-rent-calculator.tsx"),
+  route("2-5x-rent-calculator", "routes/2-5x-rent-calculator.tsx"),
+
+  // Glossary and answer guides
+  route("what-does-pcm-mean-rent", "routes/what-does-pcm-mean-rent.tsx"),
+  route("what-does-pw-mean-rent", "routes/what-does-pw-mean-rent.tsx"),
+  route("pw-to-pcm", "routes/pw-to-pcm.tsx"),
+  route("pcw-to-pcm", "routes/pcw-to-pcm.tsx"),
+  route("when-is-rent-due", "routes/when-is-rent-due.tsx"),
+  route(
+    "do-you-pay-rent-in-advance-or-after",
+    "routes/do-you-pay-rent-in-advance-or-after.tsx",
   ),
 
   //Answer pages for specific queries

@@ -145,6 +145,10 @@ const sitemapSections: SitemapSection[] = [
         label: "Rent due date calculator",
         href: "/rent-due-date-calculator",
       },
+      {
+        label: "Prorated rent calculator",
+        href: "/prorated-rent-calculator",
+      },
     ],
   },
   {
@@ -154,15 +158,11 @@ const sitemapSections: SitemapSection[] = [
     links: [
       {
         label: "Rent affordability calculator",
-        href: "/rent-affordability-calculator",
+        href: "/how-much-rent-can-i-afford-calculator",
       },
       {
         label: "Rent as percentage of income calculator",
         href: "/rent-as-percentage-of-income-calculator",
-      },
-      {
-        label: "How much rent can I afford calculator",
-        href: "/how-much-rent-can-i-afford-calculator",
       },
       {
         label: "Rent after tax income calculator",
@@ -175,6 +175,45 @@ const sitemapSections: SitemapSection[] = [
       {
         label: "Income required for rent calculator",
         href: "/income-required-for-rent-calculator",
+      },
+      {
+        label: "3x rent calculator",
+        href: "/3x-rent-calculator",
+      },
+      {
+        label: "2.5x rent calculator",
+        href: "/2-5x-rent-calculator",
+      },
+    ],
+  },
+  {
+    title: "Guides and glossary",
+    description:
+      "Plain-English guides for rent abbreviations, due dates, rent timing, and weekly-to-monthly comparison terms.",
+    links: [
+      {
+        label: "What does PCM mean in rent?",
+        href: "/what-does-pcm-mean-rent",
+      },
+      {
+        label: "What does PW mean in rent?",
+        href: "/what-does-pw-mean-rent",
+      },
+      {
+        label: "PW to PCM",
+        href: "/pw-to-pcm",
+      },
+      {
+        label: "PCW to PCM",
+        href: "/pcw-to-pcm",
+      },
+      {
+        label: "When is rent due?",
+        href: "/when-is-rent-due",
+      },
+      {
+        label: "Do you pay rent in advance or after?",
+        href: "/do-you-pay-rent-in-advance-or-after",
       },
     ],
   },

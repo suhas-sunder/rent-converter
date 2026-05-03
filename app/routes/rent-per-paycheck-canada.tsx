@@ -6,7 +6,7 @@ import ToolFit from "~/client/components/rent-per-paycheck-canada/ToolFit";
 import FAQ from "~/client/components/rent-per-paycheck-canada/FAQ";
 
 function safeToFixed(n: number, digits: number): string {
-  if (!Number.isFinite(n)) return "—";
+  if (!Number.isFinite(n)) return "-";
   return n.toFixed(digits);
 }
 

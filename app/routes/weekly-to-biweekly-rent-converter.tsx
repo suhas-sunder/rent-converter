@@ -6,7 +6,7 @@ import HowItWorks from "~/client/components/weekly-to-biweekly-rent-converter/Ho
 import ToolFit from "~/client/components/weekly-to-biweekly-rent-converter/ToolFit";
 
 function safeToFixed(n: number, digits: number): string {
-  if (!Number.isFinite(n)) return "—";
+  if (!Number.isFinite(n)) return "-";
   return n.toFixed(digits);
 }
 

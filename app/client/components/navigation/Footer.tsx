@@ -81,6 +81,7 @@ export default function Footer() {
         { label: "Rent Per Paycheck", to: "/rent-per-paycheck-calculator" },
         { label: "Split Rent", to: "/rent-split-calculator" },
         { label: "Rent Due Date", to: "/rent-due-date-calculator" },
+        { label: "Prorated Rent", to: "/prorated-rent-calculator" },
       ],
     },
     {
@@ -101,6 +102,14 @@ export default function Footer() {
         {
           label: "Rent vs Take-Home Pay",
           to: "/rent-vs-take-home-pay-calculator",
+        },
+        {
+          label: "3x Rent",
+          to: "/3x-rent-calculator",
+        },
+        {
+          label: "2.5x Rent",
+          to: "/2-5x-rent-calculator",
         },
       ],
     },
@@ -139,6 +148,20 @@ export default function Footer() {
         {
           label: "Rent Per Paycheck (Canada)",
           to: "/rent-per-paycheck-canada",
+        },
+      ],
+    },
+    {
+      title: "Guides & Glossary",
+      items: [
+        { label: "What PCM Means", to: "/what-does-pcm-mean-rent" },
+        { label: "What PW Means", to: "/what-does-pw-mean-rent" },
+        { label: "PW to PCM", to: "/pw-to-pcm" },
+        { label: "PCW to PCM", to: "/pcw-to-pcm" },
+        { label: "When Rent Is Due", to: "/when-is-rent-due" },
+        {
+          label: "Rent in Advance or After",
+          to: "/do-you-pay-rent-in-advance-or-after",
         },
       ],
     },

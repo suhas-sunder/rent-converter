@@ -73,5 +73,3 @@ Allow: /
 
 User-agent: Applebot
 Allow: /
-
-Sitemap: https://yourdomain.com/sitemap.xml

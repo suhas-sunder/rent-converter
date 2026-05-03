@@ -43,16 +43,20 @@ const howItWorks = {
   ],
   relatedLinks: [
     {
+      to: "/pw-to-pcm",
+      label: "PW to PCM"
+    },
+    {
+      to: "/what-does-pcm-mean-rent",
+      label: "What PCM means"
+    },
+    {
       to: "/monthly-to-weekly-rent-converter",
       label: "Monthly to weekly"
     },
     {
       to: "/rent-paid-every-4-weeks-calculator",
       label: "4-week rent"
-    },
-    {
-      to: "/weekly-to-annual-rent-converter",
-      label: "Weekly to annual"
     }
   ]
 };

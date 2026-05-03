@@ -12,16 +12,16 @@ const toolFit = {
   ],
   nextSteps: [
     {
+      to: "/3x-rent-calculator",
+      label: "3x rent"
+    },
+    {
+      to: "/2-5x-rent-calculator",
+      label: "2.5x rent"
+    },
+    {
       to: "/rent-vs-take-home-pay-calculator",
       label: "Rent vs take-home pay"
-    },
-    {
-      to: "/rent-per-paycheck-calculator",
-      label: "Rent per paycheck"
-    },
-    {
-      to: "/rent-as-percentage-of-income-calculator",
-      label: "Rent percentage"
     }
   ]
 };

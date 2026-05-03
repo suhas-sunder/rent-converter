@@ -6,6 +6,10 @@
     <loc>https://www.rentconverter.com/</loc>
     <lastmod>2026-05-03</lastmod>
   </url>
+  <url>
+    <loc>https://www.rentconverter.com/rent-converter</loc>
+    <lastmod>2026-05-03</lastmod>
+  </url>
 
   <!-- Frequency converters -->
   <url>
@@ -112,12 +116,12 @@
     <loc>https://www.rentconverter.com/rent-due-date-calculator</loc>
     <lastmod>2026-05-03</lastmod>
   </url>
-
-  <!-- Affordability and income -->
   <url>
-    <loc>https://www.rentconverter.com/rent-affordability-calculator</loc>
+    <loc>https://www.rentconverter.com/prorated-rent-calculator</loc>
     <lastmod>2026-05-03</lastmod>
   </url>
+
+  <!-- Affordability and income -->
   <url>
     <loc>https://www.rentconverter.com/rent-as-percentage-of-income-calculator</loc>
     <lastmod>2026-05-03</lastmod>
@@ -136,6 +140,40 @@
   </url>
   <url>
     <loc>https://www.rentconverter.com/income-required-for-rent-calculator</loc>
+    <lastmod>2026-05-03</lastmod>
+  </url>
+  <url>
+    <loc>https://www.rentconverter.com/3x-rent-calculator</loc>
+    <lastmod>2026-05-03</lastmod>
+  </url>
+  <url>
+    <loc>https://www.rentconverter.com/2-5x-rent-calculator</loc>
+    <lastmod>2026-05-03</lastmod>
+  </url>
+
+  <!-- Guides and glossary -->
+  <url>
+    <loc>https://www.rentconverter.com/what-does-pcm-mean-rent</loc>
+    <lastmod>2026-05-03</lastmod>
+  </url>
+  <url>
+    <loc>https://www.rentconverter.com/what-does-pw-mean-rent</loc>
+    <lastmod>2026-05-03</lastmod>
+  </url>
+  <url>
+    <loc>https://www.rentconverter.com/pw-to-pcm</loc>
+    <lastmod>2026-05-03</lastmod>
+  </url>
+  <url>
+    <loc>https://www.rentconverter.com/pcw-to-pcm</loc>
+    <lastmod>2026-05-03</lastmod>
+  </url>
+  <url>
+    <loc>https://www.rentconverter.com/when-is-rent-due</loc>
+    <lastmod>2026-05-03</lastmod>
+  </url>
+  <url>
+    <loc>https://www.rentconverter.com/do-you-pay-rent-in-advance-or-after</loc>
     <lastmod>2026-05-03</lastmod>
   </url>
 

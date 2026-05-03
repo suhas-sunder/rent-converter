@@ -29,6 +29,12 @@ function isCanonicalToolRoute(path: string) {
     "/weekly-to-monthly-rent-australia",
     "/rent-per-paycheck-us",
     "/rent-per-paycheck-canada",
+    "/what-does-pcm-mean-rent",
+    "/what-does-pw-mean-rent",
+    "/pw-to-pcm",
+    "/pcw-to-pcm",
+    "/when-is-rent-due",
+    "/do-you-pay-rent-in-advance-or-after",
   ]);
 
   return explicitCanonical.has(path);
@@ -168,6 +174,11 @@ function buildCanonicalItems(): NavItem[] {
       to: "/rent-due-date-calculator",
       keywords: ["rent", "due date", "date", "calculator"],
     },
+    {
+      label: "Prorated Rent",
+      to: "/prorated-rent-calculator",
+      keywords: ["prorated", "partial month", "move in", "move out", "rent"],
+    },
 
     {
       label: "Rent % of Income",
@@ -188,6 +199,16 @@ function buildCanonicalItems(): NavItem[] {
       label: "Rent vs Take-Home",
       to: "/rent-vs-take-home-pay-calculator",
       keywords: ["take home", "income", "pay", "calculator"],
+    },
+    {
+      label: "3x Rent",
+      to: "/3x-rent-calculator",
+      keywords: ["3x", "three times", "rent", "income", "qualification"],
+    },
+    {
+      label: "2.5x Rent",
+      to: "/2-5x-rent-calculator",
+      keywords: ["2.5x", "two point five", "rent", "income", "qualification"],
     },
 
     {
@@ -271,6 +292,36 @@ function buildCanonicalItems(): NavItem[] {
       label: "Rent per Paycheck (Canada)",
       to: "/rent-per-paycheck-canada",
       keywords: ["canada", "cad", "paycheck", "biweekly", "rent"],
+    },
+    {
+      label: "What PCM Means",
+      to: "/what-does-pcm-mean-rent",
+      keywords: ["pcm", "per calendar month", "meaning", "rent glossary"],
+    },
+    {
+      label: "What PW Means",
+      to: "/what-does-pw-mean-rent",
+      keywords: ["pw", "per week", "meaning", "rent glossary"],
+    },
+    {
+      label: "PW to PCM",
+      to: "/pw-to-pcm",
+      keywords: ["pw", "pcm", "weekly", "monthly", "conversion"],
+    },
+    {
+      label: "PCW to PCM",
+      to: "/pcw-to-pcm",
+      keywords: ["pcw", "pcm", "weekly", "monthly", "conversion"],
+    },
+    {
+      label: "When Rent Is Due",
+      to: "/when-is-rent-due",
+      keywords: ["rent due", "due date", "what time", "grace period"],
+    },
+    {
+      label: "Rent in Advance or After",
+      to: "/do-you-pay-rent-in-advance-or-after",
+      keywords: ["rent in advance", "rent after", "payment timing"],
     },
   ];
 

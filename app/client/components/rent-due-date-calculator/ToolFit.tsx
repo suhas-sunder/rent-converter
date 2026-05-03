@@ -12,12 +12,16 @@ const toolFit = {
   ],
   nextSteps: [
     {
-      to: "/rent-paid-every-4-weeks-calculator",
-      label: "4-week rent"
+      to: "/when-is-rent-due",
+      label: "When rent is due"
     },
     {
-      to: "/rent-per-paycheck-calculator",
-      label: "Rent per paycheck"
+      to: "/do-you-pay-rent-in-advance-or-after",
+      label: "Rent in advance"
+    },
+    {
+      to: "/rent-paid-every-4-weeks-calculator",
+      label: "4-week rent"
     }
   ]
 };
