@@ -8,23 +8,23 @@ const SITE_URL = "https://www.rentconverter.com/";
 
 export const meta: Route.MetaFunction = () => [
   {
-    title: "Rent Converter Calculator | Weekly, Monthly, 4-Week & Annual Rent",
+    title: "Rent Converter: Weekly, Monthly, Daily & Annual",
   },
   {
     name: "description",
     content:
-      "Convert rent between weekly, monthly, every 4 weeks, biweekly, daily, hourly, and annual periods. See true monthly cost, 4-week comparisons, and printable results.",
+      "Convert rent between weekly, monthly, biweekly, 4-week, daily, hourly, and annual amounts. See true monthly cost, annual cost, and 4-week vs monthly differences. Free, private, no signup.",
   },
 
   { property: "og:type", content: "website" },
   {
     property: "og:title",
-    content: "Rent Converter Calculator | Weekly, Monthly, 4-Week & Annual Rent",
+    content: "Rent Converter: Weekly, Monthly, Daily & Annual",
   },
   {
     property: "og:description",
     content:
-      "Convert rent across weekly, monthly, biweekly, 4-week, daily, hourly, and annual periods with clear assumptions and cents-rounded results.",
+      "Convert rent across weekly, monthly, biweekly, 4-week, daily, hourly, and annual periods with clear assumptions, exact decimal-safe math, and side-by-side results.",
   },
   { property: "og:url", content: SITE_URL },
   { property: "og:site_name", content: "RentConverter.com" },
@@ -33,12 +33,12 @@ export const meta: Route.MetaFunction = () => [
   { name: "twitter:card", content: "summary_large_image" },
   {
     name: "twitter:title",
-    content: "Rent Converter Calculator | Weekly, Monthly, 4-Week & Annual Rent",
+    content: "Rent Converter: Weekly, Monthly, Daily & Annual",
   },
   {
     name: "twitter:description",
     content:
-      "Find true monthly, weekly, 4-week, daily, hourly, and annual rent with clear assumptions and printable browser results.",
+      "Find the true monthly, weekly, daily, hourly, and annual cost of rent with clear assumptions and decimal-safe calculations.",
   },
   { name: "twitter:image", content: `${SITE_URL}og-image.jpg` },
 
@@ -763,9 +763,9 @@ export default function Home() {
   const webPageSchema = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    name: "Rent Converter Calculator",
+    name: "Rent Converter: Weekly, Monthly, Daily, Hourly, Biweekly, 4-Week, and Annual Rent",
     description:
-      "Convert rent between weekly, monthly, every 4 weeks, biweekly, daily, hourly, and annual periods. See true monthly rent, annual rent, and 4-week comparisons with clear assumptions.",
+      "Convert rent between weekly, monthly, every 4 weeks, biweekly, daily, hourly, and annual periods. See true monthly rent, annual rent, and 4-week vs monthly differences with clear assumptions.",
     url: SITE_URL,
   };
 
@@ -809,12 +809,11 @@ export default function Home() {
                 Rent conversion calculator
               </p>
               <h1 className="text-center mb-1 sm:mb-0 sm:text-left text-2xl sm:text-3xl capitalize font-bold text-sky-900 tracking-tight">
-                Rent Converter Calculator
+                Rent Converter: Daily, Weekly, Monthly & Annual
               </h1>
               <p className="hidden md:flex w-full max-w-3xl pt-2 text-slate-700 leading-relaxed">
-                Convert rent between weekly, monthly, every 4 weeks, biweekly,
-                daily, hourly, and annual periods. Compare true monthly cost
-                without treating 4 weeks as a full month.
+                Convert rent between daily, weekly, monthly, and yearly rates in
+                one click. No sign-up, instant results.
               </p>
             </div>
 
