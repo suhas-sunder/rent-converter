@@ -88,7 +88,7 @@ const pcmFaq: FaqItem[] = [
   },
   {
     q: "Is PCM every 4 weeks?",
-    a: "No. Every 4 weeks is a 28-day cycle with 13 payments per year. PCM is 12 calendar-month payments per year.",
+    a: "No. Every 4 weeks is a 28-day cycle. PCM is 12 calendar-month payments per year.",
   },
   {
     q: "Does PCM include bills?",
@@ -120,7 +120,7 @@ const glossaryRows = [
   { term: "PW", meaning: "Per week", note: "Weekly rent. Convert by annualizing, then dividing by 12 for PCM." },
   { term: "PCW", meaning: "Per calendar week", note: "Often used like PW in rental listings." },
   { term: "PA", meaning: "Per annum", note: "Annual rent for a full year." },
-  { term: "Every 4 weeks", meaning: "28-day rent cycle", note: "Creates 13 payments per year, not 12." },
+  { term: "Every 4 weeks", meaning: "28-day rent cycle", note: "A 28-day cycle is shorter than an average calendar month." },
 ];
 
 export const infoPageConfigs: Record<string, InfoPageConfig> = {
@@ -141,7 +141,7 @@ export const infoPageConfigs: Record<string, InfoPageConfig> = {
     sections: [
       {
         title: "Calendar month vs 4 weeks",
-        body: "A calendar month is not the same length as 4 weeks. Four weeks is always 28 days, while calendar months run from 28 to 31 days. Over a year, PCM means 12 payments, while a 4-week cycle means 13 payments.",
+        body: "A calendar month is not the same length as 4 weeks. Four weeks is always 28 days, while calendar months run from 28 to 31 days. Over a year, PCM means 12 monthly payments, while a repeating 28-day cycle falls on a different rhythm.",
       },
       {
         title: "Why this matters in listings",
@@ -473,7 +473,7 @@ export const conversionPageConfigs: Record<string, ConversionPageConfig> = {
     mode: "fortnightly-to-monthly",
     resultLabel: "Calendar monthly rent",
     formulaLabel: "monthly = fortnightly rent x 365 / 14 / 12",
-    context: "Fortnightly rent creates 26 payments per year. Two fortnightly payments cover 28 days, not a full average calendar month.",
+    context: "Fortnightly rent is a 14-day amount. Two fortnightly payments cover 28 days, not a full average calendar month.",
     commonAmounts: [700, 800, 900, 1000, 1100, 1200, 1300, 1500],
     relatedLinks: australiaLinks,
   }),
@@ -582,7 +582,7 @@ export const conversionPageConfigs: Record<string, ConversionPageConfig> = {
   "/4-weekly-to-monthly-rent-uk": conversionConfig({
     path: "/4-weekly-to-monthly-rent-uk",
     title: "4-Weekly to Monthly Rent UK | 28-Day Rent Calculator",
-    description: "Convert 4-weekly rent to true monthly rent. See why 28-day rent creates 13 payments per year and compare it with PCM.",
+    description: "Convert 4-weekly rent to true monthly rent. See why 28-day rent cycles differ from PCM.",
     eyebrow: "UK rent converter",
     h1: "4-Weekly to Monthly Rent UK",
     lead: "Convert a 28-day rent amount into true calendar monthly rent, weekly rent, and annual rent.",
@@ -592,7 +592,7 @@ export const conversionPageConfigs: Record<string, ConversionPageConfig> = {
     mode: "four-week-to-monthly",
     resultLabel: "Monthly equivalent",
     formulaLabel: "monthly = 4-week rent x 365 / 28 / 12",
-    context: "A 4-week payment cycle has 13 payments per year, so it is not the same as PCM.",
+    context: "A 4-week payment cycle is 28 days, so it is not the same as PCM.",
     commonAmounts: [600, 800, 1000, 1200, 1600, 2000, 2400],
     relatedLinks: ukLinks,
   }),
@@ -813,9 +813,10 @@ export const increaseToolConfigs: Record<string, IncreaseToolConfig> = {
     description: "Learn the rent increase formula and calculate new rent from a percentage increase, fixed increase, or old and new rent.",
     eyebrow: "Rent increase formula",
     h1: "Rent Increase Formula",
-    lead: "Calculate new rent from a percentage increase and compare monthly and annual impact.",
-    mode: "simple",
+    lead: "Calculate new rent from a percentage increase, a fixed increase, or old and new monthly rent.",
+    mode: "formula",
     defaultRate: "5",
+    defaultFixed: "100",
     relatedLinks: increaseLinks,
   }),
   "/compound-rent-increase-calculator": increaseConfig({
@@ -858,9 +859,10 @@ export const increaseToolConfigs: Record<string, IncreaseToolConfig> = {
     description: "Calculate a monthly rent increase from old and new rent, or from a percentage increase. See monthly and annual impact.",
     eyebrow: "Rent increase calculator",
     h1: "Monthly Rent Increase Calculator",
-    lead: "Compare old and new monthly rent and see the monthly and annual impact.",
-    mode: "simple",
+    lead: "Compare old and new monthly rent, or test a percentage or fixed monthly increase.",
+    mode: "formula",
     defaultRate: "5",
+    defaultFixed: "100",
     relatedLinks: increaseLinks,
   }),
   "/rent-escalation-calculator": increaseConfig({

@@ -583,7 +583,7 @@ export default function HourlyToMonthlyRent() {
     },
     {
       q: "Does display rounding change the calculation?",
-      a: "No. Rounding is display-only. The calculator keeps decimal precision through the calculation and only rounds shown or exported values.",
+      a: "No. Rounding is display-only. The calculator keeps decimal precision through the calculation and only rounds shown or printed values.",
     },
   ];
 

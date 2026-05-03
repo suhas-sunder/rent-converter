@@ -10,7 +10,7 @@ const PAGE_PATH = "/biweekly-to-monthly-rent-converter";
 export const meta: Route.MetaFunction = () => {
   const title = "Biweekly to Monthly Rent Converter | Average Monthly Rent";
   const description =
-    "Convert biweekly rent to an average monthly amount. Compare 26 payments per year with monthly, weekly, and 4-week rent equivalents.";
+    "Convert biweekly rent to an average monthly amount. Compare 14-day rent cycles with monthly, weekly, and 4-week rent equivalents.";
 
   const url = `${SITE_URL}${PAGE_PATH}`;
   const ogImage = `${SITE_URL}/og-image.jpg`;
@@ -21,7 +21,7 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "keywords",
       content:
-        "biweekly to monthly rent converter, every 2 weeks to monthly rent, biweekly rent to monthly, biweekly monthly rent calculator, 26 payments per year rent, biweekly vs monthly rent",
+        "biweekly to monthly rent converter, every 2 weeks to monthly rent, biweekly rent to monthly, biweekly monthly rent calculator, 14-day rent cycle, biweekly vs monthly rent",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
@@ -584,7 +584,7 @@ export default function BiweeklyToMonthlyRent() {
     },
     {
       q: "Does display rounding change the calculation?",
-      a: "No. Rounding is display-only. The calculator keeps decimal precision through the calculation and only rounds shown or exported values.",
+      a: "No. Rounding is display-only. The calculator keeps decimal precision through the calculation and only rounds shown or printed values.",
     },
   ];
 

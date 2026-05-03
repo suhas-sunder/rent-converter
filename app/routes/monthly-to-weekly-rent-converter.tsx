@@ -504,11 +504,11 @@ export default function MonthlyToWeeklyRent() {
   const faqData = [
     {
       q: "How do you convert monthly rent to weekly rent?",
-      a: "This calculator uses annual equivalence. It multiplies monthly rent by 12, then divides the annual amount by 52 weeks.",
+      a: "This calculator uses the sitewide 365-day model. It multiplies monthly rent by 12, then converts that annual amount into a 7-day weekly equivalent.",
     },
     {
       q: "What formula does the monthly to weekly rent converter use?",
-      a: "The main formula is monthly rent × 12 ÷ 52. For example, $2,000 per month is about $461.54 per week before display rounding.",
+      a: "The main formula is monthly rent × 12 × 7 ÷ 365. For example, $2,000 per month is about $460.27 per week before display rounding.",
     },
     {
       q: "Why not divide monthly rent by 4?",
@@ -573,7 +573,7 @@ export default function MonthlyToWeeklyRent() {
     "@type": "WebPage",
     name: "Monthly to Weekly Rent Converter",
     description:
-      "Convert monthly rent to a weekly amount using annual equivalence. Includes related rent breakdowns and a 4-week comparison.",
+      "Convert monthly rent to a weekly amount using the 365-day model. Includes related rent breakdowns and a 4-week comparison.",
     url: "https://www.rentconverter.com/monthly-to-weekly-rent-converter",
   };
 
@@ -744,7 +744,7 @@ export default function MonthlyToWeeklyRent() {
                         {fmt(breakdown.weekly)}
                       </div>
                       <p className="text-sm text-slate-700">
-                        Based on monthly rent × 12 ÷ 52.
+                        Based on monthly rent × 12 × 7 ÷ 365.
                       </p>
                     </div>
 

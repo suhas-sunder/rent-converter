@@ -417,9 +417,9 @@ function parseNonNegInt(raw: string, label: string, max: number): ParsedInt {
 function annualizeFromScaled(valueScaled: bigint, period: Period): bigint {
   if (period === "hourly") return valueScaled * 24n * 365n;
   if (period === "daily") return valueScaled * 365n;
-  if (period === "weekly") return valueScaled * 52n;
-  if (period === "biweekly") return valueScaled * 26n;
-  if (period === "every_4_weeks") return valueScaled * 13n;
+  if (period === "weekly") return mulDivRound(valueScaled, 365n, 7n);
+  if (period === "biweekly") return mulDivRound(valueScaled, 365n, 14n);
+  if (period === "every_4_weeks") return mulDivRound(valueScaled, 365n, 28n);
   if (period === "monthly") return valueScaled * 12n;
   return valueScaled;
 }
@@ -601,7 +601,7 @@ export default function RentPerWeekCalculator() {
   const faqData = [
     {
       q: "How do I calculate rent per week?",
-      a: "Convert the rent amount to an annual total, then divide by 52. For example, monthly rent is multiplied by 12 first, then divided by 52.",
+      a: "Convert the rent amount to an annual total, then convert that annual rent into a 7-day weekly equivalent. For example, monthly rent is multiplied by 12 first, then multiplied by 7 and divided by 365.",
     },
     {
       q: "Why is monthly rent divided by 4 different from weekly rent?",
@@ -904,7 +904,7 @@ export default function RentPerWeekCalculator() {
                       {fmt(computed.weeklyScaled)}
                     </div>
                     <p className="text-sm text-slate-700">
-                      Based on annual rent divided by 52.
+                      Based on annual rent x 7 / 365.
                     </p>
                   </div>
 

@@ -453,9 +453,9 @@ function parseMoneyInputToScaled(raw: string): ParsedScaled {
 function annualizeFromScaled(valueScaled: bigint, period: Period): bigint {
   if (period === "hourly") return valueScaled * 24n * 365n;
   if (period === "daily") return valueScaled * 365n;
-  if (period === "weekly") return valueScaled * 52n;
-  if (period === "biweekly") return valueScaled * 26n;
-  if (period === "every_4_weeks") return valueScaled * 13n;
+  if (period === "weekly") return mulDivRound(valueScaled, 365n, 7n);
+  if (period === "biweekly") return mulDivRound(valueScaled, 365n, 14n);
+  if (period === "every_4_weeks") return mulDivRound(valueScaled, 365n, 28n);
   if (period === "monthly") return valueScaled * 12n;
   return valueScaled;
 }

@@ -104,7 +104,9 @@ export function parseMoneyToCents(raw: string, emptyMessage = "Enter an amount."
 }
 
 export function parsePositiveNumber(raw: string, fallback: number, min = 0, max = Number.MAX_SAFE_INTEGER) {
-  const value = Number(String(raw).replace(/[^\d.]/g, ""));
+  const source = String(raw).trim();
+  if (source.startsWith("-")) return min;
+  const value = Number(source.replace(/[^\d.]/g, ""));
   if (!Number.isFinite(value)) return fallback;
   return Math.min(max, Math.max(min, value));
 }

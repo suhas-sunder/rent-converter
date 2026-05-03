@@ -408,23 +408,23 @@ function parseMoneyInputToScaled(raw: string): ParsedScaled {
  * Assumptions (source of truth):
  * - Calendar year = 365 days
  * - Monthly rent uses 12 payments/year (calendar-average month)
- * - Weekly rent uses 52 payments/year
- * - Every 2 weeks (biweekly rent) uses 26 payments/year
- * - Every 4 weeks (28-day cycle) uses 13 payments/year
+ * - Weekly rent uses 7-day periods in a 365-day year
+ * - Every 2 weeks (biweekly rent) uses 14-day periods in a 365-day year
+ * - Every 4 weeks (28-day cycle) uses 28-day periods in a 365-day year
  * - Daily rent uses 365 days/year
- * - Hourly rent uses a standard 2,080-hour work year (40h/week × 52 weeks)
+ * - Hourly rent uses 24-hour days in a 365-day year
  *
  * Conversions are annual-basis:
- * 1) convert input to annual using the above payment counts
+ * 1) convert input to annual using the above rent-period assumptions
  * 2) derive any other period from annual using the same conventions
  */
 
 function annualizeFromScaled(valueScaled: bigint, period: RentPeriod): bigint {
   if (period === "hourly") return valueScaled * 24n * 365n;
   if (period === "daily") return valueScaled * 365n;
-  if (period === "weekly") return valueScaled * 52n;
-  if (period === "biweekly") return valueScaled * 26n;
-  if (period === "every_4_weeks") return valueScaled * 13n;
+  if (period === "weekly") return mulDivRound(valueScaled, 365n, 7n);
+  if (period === "biweekly") return mulDivRound(valueScaled, 365n, 14n);
+  if (period === "every_4_weeks") return mulDivRound(valueScaled, 365n, 28n);
   if (period === "monthly") return valueScaled * 12n;
   return valueScaled;
 }
@@ -578,13 +578,13 @@ export default function RentPerPaycheck() {
 
     const annualCounts = {
       rentPayments: {
-        hourly: 365 * 24,
-        daily: 365,
-        weekly: 52,
-        biweekly: 26,
-        every_4_weeks: 13,
-        monthly: 12,
-        annual: 1,
+        hourly: "8,760",
+        daily: "365",
+        weekly: "52.14",
+        biweekly: "26.07",
+        every_4_weeks: "13.04",
+        monthly: "12",
+        annual: "1",
       },
       paychecks: {
         weekly: 52,
@@ -626,7 +626,7 @@ export default function RentPerPaycheck() {
     },
     {
       q: "How does this handle rent paid every 4 weeks?",
-      a: "A 4-week rent cycle is treated as 28 days, or 13 payments in a 52-week year. The calculator converts that rent to an annual total before dividing it by paycheck frequency.",
+      a: "A 4-week rent cycle is treated as 28 days. The calculator converts that rent to an annual total using the 365-day model before dividing it by paycheck frequency.",
     },
     {
       q: "Does this tell me whether rent is affordable?",
@@ -634,7 +634,7 @@ export default function RentPerPaycheck() {
     },
     {
       q: "What assumptions does this calculator use?",
-      a: "Rent assumptions: year = 365 days, month = 365 ÷ 12 days, week = 7 days, biweekly = 14 days, every 4 weeks = 28 days. Paycheck counts: weekly = 52, biweekly = 26, semimonthly = 24, monthly = 12.",
+      a: "Rent assumptions: year = 365 days, month = 365 / 12 days, week = 7 days, biweekly = 14 days, every 4 weeks = 28 days. Paycheck counts: weekly = 52, biweekly = 26, semimonthly = 24, monthly = 12.",
     },
   ];
 

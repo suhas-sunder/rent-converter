@@ -140,7 +140,7 @@ export type IncreaseToolConfig = SeoConfig & {
   eyebrow: string;
   h1: string;
   lead: string;
-  mode: "simple" | "compound" | "cpi" | "escalation" | "regional";
+  mode: "simple" | "compound" | "cpi" | "escalation" | "regional" | "formula";
   defaultRate?: string;
   defaultFixed?: string;
   regionNote?: string;
@@ -229,7 +229,7 @@ function ToolCard({
     <section className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
       <div className="overflow-hidden rounded-[1.75rem] bg-white px-5 py-7 sm:px-8 sm:py-8">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-          <div>
+          <div className="min-w-0 flex-1">
             <p className="rc-page-eyebrow">{eyebrow}</p>
             <h1 className="mt-3 text-2xl font-bold tracking-tight text-sky-900 sm:text-3xl">
               {h1}
@@ -601,9 +601,9 @@ function conversionValues(mode: ConversionMode, cents: bigint): ConversionValues
       cards: [
         ["Every 4 weeks", cents],
         ["Weekly equivalent", divRound(cents, 4n)],
-        ["Annual rent", cents * 13n],
+        ["Annual rent", divRound(cents * 365n, 28n)],
       ],
-      detail: "A 28-day rent cycle has 13 payments per year, so it is not the same as monthly rent.",
+      detail: "A 28-day rent cycle is annualized over a 365-day year, so it is not the same as monthly rent.",
     };
   }
   if (mode === "weekly-to-fortnightly") {
@@ -623,10 +623,10 @@ function conversionValues(mode: ConversionMode, cents: bigint): ConversionValues
       main: monthly,
       cards: [
         ["Weekly equivalent", divRound(cents, 2n)],
-        ["Annual rent", cents * 26n],
+        ["Annual rent", divRound(cents * 365n, 14n)],
         ["Two fortnightly payments", cents * 2n],
       ],
-      detail: "Fortnightly rent creates 26 payments per year. Two fortnightly payments cover 28 days.",
+      detail: "Fortnightly rent is a 14-day amount annualized over a 365-day year. Two fortnightly payments cover 28 days.",
     };
   }
   if (mode === "daily-to-monthly") {
@@ -886,9 +886,14 @@ export function IncomeToolPage({ config }: { config: IncomeToolConfig }) {
   const maxBy30 = monthlyIncome ? divRound(monthlyIncome * 30n, 100n) : undefined;
   const maxBy40 = monthlyIncome ? divRound(monthlyIncome * 40n, 100n) : undefined;
   const maxBy3x = monthlyIncome ? divRound(monthlyIncome, 3n) : undefined;
-  const requiredIncome = rentParsed.ok ? BigInt(Math.round(multiplier * 100)) * rentParsed.cents / 100n : undefined;
+  const requiredIncome = rentParsed.ok
+    ? divRound(rentParsed.cents * BigInt(Math.round(multiplier * 100)), 100n)
+    : undefined;
   const requiredAnnualIncome = requiredIncome !== undefined ? requiredIncome * 12n : undefined;
-  const ratio = rentParsed.ok && monthlyIncome && monthlyIncome > 0n ? Number(rentParsed.cents * 10000n / monthlyIncome) / 100 : 0;
+  const ratio =
+    rentParsed.ok && monthlyIncome && monthlyIncome > 0n
+      ? Number(divRound(rentParsed.cents * 10000n, monthlyIncome)) / 100
+      : 0;
   const remaining =
     monthlyIncome && rentParsed.ok
       ? monthlyIncome - rentParsed.cents - (expensesParsed.ok ? expensesParsed.cents : 0n)
@@ -1035,15 +1040,17 @@ export function IncreaseToolPage({ config }: { config: IncreaseToolConfig }) {
   const [rent, setRent] = useState("2000");
   const [rate, setRate] = useState(config.defaultRate ?? "5");
   const [fixed, setFixed] = useState(config.defaultFixed ?? "100");
+  const [newRentInput, setNewRentInput] = useState("2100");
   const [years, setYears] = useState("5");
   const [currency, setCurrency] = useState<Currency>("USD");
   const rentParsed = useMemo(() => parseMoneyToCents(rent), [rent]);
   const rateNum = parsePositiveNumber(rate, 5, 0, 100);
   const fixedParsed = parseMoneyToCents(fixed);
+  const newRentParsed = parseMoneyToCents(newRentInput);
   const yearCount = Math.round(parsePositiveNumber(years, 5, 1, 50));
   const newRent = useMemo(() => {
     if (!rentParsed.ok) return undefined;
-    if (config.mode === "simple" || config.mode === "regional" || config.mode === "cpi") {
+    if (config.mode === "simple" || config.mode === "regional" || config.mode === "cpi" || config.mode === "formula") {
       return divRound(rentParsed.cents * BigInt(Math.round((100 + rateNum) * 100)), 10000n);
     }
     if (config.mode === "compound" || config.mode === "escalation") {
@@ -1056,8 +1063,24 @@ export function IncreaseToolPage({ config }: { config: IncreaseToolConfig }) {
     return fixedParsed.ok ? rentParsed.cents + fixedParsed.cents : undefined;
   }, [config.mode, fixedParsed, rateNum, rentParsed, yearCount]);
   const increase = rentParsed.ok && newRent !== undefined ? newRent - rentParsed.cents : undefined;
+  const fixedNewRent =
+    rentParsed.ok && fixedParsed.ok ? rentParsed.cents + fixedParsed.cents : undefined;
+  const reverseIncrease =
+    rentParsed.ok && newRentParsed.ok ? newRentParsed.cents - rentParsed.cents : undefined;
+  const reversePercent =
+    rentParsed.ok && newRentParsed.ok && rentParsed.cents > 0n
+      ? Number(divRound(reverseIncrease! * 10000n, rentParsed.cents)) / 100
+      : undefined;
   const rows = useMemo(() => {
     if (!rentParsed.ok) return [];
+    if (config.mode === "formula") {
+      return [
+        ["Formula", "Result"],
+        ["new rent = current rent x (1 + percentage / 100)", formatMoney(newRent, currency)],
+        ["new rent = current rent + fixed increase", formatMoney(fixedNewRent, currency)],
+        ["percentage increase = (new rent - old rent) / old rent x 100", reversePercent === undefined ? "-" : formatPercent(reversePercent)],
+      ];
+    }
     let current = rentParsed.cents;
     const out: string[][] = [["Year", "Monthly rent", "Annual rent"]];
     for (let i = 0; i <= yearCount; i += 1) {
@@ -1065,7 +1088,7 @@ export function IncreaseToolPage({ config }: { config: IncreaseToolConfig }) {
       current = divRound(current * BigInt(Math.round((100 + rateNum) * 100)), 10000n);
     }
     return out;
-  }, [currency, rateNum, rentParsed, yearCount]);
+  }, [config.mode, currency, fixedNewRent, newRent, rateNum, rentParsed, reversePercent, yearCount]);
   const schemas = makePageSchemas({ ...config, calculator: true, faq: config.faq });
   return (
     <Shell schemas={schemas}>
@@ -1073,19 +1096,37 @@ export function IncreaseToolPage({ config }: { config: IncreaseToolConfig }) {
         <div className="mt-6 grid gap-4 lg:grid-cols-12">
           <div className="lg:col-span-4"><TextInput label="Current monthly rent" value={rent} onChange={setRent} /></div>
           <div className="lg:col-span-3"><TextInput label={config.mode === "cpi" ? "CPI or cap percentage" : "Increase percentage"} value={rate} onChange={setRate} /></div>
-          <div className="lg:col-span-2"><TextInput label="Years" value={years} onChange={setYears} inputMode="numeric" /></div>
-          <div className="lg:col-span-3"><CurrencySelect value={currency} onChange={setCurrency} /></div>
+          {config.mode === "formula" ? (
+            <>
+              <div className="lg:col-span-2"><TextInput label="Fixed increase" value={fixed} onChange={setFixed} /></div>
+              <div className="lg:col-span-3"><TextInput label="New monthly rent" value={newRentInput} onChange={setNewRentInput} /></div>
+            </>
+          ) : (
+            <div className="lg:col-span-2"><TextInput label="Years" value={years} onChange={setYears} inputMode="numeric" /></div>
+          )}
+          <div className={config.mode === "formula" ? "lg:col-span-12" : "lg:col-span-3"}><CurrencySelect value={currency} onChange={setCurrency} /></div>
         </div>
         <ResultPanel
-          label="Estimated new rent"
+          label={config.mode === "formula" ? "New rent from percentage" : "Estimated new rent"}
           value={formatMoney(newRent, currency)}
-          detail={config.regionNote ?? "This estimates the math impact. Lease terms and local rules can change whether an increase is allowed."}
+          detail={
+            config.mode === "formula"
+              ? "Use the percentage, fixed increase, and old-to-new formulas side by side to check the rent math."
+              : config.regionNote ?? "This estimates the math impact. Lease terms and local rules can change whether an increase is allowed."
+          }
           cards={[
+            ...(config.mode === "formula"
+              ? [
+                  { label: "Fixed increase result", value: formatMoney(fixedNewRent, currency) },
+                  { label: "Reverse percentage", value: reversePercent === undefined ? "-" : formatPercent(reversePercent) },
+                  { label: "Reverse monthly change", value: formatMoney(reverseIncrease, currency) },
+                ]
+              : []),
             { label: "Monthly increase", value: formatMoney(increase, currency) },
             { label: "Annual rent before", value: rentParsed.ok ? formatMoney(rentParsed.cents * 12n, currency) : "-" },
             { label: "Annual rent after", value: newRent ? formatMoney(newRent * 12n, currency) : "-" },
           ]}
-          tableRows={config.mode === "compound" || config.mode === "escalation" ? rows : undefined}
+          tableRows={config.mode === "compound" || config.mode === "escalation" || config.mode === "formula" ? rows : undefined}
         />
       </ToolCard>
       <ContentBlocks sections={[{ title: "How to read the result", body: "The output shows the arithmetic result from the rent, rate, and years entered. It does not decide whether an increase is allowed, whether notice is valid, or whether a local cap applies." }]} examples={config.examples} />
@@ -1109,7 +1150,7 @@ export function SplitToolPage({ config }: { config: SplitToolConfig }) {
   const bParsed = parseMoneyToCents(b);
   const total = rentParsed.ok && utilitiesParsed.ok ? rentParsed.cents + utilitiesParsed.cents : undefined;
   const rows = useMemo(() => {
-    if (!total) return [];
+    if (total === undefined) return [];
     if (config.mode === "income" && aParsed.ok && bParsed.ok) {
       const combined = aParsed.cents + bParsed.cents;
       const aShare = combined > 0n ? divRound(total * aParsed.cents, combined) : 0n;
@@ -1143,7 +1184,7 @@ export function SplitToolPage({ config }: { config: SplitToolConfig }) {
         </div>
         <ResultPanel
           label="Split result"
-          value={total ? formatMoney(total, currency) : "-"}
+          value={total !== undefined ? formatMoney(total, currency) : "-"}
           detail="The table shows each roommate share. Add other costs if you want rent plus utilities instead of rent alone."
           tableRows={rows}
         />
@@ -1324,7 +1365,19 @@ export function ProrationToolPage({ config }: { config: ProrationToolConfig }) {
 }
 
 function addMonths(date: Date, months: number) {
-  return new Date(date.getFullYear(), date.getMonth() + months, date.getDate());
+  const targetMonth = date.getMonth() + months;
+  const firstOfTarget = new Date(date.getFullYear(), targetMonth, 1);
+  const lastDayOfTarget = new Date(
+    firstOfTarget.getFullYear(),
+    firstOfTarget.getMonth() + 1,
+    0,
+  ).getDate();
+
+  return new Date(
+    firstOfTarget.getFullYear(),
+    firstOfTarget.getMonth(),
+    Math.min(date.getDate(), lastDayOfTarget),
+  );
 }
 
 function addDays(date: Date, days: number) {
@@ -1335,6 +1388,13 @@ function addDays(date: Date, days: number) {
 
 function isoDate(date: Date) {
   return date.toISOString().slice(0, 10);
+}
+
+function parseIsoDate(value: string, fallback: Date) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return fallback;
+  const date = new Date(`${value}T00:00:00`);
+  if (!Number.isFinite(date.getTime())) return fallback;
+  return isoDate(date) === value ? date : fallback;
 }
 
 function formatDate(date: Date) {
@@ -1348,12 +1408,16 @@ export function DateToolPage({ config }: { config: DateToolConfig }) {
   const [rent, setRent] = useState("2000");
   const [currency, setCurrency] = useState<Currency>("USD");
   const [frequency, setFrequency] = useState("monthly");
-  const startDate = new Date(`${start}T00:00:00`);
+  const startDate = parseIsoDate(start, new Date());
+  const startIsValid = isoDate(startDate) === start;
   const monthCount = Math.round(parsePositiveNumber(months, 12, 1, 120));
   const endDate = addDays(addMonths(startDate, monthCount), -1);
+  const renewalReminder = addDays(endDate, -60);
+  const renewalReminderText =
+    renewalReminder >= startDate ? formatDate(renewalReminder) : "Check lease terms";
   const rentParsed = parseMoneyToCents(rent);
   const rows = useMemo(() => {
-    if (config.mode !== "schedule" || !rentParsed.ok) return [];
+    if (config.mode !== "schedule" || !rentParsed.ok || !startIsValid) return [];
     const interval = frequency === "weekly" ? 7 : frequency === "fortnightly" ? 14 : frequency === "every 4 weeks" ? 28 : 30;
     const count = frequency === "monthly" ? monthCount : Math.min(120, Math.ceil((monthCount * 365) / 12 / interval));
     const out = [["Payment", "Due date", "Amount"]];
@@ -1362,7 +1426,7 @@ export function DateToolPage({ config }: { config: DateToolConfig }) {
       out.push([String(i + 1), formatDate(due), formatMoney(rentParsed.cents, currency)]);
     }
     return out;
-  }, [config.mode, currency, frequency, monthCount, rentParsed, startDate]);
+  }, [config.mode, currency, frequency, monthCount, rentParsed, startDate, startIsValid]);
   const schemas = makePageSchemas({ ...config, calculator: true, faq: config.faq });
   return (
     <Shell schemas={schemas}>
@@ -1386,15 +1450,28 @@ export function DateToolPage({ config }: { config: DateToolConfig }) {
             </>
           ) : null}
         </div>
+        {!startIsValid ? (
+          <p className="mt-2 text-sm font-semibold text-rose-700">
+            Enter a valid date in YYYY-MM-DD format.
+          </p>
+        ) : null}
         <ResultPanel
           label="Calculated date"
-          value={formatDate(endDate)}
-          detail="This treats the lease end date as the day before the same calendar date after the lease length. Your lease wording controls the actual final day."
-          cards={[
-            { label: "Start date", value: formatDate(startDate) },
-            { label: "Lease length", value: `${monthCount} months` },
-            { label: "Renewal reminder", value: formatDate(addDays(endDate, -60)) },
-          ]}
+          value={startIsValid ? formatDate(endDate) : "-"}
+          detail={
+            startIsValid
+              ? "This treats the lease end date as the day before the same calendar date after the lease length. Your lease wording controls the actual final day."
+              : "Enter a valid start date before using the calculated lease date."
+          }
+          cards={
+            startIsValid
+              ? [
+                  { label: "Start date", value: formatDate(startDate) },
+                  { label: "Lease length", value: monthCount === 1 ? "1 month" : `${monthCount} months` },
+                  { label: "Renewal reminder", value: renewalReminderText },
+                ]
+              : undefined
+          }
           tableRows={rows.length ? rows : undefined}
         />
       </ToolCard>

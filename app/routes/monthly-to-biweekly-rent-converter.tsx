@@ -566,7 +566,7 @@ export default function MonthlyToBiweeklyRent() {
     },
     {
       q: "How many payments are there in a year?",
-      a: "Monthly is commonly 12 payments per year. Biweekly is commonly 26 payments per year.",
+      a: "Monthly rent is treated as 12 calendar-month payments. Biweekly rent is treated as a 14-day rent period under the 365-day model.",
     },
     {
       q: "Will this match my exact lease payments?",
@@ -574,7 +574,7 @@ export default function MonthlyToBiweeklyRent() {
     },
     {
       q: "Does display rounding change the calculation?",
-      a: "No. Rounding is display-only. The calculator keeps decimal precision through the calculation and only rounds shown or exported values.",
+      a: "No. Rounding is display-only. The calculator keeps decimal precision through the calculation and only rounds shown or printed values.",
     },
   ];
 

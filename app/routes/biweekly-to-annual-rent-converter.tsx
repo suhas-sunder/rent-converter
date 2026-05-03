@@ -13,9 +13,9 @@ const SITE_URL = "https://www.rentconverter.com";
 const PAGE_PATH = "/biweekly-to-annual-rent-converter";
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Biweekly to Annual Rent Converter | 26 Payments";
+  const title = "Biweekly to Annual Rent Converter | 14-Day Rent";
   const description =
-    "Convert biweekly rent to annual rent using 26 payments per year. See monthly, weekly, and 4-week equivalents for comparison.";
+    "Convert biweekly rent to annual rent using a 14-day rent cycle and 365-day year. See monthly, weekly, and 4-week equivalents for comparison.";
 
   const url = `${SITE_URL}${PAGE_PATH}`;
   const ogImage = `${SITE_URL}/og-image.jpg`;
@@ -573,7 +573,7 @@ export default function BiweeklyToAnnualRent() {
     },
     {
       q: "Does display rounding change the calculation?",
-      a: "No. Rounding is display-only. The calculator keeps decimal precision through the calculation and only rounds shown or exported values.",
+      a: "No. Rounding is display-only. The calculator keeps decimal precision through the calculation and only rounds shown or printed values.",
     },
     {
       q: "Does the currency selector convert exchange rates?",

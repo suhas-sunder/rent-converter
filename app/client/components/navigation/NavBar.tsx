@@ -245,12 +245,14 @@ export default function NavBar() {
     if (!moreRect) return undefined;
 
     const gap = 8;
+    const viewportPadding = 24;
     const top = Math.round(moreRect.top + moreRect.height + gap);
-    const menuWidth = Math.min(760, Math.max(440, window.innerWidth - 16));
+    const availableWidth = Math.max(320, window.innerWidth - viewportPadding * 2);
+    const menuWidth = Math.min(1280, Math.max(560, availableWidth), availableWidth);
     const rightEdge = Math.round(moreRect.left + moreRect.width);
     const left = Math.min(
-      Math.max(8, rightEdge - menuWidth),
-      window.innerWidth - menuWidth - 8,
+      Math.max(viewportPadding, rightEdge - menuWidth),
+      window.innerWidth - menuWidth - viewportPadding,
     );
 
     return {
@@ -368,7 +370,11 @@ export default function NavBar() {
                 {section.description}
               </p>
             </div>
-            <div className={compact ? "grid gap-1" : "grid gap-1 md:grid-cols-2"}>
+            <div
+              className={
+                compact ? "grid gap-1" : "grid gap-1 md:grid-cols-2 xl:grid-cols-3"
+              }
+            >
               {section.items.map((item) => (
                 <SectionLink
                   key={`${section.title}-${item.to}`}
@@ -502,7 +508,7 @@ export default function NavBar() {
             <div
               ref={moreMenuRef}
               role="menu"
-              className="overflow-hidden rounded-2xl bg-white/95 backdrop-blur"
+              className="overflow-hidden rounded-2xl bg-white"
               style={dropdownStyle}
             >
               <div className="bg-white/95 p-3">
@@ -531,7 +537,7 @@ export default function NavBar() {
               </div>
 
               <div
-                className={`${SCROLL_CLASS} max-h-[min(68vh,620px)] overflow-y-auto`}
+                className={`${SCROLL_CLASS} max-h-[min(72vh,700px)] overflow-y-auto`}
               >
                 <div className="bg-sky-50/70 p-3 pb-0">
                   <AllToolsButton variant="dropdown" />

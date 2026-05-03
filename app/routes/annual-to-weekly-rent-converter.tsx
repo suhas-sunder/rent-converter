@@ -10,7 +10,7 @@ const PAGE_PATH = "/annual-to-weekly-rent-converter";
 export const meta: Route.MetaFunction = () => {
   const title = "Annual to Weekly Rent Converter | Yearly to Weekly Rent";
   const description =
-    "Convert annual rent to weekly rent using yearly rent divided by 52, with a 365-day weekly comparison and printable rent breakdown.";
+    "Convert annual rent to a 7-day weekly equivalent using the 365-day rent model, with a 52-week shortcut comparison and printable rent breakdown.";
 
   const url = `${SITE_URL}${PAGE_PATH}`;
   const ogImage = `${SITE_URL}/og-image.jpg`;
@@ -21,7 +21,7 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "keywords",
       content:
-        "annual to weekly rent converter, yearly to weekly rent, annual rent to weekly calculator, annual ÷ 52 rent, weekly rent equivalent, 365-day weekly rent, rent weekly conversion",
+        "annual to weekly rent converter, yearly to weekly rent, annual rent to weekly calculator, annual rent to 7-day weekly equivalent, 365-day weekly rent, rent weekly conversion",
     },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "RentConverter.com" },
@@ -515,7 +515,7 @@ export default function AnnualToWeeklyRentConverter() {
   const fmt = (scaled: bigint) =>
     formatMoneyFromScaled(scaled, currency);
 
-  const weeklyHeadlineScaled = breakdownScaled?.weeklyBudget ?? 0n;
+  const weeklyHeadlineScaled = breakdownScaled?.weekly365 ?? 0n;
 
 
   const handlePrint = () => {
@@ -526,19 +526,19 @@ export default function AnnualToWeeklyRentConverter() {
   const faqData = [
     {
       q: "How do you convert annual rent to weekly rent?",
-      a: "The main weekly result uses annual ÷ 52. For example, 24,000 per year divided by 52 equals about 461.54 per week before display rounding.",
+      a: "The main weekly result uses annual rent x 7 / 365. For example, 24,000 per year converted to a 7-day weekly equivalent is about 460.27 per week before display rounding.",
     },
     {
       q: "Why does this page also show a 365-day weekly amount?",
-      a: "The 365-day weekly amount uses annual × 7 ÷ 365. It aligns weekly rent with day-based conversions such as daily, hourly, 14-day, and 28-day amounts.",
+      a: "The 365-day weekly amount is the main sitewide result because it aligns weekly rent with day-based conversions such as daily, hourly, 14-day, and 28-day amounts.",
     },
     {
       q: "Which weekly rent number should I use?",
-      a: "Use annual ÷ 52 for normal weekly budgeting. Use annual × 7 ÷ 365 when you need a day-based weekly equivalent that lines up with daily or 28-day comparisons.",
+      a: "Use annual x 7 / 365 for RentConverter period comparisons. Annual / 52 can still be useful as a separate payment-count shortcut, but it is not the sitewide rent conversion model.",
     },
     {
-      q: "Why are annual ÷ 52 and annual × 7 ÷ 365 slightly different?",
-      a: "A 365-day year is not exactly 52 weeks. It is 52 weeks plus 1 day. That extra day is why a strict 365-day weekly equivalent can differ slightly from annual ÷ 52.",
+      q: "Why are annual / 52 and annual x 7 / 365 slightly different?",
+      a: "A 365-day year is not exactly 52 weeks. It is 52 weeks plus 1 day. That extra day is why a strict 365-day weekly equivalent can differ slightly from annual / 52.",
     },
     {
       q: "How is 4-week rent different from weekly rent?",
@@ -546,7 +546,7 @@ export default function AnnualToWeeklyRentConverter() {
     },
     {
       q: "Does display rounding change the result?",
-      a: "No. Rounding is display-only. The calculator keeps decimal precision through the calculation and only rounds the values shown on screen or exported.",
+      a: "No. Rounding is display-only. The calculator keeps decimal precision through the calculation and only rounds the values shown on screen or in print output.",
     },
     {
       q: "Does the currency selector convert exchange rates?",
@@ -589,7 +589,7 @@ export default function AnnualToWeeklyRentConverter() {
     name: "Annual to Weekly Rent Converter",
     url: `${SITE_URL}${PAGE_PATH}`,
     description:
-      "Convert annual rent to weekly rent using annual ÷ 52, with a 365-day weekly comparison and hourly, daily, biweekly, 4-week, monthly, and annual outputs.",
+      "Convert annual rent to weekly rent using annual x 7 / 365, with a 52-week shortcut comparison and hourly, daily, biweekly, 4-week, monthly, and annual outputs.",
     isPartOf: {
       "@type": "WebSite",
       name: "RentConverter.com",
@@ -758,7 +758,7 @@ export default function AnnualToWeeklyRentConverter() {
                         {fmt(weeklyHeadlineScaled)}
                       </div>
                       <p className="mt-2 text-sm text-slate-700">
-                        Based on annual rent divided by 52 weeks.
+                        Based on annual rent x 7 / 365.
                       </p>
                     </div>
                   </div>
@@ -815,7 +815,7 @@ export default function AnnualToWeeklyRentConverter() {
                       <div className="mt-2 grid gap-2 sm:grid-cols-2">
                         <div className="rounded-xl border border-emerald-200 bg-white/90 px-4 py-3">
                           <div className="text-xs text-slate-700">
-                            Annual ÷ 52
+                            Annual / 52
                           </div>
                           <div className="mt-1 text-sm font-bold text-slate-950">
                             {fmt(breakdownScaled!.weeklyBudget)}
@@ -824,7 +824,7 @@ export default function AnnualToWeeklyRentConverter() {
 
                         <div className="rounded-xl border border-emerald-200 bg-white/90 px-4 py-3">
                           <div className="text-xs text-slate-700">
-                            Annual × 7 ÷ 365
+                            Annual x 7 / 365
                           </div>
                           <div className="mt-1 text-sm font-bold text-slate-950">
                             {fmt(breakdownScaled!.weekly365)}
@@ -850,9 +850,7 @@ export default function AnnualToWeeklyRentConverter() {
                       </div>
 
                       <p className="mt-2 text-xs text-slate-700">
-                        The headline uses annual ÷ 52 for simple weekly
-                        budgeting. The 365-day version is useful when comparing
-                        against daily, hourly, 14-day, or 28-day periods.
+                        The headline uses the 365-day weekly equivalent so it matches the rest of the site. The 52-week shortcut is kept as a separate comparison.
                       </p>
                     </div>
                   </div>
@@ -890,7 +888,7 @@ export default function AnnualToWeeklyRentConverter() {
         </h2>
 
         <p className="mx-auto mb-6 max-w-6xl text-center text-slate-700">
-          These answers explain the difference between annual ÷ 52 and a 365-day
+          These answers explain the difference between annual / 52 and a 365-day
           weekly equivalent, plus how to use the weekly rent result for
           budgeting and rent-cycle comparisons.
         </p>
