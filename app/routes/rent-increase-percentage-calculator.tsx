@@ -795,7 +795,7 @@ export default function RentIncreasePercentage() {
                   Rent Increase Percentage Calculator
                 </h1>
 
-                <p className="mt-2 max-w-3xl text-base text-slate-700">
+                <p className="mt-2 text-base text-slate-700">
                   Calculate the percentage increase between your old rent and
                   new rent. The calculator also shows the yearly impact and
                   common period breakdowns.
@@ -1278,7 +1278,7 @@ export default function RentIncreasePercentage() {
                 </span>
               </summary>
 
-              <div className="mt-2 text-slate-700 leading-relaxed max-w-prose">
+              <div className="mt-2 text-slate-700 leading-relaxed">
                 {f.a}
               </div>
             </details>

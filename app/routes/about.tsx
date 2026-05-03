@@ -203,7 +203,7 @@ export default function About() {
               About RentConverter.com | Rent Math and Assumptions
             </h1>
 
-            <p className="max-w-3xl text-base leading-relaxed text-slate-700">
+            <p className="text-base leading-relaxed text-slate-700">
               RentConverter.com helps compare rent across different payment
               periods. Enter a rent amount, choose the period, and see the
               matching daily, weekly, biweekly, 4-week, monthly, hourly, or
@@ -331,7 +331,7 @@ export default function About() {
                   How the conversion math works
                 </h2>
 
-                <p className="mt-3 max-w-prose leading-relaxed text-slate-700">
+                <p className="mt-3 leading-relaxed text-slate-700">
                   The calculators use a consistent day-rate model. Your input is
                   converted to a daily amount, then converted into the target
                   period.
@@ -523,7 +523,7 @@ export default function About() {
           Frequently Asked Questions
         </h2>
 
-        <p className="mx-auto mb-6 max-w-3xl text-center text-slate-700">
+        <p className="mx-auto mb-6 text-center text-slate-700">
           These answers cover the site’s assumptions, rounding behavior, and
           intended use.
         </p>
@@ -538,7 +538,7 @@ export default function About() {
                 </span>
               </summary>
 
-              <div className="mt-2 max-w-prose leading-relaxed text-slate-700">
+              <div className="mt-2 leading-relaxed text-slate-700">
                 {f.a}
               </div>
             </details>

@@ -729,7 +729,7 @@ export default function RentPerDayCalculator() {
                   Rent Per Day Calculator
                 </h1>
 
-                <p className="mt-2 max-w-3xl text-base text-slate-700">
+                <p className="mt-2 text-base text-slate-700">
                   Calculate the daily equivalent of monthly, weekly, 4-week,
                   biweekly, hourly, or annual rent. Use it for short stays,
                   prorated comparisons, or day-by-day budgeting.
@@ -1093,7 +1093,7 @@ export default function RentPerDayCalculator() {
                 </span>
               </summary>
 
-              <div className="mt-2 text-slate-700 leading-relaxed max-w-prose">
+              <div className="mt-2 text-slate-700 leading-relaxed">
                 {f.a}
               </div>
             </details>

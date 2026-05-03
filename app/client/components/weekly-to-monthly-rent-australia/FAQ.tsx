@@ -57,7 +57,7 @@ export default function FAQ() {
                 </span>
               </summary>
 
-              <div className="mt-2 text-slate-700 leading-relaxed max-w-prose">
+              <div className="mt-2 text-slate-700 leading-relaxed">
                 {f.a}
               </div>
             </details>

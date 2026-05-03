@@ -43,7 +43,7 @@ const howItWorks = {
   ],
   relatedLinks: [
     {
-      to: "/pw-to-pcm",
+      to: "/pw-to-pcm-calculator",
       label: "PW to PCM"
     },
     {

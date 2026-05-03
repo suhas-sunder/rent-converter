@@ -122,7 +122,7 @@ export default function IntentLandingPage({
           <h1 className="mt-3 text-2xl font-bold tracking-tight text-sky-900 sm:text-3xl">
             {title}
           </h1>
-          <p className="mt-3 max-w-3xl text-base leading-relaxed text-slate-700">
+          <p className="mt-3 text-base leading-relaxed text-slate-700">
             {lead}
           </p>
 
@@ -138,7 +138,7 @@ export default function IntentLandingPage({
                   {answerTitle}
                 </h2>
               </div>
-              <p className="mt-3 max-w-4xl text-base leading-7 text-slate-800">
+              <p className="mt-3 text-base leading-7 text-slate-800">
                 {answer}
               </p>
               {formula ? (
@@ -152,7 +152,7 @@ export default function IntentLandingPage({
                 </div>
               ) : null}
               {caveat ? (
-                <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-700">
+                <p className="mt-3 text-sm leading-6 text-slate-700">
                   {caveat}
                 </p>
               ) : null}
@@ -273,7 +273,7 @@ export default function IntentLandingPage({
                     v
                   </span>
                 </summary>
-                <div className="mt-2 max-w-prose leading-relaxed text-slate-700">
+                <div className="mt-2 leading-relaxed text-slate-700">
                   {item.a}
                 </div>
               </details>

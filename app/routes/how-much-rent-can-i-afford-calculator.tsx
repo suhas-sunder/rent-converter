@@ -698,7 +698,7 @@ export default function HowMuchRentCanIAfford() {
                   How Much Rent Can I Afford?
                 </h1>
 
-                <p className="mt-2 max-w-4xl text-base text-slate-700">
+                <p className="mt-2 text-base text-slate-700">
                   Estimate rent targets from your income. Compare monthly,
                   weekly, and 4-week rent amounts.
                 </p>
@@ -981,7 +981,7 @@ export default function HowMuchRentCanIAfford() {
                 </span>
               </summary>
 
-              <div className="mt-2 max-w-prose leading-relaxed text-slate-700">
+              <div className="mt-2 leading-relaxed text-slate-700">
                 {f.a}
               </div>
             </details>

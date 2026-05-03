@@ -782,7 +782,7 @@ export default function RentAsPercentageOfIncome() {
                   Rent as Percentage of Income Calculator
                 </h1>
 
-                <p className="mt-2 max-w-3xl text-base leading-relaxed text-slate-700">
+                <p className="mt-2 text-base leading-relaxed text-slate-700">
                   Calculate what percentage of your income goes to rent. Enter
                   rent and income amounts to compare the same time period.
                 </p>
@@ -1176,7 +1176,7 @@ export default function RentAsPercentageOfIncome() {
                   </span>
                 </summary>
 
-                <div className="mt-2 max-w-prose leading-relaxed text-slate-700">
+                <div className="mt-2 leading-relaxed text-slate-700">
                   {f.a}
                 </div>
               </details>

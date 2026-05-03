@@ -760,7 +760,7 @@ export default function RentPerPerson() {
                   Rent Split Calculator
                 </h1>
 
-                <p className="mt-2 max-w-3xl text-base text-slate-700">
+                <p className="mt-2 text-base text-slate-700">
                   Split rent evenly between roommates. The calculator shows each
                   person’s share and related rent breakdowns.
                 </p>
@@ -1120,7 +1120,7 @@ export default function RentPerPerson() {
                 </span>
               </summary>
 
-              <div className="mt-2 text-slate-700 leading-relaxed max-w-prose">
+              <div className="mt-2 text-slate-700 leading-relaxed">
                 {f.a}
               </div>
             </details>

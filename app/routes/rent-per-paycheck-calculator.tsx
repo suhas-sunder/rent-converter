@@ -719,7 +719,7 @@ export default function RentPerPaycheck() {
                   Rent Per Paycheck Calculator
                 </h1>
 
-                <p className="mt-2 max-w-3xl text-base text-slate-700">
+                <p className="mt-2 text-base text-slate-700">
                   Calculate how much rent to set aside from each paycheck based
                   on your rent period and pay frequency. Compare rent against
                   biweekly, semi-monthly, weekly, or monthly pay.
@@ -1195,7 +1195,7 @@ export default function RentPerPaycheck() {
                 </span>
               </summary>
 
-              <div className="mt-2 text-slate-700 leading-relaxed max-w-prose">
+              <div className="mt-2 text-slate-700 leading-relaxed">
                 {f.a}
               </div>
             </details>

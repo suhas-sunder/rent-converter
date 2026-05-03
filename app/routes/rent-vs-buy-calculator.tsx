@@ -1140,7 +1140,7 @@ export default function RentVsBuyCalculator() {
                   Rent vs Buy Calculator
                 </h1>
 
-                <p className="mt-2 max-w-3xl text-base text-slate-700">
+                <p className="mt-2 text-base text-slate-700">
                   Compare renting and buying over time. The calculator estimates
                   rent paid, ownership costs, equity, and break-even timing.
                 </p>
@@ -1800,7 +1800,7 @@ export default function RentVsBuyCalculator() {
                 </span>
               </summary>
 
-              <div className="mt-2 text-slate-700 leading-relaxed max-w-prose">
+              <div className="mt-2 text-slate-700 leading-relaxed">
                 {f.a}
               </div>
             </details>

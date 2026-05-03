@@ -13,7 +13,7 @@ const toolFit = {
   ],
   nextSteps: [
     {
-      to: "/pw-to-pcm",
+      to: "/pw-to-pcm-calculator",
       label: "PW to PCM"
     },
     {

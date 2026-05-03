@@ -811,7 +811,7 @@ export default function Home() {
               <h1 className="text-center mb-1 sm:mb-0 sm:text-left text-2xl sm:text-3xl capitalize font-bold text-sky-900 tracking-tight">
                 Rent Converter: Daily, Weekly, Monthly & Annual
               </h1>
-              <p className="hidden md:flex w-full max-w-3xl pt-2 text-slate-700 leading-relaxed">
+              <p className="hidden md:flex w-full pt-2 text-slate-700 leading-relaxed">
                 Convert rent between daily, weekly, monthly, and yearly rates in
                 one click. No sign-up, instant results.
               </p>
@@ -1077,7 +1077,7 @@ export default function Home() {
                   </span>
                 </summary>
 
-                <div className="mt-2 text-slate-700 leading-relaxed max-w-prose">
+                <div className="mt-2 text-slate-700 leading-relaxed">
                   {f.a}
                 </div>
               </details>

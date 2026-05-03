@@ -830,7 +830,7 @@ export default function RentVsTakeHomePay() {
                   Rent vs Take-Home Pay Calculator
                 </h1>
 
-                <p className="mt-2 max-w-4xl text-base text-slate-700">
+                <p className="mt-2 text-base text-slate-700">
                   Calculate rent as a percentage of take-home pay. See how much
                   income remains after rent.
                 </p>
@@ -1208,7 +1208,7 @@ export default function RentVsTakeHomePay() {
                 </span>
               </summary>
 
-              <div className="mt-2 text-slate-700 leading-relaxed max-w-prose">
+              <div className="mt-2 text-slate-700 leading-relaxed">
                 {f.a}
               </div>
             </details>

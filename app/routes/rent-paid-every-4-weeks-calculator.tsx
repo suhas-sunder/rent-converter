@@ -682,7 +682,7 @@ export default function RentPaidEvery4Weeks() {
                   Rent Paid Every 4 Weeks Calculator
                 </h1>
 
-                <p className="mt-2 max-w-3xl text-base text-slate-700">
+                <p className="mt-2 text-base text-slate-700">
                   Convert rent paid every 4 weeks into monthly, weekly, and
                   annual equivalents. A 28-day rent cycle creates 13 payments
                   per year, so it is not the same as monthly rent.
@@ -1128,7 +1128,7 @@ export default function RentPaidEvery4Weeks() {
                 </span>
               </summary>
 
-              <div className="mt-2 text-slate-700 leading-relaxed max-w-prose">
+              <div className="mt-2 text-slate-700 leading-relaxed">
                 {f.a}
               </div>
             </details>

@@ -765,7 +765,7 @@ export default function WeeklyToBiweeklyRent() {
                   Weekly to Biweekly Rent Converter
                 </h1>
 
-                <p className="mt-2 max-w-4xl text-base text-slate-700">
+                <p className="mt-2 text-base text-slate-700">
                   Convert weekly rent into a biweekly amount. The calculator
                   also shows monthly, 4-week, daily, and annual rent breakdowns.
                 </p>
@@ -1027,7 +1027,7 @@ export default function WeeklyToBiweeklyRent() {
                 </span>
               </summary>
 
-              <div className="mt-2 text-slate-700 leading-relaxed max-w-prose">
+              <div className="mt-2 text-slate-700 leading-relaxed">
                 {f.a}
               </div>
             </details>

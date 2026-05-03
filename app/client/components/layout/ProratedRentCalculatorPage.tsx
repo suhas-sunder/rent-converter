@@ -143,7 +143,7 @@ export default function ProratedRentCalculatorPage({
           <h1 className="mt-3 text-2xl font-bold tracking-tight text-sky-900 sm:text-3xl">
             Prorated Rent Calculator
           </h1>
-          <p className="mt-3 max-w-3xl text-base leading-relaxed text-slate-700">
+          <p className="mt-3 text-base leading-relaxed text-slate-700">
             Calculate partial-month rent when someone moves in, moves out, or
             pays for only part of a rental period.
           </p>
@@ -352,7 +352,7 @@ export default function ProratedRentCalculatorPage({
                     v
                   </span>
                 </summary>
-                <div className="mt-2 max-w-prose leading-relaxed text-slate-700">
+                <div className="mt-2 leading-relaxed text-slate-700">
                   {item.a}
                 </div>
               </details>

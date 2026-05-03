@@ -818,7 +818,7 @@ export default function AnnualToHourlyRent() {
                   Annual to Hourly Rent Converter
                 </h1>
 
-                <p className="mt-2 max-w-4xl text-base text-slate-700">
+                <p className="mt-2 text-base text-slate-700">
                   Convert an annual rent total into an hourly equivalent using a
                   365-day year. The tool also shows daily, weekly, biweekly,
                   4-week, monthly, and annual breakdowns so you can compare rent
@@ -1192,7 +1192,7 @@ export default function AnnualToHourlyRent() {
                 </span>
               </summary>
 
-              <div className="mt-2 max-w-prose text-slate-700 leading-relaxed">
+              <div className="mt-2 text-slate-700 leading-relaxed">
                 {f.a}
               </div>
             </details>

@@ -571,7 +571,7 @@ export default function RentPerPaycheckUS() {
                   Rent Per Paycheck Calculator (US)
                 </h1>
 
-                <p className="mt-2 max-w-3xl text-base text-slate-700">
+                <p className="mt-2 text-base text-slate-700">
                   Convert monthly rent into a per-paycheck amount for common US
                   pay schedules.
                 </p>

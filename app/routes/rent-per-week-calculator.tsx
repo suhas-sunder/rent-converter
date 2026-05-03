@@ -704,7 +704,7 @@ export default function RentPerWeekCalculator() {
                   Rent Per Week Calculator
                 </h1>
 
-                <p className="mt-2 max-w-3xl text-base text-slate-700">
+                <p className="mt-2 text-base text-slate-700">
                   Calculate rent per week from monthly, 4-week, biweekly,
                   daily, hourly, or annual rent using the same period
                   assumptions shown in the result.
@@ -1124,7 +1124,7 @@ export default function RentPerWeekCalculator() {
                 </span>
               </summary>
 
-              <div className="mt-2 text-slate-700 leading-relaxed max-w-prose">
+              <div className="mt-2 text-slate-700 leading-relaxed">
                 {f.a}
               </div>
             </details>

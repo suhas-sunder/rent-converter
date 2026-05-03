@@ -1315,7 +1315,7 @@ export default function RentAfterTaxIncome() {
                   </span>
                 </summary>
 
-                <div className="mt-2 max-w-prose leading-relaxed text-slate-700">
+                <div className="mt-2 leading-relaxed text-slate-700">
                   {f.a}
                 </div>
               </details>

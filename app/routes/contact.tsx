@@ -84,7 +84,7 @@ export default function Contact() {
     <main className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-slate-50 text-slate-700 antialiased">
       <section className="mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-14">
         <div className="rounded-2xl border border-slate-200 bg-white/95 px-4 py-6 shadow-sm sm:px-8 sm:py-8">
-          <div className="mx-auto max-w-3xl text-center">
+          <div className="mx-auto text-center">
             <div className="mx-auto mb-3 rc-page-eyebrow">
               Contact RentConverter.com
             </div>

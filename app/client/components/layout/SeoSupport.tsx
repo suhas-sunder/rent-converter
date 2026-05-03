@@ -65,7 +65,7 @@ export function SeoHowItWorks({
   return (
     <section id="how-it-works" className="bg-white px-6 py-14 sm:py-16 rc-no-print">
       <div className="mx-auto max-w-6xl">
-        <div className="max-w-3xl">
+          <div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-sky-900 tracking-tight leading-tight">
             {title}
           </h2>

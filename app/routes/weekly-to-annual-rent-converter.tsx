@@ -709,7 +709,7 @@ export default function WeeklyToAnnualRent() {
                   Weekly to Annual Rent Converter
                 </h1>
 
-                <p className="mt-2 max-w-4xl text-base text-slate-700">
+                <p className="mt-2 text-base text-slate-700">
                   Convert weekly rent into an annual amount. The calculator also
                   shows monthly, 4-week, daily, and hourly rent breakdowns.
                 </p>
@@ -949,7 +949,7 @@ export default function WeeklyToAnnualRent() {
                 </span>
               </summary>
 
-              <div className="mt-2 text-slate-700 leading-relaxed max-w-prose">
+              <div className="mt-2 text-slate-700 leading-relaxed">
                 {f.a}
               </div>
             </details>

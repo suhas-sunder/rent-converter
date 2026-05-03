@@ -639,7 +639,7 @@ export default function WeeklyToMonthlyRentUK() {
                   Weekly to Monthly Rent Calculator UK
                 </h1>
 
-                <p className="mt-2 max-w-4xl text-base text-slate-700">
+                <p className="mt-2 text-base text-slate-700">
                   Convert weekly rent into a monthly amount in the UK. The
                   calculator also shows the 4-week comparison.
                 </p>

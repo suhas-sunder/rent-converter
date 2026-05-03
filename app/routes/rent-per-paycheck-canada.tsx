@@ -574,7 +574,7 @@ export default function RentPerPaycheckCanada() {
                   Rent Per Paycheque Calculator (Canada)
                 </h1>
 
-                <p className="mt-2 max-w-3xl text-base text-slate-700">
+                <p className="mt-2 text-base text-slate-700">
                   Convert monthly rent into a per-paycheque amount for common
                   Canadian pay schedules.
                 </p>

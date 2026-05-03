@@ -676,7 +676,7 @@ export default function AnnualToMonthlyRent() {
                   Annual to Monthly Rent Converter
                 </h1>
 
-                <p className="mt-2 max-w-4xl text-base text-slate-700">
+                <p className="mt-2 text-base text-slate-700">
                   Convert an annual rent total into a monthly amount using
                   annual ÷ 12. The breakdown also shows hourly, daily, weekly,
                   biweekly, 4-week, and annual equivalents so you can compare
@@ -896,7 +896,7 @@ export default function AnnualToMonthlyRent() {
                 </span>
               </summary>
 
-              <div className="mt-2 max-w-prose leading-relaxed text-slate-700">
+              <div className="mt-2 leading-relaxed text-slate-700">
                 {f.a}
               </div>
             </details>
