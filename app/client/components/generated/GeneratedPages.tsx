@@ -234,7 +234,7 @@ function ToolCard({
             <h1 className="mt-3 text-2xl font-bold tracking-tight text-sky-900 sm:text-3xl">
               {h1}
             </h1>
-            <p className="mt-3 text-base leading-relaxed text-slate-700">
+            <p className="mt-3 max-w-none text-base leading-relaxed text-slate-700">
               {lead}
             </p>
           </div>
@@ -414,9 +414,19 @@ function ContentBlocks({
   sections: ContentSection[];
   examples?: ExampleItem[];
 }) {
+  const visibleExamples = examples ?? [];
+  const hasExamples = visibleExamples.length > 0;
+
   return (
     <section className="bg-white px-6 py-14 rc-no-print">
-      <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(280px,0.82fr)]">
+      <div
+        className={[
+          "mx-auto grid max-w-6xl gap-10",
+          hasExamples
+            ? "lg:grid-cols-[minmax(0,1fr)_minmax(280px,0.82fr)]"
+            : "",
+        ].join(" ")}
+      >
         <div className="space-y-8">
           {sections.map((section) => (
             <section key={section.title}>
@@ -438,13 +448,13 @@ function ContentBlocks({
           ))}
         </div>
 
-        {examples?.length ? (
+        {hasExamples ? (
           <div>
             <h2 className="text-2xl font-bold tracking-tight text-sky-900">
               Real situations
             </h2>
             <div className="mt-4 space-y-4">
-              {examples.map((example) => (
+              {visibleExamples.map((example) => (
                 <div key={example.title} className="relative pl-5">
                   <span aria-hidden="true" className="absolute left-0 top-2.5 h-2.5 w-2.5 rounded-full bg-emerald-500" />
                   <h3 className="font-semibold text-slate-950">{example.title}</h3>

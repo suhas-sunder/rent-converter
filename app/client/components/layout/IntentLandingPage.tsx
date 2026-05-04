@@ -114,6 +114,10 @@ export default function IntentLandingPage({
   relatedLinks,
   faq,
 }: IntentLandingPageProps) {
+  const visibleExamples = examples ?? [];
+  const visibleTableRows = tableRows ?? [];
+  const hasSideContent = Boolean(visibleExamples.length || visibleTableRows.length);
+
   return (
     <main className="min-h-screen bg-sky-50 text-slate-700 scroll-smooth antialiased">
       <section className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
@@ -122,7 +126,7 @@ export default function IntentLandingPage({
           <h1 className="mt-3 text-2xl font-bold tracking-tight text-sky-900 sm:text-3xl">
             {title}
           </h1>
-          <p className="mt-3 text-base leading-relaxed text-slate-700">
+          <p className="mt-3 max-w-none text-base leading-relaxed text-slate-700">
             {lead}
           </p>
 
@@ -168,7 +172,14 @@ export default function IntentLandingPage({
       </section>
 
       <section className="bg-white px-6 py-14 rc-no-print">
-        <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(280px,0.82fr)]">
+        <div
+          className={[
+            "mx-auto grid max-w-6xl gap-10",
+            hasSideContent
+              ? "lg:grid-cols-[minmax(0,1fr)_minmax(280px,0.82fr)]"
+              : "",
+          ].join(" ")}
+        >
           <div className="space-y-8">
             {sections.map((section) => (
               <section key={section.title}>
@@ -195,59 +206,61 @@ export default function IntentLandingPage({
             ))}
           </div>
 
-          <div className="space-y-8">
-            {examples?.length ? (
-              <section>
-                <h2 className="text-2xl font-bold tracking-tight text-sky-900">
-                  Real situations
-                </h2>
-                <div className="mt-4 space-y-4">
-                  {examples.map((example) => (
-                    <div key={example.title} className="relative pl-5">
-                      <span
-                        aria-hidden="true"
-                        className="absolute left-0 top-2.5 h-2.5 w-2.5 rounded-full bg-emerald-500"
-                      />
-                      <h3 className="font-semibold text-slate-950">
-                        {example.title}
-                      </h3>
-                      <p className="mt-1 leading-7 text-slate-700">
-                        {example.body}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </section>
-            ) : null}
+          {hasSideContent ? (
+            <div className="space-y-8">
+              {visibleExamples.length ? (
+                <section>
+                  <h2 className="text-2xl font-bold tracking-tight text-sky-900">
+                    Real situations
+                  </h2>
+                  <div className="mt-4 space-y-4">
+                    {visibleExamples.map((example) => (
+                      <div key={example.title} className="relative pl-5">
+                        <span
+                          aria-hidden="true"
+                          className="absolute left-0 top-2.5 h-2.5 w-2.5 rounded-full bg-emerald-500"
+                        />
+                        <h3 className="font-semibold text-slate-950">
+                          {example.title}
+                        </h3>
+                        <p className="mt-1 leading-7 text-slate-700">
+                          {example.body}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              ) : null}
 
-            {tableRows?.length ? (
-              <section>
-                <h2 className="text-2xl font-bold tracking-tight text-sky-900">
-                  {tableTitle ?? "Common terms"}
-                </h2>
-                <div className="mt-4 overflow-hidden rounded-2xl bg-sky-50">
-                  {tableRows.map((row) => (
-                    <div
-                      key={row.term}
-                      className="grid gap-2 px-4 py-3 sm:grid-cols-[120px_minmax(0,1fr)]"
-                    >
-                      <div className="font-bold text-slate-950">
-                        {row.term}
-                      </div>
-                      <div>
-                        <div className="font-semibold text-slate-900">
-                          {row.meaning}
+              {visibleTableRows.length ? (
+                <section>
+                  <h2 className="text-2xl font-bold tracking-tight text-sky-900">
+                    {tableTitle ?? "Common terms"}
+                  </h2>
+                  <div className="mt-4 overflow-hidden rounded-2xl bg-sky-50">
+                    {visibleTableRows.map((row) => (
+                      <div
+                        key={row.term}
+                        className="grid gap-2 px-4 py-3 sm:grid-cols-[120px_minmax(0,1fr)]"
+                      >
+                        <div className="font-bold text-slate-950">
+                          {row.term}
                         </div>
-                        <div className="mt-1 text-sm leading-6 text-slate-700">
-                          {row.note}
+                        <div>
+                          <div className="font-semibold text-slate-900">
+                            {row.meaning}
+                          </div>
+                          <div className="mt-1 text-sm leading-6 text-slate-700">
+                            {row.note}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              </section>
-            ) : null}
-          </div>
+                    ))}
+                  </div>
+                </section>
+              ) : null}
+            </div>
+          ) : null}
         </div>
       </section>
 

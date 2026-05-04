@@ -62,6 +62,10 @@ export function SeoHowItWorks({
   notes,
   relatedLinks,
 }: SeoHowItWorksProps) {
+  const visibleExamples = examples ?? [];
+  const visibleNotes = notes ?? [];
+  const hasSideContent = Boolean(visibleExamples.length || visibleNotes.length);
+
   return (
     <section id="how-it-works" className="bg-white px-6 py-14 sm:py-16 rc-no-print">
       <div className="mx-auto max-w-6xl">
@@ -69,10 +73,17 @@ export function SeoHowItWorks({
           <h2 className="text-3xl sm:text-4xl font-extrabold text-sky-900 tracking-tight leading-tight">
             {title}
           </h2>
-          <p className="mt-3 text-lg leading-8 text-slate-700">{intro}</p>
+          <p className="mt-3 max-w-none text-lg leading-8 text-slate-700">{intro}</p>
         </div>
 
-        <div className="mt-10 grid gap-10 lg:grid-cols-[minmax(0,1.08fr)_minmax(280px,0.92fr)]">
+        <div
+          className={[
+            "mt-10 grid gap-10",
+            hasSideContent
+              ? "lg:grid-cols-[minmax(0,1.08fr)_minmax(280px,0.92fr)]"
+              : "",
+          ].join(" ")}
+        >
           <div>
             <h3 className="text-xl font-bold text-sky-900 tracking-tight">
               What this calculation clarifies
@@ -94,50 +105,52 @@ export function SeoHowItWorks({
             </ol>
           </div>
 
-          <div className="space-y-8">
-            {examples?.length ? (
-              <div>
-                <h3 className="text-xl font-bold text-sky-900 tracking-tight">
-                  Real situations
-                </h3>
-                <div className="mt-4 space-y-4">
-                  {examples.map((example) => (
-                    <div key={example.title} className="relative pl-5">
-                      <span
-                        aria-hidden="true"
-                        className="absolute left-0 top-2.5 h-2.5 w-2.5 rounded-full bg-sky-400"
-                      />
-                      <div className="font-semibold text-slate-950">
-                        {example.title}
+          {hasSideContent ? (
+            <div className="space-y-8">
+              {visibleExamples.length ? (
+                <div>
+                  <h3 className="text-xl font-bold text-sky-900 tracking-tight">
+                    Real situations
+                  </h3>
+                  <div className="mt-4 space-y-4">
+                    {visibleExamples.map((example) => (
+                      <div key={example.title} className="relative pl-5">
+                        <span
+                          aria-hidden="true"
+                          className="absolute left-0 top-2.5 h-2.5 w-2.5 rounded-full bg-sky-400"
+                        />
+                        <div className="font-semibold text-slate-950">
+                          {example.title}
+                        </div>
+                        <p className="mt-1 leading-7 text-slate-700">
+                          {example.body}
+                        </p>
                       </div>
-                      <p className="mt-1 leading-7 text-slate-700">
-                        {example.body}
-                      </p>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ) : null}
+              ) : null}
 
-            {notes?.length ? (
-              <div>
-                <h3 className="text-xl font-bold text-sky-900 tracking-tight">
-                  Useful context
-                </h3>
-                <ul className="mt-4 space-y-3">
-                  {notes.map((note) => (
-                    <li key={note} className="flex gap-3 leading-7 text-slate-700">
-                      <span
-                        aria-hidden="true"
-                        className="mt-2 h-2 w-2 shrink-0 rounded-full bg-emerald-500"
-                      />
-                      <span>{note}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ) : null}
-          </div>
+              {visibleNotes.length ? (
+                <div>
+                  <h3 className="text-xl font-bold text-sky-900 tracking-tight">
+                    Useful context
+                  </h3>
+                  <ul className="mt-4 space-y-3">
+                    {visibleNotes.map((note) => (
+                      <li key={note} className="flex gap-3 leading-7 text-slate-700">
+                        <span
+                          aria-hidden="true"
+                          className="mt-2 h-2 w-2 shrink-0 rounded-full bg-emerald-500"
+                        />
+                        <span>{note}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+            </div>
+          ) : null}
         </div>
 
         <RelatedLinks links={relatedLinks} />
@@ -152,9 +165,20 @@ export function SeoToolFit({
   notFor,
   nextSteps,
 }: SeoToolFitProps) {
+  const visibleNotFor = notFor ?? [];
+  const visibleNextSteps = nextSteps ?? [];
+  const hasSideContent = Boolean(visibleNotFor.length || visibleNextSteps.length);
+
   return (
     <section id="tool-fit" className="bg-sky-50/60 px-6 py-14 rc-no-print">
-      <div className="mx-auto max-w-6xl grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(260px,0.72fr)]">
+      <div
+        className={[
+          "mx-auto grid max-w-6xl gap-8",
+          hasSideContent
+            ? "lg:grid-cols-[minmax(0,1fr)_minmax(260px,0.72fr)]"
+            : "",
+        ].join(" ")}
+      >
         <div>
           <h2 className="text-2xl sm:text-3xl font-bold text-sky-900 tracking-tight">
             {title}
@@ -172,22 +196,22 @@ export function SeoToolFit({
           </ul>
         </div>
 
-        {notFor?.length || nextSteps?.length ? (
+        {hasSideContent ? (
           <div>
-            {notFor?.length ? (
+            {visibleNotFor.length ? (
               <>
                 <h3 className="text-lg font-bold text-sky-900 tracking-tight">
                   Check before relying on it
                 </h3>
                 <ul className="mt-3 space-y-2 text-sm leading-6 text-slate-700">
-                  {notFor.map((item) => (
+                  {visibleNotFor.map((item) => (
                     <li key={item}>{item}</li>
                   ))}
                 </ul>
               </>
             ) : null}
 
-            <RelatedLinks links={nextSteps} />
+            <RelatedLinks links={visibleNextSteps} />
           </div>
         ) : null}
       </div>

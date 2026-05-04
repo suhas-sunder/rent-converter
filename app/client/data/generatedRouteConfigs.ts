@@ -376,12 +376,12 @@ function conversionConfig(input: Omit<ConversionPageConfig, "faq" | "examples" |
       { q: "Does this include bills?", a: "No. The calculator converts the rent amount only. Add utilities, parking, internet, and fees separately." },
     ],
     examples: input.examples ?? [
-      { title: "Monthly budget check", body: "Use the converted monthly amount when your income, bills, or affordability target is planned monthly." },
-      { title: "Listing comparison", body: "Compare listings on the same period before deciding which one is actually cheaper." },
+      { title: "A weekly listing beside a monthly cap", body: "A weekly listing can look under budget until it is annualized. Use the calendar-month result when your salary, bills, or rent cap is planned monthly." },
+      { title: "Two listings with different rent periods", body: "A weekly, biweekly, 4-week, or monthly price should be put on the same time basis before deciding which place is actually cheaper." },
     ],
     sections: input.sections ?? [
-      { title: "How the conversion works", body: "The calculator converts the entered rent into a day-based equivalent, then expresses it in the target period. That avoids treating 4 weeks as a full month." },
-      { title: "What the result means", body: "The result is rent only. It does not include utilities, deposits, parking, pet rent, service charges, or other move-in costs." },
+      { title: "What the conversion is really comparing", body: "The calculator turns the rent you enter into a 365-day daily-rate equivalent, then expresses that amount in the target period. This keeps weekly, 14-day, 28-day, monthly, and annual rent on the same footing." },
+      { title: "Costs that can change the decision", body: "The result is rent only. If two listings are close, utilities, deposits, parking, pet rent, service charges, internet, and move-in costs can matter more than the converted rent difference." },
     ],
     ...input,
   };
@@ -605,12 +605,12 @@ function incomeConfig(input: Omit<IncomeToolConfig, "faq" | "examples" | "sectio
       { q: "Does this guarantee approval?", a: "No. Landlords may consider credit, savings, guarantors, household income, local rules, and their own criteria." },
     ],
     examples: input.examples ?? [
-      { title: "Qualification check", body: "Use the income rule to see whether a rent amount is likely to meet a common screening threshold." },
-      { title: "Comfort check", body: "Use the percent-of-income numbers to decide whether the rent still leaves enough room for bills and savings." },
+      { title: "Apartment screening", body: "A listing may ask for 2.5x or 3x rent in gross income. The calculator shows that screening number before you spend time on an application." },
+      { title: "Real monthly pressure", body: "A rent amount can pass a simple income rule but still leave too little after utilities, debt, insurance, transport, groceries, and savings." },
     ],
     sections: input.sections ?? [
       { title: "Qualification max vs comfort max", body: "A rent amount can pass a landlord income rule and still feel too tight in a real budget. Compare the rule result with your take-home pay and fixed expenses." },
-      { title: "What the calculator leaves out", body: "The estimate does not include credit checks, guarantors, deposits, utilities, insurance, childcare, car payments, or local application rules." },
+      { title: "What a rent rule leaves out", body: "Income rules do not know your credit profile, guarantor options, deposits, utilities, insurance, childcare, car payments, local application rules, or how variable your income is." },
     ],
     ...input,
   };
@@ -799,8 +799,8 @@ function increaseConfig(input: Omit<IncreaseToolConfig, "faq" | "examples"> & Pa
       { q: "Can I use a fixed dollar increase?", a: "Use the related rent increase calculator for fixed-dollar changes, or enter a percentage here when the page is percentage based." },
     ],
     examples: input.examples ?? [
-      { title: "Monthly impact", body: "A small monthly increase becomes a larger annual cost once it is paid every month." },
-      { title: "Planning ahead", body: "Use the yearly impact to compare rent changes with salary changes, renewal choices, or moving costs." },
+      { title: "Lease renewal decision", body: "A small monthly increase becomes a larger yearly cost once it repeats for 12 payments. That yearly number is easier to compare with moving costs or a salary change." },
+      { title: "Before and after rent", body: "Use the old rent, new rent, and percentage change together when checking whether a notice, renewal offer, or budget worksheet matches the math." },
     ],
     ...input,
   };

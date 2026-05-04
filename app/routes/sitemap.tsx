@@ -6,27 +6,30 @@ import {
 } from "~/client/data/routeRegistry";
 
 const SITE_URL = "https://www.rentconverter.com";
+const SITEMAP_URL = `${SITE_URL}/sitemap`;
 
 export function meta({}: Route.MetaArgs) {
   const title = "HTML Sitemap | RentConverter";
   const description =
     "Browse every RentConverter tool and page in one place, including rent frequency converters, affordability calculators, rent increase calculators, and legal pages.";
-  const canonical = `${SITE_URL}/sitemap`;
 
   return [
     { title },
     { name: "description", content: description },
     { name: "viewport", content: "width=device-width, initial-scale=1" },
     { name: "theme-color", content: "#0284c7" },
-    { rel: "canonical", href: canonical },
     { property: "og:title", content: title },
     { property: "og:description", content: description },
     { property: "og:type", content: "website" },
-    { property: "og:url", content: canonical },
+    { property: "og:url", content: SITEMAP_URL },
     { name: "twitter:card", content: "summary" },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
   ];
+}
+
+export function links() {
+  return [{ rel: "canonical", href: SITEMAP_URL }];
 }
 
 export function loader({ context }: Route.LoaderArgs) {
@@ -39,7 +42,7 @@ export default function SitemapPage() {
     "@type": "CollectionPage",
     name: "HTML Sitemap",
     description: "A complete browsable sitemap of RentConverter tools and pages.",
-    url: `${SITE_URL}/sitemap`,
+    url: SITEMAP_URL,
     isPartOf: {
       "@type": "WebSite",
       name: "RentConverter",

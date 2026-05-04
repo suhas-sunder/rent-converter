@@ -55,24 +55,24 @@ const fromConfig = (
   );
 
 const frequencyConverters: RegistryLink[] = [
-  item("/monthly-to-weekly-rent-converter", "Monthly to weekly rent converter", "Convert monthly rent to weekly rent.", ["monthly", "weekly", "pcm", "pw"]),
-  item("/weekly-to-monthly-rent-converter", "Weekly to monthly rent converter", "Convert weekly rent to monthly rent.", ["weekly", "monthly", "pw", "pcm"]),
-  item("/weekly-to-annual-rent-converter", "Weekly to annual rent converter", "Convert weekly rent to annual rent.", ["weekly", "annual"]),
-  item("/weekly-to-biweekly-rent-converter", "Weekly to biweekly rent converter", "Convert weekly rent to biweekly rent.", ["weekly", "biweekly"]),
-  item("/biweekly-to-weekly-rent-converter", "Biweekly to weekly rent converter", "Convert biweekly rent to weekly rent.", ["biweekly", "weekly"]),
-  item("/biweekly-to-monthly-rent-converter", "Biweekly to monthly rent converter", "Convert biweekly rent to monthly rent.", ["biweekly", "monthly"]),
-  item("/biweekly-to-annual-rent-converter", "Biweekly to annual rent converter", "Convert biweekly rent to annual rent.", ["biweekly", "annual"]),
-  item("/monthly-to-annual-rent-converter", "Monthly to annual rent converter", "Convert monthly rent to annual rent.", ["monthly", "annual"]),
-  item("/annual-to-monthly-rent-converter", "Annual to monthly rent converter", "Convert annual rent to monthly rent.", ["annual", "monthly"]),
-  item("/monthly-to-daily-rent-converter", "Monthly to daily rent converter", "Convert monthly rent to daily rent.", ["monthly", "daily"]),
-  item("/daily-to-monthly-rent-converter", "Daily to monthly rent converter", "Convert daily rent to monthly rent.", ["daily", "monthly"]),
-  item("/monthly-to-hourly-rent-converter", "Monthly to hourly rent converter", "Convert monthly rent to hourly rent.", ["monthly", "hourly"]),
-  item("/hourly-to-monthly-rent-converter", "Hourly to monthly rent converter", "Convert hourly rent to monthly rent.", ["hourly", "monthly"]),
-  item("/hourly-to-annual-rent-converter", "Hourly to annual rent converter", "Convert hourly rent to annual rent.", ["hourly", "annual"]),
-  item("/annual-to-hourly-rent-converter", "Annual to hourly rent converter", "Convert annual rent to hourly rent.", ["annual", "hourly"]),
-  item("/annual-to-weekly-rent-converter", "Annual to weekly rent converter", "Convert annual rent to weekly rent.", ["annual", "weekly"]),
-  item("/annual-to-biweekly-rent-converter", "Annual to biweekly rent converter", "Convert annual rent to biweekly rent.", ["annual", "biweekly"]),
-  item("/monthly-to-biweekly-rent-converter", "Monthly to biweekly rent converter", "Convert monthly rent to biweekly rent.", ["monthly", "biweekly"]),
+  item("/monthly-to-weekly-rent-converter", "Monthly to weekly rent converter", "Turn a monthly rent budget into a 7-day weekly equivalent.", ["monthly", "weekly", "pcm", "pw"]),
+  item("/weekly-to-monthly-rent-converter", "Weekly to monthly rent converter", "Annualize weekly rent over 365 days and compare it with a calendar-month budget.", ["weekly", "monthly", "pw", "pcm"]),
+  item("/weekly-to-annual-rent-converter", "Weekly to annual rent converter", "Convert weekly rent into a 365-day yearly total with monthly and 4-week context.", ["weekly", "annual"]),
+  item("/weekly-to-biweekly-rent-converter", "Weekly to biweekly rent converter", "Convert weekly rent into a 14-day biweekly amount and annual equivalent.", ["weekly", "biweekly"]),
+  item("/biweekly-to-weekly-rent-converter", "Biweekly to weekly rent converter", "Turn a 14-day rent amount into a weekly equivalent for side-by-side comparison.", ["biweekly", "weekly"]),
+  item("/biweekly-to-monthly-rent-converter", "Biweekly to monthly rent converter", "Convert a 14-day rent amount into true calendar-month rent.", ["biweekly", "monthly"]),
+  item("/biweekly-to-annual-rent-converter", "Biweekly to annual rent converter", "Annualize biweekly rent from a 14-day cycle using the 365-day model.", ["biweekly", "annual"]),
+  item("/monthly-to-annual-rent-converter", "Monthly to annual rent converter", "Multiply monthly rent across 12 calendar months for yearly rent planning.", ["monthly", "annual"]),
+  item("/annual-to-monthly-rent-converter", "Annual to monthly rent converter", "Split annual rent into a calendar-month amount and related period equivalents.", ["annual", "monthly"]),
+  item("/monthly-to-daily-rent-converter", "Monthly to daily rent converter", "Convert monthly rent into a daily rate using 365 divided by 12 days per month.", ["monthly", "daily"]),
+  item("/daily-to-monthly-rent-converter", "Daily to monthly rent converter", "Turn a daily rent or nightly rate into a calendar-month equivalent.", ["daily", "monthly"]),
+  item("/monthly-to-hourly-rent-converter", "Monthly to hourly rent converter", "Break monthly rent into hourly and daily equivalents for cost comparison.", ["monthly", "hourly"]),
+  item("/hourly-to-monthly-rent-converter", "Hourly to monthly rent converter", "Convert an hourly rent amount into daily, monthly, and annual equivalents.", ["hourly", "monthly"]),
+  item("/hourly-to-annual-rent-converter", "Hourly to annual rent converter", "Annualize hourly rent over 24 hours and 365 days.", ["hourly", "annual"]),
+  item("/annual-to-hourly-rent-converter", "Annual to hourly rent converter", "Break annual rent into hourly, daily, weekly, and monthly equivalents.", ["annual", "hourly"]),
+  item("/annual-to-weekly-rent-converter", "Annual to weekly rent converter", "Convert yearly rent into a 7-day weekly equivalent using the 365-day model.", ["annual", "weekly"]),
+  item("/annual-to-biweekly-rent-converter", "Annual to biweekly rent converter", "Convert annual rent into a 14-day biweekly equivalent.", ["annual", "biweekly"]),
+  item("/monthly-to-biweekly-rent-converter", "Monthly to biweekly rent converter", "Convert monthly rent into a 14-day biweekly amount for paycheck planning.", ["monthly", "biweekly"]),
 ];
 
 const pwPcmSection = [
@@ -85,47 +85,47 @@ const pwPcmSection = [
 ];
 
 const generalCalculators: RegistryLink[] = [
-  item("/rent-per-day-calculator", "Rent per day calculator", "Convert rent into a daily amount.", ["daily", "per day"]),
-  item("/rent-per-week-calculator", "Rent per week calculator", "Convert rent into a weekly amount.", ["weekly", "per week"]),
+  item("/rent-per-day-calculator", "Rent per day calculator", "Find the daily rent behind a weekly, monthly, 4-week, or annual amount.", ["daily", "per day"]),
+  item("/rent-per-week-calculator", "Rent per week calculator", "Convert rent into a weekly amount using a 365-day daily-rate model.", ["weekly", "per week"]),
   item("/rent-paid-every-4-weeks-calculator", "Rent paid every 4 weeks calculator", "Compare 28-day rent cycles with calendar months.", ["4 weeks", "28 day"]),
   item("/rent-per-paycheck-calculator", "Rent per paycheck calculator", "Plan rent around biweekly, semi-monthly, weekly, or monthly pay.", ["paycheck", "pay"]),
-  item("/rent-split-calculator", "Rent split calculator", "Split rent between roommates.", ["split", "roommate"]),
-  item("/rent-due-date-calculator", "Rent due date calculator", "Calculate upcoming rent due dates.", ["due date", "calendar"]),
-  item("/prorated-rent-calculator", "Prorated rent calculator", "Estimate partial-period rent.", ["prorated", "partial"]),
+  item("/rent-split-calculator", "Rent split calculator", "Split rent between roommates with equal-share planning.", ["split", "roommate"]),
+  item("/rent-due-date-calculator", "Rent due date calculator", "Calculate upcoming rent due dates from a start date and payment schedule.", ["due date", "calendar"]),
+  item("/prorated-rent-calculator", "Prorated rent calculator", "Estimate partial-period rent for a move-in, move-out, or mid-cycle change.", ["prorated", "partial"]),
   fromConfig(dateToolConfigs["/rent-schedule-calculator"], "Rent schedule calculator", ["schedule", "dates"]),
 ];
 
 const affordabilitySection = [
-  item("/how-much-rent-can-i-afford-calculator", "How much rent can I afford calculator", "Estimate rent affordability from income.", ["afford", "income"]),
-  item("/rent-as-percentage-of-income-calculator", "Rent as percentage of income calculator", "Calculate rent as a percent of income.", ["percentage", "income"]),
-  item("/rent-after-tax-income-calculator", "Rent after tax income calculator", "Compare rent with after-tax income.", ["after tax", "income"]),
-  item("/rent-vs-take-home-pay-calculator", "Rent vs take-home pay calculator", "Compare rent with take-home pay.", ["take home", "pay"]),
-  item("/income-required-for-rent-calculator", "Income required for rent calculator", "Estimate income needed for rent.", ["required income"]),
+  item("/how-much-rent-can-i-afford-calculator", "How much rent can I afford calculator", "Estimate rent targets from income, monthly costs, and common affordability rules.", ["afford", "income"]),
+  item("/rent-as-percentage-of-income-calculator", "Rent as percentage of income calculator", "Calculate rent as a share of income and compare it with common affordability bands.", ["percentage", "income"]),
+  item("/rent-after-tax-income-calculator", "Rent after tax income calculator", "Compare rent with after-tax income instead of gross salary alone.", ["after tax", "income"]),
+  item("/rent-vs-take-home-pay-calculator", "Rent vs take-home pay calculator", "Check how much of take-home pay is left after rent.", ["take home", "pay"]),
+  item("/income-required-for-rent-calculator", "Income required for rent calculator", "Estimate income needed for a target rent under common screening rules.", ["required income"]),
   ...Object.values(incomeToolConfigs).map((config) => fromConfig(config)),
   ...Object.values(salaryAnswerConfigs).map((config) => fromConfig(config)),
 ];
 
 const increaseSection = [
-  item("/rent-increase-calculator", "Rent increase calculator", "Calculate a rent increase.", ["increase"]),
+  item("/rent-increase-calculator", "Rent increase calculator", "Calculate new rent, monthly change, and yearly impact after an increase.", ["increase"]),
   item("/rent-increase-percentage-calculator", "Rent increase percentage calculator", "Calculate the percent change between old and new rent.", ["increase", "percentage"]),
-  item("/rent-after-increase-calculator", "Rent after increase calculator", "Calculate rent after an increase.", ["after increase"]),
+  item("/rent-after-increase-calculator", "Rent after increase calculator", "See the new monthly rent after a fixed or percentage increase.", ["after increase"]),
   ...Object.values(increaseToolConfigs).map((config) => fromConfig(config)),
 ];
 
 const splitSection = [
-  item("/rent-split-calculator", "Rent split calculator", "Split rent between roommates.", ["split", "roommate"]),
+  item("/rent-split-calculator", "Rent split calculator", "Split rent between roommates and compare each monthly share.", ["split", "roommate"]),
   ...Object.values(splitToolConfigs).map((config) => fromConfig(config)),
 ];
 
 const australiaSection = [
-  item("/weekly-to-monthly-rent-australia", "Weekly to monthly rent Australia", "Convert Australian weekly rent to monthly rent.", ["australia", "weekly", "monthly"]),
+  item("/weekly-to-monthly-rent-australia", "Weekly to monthly rent Australia", "Convert Australian weekly rent into a calendar-month amount and 4-week comparison.", ["australia", "weekly", "monthly"]),
   ...Object.values(conversionPageConfigs).filter((config) => australiaLinks.some((related) => related.to === config.path)).map((config) => fromConfig(config)),
   ...Object.values(moveInCostConfigs).map((config) => fromConfig(config)),
   ...Object.values(prorationToolConfigs).map((config) => fromConfig(config)),
 ];
 
 const ukSection = [
-  item("/weekly-to-monthly-rent-uk", "Weekly to monthly rent UK", "Convert UK weekly rent to monthly rent.", ["uk", "weekly", "monthly"]),
+  item("/weekly-to-monthly-rent-uk", "Weekly to monthly rent UK", "Convert UK PW rent into PCM using the annualized 365-day method.", ["uk", "weekly", "monthly"]),
   ...Object.values(conversionPageConfigs)
     .filter((config) => ["/pcm-rent-calculator", "/pw-rent-calculator", "/weekly-to-monthly-rent-formula-uk", "/convert-weekly-rent-to-monthly-uk", "/4-weekly-to-monthly-rent-uk"].includes(config.path))
     .map((config) => fromConfig(config)),
@@ -136,8 +136,8 @@ const answerSection = Object.values(weeklyAnswerPageConfigs).map((config) => fro
 
 const dateSection = [
   item("/rent-due-date-calculator", "Rent due date calculator", "Calculate upcoming rent due dates.", ["due date"]),
-  item("/when-is-rent-due", "When is rent due?", "Understand rent due dates and timing.", ["due", "timing"]),
-  item("/do-you-pay-rent-in-advance-or-after", "Do you pay rent in advance or after?", "Understand what rent payments usually cover.", ["advance", "after"]),
+  item("/when-is-rent-due", "When is rent due?", "Understand lease due dates, grace periods, payment cutoffs, and timing.", ["due", "timing"]),
+  item("/do-you-pay-rent-in-advance-or-after", "Do you pay rent in advance or after?", "Understand what rental period a rent payment usually covers.", ["advance", "after"]),
   fromConfig(infoPageConfigs["/is-rent-due-on-the-first"], "Is rent due on the first?", ["first", "due"]),
   fromConfig(infoPageConfigs["/is-rent-paid-for-the-current-month-or-next-month"], "Current month or next month rent", ["current month", "next month"]),
   ...Object.values(dateToolConfigs).map((config) => fromConfig(config)),
@@ -280,12 +280,12 @@ export const redirectAliases: RedirectAlias[] = [
 export const redirectAliasPaths = new Set(redirectAliases.map((entry) => entry.from));
 
 export const navItems = [
-  item("/", "Universal Rent Converter", "Convert rent across common periods.", ["rent", "converter", "frequency"]),
-  item("/weekly-to-monthly-rent-converter", "Weekly to Monthly", "Convert weekly rent to monthly rent.", ["weekly", "monthly", "pw", "pcm"]),
-  item("/pw-to-pcm-calculator", "PW to PCM", "Convert weekly rent to per calendar month.", ["pw", "pcm"]),
+  item("/", "Universal Rent Converter", "Convert rent across daily, weekly, monthly, annual, and 4-week periods.", ["rent", "converter", "frequency"]),
+  item("/weekly-to-monthly-rent-converter", "Weekly to Monthly", "Compare weekly rent with a true calendar-month budget.", ["weekly", "monthly", "pw", "pcm"]),
+  item("/pw-to-pcm-calculator", "PW to PCM", "Convert weekly rent to per calendar month without the 4-week shortcut.", ["pw", "pcm"]),
   item("/rent-per-paycheck-calculator", "Rent Per Paycheck", "Plan rent around paycheck timing.", ["paycheck", "biweekly"]),
-  item("/how-much-rent-can-i-afford-calculator", "Affordability", "Estimate rent affordability.", ["afford", "income"]),
-  ...canonicalRouteEntries.filter((entry) => !["/", "/weekly-to-monthly-rent-converter", "/rent-per-paycheck-calculator", "/how-much-rent-can-i-afford-calculator"].includes(entry.href)),
+  item("/how-much-rent-can-i-afford-calculator", "Affordability", "Estimate rent targets from income and budget rules.", ["afford", "income"]),
+  ...canonicalRouteEntries.filter((entry) => !["/", "/weekly-to-monthly-rent-converter", "/pw-to-pcm-calculator", "/rent-per-paycheck-calculator", "/how-much-rent-can-i-afford-calculator"].includes(entry.href)),
 ];
 
 const navSectionTitles = new Set([

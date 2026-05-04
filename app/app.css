@@ -293,7 +293,7 @@ main #faq summary:focus-visible {
 
 main #faq details > div {
   margin-top: 0.5rem;
-  max-width: 48rem;
+  max-width: none;
   color: var(--rc-text);
   line-height: 1.75;
 }
