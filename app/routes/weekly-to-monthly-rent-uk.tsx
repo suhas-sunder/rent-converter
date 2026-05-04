@@ -889,7 +889,7 @@ export default function WeeklyToMonthlyRentUK() {
 
       <ToolFit />
 
-      <FAQ />
+      <FAQ includeSchema={false} />
 
       <script
         type="application/ld+json"

@@ -945,7 +945,7 @@ export default function WeeklyToMonthlyRent() {
 
       <ToolFit />
 
-      <FAQ />
+      <FAQ includeSchema={false} />
 
       <script
         type="application/ld+json"

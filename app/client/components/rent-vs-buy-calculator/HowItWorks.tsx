@@ -47,7 +47,7 @@ const howItWorks = {
       label: "Affordability"
     },
     {
-      to: "/rent-converter",
+      to: "/",
       label: "Rent converter"
     }
   ]

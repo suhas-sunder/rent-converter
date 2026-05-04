@@ -12,7 +12,7 @@ const toolFit = {
   ],
   nextSteps: [
     {
-      to: "/rent-converter",
+      to: "/",
       label: "Rent converter"
     },
     {

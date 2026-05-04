@@ -1,4 +1,8 @@
-export default function FAQ() {
+type FAQProps = {
+  includeSchema?: boolean;
+};
+
+export default function FAQ({ includeSchema = true }: FAQProps) {
   const faqData = [
     {
       q: "How does this UK page convert weekly rent to monthly (PCM)?",
@@ -60,10 +64,12 @@ export default function FAQ() {
           ))}
         </div>
       </section>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
+      {includeSchema ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      ) : null}
     </>
   );
 }

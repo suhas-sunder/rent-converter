@@ -47,7 +47,7 @@ const howItWorks = {
       label: "Rent due date"
     },
     {
-      to: "/rent-converter",
+      to: "/",
       label: "Rent converter"
     }
   ]

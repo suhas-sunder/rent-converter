@@ -863,7 +863,7 @@ export default function WeeklyToMonthlyRentAustralia() {
         </nav>
       </section>
 
-      <FAQ />
+      <FAQ includeSchema={false} />
 
       <ToolFit />
 

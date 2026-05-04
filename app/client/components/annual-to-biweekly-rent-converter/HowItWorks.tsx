@@ -39,7 +39,7 @@ const howItWorks = {
   ],
   relatedLinks: [
     {
-      to: "/rent-converter",
+      to: "/",
       label: "Rent converter"
     },
     {

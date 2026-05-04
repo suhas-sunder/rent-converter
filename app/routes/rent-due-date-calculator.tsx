@@ -102,7 +102,7 @@ const ROUTE_WHITELIST = new Set<string>([
   "/",
 
   // Rent converter hub
-  "/rent-converter",
+  "/",
 
   // Frequency converters
   "/monthly-to-weekly-rent-converter",
@@ -826,7 +826,7 @@ export default function RentDueDateCalculator() {
 
   // FIX: only whitelisted routes here
   const relatedLinks = [
-    { href: "/rent-converter", text: "Rent converter hub" },
+    { href: "/", text: "Rent converter hub" },
     {
       href: "/weekly-to-monthly-rent-converter",
       text: "Weekly to monthly rent converter",

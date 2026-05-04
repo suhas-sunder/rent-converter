@@ -314,3 +314,43 @@ export const navSections: SitemapSection[] = sitemapSections
 export const footerCategories = sitemapSections.filter((section) =>
   ["Rent converters", "Affordability and income", "Rent increase", "Australia rent tools", "UK rent tools", "Lease and date tools"].includes(section.title),
 );
+
+const toolDirectorySectionTitles = new Set([
+  "Rent converters",
+  "PW and PCM glossary",
+  "General rent calculators",
+  "Affordability and income",
+  "Rent increase",
+  "Rent split",
+  "Australia rent tools",
+  "UK rent tools",
+  "Exact answer pages",
+  "Lease and date tools",
+  "Rent vs buy",
+]);
+
+export const toolDirectorySections: SitemapSection[] = [
+  ...sitemapSections
+    .filter((section) => toolDirectorySectionTitles.has(section.title))
+    .map((section) => ({
+      ...section,
+      links: Array.from(
+        new Map(
+          section.links.map((linkEntry) => [linkEntry.href, linkEntry]),
+        ).values(),
+      ),
+    })),
+  {
+    title: "Site information",
+    description: "Contact, policies, and the full canonical sitemap.",
+    links: [
+      item("/", "Home", "Start with the main rent converter."),
+      item("/about", "About", "Learn what RentConverter is built for."),
+      item("/contact", "Contact", "Contact the RentConverter team."),
+      item("/sitemap", "Sitemap", "Browse every canonical RentConverter page."),
+      item("/privacy-policy", "Privacy policy", "How RentConverter handles privacy."),
+      item("/terms-of-service", "Terms of service", "Terms for using RentConverter."),
+      item("/cookies", "Cookie policy", "Cookie information for RentConverter."),
+    ],
+  },
+];

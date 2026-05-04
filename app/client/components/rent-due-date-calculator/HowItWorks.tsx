@@ -43,7 +43,7 @@ const howItWorks = {
       label: "4-week rent"
     },
     {
-      to: "/rent-converter",
+      to: "/",
       label: "Rent converter"
     }
   ]
