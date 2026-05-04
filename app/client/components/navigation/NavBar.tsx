@@ -317,19 +317,19 @@ export default function NavBar() {
         onClick={onClick}
         role="menuitem"
         className={[
-          "block cursor-pointer rounded-xl px-3 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-inset",
+          "group block cursor-pointer rounded-xl px-3 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-inset",
           compact ? "py-2.5" : "py-3",
           active
-            ? "bg-white text-sky-900"
-            : "text-slate-800 hover:bg-white/80 hover:text-sky-800",
+            ? "bg-sky-100 text-sky-900"
+            : "bg-sky-50/70 text-sky-800 hover:bg-sky-100/80 hover:text-sky-900",
         ].join(" ")}
         aria-current={active ? "page" : undefined}
       >
-        <span className="block text-sm font-semibold leading-snug">
+        <span className="block text-sm font-bold leading-snug text-sky-800 group-hover:text-sky-900">
           {item.label}
         </span>
         {item.description ? (
-          <span className="mt-1 block text-xs leading-relaxed text-slate-600">
+          <span className="mt-1.5 block text-xs leading-relaxed text-slate-700">
             {item.description}
           </span>
         ) : null}
@@ -359,20 +359,20 @@ export default function NavBar() {
     }
 
     return (
-      <div className={compact ? "space-y-3 p-3" : "space-y-4 p-4"}>
+      <div className={compact ? "space-y-3" : "space-y-4"}>
         {sectionsToRender.map((section) => (
-          <section key={section.title} className="rounded-2xl bg-sky-50/65 p-2">
-            <div className="px-2 pb-2">
+          <section key={section.title} className="rounded-2xl bg-white p-3">
+            <div className="px-1 pb-3">
               <div className="text-xs font-bold uppercase tracking-[0.16em] text-sky-800">
                 {section.title}
               </div>
-              <p className="mt-1 text-xs leading-relaxed text-slate-600">
+              <p className="mt-1 text-xs leading-relaxed text-slate-700">
                 {section.description}
               </p>
             </div>
             <div
               className={
-                compact ? "grid gap-1" : "grid gap-1 md:grid-cols-2 xl:grid-cols-3"
+                compact ? "grid gap-2" : "grid gap-2 md:grid-cols-2 xl:grid-cols-3"
               }
             >
               {section.items.map((item) => (
@@ -390,22 +390,11 @@ export default function NavBar() {
     );
   }
 
-  function AllToolsButton({
-    variant,
-  }: {
-    variant: "desktop" | "dropdown" | "mobile";
-  }) {
-    const classes =
-      variant === "desktop"
-        ? "inline-flex cursor-pointer select-none items-center rounded-xl bg-sky-50 px-3 py-2 text-sm font-semibold text-sky-800 transition-colors hover:bg-sky-100 hover:text-sky-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-        : variant === "dropdown"
-          ? "block w-full cursor-pointer select-none rounded-xl px-3 py-3 text-left text-sm font-semibold text-sky-800 transition-colors hover:bg-white/80 hover:text-sky-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-inset"
-          : "block w-full cursor-pointer select-none rounded-xl px-3 py-3 text-left text-base font-semibold text-sky-800 transition-colors hover:bg-white/80 hover:text-sky-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-inset";
-
+  function AllToolsButton() {
     return (
       <button
         type="button"
-        className={classes}
+        className="inline-flex cursor-pointer select-none items-center rounded-xl bg-sky-50 px-3 py-2 text-sm font-semibold text-sky-800 transition-colors hover:bg-sky-100 hover:text-sky-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
         onClick={() => scrollToAllTools(closeAll)}
       >
         All tools
@@ -427,7 +416,6 @@ export default function NavBar() {
         .${SCROLL_CLASS}::-webkit-scrollbar-thumb {
           background-color: rgba(14,165,233,.45);
           border-radius: 10px;
-          border: 2px solid rgba(248,250,252,1);
         }
         .${SCROLL_CLASS}::-webkit-scrollbar-thumb:hover { background-color: rgba(14,165,233,.7); }
         .${SCROLL_CLASS}::-webkit-scrollbar-corner { background: rgba(248,250,252,1); }
@@ -473,7 +461,7 @@ export default function NavBar() {
           </button>
 
           <nav className="hidden items-center gap-2 text-sm sm:flex">
-            <AllToolsButton variant="desktop" />
+            <AllToolsButton />
 
             {primaryLinks.map((linkItem) => (
               <NavLinkItem
@@ -508,10 +496,10 @@ export default function NavBar() {
             <div
               ref={moreMenuRef}
               role="menu"
-              className="overflow-hidden rounded-2xl bg-white"
+              className="overflow-hidden rounded-[1.5rem] bg-white"
               style={dropdownStyle}
             >
-              <div className="bg-white/95 p-3">
+              <div className="bg-white p-3">
                 <label className="sr-only" htmlFor="desktop-tool-search">
                   Search rent tools
                 </label>
@@ -521,7 +509,7 @@ export default function NavBar() {
                   value={desktopQuery}
                   onChange={(event) => setDesktopQuery(event.target.value)}
                   placeholder="Search tools..."
-                  className="w-full cursor-text rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-sky-400"
+                  className="w-full cursor-text rounded-xl bg-sky-50 px-4 py-3 text-sm font-medium text-sky-900 outline-none transition placeholder:text-slate-500 focus:bg-white focus:ring-2 focus:ring-sky-200 focus-visible:ring-sky-400"
                   onKeyDown={(event) => {
                     if (event.key === "Escape") {
                       setMoreOpen(false);
@@ -529,20 +517,16 @@ export default function NavBar() {
                   }}
                 />
 
-                <div className="mt-2 text-xs font-medium text-slate-500">
+              </div>
+
+              <div
+                className={`${SCROLL_CLASS} max-h-[min(72vh,700px)] overflow-y-auto bg-white px-4 pb-6 pt-4`}
+              >
+                <div className="mb-4 px-1 text-xs font-semibold text-slate-600">
                   {desktopResultCount === 1
                     ? "1 page found"
                     : `${desktopResultCount} pages found`}
                 </div>
-              </div>
-
-              <div
-                className={`${SCROLL_CLASS} max-h-[min(72vh,700px)] overflow-y-auto`}
-              >
-                <div className="bg-sky-50/70 p-3 pb-0">
-                  <AllToolsButton variant="dropdown" />
-                </div>
-
                 <SectionedNavList
                   sectionsToRender={desktopMoreSections}
                   query={desktopQuery}
@@ -550,6 +534,10 @@ export default function NavBar() {
                   onClick={closeAll}
                 />
               </div>
+              <div
+                className="h-8 shrink-0 rounded-b-[1.5rem] bg-white"
+                aria-hidden="true"
+              />
             </div>,
             document.body,
           )
@@ -611,23 +599,21 @@ export default function NavBar() {
                       value={mobileQuery}
                       onChange={(event) => setMobileQuery(event.target.value)}
                       placeholder="Search tools"
-                      className="w-full cursor-text rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus-visible:ring-sky-400"
+                      className="w-full cursor-text rounded-xl bg-sky-50 px-4 py-3 text-sm font-medium text-sky-900 outline-none transition placeholder:text-slate-500 focus:bg-white focus:ring-2 focus:ring-sky-200 focus-visible:ring-sky-400"
                     />
 
-                    <div className="mt-2 text-xs font-medium text-slate-500">
-                      {mobileResultCount === 1
-                        ? "1 page found"
-                        : `${mobileResultCount} pages found`}
-                    </div>
                   </div>
                 </div>
 
                 <div className="min-h-0 flex-1">
-                  <div className={`${SCROLL_CLASS} h-full overflow-y-auto`}>
-                    <div className="bg-sky-50/70 p-3 pb-0">
-                      <AllToolsButton variant="mobile" />
+                  <div
+                    className={`${SCROLL_CLASS} h-full overflow-y-auto bg-white px-3 pb-12 pt-3`}
+                  >
+                    <div className="mb-3 px-1 text-xs font-semibold text-slate-600">
+                      {mobileResultCount === 1
+                        ? "1 page found"
+                        : `${mobileResultCount} pages found`}
                     </div>
-
                     <SectionedNavList
                       sectionsToRender={mobileSections}
                       query={mobileQuery}

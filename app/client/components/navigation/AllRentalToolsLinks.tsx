@@ -17,7 +17,7 @@ export default function AllRentalToolsLinks() {
       className="bg-sky-50 px-4 py-12 sm:px-6 lg:py-14"
       data-nosnippet
     >
-      <div className="mx-auto max-w-6xl rounded-[2rem] bg-white px-5 py-8 shadow-[0_24px_70px_rgba(14,165,233,0.10)] sm:px-8 lg:px-10">
+      <div className="mx-auto max-w-6xl rounded-[2rem] bg-white px-5 py-8 sm:px-8 lg:px-10">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
             <p className="rc-page-eyebrow">RentConverter.com</p>
@@ -69,23 +69,24 @@ export default function AllRentalToolsLinks() {
                         {item.label}
                       </span>
                       {item.description ? (
-                        <span className="mt-2 block flex-1 text-[15px] leading-7 text-slate-700">
+                        <span className="mt-2 block text-[15px] leading-7 text-slate-700">
                           {item.description}
                         </span>
                       ) : null}
                       <span
                         className={[
-                          "mt-4 inline-flex min-h-9 w-fit items-center justify-center gap-2 rounded-full px-4 text-sm font-bold leading-none transition-colors",
+                          "mt-4 inline-flex w-fit items-center gap-2 text-sm font-bold leading-none transition-colors",
                           isCurrent
-                            ? "bg-sky-700 text-white"
-                            : "bg-sky-50 text-sky-800 group-hover:bg-sky-100 group-hover:text-sky-900",
+                            ? "text-sky-900"
+                            : "text-sky-800 group-hover:text-sky-900",
                         ].join(" ")}
                       >
-                        {isCurrent ? "Current page" : "Open page"}
+                        <span className="leading-none">
+                          {isCurrent ? "Current page" : "Open page"}
+                        </span>
                         {!isCurrent ? (
                           <svg
-                            width="14"
-                            height="14"
+                            className="block h-4 w-4 shrink-0"
                             viewBox="0 0 24 24"
                             fill="none"
                             aria-hidden="true"
