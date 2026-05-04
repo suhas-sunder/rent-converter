@@ -19,7 +19,11 @@ export default function Footer() {
       <footer className="bg-white/95 text-slate-700" data-nosnippet>
         <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
           <div className="flex flex-col gap-5 text-center sm:flex-row sm:items-center sm:justify-between sm:text-left">
-            <div className="flex items-center justify-center gap-3 sm:justify-start">
+            <Link
+              to="/"
+              className="group flex cursor-pointer items-center justify-center gap-3 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:justify-start"
+              aria-label="RentConverter home"
+            >
               <img
                 src="/images/rent-converter-logo-final_icon_compressed.jpg"
                 alt="RentConverter"
@@ -28,14 +32,14 @@ export default function Footer() {
                 decoding="async"
               />
               <div>
-                <div className="text-base font-bold tracking-tight text-slate-950">
+                <div className="text-base font-bold tracking-tight text-slate-950 group-hover:text-sky-800">
                   RentConverter<span className="text-sky-600">.com</span>
                 </div>
                 <div className="text-xs font-semibold text-slate-600">
                   Fast, private rent calculators
                 </div>
               </div>
-            </div>
+            </Link>
 
             <nav
               aria-label="Footer"

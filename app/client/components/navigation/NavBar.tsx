@@ -491,6 +491,11 @@ export default function NavBar() {
         </div>
       </div>
 
+      <div
+        className="h-1 w-full bg-gradient-to-r from-sky-500 to-emerald-400 opacity-20"
+        aria-hidden="true"
+      />
+
       {isClient && moreOpen && dropdownStyle
         ? createPortal(
             <div
