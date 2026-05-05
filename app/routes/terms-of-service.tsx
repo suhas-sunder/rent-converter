@@ -30,7 +30,7 @@ export const meta: Route.MetaFunction = () => {
     { name: "twitter:description", content: description },
     { name: "twitter:image", content: ogImage },
 
-    { name: "robots", content: "noindex,follow" },
+    { name: "robots", content: "index,follow" },
   ];
 };
 
@@ -74,8 +74,7 @@ export default function TermsOfService() {
   return (
 
     <main className="mx-auto max-w-[1200px] px-6 py-10 text-slate-700">
-      {/* Breadcrumb */}
-      <nav aria-label="Breadcrumb" className="mb-6 text-sm">
+      <nav aria-label="Breadcrumb" className="hidden">
         <ol className="flex flex-wrap items-center gap-2">
           <li>
             <Link
@@ -244,7 +243,7 @@ export default function TermsOfService() {
           <p>
             If you wish to make any use of the Services, Content, or Marks other
             than as set out in this section or elsewhere in our Legal Terms,
-            please address your request to: admin@morsewords.com. If we ever
+            please address your request to: hello@rentconverter.com. If we ever
             grant you the permission to post, reproduce, or publicly display any
             part of our Services or Content, you must identify us as the owners
             or licensors of the Services, Content, or Marks and ensure that any
@@ -430,9 +429,9 @@ export default function TermsOfService() {
           <p>
             Using profanity in the username, in any way, shape, or form, is not
             allowed. Doing so may result in the username being changed by the
-            MorseWords admin or, in extreme cases, may lead to account
+            RentConverter admin or, in extreme cases, may lead to account
             suspension or termination. If you notice any users abusing this
-            policy please contact us at admin@morsewords.com and we will address
+            policy please contact us at hello@rentconverter.com and we will address
             the issue as soon as possible.
           </p>
         </section>
@@ -953,7 +952,7 @@ export default function TermsOfService() {
           </h2>
           <p>
             We care about data privacy and security. Please review our Privacy
-            Policy: https://www.morsewords.com/privacy. By using the Services,
+            Policy: https://www.rentconverter.com/privacy-policy. By using the Services,
             you agree to be bound by our Privacy Policy, which is incorporated
             into these Legal Terms. Please be advised the Services may be hosted
             in Canada and/or other jurisdictions depending on our service
@@ -1049,7 +1048,7 @@ export default function TermsOfService() {
           </h2>
           <p>
             These Legal Terms shall be governed by and defined following the
-            laws of Canada and the Province of Ontario. MorseWords and yourself
+            laws of Canada and the Province of Ontario. RentConverter and yourself
             irrevocably consent that the courts of Ontario, Canada shall have
             exclusive jurisdiction to resolve any dispute which may arise in
             connection with these Legal Terms, except as otherwise required by
@@ -1302,12 +1301,29 @@ export default function TermsOfService() {
             further information regarding use of the Services, please contact us
             at:
           </p>
-          <p>https://www.morsewords.com</p>
+          <p>https://www.rentconverter.com</p>
           <p>Toronto, Ontario</p>
           <p>Canada</p>
-          <p>admin@morsewords.com</p>
+          <p>hello@rentconverter.com</p>
         </section>
       </div>
+
+      <nav aria-label="Breadcrumb" className="mt-10 text-sm">
+        <ol className="flex flex-wrap items-center gap-2">
+          <li>
+            <Link
+              to="/"
+              className="cursor-pointer text-sky-700 underline-offset-4 hover:text-sky-900 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+            >
+              Home
+            </Link>
+          </li>
+          <li className="opacity-60" aria-hidden="true">/</li>
+          <li aria-current="page" className="text-slate-950">
+            Terms of Service
+          </li>
+        </ol>
+      </nav>
 
       <script
         type="application/ld+json"

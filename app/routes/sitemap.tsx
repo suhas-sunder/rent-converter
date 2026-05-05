@@ -64,21 +64,6 @@ export default function SitemapPage() {
 
       <section className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
         <div className="rounded-[1.75rem] bg-white px-5 py-7 sm:px-8 sm:py-8">
-          <nav className="mb-6 text-sm text-slate-700" aria-label="Breadcrumb">
-            <ol className="flex flex-wrap items-center gap-2">
-              <li>
-                <Link
-                  to="/"
-                  className="cursor-pointer font-semibold text-sky-700 underline-offset-4 hover:text-sky-900 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
-                >
-                  Home
-                </Link>
-              </li>
-              <li aria-hidden="true">/</li>
-              <li className="font-semibold text-slate-950">HTML Sitemap</li>
-            </ol>
-          </nav>
-
           <p className="rc-page-eyebrow">RentConverter site index</p>
           <h1 className="mt-3 text-3xl font-bold tracking-tight text-sky-900 sm:text-4xl">
             HTML Sitemap

@@ -889,15 +889,11 @@ export default function WeeklyToMonthlyRentUK() {
 
       <ToolFit />
 
-      <FAQ includeSchema={false} />
+      <FAQ />
 
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <script
         type="application/ld+json"

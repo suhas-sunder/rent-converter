@@ -5,6 +5,7 @@
   "scripts": {
     "build": "react-router build",
     "dev": "cross-env NODE_ENV=development node server.js",
+    "release:audit": "node scripts/release-audit.mjs",
     "start": "node server.js",
     "typecheck": "react-router typegen && tsc -b"
   },

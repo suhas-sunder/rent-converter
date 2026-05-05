@@ -97,25 +97,6 @@ export default function CookiesPolicy() {
       <div className="max-w-6xl mx-auto px-6 pt-8 pb-12">
         {/* Header */}
         <header className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm">
-          <nav className="text-sm text-slate-700 mb-4" aria-label="Breadcrumb">
-            <ol className="flex flex-wrap items-center gap-2">
-              <li>
-                <Link
-                  to="/"
-                  className="inline-flex items-center gap-2 rounded-md text-slate-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
-                >
-                  Home
-                </Link>
-              </li>
-              <li aria-hidden className="opacity-60">
-                /
-              </li>
-              <li aria-current="page" className="text-slate-800 font-semibold">
-                {pageName}
-              </li>
-            </ol>
-          </nav>
-
           <h1 className="text-4xl font-bold text-slate-950 mb-2">{pageName}</h1>
           <p className="text-sm text-slate-700">
             Last updated January 24, 2026
@@ -332,6 +313,15 @@ export default function CookiesPolicy() {
             </em>
           </p>
         </section>
+        <nav className="mt-8 text-sm text-slate-700" aria-label="Breadcrumb">
+          <Link
+            to="/"
+            className="inline-flex cursor-pointer items-center gap-2 rounded-md text-sky-700 underline-offset-4 hover:text-sky-900 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
+          >
+            Home
+          </Link>{" "}
+          / <span className="text-slate-800">{pageName}</span>
+        </nav>
       </div>
 
       <script

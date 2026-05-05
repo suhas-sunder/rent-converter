@@ -863,17 +863,13 @@ export default function WeeklyToMonthlyRentAustralia() {
         </nav>
       </section>
 
-      <FAQ includeSchema={false} />
+      <FAQ />
 
       <ToolFit />
 
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <script
         type="application/ld+json"

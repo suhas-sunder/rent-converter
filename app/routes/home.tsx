@@ -4,7 +4,7 @@ import Assumptions from "~/client/components/layout/Assumptions";
 import HowItWorks from "~/client/components/home/HowItWorks";
 import ToolFit from "~/client/components/home/ToolFit";
 
-const SITE_URL = "https://www.rentconverter.com/";
+const SITE_URL = "https://www.rentconverter.com";
 
 export const meta: Route.MetaFunction = () => [
   {
@@ -28,7 +28,7 @@ export const meta: Route.MetaFunction = () => [
   },
   { property: "og:url", content: SITE_URL },
   { property: "og:site_name", content: "RentConverter.com" },
-  { property: "og:image", content: `${SITE_URL}og-image.jpg` },
+  { property: "og:image", content: `${SITE_URL}/og-image.jpg` },
 
   { name: "twitter:card", content: "summary_large_image" },
   {
@@ -40,7 +40,7 @@ export const meta: Route.MetaFunction = () => [
     content:
       "Find the true monthly, weekly, daily, hourly, and annual cost of rent with clear assumptions and decimal-safe calculations.",
   },
-  { name: "twitter:image", content: `${SITE_URL}og-image.jpg` },
+  { name: "twitter:image", content: `${SITE_URL}/og-image.jpg` },
 
   { tagName: "link", rel: "canonical", href: SITE_URL },
 ];
