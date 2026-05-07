@@ -144,3 +144,37 @@
 - Run Rich Results Test on representative tool, exact-answer, salary, regional, and legal/support routes.
 - Run PageSpeed/Lighthouse on home, one generated tool page, one custom calculator page, and one legal/support page.
 - Review legal-sensitive regional pages against current official sources before making any stronger rent-rule claims.
+
+## Live production verification - 2026-05-07
+
+### Commands run
+
+- `git status --short --branch` - clean; `final-polish` is aligned with `origin/final-polish`.
+- `git log --oneline --decorate -n 8` - latest commit is `3165b1f fix: harden RentConverter production SEO QA`, followed by `fe6e299 Polish high-risk SEO page clusters` and `bcd4d0c Hardening SEO page quality audits`.
+- `git show --name-status --oneline --decorate --stat 3165b1f` - confirmed the production QA commit includes `public/og-image.jpg`, the rent-split typo fix, cookies/terms schema updates, terms OG image update, and release-audit social image checks.
+- `package.json` inspection - no `lint` or `test` scripts are defined.
+- `AUDIT_ORIGIN=https://www.rentconverter.com npm run release:audit` - passed; audited 126 sitemap pages and 122 unique internal links.
+- `AUDIT_ORIGIN=https://www.rentconverter.com node scripts/page-quality-audit.mjs` - passed; crawled 126 pages with 0 high-risk and 0 medium-risk pages and regenerated `SEO_PAGE_QUALITY_AUDIT.md`.
+- `curl.exe -I https://www.rentconverter.com/og-image.jpg` - returned 200.
+- Live targeted HTML checks confirmed `/rent-split-calculator` no longer contains `person?s`, `/terms-of-service` no longer references `/og/rentconverter-terms.jpg`, terms social image URLs now point to `/og-image.jpg`, and `/contact`, `/privacy-policy`, `/cookies`, and `/terms-of-service` no longer contain `/cdn-cgi/l/email-protection`.
+
+### Production freshness
+
+- Production is now serving the latest SEO/content and production QA build for the previously stale app content.
+- The previous full all-tools directory leakage is gone from the live release audit.
+- Same-origin social image 404s are gone; `/og-image.jpg` returns 200 and the stale terms image reference is gone.
+- The rent-split metadata typo `person?s` is gone from the live page.
+
+### Final live status after Cloudflare Email Obfuscation change
+
+- Cloudflare Email Address Obfuscation was disabled manually outside the repo.
+- Fresh live release audit passed: `AUDIT_ORIGIN=https://www.rentconverter.com npm run release:audit` audited 126 sitemap pages and 122 unique internal links.
+- Fresh live page-quality audit passed: `AUDIT_ORIGIN=https://www.rentconverter.com node scripts/page-quality-audit.mjs` crawled 126 pages with 0 high-risk and 0 medium-risk pages.
+- `/og-image.jpg` returns 200.
+- `/terms-of-service` no longer references `/og/rentconverter-terms.jpg`; its social images point to `https://www.rentconverter.com/og-image.jpg`.
+- `/rent-split-calculator` no longer contains `person?s`.
+- Fresh contact/legal page checks found no `/cdn-cgi/l/email-protection` links on `/contact`, `/privacy-policy`, `/cookies`, or `/terms-of-service`.
+- No known technical crawl blockers remain from the repo or current live audit output.
+- AdSense resubmission is no longer blocked by known repo/live-audit issues.
+- Remaining non-Codex checks are Google Search Console URL Inspection, official Rich Results Test, Lighthouse/PageSpeed mobile checks, live ad placement checks once ads render, and AdSense resubmission.
+- No code or calculation behavior was changed during the live verification passes.
