@@ -7,7 +7,7 @@ import ToolFit from "~/client/components/rent-split-calculator/ToolFit";
 export const meta: Route.MetaFunction = () => {
   const title = "Rent Split Calculator | Split Rent by Roommates";
   const description =
-    "Split rent evenly among roommates and see each person?s share by month, week, 4-week period, and year, including cents remainder.";
+    "Split rent evenly among roommates and see each person's share by month, week, 4-week period, and year, including cents remainder.";
 
   const canonicalUrl = "https://www.rentconverter.com/rent-split-calculator";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
@@ -704,7 +704,7 @@ export default function RentPerPerson() {
     "@type": "WebPage",
     name: pageName,
     description:
-      "Split rent evenly among roommates and see each person?s share by month, week, 4-week period, and year, including cents remainder.",
+      "Split rent evenly among roommates and see each person's share by month, week, 4-week period, and year, including cents remainder.",
     url: canonicalUrl,
     isPartOf: { "@type": "WebSite", url: "https://www.rentconverter.com" },
     breadcrumb: { "@id": `${canonicalUrl}#breadcrumb` },

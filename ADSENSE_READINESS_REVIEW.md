@@ -87,3 +87,37 @@ No routes were noindexed in this pass. If future data shows low engagement, dupl
 - `git diff --check`: passed; CRLF normalization warnings only
 - `npm run lint`: no script exists in `package.json`
 - `npm run test`: no script exists in `package.json`
+
+## Final QA readiness update
+
+### Current readiness status
+
+- Local production build, rendered crawl, and page-quality audit pass on a fresh `http://127.0.0.1:3011` server.
+- All 126 XML sitemap routes remain reachable in the rendered audit.
+- No broken internal links were found by the release audit.
+- No full all-tools directory leakage was found outside the home page.
+- No high-risk or medium-risk page-quality pages were found after regenerating `SEO_PAGE_QUALITY_AUDIT.md`.
+- Legal/support pages are accessible from the footer, and `/about`, `/contact`, `/privacy-policy`, `/cookies`, `/terms-of-service`, and `/sitemap` all render.
+
+### Final QA fixes that reduce AdSense risk
+
+- Fixed missing Open Graph/Twitter image output by adding `public/og-image.jpg` and pointing the terms page at the shared image URL.
+- Added release-audit coverage for same-origin social image asset 404s.
+- Fixed malformed rent-split metadata/schema text so the page no longer renders `person?s` in snippets or schema.
+- Added missing WebPage schema descriptions for the cookie policy and terms pages.
+
+### Remaining live-only risks
+
+- Live AdSense rendering still needs to be checked after deployment for CLS, ad density, ad placement, accidental tap risk, and mobile layout behavior.
+- Google Search Console URL Inspection still needs to be run on representative pages after deployment.
+- Rich Results Test still needs to be run against representative routes because local schema checks do not replace Google's parser.
+- PageSpeed/Lighthouse still needs to be run on live or production-preview URLs for Core Web Vitals, especially home, a generated calculator page, a custom calculator page, and support/legal pages.
+- Regional rent-increase and Australia pages still need official-source review before any stronger legal or regional claims are added.
+
+### Clusters to watch after deployment
+
+- Exact amount pages, especially low-amount and high-amount weekly-to-monthly answers.
+- Salary answer pages, especially `/how-much-rent-can-i-afford-on-50k`, `/how-much-rent-can-i-afford-on-70k`, and `/how-much-rent-can-i-afford-on-100k`.
+- Affordability and screening-rule pages where query intent overlaps.
+- UK PCM/PW terminology pages and Australia weekly/monthly pages.
+- Regional rent-increase pages because they are legal-sensitive and may draw scrutiny if snippets imply certainty.

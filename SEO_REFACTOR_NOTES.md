@@ -102,3 +102,45 @@
 - `AUDIT_ORIGIN=http://127.0.0.1:3011 npm run release:audit` - passed; audited 126 sitemap pages and 122 unique internal links.
 - `AUDIT_ORIGIN=http://127.0.0.1:3011 node scripts/page-quality-audit.mjs` - passed with 0 high-risk and 0 medium-risk pages across 126 rendered sitemap pages.
 - `git diff --check` - passed; only CRLF normalization warnings were reported.
+
+## Final production-readiness QA pass
+
+### Scope reviewed
+
+- Deployment-critical files: `package.json`, generated page templates/configs, sitemap and route registry files, robots/ads files, schema/metadata helpers, navigation/footer/SEO support components, `scripts/release-audit.mjs`, and `scripts/page-quality-audit.mjs`.
+- Representative rendered pages: `/`, `/weekly-to-monthly-rent-converter`, `/150-per-week-to-monthly-rent`, `/500-per-week-to-monthly-rent`, `/750-per-week-to-monthly-rent`, `/how-much-rent-can-i-afford-on-50k`, `/how-much-rent-can-i-afford-on-70k`, `/how-much-rent-can-i-afford-on-100k`, `/how-much-rent-can-i-afford-calculator`, `/3x-rent-calculator`, `/rent-budget-calculator`, `/ontario-rent-increase-calculator`, `/california-rent-increase-calculator`, `/what-does-pcm-mean-rent`, `/weekly-to-monthly-rent-uk`, `/australia-rent-calculator`, `/weekly-to-monthly-rent-sydney`, `/prorated-rent-calculator`, `/lease-date-calculator`, `/rent-per-paycheck-calculator`, `/rent-split-calculator`, `/about`, `/contact`, `/privacy-policy`, `/cookies`, `/terms-of-service`, and `/sitemap`.
+- Mobile screenshots were captured at 390px width for home, weekly-to-monthly, exact-answer, salary-answer, regional increase, Australia city, proration, paycheck, rent split, and cookie-policy pages.
+
+### Production-readiness issues found and fixed
+
+- Added the missing shared Open Graph image asset at `public/og-image.jpg` from the existing compressed RentConverter logo so existing `og:image` and `twitter:image` URLs resolve instead of returning 404.
+- Updated the terms page to use the shared `/og-image.jpg` URL instead of a missing `/og/rentconverter-terms.jpg` asset.
+- Fixed a rendered metadata/schema typo on `/rent-split-calculator` where `person?s` appeared instead of `person's`.
+- Added WebPage schema descriptions for `/cookies` and `/terms-of-service`.
+- Extended `scripts/release-audit.mjs` to fail when same-origin `og:image` or `twitter:image` assets do not resolve on the built server.
+
+### Preserved behavior
+
+- No routes were removed, merged, renamed, or noindexed.
+- No formulas, parsing, rounding, localStorage behavior, print/export behavior, canonical paths, redirect aliases, or sitemap paths were changed.
+- The home-page visual system remains unchanged; fixes were metadata/schema, audit, and missing-asset related.
+
+### Final QA validation
+
+- `npm run lint` - not available; package.json has no `lint` script.
+- `npm run test` - not available; package.json has no `test` script.
+- `npm run typecheck` - passed.
+- `npm run build` - passed.
+- Fresh production server restarted on `http://127.0.0.1:3011`.
+- `AUDIT_ORIGIN=http://127.0.0.1:3011 npm run release:audit` - passed; audited 126 sitemap pages and 122 unique internal links, including same-origin social image assets.
+- `AUDIT_ORIGIN=http://127.0.0.1:3011 node scripts/page-quality-audit.mjs` - passed; crawled 126 pages with 0 high-risk and 0 medium-risk pages.
+- Targeted asset checks passed for `/og-image.jpg`, `/ads.txt`, `/robots.txt`, and `/sitemap.xml`.
+- `git diff --check` - passed; CRLF normalization warnings only.
+
+### Remaining manual checks before AdSense resubmission
+
+- Run live AdSense rendering checks after deployment because local validation does not load production ad auctions.
+- Run Search Console URL Inspection on representative routes after deployment.
+- Run Rich Results Test on representative tool, exact-answer, salary, regional, and legal/support routes.
+- Run PageSpeed/Lighthouse on home, one generated tool page, one custom calculator page, and one legal/support page.
+- Review legal-sensitive regional pages against current official sources before making any stronger rent-rule claims.

@@ -8,7 +8,7 @@ export const meta: Route.MetaFunction = () => {
   const description =
     "Read the RentConverter.com Terms of Service, including acceptable use, calculator limitations, and site responsibilities.";
 
-  const ogImage = "https://www.rentconverter.com/og/rentconverter-terms.jpg";
+  const ogImage = "https://www.rentconverter.com/og-image.jpg";
 
   return [
     { title },
@@ -68,6 +68,8 @@ export default function TermsOfService() {
     "@context": "https://schema.org",
     "@type": "WebPage",
     name: pageName,
+    description:
+      "Read the RentConverter.com Terms of Service, including acceptable use, calculator limitations, and site responsibilities.",
     url: canonicalUrl,
   };
 

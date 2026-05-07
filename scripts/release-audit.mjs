@@ -85,6 +85,16 @@ function extractInternalLinks(html) {
     .filter(Boolean);
 }
 
+function extractSocialImageUrls(html) {
+  return [
+    ...html.matchAll(
+      /<meta\b[^>]*(?:property=["']og:image["']|name=["']twitter:image["'])[^>]*>/gi,
+    ),
+  ]
+    .map((match) => extractAttr(match[0], "content"))
+    .filter(Boolean);
+}
+
 async function get(path, options = {}) {
   const key = `${options.redirect ?? "follow"}:${path}`;
   if (fetched.has(key)) return fetched.get(key);
@@ -197,6 +207,26 @@ async function auditPage(path, sitemapSet) {
 
   if (/<img\b[^>]*loading=["']lazy["'][^>]*class=["'][^"']*(h-\d+|w-\d+)/i.test(html)) {
     warn.push(`${path}: lazy image found; verify it is not the LCP asset`);
+  }
+
+  for (const imageUrl of extractSocialImageUrls(html)) {
+    let parsed;
+    try {
+      parsed = new URL(imageUrl, SITE_ORIGIN);
+    } catch {
+      fail.push(`${path}: social image URL is invalid: ${imageUrl}`);
+      continue;
+    }
+
+    if (parsed.origin !== SITE_ORIGIN) continue;
+
+    const assetPath = normalizePath(parsed.pathname);
+    const { response: assetResponse } = await get(assetPath);
+    if (assetResponse.status !== 200) {
+      fail.push(
+        `${path}: social image ${assetPath} returned ${assetResponse.status}`,
+      );
+    }
   }
 
   return extractInternalLinks(html);

@@ -90,6 +90,8 @@ export default function CookiesPolicy() {
     "@context": "https://schema.org",
     "@type": "WebPage",
     name: pageName,
+    description:
+      "Read the RentConverter.com cookie policy, including how cookies and similar technologies may be used for essential functionality, analytics, and advertising where applicable.",
     url: canonicalUrl,
   };
   return (
