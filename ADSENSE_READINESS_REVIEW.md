@@ -121,3 +121,54 @@ No routes were noindexed in this pass. If future data shows low engagement, dupl
 - Affordability and screening-rule pages where query intent overlaps.
 - UK PCM/PW terminology pages and Australia weekly/monthly pages.
 - Regional rent-increase pages because they are legal-sensitive and may draw scrutiny if snippets imply certainty.
+
+## Live production verification update - 2026-05-07
+
+### Current live readiness status
+
+- Production is serving the latest `final-polish` app build for the previously stale content and assets.
+- Live release audit passed with 126 sitemap pages crawled and 122 unique internal links.
+- Live page-quality audit passed with 126 pages crawled, 0 high-risk pages, and 0 medium-risk pages.
+- No known technical crawl blockers remain from the repo or current live audit output.
+- AdSense resubmission is no longer blocked by known repo/live-audit issues.
+
+### Resolved previous live blockers
+
+- `/og-image.jpg` now returns 200.
+- `/terms-of-service` now uses `https://www.rentconverter.com/og-image.jpg` for social images and no longer references `/og/rentconverter-terms.jpg`.
+- `/rent-split-calculator` no longer contains the malformed `person?s` metadata text.
+- The full all-tools directory leakage outside the home page was not reported by the live release audit.
+- Same-origin social image 404s were not reported by the live release audit.
+
+### Cloudflare email obfuscation status
+
+- Cloudflare Email Address Obfuscation was disabled manually outside the repo.
+- Fresh live checks found no `/cdn-cgi/l/email-protection` links on `/contact`, `/privacy-policy`, `/cookies`, or `/terms-of-service`.
+- The fresh live release audit no longer reports the `/cdn-cgi/l/email-protection` internal 404.
+
+### Remaining live-only checks
+
+- Google Search Console URL Inspection on representative pages.
+- Official Rich Results Test on representative structured-data pages.
+- PageSpeed/Lighthouse mobile checks on home, one calculator page, and one generated answer page.
+- Live ad rendering checks for CLS, ad density, accidental tap risk, and mobile placement around calculators.
+- AdSense resubmission.
+- Official-source review before adding stronger legal or regional claims to regional rent-increase and Australia pages.
+
+## Deployment/cache recheck - 2026-05-07
+
+### Current status
+
+- Fresh live release audit passed: 126 sitemap pages and 122 unique internal links.
+- Fresh live page-quality audit passed: 126 pages crawled, 0 high-risk pages, and 0 medium-risk pages.
+- The stale live blockers no longer reproduce: `/og-image.jpg` returns 200, `/terms-of-service` does not reference `/og/rentconverter-terms.jpg`, `/rent-split-calculator` does not contain `person?s`, and contact/legal pages do not contain `/cdn-cgi/l/email-protection`.
+- Local production build and local rendered audits also passed on `http://127.0.0.1:3011`.
+- No known repo or current live-audit blocker remains before AdSense resubmission.
+
+### Remaining non-Codex checks
+
+- Google Search Console URL Inspection on representative pages.
+- Official Rich Results Test on representative structured-data pages.
+- Lighthouse/PageSpeed mobile checks on home, one calculator page, and one generated answer page.
+- Live ad rendering checks once ads actually render, including CLS, ad density, placement near calculator controls/results, and accidental tap risk.
+- AdSense resubmission.
