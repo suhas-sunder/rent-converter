@@ -51,3 +51,54 @@
 - `npm run build` - passed.
 - `AUDIT_ORIGIN=http://127.0.0.1:3011 npm run release:audit` - passed; audited 126 sitemap pages and 122 unique internal links.
 - `git diff --check` - passed.
+
+## Third-pass human-quality polish
+
+### Clusters manually reviewed
+
+- Exact weekly-to-monthly amount pages, including low, mid, high, euro, UK PW, and nightly GBP variants.
+- Salary-specific affordability pages from `$50,000` through `$100,000`.
+- Generated income, affordability, screening-rule, rent split, UK PW/PCM, Australia, move-in-cost, and regional rent-increase clusters.
+- Rendered audit output for custom/manual pages remained clean, so this pass did not rewrite large route-local calculator files.
+
+### Pages, configs, and components changed
+
+- `app/client/components/generated/GeneratedPages.tsx`
+  - Added tier/currency-specific exact-answer copy, examples, limitations, and next-step guidance.
+  - Added salary-specific interpretation sections and 2.5x/40% labeling without changing formulas.
+  - Made generated income pages more distinct by mode: screening multiple, ratio, hourly, rent-rule, salary, and budget views.
+  - Added clearer regional rent-increase caveats separating arithmetic from legal eligibility.
+  - Expanded generated rent split and Australia move-in content with practical user checks.
+- `app/client/data/generatedRouteConfigs.ts`
+  - Added more varied exact-answer meta descriptions.
+  - Added salary-specific meta descriptions.
+  - Added route-specific default examples for income, increase, UK, and Australia generated pages.
+  - Added a second worked example to the 30% rent-rule page after the rendered audit flagged it as still borderline.
+
+### Content-quality issues found and fixed
+
+- Exact amount pages were technically passing before this pass but still shared too much section structure. They now vary by amount tier, currency, likely use case, examples, and "what to check next" guidance.
+- Some exact-answer pages temporarily lost the explicit rendered limitations signal during the rewrite. The signal is now restored with visible "What this result does not include" sections.
+- Salary pages now include salary-specific interpretation and tighter gross-vs-take-home cautions instead of salary-swapped boilerplate.
+- Affordability and screening pages now explain different intents: qualification screening, budget comfort, hourly-pay conversion, ratio interpretation, and salary benchmarking.
+- Regional rent-increase pages now more clearly separate calculation math from official rule eligibility without adding unverified legal claims.
+
+### Calculation logic
+
+- Calculation logic was untouched.
+- No formula, parser, localStorage, currency, rounding, print/export, redirect, canonical, or route behavior was changed.
+
+### Legal-sensitive follow-up
+
+- Ontario, BC, Quebec, and California rent-increase pages still need official source review before any stronger legal wording is added.
+- Australia bond/rent-in-advance and city pages still avoid local legal or market-average claims; verify official state/territory sources before making them more specific.
+
+### Third-pass validation
+
+- `npm run lint` - not available; package.json has no `lint` script.
+- `npm run test` - not available; package.json has no `test` script.
+- `npm run typecheck` - passed.
+- `npm run build` - passed.
+- `AUDIT_ORIGIN=http://127.0.0.1:3011 npm run release:audit` - passed; audited 126 sitemap pages and 122 unique internal links.
+- `AUDIT_ORIGIN=http://127.0.0.1:3011 node scripts/page-quality-audit.mjs` - passed with 0 high-risk and 0 medium-risk pages across 126 rendered sitemap pages.
+- `git diff --check` - passed; only CRLF normalization warnings were reported.

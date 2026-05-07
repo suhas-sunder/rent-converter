@@ -51,10 +51,32 @@ No routes were noindexed in this pass. If future data shows low engagement, dupl
 
 ## Remaining AdSense risks
 
-- AdSense manual review may still view some amount-specific and salary-specific pages as templated despite improved visible utility.
-- Legal and regional pages require ongoing source freshness; this pass did not make new legal claims.
+- AdSense manual review may still scrutinize amount-specific and salary-specific pages because their intents are narrow, but this pass reduced same-template risk with amount-tier, currency, and salary-specific interpretation.
+- Legal and regional pages require ongoing source freshness; this pass did not make new legal claims or add unverified official-source references.
 - This pass did not run live AdSense, Search Console URL Inspection, Rich Results Test, or Lighthouse in Google tooling.
 - Ad density and live ad rendering still need to be checked in the deployed environment because local crawl validation does not load production ad auctions.
+
+## Third-pass risk reduction
+
+- Exact weekly-to-monthly amount pages now have varied use-case framing for room/shared housing, budget listings, mid-range listings, higher-cost listings, GBP/PW, EUR, and nightly GBP scenarios.
+- Salary-specific pages now explain how to read each salary level instead of only swapping a number into the same table.
+- Income and affordability pages now better distinguish screening multiples, rent-to-income ratio, hourly pay, salary conversion, percent-rule, and budget-first workflows.
+- Regional rent-increase pages now visibly separate calculation math from official legal eligibility and keep caveats prominent.
+- UK and Australia generated pages now have more route-specific examples and next-step context.
+
+## Route clusters still needing live manual review
+
+- Exact amount answer pages after deployment, using Search Console CTR and engagement data.
+- Salary answer pages after deployment, especially pages that receive impressions but few tool interactions.
+- Regional rent-increase pages before any legal-source expansion.
+- Australia move-in-cost pages before stronger state/territory-specific wording.
+- Live ad rendering on mobile and desktop to confirm no layout shift or accidental tap risk.
+
+## Technically compliant but sensitive
+
+- Regional rent-increase pages are sensitive because local rules, exemptions, notice timing, and official guidance can change.
+- Affordability and salary pages are financial-context pages; they remain calculators and planning aids, not financial advice.
+- Support/legal pages are indexed and useful for trust, but should remain owner-reviewed for policy accuracy.
 
 ## Validation status
 
@@ -62,5 +84,6 @@ No routes were noindexed in this pass. If future data shows low engagement, dupl
 - `npm run build`: passed during this pass
 - `AUDIT_ORIGIN=http://127.0.0.1:3011 npm run release:audit`: passed during this pass
 - `AUDIT_ORIGIN=http://127.0.0.1:3011 node scripts/page-quality-audit.mjs`: passed with 0 high-risk and 0 medium-risk pages
+- `git diff --check`: passed; CRLF normalization warnings only
 - `npm run lint`: no script exists in `package.json`
 - `npm run test`: no script exists in `package.json`

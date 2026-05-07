@@ -369,16 +369,80 @@ export const infoPageConfigs: Record<string, InfoPageConfig> = {
 
 const commonWeeklyAmounts = [150, 160, 170, 180, 200, 220, 230, 250, 300, 320, 350, 370, 400, 450, 500, 550, 600, 650, 750];
 
+function conversionDefaultExamples(input: Omit<ConversionPageConfig, "faq" | "examples" | "sections">): ConversionPageConfig["examples"] {
+  if (input.path === "/australia-rent-calculator") {
+    return [
+      { title: "$500 weekly listing", body: "$500/week is $1,000 per fortnight, $2,000 every 4 weeks, and about $2,172.62 per calendar month before bond or rent in advance." },
+      { title: "Move-in planning", body: "Use the monthly result for your budget, then check bond and rent-in-advance separately because those are upfront cash needs, not monthly rent." },
+    ];
+  }
+  if (input.path === "/weekly-to-fortnightly-rent-australia") {
+    return [
+      { title: "$500 weekly to fortnightly", body: "$500/week becomes $1,000 per fortnight. The calendar-month equivalent is still higher than two fortnightly payments." },
+      { title: "Pay cycle check", body: "Use the fortnightly result when rent or income is planned every two weeks, then keep the monthly number for bills and affordability." },
+    ];
+  }
+  if (input.path === "/fortnightly-to-monthly-rent-australia") {
+    return [
+      { title: "$1,000 fortnightly rent", body: "$1,000 per fortnight is about $2,172.62 per average calendar month, not $2,000." },
+      { title: "Monthly budget check", body: "Two fortnightly payments cover 28 days. Use the monthly equivalent for salary, bills, and move-in planning." },
+    ];
+  }
+  if (input.path === "/weekly-to-monthly-rent-melbourne") {
+    return [
+      { title: "Melbourne listing comparison", body: "A weekly Melbourne listing should be converted before comparing it with a monthly salary budget or another listing quoted monthly." },
+      { title: "No city-rule assumption", body: "This page only converts the rent period. It does not claim local rent averages or decide state tenancy rules." },
+    ];
+  }
+  if (input.path === "/weekly-to-monthly-rent-sydney") {
+    return [
+      { title: "Sydney listing comparison", body: "Convert the weekly amount to monthly before deciding whether it fits salary, transport, utilities, and move-in cash." },
+      { title: "Rent-only calculation", body: "The converted amount excludes bond, rent in advance, utilities, parking, and other charges unless you add them yourself." },
+    ];
+  }
+  if (input.path === "/weekly-to-monthly-rent-formula-uk") {
+    return [
+      { title: "Formula check", body: "GBP 190/week is annualized first, then divided by 12. That avoids treating a calendar month as exactly 4 weeks." },
+      { title: "Explaining the result", body: "Use the formula when you need to show why a PW listing and a PCM listing should be compared through annual rent." },
+    ];
+  }
+  if (input.path === "/convert-weekly-rent-to-monthly-uk") {
+    return [
+      { title: "UK room search", body: "A weekly room listing can look cheaper than the PCM comparison. Convert it before comparing with monthly bills or salary." },
+      { title: "4-week trap", body: "Multiplying by 4 only covers 28 days, so it understates the true monthly equivalent for PW listings." },
+    ];
+  }
+  if (input.path === "/4-weekly-to-monthly-rent-uk") {
+    return [
+      { title: "28-day rent cycle", body: "A GBP 2,000 payment every 4 weeks creates 13 payments per year, not 12 monthly payments." },
+      { title: "PCM comparison", body: "Convert 4-weekly rent to PCM before comparing it with monthly listings or monthly income." },
+    ];
+  }
+  if (input.path === "/pcm-rent-calculator") {
+    return [
+      { title: "PW to PCM", body: "A weekly listing can be converted to PCM by annualizing the weekly rent and dividing by 12." },
+      { title: "PCM to weekly thinking", body: "Use the related PCM-to-PW path when a monthly rent needs to be discussed as a weekly equivalent." },
+    ];
+  }
+  if (input.path === "/pw-rent-calculator") {
+    return [
+      { title: "Monthly rent to PW", body: "GBP 1,200 PCM becomes a weekly equivalent by annualizing the monthly rent and dividing into 7-day periods." },
+      { title: "Weekly-paid budget", body: "The weekly equivalent can help with paycheck planning, but the lease payment schedule still controls when rent is due." },
+    ];
+  }
+  return [
+    { title: "Listing comparison", body: "Put a weekly, biweekly, 4-week, or monthly listing on the same time basis before deciding which place is actually cheaper." },
+    { title: "Monthly budget check", body: "Use the calendar-month result when salary, bills, savings, and rent caps are planned monthly." },
+  ];
+}
+
 function conversionConfig(input: Omit<ConversionPageConfig, "faq" | "examples" | "sections"> & Partial<Pick<ConversionPageConfig, "faq" | "examples" | "sections">>): ConversionPageConfig {
   return {
     faq: input.faq ?? [
       { q: "What assumption does this calculator use?", a: "It uses a 365-day year, 7-day weeks, 14-day biweekly or fortnightly periods, 28-day four-week periods, and 12 calendar months." },
       { q: "Does this include bills or move-in costs?", a: "No. The calculator converts the rent amount only. Add utilities, parking, internet, deposits, service charges, or other fees separately." },
     ],
-    examples: input.examples ?? [
-      { title: "Listing comparison", body: "Put a weekly, biweekly, 4-week, or monthly listing on the same time basis before deciding which place is actually cheaper." },
-      { title: "Monthly budget check", body: "Use the calendar-month result when salary, bills, savings, and rent caps are planned monthly." },
-    ],
+    examples: input.examples ?? conversionDefaultExamples(input),
     sections: input.sections ?? [
       { title: "Calendar month vs payment cycle", body: "A calendar month is not always the same as a repeated payment cycle. Weekly, fortnightly, biweekly, and 4-week rent should be annualized before comparing with monthly rent." },
       { title: "Costs that can change the decision", body: "If two listings are close, utilities, deposits, parking, pet rent, service charges, internet, and move-in costs can matter more than the converted rent difference." },
@@ -598,16 +662,86 @@ export const conversionPageConfigs: Record<string, ConversionPageConfig> = {
   }),
 };
 
+function incomeDefaultExamples(input: Omit<IncomeToolConfig, "faq" | "examples" | "sections">): IncomeToolConfig["examples"] {
+  if (input.path === "/2-5x-rent-calculator") {
+    return [
+      { title: "$2,000 monthly rent", body: "Under a 2.5x rule, $2,000 rent points to about $5,000 in gross monthly income, or $60,000 per year." },
+      { title: "Why it differs from 3x", body: "A 2.5x rule allows rent to take a larger share of gross income than a 3x rule, so it should be checked against take-home pay." },
+    ];
+  }
+  if (input.path === "/2x-rent-calculator") {
+    return [
+      { title: "$1,500 monthly rent", body: "Under a 2x rule, $1,500 rent points to about $3,000 in gross monthly income, but that is a much looser screen than 3x." },
+      { title: "Loose screening check", body: "Use this for listings that explicitly mention 2x rent, then compare the result with a stricter budget target before applying." },
+    ];
+  }
+  if (input.path === "/rent-to-income-ratio-calculator") {
+    return [
+      { title: "$1,500 rent and $5,000 income", body: "$1,500 rent divided by $5,000 monthly income is 30%, before utilities, debt, savings, or take-home-pay adjustments." },
+      { title: "Comparing two listings", body: "If one listing is 28% of income and another is 36%, the second may still qualify but leaves less room for other monthly costs." },
+    ];
+  }
+  if (input.path === "/40-percent-rent-rule-calculator") {
+    return [
+      { title: "$60,000 salary", body: "On $60,000/year, 40% gives about $2,000/month before taxes, utilities, debt, deposits, and savings goals." },
+      { title: "Stretch benchmark", body: "Use the 40% result as a stress test beside the 30% number rather than as automatic proof a rent amount is comfortable." },
+    ];
+  }
+  if (input.path === "/max-rent-calculator") {
+    return [
+      { title: "Income plus expenses", body: "A $60,000 salary can produce several rent caps. The maximum is more useful after monthly expenses are entered, not before." },
+      { title: "Rule comparison", body: "Compare 30%, 40%, and 3x results, then use the lower number when utilities, transport, or debt are uncertain." },
+    ];
+  }
+  if (input.path === "/rent-budget-calculator") {
+    return [
+      { title: "Budget-first estimate", body: "Enter recurring expenses so the rent target reflects cash flow, not only a gross-income rule." },
+      { title: "Move-in pressure", body: "A rent amount can fit monthly income but still be difficult if deposits, fees, and first rent are all due at signing." },
+    ];
+  }
+  if (input.path === "/salary-to-rent-calculator" || input.path === "/rent-calculator-by-salary") {
+    return [
+      { title: "$65,000 salary", body: "A $65,000 salary gives a gross monthly income basis before the calculator compares 30%, 40%, and screening-style targets." },
+      { title: "Salary is not take-home pay", body: "Use the salary result as a benchmark, then check net income if payroll deductions, debt, or local costs are high." },
+    ];
+  }
+  if (input.path === "/rent-calculator-by-income") {
+    return [
+      { title: "Monthly income check", body: "Start with monthly income, compare the target rent, and use the ratio to decide whether the rent is comfortable or stretched." },
+      { title: "Variable income", body: "If income changes month to month, use a conservative income figure before trusting the rent target." },
+    ];
+  }
+  if (input.mode === "hourly") {
+    return [
+      { title: "$18 to $22 per hour", body: "Small hourly wage differences can change the rent target quickly when hours are steady." },
+      { title: "Variable hours", body: "A higher hourly rate still needs a check against taxes, debt, utilities, and hours that may vary." },
+    ];
+  }
+  if (input.mode === "rent-rule" && input.percent === 30) {
+    return [
+      { title: "$60,000 salary", body: "On $60,000/year, 30% gives about $1,500/month before tax, debt, savings, utilities, and local rent prices." },
+      { title: "Conservative cap", body: "If take-home pay is tight, a 30% gross-income target can still need a second check against actual paycheck cash flow." },
+    ];
+  }
+  if (input.mode === "multiplier") {
+    return [
+      { title: "$2,000 monthly rent", body: "A $2,000/month apartment can require a different gross income depending on whether the screen is 2x, 2.5x, or 3x rent." },
+      { title: "Roommates", body: "If household income is combined, compare the total rent against combined gross income, then decide how the rent should be split." },
+    ];
+  }
+  return [
+    { title: "Apartment screening", body: "A listing may ask for 2.5x or 3x rent in gross income. The calculator shows that screening number before you spend time on an application." },
+    { title: "Real monthly pressure", body: "A rent amount can pass a simple income rule but still leave too little after utilities, debt, insurance, transport, groceries, and savings." },
+  ];
+}
+
 function incomeConfig(input: Omit<IncomeToolConfig, "faq" | "examples" | "sections"> & Partial<Pick<IncomeToolConfig, "faq" | "examples" | "sections">>): IncomeToolConfig {
   return {
     faq: input.faq ?? [
       { q: "Should I use gross or take-home income?", a: "Many qualification rules use gross income. A personal budget should also check take-home pay, debt, utilities, savings, and local costs." },
       { q: "Does this guarantee approval?", a: "No. Landlords may consider credit, savings, guarantors, household income, local rules, and their own criteria." },
     ],
-    examples: input.examples ?? [
-      { title: "Apartment screening", body: "A listing may ask for 2.5x or 3x rent in gross income. The calculator shows that screening number before you spend time on an application." },
-      { title: "Real monthly pressure", body: "A rent amount can pass a simple income rule but still leave too little after utilities, debt, insurance, transport, groceries, and savings." },
-    ],
+    examples: input.examples ?? incomeDefaultExamples(input),
     sections: input.sections ?? [
       { title: "Qualification max vs comfort max", body: "A rent amount can pass a landlord income rule and still feel too tight in a real budget. Compare the rule result with your take-home pay and fixed expenses." },
       { title: "What a rent rule leaves out", body: "Income rules do not know your credit profile, guarantor options, deposits, utilities, insurance, childcare, car payments, local application rules, or how variable your income is." },
@@ -680,7 +814,10 @@ export const incomeToolConfigs: Record<string, IncomeToolConfig> = {
     percent: 30,
     defaultIncome: "60000",
     relatedLinks: affordabilityLinks,
-    examples: [{ title: "$60,000 salary", body: "On $60,000/year, 30% gives about $1,500/month before tax, debt, savings, utilities, and local rent prices." }],
+    examples: [
+      { title: "$60,000 salary", body: "On $60,000/year, 30% gives about $1,500/month before tax, debt, savings, utilities, and local rent prices." },
+      { title: "Why the 30% result is a starting point", body: "Use the 30% number as a first rent cap, then compare it with take-home pay, utilities, transport, and move-in cash before applying." },
+    ],
   }),
   "/40-percent-rent-rule-calculator": incomeConfig({
     path: "/40-percent-rent-rule-calculator",
@@ -775,11 +912,23 @@ export const incomeToolConfigs: Record<string, IncomeToolConfig> = {
 function salaryAnswer(salary: number): SalaryAnswerConfig {
   const suffix = salary >= 100000 ? "100k" : `${salary / 1000}k`;
   const salaryLabel = `$${salary.toLocaleString()}`;
+  const description =
+    salary <= 50000
+      ? "See rent targets for a $50,000 salary using 30%, 40%, 2.5x, and 3x checks. Compare gross-income results with take-home-pay cautions."
+      : salary <= 60000
+        ? "Estimate rent targets on a $60,000 salary using 30%, 40%, 2.5x, and 3x rules. See gross monthly income and practical budget cautions."
+        : salary <= 65000
+          ? "Check rent targets for a $65,000 salary with 30%, 40%, 2.5x, and 3x comparisons. Useful for listings near a monthly rent cap."
+          : salary <= 70000
+            ? "Compare rent targets on a $70,000 salary using comfort and screening rules. See where gross-income qualification can differ from budget fit."
+            : salary <= 80000
+              ? "Estimate rent targets on an $80,000 salary and compare 30%, 40%, 2.5x, and 3x results before checking take-home pay."
+              : "See rent targets for a $100,000 salary with gross-income and screening-rule comparisons. Useful for high-cost-market rent checks.";
   return {
     path: `/how-much-rent-can-i-afford-on-${suffix}`,
     salary,
     title: `How much rent can I afford on ${salaryLabel}?`,
-    description: `See rent targets for a ${salaryLabel} income using 30%, 40%, and 3x rules. Compare gross monthly income, weekly equivalent, and annual rent impact.`,
+    description,
     eyebrow: "Salary answer",
     h1: `How much rent can I afford on ${salaryLabel}?`,
     relatedLinks: [link("/salary-to-rent-calculator", "Salary to rent calculator"), link("/rent-budget-calculator", "Rent budget calculator"), link("/rent-to-income-ratio-calculator", "Rent-to-income ratio")],
@@ -793,16 +942,44 @@ export const salaryAnswerConfigs: Record<string, SalaryAnswerConfig> = Object.fr
   }),
 );
 
+function increaseDefaultExamples(input: Omit<IncreaseToolConfig, "faq" | "examples">): IncreaseToolConfig["examples"] {
+  if (input.mode === "regional") {
+    return [
+      { title: "Math check only", body: "Enter the current rent and the percentage you want to test. The result shows the new rent and annual impact, but it does not decide whether that percentage is allowed." },
+      { title: "Notice review", body: "Compare the calculated monthly change with the rent notice, then verify dates, exemptions, lease wording, and official guidance separately." },
+    ];
+  }
+  if (input.mode === "compound") {
+    return [
+      { title: "Multi-year renewal planning", body: "A repeated 4% increase compounds, so the fifth-year rent is higher than applying one flat increase to the starting rent." },
+      { title: "Annual budget view", body: "Use the yearly rows to compare staying put with moving costs, not just the next monthly payment." },
+    ];
+  }
+  if (input.mode === "cpi") {
+    return [
+      { title: "CPI-linked clause", body: "Enter the CPI or cap percentage stated in the lease or notice to see the rent math before checking whether the clause applies." },
+      { title: "Budget scenario", body: "Testing a CPI scenario shows the monthly and annual impact without assuming the entered rate is legally required or allowed." },
+    ];
+  }
+  if (input.mode === "formula") {
+    return [
+      { title: "Old rent to new rent", body: "Use current rent and new rent to find the percentage change, or enter a percentage and fixed increase to compare the formulas." },
+      { title: "Checking a renewal offer", body: "Put the notice amount beside the percentage result so mismatched math is visible before you ask for clarification." },
+    ];
+  }
+  return [
+    { title: "Lease renewal decision", body: "A small monthly increase becomes a larger yearly cost once it repeats for 12 payments. That yearly number is easier to compare with moving costs or a salary change." },
+    { title: "Before and after rent", body: "Use the old rent, new rent, and percentage change together when checking whether a notice, renewal offer, or budget worksheet matches the math." },
+  ];
+}
+
 function increaseConfig(input: Omit<IncreaseToolConfig, "faq" | "examples"> & Partial<Pick<IncreaseToolConfig, "faq" | "examples">>): IncreaseToolConfig {
   return {
     faq: input.faq ?? [
       { q: "Does this decide whether an increase is legal?", a: "No. It estimates the math only. Check your lease and official local tenancy source for legal rules." },
       { q: "Can I use a fixed dollar increase?", a: "Use the related rent increase calculator for fixed-dollar changes, or enter a percentage here when the page is percentage based." },
     ],
-    examples: input.examples ?? [
-      { title: "Lease renewal decision", body: "A small monthly increase becomes a larger yearly cost once it repeats for 12 payments. That yearly number is easier to compare with moving costs or a salary change." },
-      { title: "Before and after rent", body: "Use the old rent, new rent, and percentage change together when checking whether a notice, renewal offer, or budget worksheet matches the math." },
-    ],
+    examples: input.examples ?? increaseDefaultExamples(input),
     ...input,
   };
 }
@@ -1119,15 +1296,43 @@ function answerAmountLabel(config: WeeklyAnswerPageConfig) {
   return config.currency === "USD" ? `$${config.amount}` : `${config.currency} ${config.amount}`;
 }
 
+function answerDescription(config: WeeklyAnswerPageConfig) {
+  const amountLabel = answerAmountLabel(config);
+  if (config.daily) {
+    return `Convert ${amountLabel} per night into average monthly and annual rent. Compare the nightly quote with lease-style housing before fees.`;
+  }
+  if (config.currency === "GBP") {
+    return `Convert ${amountLabel} per week to PCM using a 365-day year. Compare UK weekly rent, 4-week rent, monthly rent, and annual cost.`;
+  }
+  if (config.currency === "EUR") {
+    return `Convert ${amountLabel} per week into average monthly rent, 4-week rent, and annual euro rent before comparing a weekly listing.`;
+  }
+  if (config.amount <= 180) {
+    return `Convert ${amountLabel} per week for a room or shared-housing budget. See average monthly rent, 4-week rent, annual rent, and the monthly gap.`;
+  }
+  if (config.amount <= 250) {
+    return `Convert ${amountLabel} per week into true monthly rent. Compare the 4-week shortcut with annual rent before judging a budget listing.`;
+  }
+  if (config.amount <= 370) {
+    return `Convert ${amountLabel} per week for listing comparisons. See the true monthly amount, 4-week rent, annual total, and what to check next.`;
+  }
+  if (config.amount <= 500) {
+    return `Convert ${amountLabel} per week into average monthly rent and annual rent. See why weekly x 4 understates the apartment budget.`;
+  }
+  if (config.amount <= 650) {
+    return `Convert ${amountLabel} per week for a higher-cost listing. Compare average monthly rent, 4-week rent, annual rent, and affordability checks.`;
+  }
+  return `Convert ${amountLabel} per week into true monthly and annual rent. Check the 4-week gap before treating a large weekly rent as affordable.`;
+}
+
 for (const config of Object.values(weeklyAnswerPageConfigs)) {
   const amountLabel = answerAmountLabel(config);
   if (config.daily) {
     config.title = `${amountLabel} per night to monthly rent`;
     config.h1 = `${amountLabel} per night to monthly rent`;
-    config.description = `Convert ${amountLabel} per night into average monthly rent. See daily, weekly, monthly, and annual equivalents with clear assumptions.`;
   } else {
     config.title = `${amountLabel} per week to monthly rent`;
     config.h1 = `${amountLabel} per week to monthly rent`;
-    config.description = `Convert ${amountLabel} per week into average monthly rent, 4-week rent, and annual rent. See why weekly rent times 4 is not the same as calendar-month rent.`;
   }
+  config.description = answerDescription(config);
 }
