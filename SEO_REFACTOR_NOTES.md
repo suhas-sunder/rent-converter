@@ -178,3 +178,17 @@
 - AdSense resubmission is no longer blocked by known repo/live-audit issues.
 - Remaining non-Codex checks are Google Search Console URL Inspection, official Rich Results Test, Lighthouse/PageSpeed mobile checks, live ad placement checks once ads render, and AdSense resubmission.
 - No code or calculation behavior was changed during the live verification passes.
+
+## Deployment/cache recheck - 2026-05-07
+
+- Rechecked the reported stale-production blockers against current live output. They no longer reproduce.
+- Before this documentation update, `final-polish` was clean and aligned with `origin/final-polish` at `05aa1a6 docs: finalize RentConverter AdSense readiness status`.
+- The production QA code commit `3165b1f fix: harden RentConverter production SEO QA` is present on `origin/main`, `origin/final-polish`, and the current branch history. It contains `public/og-image.jpg`, the rent-split typo fix, terms/cookies schema updates, the terms OG image fix, and release-audit social image checks.
+- Netlify repo config uses `react-router build` with `build/client` as the publish directory. No deploy-branch setting is stored in the repo; any branch target or deploy cache controls are in the hosting dashboard.
+- Current live release audit passed: `AUDIT_ORIGIN=https://www.rentconverter.com npm run release:audit` audited 126 sitemap pages and 122 unique internal links.
+- Current live page-quality audit passed: `AUDIT_ORIGIN=https://www.rentconverter.com node scripts/page-quality-audit.mjs` crawled 126 pages with 0 high-risk and 0 medium-risk pages.
+- Current live targeted checks confirmed `/og-image.jpg` returns 200, `/terms-of-service` does not reference `/og/rentconverter-terms.jpg`, `/rent-split-calculator` does not contain `person?s`, and `/contact`, `/privacy-policy`, `/cookies`, and `/terms-of-service` do not contain `/cdn-cgi/l/email-protection`.
+- Local production validation also passed: `npm run typecheck`, `npm run build`, `AUDIT_ORIGIN=http://127.0.0.1:3011 npm run release:audit`, and `AUDIT_ORIGIN=http://127.0.0.1:3011 node scripts/page-quality-audit.mjs`.
+- `build/client/og-image.jpg` exists, local `/og-image.jpg` returns 200, and local rendered terms/rent-split/contact/legal checks do not show the stale image path, `person?s`, or `/cdn-cgi/l/email-protection`.
+- The earlier stale-production symptoms were consistent with a previously stale deploy/cache/live artifact. Current live output shows the latest production QA fixes are deployed.
+- No new app code changes were made in this recheck. No route, formula, canonical, redirect, schema architecture, parsing, rounding, localStorage, print/export, or visual behavior was changed.
