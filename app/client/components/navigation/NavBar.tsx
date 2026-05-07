@@ -392,13 +392,21 @@ export default function NavBar() {
 
   function AllToolsButton() {
     return (
-      <button
-        type="button"
+      <Link
+        to="/sitemap"
         className="inline-flex cursor-pointer select-none items-center rounded-xl bg-sky-50 px-3 py-2 text-sm font-semibold text-sky-800 transition-colors hover:bg-sky-100 hover:text-sky-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-        onClick={() => scrollToAllTools(closeAll)}
+        onClick={(event) => {
+          const el = document.getElementById("all-tools");
+          if (!el) {
+            closeAll();
+            return;
+          }
+          event.preventDefault();
+          scrollToAllTools(closeAll);
+        }}
       >
         All tools
-      </button>
+      </Link>
     );
   }
 

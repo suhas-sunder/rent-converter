@@ -451,7 +451,7 @@ function ContentBlocks({
         {hasExamples ? (
           <div>
             <h2 className="text-2xl font-bold tracking-tight text-sky-900">
-              Real situations
+              Worked examples
             </h2>
             <div className="mt-4 space-y-4">
               {visibleExamples.map((example) => (
@@ -501,8 +501,8 @@ function assumptionsText(path: string) {
   if (path.includes("increase") || path.includes("ontario") || path.includes("california") || path.includes("quebec") || path.includes("bc-")) {
     return "This page estimates rent math only. Local rules, notice requirements, lease terms, and allowable increases can change, so check the official tenancy authority for your location.";
   }
-  if (path.includes("australia") || path.includes("bond") || path.includes("advance")) {
-    return "Australian rental rules vary by state and territory. Use this as a budgeting estimate and check your lease or state tenancy authority for exact requirements.";
+  if (path.includes("australia") || path.includes("melbourne") || path.includes("sydney") || path.includes("bond") || path.includes("advance")) {
+    return "Australian rental rules vary by state and territory. Calculation assumptions reviewed May 7, 2026. Use this as a budgeting estimate and check your lease or state tenancy authority for exact requirements.";
   }
   return "Calculations use a 365-day year, 7-day weeks, 14-day fortnightly or biweekly periods, 28-day four-week periods, and 365 divided by 12 days for a calendar month.";
 }
@@ -514,6 +514,365 @@ function AssumptionNote({ path }: { path: string }) {
         {assumptionsText(path)}
       </div>
     </section>
+  );
+}
+
+function mergeSections(required: ContentSection[], existing: ContentSection[] = []) {
+  const seen = new Set<string>();
+  const merged: ContentSection[] = [];
+  for (const section of [...required, ...existing]) {
+    const key = section.title.trim().toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    merged.push(section);
+  }
+  return merged;
+}
+
+function conversionUseCase(config: ConversionPageConfig) {
+  if (config.path.includes("melbourne") || config.path.includes("sydney")) {
+    return "Use this when comparing weekly listings in that city against a monthly budget. It is a rent calculation page, not a local legal guide or market-average claim.";
+  }
+  if (config.path.includes("australia") || config.path.includes("melbourne") || config.path.includes("sydney")) {
+    return "Use this when an Australian listing is quoted weekly or fortnightly but your budget, bond estimate, rent-in-advance estimate, or household plan is monthly.";
+  }
+  if (config.path.includes("pcm") || config.path.includes("pw-") || config.path.includes("uk")) {
+    return "Use this when a UK-style listing uses PW, PCM, or 4-weekly wording and you need one clear monthly or weekly comparison.";
+  }
+  if (config.mode.includes("monthly")) {
+    return "Use this when a listing, lease, paycheck plan, or budget uses a different rent period than the number you want to compare.";
+  }
+  return "Use this when you need to compare rent across payment periods without changing the underlying lease amount.";
+}
+
+function conversionSections(config: ConversionPageConfig) {
+  return mergeSections(
+    [
+      {
+        title: "How this calculator works",
+        body: `${config.formulaLabel}. ${config.context} The result keeps the period math consistent, so a weekly, 14-day, 28-day, monthly, or annual amount can be compared on the same basis.`,
+      },
+      {
+        title: "When to use this page",
+        body: conversionUseCase(config),
+      },
+      {
+        title: "What this result does not include",
+        body: "The result converts rent only. Utilities, deposits, parking, pet rent, service charges, insurance, move-in fees, proration, and lease-specific payment rules are not included unless you add them to the rent amount yourself.",
+      },
+      {
+        title: "How to read the comparison",
+        body: "Use the converted amount for the budget period you actually plan with, then keep the original listing period visible so you do not lose track of how rent is collected. A calendar-month result is best for monthly bills, while a weekly, fortnightly, or 4-week result is better for matching a payment cycle.",
+      },
+    ],
+    config.sections,
+  );
+}
+
+function incomeSections(config: IncomeToolConfig) {
+  const basis =
+    config.mode === "multiplier"
+      ? `This page applies a ${config.multiplier ?? 3}x gross-income screening rule to the rent amount entered.`
+      : config.mode === "ratio"
+        ? "This page divides rent by income to show the rent-to-income percentage."
+        : config.mode === "hourly"
+          ? "This page turns hourly pay and weekly hours into annual and monthly gross income before estimating rent targets."
+          : "This page turns income into rent targets using the selected budgeting rule and comparison bands.";
+
+  return mergeSections(
+    [
+      {
+        title: "How this calculator works",
+        body: `${basis} The output is a planning estimate, not an approval decision or a complete household budget.`,
+        bullets: [
+          "Use the rent target as a starting point before adding utilities, debt payments, savings, and transport.",
+          "Compare gross-income rules with take-home pay when the household budget is tight.",
+          "Treat landlord screening rules as qualification checks, not proof that the rent is comfortable.",
+        ],
+      },
+      {
+        title: "When to use this page",
+        body: "Use it before applying for an apartment, comparing rent caps, checking whether a rent number is comfortable, or deciding whether a landlord income rule and your real budget point to different answers.",
+      },
+      {
+        title: "How to read the result",
+        body: "A lower rent target usually gives more room for irregular costs and savings. A higher target may still pass a simple rule, but it can become fragile if utilities, debt, commuting, insurance, or deposits are higher than expected. If two methods produce different answers, use the stricter number until your real cash-flow picture is clear.",
+      },
+      {
+        title: "What this result does not include",
+        body: "Gross income rules do not include take-home pay, taxes, debt, savings goals, utilities, insurance, transport, childcare, deposits, application fees, or local cost differences. Those can lower the rent that is actually comfortable.",
+      },
+    ],
+    config.sections,
+  );
+}
+
+function increaseSections(config: IncreaseToolConfig) {
+  const modeText =
+    config.mode === "compound"
+      ? "The calculator applies the entered percentage repeatedly for the number of years entered."
+      : config.mode === "escalation"
+        ? "The calculator models scheduled increases from a starting rent and escalation rate."
+        : config.mode === "formula"
+          ? "The calculator compares percentage, fixed-dollar, and old-to-new rent formulas side by side."
+          : "The calculator applies the entered increase percentage to the current monthly rent.";
+
+  const regionalText =
+    config.mode === "regional"
+      ? " Calculation assumptions reviewed May 7, 2026. Official rules, exemptions, notice timing, local caps, and lease terms can change, so verify the current government or tenancy-source rules before acting."
+      : "";
+
+  return mergeSections(
+    [
+      {
+        title: "How this calculator works",
+        body: `${modeText} It shows the new monthly rent, monthly change, annual rent before, and annual rent after so the increase is visible beyond one payment.${regionalText}`,
+      },
+      {
+        title: "When to use this page",
+        body: "Use it to check renewal offers, rent notices, budget changes, CPI-linked clauses, scheduled increases, or before-and-after rent math before you decide whether to move, negotiate, or ask for clarification.",
+      },
+      {
+        title: "What this result does not include",
+        body: "This is arithmetic only. It does not decide whether a rent increase is allowed, whether notice is valid, whether a unit is exempt, whether local caps apply, or whether fees and utilities can change separately.",
+        bullets: [
+          "Check whether the amount is a fixed increase, percentage increase, CPI-linked increase, or scheduled escalation.",
+          "Confirm whether the rent amount excludes separate fees, utilities, parking, or service charges.",
+          "For regional pages, verify current official rules before using the result in a dispute or notice response.",
+        ],
+      },
+      {
+        title: "How to read the result",
+        body: "The monthly change shows the immediate payment impact. The annual before-and-after amounts show the full-year impact, which is usually the better number for deciding whether a renewal offer, CPI adjustment, or escalation clause fits your budget. If rent is paid weekly, fortnightly, or every 4 weeks, convert the new monthly rent before comparing payment-cycle cash flow.",
+      },
+      {
+        title: "Before acting on an increase",
+        body: config.mode === "regional"
+          ? "Use the calculator to check the arithmetic, then compare the notice, dates, exemption status, and allowed-increase language against the current official tenancy source for that region."
+          : "Use the calculator to check the arithmetic, then compare the result with the lease clause or rent notice. A correct percentage calculation does not prove that the increase is permitted or that every required notice step was followed.",
+      },
+    ],
+    [],
+  );
+}
+
+function splitSections(config: SplitToolConfig) {
+  const method =
+    config.mode === "income"
+      ? "Income-based splitting divides rent and entered shared costs in proportion to each roommate income."
+      : config.mode === "percentage"
+        ? "Percentage splitting applies the custom share entered for one roommate and assigns the rest to the other."
+        : "The roommate split view starts with an equal split and lets you compare the shared monthly amount clearly.";
+
+  return [
+    {
+      title: "How this calculator works",
+      body: `${method} The table shows the monthly share for each person so the agreement can be checked before anyone pays.`,
+    },
+    {
+      title: "When to use this page",
+      body: "Use it when roommates have different incomes, different room values, parking arrangements, private bathrooms, or shared utilities that need to be discussed before signing or renewing a lease.",
+    },
+    {
+      title: "What this result does not include",
+      body: "This does not decide legal responsibility under the lease, damage deposits, late fees, household chores, variable utility usage, or what happens if one roommate cannot pay.",
+    },
+  ];
+}
+
+function splitExamples(config: SplitToolConfig): ExampleItem[] {
+  if (config.mode === "income") {
+    return [
+      {
+        title: "Different incomes",
+        body: "$2,400 rent plus $300 utilities split between $4,000 and $6,000 monthly incomes gives the higher-income roommate a larger share.",
+      },
+    ];
+  }
+  if (config.mode === "percentage") {
+    return [
+      {
+        title: "Room value adjustment",
+        body: "A 60/40 split can fit a larger bedroom, private bathroom, parking spot, or other agreed value difference.",
+      },
+    ];
+  }
+  return [
+    {
+      title: "Equal-share starting point",
+      body: "$2,400 rent plus $300 shared costs is $2,700 total, or $1,350 each for two roommates before any room adjustments.",
+    },
+  ];
+}
+
+function dateSections(config: DateToolConfig) {
+  const task =
+    config.mode === "schedule"
+      ? "The calculator builds payment dates from the first due date, lease length, rent amount, and payment frequency."
+      : "The calculator adds the lease length to the start date and treats the end date as the day before the same calendar date after that length.";
+
+  return [
+    {
+      title: "How this calculator works",
+      body: `${task} Date output is a planning aid; exact dates depend on the lease wording and payment terms.`,
+    },
+    {
+      title: "When to use this page",
+      body: "Use it before move-in, renewal, notice planning, payment scheduling, or when you need a quick check of lease start dates, end dates, due dates, and reminders.",
+    },
+      {
+        title: "What this result does not include",
+        body: "This does not override lease language, grace periods, holiday rules, payment portal cutoffs, local notice rules, proration clauses, or agreement-specific due-date changes.",
+        bullets: [
+          "Use lease wording for the final legal date when it differs from a calculator result.",
+          "Build reminders earlier than the calculated date when payment processing time matters.",
+          "Check notice periods separately from rent payment dates because they can use different rules.",
+        ],
+      },
+      {
+        title: "How to read the calculated date",
+        body: config.mode === "schedule"
+          ? "The schedule lists the payment dates produced from the start date and frequency entered. Monthly schedules stay on calendar months, while weekly, fortnightly, and every-4-weeks schedules move by fixed day intervals."
+          : "The end date is calculated by adding the lease length to the start date, then stepping back one day. This matches a common lease-counting convention, but the lease wording controls the final date.",
+      },
+      {
+        title: "Before you put dates on a calendar",
+        body: "Check whether the lease uses calendar days, business days, a specific payment portal cutoff, or a notice deadline that falls before the visible rent due date. Those details can change when you should schedule the actual payment or reminder.",
+      },
+      {
+        title: "After you get the date",
+        body: "Use the output to plan rent reminders, renewal conversations, notice timing, move-in budgeting, or a proration check. If money is due before move-in, compare the date result with the rent-in-advance and prorated-rent calculators. Keep a copy for your own records when dates affect deposits or payments.",
+      },
+      {
+        title: "Common date mistakes to avoid",
+        body: "Do not assume every lease ends on the same numbered day it starts, and do not treat a reminder date as the legal deadline. Month lengths, leap years, weekends, portal cutoff times, and lease wording can all change how a date should be used in practice. When dates affect money, save the calculation beside the lease clause or invoice line it is based on.",
+      },
+    ];
+}
+
+function dateExamples(config: DateToolConfig): ExampleItem[] {
+  if (config.mode === "schedule") {
+    return [
+      {
+        title: "Monthly rent schedule",
+        body: "A lease starting 2026-06-01 with monthly rent due monthly generates one payment date for each month in the lease length entered.",
+      },
+    ];
+  }
+  return [
+    {
+      title: "12-month lease",
+      body: "A 12-month lease starting June 1 commonly ends May 31 the next year under this counting method, but the lease controls the final date.",
+    },
+  ];
+}
+
+function moveInSections(config: MoveInCostConfig) {
+  return mergeSections(
+    [
+      {
+        title: "How this calculator works",
+        body: config.mode === "advance"
+          ? "The calculator multiplies weekly rent by the number of weeks paid in advance and compares that with calendar-month rent."
+          : "The calculator estimates bond, rent in advance, optional moving costs, and the combined upfront amount from the weekly rent entered.",
+      },
+      {
+        title: "When to use this page",
+        body: "Use it before applying, signing, or moving so bond, rent in advance, and other upfront costs are visible before you commit cash.",
+      },
+      {
+        title: "What this result does not include",
+        body: "Rules vary by state, territory, lease, and property. This does not decide legal maximums, bond lodgement rules, utility connections, moving quotes, pet costs, or inspection fees.",
+      },
+    ],
+    config.sections,
+  );
+}
+
+function prorationSections(config: ProrationToolConfig) {
+  return mergeSections(
+    [
+      {
+        title: "How this calculator works",
+        body: "The calculator divides rent by the days in the selected period, then multiplies that daily rate by the number of days charged.",
+      },
+      {
+        title: "When to use this page",
+        body: "Use it for mid-period move-ins, move-outs, lease changes, partial first months, or checking a prorated rent line before paying.",
+      },
+      {
+        title: "What this result does not include",
+        body: "Your lease or local rules may require a different proration method. Utilities, deposits, cleaning fees, late fees, and move-in charges are not included.",
+      },
+    ],
+    config.sections,
+  );
+}
+
+function infoSections(config: InfoPageConfig) {
+  const lowerPath = config.path.toLowerCase();
+  const isPw = lowerPath.includes("pw") || lowerPath.includes("weekly");
+  const isPcm = lowerPath.includes("pcm") || lowerPath.includes("calendar-month");
+  const isDueDate = lowerPath.includes("rent-due") || lowerPath.includes("current-month") || lowerPath.includes("first");
+
+  if (isDueDate) {
+    return mergeSections(
+      [
+        {
+          title: "How this page works",
+          body: "This guide separates the common rent-payment convention from the lease-specific answer. It explains the usual timing, then points you back to the calculator when dates, grace periods, or payment schedules need to be checked.",
+        },
+        {
+          title: "When to use this page",
+          body: "Use it when you need to understand what a rent payment usually covers before checking the exact due date, schedule, first-month payment, or rent-in-advance language in your lease.",
+        },
+        {
+          title: "What this page does not include",
+          body: "It does not override a lease, payment portal cutoff, grace period, notice rule, holiday rule, or local requirement. Use it as planning guidance and confirm the final answer from the lease or local rule.",
+          bullets: [
+            "Grace periods can affect late fees without changing the original due date.",
+            "Payment processing time can matter when bank transfers or portals settle after submission.",
+            "Move-in, move-out, and proration language can use separate timing rules.",
+          ],
+        },
+        {
+          title: "How to use this with a lease",
+          body: "Read the lease clause first, then use the related calculator to turn the clause into dates or partial-period amounts. That keeps the guide from replacing the agreement while still making the rental math easier to check.",
+        },
+      ],
+      config.sections,
+    );
+  }
+
+  return mergeSections(
+    [
+      {
+        title: "How this page works",
+        body: isPw
+          ? "This page defines weekly rent wording, then shows why a weekly listing should be annualized before comparing it with a calendar-month budget."
+          : isPcm
+            ? "This page defines per-calendar-month rent, then compares it with weekly and every-4-weeks rent so the listing period does not distort the budget."
+            : "This page explains the listing term, shows the conversion formula when relevant, and connects the term to the calculator that matches the next decision.",
+      },
+      {
+        title: "When to use this page",
+        body: "Use it when a listing uses PCM, PW, per calendar month, or 4-weekly wording and you need to understand the term before comparing rent, bills, or affordability.",
+      },
+      {
+        title: "What this page does not include",
+        body: "The term does not prove what bills, council tax, service charges, parking, deposits, or utilities are included. The listing and lease control those details.",
+        bullets: [
+          "Use PW-to-PCM conversion for rent amount comparison, not for included-bills assumptions.",
+          "Use the lease or listing to confirm payment dates, deposits, and service charges.",
+          "Use the 4-week comparison only when the listing is actually collected every 28 days.",
+        ],
+      },
+      {
+        title: "How to use the term in a listing",
+        body: "Translate the listing term into the period you budget with, then compare like with like. A PCM amount fits monthly bills, a PW amount fits weekly listings, and a 4-weekly amount should be checked separately because it creates 13 payment periods per year.",
+      },
+    ],
+    config.sections,
   );
 }
 
@@ -578,7 +937,7 @@ export function InfoPage({ config }: { config: InfoPageConfig }) {
         </section>
       ) : null}
 
-      <ContentBlocks sections={config.sections} examples={config.examples} />
+      <ContentBlocks sections={infoSections(config)} examples={config.examples} />
       <RelatedTools links={config.relatedLinks} />
       <Faq items={config.faq ?? []} />
     </Shell>
@@ -713,7 +1072,7 @@ export function ConversionCalculatorPage({ config }: { config: ConversionPageCon
         body={config.context}
         formula={config.formulaLabel}
       />
-      <ContentBlocks sections={config.sections} examples={config.examples} />
+      <ContentBlocks sections={conversionSections(config)} examples={config.examples} />
       <AssumptionNote path={config.path} />
       <RelatedTools links={config.relatedLinks} />
       <Faq items={config.faq} />
@@ -750,6 +1109,65 @@ function DirectAnswer({
   );
 }
 
+const exactAnswerAmounts = [150, 160, 170, 180, 200, 220, 230, 250, 300, 320, 350, 370, 400, 450, 500, 550, 600, 650, 750];
+
+function nearbyWeeklyAnswerLinks(config: WeeklyAnswerPageConfig): RelatedLink[] {
+  if (config.currency !== "USD" || config.daily) return config.relatedLinks.slice(0, 6);
+
+  const index = exactAnswerAmounts.indexOf(config.amount);
+  const nearby =
+    index === -1
+      ? []
+      : [exactAnswerAmounts[index - 1], exactAnswerAmounts[index + 1]]
+          .filter((amount): amount is number => typeof amount === "number")
+          .map((amount) => ({
+            to: `/${amount}-per-week-to-monthly-rent`,
+            label: `$${amount} per week to monthly rent`,
+            description: "Compare a nearby weekly amount with this result.",
+          }));
+
+  const links = [...nearby, ...config.relatedLinks];
+  return Array.from(new Map(links.map((link) => [link.to, link])).values()).slice(0, 6);
+}
+
+function exactAnswerScenario(config: WeeklyAnswerPageConfig, monthly: bigint, annual: bigint) {
+  if (config.daily) {
+    return `${formatMoney(BigInt(Math.round(config.amount * 100)), config.currency)} per night can work for a short stay, but the monthly equivalent of ${formatMoney(monthly, config.currency)} helps compare it with a normal lease or temporary housing budget.`;
+  }
+  if (config.currency === "GBP") {
+    return `${formatMoney(BigInt(Math.round(config.amount * 100)), config.currency)} per week is a common UK room or student-listing style. Converting it to PCM makes it easier to compare with monthly listings, bills, and salary planning.`;
+  }
+  if (config.currency === "EUR") {
+    return `${formatMoney(BigInt(Math.round(config.amount * 100)), config.currency)} per week should be compared with monthly rent after annualizing the weekly price, especially when bills and income are planned monthly.`;
+  }
+  if (config.amount <= 250) {
+    return `At ${formatMoney(BigInt(config.amount * 100), config.currency)} per week, this is most useful for rooms, student housing, or shared accommodation where the weekly number can look lower than the monthly budget impact.`;
+  }
+  if (config.amount <= 450) {
+    return `At ${formatMoney(BigInt(config.amount * 100), config.currency)} per week, the 4-week shortcut can understate the amount needed in a monthly budget by ${formatMoney(monthly - BigInt(config.amount * 100) * 4n, config.currency)}.`;
+  }
+  return `At ${formatMoney(BigInt(config.amount * 100), config.currency)} per week, the annual total is ${formatMoney(annual, config.currency)}, so the monthly equivalent matters for affordability checks and listing comparisons.`;
+}
+
+function exactAnswerLead(config: WeeklyAnswerPageConfig, annual: bigint, diff: bigint) {
+  if (config.daily) {
+    return `Use it to compare a nightly quote with a normal monthly rental budget before fees or minimum-stay rules.`;
+  }
+  if (config.currency === "GBP") {
+    return `Use it for UK-style PW listings where the PCM comparison matters more than the 4-week shortcut.`;
+  }
+  if (config.currency === "EUR") {
+    return `Use it when a euro weekly listing needs to be checked against a monthly budget and annual rent total.`;
+  }
+  if (config.amount <= 250) {
+    return `The monthly gap from multiplying by 4 is ${formatMoney(diff, config.currency)}, which matters for room, student, or shared-housing budgets.`;
+  }
+  if (config.amount <= 450) {
+    return `This is useful for comparing mid-range weekly listings with monthly bills and lease budgets.`;
+  }
+  return `At this level, the annual total of ${formatMoney(annual, config.currency)} is worth checking before treating the weekly price as affordable.`;
+}
+
 export function WeeklyAnswerPage({ config }: { config: WeeklyAnswerPageConfig }) {
   const cents = BigInt(Math.round(config.amount * 100));
   const monthly = config.daily ? dailyToMonthlyCents(cents) : weeklyToMonthlyCents(cents);
@@ -779,6 +1197,10 @@ export function WeeklyAnswerPage({ config }: { config: WeeklyAnswerPageConfig })
       ]
     : [
         ["Formula", "weekly x 365 / 7 / 12"],
+        ["Weekly rent", formatMoney(cents, config.currency)],
+        ["Every 4 weeks", formatMoney(fourWeek, config.currency)],
+        ["Average monthly rent", formatMoney(monthly, config.currency)],
+        ["Annual rent", formatMoney(annual, config.currency)],
         ["Budget point", `${formatMoney(diff, config.currency)} is the gap between 4 weeks and a calendar month.`],
       ];
 
@@ -787,7 +1209,7 @@ export function WeeklyAnswerPage({ config }: { config: WeeklyAnswerPageConfig })
       <ToolCard
         eyebrow={config.eyebrow}
         h1={config.h1}
-        lead={`${amountLabel} is ${formatMoney(monthly, config.currency)} per calendar month using the 365-day model.`}
+        lead={`${amountLabel} is ${formatMoney(monthly, config.currency)} per calendar month using the 365-day model. ${exactAnswerLead(config, annual, diff)}`}
         onPrint={() => window.print()}
       >
         <ResultPanel
@@ -816,22 +1238,60 @@ export function WeeklyAnswerPage({ config }: { config: WeeklyAnswerPageConfig })
           config.daily
             ? [
                 {
-                  title: "Why nightly rent needs a monthly view",
+                  title: "How this answer is calculated",
+                  body: "The nightly amount is treated as daily rent, multiplied by 365, then divided by 12 calendar months.",
+                  bullets: [
+                    "Use the monthly equivalent only as a comparison number, not as a guarantee that nightly housing can be booked long term.",
+                    "Check cleaning fees, platform fees, taxes, deposits, and minimum-stay rules separately.",
+                    "Confirm whether the quoted night price covers one person, one room, or the whole property.",
+                  ],
+                },
+                {
+                  title: "When to use this exact amount page",
                   body: "A nightly amount can look manageable until it is annualized. The monthly equivalent helps compare short-stay pricing with a normal monthly rental budget.",
                 },
                 {
-                  title: "Where this shows up",
-                  body: "This calculation is useful when comparing short stays, temporary housing, daily room rates, and rental ads that need to be compared against a monthly budget.",
+                  title: "What this result does not include",
+                  body: "Cleaning fees, deposits, minimum stays, taxes, utilities, parking, and short-stay rules are not included unless you add them separately.",
+                },
+                {
+                  title: "How to compare it with monthly rent",
+                  body: "Put the nightly quote beside a normal monthly lease only after adding unavoidable fees and checking how many nights are actually available. A short-stay quote can be useful for temporary housing, but it does not always behave like base rent in a lease.",
+                },
+                {
+                  title: "Before you rely on it",
+                  body: "If the quote is for a room, a furnished unit, or temporary accommodation, confirm what the price includes and whether the stay can be extended. The rent math is only one part of the comparison. Also check whether the monthly equivalent still fits after deposits, platform fees, council tax, utilities, and any required minimum stay.",
                 },
               ]
             : [
+                {
+                  title: "How this answer is calculated",
+                  body: `${formatMoney(cents, config.currency)} per week is converted with weekly x 365 / 7 / 12. That gives ${formatMoney(monthly, config.currency)} per average calendar month and ${formatMoney(annual, config.currency)} per year.`,
+                  bullets: [
+                    `${formatMoney(fourWeek, config.currency)} is the 28-day amount, not the average calendar-month amount.`,
+                    `${formatMoney(diff, config.currency)} is the monthly gap created by using 4 weeks instead of a true month.`,
+                    `${formatMoney(annual, config.currency)} is the annual rent before bills, deposits, or fees.`,
+                  ],
+                },
+                {
+                  title: "When to use this exact amount page",
+                  body: exactAnswerScenario(config, monthly, annual),
+                },
+                {
+                  title: "What this result does not include",
+                  body: "This is rent-only conversion. Utilities, deposits, parking, internet, service charges, move-in fees, and lease-specific due dates can change the actual amount you need.",
+                },
                 {
                   title: "Why 4 weeks can mislead",
                   body: "Four weeks is 28 days. An average calendar month is 365 divided by 12 days, about 30.42 days. That gap is small each week but noticeable across a monthly budget.",
                 },
                 {
-                  title: "Where this shows up",
-                  body: "This calculation is useful when comparing weekly listings, room rentals, student housing, short stays, and rent pages that use PW, PCW, PCM, or per calendar month wording.",
+                  title: "How to use the comparison",
+                  body: "Use the monthly equivalent when your income, bills, or savings plan resets monthly. Use the 4-week amount only when the rent is actually collected every 28 days. Keeping both numbers visible helps avoid under-budgeting a weekly listing.",
+                },
+                {
+                  title: "Before choosing the listing",
+                  body: "Check whether the weekly amount covers the whole property, one room, or a shared arrangement. Then compare the monthly equivalent with bills, deposits, commute costs, and the exact payment schedule in the lease or listing.",
                 },
               ]
         }
@@ -847,7 +1307,7 @@ export function WeeklyAnswerPage({ config }: { config: WeeklyAnswerPageConfig })
         ]}
       />
       <AssumptionNote path={config.path} />
-      <RelatedTools links={config.relatedLinks} />
+      <RelatedTools links={nearbyWeeklyAnswerLinks(config)} />
       <Faq items={answerFaq(config.daily)} />
     </Shell>
   );
@@ -973,12 +1433,22 @@ export function IncomeToolPage({ config }: { config: IncomeToolConfig }) {
           ]}
         />
       </ToolCard>
-      <ContentBlocks sections={config.sections} examples={config.examples} />
+      <ContentBlocks sections={incomeSections(config)} examples={config.examples} />
       <AssumptionNote path={config.path} />
       <RelatedTools links={config.relatedLinks} />
       <Faq items={config.faq} />
     </Shell>
   );
+}
+
+function salaryAnswerContext(salary: number) {
+  if (salary <= 60000) {
+    return "This range is most useful for checking whether the 30% target still leaves room for utilities, debt, transportation, and savings.";
+  }
+  if (salary <= 80000) {
+    return "Use it to compare a moderate rent target with a stretch target before assuming a landlord screening number is comfortable.";
+  }
+  return "Higher income can still become rent-heavy in expensive markets, so compare the comfort target with the qualification-style cap.";
 }
 
 export function SalaryAnswerPage({ config }: { config: SalaryAnswerConfig }) {
@@ -993,7 +1463,7 @@ export function SalaryAnswerPage({ config }: { config: SalaryAnswerConfig }) {
       <ToolCard
         eyebrow={config.eyebrow}
         h1={config.h1}
-        lead={`On a $${config.salary.toLocaleString()} salary, common rent estimates range from ${formatMoney(rent30, "USD")} at 30% of gross income to ${formatMoney(rent40, "USD")} at 40%.`}
+        lead={`On a $${config.salary.toLocaleString()} salary, common rent estimates range from ${formatMoney(rent30, "USD")} at 30% of gross income to ${formatMoney(rent40, "USD")} at 40%. ${salaryAnswerContext(config.salary)}`}
       >
         <ResultPanel
           label="Estimated rent range"
@@ -1005,17 +1475,54 @@ export function SalaryAnswerPage({ config }: { config: SalaryAnswerConfig }) {
             { label: "40% rent target", value: formatMoney(rent40, "USD") },
             { label: "3x qualification max", value: formatMoney(rent3x, "USD") },
           ]}
+          tableRows={[
+            ["Method", "Monthly rent"],
+            ["30% of gross income", formatMoney(rent30, "USD")],
+            ["40% of gross income", formatMoney(rent40, "USD")],
+            ["3x rent screening", formatMoney(rent3x, "USD")],
+            ["Annual rent at 30%", formatMoney(rent30 * 12n, "USD")],
+          ]}
         />
       </ToolCard>
       <ContentBlocks
         sections={[
           {
-            title: "Salary is not the same as take-home pay",
-            body: "These numbers use gross salary because that is how many simple rent rules are stated. Your comfortable rent may be lower after tax withholding, debt payments, insurance, savings, utilities, and transportation.",
+            title: "How this answer is calculated",
+            body: `The $${config.salary.toLocaleString()} salary is divided by 12 to estimate gross monthly income. The page then compares 30%, 40%, and a 3x-rent screening cap.`,
+            bullets: [
+              `${formatMoney(monthlyIncome, "USD")} is the gross monthly income basis used here.`,
+              `${formatMoney(rent30, "USD")} is the 30% target before utilities and fees.`,
+              `${formatMoney(rent3x, "USD")} is the rent amount implied by a simple 3x gross-income screen.`,
+            ],
+          },
+          {
+            title: "When to use this salary page",
+            body: "Use it as a prefilled rent check before searching listings, changing cities, applying for an apartment, or deciding whether to use a stricter take-home-pay calculator.",
+          },
+          {
+            title: "What this result does not include",
+            body: "These numbers use gross salary. They do not include tax withholding, debt, savings goals, childcare, transportation, insurance, utilities, deposits, application fees, or local cost differences.",
           },
           {
             title: "Qualification max vs comfort max",
             body: "A landlord rule can say you qualify for one rent amount while your monthly budget points to a lower amount. The safer number is usually the one that still leaves room for bills and emergencies.",
+          },
+          {
+            title: "How to apply the range",
+            body: `For a $${config.salary.toLocaleString()} salary, compare the rent target with the real monthly costs that do not appear in a gross-income rule. A renter with low debt and stable savings may read the range differently than a renter with car payments, childcare, medical costs, or variable income.`,
+          },
+          {
+            title: "Next check after this page",
+            body: "If the number looks close to your limit, run the take-home-pay or rent-as-percentage-of-income calculator with your actual paycheck. That gives a better view of cash flow than salary alone.",
+          },
+          {
+            title: "What can move the answer lower",
+            body: "A salary-specific page is useful for a quick benchmark, but the comfortable rent can be lower when fixed monthly costs are high.",
+            bullets: [
+              "Student loans, car payments, credit cards, childcare, or medical costs reduce the rent room left after payday.",
+              "Utilities, internet, renters insurance, parking, and pet rent can make two listings with the same base rent feel different.",
+              "A larger deposit or move-in payment can make an otherwise affordable rent difficult at signing time.",
+            ],
           },
         ]}
         examples={[
@@ -1139,7 +1646,7 @@ export function IncreaseToolPage({ config }: { config: IncreaseToolConfig }) {
           tableRows={config.mode === "compound" || config.mode === "escalation" || config.mode === "formula" ? rows : undefined}
         />
       </ToolCard>
-      <ContentBlocks sections={[{ title: "How to read the result", body: "The output shows the arithmetic result from the rent, rate, and years entered. It does not decide whether an increase is allowed, whether notice is valid, or whether a local cap applies." }]} examples={config.examples} />
+      <ContentBlocks sections={increaseSections(config)} examples={config.examples} />
       <AssumptionNote path={config.path} />
       <RelatedTools links={config.relatedLinks} />
       <Faq items={config.faq} />
@@ -1199,7 +1706,7 @@ export function SplitToolPage({ config }: { config: SplitToolConfig }) {
           tableRows={rows}
         />
       </ToolCard>
-      <ContentBlocks sections={[{ title: "Choosing a split method", body: "Equal splits are easy when rooms and incomes are similar. Income-based splits can feel fairer when roommates earn very different amounts. Custom percentages work when room size, parking, or private bathrooms change the value of each share." }]} examples={[]} />
+      <ContentBlocks sections={splitSections(config)} examples={splitExamples(config)} />
       <RelatedTools links={config.relatedLinks} />
       <Faq items={config.faq} />
     </Shell>
@@ -1287,7 +1794,7 @@ export function MoveInCostPage({ config }: { config: MoveInCostConfig }) {
           tableRows={rows}
         />
       </ToolCard>
-      <ContentBlocks sections={config.sections} examples={config.examples} />
+      <ContentBlocks sections={moveInSections(config)} examples={config.examples} />
       <AssumptionNote path={config.path} />
       <RelatedTools links={config.relatedLinks} />
       <Faq items={config.faq} />
@@ -1366,7 +1873,7 @@ export function ProrationToolPage({ config }: { config: ProrationToolConfig }) {
           tableRows={rows}
         />
       </ToolCard>
-      <ContentBlocks sections={config.sections} examples={config.examples} />
+      <ContentBlocks sections={prorationSections(config)} examples={config.examples} />
       <AssumptionNote path={config.path} />
       <RelatedTools links={config.relatedLinks} />
       <Faq items={config.faq} />
@@ -1485,7 +1992,7 @@ export function DateToolPage({ config }: { config: DateToolConfig }) {
           tableRows={rows.length ? rows : undefined}
         />
       </ToolCard>
-      <ContentBlocks sections={[{ title: "Lease date assumptions", body: "Lease documents can describe dates in different ways. A 12-month lease starting June 1 often ends May 31 the next year, but the lease language controls the official dates." }]} examples={[]} />
+      <ContentBlocks sections={dateSections(config)} examples={dateExamples(config)} />
       <AssumptionNote path={config.path} />
       <RelatedTools links={config.relatedLinks} />
       <Faq items={config.faq} />

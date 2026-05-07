@@ -576,7 +576,8 @@ export default function RentPerPaycheckCanada() {
 
                 <p className="mt-2 text-base text-slate-700">
                   Convert monthly rent into a per-paycheque amount for common
-                  Canadian pay schedules.
+                  Canadian pay schedules, including weekly, biweekly,
+                  semi-monthly, and monthly paycheques.
                 </p>
               </div>
 

@@ -664,8 +664,9 @@ export default function MonthlyToBiweeklyRent() {
                 </h1>
 
                 <p className="mt-2 text-base text-slate-700">
-                  Convert monthly rent into a biweekly amount. The calculator
-                  also shows related rent breakdowns for comparison.
+                  Convert monthly rent into a true 14-day equivalent. Use it
+                  when a monthly lease needs to fit a biweekly paycheck plan or
+                  when two listings quote rent on different schedules.
                 </p>
               </div>
 

@@ -36,6 +36,13 @@ main.bg-gradient-to-b {
   background-image: none !important;
 }
 
+main .bg-gradient-to-r,
+header .bg-gradient-to-r,
+footer .bg-gradient-to-r {
+  background-image: none !important;
+  background-color: #0ea5e9 !important;
+}
+
 main .shadow,
 main .shadow-sm,
 main .shadow-md,

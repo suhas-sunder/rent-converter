@@ -94,7 +94,7 @@ export default function RentAdvanceOrAfter() {
         }}
         sections={[
           {
-            title: "Rent in advance",
+            title: "How this page works",
             body: "Paying in advance means you pay before or at the start of the period you are about to occupy. This is common for monthly rent, weekly rent, and 4-week rent cycles.",
           },
           {

@@ -944,8 +944,8 @@ export default function RentDueDateCalculator() {
 
           <p className="hidden md:flex w-full py-2 text-base text-slate-700">
             Calculate upcoming rent due dates for monthly, weekly, biweekly, or
-            28-day rent. See the next payment date, schedule totals, and monthly
-            rollups.
+            28-day rent. See the next payment date, monthly rollups, and yearly
+            counts while keeping lease terms and grace periods separate.
           </p>
 
           <div className="grid gap-x-5 gap-y-3 md:grid-cols-12">

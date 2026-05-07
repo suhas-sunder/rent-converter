@@ -372,16 +372,16 @@ const commonWeeklyAmounts = [150, 160, 170, 180, 200, 220, 230, 250, 300, 320, 3
 function conversionConfig(input: Omit<ConversionPageConfig, "faq" | "examples" | "sections"> & Partial<Pick<ConversionPageConfig, "faq" | "examples" | "sections">>): ConversionPageConfig {
   return {
     faq: input.faq ?? [
-      { q: "Why not multiply weekly rent by 4?", a: "Weekly x 4 covers 28 days. A calendar month averages about 30.42 days, so the annualized monthly amount is higher." },
-      { q: "Does this include bills?", a: "No. The calculator converts the rent amount only. Add utilities, parking, internet, and fees separately." },
+      { q: "What assumption does this calculator use?", a: "It uses a 365-day year, 7-day weeks, 14-day biweekly or fortnightly periods, 28-day four-week periods, and 12 calendar months." },
+      { q: "Does this include bills or move-in costs?", a: "No. The calculator converts the rent amount only. Add utilities, parking, internet, deposits, service charges, or other fees separately." },
     ],
     examples: input.examples ?? [
-      { title: "A weekly listing beside a monthly cap", body: "A weekly listing can look under budget until it is annualized. Use the calendar-month result when your salary, bills, or rent cap is planned monthly." },
-      { title: "Two listings with different rent periods", body: "A weekly, biweekly, 4-week, or monthly price should be put on the same time basis before deciding which place is actually cheaper." },
+      { title: "Listing comparison", body: "Put a weekly, biweekly, 4-week, or monthly listing on the same time basis before deciding which place is actually cheaper." },
+      { title: "Monthly budget check", body: "Use the calendar-month result when salary, bills, savings, and rent caps are planned monthly." },
     ],
     sections: input.sections ?? [
-      { title: "What the conversion is really comparing", body: "The calculator turns the rent you enter into a 365-day daily-rate equivalent, then expresses that amount in the target period. This keeps weekly, 14-day, 28-day, monthly, and annual rent on the same footing." },
-      { title: "Costs that can change the decision", body: "The result is rent only. If two listings are close, utilities, deposits, parking, pet rent, service charges, internet, and move-in costs can matter more than the converted rent difference." },
+      { title: "Calendar month vs payment cycle", body: "A calendar month is not always the same as a repeated payment cycle. Weekly, fortnightly, biweekly, and 4-week rent should be annualized before comparing with monthly rent." },
+      { title: "Costs that can change the decision", body: "If two listings are close, utilities, deposits, parking, pet rent, service charges, internet, and move-in costs can matter more than the converted rent difference." },
     ],
     ...input,
   };
@@ -774,13 +774,14 @@ export const incomeToolConfigs: Record<string, IncomeToolConfig> = {
 
 function salaryAnswer(salary: number): SalaryAnswerConfig {
   const suffix = salary >= 100000 ? "100k" : `${salary / 1000}k`;
+  const salaryLabel = `$${salary.toLocaleString()}`;
   return {
     path: `/how-much-rent-can-i-afford-on-${suffix}`,
     salary,
-    title: `How Much Rent Can I Afford on $${salary / 1000}k?`,
-    description: `Estimate rent on a $${salary.toLocaleString()} salary with 30%, 40%, and 3x rent rules.`,
+    title: `How much rent can I afford on ${salaryLabel}?`,
+    description: `See rent targets for a ${salaryLabel} income using 30%, 40%, and 3x rules. Compare gross monthly income, weekly equivalent, and annual rent impact.`,
     eyebrow: "Salary answer",
-    h1: `How Much Rent Can I Afford on $${salary / 1000}k?`,
+    h1: `How much rent can I afford on ${salaryLabel}?`,
     relatedLinks: [link("/salary-to-rent-calculator", "Salary to rent calculator"), link("/rent-budget-calculator", "Rent budget calculator"), link("/rent-to-income-ratio-calculator", "Rent-to-income ratio")],
   };
 }
@@ -1113,3 +1114,20 @@ export const weeklyAnswerPageConfigs: Record<string, WeeklyAnswerPageConfig> = {
     true,
   ),
 };
+
+function answerAmountLabel(config: WeeklyAnswerPageConfig) {
+  return config.currency === "USD" ? `$${config.amount}` : `${config.currency} ${config.amount}`;
+}
+
+for (const config of Object.values(weeklyAnswerPageConfigs)) {
+  const amountLabel = answerAmountLabel(config);
+  if (config.daily) {
+    config.title = `${amountLabel} per night to monthly rent`;
+    config.h1 = `${amountLabel} per night to monthly rent`;
+    config.description = `Convert ${amountLabel} per night into average monthly rent. See daily, weekly, monthly, and annual equivalents with clear assumptions.`;
+  } else {
+    config.title = `${amountLabel} per week to monthly rent`;
+    config.h1 = `${amountLabel} per week to monthly rent`;
+    config.description = `Convert ${amountLabel} per week into average monthly rent, 4-week rent, and annual rent. See why weekly rent times 4 is not the same as calendar-month rent.`;
+  }
+}

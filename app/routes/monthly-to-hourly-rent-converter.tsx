@@ -620,9 +620,9 @@ export default function MonthlyToHourlyRent() {
                 </h1>
 
                 <p className="mt-2 max-w-6xl text-base leading-relaxed text-slate-700">
-                  Convert monthly rent into an hourly amount. The calculator also
-                  shows daily, weekly, 4-week, and annual breakdowns for
-                  comparison.
+                  Convert monthly rent into an hourly-equivalent housing cost.
+                  Use it to understand how a monthly lease spreads across time,
+                  not as a claim that rent is actually billed by the hour.
                 </p>
               </div>
 

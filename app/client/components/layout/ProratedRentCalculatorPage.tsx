@@ -256,23 +256,32 @@ export default function ProratedRentCalculatorPage({
         <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(280px,0.82fr)]">
           <div>
             <h2 className="text-3xl font-bold tracking-tight text-sky-900">
-              When prorated rent comes up
+              How this calculator works
             </h2>
             <p className="mt-3 leading-8 text-slate-700">
-              Proration usually appears when a rental period is split. That can
-              happen at move-in, move-out, lease changes, roommate changes, or
-              when a landlord charges for a partial first month.
+              Proration splits the full rent across the days in the rental
+              period, then charges only the days owed. That can happen at
+              move-in, move-out, lease changes, roommate changes, or when a
+              landlord charges for a partial first month.
             </p>
             <p className="mt-4 leading-8 text-slate-700">
               The safest approach is to match the lease or invoice. Some leases
               use the exact number of days in the month. Others use a fixed
               30-day period. This calculator lets you enter either method.
             </p>
+            <h3 className="mt-8 text-xl font-bold tracking-tight text-sky-900">
+              What this result does not include
+            </h3>
+            <p className="mt-3 leading-8 text-slate-700">
+              The result covers base rent only. Utilities, deposits, parking,
+              late fees, local rules, and lease-specific rounding may need to be
+              handled separately.
+            </p>
           </div>
 
           <div>
             <h2 className="text-2xl font-bold tracking-tight text-sky-900">
-              Real situations
+              Worked examples
             </h2>
             <div className="mt-4 space-y-4">
               <div className="relative pl-5">

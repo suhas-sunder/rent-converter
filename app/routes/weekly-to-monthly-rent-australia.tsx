@@ -616,8 +616,9 @@ export default function WeeklyToMonthlyRentAustralia() {
                 </h1>
 
                 <p className="mt-2 text-base text-slate-700">
-                  Convert weekly rent into a monthly amount in Australia. The
-                  calculator also shows the 4-week comparison.
+                  Convert Australian weekly rent into a calendar-month amount.
+                  The result helps compare weekly listings, fortnightly budgets,
+                  bond planning, and the 4-week shortcut.
                 </p>
               </div>
 

@@ -182,6 +182,11 @@ async function auditPage(path, sitemapSet) {
     fail.push(`${path}: visible breadcrumb appears before the H1`);
   }
 
+  const fullDirectoryCount = (html.match(/id=["']all-tools["']/gi) ?? []).length;
+  if (path !== "/" && fullDirectoryCount > 0) {
+    fail.push(`${path}: full all-tools directory should not render outside the home page`);
+  }
+
   for (const schema of schemas.filter((item) => item?.["@type"] === "BreadcrumbList")) {
     for (const item of schema.itemListElement ?? []) {
       if (item.item && !String(item.item).startsWith(SITE_ORIGIN)) {

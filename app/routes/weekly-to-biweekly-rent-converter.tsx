@@ -766,8 +766,9 @@ export default function WeeklyToBiweeklyRent() {
                 </h1>
 
                 <p className="mt-2 text-base text-slate-700">
-                  Convert weekly rent into a biweekly amount. The calculator
-                  also shows monthly, 4-week, daily, and annual rent breakdowns.
+                  Convert weekly rent into a two-week rent amount. This is most
+                  useful when rent is quoted weekly but your paycheck, savings,
+                  or roommate plan is built around a 14-day cycle.
                 </p>
               </div>
 

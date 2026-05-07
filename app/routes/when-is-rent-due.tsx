@@ -94,7 +94,7 @@ export default function WhenIsRentDue() {
         }}
         sections={[
           {
-            title: "Lease date comes first",
+            title: "How this page works",
             body: "The lease usually sets the due date, such as the 1st of each month or every Friday. If the lease names a date, use that date before relying on a general rule.",
           },
           {

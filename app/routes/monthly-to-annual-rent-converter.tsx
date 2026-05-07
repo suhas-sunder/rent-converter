@@ -712,8 +712,9 @@ export default function MonthlyToAnnualRent() {
                 </h1>
 
                 <p className="mt-2 text-base text-slate-700">
-                  Convert monthly rent into an annual amount. The calculator
-                  also shows related rent breakdowns for comparison.
+                  Convert monthly rent into the 12-payment yearly total. Use it
+                  to see the annual housing cost behind a monthly lease, rent
+                  cap, or salary-based affordability check.
                 </p>
               </div>
 

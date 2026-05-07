@@ -679,8 +679,9 @@ export default function DailyToMonthlyRent() {
                 </h1>
 
           <p className="mt-2 text-base text-slate-700">
-                  Convert daily rent into a monthly amount. The calculator also
-                  shows related rent breakdowns for comparison.
+                  Convert a daily rent amount into an average calendar-month
+                  cost. Use it when a short-stay, temporary housing, or
+                  prorated daily price needs a monthly comparison.
                 </p>
               </div>
 

@@ -620,9 +620,9 @@ export default function MonthlyToWeeklyRent() {
                 </h1>
 
                 <p className="mt-2 max-w-6xl text-base leading-relaxed text-slate-700">
-                  Convert monthly rent into a weekly amount. The calculator also
-                  shows hourly, daily, 4-week, and annual breakdowns for
-                  comparison.
+                  Convert monthly rent into a true weekly equivalent. Use this
+                  when a monthly lease needs to be compared with weekly income,
+                  shared-room listings, or PW-style rent quotes.
                 </p>
               </div>
 

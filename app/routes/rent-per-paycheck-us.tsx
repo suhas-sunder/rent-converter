@@ -573,7 +573,8 @@ export default function RentPerPaycheckUS() {
 
                 <p className="mt-2 text-base text-slate-700">
                   Convert monthly rent into a per-paycheck amount for common US
-                  pay schedules.
+                  pay schedules, including weekly, biweekly, semi-monthly, and
+                  monthly paychecks.
                 </p>
               </div>
 

@@ -10,6 +10,8 @@ export default function AllRentalToolsLinks() {
   const { pathname } = useLocation();
   const currentPath = normalizePath(pathname);
 
+  if (currentPath !== "/") return null;
+
   return (
     <section
       id="all-tools"

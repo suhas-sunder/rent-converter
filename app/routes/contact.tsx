@@ -81,9 +81,9 @@ export default function Contact() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-slate-50 text-slate-700 antialiased">
-      <section className="mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-14">
-        <div className="rounded-2xl border border-slate-200 bg-white/95 px-4 py-6 shadow-sm sm:px-8 sm:py-8">
+    <main className="min-h-screen bg-sky-50 text-slate-700 antialiased">
+      <section className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-10">
+        <div className="rounded-[1.75rem] bg-white px-5 py-7 sm:px-8 sm:py-8">
           <div className="mx-auto text-center">
             <div className="mx-auto mb-3 rc-page-eyebrow">
               Contact RentConverter.com
@@ -99,7 +99,7 @@ export default function Contact() {
             </p>
           </div>
 
-          <div className="mx-auto mt-6 max-w-2xl rounded-2xl bg-white p-5 sm:p-6">
+          <div className="mx-auto mt-7 max-w-2xl rounded-[1.5rem] bg-sky-50 p-5 sm:p-6">
             <h2 className="text-lg font-semibold text-sky-800">Email</h2>
 
             <p className="mt-2 text-sm leading-relaxed text-slate-700">
@@ -115,7 +115,7 @@ export default function Contact() {
               </a>
             </p>
 
-            <div className="mt-6 rounded-xl border border-slate-200 bg-sky-50/60 px-4 py-4">
+            <div className="mt-6 rounded-xl bg-white px-4 py-4">
               <h3 className="text-sm font-semibold text-slate-950">
                 What to include
               </h3>
@@ -129,7 +129,7 @@ export default function Contact() {
               </ul>
             </div>
 
-            <div className="mt-6 rounded-xl border border-slate-200 bg-white px-4 py-4 shadow-sm">
+            <div className="mt-6 rounded-xl bg-white px-4 py-4">
               <h3 className="text-sm font-semibold text-slate-950">Note</h3>
 
               <p className="mt-2 text-sm leading-relaxed text-slate-700">

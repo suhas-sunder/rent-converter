@@ -664,8 +664,9 @@ export default function BiweeklyToAnnualRent() {
                 </h1>
 
                 <p className="mt-2 text-base text-slate-700">
-                  Convert biweekly rent into an annual amount. The calculator
-                  also shows related rent breakdowns for comparison.
+                  Convert a 14-day rent payment into a yearly total. This helps
+                  you see the full 26-payment impact before comparing leases,
+                  salary targets, or yearly housing costs.
                 </p>
               </div>
 

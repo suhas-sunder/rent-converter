@@ -640,8 +640,9 @@ export default function WeeklyToMonthlyRentUK() {
                 </h1>
 
                 <p className="mt-2 text-base text-slate-700">
-                  Convert weekly rent into a monthly amount in the UK. The
-                  calculator also shows the 4-week comparison.
+                  Convert UK weekly rent into a PCM-style monthly equivalent.
+                  Use it when a PW listing needs to be compared with monthly
+                  rent, bills, council tax, or a salary budget.
                 </p>
               </div>
 

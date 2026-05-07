@@ -211,7 +211,7 @@ export default function IntentLandingPage({
               {visibleExamples.length ? (
                 <section>
                   <h2 className="text-2xl font-bold tracking-tight text-sky-900">
-                    Real situations
+                    Worked examples
                   </h2>
                   <div className="mt-4 space-y-4">
                     {visibleExamples.map((example) => (

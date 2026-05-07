@@ -71,6 +71,9 @@ export function SeoHowItWorks({
       <div className="mx-auto max-w-6xl">
           <div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-sky-900 tracking-tight leading-tight">
+            <span className="block text-sm font-semibold uppercase text-slate-700">
+              How this calculator works
+            </span>
             {title}
           </h2>
           <p className="mt-3 max-w-none text-lg leading-8 text-slate-700">{intro}</p>
@@ -110,7 +113,7 @@ export function SeoHowItWorks({
               {visibleExamples.length ? (
                 <div>
                   <h3 className="text-xl font-bold text-sky-900 tracking-tight">
-                    Real situations
+                    Worked examples
                   </h3>
                   <div className="mt-4 space-y-4">
                     {visibleExamples.map((example) => (

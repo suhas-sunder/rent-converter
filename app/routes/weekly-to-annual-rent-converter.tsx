@@ -710,8 +710,9 @@ export default function WeeklyToAnnualRent() {
                 </h1>
 
                 <p className="mt-2 text-base text-slate-700">
-                  Convert weekly rent into an annual amount. The calculator also
-                  shows monthly, 4-week, daily, and hourly rent breakdowns.
+                  Convert weekly rent into a 365-day yearly total. Use the
+                  annual number to compare listings with salary, savings goals,
+                  or lease costs instead of relying on weekly rent alone.
                 </p>
               </div>
 

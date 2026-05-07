@@ -982,8 +982,9 @@ export default function RentIncreaseCalculator() {
                 </h1>
 
                 <p className="mt-2 text-base text-slate-700">
-                  Calculate your new rent after a percentage or fixed increase.
-                  The calculator also shows the annual and per-period impact.
+                  Calculate the new rent after a percentage or fixed increase.
+                  The result shows monthly change, yearly impact, and per-period
+                  equivalents so the increase is visible beyond one payment.
                 </p>
               </div>
 

@@ -46,7 +46,7 @@ export default function TermsOfService() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.rentconverter.com/",
+        item: "https://www.rentconverter.com",
       },
       {
         "@type": "ListItem",
@@ -61,7 +61,7 @@ export default function TermsOfService() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "RentConverter.com",
-    url: "https://www.rentconverter.com/",
+    url: "https://www.rentconverter.com",
   };
 
   const webPageSchema = {
