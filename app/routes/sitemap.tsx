@@ -4,6 +4,7 @@ import {
   canonicalRouteEntries,
   sitemapSections,
 } from "~/client/data/routeRegistry";
+import { makeBreadcrumbSchema } from "~/client/utils/seo";
 
 const SITE_URL = "https://www.rentconverter.com";
 const SITEMAP_URL = `${SITE_URL}/sitemap`;
@@ -37,6 +38,11 @@ export function loader({ context }: Route.LoaderArgs) {
 }
 
 export default function SitemapPage() {
+  const breadcrumbSchema = makeBreadcrumbSchema({
+    name: "HTML Sitemap",
+    url: SITEMAP_URL,
+  });
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
@@ -60,6 +66,10 @@ export default function SitemapPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
       <section className="mx-auto max-w-6xl px-4 py-8 sm:px-6">

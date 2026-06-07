@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import type { Route } from "./+types/about";
+import { makeBreadcrumbSchema } from "~/client/utils/seo";
 
 const SITE_URL = "https://www.rentconverter.com";
 const PAGE_PATH = "/about";
@@ -134,6 +135,15 @@ export default function About() {
         url: SITE_URL,
       },
     }),
+    [],
+  );
+
+  const breadcrumbSchema = useMemo(
+    () =>
+      makeBreadcrumbSchema({
+        name: "About RentConverter.com",
+        url: PAGE_URL,
+      }),
     [],
   );
 
@@ -557,6 +567,10 @@ export default function About() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
       <script
         type="application/ld+json"

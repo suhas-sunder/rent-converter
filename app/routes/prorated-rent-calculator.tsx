@@ -1,6 +1,7 @@
 import type { Route } from "./+types/prorated-rent-calculator";
 import ProratedRentCalculatorPage from "~/client/components/layout/ProratedRentCalculatorPage";
 import type { IntentFaq } from "~/client/components/layout/IntentLandingPage";
+import { makeBreadcrumbSchema } from "~/client/utils/seo";
 
 const SITE_URL = "https://www.rentconverter.com";
 const PAGE_PATH = "/prorated-rent-calculator";
@@ -75,6 +76,11 @@ const webPageSchema = {
   isPartOf: { "@type": "WebSite", name: "RentConverter.com", url: SITE_URL },
 };
 
+const breadcrumbSchema = makeBreadcrumbSchema({
+  name: "Prorated Rent Calculator",
+  url: PAGE_URL,
+});
+
 export default function ProratedRentCalculator() {
   return (
     <>
@@ -105,6 +111,10 @@ export default function ProratedRentCalculator() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
     </>
   );

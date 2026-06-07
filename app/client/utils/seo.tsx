@@ -1,17 +1,65 @@
-const SITE_URL = "https://www.rentconverter.com";
+export const SITE_URL = "https://www.rentconverter.com";
 const OG_IMAGE = "https://www.rentconverter.com/og-image.jpg";
 
 export type SeoConfig = {
   title: string;
   description: string;
   path: string;
+  breadcrumbName?: string;
+  includeBreadcrumb?: boolean;
   pageType?: string;
   calculator?: boolean;
   faq?: Array<{ q: string; a: string }>;
 };
 
+export type BreadcrumbListSchema = {
+  "@context": "https://schema.org";
+  "@type": "BreadcrumbList";
+  "@id"?: string;
+  itemListElement: Array<{
+    "@type": "ListItem";
+    position: number;
+    name: string;
+    item: string;
+  }>;
+};
+
 export function absoluteUrl(path: string): string {
   return `${SITE_URL}${path === "/" ? "" : path}`;
+}
+
+function cleanBreadcrumbName(name: string): string {
+  return name.split("|")[0]?.trim() || name.trim();
+}
+
+export function makeBreadcrumbSchema({
+  name,
+  url,
+  id,
+}: {
+  name: string;
+  url: string;
+  id?: string;
+}): BreadcrumbListSchema {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    ...(id ? { "@id": id } : {}),
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: SITE_URL,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: cleanBreadcrumbName(name),
+        item: url,
+      },
+    ],
+  };
 }
 
 export function buildMeta(config: SeoConfig) {
@@ -51,25 +99,14 @@ export function makePageSchemas(config: SeoConfig) {
         url: SITE_URL,
       },
     },
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Home",
-          item: SITE_URL,
-        },
-        {
-          "@type": "ListItem",
-          position: 2,
-          name: config.title,
-          item: url,
-        },
-      ],
-    },
   ];
+
+  if (config.includeBreadcrumb !== false && config.path !== "/") {
+    schemas.push(makeBreadcrumbSchema({
+      name: config.breadcrumbName ?? config.title,
+      url,
+    }));
+  }
 
   if (config.calculator) {
     schemas.push({

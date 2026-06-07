@@ -2,6 +2,7 @@ import type { Route } from "./+types/when-is-rent-due";
 import IntentLandingPage, {
   type IntentFaq,
 } from "~/client/components/layout/IntentLandingPage";
+import { makeBreadcrumbSchema } from "~/client/utils/seo";
 
 const SITE_URL = "https://www.rentconverter.com";
 const PAGE_PATH = "/when-is-rent-due";
@@ -74,6 +75,11 @@ const webPageSchema = {
   isPartOf: { "@type": "WebSite", name: "RentConverter.com", url: SITE_URL },
 };
 
+const breadcrumbSchema = makeBreadcrumbSchema({
+  name: "When Is Rent Due?",
+  url: PAGE_URL,
+});
+
 export default function WhenIsRentDue() {
   return (
     <>
@@ -142,6 +148,10 @@ export default function WhenIsRentDue() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
     </>
   );

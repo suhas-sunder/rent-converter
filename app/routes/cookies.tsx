@@ -68,7 +68,7 @@ export default function CookiesPolicy() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.rentconverter.com/",
+        item: "https://www.rentconverter.com",
       },
       {
         "@type": "ListItem",
