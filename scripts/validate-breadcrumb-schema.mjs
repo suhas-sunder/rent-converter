@@ -149,6 +149,34 @@ function collectBreadcrumbLists(value, location = "direct") {
   return found;
 }
 
+function collectWebPageBreadcrumbRefs(value, location = "direct") {
+  const found = [];
+
+  if (Array.isArray(value)) {
+    value.forEach((item, index) => {
+      found.push(...collectWebPageBreadcrumbRefs(item, `array item ${index}`));
+    });
+    return found;
+  }
+
+  if (!value || typeof value !== "object") return found;
+
+  if (typeIncludes(value, "WebPage")) {
+    const breadcrumbId = value.breadcrumb?.["@id"];
+    if (typeof breadcrumbId === "string" && breadcrumbId.trim() !== "") {
+      found.push({ id: breadcrumbId, location });
+    }
+  }
+
+  if (Array.isArray(value["@graph"])) {
+    value["@graph"].forEach((item, index) => {
+      found.push(...collectWebPageBreadcrumbRefs(item, `@graph item ${index}`));
+    });
+  }
+
+  return found;
+}
+
 function isAbsoluteUrl(value) {
   try {
     const url = new URL(value);
@@ -248,6 +276,8 @@ async function validateRoute(baseUrl, path) {
   const failures = [];
   let breadcrumbsFound = 0;
   let invalidBreadcrumbsFound = 0;
+  const breadcrumbIds = new Set();
+  const breadcrumbRefs = [];
 
   scripts.forEach((scriptText, scriptIndex) => {
     let parsed;
@@ -266,6 +296,14 @@ async function validateRoute(baseUrl, path) {
 
     const breadcrumbs = collectBreadcrumbLists(parsed);
     breadcrumbsFound += breadcrumbs.length;
+    breadcrumbs.forEach(({ schema }) => {
+      if (typeof schema["@id"] === "string" && schema["@id"].trim() !== "") {
+        breadcrumbIds.add(schema["@id"]);
+      }
+    });
+    collectWebPageBreadcrumbRefs(parsed).forEach((ref) => {
+      breadcrumbRefs.push({ ...ref, scriptIndex });
+    });
 
     breadcrumbs.forEach(({ schema, location }) => {
       const schemaFailures = validateBreadcrumbList(schema, canonicalUrl);
@@ -280,6 +318,18 @@ async function validateRoute(baseUrl, path) {
         });
       });
     });
+  });
+
+  breadcrumbRefs.forEach(({ id, scriptIndex, location }) => {
+    if (!breadcrumbIds.has(id)) {
+      failures.push({
+        path,
+        scriptIndex,
+        location,
+        reason: `WebPage breadcrumb reference ${id} does not match a BreadcrumbList "@id"`,
+        excerpt: "",
+      });
+    }
   });
 
   if (path === "/" && breadcrumbsFound > 0) {
