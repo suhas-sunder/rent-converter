@@ -1,4 +1,5 @@
 import { useMemo, useEffect, useState } from "react";
+import { useHydrationSafeSavedState, validSavedCurrency, validSavedEnum, validSavedMoney } from "~/client/utils/savedState.js";
 import type { Route } from "./+types/home";
 import Assumptions from "~/client/components/layout/Assumptions";
 import HowItWorks from "~/client/components/home/HowItWorks";
@@ -150,7 +151,6 @@ const ROUTE_WHITELIST = new Set<string>([
   // Rent increases
   "/rent-increase-calculator",
   "/rent-increase-percentage-calculator",
-  "/rent-after-increase-calculator",
 
   // Rent vs buy
   "/rent-vs-buy-calculator",
@@ -495,35 +495,40 @@ function safeEnvIsDev(): boolean {
 }
 
 export default function Home() {
-  const [amount, setAmount] = useState<string>(() => {
-    if (typeof window === "undefined") return "500";
-    return localStorage.getItem("rc_amount") ?? "500";
-  });
+  const [amount, setAmount] = useState<string>("500");
 
   const [amountFocused, setAmountFocused] = useState<boolean>(false);
 
-  const [from, setFrom] = useState<Period>(() => {
-    if (typeof window === "undefined") return "weekly";
-    return safePeriod(localStorage.getItem("rc_from"), "weekly");
-  });
+  const [from, setFrom] = useState<Period>("weekly");
 
-  const [to, setTo] = useState<Period>(() => {
-    if (typeof window === "undefined") return "monthly";
-    return safePeriod(localStorage.getItem("rc_to"), "monthly");
-  });
+  const [to, setTo] = useState<Period>("monthly");
 
-  const [currency, setCurrency] = useState<string>(() => {
-    if (typeof window === "undefined") return "USD";
-    return safeCurrency(localStorage.getItem("rc_currency"), "USD");
-  });
+  const [currency, setCurrency] = useState<string>("USD");
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    localStorage.setItem("rc_amount", amount);
-    localStorage.setItem("rc_from", from);
-    localStorage.setItem("rc_to", to);
-    localStorage.setItem("rc_currency", currency);
-  }, [amount, from, to, currency]);
+  useHydrationSafeSavedState({
+    restore(storage) {
+      let applied = false;
+      const savedAmount = validSavedMoney(storage.getItem("rc_amount"), "Rent amount", { allowZero: true });
+      if (savedAmount !== undefined) { setAmount(savedAmount); applied = true; }
+      const savedFrom = validSavedEnum(storage.getItem("rc_from"), PERIOD_ORDER);
+      const savedTo = validSavedEnum(storage.getItem("rc_to"), PERIOD_ORDER);
+      if (savedFrom !== undefined && savedTo !== undefined) {
+        setFrom(savedFrom);
+        setTo(savedTo);
+        applied = true;
+      }
+      const savedCurrency = validSavedCurrency(storage.getItem("rc_currency"));
+      if (savedCurrency !== undefined) { setCurrency(savedCurrency); applied = true; }
+      return applied;
+    },
+    persist(storage) {
+      storage.setItem("rc_amount", amount);
+      storage.setItem("rc_from", from);
+      storage.setItem("rc_to", to);
+      storage.setItem("rc_currency", currency);
+    },
+    dependencies: [amount, from, to, currency],
+  });
 
   const hasInput = useMemo(() => amount.trim().length > 0, [amount]);
 

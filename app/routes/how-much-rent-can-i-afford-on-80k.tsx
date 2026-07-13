@@ -1,11 +1,9 @@
-﻿import { SalaryAnswerPage } from "~/client/components/generated/GeneratedPages";
-import { salaryAnswerConfigs } from "~/client/data/generatedRouteConfigs";
-import { buildMeta } from "~/client/utils/seo";
+import { permanentRedirectPreservingQuery } from "~/utils/redirects";
 
-const config = salaryAnswerConfigs["/how-much-rent-can-i-afford-on-80k"];
+export function loader({ request }: { request: Request }) {
+  return permanentRedirectPreservingQuery(request, "/salary-to-rent-calculator");
+}
 
-export const meta = () => buildMeta(config);
-
-export default function HowMuchRentCanIAffordOn80kPage() {
-  return <SalaryAnswerPage config={config} />;
+export default function HowMuchRentCanIAffordOn80kRedirect() {
+  return null;
 }

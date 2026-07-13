@@ -1,104 +1,9 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router";
 import type { IntentFaq, IntentLink } from "./IntentLandingPage";
-
-const CURRENCY_OPTIONS = [
-  "USD",
-  "CAD",
-  "EUR",
-  "GBP",
-  "AUD",
-  "NZD",
-  "JPY",
-  "CNY",
-  "HKD",
-  "SGD",
-  "INR",
-  "KRW",
-  "CHF",
-  "SEK",
-  "NOK",
-  "DKK",
-  "MXN",
-  "BRL",
-] as const;
-
-type Currency = (typeof CURRENCY_OPTIONS)[number];
-
-function isCurrency(value: string): value is Currency {
-  return (CURRENCY_OPTIONS as readonly string[]).includes(value);
-}
-
-function parseMoneyToCents(raw: string): {
-  ok: boolean;
-  cents?: bigint;
-  error?: string;
-} {
-  const clean = raw.trim().replace(/[^\d.,-]/g, "");
-  if (!clean) return { ok: false, error: "Enter monthly rent." };
-  if (clean.includes("-")) {
-    return { ok: false, error: "Rent cannot be negative." };
-  }
-
-  let value = clean;
-  const lastDot = value.lastIndexOf(".");
-  const lastComma = value.lastIndexOf(",");
-
-  if (lastDot >= 0 && lastComma >= 0) {
-    const decimal = lastDot > lastComma ? "." : ",";
-    const thousands = decimal === "." ? "," : ".";
-    value = value.split(thousands).join("");
-    if (decimal === ",") value = value.replace(",", ".");
-  } else if (lastComma >= 0 && lastDot < 0) {
-    const parts = value.split(",");
-    if (parts.length === 2 && (parts[1] ?? "").length === 2) {
-      value = `${parts[0]}.${parts[1]}`;
-    } else {
-      value = value.replace(/,/g, "");
-    }
-  } else {
-    value = value.replace(/,/g, "");
-  }
-
-  if (value.startsWith(".")) value = `0${value}`;
-  if (value.endsWith(".")) value = `${value}0`;
-
-  if (!/^\d+(\.\d+)?$/.test(value)) {
-    return { ok: false, error: "Use a number like 1800 or 1,800.50." };
-  }
-
-  const [wholeRaw, fracRaw = ""] = value.split(".");
-  const whole = BigInt(wholeRaw || "0");
-  const frac3 = fracRaw.padEnd(3, "0").slice(0, 3);
-  const centsBase = BigInt(frac3.slice(0, 2) || "0");
-  const thirdDigit = Number(frac3[2] ?? "0");
-  const cents = whole * 100n + centsBase + (thirdDigit >= 5 ? 1n : 0n);
-
-  return { ok: true, cents };
-}
-
-function parsePositiveInt(raw: string, fallback: number): number {
-  const value = Number.parseInt(raw, 10);
-  if (!Number.isFinite(value)) return fallback;
-  return Math.min(366, Math.max(1, value));
-}
-
-function divRound(numerator: bigint, denominator: bigint): bigint {
-  if (denominator === 0n) return 0n;
-  return (numerator + denominator / 2n) / denominator;
-}
-
-function formatMoney(cents: bigint | undefined, currency: Currency): string {
-  if (cents === undefined) return "-";
-  const value = Number(cents) / 100;
-  if (!Number.isFinite(value)) return "-";
-  return new Intl.NumberFormat(undefined, {
-    style: "currency",
-    currency,
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(value);
-}
+import { formatMoney, isCurrency, SUPPORTED_CURRENCIES, type Currency } from "~/client/utils/rentMath";
+import { parseIncomeMoney } from "~/client/utils/generatedIncome.js";
+import { calculateProration, parseWholeNumberInRange } from "~/client/utils/generatedTools.js";
 
 type ProratedRentCalculatorPageProps = {
   faq: IntentFaq[];
@@ -114,35 +19,27 @@ export default function ProratedRentCalculatorPage({
   const [daysInPeriod, setDaysInPeriod] = useState("30");
   const [currency, setCurrency] = useState<Currency>("USD");
 
-  const rentParsed = useMemo(
-    () => parseMoneyToCents(monthlyRent),
-    [monthlyRent],
-  );
-
-  const owedDays = useMemo(() => parsePositiveInt(daysOwed, 10), [daysOwed]);
-  const periodDays = useMemo(
-    () => parsePositiveInt(daysInPeriod, 30),
-    [daysInPeriod],
-  );
-
-  const proratedRent = useMemo(() => {
-    if (!rentParsed.ok || rentParsed.cents === undefined) return undefined;
-    return divRound(rentParsed.cents * BigInt(owedDays), BigInt(periodDays));
-  }, [owedDays, periodDays, rentParsed]);
-
-  const dailyRate = useMemo(() => {
-    if (!rentParsed.ok || rentParsed.cents === undefined) return undefined;
-    return divRound(rentParsed.cents, BigInt(periodDays));
-  }, [periodDays, rentParsed]);
+  const rentParsed = parseIncomeMoney(monthlyRent, "Rent amount");
+  const periodParsed = parseWholeNumberInRange(daysInPeriod, "Days in rent period", 1, 366);
+  const owedParsed = parseWholeNumberInRange(daysOwed, "Charged days", 0, 366);
+  const owedRelationError = owedParsed.ok && periodParsed.ok && owedParsed.value > periodParsed.value
+    ? "Charged days cannot exceed days in the rent period."
+    : undefined;
+  const result = rentParsed.ok && periodParsed.ok && owedParsed.ok && !owedRelationError
+    ? calculateProration(rentParsed.cents, owedParsed.value, periodParsed.value)
+    : undefined;
 
   return (
     <main className="min-h-screen bg-sky-50 text-slate-700 scroll-smooth antialiased">
       <section className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
         <div className="overflow-hidden rounded-[1.75rem] bg-white px-5 py-7 sm:px-8 sm:py-8">
-          <p className="rc-page-eyebrow">Prorated rent calculator</p>
-          <h1 className="mt-3 text-2xl font-bold tracking-tight text-sky-900 sm:text-3xl">
-            Prorated Rent Calculator
-          </h1>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <p className="rc-page-eyebrow">Prorated rent calculator</p>
+              <h1 className="mt-3 text-2xl font-bold tracking-tight text-sky-900 sm:text-3xl">Prorated Rent Calculator</h1>
+            </div>
+            <button type="button" onClick={() => window.print()} data-nosnippet className="rc-print-button rc-no-print cursor-pointer">Print / Save PDF</button>
+          </div>
           <p className="mt-3 text-base leading-relaxed text-slate-700">
             Calculate partial-month rent when someone moves in, moves out, or
             pays for only part of a rental period.
@@ -150,16 +47,16 @@ export default function ProratedRentCalculatorPage({
 
           <div className="mt-6 grid gap-4 lg:grid-cols-12">
             <div className="lg:col-span-5">
-              <label className="mb-2 block text-sm font-semibold text-slate-800">
-                Full monthly rent
-              </label>
+              <label htmlFor="proration-rent" className="mb-2 block text-sm font-semibold text-slate-800">Rent amount</label>
               <div className="flex gap-2">
                 <input
+                  id="proration-rent"
                   inputMode="decimal"
                   value={monthlyRent}
                   onChange={(event) => setMonthlyRent(event.target.value)}
-                  className="w-full cursor-pointer rounded-xl bg-slate-100 px-4 py-3 text-base text-slate-950 outline-none transition hover:bg-sky-50 focus:bg-white focus:ring-2 focus:ring-sky-200 focus-visible:ring-sky-400"
-                  aria-label="Full monthly rent"
+                  className={`w-full cursor-pointer rounded-xl px-4 py-3 text-base text-slate-950 outline-none transition hover:bg-sky-50 focus:bg-white focus:ring-2 focus-visible:ring-sky-400 ${rentParsed.ok ? "bg-slate-100 focus:ring-sky-200" : "bg-rose-50 ring-2 ring-rose-300 focus:ring-rose-400"}`}
+                  aria-invalid={!rentParsed.ok}
+                  aria-describedby={!rentParsed.ok ? "proration-rent-error" : undefined}
                 />
                 <select
                   value={currency}
@@ -170,7 +67,7 @@ export default function ProratedRentCalculatorPage({
                   className="cursor-pointer rounded-xl bg-slate-100 px-3 py-3 text-sm font-semibold text-slate-950 outline-none transition hover:bg-sky-50 focus:bg-white focus:ring-2 focus:ring-sky-200 focus-visible:ring-sky-400"
                   aria-label="Currency"
                 >
-                  {CURRENCY_OPTIONS.map((option) => (
+                  {SUPPORTED_CURRENCIES.map((option) => (
                     <option key={option} value={option}>
                       {option}
                     </option>
@@ -178,40 +75,47 @@ export default function ProratedRentCalculatorPage({
                 </select>
               </div>
               {!rentParsed.ok ? (
-                <p className="mt-2 text-sm font-medium text-rose-700">
+                <p id="proration-rent-error" role="alert" className="mt-2 text-sm font-medium text-rose-700">
                   {rentParsed.error}
                 </p>
               ) : null}
             </div>
 
             <div className="lg:col-span-3">
-              <label className="mb-2 block text-sm font-semibold text-slate-800">
-                Days owed
-              </label>
+              <label htmlFor="proration-charged-days" className="mb-2 block text-sm font-semibold text-slate-800">Charged days</label>
               <input
+                id="proration-charged-days"
                 inputMode="numeric"
                 value={daysOwed}
                 onChange={(event) => setDaysOwed(event.target.value)}
-                className="w-full cursor-pointer rounded-xl bg-slate-100 px-4 py-3 text-base text-slate-950 outline-none transition hover:bg-sky-50 focus:bg-white focus:ring-2 focus:ring-sky-200 focus-visible:ring-sky-400"
-                aria-label="Days owed"
+                className={`w-full cursor-pointer rounded-xl px-4 py-3 text-base text-slate-950 outline-none transition hover:bg-sky-50 focus:bg-white focus:ring-2 focus-visible:ring-sky-400 ${owedParsed.ok && !owedRelationError ? "bg-slate-100 focus:ring-sky-200" : "bg-rose-50 ring-2 ring-rose-300 focus:ring-rose-400"}`}
+                aria-invalid={!owedParsed.ok || Boolean(owedRelationError)}
+                aria-describedby={!owedParsed.ok || owedRelationError ? "proration-charged-days-error" : undefined}
               />
+              {!owedParsed.ok || owedRelationError ? <p id="proration-charged-days-error" role="alert" className="mt-2 text-sm font-medium text-rose-700">{!owedParsed.ok ? owedParsed.error : owedRelationError}</p> : null}
             </div>
 
             <div className="lg:col-span-4">
-              <label className="mb-2 block text-sm font-semibold text-slate-800">
-                Days in rent period
-              </label>
+              <label htmlFor="proration-period-days" className="mb-2 block text-sm font-semibold text-slate-800">Days in rent period</label>
               <input
+                id="proration-period-days"
                 inputMode="numeric"
                 value={daysInPeriod}
                 onChange={(event) => setDaysInPeriod(event.target.value)}
-                className="w-full cursor-pointer rounded-xl bg-slate-100 px-4 py-3 text-base text-slate-950 outline-none transition hover:bg-sky-50 focus:bg-white focus:ring-2 focus:ring-sky-200 focus-visible:ring-sky-400"
-                aria-label="Days in rent period"
+                className={`w-full cursor-pointer rounded-xl px-4 py-3 text-base text-slate-950 outline-none transition hover:bg-sky-50 focus:bg-white focus:ring-2 focus-visible:ring-sky-400 ${periodParsed.ok ? "bg-slate-100 focus:ring-sky-200" : "bg-rose-50 ring-2 ring-rose-300 focus:ring-rose-400"}`}
+                aria-invalid={!periodParsed.ok}
+                aria-describedby={!periodParsed.ok ? "proration-period-days-error" : "proration-period-days-help"}
               />
+              <p id="proration-period-days-help" className="mt-2 text-sm text-slate-600">Choose the day-count convention used by the lease or invoice.</p>
+              {!periodParsed.ok ? <p id="proration-period-days-error" role="alert" className="mt-2 text-sm font-medium text-rose-700">{periodParsed.error}</p> : null}
             </div>
           </div>
 
-          <div className="mt-6 overflow-hidden rounded-[1.5rem] bg-sky-50">
+          {!result ? (
+            <div className="mt-6 rounded-2xl bg-rose-50 px-5 py-4 text-rose-900" role="status" aria-live="polite">
+              <p className="font-semibold">Fix the highlighted fields to calculate prorated rent.</p>
+            </div>
+          ) : <div className="mt-6 overflow-hidden rounded-[1.5rem] bg-sky-50 rc-print-block">
             <div className="h-1 bg-gradient-to-r from-sky-500 to-emerald-400" />
             <div className="grid gap-3 p-5 sm:grid-cols-3 sm:p-6">
               <div className="rounded-2xl bg-white px-4 py-4 sm:col-span-2">
@@ -219,11 +123,11 @@ export default function ProratedRentCalculatorPage({
                   Prorated rent
                 </div>
                 <div className="mt-2 text-4xl font-extrabold text-emerald-700 sm:text-5xl">
-                  {formatMoney(proratedRent, currency)}
+                  {formatMoney(result.proratedRent, currency)}
                 </div>
                 <p className="mt-2 text-sm leading-6 text-slate-700">
-                  Based on {owedDays} day{owedDays === 1 ? "" : "s"} out of{" "}
-                  {periodDays} day{periodDays === 1 ? "" : "s"}.
+                  Based on {result.chargedDays} day{result.chargedDays === 1 ? "" : "s"} out of{" "}
+                  {result.periodDays} day{result.periodDays === 1 ? "" : "s"}.
                 </p>
               </div>
 
@@ -232,7 +136,7 @@ export default function ProratedRentCalculatorPage({
                   Daily rate
                 </div>
                 <div className="mt-2 text-2xl font-extrabold text-slate-950">
-                  {formatMoney(dailyRate, currency)}
+                  {formatMoney(result.dailyRate, currency)}
                 </div>
                 <p className="mt-2 text-sm leading-6 text-slate-700">
                   Full rent divided by days in the rent period.
@@ -244,11 +148,16 @@ export default function ProratedRentCalculatorPage({
                   Formula
                 </div>
                 <p className="mt-1 leading-7 text-slate-800">
-                  Prorated rent = monthly rent / days in period x days owed.
+                  Prorated rent = rent amount / days in period × charged days.
                 </p>
               </div>
+              <div className="grid gap-3 sm:col-span-3 sm:grid-cols-3">
+                <div className="rounded-2xl bg-white px-4 py-3"><span className="block text-xs text-slate-600">Entered rent</span><strong>{formatMoney(result.rent, currency)}</strong></div>
+                <div className="rounded-2xl bg-white px-4 py-3"><span className="block text-xs text-slate-600">Charged days</span><strong>{result.chargedDays}</strong></div>
+                <div className="rounded-2xl bg-white px-4 py-3"><span className="block text-xs text-slate-600">Days in period</span><strong>{result.periodDays}</strong></div>
+              </div>
             </div>
-          </div>
+          </div>}
         </div>
       </section>
 

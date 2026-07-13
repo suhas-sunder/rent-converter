@@ -4,43 +4,43 @@ type HowItWorksProps = Record<string, unknown>;
 
 const howItWorks = {
   title: "Rent increase percentage calculator",
-  intro: "Use before-and-after rent amounts to find the percentage increase. This is the cleanest way to check a notice when the landlord gives dollar amounts but not the percent.",
+  intro: "Enter the starting rent and new rent for the same payment period to find the arithmetic percentage change and the absolute difference.",
   steps: [
     {
-      title: "Percent and fixed increases behave differently",
-      body: "A percentage increase scales with the current rent. A fixed increase adds the same dollar amount. Over multiple years, percentage increases can compound."
+      title: "Start with old and new rent",
+      body: "The starting rent is the comparison base. The new rent is the amount after the change; both inputs must use the same payment period."
     },
     {
-      title: "Annual impact is often clearer than monthly change",
-      body: "A small monthly increase can become a larger yearly cost. Annual impact helps you compare renewing, moving, or negotiating."
+      title: "Reverse percentage formula",
+      body: "Percentage increase = (new rent − old rent) ÷ old rent × 100. The calculator also shows the absolute and annualized differences."
     },
     {
-      title: "Rules and caps are outside the math",
-      body: "Local rent rules, notice periods, CPI caps, lease terms, and exemptions can matter. The calculator gives the math, not legal permission."
+      title: "A zero starting rent has no meaningful percentage",
+      body: "When old rent is zero, it cannot be used as the divisor for a percentage comparison. The calculator reports the absolute change instead."
     }
   ],
   examples: [
     {
-      title: "$1,538 with a 7.5% increase",
-      body: "$1,538 increased by 7.5% becomes $1,653.35. The monthly change is $115.35, and the annualized change is $1,384.20."
+      title: "$2,000 to $2,100",
+      body: "The change is $100. Dividing $100 by the $2,000 starting rent and multiplying by 100 gives a 5% increase."
     },
     {
-      title: "$800 rent with a $70 increase",
-      body: "$800 plus $70 becomes $870. Over a year, that fixed increase adds $840 before any later changes."
+      title: "Use matching periods",
+      body: "Compare monthly rent with monthly rent, or weekly rent with weekly rent. Mixing periods would produce a misleading percentage."
     },
     {
-      title: "Checking a projection",
-      body: "If rent rises by the same dollar amount each year, the pattern is linear. If it rises by a percent each year, the pattern compounds and later years increase more."
+      title: "Arithmetic, not permission",
+      body: "The percentage describes the numeric change between the amounts. It does not determine whether that change is legally permitted."
     }
   ],
   notes: [
-    "Use this for rent increase calculator, rent increase percentage calculator, annual rent increase calculator, and calculating rent increase searches when they match the page.",
-    "If you only know the old and new rent, use the percentage calculator. If you know the percentage and need the new rent, use rent after increase."
+    "Use the forward rent increase calculator when you know a percentage or fixed amount and need the resulting rent.",
+    "This route does not add a proposed increase to rent; it measures the change between two entered amounts."
   ],
   relatedLinks: [
     {
-      to: "/rent-after-increase-calculator",
-      label: "Rent after increase"
+      to: "/rent-increase-calculator",
+      label: "Calculate new rent after an increase"
     },
     {
       to: "/how-much-rent-can-i-afford-calculator",

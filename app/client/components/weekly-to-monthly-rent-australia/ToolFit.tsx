@@ -8,8 +8,8 @@ const toolFit = {
     "Explaining why weekly times 4 is not the same as a calendar-month equivalent."
   ],
   notFor: [
-    "A lease can still require weekly, fortnightly, 4-weekly, or monthly payments depending on its wording.",
-    "Included bills and local rental practices can change the final comparison."
+    "Market rent data or city-specific price estimates.",
+    "Legal rent, tenancy terms, bond requirements, rent-increase limits, or an exact lease payment schedule."
   ],
   nextSteps: [
     {

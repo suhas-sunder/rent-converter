@@ -1,11 +1,10 @@
-﻿import { WeeklyAnswerPage } from "~/client/components/generated/GeneratedPages";
-import { weeklyAnswerPageConfigs } from "~/client/data/generatedRouteConfigs";
-import { buildMeta } from "~/client/utils/seo";
+import type { Route } from "./+types/60-pounds-per-night-to-monthly-rent";
+import { permanentRedirectPreservingQuery } from "~/utils/redirects";
 
-const config = weeklyAnswerPageConfigs["/60-pounds-per-night-to-monthly-rent"];
-
-export const meta = () => buildMeta(config);
+export function loader({ request }: Route.LoaderArgs) {
+  return permanentRedirectPreservingQuery(request, "/daily-to-monthly-rent-converter");
+}
 
 export default function Route60PoundsPerNightToMonthlyRentPage() {
-  return <WeeklyAnswerPage config={config} />;
+  return null;
 }

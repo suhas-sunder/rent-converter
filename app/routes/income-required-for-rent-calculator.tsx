@@ -4,6 +4,12 @@ import type { Route } from "./+types/income-required-for-rent-calculator";
 import Assumptions from "~/client/components/layout/Assumptions";
 import HowItWorks from "../client/components/income-required-for-rent-calculator/HowItWorks";
 import ToolFit from "~/client/components/income-required-for-rent-calculator/ToolFit";
+import {
+  useHydrationSafeSavedState,
+  validSavedBoolean,
+  validSavedDecimal,
+  validSavedMoney,
+} from "~/client/utils/savedState";
 
 const SITE_URL = "https://www.rentconverter.com";
 const PAGE_PATH = "/income-required-for-rent-calculator";
@@ -84,7 +90,6 @@ const ROUTE_WHITELIST = new Set<string>([
   "/rent-vs-take-home-pay-calculator",
   "/rent-increase-calculator",
   "/rent-increase-percentage-calculator",
-  "/rent-after-increase-calculator",
   "/rent-vs-buy-calculator",
   "/income-required-for-rent-calculator",
 ]);
@@ -254,6 +259,9 @@ function parseMoneyInputToScaled(raw: string): ParsedAmount {
 
   if (!s0) {
     return { ok: false, error: "Enter a valid amount.", warnings };
+  }
+  if (/[a-z]/i.test(s0)) {
+    return { ok: false, error: "Enter a valid number without letters.", warnings };
   }
 
   let s = s0.replace(/\s+/g, "");
@@ -439,72 +447,78 @@ function divScaledByScaled(
 }
 
 export default function IncomeRequiredForRentCalculator() {
-  const [modeReverse, setModeReverse] = useState<boolean>(() => {
-    if (typeof window === "undefined") return false;
-    const saved = window.localStorage.getItem("rc_ir_reverse_mode");
-    return safeParseBoolean(saved, false);
-  });
-
-  const [rentMonthly, setRentMonthly] = useState<string>(() => {
-    if (typeof window === "undefined") return "1500";
-    const saved = window.localStorage.getItem("rc_ir_rent_monthly");
-    return saved ?? "1500";
-  });
-
-  const [incomeMonthly, setIncomeMonthly] = useState<string>(() => {
-    if (typeof window === "undefined") return "4500";
-    const saved = window.localStorage.getItem("rc_ir_income_monthly");
-    return saved ?? "4500";
-  });
+  const [modeReverse, setModeReverse] = useState<boolean>(false);
+  const [rentMonthly, setRentMonthly] = useState<string>("1500");
+  const [incomeMonthly, setIncomeMonthly] = useState<string>("4500");
 
   const [rentFocused, setRentFocused] = useState<boolean>(false);
   const [incomeFocused, setIncomeFocused] = useState<boolean>(false);
 
-  const [multiplierPreset, setMultiplierPreset] = useState<MultiplierPreset>(
-    () => {
-      if (typeof window === "undefined") return "3";
-      const saved = window.localStorage.getItem("rc_ir_multiplier_preset");
-      return saved && isMultiplierPreset(saved) ? saved : "3";
-    },
-  );
-
-  const [multiplierCustom, setMultiplierCustom] = useState<string>(() => {
-    if (typeof window === "undefined") return "3";
-    const saved = window.localStorage.getItem("rc_ir_multiplier_custom");
-    return saved ?? "3";
-  });
-
-  const [currency, setCurrency] = useState<Currency>(() => {
-    if (typeof window === "undefined") return "USD";
-    const saved = window.localStorage.getItem("rc_ir_currency");
-    return saved && isCurrency(saved) ? saved : "USD";
-  });
+  const [multiplierPreset, setMultiplierPreset] =
+    useState<MultiplierPreset>("3");
+  const [multiplierCustom, setMultiplierCustom] = useState<string>("3");
+  const [currency, setCurrency] = useState<Currency>("USD");
 
   const copyTimerRef = useRef<number | null>(null);
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    try {
-      window.localStorage.setItem(
-        "rc_ir_reverse_mode",
-        JSON.stringify(modeReverse),
+  useHydrationSafeSavedState({
+    restore(storage) {
+      const savedMode = validSavedBoolean(storage.getItem("rc_ir_reverse_mode"));
+      const savedRent = validSavedMoney(storage.getItem("rc_ir_rent_monthly"), {
+        allowZero: true,
+      });
+      const savedIncome = validSavedMoney(
+        storage.getItem("rc_ir_income_monthly"),
+        { allowZero: true },
       );
-      window.localStorage.setItem("rc_ir_rent_monthly", rentMonthly);
-      window.localStorage.setItem("rc_ir_income_monthly", incomeMonthly);
-      window.localStorage.setItem("rc_ir_multiplier_preset", multiplierPreset);
-      window.localStorage.setItem("rc_ir_multiplier_custom", multiplierCustom);
-      window.localStorage.setItem("rc_ir_currency", currency);
-    } catch {
-      // ignore storage failures
-    }
-  }, [
-    modeReverse,
-    rentMonthly,
-    incomeMonthly,
-    multiplierPreset,
-    multiplierCustom,
-    currency,
-  ]);
+      const savedPreset = storage.getItem("rc_ir_multiplier_preset");
+      const savedCustom = validSavedDecimal(
+        storage.getItem("rc_ir_multiplier_custom"),
+        { min: 0.01, max: 100 },
+      );
+      const savedCurrency = storage.getItem("rc_ir_currency");
+
+      // These fields describe one direction/multiplier calculation. Restore the
+      // group only when it is complete so partial legacy state cannot contradict
+      // the visible mode or selected multiplier.
+      if (
+        savedMode === undefined ||
+        savedRent === undefined ||
+        savedIncome === undefined ||
+        !savedPreset ||
+        !isMultiplierPreset(savedPreset) ||
+        savedCustom === undefined ||
+        !savedCurrency ||
+        !isCurrency(savedCurrency)
+      ) {
+        return false;
+      }
+
+      setModeReverse(savedMode);
+      setRentMonthly(savedRent);
+      setIncomeMonthly(savedIncome);
+      setMultiplierPreset(savedPreset);
+      setMultiplierCustom(savedCustom);
+      setCurrency(savedCurrency);
+      return true;
+    },
+    persist(storage) {
+      storage.setItem("rc_ir_reverse_mode", JSON.stringify(modeReverse));
+      storage.setItem("rc_ir_rent_monthly", rentMonthly);
+      storage.setItem("rc_ir_income_monthly", incomeMonthly);
+      storage.setItem("rc_ir_multiplier_preset", multiplierPreset);
+      storage.setItem("rc_ir_multiplier_custom", multiplierCustom);
+      storage.setItem("rc_ir_currency", currency);
+    },
+    dependencies: [
+      modeReverse,
+      rentMonthly,
+      incomeMonthly,
+      multiplierPreset,
+      multiplierCustom,
+      currency,
+    ],
+  });
 
   useEffect(() => {
     return () => {
@@ -641,7 +655,7 @@ export default function IncomeRequiredForRentCalculator() {
   const faqData = [
     {
       q: "How does the income required for rent calculation work?",
-      a: "In standard mode, monthly rent is multiplied by the selected income multiple. Reverse mode divides monthly income by the multiple to estimate the maximum rent allowed.",
+      a: "In standard mode, required income equals monthly rent multiplied by the selected multiplier. Reverse mode calculates maximum rent by dividing monthly income by that multiplier.",
     },
     {
       q: "What does 3x rent mean?",
@@ -657,7 +671,7 @@ export default function IncomeRequiredForRentCalculator() {
     },
     {
       q: "Will this guarantee I qualify?",
-      a: "No. Landlords may also review credit, debt, guarantors, employment history, and other application details.",
+      a: "No. Actual qualification can depend on the landlord or property manager, jurisdiction, lease, income definition, credit, debt, references, deposits, and other requirements.",
     },
     {
       q: "Does this tool convert currencies or exchange rates?",

@@ -1,23 +1,19 @@
 import { SeoToolFit } from "~/client/components/layout/SeoSupport";
 
 const toolFit = {
-  title: "When affordability context helps",
+  title: "When multiplier arithmetic helps",
   bestFor: [
-    "Setting a rent cap before touring or applying.",
-    "Comparing a rent number with salary, monthly income, or take-home pay.",
-    "Understanding whether rent leaves enough room for bills, savings, and debt."
+    "Calculating required income from monthly rent.",
+    "Reversing monthly income into a maximum-rent scenario.",
+    "Comparing 2x, 2.5x, 3x, and custom multiplier arithmetic."
   ],
   notFor: [
-    "This is not a landlord approval decision, legal advice, or a full household budget."
+    "This does not determine approval, affordability, credit, debt, deposits, references, or local legal requirements."
   ],
   nextSteps: [
     {
-      to: "/3x-rent-calculator",
-      label: "3x rent"
-    },
-    {
-      to: "/2-5x-rent-calculator",
-      label: "2.5x rent"
+      to: "/rent-as-percentage-of-income-calculator",
+      label: "Rent as percentage of income"
     },
     {
       to: "/rent-vs-take-home-pay-calculator",

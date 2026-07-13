@@ -5,32 +5,28 @@ type FAQProps = {
 export default function FAQ({ includeSchema = true }: FAQProps) {
   const faqData = [
     {
-      q: "How do you convert weekly rent to monthly rent in Australia on this page?",
-      a: "This calculator converts an Australian weekly rent (pw) into a per-calendar-month (PCM) equivalent using a 365-day basis: monthly = weekly × 365 ÷ (7 × 12). It treats a week as 7 days and a month as the average calendar month length (365 ÷ 12 days).",
+      q: "How do you convert weekly rent to monthly rent in Australia?",
+      a: "Multiply weekly rent by 365, divide by 7, then divide by 12. The result is an average calendar-month equivalent based on the same annual rent.",
     },
     {
-      q: "What does “PCM” mean if rent is advertised weekly in Australia?",
-      a: "PCM here means a calendar-month equivalent used for comparison and budgeting. In Australia most ads quote rent per week, but many budgets, affordability checks, and monthly bills are easier to think about monthly. PCM lets you compare a weekly listing to a monthly number on the same annual cost basis.",
+      q: "Why is weekly rent times 4 different from monthly rent?",
+      a: "Four weeks is 28 days. An average calendar month is about 30.42 days, so weekly rent times 4 is a four-week amount, not a calendar-month equivalent.",
     },
     {
-      q: "Why is weekly × 4 not the same as monthly rent?",
-      a: "Because 4 weeks is 28 days, not a calendar month. A calendar month averages about 30.42 days (365 ÷ 12). Weekly × 4 gives a 28-day (4-week) figure, while this tool outputs a per-calendar-month equivalent.",
+      q: "Does the calculation change in Melbourne, Sydney, or another Australian city?",
+      a: "No. The rent-period arithmetic is the same across Australian cities. A city name does not change the weekly-to-monthly formula.",
     },
     {
-      q: "In Australia, how is 4-weekly (every 28 days) different from monthly?",
-      a: "A 4-weekly cycle is always 28 days and typically produces 13 payments over a year (52 ÷ 4). Monthly is generally understood as 12 months in a year. Even if the payment amounts look close, the annual total can differ, so it helps to compare everything using an annual basis.",
+      q: "Can I enter any weekly amount and use another currency?",
+      a: "Yes. Enter any weekly rent amount. AUD is selected by default, and you can choose another available currency for display.",
     },
     {
-      q: "Can a weekly rent price look cheaper but cost more over a year?",
-      a: "Yes. Weekly, 4-weekly, and monthly figures can look similar while describing different time bases. Converting them to the same annual total (or to PCM using the same annual basis) is the cleanest way to compare true cost across listings.",
+      q: "Does this calculator show market rent or determine tenancy requirements?",
+      a: "No. It does not provide market rent data or determine legal rent, tenancy terms, bond requirements, rent-increase limits, or an exact lease payment schedule.",
     },
     {
-      q: "Will this match my exact rent payments or lease schedule in Australia?",
-      a: "Not exactly. This is a budgeting and comparison conversion. Your actual payments depend on what your lease specifies (weekly, fortnightly, 4-weekly, monthly), the start date, any proration, and what is included (utilities, parking, internet, fees).",
-    },
-    {
-      q: "Does the weekly-to-monthly conversion change for Australia specifically?",
-      a: "The math does not change by country. What changes is how rent is commonly advertised. Australia often lists rent per week, so this page focuses on turning a weekly figure into a monthly-equivalent (PCM) number that’s easier to compare to monthly budgets.",
+      q: "What costs are included?",
+      a: "Only the rent amount you enter. Utilities, parking, internet, insurance, deposits, and fees are not included unless you add them to the weekly amount.",
     },
   ];
 

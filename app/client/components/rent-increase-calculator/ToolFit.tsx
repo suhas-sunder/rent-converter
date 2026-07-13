@@ -16,8 +16,8 @@ const toolFit = {
       label: "Percentage increase"
     },
     {
-      to: "/rent-after-increase-calculator",
-      label: "Rent after increase"
+      to: "/compound-rent-increase-calculator",
+      label: "Compound rent increase"
     },
     {
       to: "/rent-as-percentage-of-income-calculator",

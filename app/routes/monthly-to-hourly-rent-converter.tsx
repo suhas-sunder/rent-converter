@@ -98,7 +98,6 @@ const ROUTE_WHITELIST = new Set<string>([
 
   "/rent-increase-calculator",
   "/rent-increase-percentage-calculator",
-  "/rent-after-increase-calculator",
 
   "/rent-vs-buy-calculator",
 ]);

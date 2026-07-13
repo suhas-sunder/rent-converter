@@ -10,7 +10,7 @@ const OG_IMAGE_URL = `${SITE_URL}/og-image.jpg`;
 
 const title = "Prorated Rent Calculator | Partial Month Rent";
 const description =
-  "Calculate prorated rent for a partial month or rental period. Enter monthly rent, days owed, and days in the period to get the amount due.";
+  "Calculate prorated rent for a partial rental period. Enter rent, charged days, and days in the period to see the daily rate and prorated amount.";
 
 export const meta: Route.MetaFunction = () => [
   { title },

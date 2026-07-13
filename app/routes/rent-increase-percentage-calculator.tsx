@@ -3,6 +3,10 @@ import type { Route } from "./+types/rent-increase-percentage-calculator";
 import Assumptions from "~/client/components/layout/Assumptions";
 import HowItWorks from "~/client/components/rent-increase-percentage-calculator/HowItWorks";
 import ToolFit from "~/client/components/rent-increase-percentage-calculator/ToolFit";
+import {
+  useHydrationSafeSavedState,
+  validSavedMoney,
+} from "~/client/utils/savedState";
 
 export const meta: Route.MetaFunction = () => {
   const title = "Rent Increase Percentage Calculator | Before and After Rent";
@@ -159,7 +163,6 @@ const ROUTE_WHITELIST = new Set<string>([
   // Rent increases
   "/rent-increase-calculator",
   "/rent-increase-percentage-calculator",
-  "/rent-after-increase-calculator",
 ]);
 
 function safeHref(path: string): string {
@@ -500,27 +503,10 @@ export default function RentIncreasePercentage() {
   const canonicalUrl =
     "https://www.rentconverter.com/rent-increase-percentage-calculator";
 
-  const [oldRent, setOldRent] = useState<string>(() => {
-    if (typeof window === "undefined") return "2000";
-    return localStorage.getItem("rc_rip_old") ?? "2000";
-  });
-
-  const [newRent, setNewRent] = useState<string>(() => {
-    if (typeof window === "undefined") return "2100";
-    return localStorage.getItem("rc_rip_new") ?? "2100";
-  });
-
-  const [period, setPeriod] = useState<Period>(() => {
-    if (typeof window === "undefined") return "monthly";
-    const saved = localStorage.getItem("rc_rip_period") ?? "monthly";
-    return isPeriod(saved) ? saved : "monthly";
-  });
-
-  const [currency, setCurrency] = useState<Currency>(() => {
-    if (typeof window === "undefined") return "USD";
-    const saved = localStorage.getItem("rc_rip_currency") ?? "USD";
-    return isCurrency(saved) ? saved : "USD";
-  });
+  const [oldRent, setOldRent] = useState<string>("2000");
+  const [newRent, setNewRent] = useState<string>("2100");
+  const [period, setPeriod] = useState<Period>("monthly");
+  const [currency, setCurrency] = useState<Currency>("USD");
 
   const [oldFocused, setOldFocused] = useState(false);
   const [newFocused, setNewFocused] = useState(false);
@@ -528,31 +514,47 @@ export default function RentIncreasePercentage() {
   const oldParsed = useMemo(() => parseMoneyInputToScaled(oldRent), [oldRent]);
   const newParsed = useMemo(() => parseMoneyInputToScaled(newRent), [newRent]);
 
-  const [oldDisplay, setOldDisplay] = useState<string>(() => {
-    if (typeof window === "undefined") return "2000";
-    const initial = localStorage.getItem("rc_rip_old") ?? "2000";
-    const p = parseMoneyInputToScaled(initial);
-    return p.ok ? formatPreviewFromParsed(p) : initial;
-  });
+  const [oldDisplay, setOldDisplay] = useState<string>("2000");
+  const [newDisplay, setNewDisplay] = useState<string>("2100");
 
-  const [newDisplay, setNewDisplay] = useState<string>(() => {
-    if (typeof window === "undefined") return "2100";
-    const initial = localStorage.getItem("rc_rip_new") ?? "2100";
-    const p = parseMoneyInputToScaled(initial);
-    return p.ok ? formatPreviewFromParsed(p) : initial;
-  });
+  useHydrationSafeSavedState({
+    restore(storage) {
+      const savedOld = validSavedMoney(storage.getItem("rc_rip_old"), {
+        allowZero: true,
+      });
+      const savedNew = validSavedMoney(storage.getItem("rc_rip_new"), {
+        allowZero: true,
+      });
+      const savedPeriod = storage.getItem("rc_rip_period");
+      const savedCurrency = storage.getItem("rc_rip_currency");
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    try {
-      localStorage.setItem("rc_rip_old", oldRent);
-      localStorage.setItem("rc_rip_new", newRent);
-      localStorage.setItem("rc_rip_period", period);
-      localStorage.setItem("rc_rip_currency", currency);
-    } catch {
-      // ignore
-    }
-  }, [oldRent, newRent, period, currency]);
+      let applied = false;
+      if (savedOld !== undefined) {
+        setOldRent(savedOld);
+        applied = true;
+      }
+      if (savedNew !== undefined) {
+        setNewRent(savedNew);
+        applied = true;
+      }
+      if (savedPeriod && isPeriod(savedPeriod)) {
+        setPeriod(savedPeriod);
+        applied = true;
+      }
+      if (savedCurrency && isCurrency(savedCurrency)) {
+        setCurrency(savedCurrency);
+        applied = true;
+      }
+      return applied;
+    },
+    persist(storage) {
+      storage.setItem("rc_rip_old", oldRent);
+      storage.setItem("rc_rip_new", newRent);
+      storage.setItem("rc_rip_period", period);
+      storage.setItem("rc_rip_currency", currency);
+    },
+    dependencies: [oldRent, newRent, period, currency],
+  });
 
   useEffect(() => {
     if (oldFocused) return;

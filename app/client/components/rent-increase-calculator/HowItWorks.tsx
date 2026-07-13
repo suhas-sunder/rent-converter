@@ -4,19 +4,19 @@ type HowItWorksProps = Record<string, unknown>;
 
 const howItWorks = {
   title: "Rent increase calculator",
-  intro: "Rent increases are easier to judge when you can see the new rent, the monthly difference, and the annual impact together. This is useful for renewal notices, negotiation, and budget planning.",
+  intro: "Enter the current rent, choose a percentage or fixed-amount increase, and see the resulting rent. The calculator also shows the difference for the selected payment period and its annualized impact.",
   steps: [
     {
-      title: "Percent and fixed increases behave differently",
-      body: "A percentage increase scales with the current rent. A fixed increase adds the same dollar amount. Over multiple years, percentage increases can compound."
+      title: "Percentage increase formula",
+      body: "Increase amount = current rent × percentage ÷ 100. The resulting rent is the current rent plus that calculated increase."
     },
     {
-      title: "Annual impact is often clearer than monthly change",
-      body: "A small monthly increase can become a larger yearly cost. Annual impact helps you compare renewing, moving, or negotiating."
+      title: "Fixed increase formula",
+      body: "New rent = current rent + fixed increase. The fixed amount uses the same payment period as the current rent you enter."
     },
     {
-      title: "Rules and caps are outside the math",
-      body: "Local rent rules, notice periods, CPI caps, lease terms, and exemptions can matter. The calculator gives the math, not legal permission."
+      title: "CPI is an entered scenario",
+      body: "The calculator does not retrieve official CPI data. Any percentage is supplied by you, the result is arithmetic only, and no jurisdictional cap is applied automatically. Verify any applicable CPI figure or legal rule separately."
     }
   ],
   examples: [
@@ -30,12 +30,12 @@ const howItWorks = {
     },
     {
       title: "Checking a projection",
-      body: "If rent rises by the same dollar amount each year, the pattern is linear. If it rises by a percent each year, the pattern compounds and later years increase more."
+      body: "One increase is one-step arithmetic. If you enter more than one percentage increase, each step applies to the prior result; use the compound calculator for a dedicated year-by-year annual view."
     }
   ],
   notes: [
-    "Use this for rent increase calculator, rent increase percentage calculator, annual rent increase calculator, and calculating rent increase searches when they match the page.",
-    "If you only know the old and new rent, use the percentage calculator. If you know the percentage and need the new rent, use rent after increase."
+    "Monthly and annualized differences follow the visible payment-period assumptions; they do not determine whether an increase is permitted.",
+    "If you know only the starting and new rent, use the percentage calculator to find the arithmetic percentage change."
   ],
   relatedLinks: [
     {
@@ -43,8 +43,8 @@ const howItWorks = {
       label: "Rent increase percentage"
     },
     {
-      to: "/rent-after-increase-calculator",
-      label: "Rent after increase"
+      to: "/compound-rent-increase-calculator",
+      label: "Compound rent increase"
     },
     {
       to: "/how-much-rent-can-i-afford-calculator",

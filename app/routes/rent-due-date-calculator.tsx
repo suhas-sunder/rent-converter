@@ -1,8 +1,25 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useLoaderData } from "react-router";
 import type { Route } from "./+types/rent-due-date-calculator";
 import Assumptions from "~/client/components/layout/Assumptions";
 import HowItWorks from "~/client/components/rent-due-date-calculator/HowItWorks";
 import ToolFit from "~/client/components/rent-due-date-calculator/ToolFit";
+import {
+  addCalendarMonths,
+  compareCalendarDates,
+  currentCalendarDateString,
+  formatCalendarDate,
+  formatCalendarDateForDisplay,
+  formatCalendarMonthForDisplay,
+  generateRentDueDates,
+  parseCalendarDate,
+  parseWholeNumber,
+  subtractCalendarDay,
+} from "~/client/utils/calendarDate.js";
+
+export function loader() {
+  return { initialDate: currentCalendarDateString() };
+}
 
 export const meta: Route.MetaFunction = () => {
   const title = "Rent Due Date Calculator | Next Rent Payment Date";
@@ -148,7 +165,6 @@ const ROUTE_WHITELIST = new Set<string>([
   // Rent increases
   "/rent-increase-calculator",
   "/rent-increase-percentage-calculator",
-  "/rent-after-increase-calculator",
 
   // Rent vs buy
   "/rent-vs-buy-calculator",
@@ -156,17 +172,6 @@ const ROUTE_WHITELIST = new Set<string>([
 
 function safeHref(path: string): string {
   return ROUTE_WHITELIST.has(path) ? path : "/";
-}
-
-function clampNum(n: number, min: number, max: number) {
-  if (!Number.isFinite(n)) return min;
-  return Math.min(max, Math.max(min, n));
-}
-
-function safeParseInt(value: string, fallback: number) {
-  const n = parseInt(value, 10);
-  if (!Number.isFinite(n)) return fallback;
-  return n;
 }
 
 /** Decimal-safe fixed point (up to 12 decimals). */
@@ -403,187 +408,35 @@ function parseMoneyInputToScaled(raw: string): ParsedScaled {
   return { ok: true, scaled: clamped, normalized, warnings };
 }
 
-function formatDate(d: Date) {
-  return new Intl.DateTimeFormat(undefined, {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  }).format(d);
+type CalendarDateValue = { year: number; month: number; day: number };
+
+function formatDate(date: CalendarDateValue) {
+  return formatCalendarDateForDisplay(date);
 }
 
-function toISODateInputValue(d: Date) {
-  const yyyy = d.getFullYear();
-  const mm = String(d.getMonth() + 1).padStart(2, "0");
-  const dd = String(d.getDate()).padStart(2, "0");
-  return `${yyyy}-${mm}-${dd}`;
+function ymKey(date: CalendarDateValue) {
+  return `${date.year}-${String(date.month).padStart(2, "0")}`;
 }
 
-function stripTime(d: Date) {
-  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
-}
-
-function addDays(date: Date, days: number) {
-  const d = new Date(date);
-  d.setDate(d.getDate() + days);
-  return d;
-}
-
-function addYears(date: Date, years: number) {
-  const d = new Date(date);
-  d.setFullYear(d.getFullYear() + years);
-  return d;
-}
-
-function lastDayOfMonth(year: number, monthIndex0: number) {
-  return new Date(year, monthIndex0 + 1, 0).getDate();
-}
-
-function nextMonthlyDueDate(fromDate: Date, dueDay: number) {
-  const start = stripTime(fromDate);
-  const y = start.getFullYear();
-  const m = start.getMonth();
-
-  const thisMonthLast = lastDayOfMonth(y, m);
-  const thisMonthDue = new Date(y, m, Math.min(dueDay, thisMonthLast));
-
-  if (thisMonthDue >= start) return thisMonthDue;
-
-  const nextMonth = m + 1;
-  const ny = y + Math.floor(nextMonth / 12);
-  const nm = nextMonth % 12;
-  const nextLast = lastDayOfMonth(ny, nm);
-  return new Date(ny, nm, Math.min(dueDay, nextLast));
-}
-
-function nextAnnualDueDate(fromDate: Date, anchor: Date) {
-  const start = stripTime(fromDate);
-  const a = stripTime(anchor);
-
-  const candidateThisYear = new Date(
-    start.getFullYear(),
-    a.getMonth(),
-    a.getDate(),
-  );
-  if (candidateThisYear >= start) return candidateThisYear;
-
-  return new Date(start.getFullYear() + 1, a.getMonth(), a.getDate());
-}
-
-function nextFixedIntervalDueDate(
-  fromDate: Date,
-  intervalDays: number,
-  anchor: Date,
-) {
-  const start = stripTime(fromDate);
-  const a = stripTime(anchor);
-
-  if (a >= start) return a;
-
-  const diffMs = start.getTime() - a.getTime();
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-  const steps = Math.ceil(diffDays / intervalDays);
-  return addDays(a, steps * intervalDays);
-}
-
-function buildScheduleUntilEnd(
-  cycle: BillingCycle,
-  asOfDate: Date,
-  endDate: Date,
-  anchorDate: Date,
-  dueDayMonthly: number,
-) {
-  const start = stripTime(asOfDate);
-  const end = stripTime(endDate);
-
-  if (end < start) return [];
-
-  const dates: Date[] = [];
-
-  if (cycle === "monthly") {
-    let cursor = nextMonthlyDueDate(start, dueDayMonthly);
-    let guard = 0;
-    while (cursor <= end && guard < 2000) {
-      dates.push(cursor);
-      const y = cursor.getFullYear();
-      const m = cursor.getMonth() + 1;
-      const ny = y + Math.floor(m / 12);
-      const nm = m % 12;
-      const nextLast = lastDayOfMonth(ny, nm);
-      cursor = new Date(ny, nm, Math.min(dueDayMonthly, nextLast));
-      guard++;
-    }
-    return dates;
-  }
-
-  if (cycle === "annual") {
-    let cursor = nextAnnualDueDate(start, anchorDate);
-    let guard = 0;
-    while (cursor <= end && guard < 2000) {
-      dates.push(cursor);
-      cursor = new Date(
-        cursor.getFullYear() + 1,
-        cursor.getMonth(),
-        cursor.getDate(),
-      );
-      guard++;
-    }
-    return dates;
-  }
-
-  const intervalDays = cycle === "weekly" ? 7 : cycle === "biweekly" ? 14 : 28;
-  let cursor = nextFixedIntervalDueDate(start, intervalDays, anchorDate);
-  let guard = 0;
-  while (cursor <= end && guard < 5000) {
-    dates.push(cursor);
-    cursor = addDays(cursor, intervalDays);
-    guard++;
-  }
-  return dates;
-}
-
-function ymKey(d: Date) {
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  return `${y}-${m}`;
-}
-
-function yKey(d: Date) {
-  return String(d.getFullYear());
+function yKey(date: CalendarDateValue) {
+  return String(date.year);
 }
 
 function monthLabelFromKey(key: string) {
-  const [y, m] = key.split("-");
-  const date = new Date(Number(y), Number(m) - 1, 1);
-  return new Intl.DateTimeFormat(undefined, {
-    year: "numeric",
-    month: "long",
-  }).format(date);
+  const [year, month] = key.split("-").map(Number);
+  return formatCalendarMonthForDisplay({ year, month, day: 1 });
 }
 
-function makeMonthKeysBetween(start: Date, end: Date) {
-  const s = new Date(start.getFullYear(), start.getMonth(), 1);
-  const e = new Date(end.getFullYear(), end.getMonth(), 1);
-
+function makeMonthKeysBetween(start: CalendarDateValue, endExclusive: CalendarDateValue) {
+  if (compareCalendarDates(endExclusive, start) <= 0) return [];
+  const finalDate = subtractCalendarDay(endExclusive);
   const keys: string[] = [];
-  let cursor = new Date(s);
-  let guard = 0;
-
-  while (cursor <= e && guard < 2000) {
+  let cursor = { ...start, day: 1 };
+  for (let guard = 0; guard < 2000 && compareCalendarDates(cursor, finalDate) <= 0; guard += 1) {
     keys.push(ymKey(cursor));
-    cursor = new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1);
-    guard++;
+    cursor = addCalendarMonths(cursor, 1, 1).date;
   }
   return keys;
-}
-
-function safeParseBoolean(raw: string | null, fallback: boolean): boolean {
-  if (raw === null) return fallback;
-  try {
-    const v = JSON.parse(raw);
-    return typeof v === "boolean" ? v : fallback;
-  } catch {
-    return fallback;
-  }
 }
 
 function isBillingCycle(x: string): x is BillingCycle {
@@ -599,65 +452,68 @@ function isBillingCycle(x: string): x is BillingCycle {
 export default function RentDueDateCalculator() {
   const pageName = "Rent Due Date Calculator";
   const canonicalUrl = "https://www.rentconverter.com/rent-due-date-calculator";
+  const { initialDate } = useLoaderData<typeof loader>();
+  const initialParsed = parseCalendarDate(initialDate, "Initial date");
+  const defaultEndDate = initialParsed.ok
+    ? formatCalendarDate(addCalendarMonths(initialParsed.date, 12).date)
+    : initialDate;
 
-  const [cycle, setCycle] = useState<BillingCycle>(() => {
-    if (typeof window === "undefined") return "monthly";
-    const saved = window.localStorage.getItem("rdd2_cycle") ?? "monthly";
-    return isBillingCycle(saved) ? saved : "monthly";
-  });
-
-  const [amount, setAmount] = useState<string>(() => {
-    if (typeof window === "undefined") return "2000";
-    return window.localStorage.getItem("rdd2_amount") ?? "2000";
-  });
-
+  const [cycle, setCycle] = useState<BillingCycle>("monthly");
+  const [amount, setAmount] = useState<string>("2000");
   const [amountFocused, setAmountFocused] = useState<boolean>(false);
-
-  const [currency, setCurrency] = useState<Currency>(() => {
-    if (typeof window === "undefined") return "USD";
-    const saved = window.localStorage.getItem("rdd2_currency") ?? "USD";
-    return isCurrency(saved) ? saved : "USD";
-  });
-
-  const [asOfDate, setAsOfDate] = useState<string>(() => {
-    const d = new Date();
-    if (typeof window === "undefined") return toISODateInputValue(d);
-    return window.localStorage.getItem("rdd2_asOf") ?? toISODateInputValue(d);
-  });
-
-  const [horizonMode, setHorizonMode] = useState<"years" | "end_date">(() => {
-    if (typeof window === "undefined") return "years";
-    const saved = window.localStorage.getItem("rdd2_horizonMode");
-    return saved === "end_date" ? "end_date" : "years";
-  });
-
-  const [yearsAhead, setYearsAhead] = useState<string>(() => {
-    if (typeof window === "undefined") return "1";
-    return window.localStorage.getItem("rdd2_yearsAhead") ?? "1";
-  });
-
-  const [endDate, setEndDate] = useState<string>(() => {
-    const d = addYears(new Date(), 1);
-    if (typeof window === "undefined") return toISODateInputValue(d);
-    return (
-      window.localStorage.getItem("rdd2_endDate") ?? toISODateInputValue(d)
-    );
-  });
-
-  const [anchorDate, setAnchorDate] = useState<string>(() => {
-    const d = new Date();
-    d.setDate(Math.max(1, Math.min(28, d.getDate())));
-    if (typeof window === "undefined") return toISODateInputValue(d);
-    return window.localStorage.getItem("rdd2_anchor") ?? toISODateInputValue(d);
-  });
-
-  const [dueDayMonthly, setDueDayMonthly] = useState<string>(() => {
-    if (typeof window === "undefined") return "1";
-    return window.localStorage.getItem("rdd2_dueDay") ?? "1";
-  });
+  const [currency, setCurrency] = useState<Currency>("USD");
+  const [asOfDate, setAsOfDate] = useState<string>(initialDate);
+  const [horizonMode, setHorizonMode] = useState<"years" | "end_date">("years");
+  const [yearsAhead, setYearsAhead] = useState<string>("1");
+  const [endDate, setEndDate] = useState<string>(defaultEndDate);
+  const [anchorDate, setAnchorDate] = useState<string>(initialDate);
+  const [dueDayMonthly, setDueDayMonthly] = useState<string>("1");
+  const [storageRestored, setStorageRestored] = useState(false);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    try {
+      const savedCycle = window.localStorage.getItem("rdd2_cycle");
+      if (savedCycle && isBillingCycle(savedCycle)) setCycle(savedCycle);
+
+      const savedAmount = window.localStorage.getItem("rdd2_amount");
+      if (savedAmount && parseMoneyInputToScaled(savedAmount).ok) setAmount(savedAmount);
+
+      const savedCurrency = window.localStorage.getItem("rdd2_currency");
+      if (savedCurrency && isCurrency(savedCurrency)) setCurrency(savedCurrency);
+
+      const savedAsOf = window.localStorage.getItem("rdd2_asOf");
+      const restoredAsOf = savedAsOf && parseCalendarDate(savedAsOf, "As-of date").ok ? savedAsOf : initialDate;
+      if (restoredAsOf !== initialDate) setAsOfDate(restoredAsOf);
+
+      const savedMode = window.localStorage.getItem("rdd2_horizonMode");
+      if (savedMode === "end_date") setHorizonMode("end_date");
+
+      const savedYears = window.localStorage.getItem("rdd2_yearsAhead");
+      if (savedYears && ["1", "2", "3", "5"].includes(savedYears)) setYearsAhead(savedYears);
+
+      const savedEnd = window.localStorage.getItem("rdd2_endDate");
+      const savedEndParsed = savedEnd ? parseCalendarDate(savedEnd, "End boundary") : null;
+      const restoredAsOfParsed = parseCalendarDate(restoredAsOf);
+      if (savedEnd && savedEndParsed?.ok && restoredAsOfParsed.ok && compareCalendarDates(savedEndParsed.date, restoredAsOfParsed.date) > 0) {
+        setEndDate(savedEnd);
+      } else {
+        if (restoredAsOfParsed.ok) setEndDate(formatCalendarDate(addCalendarMonths(restoredAsOfParsed.date, 12).date));
+      }
+
+      const savedAnchor = window.localStorage.getItem("rdd2_anchor");
+      setAnchorDate(savedAnchor && parseCalendarDate(savedAnchor, "Anchor date").ok ? savedAnchor : restoredAsOf);
+
+      const savedDueDay = window.localStorage.getItem("rdd2_dueDay");
+      if (savedDueDay && parseWholeNumber(savedDueDay, "Monthly due day", 1, 31).ok) setDueDayMonthly(savedDueDay);
+    } catch {
+      // Storage may be unavailable. Deterministic loader defaults remain active.
+    } finally {
+      setStorageRestored(true);
+    }
+  }, [initialDate]);
+
+  useEffect(() => {
+    if (!storageRestored) return;
     try {
       window.localStorage.setItem("rdd2_cycle", cycle);
       window.localStorage.setItem("rdd2_amount", amount);
@@ -669,9 +525,10 @@ export default function RentDueDateCalculator() {
       window.localStorage.setItem("rdd2_anchor", anchorDate);
       window.localStorage.setItem("rdd2_dueDay", dueDayMonthly);
     } catch {
-      // ignore
+      // Storage is optional; calculation behavior does not depend on it.
     }
   }, [
+    storageRestored,
     cycle,
     amount,
     currency,
@@ -693,43 +550,40 @@ export default function RentDueDateCalculator() {
     return amount;
   }, [amountFocused, amount, parsedAmount.ok, parsedAmount.normalized]);
 
-  const parsedAsOf = useMemo(() => {
-    const d = new Date(asOfDate);
-    if (!Number.isFinite(d.getTime())) return stripTime(new Date());
-    return stripTime(d);
-  }, [asOfDate]);
+  const parsedAsOf = useMemo(() => parseCalendarDate(asOfDate, "As-of date"), [asOfDate]);
+  const parsedAnchor = useMemo(() => parseCalendarDate(anchorDate, "Anchor date"), [anchorDate]);
+  const parsedEnd = useMemo(() => parseCalendarDate(endDate, "End boundary"), [endDate]);
+  const parsedDueDay = useMemo(() => parseWholeNumber(dueDayMonthly, "Monthly due day", 1, 31), [dueDayMonthly]);
+  const computedBoundary = useMemo(() => {
+    if (!parsedAsOf.ok) return null;
+    if (horizonMode === "end_date") return parsedEnd.ok ? parsedEnd.date : null;
+    const years = Number(yearsAhead);
+    return addCalendarMonths(parsedAsOf.date, years * 12, parsedAsOf.date.day).date;
+  }, [horizonMode, parsedAsOf, parsedEnd, yearsAhead]);
+  const boundaryRelationError = parsedAsOf.ok && computedBoundary && compareCalendarDates(computedBoundary, parsedAsOf.date) <= 0
+    ? "The end boundary must be after the as-of date."
+    : null;
 
-  const parsedAnchor = useMemo(() => {
-    const d = new Date(anchorDate);
-    if (!Number.isFinite(d.getTime())) return stripTime(new Date());
-    return stripTime(d);
-  }, [anchorDate]);
-
-  const dueDay = useMemo(
-    () => clampNum(safeParseInt(dueDayMonthly, 1), 1, 31),
-    [dueDayMonthly],
-  );
-
-  const computedEnd = useMemo(() => {
-    if (horizonMode === "end_date") {
-      const d = new Date(endDate);
-      if (!Number.isFinite(d.getTime()))
-        return stripTime(addYears(parsedAsOf, 1));
-      return stripTime(d);
-    }
-    const yrs = clampNum(safeParseInt(yearsAhead, 1), 1, 5);
-    return stripTime(addYears(parsedAsOf, yrs));
-  }, [horizonMode, endDate, yearsAhead, parsedAsOf]);
+  const dateErrors = useMemo(() => {
+    const errors: string[] = [];
+    if (!parsedAsOf.ok) errors.push(parsedAsOf.error);
+    if (horizonMode === "end_date" && !parsedEnd.ok) errors.push(parsedEnd.error);
+    if (cycle === "monthly" && !parsedDueDay.ok) errors.push(parsedDueDay.error);
+    if (cycle !== "monthly" && !parsedAnchor.ok) errors.push(parsedAnchor.error);
+    if (boundaryRelationError) errors.push(boundaryRelationError);
+    return errors;
+  }, [boundaryRelationError, cycle, horizonMode, parsedAnchor, parsedAsOf, parsedDueDay, parsedEnd]);
 
   const schedule = useMemo(() => {
-    return buildScheduleUntilEnd(
+    if (dateErrors.length || !parsedAsOf.ok || !computedBoundary) return [];
+    return generateRentDueDates({
       cycle,
-      parsedAsOf,
-      computedEnd,
-      parsedAnchor,
-      dueDay,
-    );
-  }, [cycle, parsedAsOf, computedEnd, parsedAnchor, dueDay]);
+      asOf: parsedAsOf.date,
+      boundary: computedBoundary,
+      anchor: parsedAnchor.ok ? parsedAnchor.date : undefined,
+      dueDay: parsedDueDay.ok ? parsedDueDay.value : undefined,
+    });
+  }, [computedBoundary, cycle, dateErrors, parsedAnchor, parsedAsOf, parsedDueDay]);
 
   const fmtMoney = (scaled: bigint) =>
     formatCurrencyFromScaled(scaled, currency);
@@ -741,24 +595,24 @@ export default function RentDueDateCalculator() {
     if (!parsedAmount.ok)
       errors.push(parsedAmount.error ?? "Enter a valid amount.");
     if (parsedAmount.warnings.length) warnings.push(...parsedAmount.warnings);
-
-    if (computedEnd < parsedAsOf)
-      errors.push("End date must be on or after the as-of date.");
+    errors.push(...dateErrors);
 
     const rentPerPaymentScaled = parsedAmount.ok
       ? (parsedAmount.scaled as bigint)
       : 0n;
 
-    if (errors.length) {
+    if (errors.length || !parsedAsOf.ok || !computedBoundary) {
       return { ok: false as const, errors, warnings, rentPerPaymentScaled };
     }
 
-    const nextDue = schedule[0] ?? parsedAsOf;
+    const nextDue = schedule[0] ?? null;
     const paymentsTotal = schedule.length;
 
     const totalPaidScaled = rentPerPaymentScaled * BigInt(paymentsTotal);
 
-    const monthlyKeys = makeMonthKeysBetween(parsedAsOf, computedEnd);
+    const monthlyKeys = parsedAsOf.ok && computedBoundary
+      ? makeMonthKeysBetween(parsedAsOf.date, computedBoundary)
+      : [];
     const paymentsByMonth = new Map<string, number>();
     for (const k of monthlyKeys) paymentsByMonth.set(k, 0);
     for (const d of schedule) {
@@ -821,8 +675,10 @@ export default function RentDueDateCalculator() {
       currentCycleStandardAnnualScaled,
 
       rentPerPaymentScaled,
+      asOf: parsedAsOf.date,
+      endBoundary: computedBoundary,
     };
-  }, [parsedAmount, computedEnd, parsedAsOf, cycle, schedule]);
+  }, [parsedAmount, computedBoundary, parsedAsOf, cycle, schedule, dateErrors]);
 
   // FIX: only whitelisted routes here
   const relatedLinks = [
@@ -839,8 +695,8 @@ export default function RentDueDateCalculator() {
 
   const faqData = [
     {
-      q: "What does “total paid by end date” mean on this page?",
-      a: "It is the number of scheduled due dates from the as-of date through the selected end date, multiplied by the rent amount you entered. It illustrates timing and cadence, not lease enforcement.",
+      q: "What does total rent due before the end boundary mean?",
+      a: "It is the number of generated due dates from the inclusive as-of date up to, but not including, the end boundary, multiplied by the rent amount entered.",
     },
     {
       q: "Why can monthly totals vary for weekly, biweekly, or 28-day rent?",
@@ -848,7 +704,7 @@ export default function RentDueDateCalculator() {
     },
     {
       q: "How is monthly rent handled when the due day is 29 to 31?",
-      a: "If the selected day does not exist in a month, the schedule places the due date on that month’s last calendar day for that cycle.",
+      a: "If the requested day does not exist in a month, that month uses its final calendar day. Later months return to the requested due day when it exists.",
     },
     {
       q: "What is the anchor date used for?",
@@ -864,7 +720,7 @@ export default function RentDueDateCalculator() {
     },
     {
       q: "Why can the schedule total differ from the standard annual total?",
-      a: "The standard annual total uses fixed payment counts for comparison. The schedule total is a calendar-based rollup from your as-of date through the selected end date, which can span partial years.",
+      a: "The standard annual total uses fixed payment counts for comparison. The generated schedule counts only dates before the exclusive end boundary.",
     },
   ];
 
@@ -950,11 +806,12 @@ export default function RentDueDateCalculator() {
 
           <div className="grid gap-x-5 gap-y-3 md:grid-cols-12">
             <div className="md:col-span-4">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label htmlFor="rent-due-amount" className="block text-sm font-semibold text-slate-700 mb-2">
                 Rent per payment
               </label>
               <div className="grid grid-cols-12 gap-2">
                 <input
+                  id="rent-due-amount"
                   inputMode="decimal"
                   value={amountDisplayValue}
                   onFocus={() => setAmountFocused(true)}
@@ -963,6 +820,7 @@ export default function RentDueDateCalculator() {
                   placeholder="e.g. 2000 or 2000.00"
                   className="cursor-pointer col-span-7 rounded-xl border border-slate-300 px-4 py-2 text-lg outline-none focus:bg-white focus:ring-2 focus:ring-sky-200"
                   aria-invalid={!parsedAmount.ok}
+                  aria-describedby={!parsedAmount.ok ? "rent-due-amount-error" : undefined}
                 />
                 <select
                   value={currency}
@@ -983,7 +841,7 @@ export default function RentDueDateCalculator() {
               </div>
 
               {!parsedAmount.ok ? (
-                <p className="mt-2 text-sm font-semibold text-rose-700">
+                <p id="rent-due-amount-error" role="alert" className="mt-2 text-sm font-semibold text-rose-700">
                   {parsedAmount.error}
                 </p>
               ) : parsedAmount.warnings.length ? (
@@ -999,10 +857,11 @@ export default function RentDueDateCalculator() {
             </div>
 
             <div className="md:col-span-4">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label htmlFor="rent-due-cycle" className="block text-sm font-semibold text-slate-700 mb-2">
                 Billing cycle
               </label>
               <select
+                id="rent-due-cycle"
                 value={cycle}
                 onChange={(e) =>
                   setCycle(
@@ -1028,86 +887,109 @@ export default function RentDueDateCalculator() {
             </div>
 
             <div className="md:col-span-4">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
-                As-of date (First Due Date)
+              <label htmlFor="rent-due-as-of" className="block text-sm font-semibold text-slate-700 mb-2">
+                As-of date
               </label>
               <input
+                id="rent-due-as-of"
                 type="date"
                 value={asOfDate}
                 onChange={(e) => setAsOfDate(e.target.value)}
                 className="cursor-pointer w-full rounded-xl bg-slate-100 px-4 py-2 text-lg outline-none focus:bg-white focus:ring-2 focus:ring-sky-200"
+                aria-invalid={!parsedAsOf.ok}
+                aria-describedby={!parsedAsOf.ok ? "rent-due-as-of-error" : "rent-due-as-of-help"}
               />
+              <p id="rent-due-as-of-help" className="mt-1 text-xs text-slate-600">Inclusive: a due date can be the as-of date itself.</p>
+              {!parsedAsOf.ok ? <p id="rent-due-as-of-error" role="alert" className="mt-1 text-sm font-semibold text-rose-700">{parsedAsOf.error}</p> : null}
             </div>
 
             <div className="md:col-span-6">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
-                Schedule horizon
-              </label>
               <div className="grid gap-3 sm:grid-cols-2">
-                <select
-                  value={horizonMode}
-                  onChange={(e) =>
-                    setHorizonMode(
-                      e.target.value === "end_date" ? "end_date" : "years",
-                    )
-                  }
-                  className="cursor-pointer w-full rounded-xl bg-slate-100 px-4 py-2 text-lg outline-none focus:bg-white focus:ring-2 focus:ring-sky-200"
-                >
-                  <option value="years">Years ahead</option>
-                  <option value="end_date">End date</option>
-                </select>
+                <div>
+                  <label htmlFor="rent-due-horizon-mode" className="block text-sm font-semibold text-slate-700 mb-2">Horizon type</label>
+                  <select
+                    id="rent-due-horizon-mode"
+                    value={horizonMode}
+                    onChange={(e) => setHorizonMode(e.target.value === "end_date" ? "end_date" : "years")}
+                    className="cursor-pointer w-full rounded-xl bg-slate-100 px-4 py-2 text-lg outline-none focus:bg-white focus:ring-2 focus:ring-sky-200"
+                  >
+                    <option value="years">Years ahead</option>
+                    <option value="end_date">End boundary</option>
+                  </select>
+                </div>
 
                 {horizonMode === "years" ? (
-                  <select
-                    value={yearsAhead}
-                    onChange={(e) => setYearsAhead(e.target.value)}
-                    className="w-full rounded-xl bg-slate-100 px-4 py-2 text-lg outline-none focus:bg-white focus:ring-2 focus:ring-sky-200"
-                  >
-                    {["1", "2", "3", "5"].map((y) => (
-                      <option key={y} value={y}>
-                        {y} {y === "1" ? "year" : "years"}
-                      </option>
-                    ))}
-                  </select>
+                  <div>
+                    <label htmlFor="rent-due-years" className="block text-sm font-semibold text-slate-700 mb-2">Years ahead</label>
+                    <select id="rent-due-years" value={yearsAhead} onChange={(e) => setYearsAhead(e.target.value)} className="w-full rounded-xl bg-slate-100 px-4 py-2 text-lg outline-none focus:bg-white focus:ring-2 focus:ring-sky-200">
+                      {["1", "2", "3", "5"].map((y) => <option key={y} value={y}>{y} {y === "1" ? "year" : "years"}</option>)}
+                    </select>
+                  </div>
                 ) : (
-                  <input
-                    type="date"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                    className="cursor-pointer w-full rounded-xl bg-slate-100 px-4 py-2 text-lg outline-none focus:bg-white focus:ring-2 focus:ring-sky-200"
-                  />
+                  <div>
+                    <label htmlFor="rent-due-end-boundary" className="block text-sm font-semibold text-slate-700 mb-2">Exclusive end boundary</label>
+                    <input
+                      id="rent-due-end-boundary"
+                      type="date"
+                      value={endDate}
+                      onChange={(e) => setEndDate(e.target.value)}
+                      className="cursor-pointer w-full rounded-xl bg-slate-100 px-4 py-2 text-lg outline-none focus:bg-white focus:ring-2 focus:ring-sky-200"
+                      aria-invalid={!parsedEnd.ok || Boolean(boundaryRelationError)}
+                      aria-describedby={!parsedEnd.ok || boundaryRelationError ? "rent-due-end-error" : "rent-due-end-help"}
+                    />
+                  </div>
                 )}
               </div>
+              {horizonMode === "end_date" ? (
+                !parsedEnd.ok || boundaryRelationError
+                  ? <p id="rent-due-end-error" role="alert" className="mt-1 text-sm font-semibold text-rose-700">{!parsedEnd.ok ? parsedEnd.error : boundaryRelationError}</p>
+                  : <p id="rent-due-end-help" className="mt-1 text-xs text-slate-600">Exclusive: due dates on this boundary are not included.</p>
+              ) : <p className="mt-1 text-xs text-slate-600">The selected anniversary is an exclusive boundary.</p>}
             </div>
 
             <div className="md:col-span-6">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label htmlFor={cycle === "monthly" ? "rent-due-month-day" : "rent-due-anchor"} className="block text-sm font-semibold text-slate-700 mb-2">
                 {cycle === "monthly" ? "Monthly due day" : "Anchor due date"}
               </label>
 
               {cycle === "monthly" ? (
                 <input
+                  id="rent-due-month-day"
                   inputMode="numeric"
                   value={dueDayMonthly}
                   onChange={(e) => setDueDayMonthly(e.target.value)}
                   placeholder="e.g. 1"
                   className="cursor-pointer w-full rounded-xl bg-slate-100 px-4 py-2 text-lg outline-none focus:bg-white focus:ring-2 focus:ring-sky-200"
                   aria-label="Monthly due day"
+                  aria-invalid={!parsedDueDay.ok}
+                  aria-describedby={!parsedDueDay.ok ? "rent-due-day-error" : "rent-due-day-help"}
                 />
               ) : (
                 <input
+                  id="rent-due-anchor"
                   type="date"
                   value={anchorDate}
                   onChange={(e) => setAnchorDate(e.target.value)}
                   className="cursor-pointer w-full rounded-xl bg-slate-100 px-4 py-2 text-lg outline-none focus:bg-white focus:ring-2 focus:ring-sky-200"
+                  aria-invalid={!parsedAnchor.ok}
+                  aria-describedby={!parsedAnchor.ok ? "rent-due-anchor-error" : "rent-due-anchor-help"}
                 />
+              )}
+              {cycle === "monthly" ? (
+                !parsedDueDay.ok
+                  ? <p id="rent-due-day-error" role="alert" className="mt-1 text-sm font-semibold text-rose-700">{parsedDueDay.error}</p>
+                  : <p id="rent-due-day-help" className="mt-1 text-xs text-slate-600">Days 29–31 clamp for short months and return when the requested day exists.</p>
+              ) : (
+                !parsedAnchor.ok
+                  ? <p id="rent-due-anchor-error" role="alert" className="mt-1 text-sm font-semibold text-rose-700">{parsedAnchor.error}</p>
+                  : <p id="rent-due-anchor-help" className="mt-1 text-xs text-slate-600">Weekly-style cycles advance by exact calendar-day intervals from this anchor.</p>
               )}
             </div>
           </div>
 
           <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:px-6 rc-print-block">
             {!computed.ok ? (
-              <div className="rounded-xl border border-slate-200 bg-white p-4">
+              <div className="rounded-xl border border-slate-200 bg-white p-4" role="status" aria-live="polite">
                 <div className="font-semibold text-slate-800">
                   No results to show
                 </div>
@@ -1132,10 +1014,16 @@ export default function RentDueDateCalculator() {
               </div>
             ) : (
               <>
+                <div className="mb-4 grid gap-2 rounded-xl border border-slate-200 bg-white p-4 text-sm sm:grid-cols-2 lg:grid-cols-4 rc-print-block">
+                  <div><span className="block text-xs text-slate-600">As-of date</span><strong>{formatCalendarDate(computed.asOf)}</strong></div>
+                  <div><span className="block text-xs text-slate-600">Exclusive end boundary</span><strong>{formatCalendarDate(computed.endBoundary)}</strong></div>
+                  <div><span className="block text-xs text-slate-600">Frequency</span><strong>{BILLING_LABEL[cycle]}</strong></div>
+                  <div><span className="block text-xs text-slate-600">Due rule</span><strong>{cycle === "monthly" ? `Day ${dueDayMonthly}` : `Anchor ${anchorDate}`}</strong></div>
+                </div>
                 <div className="grid gap-4 lg:grid-cols-3">
                   <div className="rounded-xl border border-slate-200 bg-white px-4 py-2">
                     <div className="text-xs text-slate-700">
-                      Total rent paid by end date
+                      Total rent due before the end boundary
                     </div>
                     <div className="mt-1 text-2xl font-bold text-emerald-700">
                       {fmtMoney(computed.totalPaidScaled)}
@@ -1146,7 +1034,7 @@ export default function RentDueDateCalculator() {
                       Next estimated due date
                     </div>
                     <div className="mt-1 text-2xl font-bold">
-                      {formatDate(computed.nextDue)}
+                      {computed.nextDue ? formatDate(computed.nextDue) : "No due date in horizon"}
                     </div>
                   </div>
 
@@ -1166,8 +1054,7 @@ export default function RentDueDateCalculator() {
                       Upcoming due dates
                     </div>
                     <div className="text-xs text-slate-700">
-                      Dates shown are estimates based on the selected cadence
-                      and horizon.
+                      The as-of date is inclusive. The end boundary is exclusive.
                     </div>
                   </div>
                   <ul className="divide-y divide-slate-200 max-h-[360px] overflow-auto">

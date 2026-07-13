@@ -1,11 +1,9 @@
-﻿import { IncreaseToolPage } from "~/client/components/generated/GeneratedPages";
-import { increaseToolConfigs } from "~/client/data/generatedRouteConfigs";
-import { buildMeta } from "~/client/utils/seo";
+import { permanentRedirectPreservingQuery } from "~/utils/redirects";
 
-const config = increaseToolConfigs["/annual-rent-increase-calculator"];
+export function loader({ request }: { request: Request }) {
+  return permanentRedirectPreservingQuery(request, "/rent-increase-calculator");
+}
 
-export const meta = () => buildMeta(config);
-
-export default function AnnualRentIncreaseCalculatorPage() {
-  return <IncreaseToolPage config={config} />;
+export default function AnnualRentIncreaseCalculatorRedirect() {
+  return null;
 }

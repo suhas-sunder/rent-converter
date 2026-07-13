@@ -3,11 +3,17 @@ import type { Route } from "./+types/rent-split-calculator";
 import Assumptions from "~/client/components/layout/Assumptions";
 import HowItWorks from "~/client/components/rent-split-calculator/HowItWorks";
 import ToolFit from "~/client/components/rent-split-calculator/ToolFit";
+import {
+  useHydrationSafeSavedState,
+  validSavedMoney,
+  validSavedWholeNumber,
+} from "~/client/utils/savedState";
+import { calculateEqualCentAllocation } from "~/client/utils/generatedTools.js";
 
 export const meta: Route.MetaFunction = () => {
   const title = "Rent Split Calculator | Split Rent by Roommates";
   const description =
-    "Split rent evenly among roommates and see each person's share by month, week, 4-week period, and year, including cents remainder.";
+    "Split rent and optional shared monthly costs evenly. See each person's share by rent period, with exact cent-remainder guidance.";
 
   const canonicalUrl = "https://www.rentconverter.com/rent-split-calculator";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
@@ -158,7 +164,6 @@ const ROUTE_WHITELIST = new Set<string>([
   // Rent increases
   "/rent-increase-calculator",
   "/rent-increase-percentage-calculator",
-  "/rent-after-increase-calculator",
 
   // Rent vs buy
   "/rent-vs-buy-calculator",
@@ -299,11 +304,29 @@ function formatMoneyPreviewFromParsed(parsed: ParsedScaled): string {
  * Accepts: $650, 650, 650.00, .5, 12., 650,50 (comma decimal).
  * Rejects ambiguous formats like "1,2,3".
  */
-function parseMoneyInputToScaled(raw: string): ParsedScaled {
+function parseMoneyInputToScaled(
+  raw: string,
+  options: { label?: string; allowZero?: boolean } = {},
+): ParsedScaled {
+  const label = options.label ?? "Rent";
+  const allowZero = options.allowZero ?? false;
   const warnings: string[] = [];
   const s0 = (raw ?? "").trim();
 
-  if (!s0) return { ok: false, error: "Enter a rent amount.", warnings };
+  if (!s0)
+    return {
+      ok: false,
+      error: `Enter ${label.toLowerCase()}.`,
+      warnings,
+    };
+
+  if (/[A-Za-z]/.test(s0)) {
+    return {
+      ok: false,
+      error: `Enter a valid ${label.toLowerCase()} (example: 2400 or 2400.00).`,
+      warnings,
+    };
+  }
 
   let s = s0.replace(/\s+/g, "");
   s = s.replace(/[^\d.,\-]/g, "");
@@ -324,7 +347,11 @@ function parseMoneyInputToScaled(raw: string): ParsedScaled {
         warnings,
       };
     }
-    return { ok: false, error: "Rent must be 0 or greater.", warnings };
+    return {
+      ok: false,
+      error: `${label} must be ${allowZero ? "zero or greater" : "greater than zero"}.`,
+      warnings,
+    };
   }
 
   const lastDot = s.lastIndexOf(".");
@@ -400,6 +427,14 @@ function parseMoneyInputToScaled(raw: string): ParsedScaled {
   if (clamped !== scaled)
     warnings.push("Value was clamped to the supported maximum.");
 
+  if (!allowZero && clamped === 0n) {
+    return {
+      ok: false,
+      error: `${label} must be greater than zero.`,
+      warnings,
+    };
+  }
+
   const normalized = fracRaw.length ? `${intPart}.${fracCapped}` : `${intPart}`;
   return { ok: true, scaled: clamped, normalized, warnings };
 }
@@ -414,11 +449,10 @@ function parsePeopleInput(raw: string): ParsedPeople {
   const s = (raw ?? "").trim();
   if (!s) return { ok: false, error: "Enter number of people." };
 
-  // allow "3", "03", "3 people" (strip non-digits)
-  const cleaned = s.replace(/[^\d]/g, "");
-  if (!cleaned) return { ok: false, error: "Enter a whole number of people." };
+  if (!/^\d+$/.test(s))
+    return { ok: false, error: "Enter a whole number of people." };
 
-  const n = Number.parseInt(cleaned, 10);
+  const n = Number.parseInt(s, 10);
   if (!Number.isFinite(n) || n <= 0)
     return { ok: false, error: "People must be 1 or more." };
   if (n > 100) return { ok: false, error: "People must be 100 or less." };
@@ -489,44 +523,72 @@ export default function RentPerPerson() {
   const totalRentInputRef = useRef<HTMLInputElement | null>(null);
   const [isTotalRentFocused, setIsTotalRentFocused] = useState(false);
 
-  const [totalRent, setTotalRent] = useState<string>(() => {
-    if (typeof window === "undefined") return "2400";
-    const saved = localStorage.getItem("rc_rpp_total") ?? "2400";
-    return saved.replace(/,/g, "");
-  });
+  const [totalRent, setTotalRent] = useState<string>("2400");
+  const [sharedCosts, setSharedCosts] = useState<string>("0");
+  const [period, setPeriod] = useState<Period>("monthly");
+  const [people, setPeople] = useState<string>("3");
+  const [currency, setCurrency] = useState<Currency>("USD");
 
-  const [period, setPeriod] = useState<Period>(() => {
-    if (typeof window === "undefined") return "monthly";
-    const saved = localStorage.getItem("rc_rpp_period") ?? "monthly";
-    return isPeriod(saved) ? saved : "monthly";
-  });
+  useHydrationSafeSavedState({
+    restore(storage) {
+      const savedRent = validSavedMoney(storage.getItem("rc_rpp_total"), {
+        allowZero: false,
+      });
+      const savedSharedCosts = validSavedMoney(
+        storage.getItem("rc_rpp_shared_costs"),
+        { allowZero: true },
+      );
+      const savedPeriod = storage.getItem("rc_rpp_period");
+      const savedPeople = validSavedWholeNumber(
+        storage.getItem("rc_rpp_people"),
+        { min: 1, max: 100 },
+      );
+      const savedCurrency = storage.getItem("rc_rpp_currency");
 
-  const [people, setPeople] = useState<string>(() => {
-    if (typeof window === "undefined") return "3";
-    return localStorage.getItem("rc_rpp_people") ?? "3";
+      let applied = false;
+      if (savedRent !== undefined) {
+        setTotalRent(savedRent);
+        applied = true;
+      }
+      if (savedSharedCosts !== undefined) {
+        setSharedCosts(savedSharedCosts);
+        applied = true;
+      }
+      if (savedPeriod && isPeriod(savedPeriod)) {
+        setPeriod(savedPeriod);
+        applied = true;
+      }
+      if (savedPeople !== undefined) {
+        setPeople(savedPeople);
+        applied = true;
+      }
+      if (savedCurrency && isCurrency(savedCurrency)) {
+        setCurrency(savedCurrency);
+        applied = true;
+      }
+      return applied;
+    },
+    persist(storage) {
+      storage.setItem("rc_rpp_total", totalRent);
+      storage.setItem("rc_rpp_shared_costs", sharedCosts);
+      storage.setItem("rc_rpp_period", period);
+      storage.setItem("rc_rpp_people", people);
+      storage.setItem("rc_rpp_currency", currency);
+    },
+    dependencies: [totalRent, sharedCosts, period, people, currency],
   });
-
-  const [currency, setCurrency] = useState<Currency>(() => {
-    if (typeof window === "undefined") return "USD";
-    const saved = localStorage.getItem("rc_rpp_currency") ?? "USD";
-    return isCurrency(saved) ? saved : "USD";
-  });
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    try {
-      localStorage.setItem("rc_rpp_total", totalRent);
-      localStorage.setItem("rc_rpp_period", period);
-      localStorage.setItem("rc_rpp_people", people);
-      localStorage.setItem("rc_rpp_currency", currency);
-    } catch {
-      // ignore
-    }
-  }, [totalRent, period, people, currency]);
 
   const parsedRent = useMemo(
-    () => parseMoneyInputToScaled(totalRent),
+    () => parseMoneyInputToScaled(totalRent, { label: "Rent" }),
     [totalRent],
+  );
+  const parsedSharedCosts = useMemo(
+    () =>
+      parseMoneyInputToScaled(sharedCosts, {
+        label: "Shared monthly costs",
+        allowZero: true,
+      }),
+    [sharedCosts],
   );
   const parsedPeople = useMemo(() => parsePeopleInput(people), [people]);
 
@@ -538,19 +600,28 @@ export default function RentPerPerson() {
       errors.push(parsedRent.error ?? "Enter a valid rent amount.");
     if (parsedRent.warnings.length) warnings.push(...parsedRent.warnings);
 
+    if (!parsedSharedCosts.ok)
+      errors.push(
+        parsedSharedCosts.error ?? "Enter valid optional shared monthly costs.",
+      );
+    if (parsedSharedCosts.warnings.length)
+      warnings.push(...parsedSharedCosts.warnings);
+
     if (!parsedPeople.ok)
       errors.push(parsedPeople.error ?? "Enter a valid number of people.");
 
     if (errors.length) return { ok: false as const, errors, warnings };
 
     const rentScaled = parsedRent.scaled as bigint;
+    const sharedMonthlyScaled = parsedSharedCosts.scaled as bigint;
     const peopleN = parsedPeople.value as number;
 
-    const annualTotalScaled = annualizeFromScaled(rentScaled, period);
+    const annualRentScaled = annualizeFromScaled(rentScaled, period);
+    const annualSharedCostsScaled = sharedMonthlyScaled * 12n;
+    const annualTotalScaled = annualRentScaled + annualSharedCostsScaled;
     const annualPerPersonScaled = annualTotalScaled / BigInt(peopleN);
 
-    // equal split in the same stated period (pure split of input, not annualized)
-    const perSelectedPeriodScaled = rentScaled / BigInt(peopleN);
+    const selectedPeriodTotalScaled = fromAnnualScaled(annualTotalScaled, period);
 
     const periods: Period[] = [
       "hourly",
@@ -577,29 +648,32 @@ export default function RentPerPerson() {
       "every_4_weeks",
     );
 
-    // remainder (in cents) when splitting the selected-period rent into cents
     const centsScale = SCALE / 100n;
-    const totalCents = rentScaled / centsScale;
-    const peopleB = BigInt(peopleN);
-
-    const remainderCents = totalCents % peopleB; // this is the real remainder (0..peopleN-1)
-
-    const leftoverCents = Number(remainderCents);
+    const displayedTotalScaled = roundScaledToDecimals(
+      selectedPeriodTotalScaled,
+      2,
+    );
+    const totalCents = displayedTotalScaled / centsScale;
+    const allocation = calculateEqualCentAllocation(totalCents, peopleN);
+    const perSelectedPeriodScaled = allocation.baseShare * centsScale;
 
     return {
       ok: true as const,
       warnings,
       peopleN,
       rentScaled,
+      sharedMonthlyScaled,
+      displayedTotalScaled,
       annualTotalScaled,
       annualPerPersonScaled,
       perSelectedPeriodScaled,
+      higherShareScaled: allocation.higherShare * centsScale,
       monthlyAvgPerPersonScaled,
       fourWeekPerPersonScaled,
       breakdown,
-      leftoverCents,
+      allocation,
     };
-  }, [parsedRent, parsedPeople, period]);
+  }, [parsedRent, parsedSharedCosts, parsedPeople, period]);
 
   const fmtMoney = (scaled: bigint) =>
     formatCurrencyFromScaled(scaled, currency);
@@ -649,7 +723,7 @@ export default function RentPerPerson() {
   const faqData = [
     {
       q: "How do I split rent equally?",
-      a: "Enter the total rent and the number of people. The calculator divides the rent evenly and shows each person's share for the selected rent period.",
+      a: "Enter the rent, optional shared monthly costs, and number of people. The calculator divides the displayed total evenly for the selected rent period.",
     },
     {
       q: "Can I split monthly rent between roommates?",
@@ -657,19 +731,19 @@ export default function RentPerPerson() {
     },
     {
       q: "Does this calculator handle uneven rent splits?",
-      a: "No. It calculates equal splits only. If one person pays more because of room size, parking, or a separate agreement, use this result as a baseline and adjust manually.",
+      a: "No. This page calculates equal shares only. Use the separate income-based or custom-percentage calculator when the shares should differ.",
     },
     {
       q: "What if the rent does not divide evenly to the cent?",
-      a: "The page shows the cents remainder for the selected period. You can assign the small remainder to one person or rotate it over time.",
+      a: "The page shows exactly how many people pay one cent more so the displayed shares reconcile to the displayed total.",
     },
     {
       q: "Why does the page show monthly and every 4 weeks separately?",
       a: "Monthly rent and 4-week rent are not the same. A 4-week period is 28 days, while an average month is about 30.42 days.",
     },
     {
-      q: "Does this include utilities, parking, or fees?",
-      a: "No. This is rent-only. Add shared bills to the rent input if you want to split a combined total.",
+      q: "Can I include utilities, parking, or other shared costs?",
+      a: "Yes. Enter optional shared monthly costs that should use the same equal split. Leave the field at zero to split rent only.",
     },
     {
       q: "What assumptions does this page use?",
@@ -704,7 +778,7 @@ export default function RentPerPerson() {
     "@type": "WebPage",
     name: pageName,
     description:
-      "Split rent evenly among roommates and see each person's share by month, week, 4-week period, and year, including cents remainder.",
+      "Split rent and optional shared monthly costs evenly, with exact cent-remainder guidance for the selected rent period.",
     url: canonicalUrl,
     isPartOf: { "@type": "WebSite", url: "https://www.rentconverter.com" },
     breadcrumb: { "@id": `${canonicalUrl}#breadcrumb` },
@@ -724,6 +798,10 @@ export default function RentPerPerson() {
   const totalRentId = "rpp_total_rent";
   const totalRentHelpId = "rpp_total_rent_help";
   const totalRentErrorId = "rpp_total_rent_error";
+
+  const sharedCostsId = "rpp_shared_costs";
+  const sharedCostsHelpId = "rpp_shared_costs_help";
+  const sharedCostsErrorId = "rpp_shared_costs_error";
 
   const periodId = "rpp_period";
   const peopleId = "rpp_people";
@@ -761,8 +839,8 @@ export default function RentPerPerson() {
                 </h1>
 
                 <p className="mt-2 text-base text-slate-700">
-                  Split rent evenly between roommates. The calculator shows each
-                  person’s share and related rent breakdowns.
+                  Split rent and optional shared monthly costs evenly across the
+                  selected number of people.
                 </p>
               </div>
 
@@ -786,7 +864,7 @@ export default function RentPerPerson() {
           </div>
 
           <div className="mt-5 grid gap-x-5 gap-y-4 md:grid-cols-12">
-            <div className="md:col-span-5">
+            <div className="md:col-span-4">
               <label
                 htmlFor={totalRentId}
                 className="block text-sm font-semibold text-slate-700 mb-2"
@@ -825,7 +903,43 @@ export default function RentPerPerson() {
               ) : null}
             </div>
 
-            <div className="md:col-span-3">
+            <div className="md:col-span-4">
+              <label
+                htmlFor={sharedCostsId}
+                className="block text-sm font-semibold text-slate-700 mb-2"
+              >
+                Optional shared monthly costs
+              </label>
+              <input
+                id={sharedCostsId}
+                inputMode="decimal"
+                value={sharedCosts}
+                onChange={(e) => setSharedCosts(e.target.value)}
+                placeholder="e.g. 150 or 0"
+                className={`w-full rounded-xl bg-slate-100 px-4 py-2 text-lg text-slate-950 placeholder:text-slate-700 outline-none transition focus:ring-2 focus:ring-sky-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 ${
+                  parsedSharedCosts.ok
+                    ? "focus:bg-white"
+                    : "border-rose-300 focus:border-rose-500"
+                }`}
+                aria-invalid={!parsedSharedCosts.ok}
+                aria-describedby={`${sharedCostsHelpId}${!parsedSharedCosts.ok ? ` ${sharedCostsErrorId}` : ""}`}
+              />
+              <p id={sharedCostsHelpId} className="mt-1 text-xs text-slate-700">
+                Defaults to zero. Add only monthly costs using the same split.
+              </p>
+
+              {!parsedSharedCosts.ok ? (
+                <p
+                  id={sharedCostsErrorId}
+                  className="mt-2 text-sm font-semibold text-rose-700"
+                  role="alert"
+                >
+                  {parsedSharedCosts.error}
+                </p>
+              ) : null}
+            </div>
+
+            <div className="md:col-span-4">
               <label
                 htmlFor={periodId}
                 className="block text-sm font-semibold text-slate-700 mb-2"
@@ -850,7 +964,7 @@ export default function RentPerPerson() {
               </select>
             </div>
 
-            <div className="md:col-span-2">
+            <div className="md:col-span-6">
               <label
                 htmlFor={peopleId}
                 className="block text-sm font-semibold text-slate-700 mb-2"
@@ -886,7 +1000,7 @@ export default function RentPerPerson() {
               ) : null}
             </div>
 
-            <div className="md:col-span-2">
+            <div className="md:col-span-6">
               <label
                 htmlFor={currencyId}
                 className="block text-sm font-semibold text-slate-700 mb-2"
@@ -966,7 +1080,7 @@ export default function RentPerPerson() {
                       aria-hidden="true"
                     />
                     <div className="text-sm font-semibold text-slate-950">
-                      Per-person rent
+                      Equal base share
                     </div>
                   </div>
 
@@ -975,40 +1089,57 @@ export default function RentPerPerson() {
                       {fmtMoney(computed.perSelectedPeriodScaled)}
                     </div>
                     <p className="text-sm text-slate-700">
-                      Equal split for {computed.peopleN}{" "}
+                      Base cent amount for {computed.peopleN}{" "}
                       {computed.peopleN === 1 ? "person" : "people"} in the
                       selected rent period.
                     </p>
                   </div>
 
-                  <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                    <div className="rounded-2xl bg-white px-4 py-3">
-                      <div className="text-xs text-slate-700">
-                        Annual per person
+                    <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                      <div className="rounded-2xl bg-white px-4 py-3">
+                        <div className="text-xs text-slate-700">Base rent</div>
+                        <div className="mt-1 text-lg font-bold text-slate-950 tabular-nums whitespace-nowrap">
+                          {fmtMoney(computed.rentScaled)}
+                        </div>
+                        <div className="mt-1 text-xs text-slate-700">Selected rent period</div>
                       </div>
-                      <div className="mt-1 text-lg font-bold text-slate-950 tabular-nums whitespace-nowrap">
-                        {fmtMoney(computed.annualPerPersonScaled)}
-                      </div>
-                    </div>
 
-                    <div className="rounded-2xl bg-white px-4 py-3">
-                      <div className="text-xs text-slate-700">Annual total</div>
-                      <div className="mt-1 text-lg font-bold text-slate-950 tabular-nums whitespace-nowrap">
-                        {fmtMoney(computed.annualTotalScaled)}
+                      <div className="rounded-2xl bg-white px-4 py-3">
+                        <div className="text-xs text-slate-700">Optional shared costs</div>
+                        <div className="mt-1 text-lg font-bold text-slate-950 tabular-nums whitespace-nowrap">
+                          {fmtMoney(computed.sharedMonthlyScaled)}
+                        </div>
+                        <div className="mt-1 text-xs text-slate-700">Per calendar month</div>
                       </div>
-                    </div>
 
-                    <div className="rounded-2xl bg-white px-4 py-3">
-                      <div className="text-xs text-slate-700">
-                        Cents remainder
+                      <div className="rounded-2xl bg-white px-4 py-3">
+                        <div className="text-xs text-slate-700">Total shared cost</div>
+                        <div className="mt-1 text-lg font-bold text-slate-950 tabular-nums whitespace-nowrap">
+                          {fmtMoney(computed.displayedTotalScaled)}
+                        </div>
+                        <div className="mt-1 text-xs text-slate-700 leading-relaxed">
+                          For the selected rent period
+                        </div>
                       </div>
-                      <div className="mt-1 text-lg font-bold text-slate-950 tabular-nums whitespace-nowrap">
-                        {computed.leftoverCents}¢
+
+                      <div className="rounded-2xl bg-white px-4 py-3">
+                        <div className="text-xs text-slate-700">Participants</div>
+                        <div className="mt-1 text-lg font-bold text-slate-950 tabular-nums whitespace-nowrap">
+                          {computed.peopleN}
+                        </div>
                       </div>
-                      <div className="mt-1 text-xs text-slate-700 leading-relaxed">
-                        After splitting the selected period amount to cents.
+
+                      <div className="rounded-2xl bg-white px-4 py-3 sm:col-span-2">
+                        <div className="text-xs text-slate-700">Cent-remainder allocation</div>
+                        <div className="mt-1 text-sm font-semibold text-slate-950 leading-relaxed">
+                          {computed.allocation.remainderCount === 0
+                            ? `Everyone pays ${fmtMoney(computed.perSelectedPeriodScaled)}; no cent adjustment is needed.`
+                            : `${computed.allocation.remainderCount} ${computed.allocation.remainderCount === 1 ? "person pays" : "people pay"} ${fmtMoney(computed.higherShareScaled)} and ${computed.allocation.baseShareCount} ${computed.allocation.baseShareCount === 1 ? "person pays" : "people pay"} ${fmtMoney(computed.perSelectedPeriodScaled)}.`}
+                        </div>
+                        <div className="mt-1 text-xs text-slate-700 leading-relaxed">
+                          This allocation reconciles exactly to {fmtMoney(computed.displayedTotalScaled)}.
+                        </div>
                       </div>
-                    </div>
 
                     <div className="sm:col-span-2 lg:col-span-3 rounded-2xl bg-emerald-50 px-4 py-3">
                       <div className="text-xs font-semibold text-emerald-800">
@@ -1036,8 +1167,8 @@ export default function RentPerPerson() {
                       Full breakdown
                     </h3>
                     <p className="text-sm text-slate-700 mb-4 leading-relaxed">
-                      The table annualizes the total rent first, then shows the
-                      total and per-person amounts across common periods.
+                      The table annualizes the rent and monthly shared costs,
+                      then shows total and per-person amounts across common periods.
                     </p>
 
                     <div className="overflow-x-auto">
@@ -1046,7 +1177,7 @@ export default function RentPerPerson() {
                           <tr className="text-left text-slate-700 border-b border-slate-200">
                             <th className="py-2 pr-4 font-semibold">Period</th>
                             <th className="py-2 pr-4 font-semibold">
-                              Total rent
+                              Total shared cost
                             </th>
                             <th className="py-2 pr-4 font-semibold">
                               Per person

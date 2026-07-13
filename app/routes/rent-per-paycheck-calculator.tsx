@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useHydrationSafeSavedState, validSavedMoney } from "~/client/utils/savedState.js";
 import type { Route } from "./+types/rent-per-paycheck-calculator";
 import Assumptions from "~/client/components/layout/Assumptions";
 import HowItWorks from "~/client/components/rent-per-paycheck-calculator/HowItWorks";
@@ -164,7 +165,6 @@ const ROUTE_WHITELIST = new Set<string>([
   "/rent-vs-take-home-pay-calculator",
   "/rent-increase-calculator",
   "/rent-increase-percentage-calculator",
-  "/rent-after-increase-calculator",
 ]);
 
 function safeHref(path: string): string {
@@ -478,40 +478,35 @@ export default function RentPerPaycheck() {
   const canonicalUrl =
     "https://www.rentconverter.com/rent-per-paycheck-calculator";
 
-  const [amount, setAmount] = useState<string>(() => {
-    if (typeof window === "undefined") return "2000";
-    return localStorage.getItem("rpc_amount") ?? "2000";
-  });
+  const [amount, setAmount] = useState<string>("2000");
 
-  const [rentPeriod, setRentPeriod] = useState<RentPeriod>(() => {
-    if (typeof window === "undefined") return "monthly";
-    const saved = localStorage.getItem("rpc_rentPeriod") ?? "monthly";
-    return isRentPeriod(saved) ? saved : "monthly";
-  });
+  const [rentPeriod, setRentPeriod] = useState<RentPeriod>("monthly");
 
-  const [payFreq, setPayFreq] = useState<PayFrequency>(() => {
-    if (typeof window === "undefined") return "biweekly";
-    const saved = localStorage.getItem("rpc_payFreq") ?? "biweekly";
-    return isPayFrequency(saved) ? saved : "biweekly";
-  });
+  const [payFreq, setPayFreq] = useState<PayFrequency>("biweekly");
 
-  const [currency, setCurrency] = useState<Currency>(() => {
-    if (typeof window === "undefined") return "USD";
-    const saved = localStorage.getItem("rpc_currency") ?? "USD";
-    return isCurrency(saved) ? saved : "USD";
-  });
+  const [currency, setCurrency] = useState<Currency>("USD");
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    try {
-      localStorage.setItem("rpc_amount", amount);
-      localStorage.setItem("rpc_rentPeriod", rentPeriod);
-      localStorage.setItem("rpc_payFreq", payFreq);
-      localStorage.setItem("rpc_currency", currency);
-    } catch {
-      // ignore
-    }
-  }, [amount, rentPeriod, payFreq, currency]);
+  useHydrationSafeSavedState({
+    restore(storage) {
+      let applied = false;
+      const savedAmount = validSavedMoney(storage.getItem("rpc_amount"), "Rent amount", { allowZero: true });
+      if (savedAmount !== undefined) { setAmount(savedAmount); applied = true; }
+      const savedRentPeriod = storage.getItem("rpc_rentPeriod");
+      if (savedRentPeriod && isRentPeriod(savedRentPeriod)) { setRentPeriod(savedRentPeriod); applied = true; }
+      const savedPayFrequency = storage.getItem("rpc_payFreq");
+      if (savedPayFrequency && isPayFrequency(savedPayFrequency)) { setPayFreq(savedPayFrequency); applied = true; }
+      const savedCurrency = storage.getItem("rpc_currency");
+      if (savedCurrency && isCurrency(savedCurrency)) { setCurrency(savedCurrency); applied = true; }
+      return applied;
+    },
+    persist(storage) {
+      storage.setItem("rpc_amount", amount);
+      storage.setItem("rpc_rentPeriod", rentPeriod);
+      storage.setItem("rpc_payFreq", payFreq);
+      storage.setItem("rpc_currency", currency);
+    },
+    dependencies: [amount, rentPeriod, payFreq, currency],
+  });
 
   const parsedAmount = useMemo(() => parseMoneyInputToScaled(amount), [amount]);
 
@@ -519,19 +514,7 @@ export default function RentPerPaycheck() {
     formatCurrencyFromScaled(scaled, currency);
 
   const [amountIsFocused, setAmountIsFocused] = useState<boolean>(false);
-  const [amountDisplay, setAmountDisplay] = useState<string>(() => {
-    const initialParsed = parseMoneyInputToScaled(
-      typeof window === "undefined"
-        ? "2000"
-        : (localStorage.getItem("rpc_amount") ?? "2000"),
-    );
-    if (initialParsed.ok && initialParsed.normalized) {
-      return formatMoneyPreviewFromNormalized(initialParsed.normalized);
-    }
-    return typeof window === "undefined"
-      ? "2000"
-      : (localStorage.getItem("rpc_amount") ?? "2000");
-  });
+  const [amountDisplay, setAmountDisplay] = useState<string>("2000");
 
   useEffect(() => {
     if (amountIsFocused) return;
@@ -630,7 +613,7 @@ export default function RentPerPaycheck() {
     },
     {
       q: "Does this tell me whether rent is affordable?",
-      a: "No. This page only allocates rent across paychecks. For affordability, compare rent against income, taxes, savings, debt payments, and other expenses.",
+      a: "No. This page only allocates annualized rent across paychecks. It does not calculate payroll deductions, tax withholding, paycheck dates, or legal affordability.",
     },
     {
       q: "What assumptions does this calculator use?",
@@ -806,7 +789,8 @@ export default function RentPerPaycheck() {
               </div>
 
               <p id={amountHelpId} className="mt-1 text-xs text-slate-700">
-                Enter the rent amount for the selected rent period.
+                Enter the rent amount for the selected period. Choose a visible
+                currency; USD and CAD are both supported.
               </p>
 
               {!parsedAmount.ok ? (

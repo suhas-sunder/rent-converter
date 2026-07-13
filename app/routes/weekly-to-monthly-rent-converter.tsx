@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useHydrationSafeSavedState, validSavedMoney } from "~/client/utils/savedState.js";
 import type { Route } from "./+types/weekly-to-monthly-rent-converter";
 import Assumptions from "~/client/components/layout/Assumptions";
 import HowItWorks from "~/client/components/weekly-to-monthly-rent-converter/HowItWorks";
@@ -158,7 +159,6 @@ const ROUTE_WHITELIST = new Set<string>([
   // Rent increases
   "/rent-increase-calculator",
   "/rent-increase-percentage-calculator",
-  "/rent-after-increase-calculator",
 
   // Rent vs buy
   "/rent-vs-buy-calculator",
@@ -487,29 +487,28 @@ export default function WeeklyToMonthlyRent() {
   const canonicalUrl =
     "https://www.rentconverter.com/weekly-to-monthly-rent-converter";
 
-  const [amount, setAmount] = useState<string>(() => {
-    if (typeof window === "undefined") return "500";
-    return localStorage.getItem("rc_wtm_amount") ?? "500";
-  });
+  const [amount, setAmount] = useState<string>("500");
 
   const [isAmountFocused, setIsAmountFocused] = useState<boolean>(false);
   const [amountTouched, setAmountTouched] = useState<boolean>(false);
 
-  const [currency, setCurrency] = useState<Currency>(() => {
-    if (typeof window === "undefined") return "USD";
-    const saved = localStorage.getItem("rc_wtm_currency") ?? "USD";
-    return isCurrency(saved) ? saved : "USD";
+  const [currency, setCurrency] = useState<Currency>("USD");
+
+  useHydrationSafeSavedState({
+    restore(storage) {
+      let applied = false;
+      const savedAmount = validSavedMoney(storage.getItem("rc_wtm_amount"), "Weekly rent", { allowZero: true });
+      if (savedAmount !== undefined) { setAmount(savedAmount); applied = true; }
+      const savedCurrency = storage.getItem("rc_wtm_currency");
+      if (savedCurrency && isCurrency(savedCurrency)) { setCurrency(savedCurrency); applied = true; }
+      return applied;
+    },
+    persist(storage) {
+      storage.setItem("rc_wtm_amount", amount);
+      storage.setItem("rc_wtm_currency", currency);
+    },
+    dependencies: [amount, currency],
   });
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    try {
-      localStorage.setItem("rc_wtm_amount", amount);
-      localStorage.setItem("rc_wtm_currency", currency);
-
-      // keep legacy key in sync
-    } catch {}
-  }, [amount, currency]);
 
   const parsed = useMemo(() => {
     const p = parseMoneyInputToScaled(amount, "weekly rent amount");

@@ -4,7 +4,7 @@ type HowItWorksProps = Record<string, unknown>;
 
 const howItWorks = {
   title: "Weekly to monthly rent conversion (Australia)",
-  intro: "Weekly rent, PW, PCW, and PCM listings are easy to misread because four weeks is only 28 days. This section explains what the monthly equivalent means and where the calculation shows up in real rental decisions.",
+  intro: "The calculator uses weekly rent × 365 ÷ 7 ÷ 12. It returns an average calendar-month equivalent, while weekly rent × 4 returns only a 28-day amount.",
   steps: [
     {
       title: "PCM is a calendar-month comparison",
@@ -15,8 +15,8 @@ const howItWorks = {
       body: "Weekly rent times 4 gives a 28-day amount. An average calendar month is about 30.42 days, so the true monthly equivalent is usually higher."
     },
     {
-      title: "The result still needs local context",
-      body: "Listings may include or exclude utilities, council rates, parking, internet, strata fees, or other charges. Convert the rent first, then compare what is actually included."
+      title: "The arithmetic is the same across Australia",
+      body: "Melbourne, Sydney, and other city names do not change the formula. This calculator converts the amount entered; it does not supply city market data or make tenancy decisions."
     }
   ],
   examples: [

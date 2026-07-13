@@ -3,6 +3,11 @@ import type { Route } from "./+types/rent-after-tax-income-calculator";
 import Assumptions from "~/client/components/layout/Assumptions";
 import HowItWorks from "~/client/components/rent-after-tax-income-calculator/HowItWorks";
 import ToolFit from "~/client/components/rent-after-tax-income-calculator/ToolFit";
+import {
+  useHydrationSafeSavedState,
+  validSavedMoney,
+  validSavedPercentage,
+} from "~/client/utils/savedState";
 
 function safeToFixed(n: number, digits: number): string {
   if (!Number.isFinite(n)) return "-";
@@ -117,7 +122,6 @@ const ROUTE_WHITELIST = new Set<string>([
   // Rent increases
   "/rent-increase-calculator",
   "/rent-increase-percentage-calculator",
-  "/rent-after-increase-calculator",
 
   // Rent vs buy
   "/rent-vs-buy-calculator",
@@ -535,64 +539,73 @@ function percentFromRatio(num: bigint, den: bigint, decimals: number): number {
 }
 
 export default function RentAfterTaxIncome() {
-  const [grossIncome, setGrossIncome] = useState<string>(() => {
-    if (typeof window === "undefined") return "60000";
-    return window.localStorage.getItem("rc_rati_gross") ?? "60000";
-  });
-
-  const [incomePeriod, setIncomePeriod] = useState<Period>(() => {
-    if (typeof window === "undefined") return "annual";
-    const saved =
-      window.localStorage.getItem("rc_rati_income_period") ?? "annual";
-    return isPeriod(saved) ? saved : "annual";
-  });
-
-  const [taxRate, setTaxRate] = useState<string>(() => {
-    if (typeof window === "undefined") return "25";
-    return window.localStorage.getItem("rc_rati_tax_rate") ?? "25";
-  });
-
-  const [rentAmount, setRentAmount] = useState<string>(() => {
-    if (typeof window === "undefined") return "2200";
-    return window.localStorage.getItem("rc_rati_rent") ?? "2200";
-  });
-
-  const [rentPeriod, setRentPeriod] = useState<Period>(() => {
-    if (typeof window === "undefined") return "monthly";
-    const saved =
-      window.localStorage.getItem("rc_rati_rent_period") ?? "monthly";
-    return isPeriod(saved) ? saved : "monthly";
-  });
-
-  const [currency, setCurrency] = useState<Currency>(() => {
-    if (typeof window === "undefined") return "USD";
-    const saved = window.localStorage.getItem("rc_rati_currency") ?? "USD";
-    return isCurrency(saved) ? saved : "USD";
-  });
+  const [grossIncome, setGrossIncome] = useState<string>("60000");
+  const [incomePeriod, setIncomePeriod] = useState<Period>("annual");
+  const [taxRate, setTaxRate] = useState<string>("25");
+  const [rentAmount, setRentAmount] = useState<string>("2200");
+  const [rentPeriod, setRentPeriod] = useState<Period>("monthly");
+  const [currency, setCurrency] = useState<Currency>("USD");
 
   const [isGrossFocused, setIsGrossFocused] = useState(false);
   const [isRentFocused, setIsRentFocused] = useState(false);
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    try {
-      window.localStorage.setItem("rc_rati_gross", grossIncome);
-      window.localStorage.setItem("rc_rati_income_period", incomePeriod);
-      window.localStorage.setItem("rc_rati_tax_rate", taxRate);
-      window.localStorage.setItem("rc_rati_rent", rentAmount);
-      window.localStorage.setItem("rc_rati_rent_period", rentPeriod);
-      window.localStorage.setItem("rc_rati_currency", currency);
-    } catch {
-      // ignore
-    }
-  }, [
-    grossIncome,
-    incomePeriod,
-    taxRate,
-    rentAmount,
-    rentPeriod,
-    currency,
-  ]);
+  useHydrationSafeSavedState({
+    restore(storage) {
+      const savedGross = validSavedMoney(storage.getItem("rc_rati_gross"), {
+        allowZero: false,
+      });
+      const savedIncomePeriod = storage.getItem("rc_rati_income_period");
+      const savedTax = validSavedPercentage(storage.getItem("rc_rati_tax_rate"));
+      const savedRent = validSavedMoney(storage.getItem("rc_rati_rent"), {
+        allowZero: true,
+      });
+      const savedRentPeriod = storage.getItem("rc_rati_rent_period");
+      const savedCurrency = storage.getItem("rc_rati_currency");
+
+      let applied = false;
+      if (savedGross !== undefined) {
+        setGrossIncome(savedGross);
+        applied = true;
+      }
+      if (savedIncomePeriod && isPeriod(savedIncomePeriod)) {
+        setIncomePeriod(savedIncomePeriod);
+        applied = true;
+      }
+      if (savedTax !== undefined) {
+        setTaxRate(savedTax);
+        applied = true;
+      }
+      if (savedRent !== undefined) {
+        setRentAmount(savedRent);
+        applied = true;
+      }
+      if (savedRentPeriod && isPeriod(savedRentPeriod)) {
+        setRentPeriod(savedRentPeriod);
+        applied = true;
+      }
+      if (savedCurrency && isCurrency(savedCurrency)) {
+        setCurrency(savedCurrency);
+        applied = true;
+      }
+      return applied;
+    },
+    persist(storage) {
+      storage.setItem("rc_rati_gross", grossIncome);
+      storage.setItem("rc_rati_income_period", incomePeriod);
+      storage.setItem("rc_rati_tax_rate", taxRate);
+      storage.setItem("rc_rati_rent", rentAmount);
+      storage.setItem("rc_rati_rent_period", rentPeriod);
+      storage.setItem("rc_rati_currency", currency);
+    },
+    dependencies: [
+      grossIncome,
+      incomePeriod,
+      taxRate,
+      rentAmount,
+      rentPeriod,
+      currency,
+    ],
+  });
 
   const grossParsed = useMemo(
     () => parseMoneyInputToScaled(grossIncome),

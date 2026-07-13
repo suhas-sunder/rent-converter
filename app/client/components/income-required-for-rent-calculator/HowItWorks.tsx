@@ -4,38 +4,38 @@ type HowItWorksProps = Record<string, unknown>;
 
 const howItWorks = {
   title: "Income required for rent",
-  intro: "Income-required calculations are useful when a landlord, roommate, or personal budget rule uses a target rent-to-income ratio such as 30%, 2.5x, or 3x rent.",
+  intro: "A multiplier compares income with rent. Choose the visible direction, then select 2x, 2.5x, 3x, or enter a custom multiplier.",
   steps: [
     {
-      title: "Income rules are shortcuts, not approvals",
-      body: "A 30% rule, 2.5x rent rule, or 3x rent rule can screen a rental budget quickly, but landlords and personal budgets can use different standards."
+      title: "Calculate required income",
+      body: "Required income = rent × selected multiplier. For example, $1,500 rent at 3x produces $4,500 required monthly income."
     },
     {
-      title: "Rent is only one housing cost",
-      body: "Utilities, renters insurance, parking, deposits, moving costs, debt payments, and savings goals can all change what feels affordable."
+      title: "Reverse the calculation",
+      body: "Maximum rent = income ÷ selected multiplier. Reverse mode changes the visible input and output without changing the multiplier arithmetic."
     },
     {
-      title: "Gross and take-home income tell different stories",
-      body: "Gross income is useful for common qualification rules. Take-home income is often better for monthly cash-flow planning."
+      title: "Choose a scenario",
+      body: "The 2x, 2.5x, and 3x presets are arithmetic scenarios. Custom input supports another positive multiplier when a listing uses one."
     }
   ],
   examples: [
     {
-      title: "$60k income at 30%",
-      body: "$60,000 per year gives a rough rent target of $1,500 per month at 30% of gross income. That still needs to be checked against take-home pay and bills."
+      title: "2x",
+      body: "$1,500 monthly rent × 2 = $3,000 required monthly income."
     },
     {
-      title: "3x rent qualification",
-      body: "For $1,800 rent, a 3x rule points to about $5,400 monthly income, or $64,800 per year. Some landlords may calculate this before tax."
+      title: "2.5x",
+      body: "$1,500 monthly rent × 2.5 = $3,750 required monthly income."
     },
     {
-      title: "Paycheck reality check",
-      body: "A rent that looks fine against salary can feel tight if take-home pay is lower because of taxes, benefits, debt, or irregular hours."
+      title: "3x",
+      body: "$1,500 monthly rent × 3 = $4,500 required monthly income."
     }
   ],
   notes: [
-    "Use the result as a planning number before you apply, not as a guarantee of approval.",
-    "If you are comparing rent to paychecks, the paycheck calculator may be more practical than an annual salary rule."
+    "Multiplier rules may be screening references, but this calculator does not determine application approval.",
+    "Actual qualification can depend on the landlord or property manager, jurisdiction, lease, income definition, and other requirements. Credit, debt, references, deposits, and local law are not evaluated."
   ],
   relatedLinks: [
     {

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useId, useMemo, useState } from "react";
 import { Link } from "react-router";
 import {
   dailyToMonthlyCents,
@@ -19,6 +19,36 @@ import {
   weeklyToMonthlyCents,
   type Currency,
 } from "~/client/utils/rentMath";
+import {
+  calculateHourlyIncome,
+  calculateRentBudget,
+  calculateSalaryComparison,
+  parseHoursPerWeek,
+  parseIncomeMoney,
+} from "~/client/utils/generatedIncome.js";
+import {
+  useHydrationSafeSavedState,
+  validSavedCurrency,
+  validSavedMoney,
+} from "~/client/utils/savedState.js";
+import {
+  calculateLeaseEnd,
+  formatCalendarDate,
+  formatCalendarDateForDisplay,
+  generateLeasePaymentSchedule,
+  parseCalendarDate,
+  parseWholeNumber,
+} from "~/client/utils/calendarDate.js";
+import {
+  calculateCompoundIncrease,
+  calculateIncomeSplit,
+  calculateOneStepIncrease,
+  calculatePercentageSplit,
+  calculateProration,
+  parsePercentage,
+  parseWholeNumberInRange,
+  parseYears,
+} from "~/client/utils/generatedTools.js";
 import { JsonLd, makePageSchemas, type SeoConfig } from "~/client/utils/seo";
 
 export type RelatedLink = {
@@ -92,24 +122,7 @@ export type ConversionPageConfig = SeoConfig & {
   sections: ContentSection[];
 };
 
-export type WeeklyAnswerPageConfig = SeoConfig & {
-  amount: number;
-  currency: Currency;
-  path: string;
-  h1: string;
-  eyebrow: string;
-  description: string;
-  title: string;
-  labelPrefix?: string;
-  daily?: boolean;
-  relatedLinks: RelatedLink[];
-};
-
 export type IncomeToolMode =
-  | "multiplier"
-  | "ratio"
-  | "rent-rule"
-  | "max-rent"
   | "budget"
   | "hourly"
   | "salary";
@@ -119,30 +132,22 @@ export type IncomeToolConfig = SeoConfig & {
   h1: string;
   lead: string;
   mode: IncomeToolMode;
-  multiplier?: number;
-  percent?: number;
   defaultIncome?: string;
   defaultRent?: string;
+  defaultExpenses?: string;
+  defaultHours?: string;
   relatedLinks: RelatedLink[];
   faq: FaqItem[];
   examples: ExampleItem[];
   sections: ContentSection[];
 };
 
-export type SalaryAnswerConfig = SeoConfig & {
-  salary: number;
-  h1: string;
-  eyebrow: string;
-  relatedLinks: RelatedLink[];
-};
-
 export type IncreaseToolConfig = SeoConfig & {
   eyebrow: string;
   h1: string;
   lead: string;
-  mode: "simple" | "compound" | "cpi" | "escalation" | "regional" | "formula";
+  mode: "compound" | "regional";
   defaultRate?: string;
-  defaultFixed?: string;
   regionNote?: string;
   relatedLinks: RelatedLink[];
   faq: FaqItem[];
@@ -153,7 +158,7 @@ export type SplitToolConfig = SeoConfig & {
   eyebrow: string;
   h1: string;
   lead: string;
-  mode: "income" | "roommate" | "percentage";
+  mode: "income" | "percentage";
   relatedLinks: RelatedLink[];
   faq: FaqItem[];
 };
@@ -162,7 +167,7 @@ export type DateToolConfig = SeoConfig & {
   eyebrow: string;
   h1: string;
   lead: string;
-  mode: "lease" | "lease-range" | "twelve-month" | "schedule";
+  mode: "lease" | "schedule";
   relatedLinks: RelatedLink[];
   faq: FaqItem[];
 };
@@ -260,24 +265,45 @@ function TextInput({
   value,
   onChange,
   inputMode = "decimal",
+  id,
+  helper,
+  error,
+  type = "text",
+  describedBy,
 }: {
   label: string;
   value: string;
   onChange: (value: string) => void;
   inputMode?: "decimal" | "numeric" | "text";
+  id?: string;
+  helper?: string;
+  error?: string;
+  type?: "text" | "date";
+  describedBy?: string;
 }) {
+  const generatedId = useId();
+  const inputId = id ?? generatedId;
+  const helperId = helper ? `${inputId}-helper` : undefined;
+  const errorId = error ? `${inputId}-error` : undefined;
+  const describedByIds = [helperId, errorId, describedBy].filter(Boolean).join(" ") || undefined;
   return (
-    <label className="block">
-      <span className="mb-2 block text-sm font-semibold text-slate-800">
+    <div className="block">
+      <label htmlFor={inputId} className="mb-2 block text-sm font-semibold text-slate-800">
         {label}
-      </span>
+      </label>
       <input
+        id={inputId}
+        type={type}
         inputMode={inputMode}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="w-full cursor-pointer rounded-xl bg-slate-100 px-4 py-3 text-base text-slate-950 outline-none transition hover:bg-sky-50 focus:bg-white focus:ring-2 focus:ring-sky-200 focus-visible:ring-sky-400"
+        aria-invalid={error ? true : undefined}
+        aria-describedby={describedByIds}
+        className={`w-full cursor-pointer rounded-xl px-4 py-3 text-base text-slate-950 outline-none transition hover:bg-sky-50 focus:bg-white focus:ring-2 focus-visible:ring-sky-400 ${error ? "bg-rose-50 ring-2 ring-rose-300 focus:ring-rose-400" : "bg-slate-100 focus:ring-sky-200"}`}
       />
-    </label>
+      {helper ? <p id={helperId} className="mt-2 text-sm leading-relaxed text-slate-600">{helper}</p> : null}
+      {error ? <p id={errorId} role="alert" className="mt-2 text-sm font-semibold text-rose-700">{error}</p> : null}
+    </div>
   );
 }
 
@@ -501,8 +527,11 @@ function assumptionsText(path: string) {
   if (path.includes("increase") || path.includes("ontario") || path.includes("california") || path.includes("quebec") || path.includes("bc-")) {
     return "This page estimates rent math only. Local rules, notice requirements, lease terms, and allowable increases can change, so check the official tenancy authority for your location.";
   }
-  if (path.includes("australia") || path.includes("melbourne") || path.includes("sydney") || path.includes("bond") || path.includes("advance")) {
-    return "Australian rental rules vary by state and territory. Calculation assumptions reviewed May 7, 2026. Use this as a budgeting estimate and check your lease or state tenancy authority for exact requirements.";
+  if (path === "/prorated-rent-calculator-australia") {
+    return "This calculator uses the visible rent period and day count selected by the user. Australian lease terms and state or territory rules may use a different proration convention.";
+  }
+  if (path.includes("australia") || path.includes("bond") || path.includes("advance")) {
+    return "Australian rental rules vary by state and territory. Use this as a budgeting estimate and check your lease or state tenancy authority for exact requirements.";
   }
   return "Calculations use a 365-day year, 7-day weeks, 14-day fortnightly or biweekly periods, 28-day four-week periods, and 365 divided by 12 days for a calendar month.";
 }
@@ -530,34 +559,13 @@ function mergeSections(required: ContentSection[], existing: ContentSection[] = 
 }
 
 function conversionUseCase(config: ConversionPageConfig) {
-  if (config.path === "/weekly-to-monthly-rent-formula-uk") {
-    return "Use this when you want to check the PW-to-PCM formula behind a UK listing, not just copy a converted number. It is most useful when a listing quotes weekly rent and your rent cap or salary planning is monthly.";
-  }
-  if (config.path === "/convert-weekly-rent-to-monthly-uk") {
-    return "Use this when a UK listing is quoted weekly and you need to compare it with a monthly budget, another PCM listing, or a rent cap before deciding whether to enquire.";
-  }
-  if (config.path === "/4-weekly-to-monthly-rent-uk") {
-    return "Use this when the payment wording says every 4 weeks or 28 days. That rhythm creates 13 payment periods per year, so it should not be treated as ordinary PCM rent.";
-  }
-  if (config.path === "/pcm-rent-calculator") {
-    return "Use this when you need to move between UK-style PW and PCM wording and keep the annual rent consistent. It helps compare room listings, flat listings, and monthly salary planning on the same basis.";
-  }
-  if (config.path === "/pw-rent-calculator") {
-    return "Use this when a PCM amount needs a weekly equivalent for a PW comparison, shared-housing discussion, or weekly-paid budget.";
-  }
-  if (config.path === "/australia-rent-calculator") {
-    return "Use this as the broad Australia rent-period check when a listing, bond estimate, rent-in-advance amount, or household budget uses a different period than the number you need.";
-  }
   if (config.path === "/weekly-to-fortnightly-rent-australia") {
     return "Use this when the listing is weekly but your rent collection, pay cycle, or household cash-flow plan is fortnightly. It keeps the simple two-week amount separate from true monthly rent.";
   }
   if (config.path === "/fortnightly-to-monthly-rent-australia") {
     return "Use this when a fortnightly rent amount needs to be checked against monthly bills, salary planning, bond estimates, or rent-in-advance cash needed at move-in.";
   }
-  if (config.path.includes("melbourne") || config.path.includes("sydney")) {
-    return "Use this when comparing weekly listings in that city against a monthly budget. It is a rent calculation page, not a local legal guide or market-average claim.";
-  }
-  if (config.path.includes("australia") || config.path.includes("melbourne") || config.path.includes("sydney")) {
+  if (config.path.includes("australia")) {
     return "Use this when an Australian listing is quoted weekly or fortnightly but your budget, bond estimate, rent-in-advance estimate, or household plan is monthly.";
   }
   if (config.path.includes("pcm") || config.path.includes("pw-") || config.path.includes("uk")) {
@@ -594,63 +602,44 @@ function conversionSections(config: ConversionPageConfig) {
 }
 
 function incomeSections(config: IncomeToolConfig) {
-  const multiplier = config.multiplier ?? 3;
-  const percent = config.percent ?? 30;
   const method =
-    config.mode === "multiplier"
+    config.mode === "hourly"
       ? {
-          basis: `This page applies a ${multiplier}x gross-income screening rule to the rent amount entered.`,
-          when: "Use it when a listing or application mentions a 2x, 2.5x, or 3x rent rule and you need to know the gross income number before applying.",
-          read: `A ${multiplier}x rule is a qualification screen. It answers whether income is high enough relative to rent, not whether the household budget will feel comfortable after taxes and bills.`,
-          limit: "Screening multiples do not include take-home pay, debts, utilities, deposits, savings goals, credit profile, guarantor options, or whether the landlord combines household income.",
+          basis: "This page turns hourly pay and weekly hours into annual and monthly gross income before estimating rent targets.",
+          when: "Use it when income is based on an hourly wage, variable hours, or a weekly schedule and a salary-style calculator would hide the pay-frequency detail.",
+          read: "The result depends heavily on the hours entered. If hours vary, compare a conservative hour count with your normal schedule before using a rent target.",
+          limit: "Hourly estimates do not include unpaid time off, overtime changes, tax withholding, payroll deductions, debt, utilities, transport, or seasonal hour changes.",
         }
-      : config.mode === "ratio"
+      : config.mode === "salary"
         ? {
-            basis: "This page divides rent by income to show the rent-to-income percentage.",
-            when: "Use it when you already know the rent and income and want to interpret the percentage instead of starting from a rule of thumb.",
-            read: "The percentage shows how much income rent consumes before other costs. A lower ratio leaves more room for utilities, debt, savings, transport, insurance, and irregular expenses.",
-            limit: "A rent-to-income ratio does not show take-home pay, tax withholding, debt minimums, household size, local costs, deposits, or whether the rent includes utilities.",
+            basis: "This salary-to-rent calculator converts annual gross salary or annual gross income into monthly income, then shows 30%, 40%, and 3x arithmetic reference amounts.",
+            when: "Use it as a rent calculator based on income when the number you know is annual salary but the listing or planned rent is monthly.",
+            read: "The 30% and 40% figures are gross-income comparisons. The 3x figure reverses an income-to-rent comparison, and the planned-rent result shows the share of entered gross income used by that rent.",
+            limit: "Annual gross salary does not show take-home pay, taxes, deductions, debt, utilities, insurance, childcare, medical costs, transportation, savings, deposits, household size, or changing income.",
           }
-        : config.mode === "hourly"
-          ? {
-              basis: "This page turns hourly pay and weekly hours into annual and monthly gross income before estimating rent targets.",
-              when: "Use it when income is based on an hourly wage, variable hours, or a weekly schedule and a salary-style calculator would hide the pay-frequency detail.",
-              read: "The result depends heavily on the hours entered. If hours vary, compare a conservative hour count with your normal schedule before using a rent target.",
-              limit: "Hourly estimates do not include unpaid time off, overtime changes, tax withholding, payroll deductions, debt, utilities, transport, or seasonal hour changes.",
-            }
-          : config.mode === "rent-rule"
-            ? {
-                basis: `This page applies a ${percent}% gross-income rent guideline to the income entered.`,
-                when: `Use it when you want a quick ${percent}% benchmark before comparing the result with a stricter take-home-pay or rent-budget check.`,
-                read: percent >= 40
-                  ? "A 40% target is a stretch benchmark for many renters. It can be useful for comparison, but it should be tested against real paycheck cash flow before signing."
-                  : "A 30% target is a common starting point. It is usually more useful as a ceiling to investigate than as proof that a rent amount is safe.",
-                limit: "Percentage rules do not account for tax, debt, utilities, deposits, transport, savings, insurance, childcare, medical costs, or local rent levels.",
-              }
-            : config.mode === "salary"
-              ? {
-                  basis: "This page converts annual salary into gross monthly income, then compares rent targets and qualification-style limits.",
-                  when: "Use it when the number you know is annual salary but the lease, listing, or budget decision is monthly.",
-                  read: "Salary-based rent targets are clean benchmarks. They become more realistic after you compare them with actual take-home pay and fixed monthly costs.",
-                  limit: "Annual salary does not show taxes, deductions, bonuses, variable income, debt, utilities, deposits, transport, household size, or city-level cost pressure.",
-                }
-              : {
-                  basis: "This page turns income, target rent, and entered expenses into rent targets using common budgeting bands.",
-                  when: "Use it when you want a renter-budget view instead of a landlord-screening answer.",
-                  read: "The result is strongest when the expense number reflects real recurring costs. A lower target usually gives more room for move-in costs and unexpected bills.",
-                  limit: "Budget estimates depend on the expenses entered and do not decide approval, legal rent limits, utility charges, deposits, insurance, or future income changes.",
-                };
+        : {
+            basis: "This page compares planned monthly rent with annual gross income and subtracts the visible aggregate non-rent expense amount from gross monthly income.",
+            when: "Use it when you want to compare a specific rent with one combined monthly estimate for non-rent costs.",
+            read: "Only the remaining-amount result uses the entered expenses. The 30%, 40%, and 3x amounts remain gross-income reference points, not expense-adjusted maximums.",
+            limit: "The calculator does not separately model taxes, debt, utilities, savings, insurance, deposits, or changing income. Include relevant recurring items in the aggregate expense field if you want them subtracted.",
+          };
 
   return mergeSections(
     [
       {
         title: "How this calculator works",
         body: `${method.basis} The output is a planning estimate, not an approval decision or a complete household budget.`,
-        bullets: [
-          "Use the rent target as a starting point before adding utilities, debt payments, savings, and transport.",
-          "Compare gross-income rules with take-home pay when the household budget is tight.",
-          "Treat landlord screening rules as qualification checks, not proof that the rent is comfortable.",
-        ],
+        bullets: config.mode === "budget"
+          ? [
+              "The remaining amount uses only gross monthly income, planned rent, and the aggregate non-rent expenses entered.",
+              "The reference amounts do not change when expenses change.",
+              "Treat income rules as comparisons, not proof that the rent is comfortable.",
+            ]
+          : [
+              "Use income-based amounts as starting points before checking real household costs.",
+              "Compare gross-income rules with take-home pay when the household budget is tight.",
+              "Treat landlord screening rules as qualification checks, not proof that the rent is comfortable.",
+            ],
       },
       {
         title: "When to use this page",
@@ -666,13 +655,9 @@ function incomeSections(config: IncomeToolConfig) {
       },
       {
         title: "Next check after this result",
-        body: config.mode === "multiplier"
-          ? "If the required income looks close, compare the same rent with take-home pay and monthly expenses before paying an application fee. A screening rule can approve a number that still feels tight."
-          : config.mode === "ratio"
-            ? "If the ratio lands near a cutoff, test the same rent with take-home pay and fixed expenses. The percentage is most useful when it leads to a real cash-flow check."
-            : config.mode === "hourly"
-              ? "If hours vary, rerun the calculator with a conservative schedule and compare that result with the rent-per-paycheck calculator. Hourly affordability is sensitive to missed shifts and unpaid time off."
-              : "If the target rent is near the high end, compare it with take-home pay, upfront move-in cash, and a specific listing. Broad rules become more useful when checked against a real rent amount.",
+        body: config.mode === "hourly"
+          ? "If hours vary, rerun the calculator with a conservative schedule and compare that result with the rent-per-paycheck calculator. Hourly affordability is sensitive to missed shifts and unpaid time off."
+          : "If the target rent is near the high end, compare it with take-home pay, upfront move-in cash, and a specific listing. Broad rules become more useful when checked against a real rent amount.",
       },
     ],
     config.sections,
@@ -682,29 +667,20 @@ function incomeSections(config: IncomeToolConfig) {
 function increaseSections(config: IncreaseToolConfig) {
   const modeText =
     config.mode === "compound"
-      ? "The calculator applies the entered percentage repeatedly for the number of years entered."
-      : config.mode === "escalation"
-        ? "The calculator models scheduled increases from a starting rent and escalation rate."
-        : config.mode === "formula"
-          ? "The calculator compares percentage, fixed-dollar, and old-to-new rent formulas side by side."
-          : config.mode === "regional"
-            ? "The calculator applies the percentage you enter to the current monthly rent so the arithmetic is visible."
-            : "The calculator applies the entered increase percentage to the current monthly rent.";
-
-  const regionalText =
-    config.mode === "regional"
-      ? " Calculation assumptions reviewed May 7, 2026. Official rules, exemptions, notice timing, local caps, and lease terms can change, so verify the current government or tenancy-source rules before acting."
-      : "";
+      ? "The calculator applies the entered annual percentage to the prior year’s rent for the whole-number term entered and shows each year’s resulting monthly rent. This repeated compounding is sometimes called annual rent escalation."
+      : "The calculator applies the editable scenario percentage entered by the user. The configured starting value is an arithmetic example, not a current legal limit.";
 
   return mergeSections(
     [
       {
         title: "How this calculator works",
-        body: `${modeText} It shows the new monthly rent, monthly change, annual rent before, and annual rent after so the increase is visible beyond one payment.${regionalText}`,
+        body: modeText,
       },
       {
         title: "When to use this page",
-        body: "Use it to check renewal offers, rent notices, budget changes, CPI-linked clauses, scheduled increases, or before-and-after rent math before you decide whether to move, negotiate, or ask for clarification.",
+        body: config.mode === "compound"
+          ? "Use it to test one repeated annual percentage scenario and inspect the year-by-year rent. It does not calculate cumulative rent paid."
+          : "Use it to check one percentage scenario against a current monthly rent.",
       },
       {
         title: "What this result does not include",
@@ -730,7 +706,9 @@ function increaseSections(config: IncreaseToolConfig) {
         : []),
       {
         title: "How to read the result",
-        body: "The monthly change shows the immediate payment impact. The annual before-and-after amounts show the full-year impact, which is usually the better number for deciding whether a renewal offer, CPI adjustment, or escalation clause fits your budget. If rent is paid weekly, fortnightly, or every 4 weeks, convert the new monthly rent before comparing payment-cycle cash flow.",
+        body: config.mode === "compound"
+          ? "The final rent and total increase use repeated annual compounding. The table shows the monthly rent after each yearly step."
+          : "The increase amount is the difference between current and calculated new monthly rent. Any annualized difference assumes 12 monthly payments.",
       },
       {
         title: "Before acting on an increase",
@@ -747,9 +725,7 @@ function splitSections(config: SplitToolConfig) {
   const method =
     config.mode === "income"
       ? "Income-based splitting divides rent and entered shared costs in proportion to each roommate income."
-      : config.mode === "percentage"
-        ? "Percentage splitting applies the custom share entered for one roommate and assigns the rest to the other."
-        : "The roommate split view starts with an equal split and lets you compare the shared monthly amount clearly.";
+      : "Percentage splitting applies the custom share entered for one roommate and assigns the rest to the other.";
 
   return [
     {
@@ -758,15 +734,15 @@ function splitSections(config: SplitToolConfig) {
     },
     {
       title: "When to use this page",
-      body: "Use it when roommates have different incomes, different room values, parking arrangements, private bathrooms, or shared utilities that need to be discussed before signing or renewing a lease.",
+      body: config.mode === "income"
+        ? "Use it when two people agree to allocate shared monthly costs in proportion to their incomes."
+        : "Use it when two people have already agreed on Person A’s percentage and Person B will pay the remainder.",
     },
     {
       title: "Choosing a fair split method",
       body: config.mode === "income"
         ? "Income-based rent splitting can help when roommates agree that ability to pay should matter more than identical shares. It works best when everyone is comfortable using income as the basis."
-        : config.mode === "percentage"
-          ? "A percentage split is useful when roommates already agreed on exact shares because of room size, private space, parking, pets, or another practical tradeoff."
-          : "An equal split is the cleanest starting point when rooms and incomes are similar. If one room is larger or one roommate gets an extra benefit, compare it with percentage or income-based splits.",
+        : "A percentage split is useful when roommates already agreed on exact shares because of room size, private space, parking, pets, or another practical tradeoff.",
     },
     {
       title: "Utilities and shared costs",
@@ -784,7 +760,7 @@ function splitExamples(config: SplitToolConfig): ExampleItem[] {
     return [
       {
         title: "Different incomes",
-        body: "$2,400 rent plus $300 utilities split between $4,000 and $6,000 monthly incomes gives the higher-income roommate a larger share.",
+        body: "$2,400 rent with no added shared costs split between $4,000 and $6,000 monthly incomes assigns 40% to Person A and 60% to Person B.",
       },
       {
         title: "When income-based split helps",
@@ -804,76 +780,41 @@ function splitExamples(config: SplitToolConfig): ExampleItem[] {
       },
     ];
   }
-  return [
-    {
-      title: "Equal-share starting point",
-      body: "$2,400 rent plus $300 shared costs is $2,700 total, or $1,350 each for two roommates before any room adjustments.",
-    },
-    {
-      title: "Roommate discussion",
-      body: "Start with the equal split, then adjust only if the roommates agree that room size, parking, private bathroom access, or income differences should change the shares.",
-    },
-  ];
+  return [];
 }
 
 function dateSections(config: DateToolConfig) {
-  const task =
-    config.mode === "schedule"
-      ? "The calculator builds payment dates from the first due date, lease length, rent amount, and payment frequency."
-      : "The calculator adds the lease length to the start date and treats the end date as the day before the same calendar date after that length.";
-
   return [
     {
       title: "How this calculator works",
-      body: `${task} Date output is a planning aid; exact dates depend on the lease wording and payment terms.`,
+      body: config.mode === "schedule"
+        ? "The calculator finds the lease end from the entered calendar-month term, then generates each payment date from the original start-date anchor. Dates on or after the calculated lease end are excluded."
+        : "The calculator uses calendar months. When the original day does not exist in the target month, the end date is clamped to that target month’s final day.",
     },
     {
-      title: "When to use this page",
-      body: "Use it before move-in, renewal, notice planning, payment scheduling, or when you need a quick check of lease start dates, end dates, due dates, and reminders.",
+      title: "Calendar-month and month-end assumptions",
+      body: "The written lease or agreement controls the contractual end date. Month-end wording and local legal rules may use a different convention, so treat this result as a planning calculation rather than legal interpretation.",
     },
-      {
-        title: "What this result does not include",
-        body: "This does not override lease language, grace periods, holiday rules, payment portal cutoffs, local notice rules, proration clauses, or agreement-specific due-date changes.",
-        bullets: [
-          "Use lease wording for the final legal date when it differs from a calculator result.",
-          "Build reminders earlier than the calculated date when payment processing time matters.",
-          "Check notice periods separately from rent payment dates because they can use different rules.",
-        ],
-      },
-      {
-        title: "How to read the calculated date",
-        body: config.mode === "schedule"
-          ? "The schedule lists the payment dates produced from the start date and frequency entered. Monthly schedules stay on calendar months, while weekly, fortnightly, and every-4-weeks schedules move by fixed day intervals."
-          : "The end date is calculated by adding the lease length to the start date, then stepping back one day. This matches a common lease-counting convention, but the lease wording controls the final date.",
-      },
-      {
-        title: "Before you put dates on a calendar",
-        body: "Check whether the lease uses calendar days, business days, a specific payment portal cutoff, or a notice deadline that falls before the visible rent due date. Those details can change when you should schedule the actual payment or reminder.",
-      },
-      {
-        title: "After you get the date",
-        body: "Use the output to plan rent reminders, renewal conversations, notice timing, move-in budgeting, or a proration check. If money is due before move-in, compare the date result with the rent-in-advance and prorated-rent calculators. Keep a copy for your own records when dates affect deposits or payments.",
-      },
-      {
-        title: "Common date mistakes to avoid",
-        body: "Do not assume every lease ends on the same numbered day it starts, and do not treat a reminder date as the legal deadline. Month lengths, leap years, weekends, portal cutoff times, and lease wording can all change how a date should be used in practice. When dates affect money, save the calculation beside the lease clause or invoice line it is based on.",
-      },
-    ];
+  ];
 }
 
 function dateExamples(config: DateToolConfig): ExampleItem[] {
   if (config.mode === "schedule") {
     return [
       {
-        title: "Monthly rent schedule",
-        body: "A lease starting 2026-06-01 with monthly rent due monthly generates one payment date for each month in the lease length entered.",
+        title: "One-month weekly schedule",
+        body: "A weekly schedule starting 2025-02-01 for one calendar month lists February 1, 8, 15, and 22. It excludes March 1 because that is after the February 28 lease end.",
       },
     ];
   }
   return [
     {
-      title: "12-month lease",
-      body: "A 12-month lease starting June 1 commonly ends May 31 the next year under this counting method, but the lease controls the final date.",
+      title: "Month-end start",
+      body: "A one-month term starting 2025-01-31 ends 2025-02-28 because February does not have a 31st day.",
+    },
+    {
+      title: "12-month term",
+      body: "A 12-month term starting 2025-06-01 ends 2026-05-31 under this calendar-month convention.",
     },
   ];
 }
@@ -970,13 +911,9 @@ function infoSections(config: InfoPageConfig) {
       ? "This page compares two listing periods side by side: PCM for calendar-month rent and PW for weekly rent. It focuses on comparison traps rather than defining only one term."
       : lowerPath.includes("what-does-pcm")
         ? "This page defines PCM as per calendar month, then shows why PCM should not be confused with weekly rent or every-4-weeks rent."
-        : lowerPath.includes("what-does-pw")
+      : lowerPath.includes("what-does-pw")
           ? "This page defines PW as per week, then shows why the weekly amount should be annualized before it is compared with a monthly rent cap."
-          : lowerPath.includes("per-calendar-month-rent-uk")
-            ? "This page focuses on UK per-calendar-month wording and how it relates to PW, 4-weekly rent, deposits, bills, and monthly budgeting."
-            : lowerPath.includes("per-calendar-month-rent")
-              ? "This page explains per-calendar-month rent as a payment period, then separates it from daily month length and 28-day rent cycles."
-              : isPw
+          : isPw
                 ? "This page defines weekly rent wording, then shows why a weekly listing should be annualized before comparing it with a calendar-month budget."
                 : isPcm
                   ? "This page defines per-calendar-month rent, then compares it with weekly and every-4-weeks rent so the listing period does not distort the budget."
@@ -985,12 +922,10 @@ function infoSections(config: InfoPageConfig) {
     lowerPath.includes("pcm-vs-pw")
       ? "Use it when two listings use different period labels and you need to compare the actual rent rhythm before choosing which one is cheaper or easier to budget."
       : lowerPath.includes("what-does-pcm")
-        ? "Use it when a listing says PCM and you need to know whether the amount is monthly, whether bills are included, and how it compares with weekly rent."
-        : lowerPath.includes("what-does-pw")
+        ? "Use it when a listing says PCM and you need to compare the calendar-month amount with weekly or every-4-weeks rent."
+      : lowerPath.includes("what-does-pw")
           ? "Use it when a listing says PW and you need to turn the weekly price into a monthly or annual comparison before deciding whether it fits."
-          : lowerPath.includes("per-calendar-month")
-            ? "Use it when the phrase per calendar month appears in a listing or lease and you need to separate monthly rent from weekly or 28-day payment wording."
-            : "Use it when a listing uses PCM, PW, per calendar month, or 4-weekly wording and you need to understand the term before comparing rent, bills, or affordability.";
+          : "Use it when a listing uses PCM, PW, per calendar month, or 4-weekly wording and you need to understand the term before comparing rent periods.";
 
   return mergeSections(
     [
@@ -1004,10 +939,10 @@ function infoSections(config: InfoPageConfig) {
       },
       {
         title: "What this page does not include",
-        body: "The term does not prove what bills, council tax, service charges, parking, deposits, or utilities are included. The listing and lease control those details.",
+        body: "PW and PCM describe rent periods only. This guide does not interpret lease terms, fees, included costs, or legal obligations.",
         bullets: [
-          "Use PW-to-PCM conversion for rent amount comparison, not for included-bills assumptions.",
-          "Use the lease or listing to confirm payment dates, deposits, and service charges.",
+          "Use PW-to-PCM conversion for rent amount comparison.",
+          "Use PCM-to-PW conversion for an average weekly equivalent.",
           "Use the 4-week comparison only when the listing is actually collected every 28 days.",
         ],
       },
@@ -1253,877 +1188,282 @@ function DirectAnswer({
   );
 }
 
-const exactAnswerAmounts = [150, 160, 170, 180, 200, 220, 230, 250, 300, 320, 350, 370, 400, 450, 500, 550, 600, 650, 750];
-
-function nearbyWeeklyAnswerLinks(config: WeeklyAnswerPageConfig): RelatedLink[] {
-  if (config.currency !== "USD" || config.daily) return config.relatedLinks.slice(0, 6);
-
-  const index = exactAnswerAmounts.indexOf(config.amount);
-  const nearby =
-    index === -1
-      ? []
-      : [exactAnswerAmounts[index - 1], exactAnswerAmounts[index + 1]]
-          .filter((amount): amount is number => typeof amount === "number")
-          .map((amount) => ({
-            to: `/${amount}-per-week-to-monthly-rent`,
-            label: `$${amount} per week to monthly rent`,
-            description: "Compare a nearby weekly amount with this result.",
-          }));
-
-  const links = [...nearby, ...config.relatedLinks];
-  return Array.from(new Map(links.map((link) => [link.to, link])).values()).slice(0, 6);
-}
-
-type ExactAnswerCopy = {
-  lead: string;
-  budgetTitle: string;
-  budgetBody: string;
-  sections: ContentSection[];
-  examples: ExampleItem[];
-};
-
-function exactAnswerCopy(
-  config: WeeklyAnswerPageConfig,
-  cents: bigint,
-  weekly: bigint,
-  monthly: bigint,
-  fourWeek: bigint,
-  annual: bigint,
-  diff: bigint,
-): ExactAnswerCopy {
-  const amountLabel = `${formatMoney(cents, config.currency)} ${config.daily ? "per night" : "per week"}`;
-  const monthlyLabel = formatMoney(monthly, config.currency);
-  const fourWeekLabel = formatMoney(fourWeek, config.currency);
-  const annualLabel = formatMoney(annual, config.currency);
-  const diffLabel = formatMoney(diff, config.currency);
-
-  if (config.daily) {
-    return {
-      lead: "Use it to compare a nightly room or short-stay quote with monthly housing before cleaning fees, platform fees, taxes, or minimum-stay terms.",
-      budgetTitle: "Short-stay quote vs monthly rent",
-      budgetBody: `${amountLabel} becomes ${monthlyLabel} per average calendar month and ${annualLabel} per year before fees. That turns a nightly quote into a number you can compare with a lease, sublet, or temporary housing budget.`,
-      sections: [
-        {
-          title: "How this nightly answer is calculated",
-          body: "The nightly amount is treated as daily rent, multiplied by 365, then divided by 12 calendar months.",
-          bullets: [
-            `${formatMoney(weekly, config.currency)} is the 7-night equivalent before fees.`,
-            `${monthlyLabel} is the average calendar-month comparison number.`,
-            `${annualLabel} is the annualized amount before taxes, cleaning fees, deposits, or platform charges.`,
-            "Use the result as a rent comparison, then confirm the booking or lease terms before relying on it.",
-          ],
-        },
-        {
-          title: "When the nightly comparison helps",
-          body: "Use it when a room, short-stay, or temporary accommodation quote looks affordable by the night but needs to be checked against a monthly rent budget.",
-        },
-        {
-          title: "What this result does not include",
-          body: "Cleaning fees, deposits, minimum stays, taxes, utilities, parking, and platform fees are not included unless you add them separately.",
-        },
-        {
-          title: "How to compare with a lease",
-          body: "A nightly quote can be useful for a gap between leases, but it does not always behave like base rent. Check whether the price covers one person, one room, or the whole property before comparing it with a normal monthly lease.",
-        },
-        {
-          title: "Before relying on the monthly equivalent",
-          body: "Confirm how many nights are actually available, whether the quote can be extended, and which charges are unavoidable. The rent math is only a comparison point.",
-        },
-      ],
-      examples: [
-        {
-          title: "Temporary stay check",
-          body: `A ${amountLabel} room is ${monthlyLabel} on an average-month basis before fees, so a one-month stay can cost more than the headline night price suggests.`,
-        },
-        {
-          title: "Lease comparison",
-          body: `Compare ${monthlyLabel} with the monthly rent on a sublet or lease only after adding taxes, cleaning, and any required deposit.`,
-        },
-      ],
-    };
-  }
-
-  const formulaSection: ContentSection = {
-    title: "How this exact answer is calculated",
-    body: `${formatMoney(weekly, config.currency)} per week is converted with weekly x 365 / 7 / 12. That gives ${monthlyLabel} per average calendar month and ${annualLabel} per year.`,
-    bullets: [
-      `${fourWeekLabel} is the 28-day amount, not the average calendar-month amount.`,
-      `${diffLabel} is the monthly gap created by using 4 weeks instead of a true month.`,
-      `${annualLabel} is the annual rent before bills, deposits, or fees.`,
-      "Use the calendar-month number for monthly budgets and the original weekly number for checking the lease payment wording.",
-    ],
-  };
-
-  if (config.currency === "GBP") {
-    return {
-      lead: "Use it for UK-style PW listings where the PCM comparison matters more than multiplying the weekly rent by 4.",
-      budgetTitle: "PW listing converted to PCM",
-      budgetBody: `${amountLabel} is ${monthlyLabel} PCM on a 365-day basis, not ${fourWeekLabel}. The ${diffLabel} monthly gap is the part often missed when a weekly UK listing is compared with a monthly budget.`,
-      sections: [
-        formulaSection,
-        {
-          title: "UK room or student listing check",
-          body: "This amount is useful when a room, student let, or shared-house listing is quoted PW but your salary, bills, or comparison listing is monthly.",
-        },
-        {
-          title: "What this result does not include",
-          body: "Bills, council tax, internet, service charges, deposits, and rent-in-advance wording are included only when the listing or lease says so.",
-        },
-        {
-          title: "PW, 4-weekly, and PCM wording",
-          body: "PW is weekly rent. PCM is per calendar month. A 4-week amount covers 28 days, so it is useful only when the payment cycle is actually every 4 weeks.",
-        },
-        {
-          title: "What to check in the listing",
-          body: "Check whether the price is for one room or the whole property, whether bills are included, when rent is due, and whether any deposit or advance rent is required before move-in.",
-        },
-      ],
-      examples: [
-        {
-          title: "Room listing comparison",
-          body: `A ${amountLabel} room is ${monthlyLabel} PCM before bills. That is the number to compare with a monthly room budget or a PCM listing nearby.`,
-        },
-        {
-          title: "4-week shortcut check",
-          body: `${fourWeekLabel} covers only 28 days. If your budget is monthly, the missing ${diffLabel} can matter once council tax, utilities, or transport are added.`,
-        },
-      ],
-    };
-  }
-
-  if (config.currency === "EUR") {
-    return {
-      lead: "Use it when a euro weekly listing needs to be checked against a monthly budget, annual rent total, and lease payment wording.",
-      budgetTitle: "Euro weekly rent converted to monthly",
-      budgetBody: `${amountLabel} becomes ${monthlyLabel} per average calendar month and ${annualLabel} per year. The 4-week amount is ${fourWeekLabel}, so using weekly x 4 would miss ${diffLabel} each month on this comparison.`,
-      sections: [
-        formulaSection,
-        {
-          title: "When this euro amount helps",
-          body: "Use it when a weekly quote needs to be compared with monthly income, a monthly rent cap, or another listing that uses a monthly price.",
-        },
-        {
-          title: "What this result does not include",
-          body: "The conversion does not decide whether utilities, building charges, deposits, agency fees, furnishings, parking, or local taxes are included.",
-        },
-        {
-          title: "Why annualizing is cleaner",
-          body: "Annualizing the weekly amount first keeps the comparison consistent across months of different lengths. That is safer than treating every month as exactly 4 weeks.",
-        },
-        {
-          title: "What to check next",
-          body: "Confirm the payment period in the listing, the first due date, the deposit or advance rent, and whether the weekly amount applies to a room or the whole property.",
-        },
-      ],
-      examples: [
-        {
-          title: "Monthly rent cap",
-          body: `If a monthly cap is close to ${monthlyLabel}, the ${fourWeekLabel} shortcut would understate the listing by ${diffLabel}.`,
-        },
-        {
-          title: "Annual housing plan",
-          body: `${annualLabel} is the annual rent before other charges, which is often the cleaner number for comparing options over a full lease year.`,
-        },
-      ],
-    };
-  }
-
-  if (config.amount <= 180) {
-    return {
-      lead: `The monthly gap from multiplying by 4 is ${diffLabel}, which matters for room, student, or shared-housing budgets.`,
-      budgetTitle: "Room listing monthly check",
-      budgetBody: `${amountLabel} is ${monthlyLabel} per average calendar month, not ${fourWeekLabel}. That keeps a low weekly room price from being mistaken for a lower monthly commitment.`,
-      sections: [
-        formulaSection,
-        {
-          title: "Room or shared-housing use case",
-          body: "Lower weekly amounts often show up on room, student, or shared accommodation searches. The monthly conversion helps compare the room with monthly bills and other shared-house costs.",
-        },
-        {
-          title: "What this result does not include",
-          body: "A low rent figure can still change once utilities, shared supplies, internet, parking, deposits, or move-in charges are added.",
-        },
-        {
-          title: "Why the monthly gap matters at lower rents",
-          body: `${diffLabel} can be meaningful when the listing is chosen because every dollar of monthly room cost matters. It is better to budget the true monthly equivalent before applying.`,
-        },
-        {
-          title: "Next checks for a budget listing",
-          body: "Confirm whether the amount is for one room or the whole unit, whether bills are included, when rent is due, and whether the lease uses weekly, 4-weekly, or monthly payment wording.",
-        },
-      ],
-      examples: [
-        {
-          title: "Student room budget",
-          body: `If a room budget is around ${monthlyLabel}, the ${fourWeekLabel} shortcut leaves out ${diffLabel} before utilities or transport.`,
-        },
-        {
-          title: "Shared-house comparison",
-          body: `Compare ${amountLabel} with monthly room listings by using ${monthlyLabel}, then add any shared bills that are not included.`,
-        },
-      ],
-    };
-  }
-
-  if (config.amount <= 250) {
-    return {
-      lead: `Use it for budget listings where the ${diffLabel} gap between 4 weeks and a calendar month can change the monthly rent cap.`,
-      budgetTitle: "Budget listing converted to monthly",
-      budgetBody: `${amountLabel} converts to ${monthlyLabel} per average calendar month and ${annualLabel} per year. The 4-week shortcut gives ${fourWeekLabel}, so it is too low for a monthly budget.`,
-      sections: [
-        formulaSection,
-        {
-          title: "Budget listing use case",
-          body: "This amount can fit room searches, smaller units, or lower-cost listings where renters often compare several weekly prices quickly.",
-        },
-        {
-          title: "What this result does not include",
-          body: "Add utilities, renter-paid services, parking, pet rent, deposits, application fees, and any rent in advance before deciding the listing fits.",
-        },
-        {
-          title: "Why the 4-week shortcut can mislead",
-          body: "Four weeks is 28 days, while an average calendar month is about 30.42 days. The weekly price needs the extra days included before it matches monthly income and bills.",
-        },
-        {
-          title: "What to check next",
-          body: "Check the lease payment wording, first due date, deposit or bond, and whether the listing is quoted weekly, every 4 weeks, monthly, PCM, or annually.",
-        },
-      ],
-      examples: [
-        {
-          title: "Monthly cap check",
-          body: `A renter comparing listings near ${monthlyLabel} should use the true monthly number rather than the ${fourWeekLabel} 28-day amount.`,
-        },
-        {
-          title: "Annual cost check",
-          body: `${annualLabel} is the rent-only annual total, which makes it easier to compare against savings plans or salary-based rent targets.`,
-        },
-      ],
-    };
-  }
-
-  if (config.amount <= 370) {
-    return {
-      lead: "Use this for mid-range weekly listings where the monthly equivalent is the number most budgets and bills are built around.",
-      budgetTitle: "Mid-range weekly listing check",
-      budgetBody: `${amountLabel} is ${monthlyLabel} per average calendar month. Using ${fourWeekLabel} would understate the rent by ${diffLabel} before bills or fees.`,
-      sections: [
-        formulaSection,
-        {
-          title: "Apartment comparison use case",
-          body: "This range is useful when comparing weekly listings with monthly apartment listings, monthly pay, or a rent cap set from income.",
-        },
-        {
-          title: "What this result does not include",
-          body: "If two listings are close, utilities, commute costs, parking, deposits, pet charges, internet, and move-in timing can matter more than a small rent difference.",
-        },
-        {
-          title: "Why calendar-month rent is the cleaner comparison",
-          body: "Monthly bills, salary planning, and many leases use calendar months. Annualizing the weekly amount first keeps the comparison from treating a month as exactly 28 days.",
-        },
-        {
-          title: "What to verify before signing",
-          body: "Confirm the payment frequency, due date, included services, deposit or bond, and whether the quoted rent applies to the whole property or a room.",
-        },
-      ],
-      examples: [
-        {
-          title: "Listing shortlist",
-          body: `When two listings look close, compare ${monthlyLabel} with the other monthly price and then add utilities and commute costs.`,
-        },
-        {
-          title: "Income check",
-          body: `${annualLabel} is the rent-only yearly total, useful for comparing the listing with a salary-based affordability target.`,
-        },
-      ],
-    };
-  }
-
-  if (config.amount <= 500) {
-    return {
-      lead: "Use this for weekly apartment listings where the 4-week shortcut can make the rent look materially lower than the monthly budget impact.",
-      budgetTitle: "Apartment monthly budget check",
-      budgetBody: `${amountLabel} is ${monthlyLabel} per average calendar month, while 4 weeks is ${fourWeekLabel}. The ${diffLabel} difference is enough to affect a monthly rent cap or paycheck plan.`,
-      sections: [
-        formulaSection,
-        {
-          title: "Weekly apartment listing use case",
-          body: "At this level, the weekly amount is often compared with full monthly rent, paycheck budgeting, and affordability rules rather than only room-level costs.",
-        },
-        {
-          title: "What this result does not include",
-          body: "Utilities, parking, renter insurance, pet rent, internet, service charges, deposits, and moving costs can change whether the listing still fits.",
-        },
-        {
-          title: "Why 4 weeks is not enough",
-          body: "A 28-day figure can look tidy on paper, but a 12-month lease covers the whole year. The monthly equivalent is annual rent divided by 12.",
-        },
-        {
-          title: "What to check after the conversion",
-          body: "Check whether rent is due weekly, every 4 weeks, or monthly; whether the first payment is prorated; and whether the listing requires a deposit, bond, or rent in advance.",
-        },
-      ],
-      examples: [
-        {
-          title: "Monthly bill planning",
-          body: `If monthly bills reset around ${monthlyLabel}, using ${fourWeekLabel} would leave ${diffLabel} unplanned before utilities.`,
-        },
-        {
-          title: "Annual lease view",
-          body: `The rent-only annual total is ${annualLabel}, which is the better number for comparing a full lease year with moving costs or salary changes.`,
-        },
-      ],
-    };
-  }
-
-  if (config.amount <= 650) {
-    return {
-      lead: `At this level, the annual total of ${annualLabel} and the ${diffLabel} monthly gap are worth checking before treating the weekly price as affordable.`,
-      budgetTitle: "Higher-cost weekly listing check",
-      budgetBody: `${amountLabel} converts to ${monthlyLabel} per average calendar month and ${annualLabel} per year. The 4-week amount is ${fourWeekLabel}, which is not enough for monthly planning.`,
-      sections: [
-        formulaSection,
-        {
-          title: "Higher-cost market use case",
-          body: "Use this when the listing is in a higher-cost area, covers a larger property, or sits near the top of a rent budget. The monthly and annual totals matter more than the weekly headline.",
-        },
-        {
-          title: "What this result does not include",
-          body: "A higher base rent leaves less room for utilities, parking, transport, insurance, deposits, pet rent, or move-in cash unless those costs are already planned.",
-        },
-        {
-          title: "Why the annual number matters",
-          body: `${annualLabel} shows the full rent-only commitment before lease extras. It is useful for comparing against salary, savings, or moving-cost tradeoffs.`,
-        },
-        {
-          title: "What to check before enquiring",
-          body: "Confirm whether the weekly price is negotiable, when payments are due, what is included, and whether the first month includes prorated rent, bond, deposit, or rent in advance.",
-        },
-      ],
-      examples: [
-        {
-          title: "Affordability screen",
-          body: `If ${monthlyLabel} is near the top of the rent range, run the affordability or take-home-pay calculator before applying.`,
-        },
-        {
-          title: "4-week gap check",
-          body: `Budgeting only ${fourWeekLabel} would miss ${diffLabel} in an average month before any separate charges.`,
-        },
-      ],
-    };
-  }
-
-  return {
-    lead: `The annual total is ${annualLabel}, so this page is most useful for checking a larger weekly rental against income, deposits, and payment timing.`,
-    budgetTitle: "Large weekly rent converted to monthly",
-    budgetBody: `${amountLabel} is ${monthlyLabel} per average calendar month and ${annualLabel} per year. The 4-week amount is ${fourWeekLabel}, which understates the monthly comparison by ${diffLabel}.`,
-    sections: [
-      formulaSection,
-      {
-        title: "Large rental or high-cost-market use case",
-        body: "Use this when a larger property or high-cost-market listing is quoted weekly but the decision depends on monthly cash flow and annual housing cost.",
-      },
-      {
-        title: "What this result does not include",
-        body: "Higher weekly rent can make deposits, rent in advance, parking, utilities, insurance, pet rent, and moving costs more important to the signing decision.",
-      },
-      {
-        title: "Why the monthly equivalent matters",
-        body: "A larger weekly rent can look manageable until the full calendar-month and annual totals are visible. The monthly equivalent is the number to compare with paycheck planning.",
-      },
-      {
-        title: "What to check next",
-        body: "Verify payment frequency, first due date, deposit or bond, included services, and whether the lease quotes weekly, every 4 weeks, monthly, PCM, or annual rent.",
-      },
-    ],
-    examples: [
-      {
-        title: "Full-year commitment",
-        body: `${annualLabel} is the rent-only annual amount before bills. Compare that with income, savings goals, and moving costs before treating the weekly rent as comfortable.`,
-      },
-      {
-        title: "Monthly cash-flow check",
-        body: `If ${monthlyLabel} is close to the maximum rent target, the ${diffLabel} gap from the 4-week shortcut is too large to ignore.`,
-      },
-    ],
-  };
-}
-
-export function WeeklyAnswerPage({ config }: { config: WeeklyAnswerPageConfig }) {
-  const cents = BigInt(Math.round(config.amount * 100));
-  const monthly = config.daily ? dailyToMonthlyCents(cents) : weeklyToMonthlyCents(cents);
-  const weekly = config.daily ? dailyToWeeklyCents(cents) : cents;
-  const annual = config.daily ? cents * 365n : weeklyToAnnualCents(cents);
-  const fourWeek = weekly * 4n;
-  const diff = monthly - fourWeek;
-  const amountLabel = `${formatMoney(cents, config.currency)} ${config.daily ? "per night" : "per week"}`;
-  const schemas = makePageSchemas({ ...config, calculator: true, faq: answerFaq(config.daily) });
-  const resultCards = config.daily
-    ? [
-        { label: "Daily amount", value: formatMoney(cents, config.currency) },
-        { label: "Weekly equivalent", value: formatMoney(weekly, config.currency) },
-        { label: "Annual amount", value: formatMoney(annual, config.currency) },
-      ]
-    : [
-        { label: "Weekly amount", value: formatMoney(cents, config.currency) },
-        { label: "Every 4 weeks", value: formatMoney(fourWeek, config.currency) },
-        { label: "Annual amount", value: formatMoney(annual, config.currency) },
-        { label: "Monthly minus 4 weeks", value: formatMoney(diff, config.currency) },
-      ];
-  const tableRows = config.daily
-    ? [
-        ["Formula", "daily x 365 / 12"],
-        ["Weekly equivalent", formatMoney(weekly, config.currency)],
-        ["Annual equivalent", formatMoney(annual, config.currency)],
-      ]
-    : [
-        ["Formula", "weekly x 365 / 7 / 12"],
-        ["Weekly rent", formatMoney(cents, config.currency)],
-        ["Every 4 weeks", formatMoney(fourWeek, config.currency)],
-        ["Average monthly rent", formatMoney(monthly, config.currency)],
-        ["Annual rent", formatMoney(annual, config.currency)],
-        ["Budget point", `${formatMoney(diff, config.currency)} is the gap between 4 weeks and a calendar month.`],
-      ];
-  const copy = exactAnswerCopy(config, cents, weekly, monthly, fourWeek, annual, diff);
-
+function InvalidIncomeResults({ errors }: { errors: string[] }) {
+  if (errors.length === 0) return null;
   return (
-    <Shell schemas={schemas}>
-      <ToolCard
-        eyebrow={config.eyebrow}
-        h1={config.h1}
-        lead={`${amountLabel} is ${formatMoney(monthly, config.currency)} per calendar month using the 365-day model. ${copy.lead}`}
-        onPrint={() => window.print()}
-      >
-        <ResultPanel
-          label={config.daily ? "Monthly equivalent" : "True monthly equivalent"}
-          value={formatMoney(monthly, config.currency)}
-          detail={
-            config.daily
-              ? "Per night is treated as daily rent, then annualized and divided by 12."
-              : `${formatMoney(fourWeek, config.currency)} covers only 4 weeks. The calendar-month equivalent is higher because an average month is about 30.42 days.`
-          }
-          cards={resultCards}
-          tableRows={tableRows}
-        />
-      </ToolCard>
-      <DirectAnswer
-        title={copy.budgetTitle}
-        body={copy.budgetBody}
-        formula={config.daily ? "monthly = daily x 365 / 12" : "monthly = weekly x 365 / 7 / 12"}
-      />
-      <ContentBlocks sections={copy.sections} examples={copy.examples} />
-      <AssumptionNote path={config.path} />
-      <RelatedTools links={nearbyWeeklyAnswerLinks(config)} />
-      <Faq items={answerFaq(config.daily)} />
-    </Shell>
+    <div className="mt-6 rounded-2xl bg-rose-50 p-4 text-rose-900" role="status" aria-live="polite">
+      <p className="font-semibold">Fix the highlighted {errors.length === 1 ? "field" : "fields"} to calculate the result.</p>
+    </div>
   );
 }
 
-function answerFaq(daily?: boolean): FaqItem[] {
-  return [
-    {
-      q: daily ? "Is per night the same as daily rent?" : "Why is weekly rent not multiplied by 4?",
-      a: daily
-        ? "For rent comparison, this page treats a per-night price like a daily price. Your contract can still use different hotel, short-stay, or lease rules."
-        : "Multiplying by 4 only covers 28 days. A calendar month averages about 30.42 days, so the true monthly equivalent is based on annual rent divided by 12.",
+const salaryStorageKeys = {
+  annualSalary: "rc_salary_to_rent_annual_salary",
+  plannedRent: "rc_salary_to_rent_planned_rent",
+  currency: "rc_salary_to_rent_currency",
+} as const;
+
+function SalaryIncomeTool({ config }: { config: IncomeToolConfig }) {
+  const [salary, setSalary] = useState(config.defaultIncome ?? "60000");
+  const [plannedRent, setPlannedRent] = useState(config.defaultRent ?? "1500");
+  const [currency, setCurrency] = useState<Currency>("USD");
+
+  useHydrationSafeSavedState({
+    restore(storage) {
+      let applied = false;
+      const savedSalary = validSavedMoney(
+        storage.getItem(salaryStorageKeys.annualSalary),
+        { allowZero: false },
+      );
+      const savedRent = validSavedMoney(
+        storage.getItem(salaryStorageKeys.plannedRent),
+        { allowZero: true },
+      );
+      const savedCurrency = validSavedCurrency(
+        storage.getItem(salaryStorageKeys.currency),
+      );
+      if (savedSalary !== undefined) {
+        setSalary(savedSalary);
+        applied = true;
+      }
+      if (savedRent !== undefined) {
+        setPlannedRent(savedRent);
+        applied = true;
+      }
+      if (savedCurrency !== undefined && isCurrency(savedCurrency)) {
+        setCurrency(savedCurrency);
+        applied = true;
+      }
+      return applied;
     },
-    {
-      q: "Does this include utilities or fees?",
-      a: "No. The result only converts the rent amount entered. Add utilities, parking, internet, deposits, and other charges separately.",
+    persist(storage) {
+      storage.setItem(salaryStorageKeys.annualSalary, salary);
+      storage.setItem(salaryStorageKeys.plannedRent, plannedRent);
+      storage.setItem(salaryStorageKeys.currency, currency);
     },
-  ];
+    dependencies: [salary, plannedRent, currency],
+  });
+
+  const salaryParsed = parseIncomeMoney(salary, "Annual gross salary");
+  const rentParsed = parseIncomeMoney(plannedRent, "Planned monthly rent", { allowZero: true });
+  const errors = [salaryParsed.ok ? "" : salaryParsed.error, rentParsed.ok ? "" : rentParsed.error].filter(Boolean);
+  const result = salaryParsed.ok && rentParsed.ok
+    ? calculateSalaryComparison(salaryParsed.cents, rentParsed.cents)
+    : undefined;
+
+  return (
+    <ToolCard eyebrow={config.eyebrow} h1={config.h1} lead={config.lead} onPrint={() => window.print()}>
+      <div className="mt-6 grid gap-4 lg:grid-cols-12">
+        <div className="lg:col-span-5"><TextInput id="annual-gross-salary" label="Annual gross salary" value={salary} onChange={setSalary} error={salaryParsed.ok ? undefined : salaryParsed.error} /></div>
+        <div className="lg:col-span-4"><TextInput id="planned-monthly-rent" label="Planned monthly rent" value={plannedRent} onChange={setPlannedRent} error={rentParsed.ok ? undefined : rentParsed.error} /></div>
+        <div className="lg:col-span-3"><CurrencySelect value={currency} onChange={setCurrency} /></div>
+      </div>
+      <InvalidIncomeResults errors={errors} />
+      {result ? (
+        <ResultPanel
+          label="30% gross-income reference"
+          value={formatMoney(result.monthlyRentAt30, currency)}
+          detail="These amounts compare annual gross income with common income-based rules. They do not calculate taxes, take-home pay, or personal expenses."
+          cards={[
+            { label: "Monthly gross income", value: formatMoney(result.monthlyGrossIncome, currency) },
+            { label: "Monthly rent at 30% of gross income", value: formatMoney(result.monthlyRentAt30, currency) },
+            { label: "Monthly rent at 40% of gross income", value: formatMoney(result.monthlyRentAt40, currency) },
+            { label: "Monthly rent under a 3x annual-income requirement", value: formatMoney(result.monthlyRentAt3x, currency) },
+            { label: "Planned rent as a percentage of monthly gross income", value: formatPercent(result.plannedRentPercent) },
+          ]}
+        />
+      ) : null}
+    </ToolCard>
+  );
+}
+
+function HourlyIncomeTool({ config }: { config: IncomeToolConfig }) {
+  const [hourlyPay, setHourlyPay] = useState(config.defaultIncome ?? "21");
+  const [hours, setHours] = useState(config.defaultHours ?? "40");
+  const [plannedRent, setPlannedRent] = useState(config.defaultRent ?? "1200");
+  const [currency, setCurrency] = useState<Currency>("USD");
+  const payParsed = parseIncomeMoney(hourlyPay, "Hourly pay");
+  const hoursParsed = parseHoursPerWeek(hours);
+  const rentParsed = parseIncomeMoney(plannedRent, "Planned monthly rent", { allowZero: true });
+  const errors = [payParsed.ok ? "" : payParsed.error, hoursParsed.ok ? "" : hoursParsed.error, rentParsed.ok ? "" : rentParsed.error].filter(Boolean);
+  const result = payParsed.ok && hoursParsed.ok && rentParsed.ok
+    ? calculateHourlyIncome(payParsed.cents, hoursParsed.hundredths, rentParsed.cents)
+    : undefined;
+
+  return (
+    <ToolCard eyebrow={config.eyebrow} h1={config.h1} lead={config.lead} onPrint={() => window.print()}>
+      <div className="mt-6 grid gap-4 lg:grid-cols-12">
+        <div className="lg:col-span-3"><TextInput id="hourly-pay" label="Hourly pay" value={hourlyPay} onChange={setHourlyPay} error={payParsed.ok ? undefined : payParsed.error} /></div>
+        <div className="lg:col-span-3"><TextInput id="hours-per-week" label="Hours per week" value={hours} onChange={setHours} helper="Enter more than 0 and no more than 168 hours." error={hoursParsed.ok ? undefined : hoursParsed.error} /></div>
+        <div className="lg:col-span-3"><TextInput id="hourly-planned-rent" label="Planned monthly rent" value={plannedRent} onChange={setPlannedRent} error={rentParsed.ok ? undefined : rentParsed.error} /></div>
+        <div className="lg:col-span-3"><CurrencySelect value={currency} onChange={setCurrency} /></div>
+      </div>
+      <p className="mt-4 text-sm leading-relaxed text-slate-600">The estimate assumes the entered hours are worked every week for 52 paid weeks. Taxes and unpaid time are not deducted.</p>
+      <InvalidIncomeResults errors={errors} />
+      {result ? (
+        <ResultPanel
+          label="30% gross-income reference"
+          value={formatMoney(result.monthlyRentAt30, currency)}
+          detail="This is a gross-income estimate based on the hourly pay and weekly hours shown above, not take-home income."
+          cards={[
+            { label: "Estimated annual gross income", value: formatMoney(result.annualGrossIncome, currency) },
+            { label: "Estimated monthly gross income", value: formatMoney(result.monthlyGrossIncome, currency) },
+            { label: "Monthly rent at 30%", value: formatMoney(result.monthlyRentAt30, currency) },
+            { label: "Monthly rent at 40%", value: formatMoney(result.monthlyRentAt40, currency) },
+            { label: "Monthly rent under a 3x annual-income requirement", value: formatMoney(result.monthlyRentAt3x, currency) },
+            { label: "Planned rent as a percentage of monthly gross income", value: formatPercent(result.plannedRentPercent) },
+          ]}
+        />
+      ) : null}
+    </ToolCard>
+  );
+}
+
+function BudgetIncomeTool({ config }: { config: IncomeToolConfig }) {
+  const [income, setIncome] = useState(config.defaultIncome ?? "60000");
+  const [rent, setRent] = useState(config.defaultRent ?? "1500");
+  const [expenses, setExpenses] = useState(config.defaultExpenses ?? "0");
+  const [currency, setCurrency] = useState<Currency>("USD");
+  const incomeParsed = parseIncomeMoney(income, "Annual gross income");
+  const rentParsed = parseIncomeMoney(rent, "Planned monthly rent", { allowZero: true });
+  const expensesParsed = parseIncomeMoney(expenses, "Monthly non-rent expenses", { allowZero: true });
+  const errors = [incomeParsed.ok ? "" : incomeParsed.error, rentParsed.ok ? "" : rentParsed.error, expensesParsed.ok ? "" : expensesParsed.error].filter(Boolean);
+  const result = incomeParsed.ok && rentParsed.ok && expensesParsed.ok
+    ? calculateRentBudget(incomeParsed.cents, rentParsed.cents, expensesParsed.cents)
+    : undefined;
+
+  return (
+    <ToolCard eyebrow={config.eyebrow} h1={config.h1} lead={config.lead} onPrint={() => window.print()}>
+      <div className="mt-6 grid gap-4 lg:grid-cols-12">
+        <div className="lg:col-span-3"><TextInput id="budget-income" label="Annual gross income" value={income} onChange={setIncome} error={incomeParsed.ok ? undefined : incomeParsed.error} /></div>
+        <div className="lg:col-span-3"><TextInput id="budget-rent" label="Planned monthly rent" value={rent} onChange={setRent} error={rentParsed.ok ? undefined : rentParsed.error} /></div>
+        <div className="lg:col-span-3"><TextInput id="budget-expenses" label="Monthly non-rent expenses" value={expenses} onChange={setExpenses} helper="Enter one aggregate amount. You can include debt, utilities, savings, or other non-rent costs here." error={expensesParsed.ok ? undefined : expensesParsed.error} /></div>
+        <div className="lg:col-span-3"><CurrencySelect value={currency} onChange={setCurrency} /></div>
+      </div>
+      <InvalidIncomeResults errors={errors} />
+      {result ? (
+        <ResultPanel
+          label="Planned rent as a percentage of monthly gross income"
+          value={formatPercent(result.plannedRentPercent)}
+          detail="The remaining amount subtracts the visible planned rent and aggregate non-rent expenses. The reference amounts are based only on gross income."
+          cards={[
+            { label: "Monthly gross income", value: formatMoney(result.monthlyGrossIncome, currency) },
+            { label: "Remaining after planned rent and non-rent expenses", value: formatMoney(result.remainingAfterRentAndExpenses, currency) },
+            { label: "30% income-based reference amount", value: formatMoney(result.monthlyRentAt30, currency) },
+            { label: "40% income-based reference amount", value: formatMoney(result.monthlyRentAt40, currency) },
+            { label: "3x income-requirement comparison amount", value: formatMoney(result.monthlyRentAt3x, currency) },
+          ]}
+        />
+      ) : null}
+    </ToolCard>
+  );
 }
 
 export function IncomeToolPage({ config }: { config: IncomeToolConfig }) {
-  const [rent, setRent] = useState(config.defaultRent ?? "2000");
-  const [income, setIncome] = useState(config.defaultIncome ?? "60000");
-  const [expenses, setExpenses] = useState("900");
-  const [currency, setCurrency] = useState<Currency>("USD");
-  const [hours, setHours] = useState("40");
-  const rentParsed = useMemo(() => parseMoneyToCents(rent), [rent]);
-  const incomeParsed = useMemo(() => parseMoneyToCents(income), [income]);
-  const expensesParsed = useMemo(() => parseMoneyToCents(expenses), [expenses]);
-  const hourlyIncome = useMemo(() => {
-    if (!incomeParsed.ok) return undefined;
-    const h = parsePositiveNumber(hours, 40, 1, 100);
-    return divRound(incomeParsed.cents * BigInt(Math.round(h * 100)) * 52n, 100n);
-  }, [hours, incomeParsed]);
-  const monthlyIncome = useMemo(() => {
-    if (config.mode === "hourly") return hourlyIncome ? divRound(hourlyIncome, 12n) : undefined;
-    if (!incomeParsed.ok) return undefined;
-    if (config.mode === "salary" || config.mode === "rent-rule" || config.mode === "max-rent" || config.mode === "budget") {
-      return divRound(incomeParsed.cents, 12n);
-    }
-    return incomeParsed.cents;
-  }, [config.mode, hourlyIncome, incomeParsed]);
-  const percent = config.percent ?? 30;
-  const multiplier = config.multiplier ?? 3;
-  const maxByPercent = monthlyIncome ? divRound(monthlyIncome * BigInt(Math.round(percent * 100)), 10000n) : undefined;
-  const maxBy30 = monthlyIncome ? divRound(monthlyIncome * 30n, 100n) : undefined;
-  const maxBy40 = monthlyIncome ? divRound(monthlyIncome * 40n, 100n) : undefined;
-  const maxBy3x = monthlyIncome ? divRound(monthlyIncome, 3n) : undefined;
-  const requiredIncome = rentParsed.ok
-    ? divRound(rentParsed.cents * BigInt(Math.round(multiplier * 100)), 100n)
-    : undefined;
-  const requiredAnnualIncome = requiredIncome !== undefined ? requiredIncome * 12n : undefined;
-  const ratio =
-    rentParsed.ok && monthlyIncome && monthlyIncome > 0n
-      ? Number(divRound(rentParsed.cents * 10000n, monthlyIncome)) / 100
-      : 0;
-  const remaining =
-    monthlyIncome && rentParsed.ok
-      ? monthlyIncome - rentParsed.cents - (expensesParsed.ok ? expensesParsed.cents : 0n)
-      : undefined;
   const schemas = makePageSchemas({ ...config, calculator: true, faq: config.faq });
-
-  const mainValue =
-    config.mode === "multiplier"
-      ? formatMoney(requiredIncome, currency)
-      : config.mode === "ratio"
-        ? formatPercent(ratio)
-        : formatMoney(maxByPercent ?? maxBy30, currency);
+  const tool =
+    config.mode === "salary" ? <SalaryIncomeTool config={config} />
+      : config.mode === "hourly" ? <HourlyIncomeTool config={config} />
+        : <BudgetIncomeTool config={config} />;
 
   return (
     <Shell schemas={schemas}>
-      <ToolCard eyebrow={config.eyebrow} h1={config.h1} lead={config.lead} onPrint={() => window.print()}>
-        <div className="mt-6 grid gap-4 lg:grid-cols-12">
-          {config.mode === "hourly" ? (
-            <>
-              <div className="lg:col-span-5"><TextInput label="Hourly pay" value={income} onChange={setIncome} /></div>
-              <div className="lg:col-span-3"><TextInput label="Hours per week" value={hours} onChange={setHours} inputMode="numeric" /></div>
-            </>
-          ) : (
-            <div className="lg:col-span-5">
-              <TextInput label={config.mode === "multiplier" ? "Monthly rent" : "Income"} value={config.mode === "multiplier" ? rent : income} onChange={config.mode === "multiplier" ? setRent : setIncome} />
-            </div>
-          )}
-          {config.mode !== "multiplier" && config.mode !== "rent-rule" ? (
-            <div className="lg:col-span-4"><TextInput label="Target monthly rent" value={rent} onChange={setRent} /></div>
-          ) : null}
-          {config.mode === "budget" || config.mode === "max-rent" ? (
-            <div className="lg:col-span-3"><TextInput label="Monthly expenses" value={expenses} onChange={setExpenses} /></div>
-          ) : null}
-          <div className="lg:col-span-3"><CurrencySelect value={currency} onChange={setCurrency} /></div>
-        </div>
-        <ResultPanel
-          label={config.mode === "ratio" ? "Rent-to-income ratio" : config.mode === "multiplier" ? "Required monthly income" : "Estimated rent target"}
-          value={mainValue}
-          detail={
-            config.mode === "multiplier"
-              ? `Under a ${multiplier}x rule, ${formatMoney(rentParsed.ok ? rentParsed.cents : undefined, currency)} rent needs about ${formatMoney(requiredIncome, currency)} gross income per month.`
-              : "Use this as a planning estimate. Debt, utilities, savings, deposits, and local rent prices can move the comfortable number lower."
-          }
-          cards={
-            config.mode === "multiplier"
-              ? [
-                  { label: "Monthly rent", value: formatMoney(rentParsed.ok ? rentParsed.cents : undefined, currency) },
-                  { label: "Required monthly income", value: formatMoney(requiredIncome, currency) },
-                  { label: "Required annual income", value: formatMoney(requiredAnnualIncome, currency) },
-                  { label: "Rent share of gross income", value: formatPercent(100 / multiplier) },
-                ]
-              : [
-                  { label: "Monthly income", value: formatMoney(monthlyIncome, currency) },
-                  { label: "30% rent target", value: formatMoney(maxBy30, currency) },
-                  { label: "40% rent target", value: formatMoney(maxBy40, currency) },
-                  { label: "3x qualification max", value: formatMoney(maxBy3x, currency) },
-                  { label: "Rent ratio", value: formatPercent(ratio) },
-                  { label: "Remaining after rent and expenses", value: formatMoney(remaining, currency) },
-                ]
-          }
-          tableRows={[
-            ["Band", "Interpretation"],
-            ["Under 30%", "Generally more comfortable"],
-            ["30% to 40%", "Common, but tighter"],
-            ["40% to 50%", "Rent-heavy"],
-            ["Over 50%", "High pressure budget"],
-          ]}
-        />
-      </ToolCard>
+      {tool}
       <ContentBlocks sections={incomeSections(config)} examples={config.examples} />
-      <AssumptionNote path={config.path} />
       <RelatedTools links={config.relatedLinks} />
       <Faq items={config.faq} />
     </Shell>
   );
 }
 
-type SalaryAnswerCopy = {
-  lead: string;
-  resultDetail: string;
-  sections: ContentSection[];
-  examples: ExampleItem[];
-};
-
-function salaryAnswerCopy(
-  salary: number,
-  monthlyIncome: bigint,
-  rent30: bigint,
-  rent40: bigint,
-  rent3x: bigint,
-): SalaryAnswerCopy {
-  const salaryLabel = `$${salary.toLocaleString()}`;
-  const incomeLabel = formatMoney(monthlyIncome, "USD");
-  const rent30Label = formatMoney(rent30, "USD");
-  const rent40Label = formatMoney(rent40, "USD");
-  const rent3xLabel = formatMoney(rent3x, "USD");
-
-  const profile =
-    salary <= 50000
-      ? {
-          lead: "The 30% target is the cleanest starting point here because taxes, utilities, transportation, and debt can narrow the real monthly margin quickly.",
-          readTitle: "How to read a $50,000 salary result",
-          readBody: `At ${salaryLabel}, ${rent30Label} is a rent-first benchmark, not a full budget. If take-home pay is tight, use the take-home-pay calculator before treating ${rent3xLabel} as comfortable.`,
-          tightTitle: "When this salary may feel tight",
-          tightBody: "This salary can feel tighter when the rent does not include utilities, when commute costs are high, or when deposits and first-month payments are due at the same time.",
-          exampleTitle: "Budget-first search",
-          exampleBody: `A renter using ${rent30Label} as a cap should still add utilities, insurance, transport, and move-in cash before applying.`,
-        }
-      : salary <= 60000
-        ? {
-            lead: "This salary is useful for comparing a conservative 30% rent target with the higher 40% or 2.5x screening-style number.",
-            readTitle: "How to read a $60,000 salary result",
-            readBody: `At ${salaryLabel}, ${rent30Label} is the lower planning target and ${rent40Label} is the stretchier 40% or 2.5x-style amount. The right number depends on take-home pay and fixed costs.`,
-            tightTitle: "What to check before signing",
-            tightBody: "Check whether the listing adds utilities, parking, pet rent, renters insurance, or a large deposit. Those costs can turn an acceptable gross-income target into a tight monthly cash-flow decision.",
-            exampleTitle: "Listing shortlist",
-            exampleBody: `If two listings are near ${rent30Label} and ${rent40Label}, compare included utilities and commute costs before choosing the higher rent.`,
-          }
-        : salary <= 65000
-          ? {
-              lead: "This in-between salary is useful when a listing sits near a common rent cap and you want to see both comfort and screening numbers clearly.",
-              readTitle: "How to read a $65,000 salary result",
-              readBody: `${salaryLabel} produces ${incomeLabel} in gross monthly income. A rent near ${rent30Label} leaves more planning room than a rent near ${rent40Label}, even if both appear in common affordability discussions.`,
-              tightTitle: "When the middle of the range matters",
-              tightBody: "If income is steady but expenses vary, the space between the 30% and 40% numbers is where utilities, loan payments, transport, and savings goals usually decide the practical answer.",
-              exampleTitle: "Between two rent caps",
-              exampleBody: `A listing around ${rent30Label} is easier to defend in a budget than one near ${rent40Label} unless take-home pay and other costs are already known.`,
-            }
-          : salary <= 70000
-            ? {
-                lead: "Use this salary page to separate a comfortable rent target from a qualification-style number before a listing looks affordable only on gross income.",
-                readTitle: "How to read a $70,000 salary result",
-                readBody: `At ${salaryLabel}, the 30% target is ${rent30Label}. The 3x screening number is ${rent3xLabel}, while the 40% or 2.5x comparison is ${rent40Label}. Treat the higher end as a stress test, not a default.`,
-                tightTitle: "What can make the higher number risky",
-                tightBody: "The higher target can feel risky when car payments, student loans, childcare, medical costs, or variable income are part of the budget.",
-                exampleTitle: "Screening vs comfort",
-                exampleBody: `A landlord-style cap near ${rent3xLabel} can still be less comfortable than a budget target near ${rent30Label}.`,
-              }
-            : salary <= 80000
-              ? {
-                  lead: "This page helps compare a stronger gross salary with the rent level that still leaves room for savings, moving costs, and bills.",
-                  readTitle: "How to read an $80,000 salary result",
-                  readBody: `${salaryLabel} gives ${incomeLabel} in gross monthly income. The 30% rent target is ${rent30Label}, while ${rent40Label} shows the upper 40% or 2.5x comparison before take-home pay is considered.`,
-                  tightTitle: "What to check at this salary",
-                  tightBody: "A higher salary can still become rent-heavy in expensive markets or when deposits, parking, utilities, insurance, and commuting all stack on top of base rent.",
-                  exampleTitle: "Higher-cost listing check",
-                  exampleBody: `If a listing is close to ${rent40Label}, compare it with actual take-home pay and move-in costs rather than relying on gross salary alone.`,
-                }
-              : {
-                  lead: "Higher income can still become rent-heavy in expensive markets, so compare the comfort target with the qualification-style cap and the annual rent commitment.",
-                  readTitle: "How to read a $100,000 salary result",
-                  readBody: `At ${salaryLabel}, ${rent30Label} is the 30% monthly target and ${rent40Label} is the 40% or 2.5x-style comparison. The higher number may qualify on paper, but it still deserves a take-home-pay check in high-cost areas.`,
-                  tightTitle: "When a high salary can still feel stretched",
-                  tightBody: "Large deposits, high local taxes, childcare, debt, transport, insurance, and higher-cost-market utilities can make a gross-income benchmark look cleaner than the real budget.",
-                  exampleTitle: "High-cost-market check",
-                  exampleBody: `A listing near ${rent40Label} should be checked against take-home pay, savings goals, and annual rent before signing.`,
-                };
-
-  return {
-    lead: profile.lead,
-    resultDetail: "The 30% figure is a conservative starting point. The 3x rule is a qualification-style cap, while the 40% figure also mirrors a 2.5x rent screen.",
-    sections: [
-      {
-        title: "How this salary answer is calculated",
-        body: `${salaryLabel} is divided by 12 to estimate ${incomeLabel} in gross monthly income. The page then compares 30%, 40%, 2.5x, and 3x-style rent checks without changing the underlying salary assumption.`,
-        bullets: [
-          `${rent30Label} is the 30% target before utilities and fees.`,
-          `${rent40Label} is the 40% target and the same rent level implied by a 2.5x gross-income screen.`,
-          `${rent3xLabel} is the rent amount implied by a simple 3x gross-income screen.`,
-        ],
-      },
-      {
-        title: profile.readTitle,
-        body: profile.readBody,
-      },
-      {
-        title: "Gross salary vs take-home pay",
-        body: "These figures start from gross salary because many screening rules do. A personal rent budget should also check take-home pay after tax withholding, payroll deductions, insurance, retirement contributions, and recurring debt.",
-      },
-      {
-        title: profile.tightTitle,
-        body: profile.tightBody,
-      },
-      {
-        title: "Before using the higher target",
-        body: "The higher rent number can be useful for screening or stress testing, but it should be checked against actual paycheck deposits, deposits due at signing, and recurring bills that do not appear in gross salary.",
-      },
-      {
-        title: "What this result does not include",
-        body: "The result does not include tax, debt, savings goals, childcare, transportation, insurance, utilities, deposits, application fees, household size, local rent levels, or whether income is stable every month.",
-      },
-      {
-        title: "Next check after this page",
-        body: "If the rent target is close to the edge, run the take-home-pay, rent-to-income-ratio, or income-required calculator with the actual rent number. That gives a clearer view than salary alone.",
-      },
-    ],
-    examples: [
-      {
-        title: profile.exampleTitle,
-        body: profile.exampleBody,
-      },
-      {
-        title: "Annual rent view",
-        body: `At the 30% target, annual rent is ${formatMoney(rent30 * 12n, "USD")}. At the 40% target, annual rent is ${formatMoney(rent40 * 12n, "USD")} before utilities or fees.`,
-      },
-    ],
-  };
+function InvalidGeneratedResults({ message = "Fix the highlighted fields to calculate the result." }: { message?: string }) {
+  return <p className="mt-5 rounded-xl bg-rose-50 px-4 py-3 text-sm font-semibold text-rose-800" role="status" aria-live="polite">{message}</p>;
 }
 
-export function SalaryAnswerPage({ config }: { config: SalaryAnswerConfig }) {
-  const salaryCents = BigInt(config.salary * 100);
-  const monthlyIncome = divRound(salaryCents, 12n);
-  const rent30 = divRound(monthlyIncome * 30n, 100n);
-  const rent40 = divRound(monthlyIncome * 40n, 100n);
-  const rent3x = divRound(monthlyIncome, 3n);
-  const copy = salaryAnswerCopy(config.salary, monthlyIncome, rent30, rent40, rent3x);
-  const schemas = makePageSchemas({ ...config, calculator: false, faq: salaryFaq });
+function OneStepIncreaseTool({ config }: { config: IncreaseToolConfig }) {
+  const [rent, setRent] = useState("2000");
+  const [rate, setRate] = useState(config.defaultRate ?? "5");
+  const [currency, setCurrency] = useState<Currency>("USD");
+  const rentParsed = parseIncomeMoney(rent, "Current monthly rent");
+  const rateLabel = "Scenario percentage";
+  const rateParsed = parsePercentage(rate, rateLabel);
+  const result = rentParsed.ok && rateParsed.ok
+    ? calculateOneStepIncrease(rentParsed.cents, rateParsed.value)
+    : undefined;
+  const rateHelper = "Editable starting scenario only. This is not an official or automatically updated legal limit.";
   return (
-    <Shell schemas={schemas}>
-      <ToolCard
-        eyebrow={config.eyebrow}
-        h1={config.h1}
-        lead={`On a $${config.salary.toLocaleString()} salary, common rent estimates range from ${formatMoney(rent30, "USD")} at 30% of gross income to ${formatMoney(rent40, "USD")} at 40%. ${copy.lead}`}
-      >
+    <ToolCard eyebrow={config.eyebrow} h1={config.h1} lead={config.lead} onPrint={() => window.print()}>
+      <div className="mt-6 grid gap-4 lg:grid-cols-12">
+        <div className="lg:col-span-4"><TextInput id={`${config.mode}-current-rent`} label="Current monthly rent" value={rent} onChange={setRent} error={rentParsed.ok ? undefined : rentParsed.error} /></div>
+        <div className="lg:col-span-5"><TextInput id={`${config.mode}-rate`} label={rateLabel} value={rate} onChange={setRate} helper={rateHelper} error={rateParsed.ok ? undefined : rateParsed.error} /></div>
+        <div className="lg:col-span-3"><CurrencySelect value={currency} onChange={setCurrency} /></div>
+      </div>
+      {!result ? <InvalidGeneratedResults /> : (
         <ResultPanel
-          label="Estimated rent range"
-          value={formatMoney(rent30, "USD")}
-          detail={copy.resultDetail}
+          label="Estimated new rent from the entered scenario"
+          value={formatMoney(result.newRent, currency)}
+          detail={config.regionNote ?? "This checks arithmetic only and does not determine whether an increase is legally permitted."}
           cards={[
-            { label: "Gross monthly income", value: formatMoney(monthlyIncome, "USD") },
-            { label: "30% rent target", value: formatMoney(rent30, "USD") },
-            { label: "40% / 2.5x target", value: formatMoney(rent40, "USD") },
-            { label: "3x qualification max", value: formatMoney(rent3x, "USD") },
-          ]}
-          tableRows={[
-            ["Method", "Monthly rent"],
-            ["30% of gross income", formatMoney(rent30, "USD")],
-            ["40% of gross income / 2.5x screen", formatMoney(rent40, "USD")],
-            ["3x rent screening", formatMoney(rent3x, "USD")],
-            ["Annual rent at 30%", formatMoney(rent30 * 12n, "USD")],
+            { label: "Current monthly rent", value: formatMoney(result.currentRent, currency) },
+            { label: "Entered scenario percentage", value: formatPercent(result.percentage) },
+            { label: "Increase amount", value: formatMoney(result.increase, currency) },
+            { label: "Monthly difference", value: formatMoney(result.increase, currency) },
+            { label: "Annualized difference (12 monthly payments)", value: formatMoney(result.increase * 12n, currency) },
           ]}
         />
-      </ToolCard>
-      <ContentBlocks sections={copy.sections} examples={copy.examples} />
-      <RelatedTools links={config.relatedLinks} />
-      <Faq items={salaryFaq} />
-    </Shell>
+      )}
+    </ToolCard>
   );
 }
 
-const salaryFaq: FaqItem[] = [
-  {
-    q: "Should I use gross income or take-home pay?",
-    a: "Many landlord rules use gross income, but a personal budget should also consider take-home pay, debts, utilities, savings, and other monthly costs.",
-  },
-  {
-    q: "Is 30% rent always affordable?",
-    a: "No. It is a common guideline, not a guarantee. A renter with high debt, childcare, car costs, or expensive utilities may need a lower rent target.",
-  },
-];
-
-export function IncreaseToolPage({ config }: { config: IncreaseToolConfig }) {
+function CompoundIncreaseTool({ config }: { config: IncreaseToolConfig }) {
   const [rent, setRent] = useState("2000");
-  const [rate, setRate] = useState(config.defaultRate ?? "5");
-  const [fixed, setFixed] = useState(config.defaultFixed ?? "100");
-  const [newRentInput, setNewRentInput] = useState("2100");
+  const [rate, setRate] = useState(config.defaultRate ?? "4");
   const [years, setYears] = useState("5");
   const [currency, setCurrency] = useState<Currency>("USD");
-  const rentParsed = useMemo(() => parseMoneyToCents(rent), [rent]);
-  const rateNum = parsePositiveNumber(rate, 5, 0, 100);
-  const fixedParsed = parseMoneyToCents(fixed);
-  const newRentParsed = parseMoneyToCents(newRentInput);
-  const yearCount = Math.round(parsePositiveNumber(years, 5, 1, 50));
-  const newRent = useMemo(() => {
-    if (!rentParsed.ok) return undefined;
-    if (config.mode === "simple" || config.mode === "regional" || config.mode === "cpi" || config.mode === "formula") {
-      return divRound(rentParsed.cents * BigInt(Math.round((100 + rateNum) * 100)), 10000n);
-    }
-    if (config.mode === "compound" || config.mode === "escalation") {
-      let current = rentParsed.cents;
-      for (let i = 0; i < yearCount; i += 1) {
-        current = divRound(current * BigInt(Math.round((100 + rateNum) * 100)), 10000n);
-      }
-      return current;
-    }
-    return fixedParsed.ok ? rentParsed.cents + fixedParsed.cents : undefined;
-  }, [config.mode, fixedParsed, rateNum, rentParsed, yearCount]);
-  const increase = rentParsed.ok && newRent !== undefined ? newRent - rentParsed.cents : undefined;
-  const fixedNewRent =
-    rentParsed.ok && fixedParsed.ok ? rentParsed.cents + fixedParsed.cents : undefined;
-  const reverseIncrease =
-    rentParsed.ok && newRentParsed.ok ? newRentParsed.cents - rentParsed.cents : undefined;
-  const reversePercent =
-    rentParsed.ok && newRentParsed.ok && rentParsed.cents > 0n
-      ? Number(divRound(reverseIncrease! * 10000n, rentParsed.cents)) / 100
-      : undefined;
-  const rows = useMemo(() => {
-    if (!rentParsed.ok) return [];
-    if (config.mode === "formula") {
-      return [
-        ["Formula", "Result"],
-        ["new rent = current rent x (1 + percentage / 100)", formatMoney(newRent, currency)],
-        ["new rent = current rent + fixed increase", formatMoney(fixedNewRent, currency)],
-        ["percentage increase = (new rent - old rent) / old rent x 100", reversePercent === undefined ? "-" : formatPercent(reversePercent)],
-      ];
-    }
-    let current = rentParsed.cents;
-    const out: string[][] = [["Year", "Monthly rent", "Annual rent"]];
-    for (let i = 0; i <= yearCount; i += 1) {
-      out.push([String(i), formatMoney(current, currency), formatMoney(current * 12n, currency)]);
-      current = divRound(current * BigInt(Math.round((100 + rateNum) * 100)), 10000n);
-    }
-    return out;
-  }, [config.mode, currency, fixedNewRent, newRent, rateNum, rentParsed, reversePercent, yearCount]);
+  const rentParsed = parseIncomeMoney(rent, "Starting monthly rent");
+  const rateLabel = "Annual percentage increase";
+  const rateParsed = parsePercentage(rate, rateLabel);
+  const yearsParsed = parseYears(years);
+  const result = rentParsed.ok && rateParsed.ok && yearsParsed.ok
+    ? calculateCompoundIncrease(rentParsed.cents, rateParsed.value, yearsParsed.value)
+    : undefined;
+  const rows = result
+    ? [["Year", "Monthly rent", "Annualized rent"], ...result.rows.map((row) => [String(row.year), formatMoney(row.rent, currency), formatMoney(row.rent * 12n, currency)])]
+    : [];
+  return (
+    <ToolCard eyebrow={config.eyebrow} h1={config.h1} lead={config.lead} onPrint={() => window.print()}>
+      <div className="mt-6 grid gap-4 lg:grid-cols-12">
+        <div className="lg:col-span-4"><TextInput id={`${config.mode}-starting-rent`} label="Starting monthly rent" value={rent} onChange={setRent} error={rentParsed.ok ? undefined : rentParsed.error} /></div>
+        <div className="lg:col-span-3"><TextInput id={`${config.mode}-rate`} label={rateLabel} value={rate} onChange={setRate} error={rateParsed.ok ? undefined : rateParsed.error} /></div>
+        <div className="lg:col-span-2"><TextInput id={`${config.mode}-years`} label="Number of years" value={years} onChange={setYears} inputMode="numeric" helper="Enter a whole number from 1 through 100." error={yearsParsed.ok ? undefined : yearsParsed.error} /></div>
+        <div className="lg:col-span-3"><CurrencySelect value={currency} onChange={setCurrency} /></div>
+      </div>
+      {!result ? <InvalidGeneratedResults /> : (
+        <ResultPanel
+          label="Final rent after annual compounding"
+          value={formatMoney(result.finalRent, currency)}
+          detail={`Applies the entered percentage once per year for ${result.years} ${result.years === 1 ? "year" : "years"}. The table does not calculate cumulative rent paid.`}
+          cards={[
+            { label: "Starting monthly rent", value: formatMoney(result.startingRent, currency) },
+            { label: rateLabel, value: formatPercent(result.percentage) },
+            { label: "Total increase amount", value: formatMoney(result.totalIncrease, currency) },
+            { label: "Total percentage increase", value: formatPercent(result.totalPercentage) },
+          ]}
+          tableRows={rows}
+        />
+      )}
+    </ToolCard>
+  );
+}
+
+export function IncreaseToolPage({ config }: { config: IncreaseToolConfig }) {
   const schemas = makePageSchemas({ ...config, calculator: true, faq: config.faq });
   return (
     <Shell schemas={schemas}>
-      <ToolCard eyebrow={config.eyebrow} h1={config.h1} lead={config.lead} onPrint={() => window.print()}>
-        <div className="mt-6 grid gap-4 lg:grid-cols-12">
-          <div className="lg:col-span-4"><TextInput label="Current monthly rent" value={rent} onChange={setRent} /></div>
-          <div className="lg:col-span-3"><TextInput label={config.mode === "cpi" ? "CPI or cap percentage" : "Increase percentage"} value={rate} onChange={setRate} /></div>
-          {config.mode === "formula" ? (
-            <>
-              <div className="lg:col-span-2"><TextInput label="Fixed increase" value={fixed} onChange={setFixed} /></div>
-              <div className="lg:col-span-3"><TextInput label="New monthly rent" value={newRentInput} onChange={setNewRentInput} /></div>
-            </>
-          ) : (
-            <div className="lg:col-span-2"><TextInput label="Years" value={years} onChange={setYears} inputMode="numeric" /></div>
-          )}
-          <div className={config.mode === "formula" ? "lg:col-span-12" : "lg:col-span-3"}><CurrencySelect value={currency} onChange={setCurrency} /></div>
-        </div>
-        <ResultPanel
-          label={config.mode === "formula" ? "New rent from percentage" : "Estimated new rent"}
-          value={formatMoney(newRent, currency)}
-          detail={
-            config.mode === "formula"
-              ? "Use the percentage, fixed increase, and old-to-new formulas side by side to check the rent math."
-              : config.regionNote ?? "This estimates the math impact. Lease terms and local rules can change whether an increase is allowed."
-          }
-          cards={[
-            ...(config.mode === "formula"
-              ? [
-                  { label: "Fixed increase result", value: formatMoney(fixedNewRent, currency) },
-                  { label: "Reverse percentage", value: reversePercent === undefined ? "-" : formatPercent(reversePercent) },
-                  { label: "Reverse monthly change", value: formatMoney(reverseIncrease, currency) },
-                ]
-              : []),
-            { label: "Monthly increase", value: formatMoney(increase, currency) },
-            { label: "Annual rent before", value: rentParsed.ok ? formatMoney(rentParsed.cents * 12n, currency) : "-" },
-            { label: "Annual rent after", value: newRent ? formatMoney(newRent * 12n, currency) : "-" },
-          ]}
-          tableRows={config.mode === "compound" || config.mode === "escalation" || config.mode === "formula" ? rows : undefined}
-        />
-      </ToolCard>
+      {config.mode === "compound"
+        ? <CompoundIncreaseTool config={config} />
+        : <OneStepIncreaseTool config={config} />}
       <ContentBlocks sections={increaseSections(config)} examples={config.examples} />
       <AssumptionNote path={config.path} />
       <RelatedTools links={config.relatedLinks} />
@@ -2132,63 +1472,90 @@ export function IncreaseToolPage({ config }: { config: IncreaseToolConfig }) {
   );
 }
 
-export function SplitToolPage({ config }: { config: SplitToolConfig }) {
+function SplitBaseFields({ rent, setRent, sharedCosts, setSharedCosts, currency, setCurrency, rentError, sharedCostsError }: {
+  rent: string; setRent: (value: string) => void; sharedCosts: string; setSharedCosts: (value: string) => void;
+  currency: Currency; setCurrency: (value: Currency) => void; rentError?: string; sharedCostsError?: string;
+}) {
+  return <>
+    <div className="lg:col-span-4"><TextInput id="split-base-rent" label="Base monthly rent" value={rent} onChange={setRent} error={rentError} /></div>
+    <div className="lg:col-span-5"><TextInput id="split-shared-costs" label="Optional shared monthly costs" value={sharedCosts} onChange={setSharedCosts} helper="Defaults to zero. Add only costs that should use the same split." error={sharedCostsError} /></div>
+    <div className="lg:col-span-3"><CurrencySelect value={currency} onChange={setCurrency} /></div>
+  </>;
+}
+
+function SplitResult({ currency, rent, sharedCosts, total, rows, cards }: { currency: Currency; rent: bigint; sharedCosts: bigint; total: bigint; rows: string[][]; cards: { label: string; value: string }[] }) {
+  return <ResultPanel label="Total shared monthly cost" value={formatMoney(total, currency)} detail="The displayed person amounts are rounded to cents and always reconcile exactly to the displayed total." cards={[
+    { label: "Base monthly rent", value: formatMoney(rent, currency) },
+    { label: "Optional shared monthly costs", value: formatMoney(sharedCosts, currency) },
+    ...cards,
+  ]} tableRows={rows} />;
+}
+
+function IncomeSplitTool({ config }: { config: SplitToolConfig }) {
   const [rent, setRent] = useState("2400");
-  const [utilities, setUtilities] = useState("300");
-  const [a, setA] = useState("4000");
-  const [b, setB] = useState("6000");
+  const [sharedCosts, setSharedCosts] = useState("0");
+  const [incomeA, setIncomeA] = useState("4000");
+  const [incomeB, setIncomeB] = useState("6000");
+  const [currency, setCurrency] = useState<Currency>("USD");
+  const rentParsed = parseIncomeMoney(rent, "Base monthly rent");
+  const sharedParsed = parseIncomeMoney(sharedCosts, "Optional shared monthly costs", { allowZero: true });
+  const incomeAParsed = parseIncomeMoney(incomeA, "Person A monthly income", { allowZero: true });
+  const incomeBParsed = parseIncomeMoney(incomeB, "Person B monthly income", { allowZero: true });
+  const total = rentParsed.ok && sharedParsed.ok ? rentParsed.cents + sharedParsed.cents : undefined;
+  const split = total !== undefined && incomeAParsed.ok && incomeBParsed.ok ? calculateIncomeSplit(total, incomeAParsed.cents, incomeBParsed.cents) : undefined;
+  const combinedError = split && !split.ok ? split.error : undefined;
+  return <ToolCard eyebrow={config.eyebrow} h1={config.h1} lead={config.lead} onPrint={() => window.print()}>
+    <div className="mt-6 grid gap-4 lg:grid-cols-12">
+      <SplitBaseFields rent={rent} setRent={setRent} sharedCosts={sharedCosts} setSharedCosts={setSharedCosts} currency={currency} setCurrency={setCurrency} rentError={rentParsed.ok ? undefined : rentParsed.error} sharedCostsError={sharedParsed.ok ? undefined : sharedParsed.error} />
+      <div className="lg:col-span-6"><TextInput id="split-income-a" label="Person A monthly income" value={incomeA} onChange={setIncomeA} error={incomeAParsed.ok ? undefined : incomeAParsed.error} describedBy={combinedError ? "split-combined-income-error" : undefined} /></div>
+      <div className="lg:col-span-6"><TextInput id="split-income-b" label="Person B monthly income" value={incomeB} onChange={setIncomeB} error={incomeBParsed.ok ? undefined : incomeBParsed.error} describedBy={combinedError ? "split-combined-income-error" : undefined} /></div>
+      {combinedError ? <p id="split-combined-income-error" role="alert" className="rounded-xl bg-rose-50 px-4 py-3 text-sm font-semibold text-rose-800 lg:col-span-12">{combinedError}</p> : null}
+    </div>
+    {!split || !split.ok || total === undefined || !rentParsed.ok || !sharedParsed.ok || !incomeAParsed.ok || !incomeBParsed.ok ? <InvalidGeneratedResults message={combinedError ?? "Fix the highlighted fields to calculate the income-based split."} /> : (
+      <SplitResult currency={currency} rent={rentParsed.cents} sharedCosts={sharedParsed.cents} total={total} cards={[
+        { label: "Person A percentage", value: formatPercent(split.percentA) },
+        { label: "Person A amount", value: formatMoney(split.shareA, currency) },
+        { label: "Person B percentage", value: formatPercent(split.percentB) },
+        { label: "Person B amount", value: formatMoney(split.shareB, currency) },
+      ]} rows={[["Person", "Monthly income", "Percentage", "Amount"], ["Person A", formatMoney(incomeAParsed.cents, currency), formatPercent(split.percentA), formatMoney(split.shareA, currency)], ["Person B", formatMoney(incomeBParsed.cents, currency), formatPercent(split.percentB), formatMoney(split.shareB, currency)]]} />
+    )}
+  </ToolCard>;
+}
+
+function PercentageSplitTool({ config }: { config: SplitToolConfig }) {
+  const [rent, setRent] = useState("2400");
+  const [sharedCosts, setSharedCosts] = useState("0");
   const [shareA, setShareA] = useState("50");
   const [currency, setCurrency] = useState<Currency>("USD");
-  const rentParsed = parseMoneyToCents(rent);
-  const utilitiesParsed = parseMoneyToCents(utilities);
-  const aParsed = parseMoneyToCents(a);
-  const bParsed = parseMoneyToCents(b);
-  const total = rentParsed.ok && utilitiesParsed.ok ? rentParsed.cents + utilitiesParsed.cents : undefined;
-  const rows = useMemo(() => {
-    if (total === undefined) return [];
-    if (config.mode === "income" && aParsed.ok && bParsed.ok) {
-      const combined = aParsed.cents + bParsed.cents;
-      const aShare = combined > 0n ? divRound(total * aParsed.cents, combined) : 0n;
-      const bShare = total - aShare;
-      return [["Person", "Basis", "Share"], ["Roommate A", formatMoney(aParsed.cents, currency), formatMoney(aShare, currency)], ["Roommate B", formatMoney(bParsed.cents, currency), formatMoney(bShare, currency)]];
-    }
-    if (config.mode === "percentage") {
-      const pct = parsePositiveNumber(shareA, 50, 0, 100);
-      const aShare = divRound(total * BigInt(Math.round(pct * 100)), 10000n);
-      return [["Person", "Percent", "Share"], ["Roommate A", `${pct.toFixed(2)}%`, formatMoney(aShare, currency)], ["Roommate B", `${(100 - pct).toFixed(2)}%`, formatMoney(total - aShare, currency)]];
-    }
-    return [["Person", "Method", "Share"], ["Roommate A", "Equal", formatMoney(divRound(total, 2n), currency)], ["Roommate B", "Equal", formatMoney(total - divRound(total, 2n), currency)]];
-  }, [aParsed, bParsed, config.mode, currency, shareA, total]);
+  const rentParsed = parseIncomeMoney(rent, "Base monthly rent");
+  const sharedParsed = parseIncomeMoney(sharedCosts, "Optional shared monthly costs", { allowZero: true });
+  const percentageParsed = parsePercentage(shareA, "Person A percentage");
+  const total = rentParsed.ok && sharedParsed.ok ? rentParsed.cents + sharedParsed.cents : undefined;
+  const split = total !== undefined && percentageParsed.ok ? calculatePercentageSplit(total, percentageParsed.value) : undefined;
+  return <ToolCard eyebrow={config.eyebrow} h1={config.h1} lead={config.lead} onPrint={() => window.print()}>
+    <div className="mt-6 grid gap-4 lg:grid-cols-12">
+      <SplitBaseFields rent={rent} setRent={setRent} sharedCosts={sharedCosts} setSharedCosts={setSharedCosts} currency={currency} setCurrency={setCurrency} rentError={rentParsed.ok ? undefined : rentParsed.error} sharedCostsError={sharedParsed.ok ? undefined : sharedParsed.error} />
+      <div className="lg:col-span-6"><TextInput id="split-percentage-a" label="Person A percentage" value={shareA} onChange={setShareA} helper="Person B receives the remainder to 100%." error={percentageParsed.ok ? undefined : percentageParsed.error} /></div>
+    </div>
+    {!split || total === undefined || !rentParsed.ok || !sharedParsed.ok ? <InvalidGeneratedResults message="Fix the highlighted fields to calculate the percentage split." /> : (
+      <SplitResult currency={currency} rent={rentParsed.cents} sharedCosts={sharedParsed.cents} total={total} cards={[
+        { label: "Person A percentage", value: formatPercent(split.percentA) },
+        { label: "Person A amount", value: formatMoney(split.shareA, currency) },
+        { label: "Person B percentage", value: formatPercent(split.percentB) },
+        { label: "Person B amount", value: formatMoney(split.shareB, currency) },
+      ]} rows={[["Person", "Percentage", "Amount"], ["Person A", formatPercent(split.percentA), formatMoney(split.shareA, currency)], ["Person B", formatPercent(split.percentB), formatMoney(split.shareB, currency)]]} />
+    )}
+  </ToolCard>;
+}
+
+export function SplitToolPage({ config }: { config: SplitToolConfig }) {
   const schemas = makePageSchemas({ ...config, calculator: true, faq: config.faq });
-  return (
-    <Shell schemas={schemas}>
-      <ToolCard eyebrow={config.eyebrow} h1={config.h1} lead={config.lead} onPrint={() => window.print()}>
-        <div className="mt-6 grid gap-4 lg:grid-cols-12">
-          <div className="lg:col-span-4"><TextInput label="Total monthly rent" value={rent} onChange={setRent} /></div>
-          <div className="lg:col-span-4"><TextInput label="Utilities or fees" value={utilities} onChange={setUtilities} /></div>
-          <div className="lg:col-span-4"><CurrencySelect value={currency} onChange={setCurrency} /></div>
-          {config.mode === "income" ? (
-            <>
-              <div className="lg:col-span-6"><TextInput label="Roommate A monthly income" value={a} onChange={setA} /></div>
-              <div className="lg:col-span-6"><TextInput label="Roommate B monthly income" value={b} onChange={setB} /></div>
-            </>
-          ) : null}
-          {config.mode === "percentage" ? (
-            <div className="lg:col-span-6"><TextInput label="Roommate A percent" value={shareA} onChange={setShareA} /></div>
-          ) : null}
-        </div>
-        <ResultPanel
-          label="Split result"
-          value={total !== undefined ? formatMoney(total, currency) : "-"}
-          detail="The table shows each roommate share. Add other costs if you want rent plus utilities instead of rent alone."
-          tableRows={rows}
-        />
-      </ToolCard>
-      <ContentBlocks sections={splitSections(config)} examples={splitExamples(config)} />
-      <RelatedTools links={config.relatedLinks} />
-      <Faq items={config.faq} />
-    </Shell>
-  );
+  return <Shell schemas={schemas}>
+    {config.mode === "income" ? <IncomeSplitTool config={config} /> : <PercentageSplitTool config={config} />}
+    <ContentBlocks sections={splitSections(config)} examples={splitExamples(config)} />
+    <RelatedTools links={config.relatedLinks} />
+    <Faq items={config.faq} />
+  </Shell>;
 }
 
 export function MoveInCostPage({ config }: { config: MoveInCostConfig }) {
@@ -2282,29 +1649,29 @@ export function MoveInCostPage({ config }: { config: MoveInCostConfig }) {
 
 export function ProrationToolPage({ config }: { config: ProrationToolConfig }) {
   const [rent, setRent] = useState("1500");
-  const [period, setPeriod] = useState("monthly");
+  const [period, setPeriod] = useState<"monthly" | "weekly" | "fortnightly">("monthly");
   const [daysCharged, setDaysCharged] = useState("22");
   const [daysInPeriod, setDaysInPeriod] = useState("31");
   const [currency, setCurrency] = useState<Currency>(config.defaultCurrency);
-  const rentParsed = useMemo(() => parseMoneyToCents(rent), [rent]);
-  const charged = Math.round(parsePositiveNumber(daysCharged, 22, 1, 366));
-  const denominatorDays =
-    period === "weekly"
-      ? 7
-      : period === "fortnightly"
-        ? 14
-        : Math.round(parsePositiveNumber(daysInPeriod, 31, 1, 366));
-  const dailyRate = rentParsed.ok ? divRound(rentParsed.cents, BigInt(denominatorDays)) : undefined;
-  const prorated = rentParsed.ok
-    ? divRound(rentParsed.cents * BigInt(charged), BigInt(denominatorDays))
+  const rentParsed = parseIncomeMoney(rent, "Rent amount");
+  const chargedParsed = parseWholeNumberInRange(daysCharged, "Charged days", 0, 366);
+  const periodDaysParsed = period === "monthly"
+    ? parseWholeNumberInRange(daysInPeriod, "Days in monthly rent period", 1, 366)
+    : { ok: true as const, value: period === "weekly" ? 7 : 14 };
+  const chargedRelationError = chargedParsed.ok && periodDaysParsed.ok && chargedParsed.value > periodDaysParsed.value
+    ? `Charged days cannot exceed the ${periodDaysParsed.value}-day ${period} period.`
     : undefined;
-  const rows = [
-    ["Input period", period],
-    ["Days charged", String(charged)],
-    ["Days in period", String(denominatorDays)],
-    ["Daily rent", formatMoney(dailyRate, currency)],
-    ["Prorated rent", formatMoney(prorated, currency)],
-  ];
+  const result = rentParsed.ok && chargedParsed.ok && periodDaysParsed.ok && !chargedRelationError
+    ? calculateProration(rentParsed.cents, chargedParsed.value, periodDaysParsed.value)
+    : undefined;
+  const rows = result ? [
+    ["Input period", period === "fortnightly" ? "Fortnightly" : period[0].toUpperCase() + period.slice(1)],
+    ["Rent amount", formatMoney(result.rent, currency)],
+    ["Days charged", String(result.chargedDays)],
+    ["Days in period", String(result.periodDays)],
+    ["Daily rent", formatMoney(result.dailyRate, currency)],
+    ["Prorated rent", formatMoney(result.proratedRent, currency)],
+  ] : [];
   const schemas = makePageSchemas({ ...config, calculator: true, faq: config.faq });
 
   return (
@@ -2312,44 +1679,48 @@ export function ProrationToolPage({ config }: { config: ProrationToolConfig }) {
       <ToolCard eyebrow={config.eyebrow} h1={config.h1} lead={config.lead} onPrint={() => window.print()}>
         <div className="mt-6 grid gap-4 lg:grid-cols-12">
           <div className="lg:col-span-4">
-            <TextInput label="Rent amount" value={rent} onChange={setRent} />
+            <TextInput id="australia-proration-rent" label="Rent amount" value={rent} onChange={setRent} error={rentParsed.ok ? undefined : rentParsed.error} />
           </div>
-          <label className="block lg:col-span-3">
-            <span className="mb-2 block text-sm font-semibold text-slate-800">Rent period</span>
+          <div className="block lg:col-span-3">
+            <label htmlFor="australia-proration-period" className="mb-2 block text-sm font-semibold text-slate-800">Rent period</label>
             <select
+              id="australia-proration-period"
               value={period}
-              onChange={(event) => setPeriod(event.target.value)}
+              onChange={(event) => setPeriod(event.target.value === "weekly" || event.target.value === "fortnightly" ? event.target.value : "monthly")}
               className="w-full cursor-pointer rounded-xl bg-slate-100 px-4 py-3 text-base text-slate-950 outline-none transition hover:bg-sky-50 focus:bg-white focus:ring-2 focus:ring-sky-200 focus-visible:ring-sky-400"
             >
               <option value="monthly">Monthly</option>
               <option value="weekly">Weekly</option>
               <option value="fortnightly">Fortnightly</option>
             </select>
-          </label>
+            <p className="mt-2 text-sm text-slate-600">Weekly uses 7 days, fortnightly uses 14 days, and monthly uses the visible day count.</p>
+          </div>
           <div className="lg:col-span-2">
-            <TextInput label="Days charged" value={daysCharged} onChange={setDaysCharged} inputMode="numeric" />
+            <TextInput id="australia-proration-charged" label="Charged days" value={daysCharged} onChange={setDaysCharged} inputMode="numeric" error={!chargedParsed.ok ? chargedParsed.error : chargedRelationError} />
           </div>
           {period === "monthly" ? (
-            <div className="lg:col-span-1">
-              <TextInput label="Days" value={daysInPeriod} onChange={setDaysInPeriod} inputMode="numeric" />
+            <div className="lg:col-span-2">
+              <TextInput id="australia-proration-period-days" label="Days in monthly rent period" value={daysInPeriod} onChange={setDaysInPeriod} inputMode="numeric" error={periodDaysParsed.ok ? undefined : periodDaysParsed.error} />
             </div>
           ) : null}
-          <div className={period === "monthly" ? "lg:col-span-2" : "lg:col-span-3"}>
+          <div className={period === "monthly" ? "lg:col-span-1" : "lg:col-span-3"}>
             <CurrencySelect value={currency} onChange={setCurrency} />
           </div>
         </div>
-        {!rentParsed.ok ? <p className="mt-2 text-sm font-semibold text-rose-700">{rentParsed.error}</p> : null}
-        <ResultPanel
-          label="Prorated rent"
-          value={formatMoney(prorated, currency)}
-          detail="The daily rate is based on the period and day count entered. Your lease or local rules may require a different method."
-          cards={[
-            { label: "Daily rent", value: formatMoney(dailyRate, currency) },
-            { label: "Days charged", value: String(charged) },
-            { label: "Period days", value: String(denominatorDays) },
-          ]}
-          tableRows={rows}
-        />
+        {!result ? <InvalidGeneratedResults message="Fix the highlighted fields to calculate prorated rent." /> : (
+          <ResultPanel
+            label="Prorated rent"
+            value={formatMoney(result.proratedRent, currency)}
+            detail={`Formula: ${formatMoney(result.rent, currency)} × ${result.chargedDays} charged days ÷ ${result.periodDays} days in the selected period. The lease or applicable local rules may use a different convention.`}
+            cards={[
+              { label: "Entered rent", value: formatMoney(result.rent, currency) },
+              { label: "Period basis", value: `${result.periodDays} days` },
+              { label: "Charged days", value: String(result.chargedDays) },
+              { label: "Daily rent", value: formatMoney(result.dailyRate, currency) },
+            ]}
+            tableRows={rows}
+          />
+        )}
       </ToolCard>
       <ContentBlocks sections={prorationSections(config)} examples={config.examples} />
       <AssumptionNote path={config.path} />
@@ -2359,119 +1730,106 @@ export function ProrationToolPage({ config }: { config: ProrationToolConfig }) {
   );
 }
 
-function addMonths(date: Date, months: number) {
-  const targetMonth = date.getMonth() + months;
-  const firstOfTarget = new Date(date.getFullYear(), targetMonth, 1);
-  const lastDayOfTarget = new Date(
-    firstOfTarget.getFullYear(),
-    firstOfTarget.getMonth() + 1,
-    0,
-  ).getDate();
-
-  return new Date(
-    firstOfTarget.getFullYear(),
-    firstOfTarget.getMonth(),
-    Math.min(date.getDate(), lastDayOfTarget),
+function InvalidDateResults({ errors }: { errors: string[] }) {
+  return (
+    <div className="mt-6 rounded-2xl bg-rose-50 p-4 text-rose-900" role="status" aria-live="polite">
+      <p className="font-semibold">Fix the highlighted input before using the date result.</p>
+      <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">
+        {errors.map((error) => <li key={error}>{error}</li>)}
+      </ul>
+    </div>
   );
 }
 
-function addDays(date: Date, days: number) {
-  const next = new Date(date);
-  next.setDate(next.getDate() + days);
-  return next;
-}
+type ScheduleFrequency = "monthly" | "weekly" | "fortnightly" | "every-4-weeks";
 
-function isoDate(date: Date) {
-  return date.toISOString().slice(0, 10);
-}
-
-function parseIsoDate(value: string, fallback: Date) {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return fallback;
-  const date = new Date(`${value}T00:00:00`);
-  if (!Number.isFinite(date.getTime())) return fallback;
-  return isoDate(date) === value ? date : fallback;
-}
-
-function formatDate(date: Date) {
-  return new Intl.DateTimeFormat(undefined, { year: "numeric", month: "long", day: "numeric" }).format(date);
-}
-
-export function DateToolPage({ config }: { config: DateToolConfig }) {
-  const today = isoDate(new Date());
-  const [start, setStart] = useState(today);
-  const [months, setMonths] = useState(config.mode === "twelve-month" ? "12" : "12");
+export function DateToolPage({ config, initialDate }: { config: DateToolConfig; initialDate: string }) {
+  const [start, setStart] = useState(initialDate);
+  const [months, setMonths] = useState("12");
   const [rent, setRent] = useState("2000");
   const [currency, setCurrency] = useState<Currency>("USD");
-  const [frequency, setFrequency] = useState("monthly");
-  const startDate = parseIsoDate(start, new Date());
-  const startIsValid = isoDate(startDate) === start;
-  const monthCount = Math.round(parsePositiveNumber(months, 12, 1, 120));
-  const endDate = addDays(addMonths(startDate, monthCount), -1);
-  const renewalReminder = addDays(endDate, -60);
-  const renewalReminderText =
-    renewalReminder >= startDate ? formatDate(renewalReminder) : "Check lease terms";
+  const [frequency, setFrequency] = useState<ScheduleFrequency>("monthly");
+  const startParsed = parseCalendarDate(start, "Lease start date");
+  const termParsed = parseWholeNumber(months, "Lease term", 1, 120);
   const rentParsed = parseMoneyToCents(rent);
-  const rows = useMemo(() => {
-    if (config.mode !== "schedule" || !rentParsed.ok || !startIsValid) return [];
-    const interval = frequency === "weekly" ? 7 : frequency === "fortnightly" ? 14 : frequency === "every 4 weeks" ? 28 : 30;
-    const count = frequency === "monthly" ? monthCount : Math.min(120, Math.ceil((monthCount * 365) / 12 / interval));
-    const out = [["Payment", "Due date", "Amount"]];
-    for (let i = 0; i < count; i += 1) {
-      const due = frequency === "monthly" ? addMonths(startDate, i) : addDays(startDate, i * interval);
-      out.push([String(i + 1), formatDate(due), formatMoney(rentParsed.cents, currency)]);
-    }
-    return out;
-  }, [config.mode, currency, frequency, monthCount, rentParsed, startDate, startIsValid]);
+  const dateCalculation = startParsed.ok && termParsed.ok
+    ? calculateLeaseEnd(startParsed.date, termParsed.value)
+    : null;
+  const scheduleCalculation = config.mode === "schedule" && startParsed.ok && termParsed.ok
+    ? { ...generateLeasePaymentSchedule(startParsed.date, termParsed.value, frequency), start: startParsed.date, term: termParsed.value }
+    : null;
+  const rows = scheduleCalculation && rentParsed.ok
+    ? [
+        ["Payment", "Payment date", "Amount"],
+        ...scheduleCalculation.payments.map((payment, index) => [
+          String(index + 1),
+          formatCalendarDate(payment),
+          formatMoney(rentParsed.cents, currency),
+        ]),
+      ]
+    : [];
+  const errors = [
+    !startParsed.ok ? startParsed.error : null,
+    !termParsed.ok ? termParsed.error : null,
+    config.mode === "schedule" && !rentParsed.ok ? rentParsed.error : null,
+  ].filter((error): error is string => Boolean(error));
   const schemas = makePageSchemas({ ...config, calculator: true, faq: config.faq });
   return (
     <Shell schemas={schemas}>
       <ToolCard eyebrow={config.eyebrow} h1={config.h1} lead={config.lead} onPrint={() => window.print()}>
         <div className="mt-6 grid gap-4 lg:grid-cols-12">
-          <div className="lg:col-span-4"><TextInput label="Lease start date" value={start} onChange={setStart} inputMode="text" /></div>
-          <div className="lg:col-span-3"><TextInput label="Lease length in months" value={months} onChange={setMonths} inputMode="numeric" /></div>
+          <div className="lg:col-span-4">
+            <TextInput id={`${config.mode}-start-date`} type="date" label={config.mode === "schedule" ? "Lease start and first payment date" : "Lease start date"} value={start} onChange={setStart} inputMode="text" error={!startParsed.ok ? startParsed.error : undefined} />
+          </div>
+          <div className="lg:col-span-3">
+            <TextInput id={`${config.mode}-term-months`} label="Term in calendar months" value={months} onChange={setMonths} inputMode="numeric" helper="Enter a whole number from 1 through 120. Enter 12 for a 12-month lease." error={!termParsed.ok ? termParsed.error : undefined} />
+          </div>
           {config.mode === "schedule" ? (
             <>
-              <div className="lg:col-span-3"><TextInput label="Rent amount" value={rent} onChange={setRent} /></div>
+              <div className="lg:col-span-3"><TextInput id="schedule-rent" label="Rent per payment" value={rent} onChange={setRent} error={!rentParsed.ok ? rentParsed.error : undefined} /></div>
               <div className="lg:col-span-2"><CurrencySelect value={currency} onChange={setCurrency} /></div>
-              <label className="block lg:col-span-4">
-                <span className="mb-2 block text-sm font-semibold text-slate-800">Frequency</span>
-                <select value={frequency} onChange={(event) => setFrequency(event.target.value)} className="w-full cursor-pointer rounded-xl bg-slate-100 px-4 py-3 text-base text-slate-950 outline-none transition hover:bg-sky-50 focus:bg-white focus:ring-2 focus:ring-sky-200">
+              <div className="block lg:col-span-4">
+                <label htmlFor="schedule-frequency" className="mb-2 block text-sm font-semibold text-slate-800">Payment frequency</label>
+                <select id="schedule-frequency" value={frequency} onChange={(event) => setFrequency(event.target.value as ScheduleFrequency)} className="w-full cursor-pointer rounded-xl bg-slate-100 px-4 py-3 text-base text-slate-950 outline-none transition hover:bg-sky-50 focus:bg-white focus:ring-2 focus:ring-sky-200">
                   <option value="monthly">Monthly</option>
                   <option value="weekly">Weekly</option>
-                  <option value="fortnightly">Fortnightly or biweekly</option>
-                  <option value="every 4 weeks">Every 4 weeks</option>
+                  <option value="fortnightly">Fortnightly or biweekly (14 days)</option>
+                  <option value="every-4-weeks">Every 4 weeks (28 days)</option>
                 </select>
-              </label>
+              </div>
             </>
           ) : null}
         </div>
-        {!startIsValid ? (
-          <p className="mt-2 text-sm font-semibold text-rose-700">
-            Enter a valid date in YYYY-MM-DD format.
-          </p>
+        {errors.length ? <InvalidDateResults errors={errors} /> : config.mode === "schedule" && scheduleCalculation && rentParsed.ok ? (
+          <ResultPanel
+            label="Generated payment schedule"
+            value={`${scheduleCalculation.payments.length} ${scheduleCalculation.payments.length === 1 ? "payment" : "payments"}`}
+            detail="Payment dates are period starts. The schedule excludes every date on or after the calculated lease end."
+            cards={[
+              { label: "Lease start", value: formatCalendarDate(scheduleCalculation.start) },
+              { label: "Calculated lease end", value: formatCalendarDate(scheduleCalculation.leaseEnd.date) },
+              { label: "Term", value: `${scheduleCalculation.term} ${scheduleCalculation.term === 1 ? "month" : "months"}` },
+              { label: "Frequency", value: frequency === "every-4-weeks" ? "Every 4 weeks" : frequency === "fortnightly" ? "Fortnightly / biweekly" : frequency[0].toUpperCase() + frequency.slice(1) },
+            ]}
+            tableRows={rows}
+          />
+        ) : dateCalculation && startParsed.ok && termParsed.ok ? (
+          <ResultPanel
+            label="Calculated lease end"
+            value={formatCalendarDateForDisplay(dateCalculation.date)}
+            detail={dateCalculation.clamped
+              ? "The original start day does not exist in the target month, so the result uses that month’s final calendar day. The written agreement controls the contractual end date."
+              : "The result is the calendar day immediately before the same numbered day after the entered term. The written agreement controls the contractual end date."}
+            cards={[
+              { label: "Lease start", value: formatCalendarDate(startParsed.date) },
+              { label: "Term", value: `${termParsed.value} ${termParsed.value === 1 ? "month" : "months"}` },
+              { label: "Calculated end", value: formatCalendarDate(dateCalculation.date) },
+              ...(dateCalculation.clamped ? [{ label: "Month-end handling", value: "Clamped to the target month’s final day" }] : []),
+            ]}
+          />
         ) : null}
-        <ResultPanel
-          label="Calculated date"
-          value={startIsValid ? formatDate(endDate) : "-"}
-          detail={
-            startIsValid
-              ? "This treats the lease end date as the day before the same calendar date after the lease length. Your lease wording controls the actual final day."
-              : "Enter a valid start date before using the calculated lease date."
-          }
-          cards={
-            startIsValid
-              ? [
-                  { label: "Start date", value: formatDate(startDate) },
-                  { label: "Lease length", value: monthCount === 1 ? "1 month" : `${monthCount} months` },
-                  { label: "Renewal reminder", value: renewalReminderText },
-                ]
-              : undefined
-          }
-          tableRows={rows.length ? rows : undefined}
-        />
       </ToolCard>
       <ContentBlocks sections={dateSections(config)} examples={dateExamples(config)} />
-      <AssumptionNote path={config.path} />
       <RelatedTools links={config.relatedLinks} />
       <Faq items={config.faq} />
     </Shell>

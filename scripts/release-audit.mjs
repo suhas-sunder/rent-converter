@@ -2,6 +2,56 @@ import fs from "node:fs";
 
 const SITE_ORIGIN = "https://www.rentconverter.com";
 const localOrigin = process.env.AUDIT_ORIGIN ?? "http://127.0.0.1:3000";
+const exactAnswerRedirectPaths = new Set([
+  "/150-per-week-to-monthly-rent",
+  "/160-per-week-to-monthly-rent",
+  "/170-per-week-to-monthly-rent",
+  "/180-per-week-to-monthly-rent",
+  "/200-per-week-to-monthly-rent",
+  "/220-per-week-to-monthly-rent",
+  "/230-per-week-to-monthly-rent",
+  "/250-per-week-to-monthly-rent",
+  "/300-per-week-to-monthly-rent",
+  "/320-per-week-to-monthly-rent",
+  "/350-per-week-to-monthly-rent",
+  "/370-per-week-to-monthly-rent",
+  "/400-per-week-to-monthly-rent",
+  "/450-per-week-to-monthly-rent",
+  "/500-per-week-to-monthly-rent",
+  "/550-per-week-to-monthly-rent",
+  "/600-per-week-to-monthly-rent",
+  "/650-per-week-to-monthly-rent",
+  "/750-per-week-to-monthly-rent",
+  "/500-euros-per-week-to-monthly-rent",
+  "/190-pounds-per-week-to-pcm",
+  "/60-pounds-per-night-to-monthly-rent",
+]);
+const pwPcmConsolidationRedirectPaths = new Set([
+  "/pcm-rent-calculator",
+  "/weekly-to-monthly-rent-uk",
+  "/convert-weekly-rent-to-monthly-uk",
+  "/weekly-to-monthly-rent-formula-uk",
+  "/pw-rent-calculator",
+  "/4-weekly-to-monthly-rent-uk",
+  "/pcm-vs-pw-rent",
+  "/per-calendar-month-rent",
+  "/per-calendar-month-rent-uk",
+  "/pcm-calculator",
+  "/rent-pcm-calculator",
+  "/pw-calculator",
+]);
+const countryCityConsolidationRedirectPaths = new Set([
+  "/australia-rent-calculator",
+  "/weekly-to-monthly-rent-melbourne",
+  "/weekly-to-monthly-rent-sydney",
+  "/rent-per-paycheck-us",
+  "/rent-per-paycheck-canada",
+]);
+const auditedConsolidationRedirectPaths = new Set([
+  ...exactAnswerRedirectPaths,
+  ...pwPcmConsolidationRedirectPaths,
+  ...countryCityConsolidationRedirectPaths,
+]);
 
 const fail = [];
 const warn = [];
@@ -258,6 +308,9 @@ async function main() {
   }
 
   for (const link of links) {
+    if (auditedConsolidationRedirectPaths.has(link)) {
+      fail.push(`${link}: retired consolidation URL remains internally linked`);
+    }
     const { response } = await get(link, { redirect: "manual" });
     if (![200, 301, 302, 303, 307, 308].includes(response.status)) {
       fail.push(`${link}: internal link returned ${response.status}`);
@@ -273,6 +326,24 @@ async function main() {
     const location = normalizePath(response.headers.get("location") ?? "");
     if (location !== alias.to) {
       fail.push(`${alias.from}: redirects to ${location || "(missing)"}, expected ${alias.to}`);
+    }
+
+    if (auditedConsolidationRedirectPaths.has(alias.from)) {
+      const query = "?ref=example&campaign=one";
+      const { response: queryResponse } = await get(`${alias.from}${query}`, {
+        redirect: "manual",
+      });
+      const queryLocation = queryResponse.headers.get("location");
+      if (queryResponse.status !== 301 || !queryLocation) {
+        fail.push(`${alias.from}: query-string redirect did not return HTTP 301`);
+      } else {
+        const parsedLocation = new URL(queryLocation, localOrigin);
+        if (normalizePath(parsedLocation.pathname) !== alias.to || parsedLocation.search !== query) {
+          fail.push(
+            `${alias.from}: query-string redirect produced ${queryLocation}, expected ${alias.to}${query}`,
+          );
+        }
+      }
     }
   }
 

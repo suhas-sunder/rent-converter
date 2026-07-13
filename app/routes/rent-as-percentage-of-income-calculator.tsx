@@ -3,6 +3,10 @@ import type { Route } from "./+types/rent-as-percentage-of-income-calculator";
 import Assumptions from "~/client/components/layout/Assumptions";
 import HowItWorks from "~/client/components/rent-as-percentage-of-income-calculator/HowItWorks";
 import ToolFit from "~/client/components/rent-as-percentage-of-income-calculator/ToolFit";
+import {
+  useHydrationSafeSavedState,
+  validSavedMoney,
+} from "~/client/utils/savedState";
 
 function safeToFixed(n: number, digits: number): string {
   if (!Number.isFinite(n)) return "-";
@@ -120,7 +124,6 @@ const ROUTE_WHITELIST = new Set<string>([
   // Rent increases
   "/rent-increase-calculator",
   "/rent-increase-percentage-calculator",
-  "/rent-after-increase-calculator",
 
   // Rent vs buy
   "/rent-vs-buy-calculator",
@@ -283,6 +286,9 @@ function parseMoneyInputToScaled(raw: string): ParsedScaled {
   const s0 = (raw ?? "").trim();
 
   if (!s0) return { ok: false, error: "Enter an amount.", warnings };
+  if (/[a-z]/i.test(s0)) {
+    return { ok: false, error: "Enter a valid number without letters.", warnings };
+  }
 
   let s = s0.replace(/\s+/g, "");
   s = s.replace(/[^\d.,\-]/g, "");
@@ -464,59 +470,60 @@ export default function RentAsPercentageOfIncome() {
   const rentInputRef = useRef<HTMLInputElement | null>(null);
   const incomeInputRef = useRef<HTMLInputElement | null>(null);
 
-  const [rentAmount, setRentAmount] = useState<string>(() => {
-    if (typeof window === "undefined") return "2200";
-    const v = window.localStorage.getItem("rc_rpi_rent_amount") ?? "2200";
-    return v.includes(",") ? v.replace(/,/g, "") : v;
-  });
-
-  const [rentPeriod, setRentPeriod] = useState<Period>(() => {
-    if (typeof window === "undefined") return "monthly";
-    const saved =
-      window.localStorage.getItem("rc_rpi_rent_period") ?? "monthly";
-    return isPeriod(saved) ? saved : "monthly";
-  });
-
-  const [incomeAmount, setIncomeAmount] = useState<string>(() => {
-    if (typeof window === "undefined") return "6500";
-    const v = window.localStorage.getItem("rc_rpi_income_amount") ?? "6500";
-    return v.includes(",") ? v.replace(/,/g, "") : v;
-  });
-
-  const [incomePeriod, setIncomePeriod] = useState<Period>(() => {
-    if (typeof window === "undefined") return "monthly";
-    const saved =
-      window.localStorage.getItem("rc_rpi_income_period") ?? "monthly";
-    return isPeriod(saved) ? saved : "monthly";
-  });
-
-  const [currency, setCurrency] = useState<Currency>(() => {
-    if (typeof window === "undefined") return "USD";
-    const saved = window.localStorage.getItem("rc_rpi_currency") ?? "USD";
-    return isCurrency(saved) ? saved : "USD";
-  });
+  const [rentAmount, setRentAmount] = useState<string>("2200");
+  const [rentPeriod, setRentPeriod] = useState<Period>("monthly");
+  const [incomeAmount, setIncomeAmount] = useState<string>("6500");
+  const [incomePeriod, setIncomePeriod] = useState<Period>("monthly");
+  const [currency, setCurrency] = useState<Currency>("USD");
 
   const [rentFocused, setRentFocused] = useState(false);
   const [incomeFocused, setIncomeFocused] = useState(false);
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    try {
-      window.localStorage.setItem("rc_rpi_rent_amount", rentAmount);
-      window.localStorage.setItem("rc_rpi_rent_period", rentPeriod);
-      window.localStorage.setItem("rc_rpi_income_amount", incomeAmount);
-      window.localStorage.setItem("rc_rpi_income_period", incomePeriod);
-      window.localStorage.setItem("rc_rpi_currency", currency);
-    } catch {
-      // ignore
-    }
-  }, [
-    rentAmount,
-    rentPeriod,
-    incomeAmount,
-    incomePeriod,
-    currency,
-  ]);
+  useHydrationSafeSavedState({
+    restore(storage) {
+      const savedRent = validSavedMoney(storage.getItem("rc_rpi_rent_amount"), {
+        allowZero: true,
+      });
+      const savedRentPeriod = storage.getItem("rc_rpi_rent_period");
+      const savedIncome = validSavedMoney(
+        storage.getItem("rc_rpi_income_amount"),
+        { allowZero: false },
+      );
+      const savedIncomePeriod = storage.getItem("rc_rpi_income_period");
+      const savedCurrency = storage.getItem("rc_rpi_currency");
+
+      let applied = false;
+      if (savedRent !== undefined) {
+        setRentAmount(savedRent);
+        applied = true;
+      }
+      if (savedRentPeriod && isPeriod(savedRentPeriod)) {
+        setRentPeriod(savedRentPeriod);
+        applied = true;
+      }
+      if (savedIncome !== undefined) {
+        setIncomeAmount(savedIncome);
+        applied = true;
+      }
+      if (savedIncomePeriod && isPeriod(savedIncomePeriod)) {
+        setIncomePeriod(savedIncomePeriod);
+        applied = true;
+      }
+      if (savedCurrency && isCurrency(savedCurrency)) {
+        setCurrency(savedCurrency);
+        applied = true;
+      }
+      return applied;
+    },
+    persist(storage) {
+      storage.setItem("rc_rpi_rent_amount", rentAmount);
+      storage.setItem("rc_rpi_rent_period", rentPeriod);
+      storage.setItem("rc_rpi_income_amount", incomeAmount);
+      storage.setItem("rc_rpi_income_period", incomePeriod);
+      storage.setItem("rc_rpi_currency", currency);
+    },
+    dependencies: [rentAmount, rentPeriod, incomeAmount, incomePeriod, currency],
+  });
 
   const rentParsed = useMemo(
     () => parseMoneyInputToScaled(rentAmount),
@@ -664,7 +671,7 @@ export default function RentAsPercentageOfIncome() {
   const faqData = [
     {
       q: "What does rent as a percentage of income mean?",
-      a: "It shows what share of income goes to rent. The calculator converts both inputs to annual amounts first, then calculates the percentage.",
+      a: "It is rent divided by income, expressed as a percentage. The calculator converts both inputs to equivalent annual periods first. A higher result means more of the entered income is allocated to rent.",
     },
     {
       q: "How do you calculate rent as a percentage of income?",
@@ -684,7 +691,7 @@ export default function RentAsPercentageOfIncome() {
     },
     {
       q: "Is this based on gross income or take-home income?",
-      a: "Use whichever income number you want to compare against. If you enter take-home income, the result is based on take-home pay. If you enter gross income, the result is based on gross pay.",
+      a: "Use the specific income measure you intend to compare. Gross income, take-home income, and after-tax estimates are different inputs and should not be treated as interchangeable.",
     },
     {
       q: "Does this include utilities, parking, or fees?",
@@ -784,7 +791,8 @@ export default function RentAsPercentageOfIncome() {
 
                 <p className="mt-2 text-base leading-relaxed text-slate-700">
                   Calculate what percentage of your income goes to rent. Enter
-                  rent and income amounts to compare the same time period.
+                  rent and income amounts with their visible periods; the tool
+                  normalizes both before applying rent ÷ income × 100.
                 </p>
               </div>
 

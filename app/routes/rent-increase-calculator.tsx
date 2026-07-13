@@ -2,6 +2,12 @@ import { useMemo, useEffect, useRef, useState } from "react";
 import type { Route } from "./+types/rent-increase-calculator";
 import HowItWorks from "~/client/components/rent-increase-calculator/HowItWorks";
 import ToolFit from "~/client/components/rent-increase-calculator/ToolFit";
+import {
+  useHydrationSafeSavedState,
+  validSavedDecimal,
+  validSavedMoney,
+  validSavedWholeNumber,
+} from "~/client/utils/savedState";
 
 export const meta: Route.MetaFunction = () => {
   const title = "Rent Increase Calculator | New Rent and Percent Change";
@@ -163,7 +169,6 @@ const ROUTE_WHITELIST = new Set<string>([
   // Rent increases
   "/rent-increase-calculator",
   "/rent-increase-percentage-calculator",
-  "/rent-after-increase-calculator",
 
   // Rent vs buy
   "/rent-vs-buy-calculator",
@@ -571,69 +576,82 @@ export default function RentIncreaseCalculator() {
   const pageName = "Rent Increase Calculator";
   const canonicalUrl = "https://www.rentconverter.com/rent-increase-calculator";
 
-  const [rentAmount, setRentAmount] = useState<string>(() => {
-    if (typeof window === "undefined") return "2200";
-    return localStorage.getItem("rc_ri_rent") ?? "2200";
-  });
-
-  const [rentPeriod, setRentPeriod] = useState<Period>(() => {
-    if (typeof window === "undefined") return "monthly";
-    const saved = localStorage.getItem("rc_ri_rent_period") ?? "monthly";
-    return isPeriod(saved) ? saved : "monthly";
-  });
-
-  const [mode, setMode] = useState<IncreaseMode>(() => {
-    if (typeof window === "undefined") return "percent";
-    const saved = localStorage.getItem("rc_ri_mode") ?? "percent";
-    return isMode(saved) ? saved : "percent";
-  });
-
-  const [percentIncrease, setPercentIncrease] = useState<string>(() => {
-    if (typeof window === "undefined") return "3";
-    return localStorage.getItem("rc_ri_pct") ?? "3";
-  });
-
-  const [fixedIncrease, setFixedIncrease] = useState<string>(() => {
-    if (typeof window === "undefined") return "100";
-    return localStorage.getItem("rc_ri_fixed") ?? "100";
-  });
-
-  const [numIncreases, setNumIncreases] = useState<string>(() => {
-    if (typeof window === "undefined") return "1";
-    return localStorage.getItem("rc_ri_n") ?? "1";
-  });
-
-  const [currency, setCurrency] = useState<Currency>(() => {
-    if (typeof window === "undefined") return "USD";
-    const saved = localStorage.getItem("rc_ri_currency") ?? "USD";
-    return isCurrency(saved) ? saved : "USD";
-  });
+  const [rentAmount, setRentAmount] = useState<string>("2200");
+  const [rentPeriod, setRentPeriod] = useState<Period>("monthly");
+  const [mode, setMode] = useState<IncreaseMode>("percent");
+  const [percentIncrease, setPercentIncrease] = useState<string>("3");
+  const [fixedIncrease, setFixedIncrease] = useState<string>("100");
+  const [numIncreases, setNumIncreases] = useState<string>("1");
+  const [currency, setCurrency] = useState<Currency>("USD");
 
   const [rentFocused, setRentFocused] = useState(false);
   const [fixedFocused, setFixedFocused] = useState(false);
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    try {
-      localStorage.setItem("rc_ri_rent", rentAmount);
-      localStorage.setItem("rc_ri_rent_period", rentPeriod);
-      localStorage.setItem("rc_ri_mode", mode);
-      localStorage.setItem("rc_ri_pct", percentIncrease);
-      localStorage.setItem("rc_ri_fixed", fixedIncrease);
-      localStorage.setItem("rc_ri_n", numIncreases);
-      localStorage.setItem("rc_ri_currency", currency);
-    } catch {
-      // ignore
-    }
-  }, [
-    rentAmount,
-    rentPeriod,
-    mode,
-    percentIncrease,
-    fixedIncrease,
-    numIncreases,
-    currency,
-  ]);
+  useHydrationSafeSavedState({
+    restore(storage) {
+      const savedRent = validSavedMoney(storage.getItem("rc_ri_rent"), {
+        allowZero: true,
+      });
+      const savedPeriod = storage.getItem("rc_ri_rent_period");
+      const savedMode = storage.getItem("rc_ri_mode");
+      const savedPercent = validSavedDecimal(storage.getItem("rc_ri_pct"), {
+        min: 0,
+        max: 1000,
+      });
+      const savedFixed = validSavedMoney(storage.getItem("rc_ri_fixed"), {
+        allowZero: true,
+      });
+      const savedCount = validSavedWholeNumber(storage.getItem("rc_ri_n"), {
+        min: 1,
+        max: 50,
+      });
+      const savedCurrency = storage.getItem("rc_ri_currency");
+
+      // Mode-specific values and the repeat count form one calculation. Restore
+      // the complete group only when every saved member is coherent.
+      if (
+        savedRent === undefined ||
+        !savedPeriod ||
+        !isPeriod(savedPeriod) ||
+        !savedMode ||
+        !isMode(savedMode) ||
+        savedPercent === undefined ||
+        savedFixed === undefined ||
+        savedCount === undefined ||
+        !savedCurrency ||
+        !isCurrency(savedCurrency)
+      ) {
+        return false;
+      }
+
+      setRentAmount(savedRent);
+      setRentPeriod(savedPeriod);
+      setMode(savedMode);
+      setPercentIncrease(savedPercent);
+      setFixedIncrease(savedFixed);
+      setNumIncreases(savedCount);
+      setCurrency(savedCurrency);
+      return true;
+    },
+    persist(storage) {
+      storage.setItem("rc_ri_rent", rentAmount);
+      storage.setItem("rc_ri_rent_period", rentPeriod);
+      storage.setItem("rc_ri_mode", mode);
+      storage.setItem("rc_ri_pct", percentIncrease);
+      storage.setItem("rc_ri_fixed", fixedIncrease);
+      storage.setItem("rc_ri_n", numIncreases);
+      storage.setItem("rc_ri_currency", currency);
+    },
+    dependencies: [
+      rentAmount,
+      rentPeriod,
+      mode,
+      percentIncrease,
+      fixedIncrease,
+      numIncreases,
+      currency,
+    ],
+  });
 
   const rentParsed = useMemo(
     () => parseMoneyInputToScaled(rentAmount),

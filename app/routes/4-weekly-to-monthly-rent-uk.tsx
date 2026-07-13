@@ -1,11 +1,10 @@
-﻿import { ConversionCalculatorPage } from "~/client/components/generated/GeneratedPages";
-import { conversionPageConfigs } from "~/client/data/generatedRouteConfigs";
-import { buildMeta } from "~/client/utils/seo";
+import type { Route } from "./+types/4-weekly-to-monthly-rent-uk";
+import { permanentRedirectPreservingQuery } from "~/utils/redirects";
 
-const config = conversionPageConfigs["/4-weekly-to-monthly-rent-uk"];
+export function loader({ request }: Route.LoaderArgs) {
+  return permanentRedirectPreservingQuery(request, "/rent-paid-every-4-weeks-calculator");
+}
 
-export const meta = () => buildMeta(config);
-
-export default function Route4WeeklyToMonthlyRentUkPage() {
-  return <ConversionCalculatorPage config={config} />;
+export default function Route4WeeklyToMonthlyRentUkRedirect() {
+  return null;
 }

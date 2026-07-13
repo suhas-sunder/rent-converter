@@ -1,11 +1,9 @@
-﻿import { IncomeToolPage } from "~/client/components/generated/GeneratedPages";
-import { incomeToolConfigs } from "~/client/data/generatedRouteConfigs";
-import { buildMeta } from "~/client/utils/seo";
+import { permanentRedirectPreservingQuery } from "~/utils/redirects";
 
-const config = incomeToolConfigs["/rent-calculator-by-income"];
+export function loader({ request }: { request: Request }) {
+  return permanentRedirectPreservingQuery(request, "/salary-to-rent-calculator");
+}
 
-export const meta = () => buildMeta(config);
-
-export default function RentCalculatorByIncomePage() {
-  return <IncomeToolPage config={config} />;
+export default function RentCalculatorByIncomeRedirect() {
+  return null;
 }

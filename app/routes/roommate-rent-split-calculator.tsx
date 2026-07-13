@@ -1,11 +1,9 @@
-﻿import { SplitToolPage } from "~/client/components/generated/GeneratedPages";
-import { splitToolConfigs } from "~/client/data/generatedRouteConfigs";
-import { buildMeta } from "~/client/utils/seo";
+import { permanentRedirectPreservingQuery } from "~/utils/redirects";
 
-const config = splitToolConfigs["/roommate-rent-split-calculator"];
+export function loader({ request }: { request: Request }) {
+  return permanentRedirectPreservingQuery(request, "/rent-split-calculator");
+}
 
-export const meta = () => buildMeta(config);
-
-export default function RoommateRentSplitCalculatorPage() {
-  return <SplitToolPage config={config} />;
+export default function RoommateRentSplitCalculatorRedirect() {
+  return null;
 }

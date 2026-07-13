@@ -1,11 +1,10 @@
-﻿import { InfoPage } from "~/client/components/generated/GeneratedPages";
-import { infoPageConfigs } from "~/client/data/generatedRouteConfigs";
-import { buildMeta } from "~/client/utils/seo";
+import type { Route } from "./+types/per-calendar-month-rent";
+import { permanentRedirectPreservingQuery } from "~/utils/redirects";
 
-const config = infoPageConfigs["/per-calendar-month-rent"];
+export function loader({ request }: Route.LoaderArgs) {
+  return permanentRedirectPreservingQuery(request, "/what-does-pcm-mean-rent");
+}
 
-export const meta = () => buildMeta(config);
-
-export default function PerCalendarMonthRentPage() {
-  return <InfoPage config={config} />;
+export default function PerCalendarMonthRentRedirect() {
+  return null;
 }

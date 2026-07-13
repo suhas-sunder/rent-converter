@@ -8,7 +8,7 @@ const toolFit = {
     "Checking whether rent feels manageable after taxes and deductions."
   ],
   notFor: [
-    "This does not change the lease due date or account for every bill in your budget."
+    "Payroll deductions, tax withholding, paycheck dates, or legal affordability. This also does not change the lease due date."
   ],
   nextSteps: [
     {

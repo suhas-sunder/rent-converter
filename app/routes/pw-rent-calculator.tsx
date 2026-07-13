@@ -1,11 +1,10 @@
-﻿import { ConversionCalculatorPage } from "~/client/components/generated/GeneratedPages";
-import { conversionPageConfigs } from "~/client/data/generatedRouteConfigs";
-import { buildMeta } from "~/client/utils/seo";
+import type { Route } from "./+types/pw-rent-calculator";
+import { permanentRedirectPreservingQuery } from "~/utils/redirects";
 
-const config = conversionPageConfigs["/pw-rent-calculator"];
+export function loader({ request }: Route.LoaderArgs) {
+  return permanentRedirectPreservingQuery(request, "/pcm-to-pw-calculator");
+}
 
-export const meta = () => buildMeta(config);
-
-export default function PwRentCalculatorPage() {
-  return <ConversionCalculatorPage config={config} />;
+export default function PwRentCalculatorRedirect() {
+  return null;
 }

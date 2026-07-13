@@ -4,38 +4,30 @@ type HowItWorksProps = Record<string, unknown>;
 
 const howItWorks = {
   title: "Rent as a percentage of income",
-  intro: "A rent-to-income ratio shows how much of your income is absorbed by rent before utilities and other living costs. It is a simple pressure test, not a complete budget.",
+  intro: "A rent-to-income ratio is rent divided by income. The calculator normalizes both visible periods before applying rent percentage = rent ÷ income × 100.",
   steps: [
     {
-      title: "Income rules are shortcuts, not approvals",
-      body: "A 30% rule, 2.5x rent rule, or 3x rent rule can screen a rental budget quickly, but landlords and personal budgets can use different standards."
+      title: "Match the time periods",
+      body: "Rent and income must cover equivalent periods. Select each period separately and the calculator annualizes both inputs before comparing them."
     },
     {
-      title: "Rent is only one housing cost",
-      body: "Utilities, renters insurance, parking, deposits, moving costs, debt payments, and savings goals can all change what feels affordable."
+      title: "Apply the percentage formula",
+      body: "$1,500 monthly rent ÷ $5,000 monthly income × 100 = 30%. The same formula works for mixed periods after normalization."
     },
     {
-      title: "Gross and take-home income tell different stories",
-      body: "Gross income is useful for common qualification rules. Take-home income is often better for monthly cash-flow planning."
+      title: "Read the result as arithmetic",
+      body: "A higher percentage means more of the entered income is allocated to rent. It does not determine affordability, suitability, or application approval."
     }
   ],
   examples: [
     {
-      title: "$60k income at 30%",
-      body: "$60,000 per year gives a rough rent target of $1,500 per month at 30% of gross income. That still needs to be checked against take-home pay and bills."
-    },
-    {
-      title: "3x rent qualification",
-      body: "For $1,800 rent, a 3x rule points to about $5,400 monthly income, or $64,800 per year. Some landlords may calculate this before tax."
-    },
-    {
-      title: "Paycheck reality check",
-      body: "A rent that looks fine against salary can feel tight if take-home pay is lower because of taxes, benefits, debt, or irregular hours."
+      title: "Monthly example",
+      body: "$1,500 rent and $5,000 income for the same month produce a 30% rent-to-income ratio. No expenses are inferred or subtracted."
     }
   ],
   notes: [
-    "Use the result as a planning number before you apply, not as a guarantee of approval.",
-    "If you are comparing rent to paychecks, the paycheck calculator may be more practical than an annual salary rule."
+    "Gross income, take-home income, and after-tax estimates are different inputs and should not be treated as interchangeable.",
+    "The result uses only the rent, income, and periods entered; it is not a financial suitability decision."
   ],
   relatedLinks: [
     {

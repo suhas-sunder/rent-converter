@@ -1,11 +1,9 @@
-﻿import { IncomeToolPage } from "~/client/components/generated/GeneratedPages";
-import { incomeToolConfigs } from "~/client/data/generatedRouteConfigs";
-import { buildMeta } from "~/client/utils/seo";
+import { permanentRedirectPreservingQuery } from "~/utils/redirects";
 
-const config = incomeToolConfigs["/rent-to-income-ratio-calculator"];
+export function loader({ request }: { request: Request }) {
+  return permanentRedirectPreservingQuery(request, "/rent-as-percentage-of-income-calculator");
+}
 
-export const meta = () => buildMeta(config);
-
-export default function RentToIncomeRatioCalculatorPage() {
-  return <IncomeToolPage config={config} />;
+export default function RentToIncomeRatioCalculatorRedirect() {
+  return null;
 }

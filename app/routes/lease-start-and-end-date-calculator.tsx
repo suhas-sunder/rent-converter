@@ -1,11 +1,9 @@
-﻿import { DateToolPage } from "~/client/components/generated/GeneratedPages";
-import { dateToolConfigs } from "~/client/data/generatedRouteConfigs";
-import { buildMeta } from "~/client/utils/seo";
+import { permanentRedirectPreservingQuery } from "~/utils/redirects";
 
-const config = dateToolConfigs["/lease-start-and-end-date-calculator"];
+export function loader({ request }: { request: Request }) {
+  return permanentRedirectPreservingQuery(request, "/lease-date-calculator");
+}
 
-export const meta = () => buildMeta(config);
-
-export default function LeaseStartAndEndDateCalculatorPage() {
-  return <DateToolPage config={config} />;
+export default function LeaseStartAndEndDateCalculatorRedirect() {
+  return null;
 }

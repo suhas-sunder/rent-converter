@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useHydrationSafeSavedState, validSavedMoney } from "~/client/utils/savedState.js";
 import type { Route } from "./+types/weekly-to-monthly-rent-australia";
 import Assumptions from "~/client/components/layout/Assumptions";
 import HowItWorks from "~/client/components/weekly-to-monthly-rent-australia/HowItWorks";
@@ -136,7 +137,6 @@ const ROUTE_WHITELIST = new Set<string>([
   "/rent-vs-take-home-pay-calculator",
   "/rent-increase-calculator",
   "/rent-increase-percentage-calculator",
-  "/rent-after-increase-calculator",
   "/rent-vs-buy-calculator",
   "/rent-paid-weekly-vs-monthly",
 ]);
@@ -426,27 +426,28 @@ export default function WeeklyToMonthlyRentAustralia() {
   const canonicalUrl =
     "https://www.rentconverter.com/weekly-to-monthly-rent-australia";
 
-  const [amount, setAmount] = useState<string>(() => {
-    if (typeof window === "undefined") return "500";
-    return localStorage.getItem("rc_wtm_amount_au") ?? "500";
-  });
+  const [amount, setAmount] = useState<string>("500");
 
   const [isAmountFocused, setIsAmountFocused] = useState<boolean>(false);
   const [amountTouched, setAmountTouched] = useState<boolean>(false);
 
-  const [currency, setCurrency] = useState<Currency>(() => {
-    if (typeof window === "undefined") return "AUD";
-    const saved = localStorage.getItem("rc_wtm_currency_au") ?? "AUD";
-    return isCurrency(saved) ? saved : "AUD";
-  });
+  const [currency, setCurrency] = useState<Currency>("AUD");
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    try {
-      localStorage.setItem("rc_wtm_amount_au", amount);
-      localStorage.setItem("rc_wtm_currency_au", currency);
-    } catch {}
-  }, [amount, currency]);
+  useHydrationSafeSavedState({
+    restore(storage) {
+      let applied = false;
+      const savedAmount = validSavedMoney(storage.getItem("rc_wtm_amount_au"), "Weekly rent", { allowZero: true });
+      if (savedAmount !== undefined) { setAmount(savedAmount); applied = true; }
+      const savedCurrency = storage.getItem("rc_wtm_currency_au");
+      if (savedCurrency && isCurrency(savedCurrency)) { setCurrency(savedCurrency); applied = true; }
+      return applied;
+    },
+    persist(storage) {
+      storage.setItem("rc_wtm_amount_au", amount);
+      storage.setItem("rc_wtm_currency_au", currency);
+    },
+    dependencies: [amount, currency],
+  });
 
   const parsed = useMemo(() => {
     const p = parseMoneyInputToScaled(amount, "weekly rent amount");
@@ -510,40 +511,6 @@ export default function WeeklyToMonthlyRentAustralia() {
   const handlePrint = () => {
     if (typeof window === "undefined") return;
     window.print();
-  };
-
-  const faqData = [
-    {
-      q: "How do you convert weekly rent to monthly rent in Australia?",
-      a: "Convert weekly rent to an annual amount, then divide by 12. This gives a calendar-month estimate instead of simply multiplying weekly rent by 4.",
-    },
-    {
-      q: "Why is weekly rent times 4 different from monthly rent?",
-      a: "Four weeks is 28 days. An average calendar month is about 30.42 days based on 365 days divided by 12, so the monthly amount is usually higher than a 4-week amount.",
-    },
-    {
-      q: "Is Australian rent usually listed weekly?",
-      a: "Many Australian rental listings show weekly rent. This calculator helps estimate the calendar-month amount so you can compare it with monthly budgets.",
-    },
-    {
-      q: "Does this calculate exact lease payments?",
-      a: "No. It gives a rent conversion estimate. Exact payments can depend on lease wording, due dates, bond rules, proration, and agency processes.",
-    },
-    {
-      q: "What costs are included?",
-      a: "Only the rent amount you enter. Utilities, parking, internet, insurance, and fees are not included unless you add them to the weekly amount.",
-    },
-  ];
-
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntityOfPage: canonicalUrl,
-    mainEntity: faqData.map((f) => ({
-      "@type": "Question",
-      name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.a },
-    })),
   };
 
   const breadcrumbSchema = {
@@ -616,9 +583,9 @@ export default function WeeklyToMonthlyRentAustralia() {
                 </h1>
 
                 <p className="mt-2 text-base text-slate-700">
-                  Convert Australian weekly rent into a calendar-month amount.
-                  The result helps compare weekly listings, fortnightly budgets,
-                  bond planning, and the 4-week shortcut.
+                  Enter any weekly amount to calculate its average calendar-month
+                  equivalent. AUD is selected by default, and the 4-week amount
+                  stays visible for comparison.
                 </p>
               </div>
 
@@ -693,7 +660,8 @@ export default function WeeklyToMonthlyRentAustralia() {
               </div>
 
               <p id={amountHelpId} className="mt-1 text-xs text-slate-700">
-                Enter the weekly rent shown on the listing.
+                Enter any weekly rent amount. The calculation is weekly rent ×
+                365 ÷ 7 ÷ 12.
               </p>
 
               {amountTouched && !parsed.ok ? (

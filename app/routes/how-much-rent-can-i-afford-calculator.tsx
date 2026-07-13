@@ -1,4 +1,5 @@
 import { useMemo, useEffect, useRef, useState } from "react";
+import { useHydrationSafeSavedState, validSavedMoney } from "~/client/utils/savedState.js";
 import type { Route } from "./+types/how-much-rent-can-i-afford-calculator";
 import Assumptions from "~/client/components/layout/Assumptions";
 import HowItWorks from "~/client/components/how-much-rent-can-i-afford-calculator/HowItWorks";
@@ -113,7 +114,6 @@ const ROUTE_WHITELIST = new Set<string>([
   // Rent increases
   "/rent-increase-calculator",
   "/rent-increase-percentage-calculator",
-  "/rent-after-increase-calculator",
 
   // Rent vs buy
   "/rent-vs-buy-calculator",
@@ -480,38 +480,34 @@ function sanitizeRawAmountForState(raw: string): string {
 }
 
 export default function HowMuchRentCanIAfford() {
-  const [income, setIncome] = useState<string>(() => {
-    if (typeof window === "undefined") return "6000";
-    const saved = window.localStorage.getItem("rc_aff_income");
-    return sanitizeRawAmountForState(saved ?? "6000");
-  });
+  const [income, setIncome] = useState<string>("6000");
 
   const [incomeFocused, setIncomeFocused] = useState<boolean>(false);
 
-  const [period, setPeriod] = useState<Period>(() => {
-    if (typeof window === "undefined") return "monthly";
-    const saved = window.localStorage.getItem("rc_aff_period");
-    return saved && isPeriod(saved) ? saved : "monthly";
-  });
+  const [period, setPeriod] = useState<Period>("monthly");
 
-  const [currency, setCurrency] = useState<Currency>(() => {
-    if (typeof window === "undefined") return "USD";
-    const saved = window.localStorage.getItem("rc_aff_currency");
-    return saved && isCurrency(saved) ? saved : "USD";
-  });
+  const [currency, setCurrency] = useState<Currency>("USD");
 
   const copyTimerRef = useRef<number | null>(null);
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    try {
-      window.localStorage.setItem("rc_aff_income", income);
-      window.localStorage.setItem("rc_aff_period", period);
-      window.localStorage.setItem("rc_aff_currency", currency);
-    } catch {
-      // ignore
-    }
-  }, [income, period, currency]);
+  useHydrationSafeSavedState({
+    restore(storage) {
+      let applied = false;
+      const savedIncome = validSavedMoney(storage.getItem("rc_aff_income"), "Income", { allowZero: false });
+      if (savedIncome !== undefined) { setIncome(savedIncome); applied = true; }
+      const savedPeriod = storage.getItem("rc_aff_period");
+      if (savedPeriod && isPeriod(savedPeriod)) { setPeriod(savedPeriod); applied = true; }
+      const savedCurrency = storage.getItem("rc_aff_currency");
+      if (savedCurrency && isCurrency(savedCurrency)) { setCurrency(savedCurrency); applied = true; }
+      return applied;
+    },
+    persist(storage) {
+      storage.setItem("rc_aff_income", income);
+      storage.setItem("rc_aff_period", period);
+      storage.setItem("rc_aff_currency", currency);
+    },
+    dependencies: [income, period, currency],
+  });
 
   useEffect(() => {
     return () => {

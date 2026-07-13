@@ -1,14 +1,14 @@
 import { SeoToolFit } from "~/client/components/layout/SeoSupport";
 
 const toolFit = {
-  title: "When affordability context helps",
+  title: "When a rent-to-income ratio helps",
   bestFor: [
-    "Setting a rent cap before touring or applying.",
-    "Comparing a rent number with salary, monthly income, or take-home pay.",
-    "Understanding whether rent leaves enough room for bills, savings, and debt."
+    "Comparing rent and income entered for the same period.",
+    "Normalizing mixed rent and income periods before calculating a percentage.",
+    "Seeing how much of the selected income input is allocated to rent."
   ],
   notFor: [
-    "This is not a landlord approval decision, legal advice, or a full household budget."
+    "This arithmetic result is not an affordability decision, approval rule, legal threshold, or full household budget."
   ],
   nextSteps: [
     {

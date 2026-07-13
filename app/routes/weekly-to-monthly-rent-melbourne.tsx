@@ -1,11 +1,9 @@
-﻿import { ConversionCalculatorPage } from "~/client/components/generated/GeneratedPages";
-import { conversionPageConfigs } from "~/client/data/generatedRouteConfigs";
-import { buildMeta } from "~/client/utils/seo";
+import { permanentRedirectPreservingQuery } from "~/utils/redirects";
 
-const config = conversionPageConfigs["/weekly-to-monthly-rent-melbourne"];
+export function loader({ request }: { request: Request }) {
+  return permanentRedirectPreservingQuery(request, "/weekly-to-monthly-rent-australia");
+}
 
-export const meta = () => buildMeta(config);
-
-export default function WeeklyToMonthlyRentMelbournePage() {
-  return <ConversionCalculatorPage config={config} />;
+export default function WeeklyToMonthlyRentMelbourneRedirect() {
+  return null;
 }

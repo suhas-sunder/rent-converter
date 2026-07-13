@@ -1,11 +1,9 @@
-﻿import { IncreaseToolPage } from "~/client/components/generated/GeneratedPages";
-import { increaseToolConfigs } from "~/client/data/generatedRouteConfigs";
-import { buildMeta } from "~/client/utils/seo";
+import { permanentRedirectPreservingQuery } from "~/utils/redirects";
 
-const config = increaseToolConfigs["/rent-escalation-calculator"];
+export function loader({ request }: { request: Request }) {
+  return permanentRedirectPreservingQuery(request, "/compound-rent-increase-calculator");
+}
 
-export const meta = () => buildMeta(config);
-
-export default function RentEscalationCalculatorPage() {
-  return <IncreaseToolPage config={config} />;
+export default function RentEscalationCalculatorRedirect() {
+  return null;
 }

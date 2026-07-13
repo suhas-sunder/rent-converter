@@ -1,4 +1,5 @@
 import { useMemo, useEffect, useRef, useState } from "react";
+import { useHydrationSafeSavedState, validSavedMoney } from "~/client/utils/savedState.js";
 import type { Route } from "./+types/monthly-to-weekly-rent-converter";
 import Assumptions from "~/client/components/layout/Assumptions";
 import HowItWorks from "~/client/components/monthly-to-weekly-rent-converter/HowItWorks";
@@ -98,7 +99,6 @@ const ROUTE_WHITELIST = new Set<string>([
 
   "/rent-increase-calculator",
   "/rent-increase-percentage-calculator",
-  "/rent-after-increase-calculator",
 
   "/rent-vs-buy-calculator",
 ]);
@@ -426,28 +426,27 @@ function formatAmountPreviewFromNormalized(normalized: string): string {
 }
 
 export default function MonthlyToWeeklyRent() {
-  const [amount, setAmount] = useState<string>(() => {
-    if (typeof window === "undefined") return "2000";
-    return window.localStorage.getItem("rc_mtw_amount") ?? "2000";
-  });
+  const [amount, setAmount] = useState<string>("2000");
 
   const [isAmountFocused, setIsAmountFocused] = useState<boolean>(false);
 
-  const [currency, setCurrency] = useState<Currency>(() => {
-    if (typeof window === "undefined") return "USD";
-    const saved = window.localStorage.getItem("rc_mtw_currency");
-    return saved && isCurrency(saved) ? saved : "USD";
-  });
+  const [currency, setCurrency] = useState<Currency>("USD");
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    try {
-      window.localStorage.setItem("rc_mtw_amount", amount);
-      window.localStorage.setItem("rc_mtw_currency", currency);
-    } catch {
-      // ignore
-    }
-  }, [amount, currency]);
+  useHydrationSafeSavedState({
+    restore(storage) {
+      let applied = false;
+      const savedAmount = validSavedMoney(storage.getItem("rc_mtw_amount"), "Monthly rent", { allowZero: true });
+      if (savedAmount !== undefined) { setAmount(savedAmount); applied = true; }
+      const savedCurrency = storage.getItem("rc_mtw_currency");
+      if (savedCurrency && isCurrency(savedCurrency)) { setCurrency(savedCurrency); applied = true; }
+      return applied;
+    },
+    persist(storage) {
+      storage.setItem("rc_mtw_amount", amount);
+      storage.setItem("rc_mtw_currency", currency);
+    },
+    dependencies: [amount, currency],
+  });
 
   const parsedAmount = useMemo(() => parseMoneyInputToScaled(amount), [amount]);
   const monthlyScaled = parsedAmount.ok ? (parsedAmount.scaled as bigint) : 0n;

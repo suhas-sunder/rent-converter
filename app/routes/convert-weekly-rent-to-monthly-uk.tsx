@@ -1,11 +1,10 @@
-﻿import { ConversionCalculatorPage } from "~/client/components/generated/GeneratedPages";
-import { conversionPageConfigs } from "~/client/data/generatedRouteConfigs";
-import { buildMeta } from "~/client/utils/seo";
+import type { Route } from "./+types/convert-weekly-rent-to-monthly-uk";
+import { permanentRedirectPreservingQuery } from "~/utils/redirects";
 
-const config = conversionPageConfigs["/convert-weekly-rent-to-monthly-uk"];
+export function loader({ request }: Route.LoaderArgs) {
+  return permanentRedirectPreservingQuery(request, "/pw-to-pcm-calculator");
+}
 
-export const meta = () => buildMeta(config);
-
-export default function ConvertWeeklyRentToMonthlyUkPage() {
-  return <ConversionCalculatorPage config={config} />;
+export default function ConvertWeeklyRentToMonthlyUkRedirect() {
+  return null;
 }

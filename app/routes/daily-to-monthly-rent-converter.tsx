@@ -1,4 +1,5 @@
 import { useMemo, useEffect, useRef, useState } from "react";
+import { useHydrationSafeSavedState, validSavedMoney } from "~/client/utils/savedState.js";
 import type { Route } from "./+types/daily-to-monthly-rent-converter";
 import Assumptions from "~/client/components/layout/Assumptions";
 import FourWeekVsMonthly from "~/client/components/layout/FourWeekVsMonthly";
@@ -98,7 +99,6 @@ const ROUTE_WHITELIST = new Set<string>([
 
   "/rent-increase-calculator",
   "/rent-increase-percentage-calculator",
-  "/rent-after-increase-calculator",
 
   "/rent-vs-buy-calculator",
 ]);
@@ -458,31 +458,29 @@ function ratioToNumber(numer: bigint, denom: bigint, precision = 8): number {
 }
 
 export default function DailyToMonthlyRent() {
-  const [amount, setAmount] = useState<string>(() => {
-    if (typeof window === "undefined") return "70";
-    const saved = window.localStorage.getItem("rc_dtm_amount");
-    return saved ?? "70";
-  });
+  const [amount, setAmount] = useState<string>("70");
 
   const [isAmountFocused, setIsAmountFocused] = useState<boolean>(false);
 
-  const [currency, setCurrency] = useState<Currency>(() => {
-    if (typeof window === "undefined") return "USD";
-    const saved = window.localStorage.getItem("rc_dtm_currency");
-    return saved && isCurrency(saved) ? saved : "USD";
-  });
+  const [currency, setCurrency] = useState<Currency>("USD");
 
   const copyTimerRef = useRef<number | null>(null);
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    try {
-      window.localStorage.setItem("rc_dtm_amount", amount);
-      window.localStorage.setItem("rc_dtm_currency", currency);
-    } catch {
-      // ignore
-    }
-  }, [amount, currency]);
+  useHydrationSafeSavedState({
+    restore(storage) {
+      let applied = false;
+      const savedAmount = validSavedMoney(storage.getItem("rc_dtm_amount"), "Daily rent", { allowZero: true });
+      if (savedAmount !== undefined) { setAmount(savedAmount); applied = true; }
+      const savedCurrency = storage.getItem("rc_dtm_currency");
+      if (savedCurrency && isCurrency(savedCurrency)) { setCurrency(savedCurrency); applied = true; }
+      return applied;
+    },
+    persist(storage) {
+      storage.setItem("rc_dtm_amount", amount);
+      storage.setItem("rc_dtm_currency", currency);
+    },
+    dependencies: [amount, currency],
+  });
 
   useEffect(() => {
     return () => {

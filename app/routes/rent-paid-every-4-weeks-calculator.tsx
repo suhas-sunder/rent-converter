@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useHydrationSafeSavedState, validSavedMoney } from "~/client/utils/savedState.js";
 import type { Route } from "./+types/rent-paid-every-4-weeks-calculator";
 import Assumptions from "~/client/components/layout/Assumptions";
 import HowItWorks from "~/client/components/rent-paid-every-4-weeks-calculator/HowItWorks";
@@ -142,7 +143,6 @@ const ROUTE_WHITELIST = new Set<string>([
   // Rent increases
   "/rent-increase-calculator",
   "/rent-increase-percentage-calculator",
-  "/rent-after-increase-calculator",
 
   // Rent vs buy
   "/rent-vs-buy-calculator",
@@ -464,29 +464,27 @@ export default function RentPaidEvery4Weeks() {
   const canonicalUrl =
     "https://www.rentconverter.com/rent-paid-every-4-weeks-calculator";
 
-  const [amount, setAmount] = useState<string>(() => {
-    if (typeof window === "undefined") return "650";
-    const saved = localStorage.getItem("rc_4w_amount") ?? "650";
-    return saved.replace(/,/g, "");
-  });
+  const [amount, setAmount] = useState<string>("650");
 
   const [amountFocused, setAmountFocused] = useState<boolean>(false);
 
-  const [currency, setCurrency] = useState<Currency>(() => {
-    if (typeof window === "undefined") return "USD";
-    const saved = localStorage.getItem("rc_4w_currency") ?? "USD";
-    return isCurrency(saved) ? saved : "USD";
-  });
+  const [currency, setCurrency] = useState<Currency>("USD");
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    try {
-      localStorage.setItem("rc_4w_amount", amount);
-      localStorage.setItem("rc_4w_currency", currency);
-    } catch {
-      // ignore
-    }
-  }, [amount, currency]);
+  useHydrationSafeSavedState({
+    restore(storage) {
+      let applied = false;
+      const savedAmount = validSavedMoney(storage.getItem("rc_4w_amount"), "Four-week rent", { allowZero: true });
+      if (savedAmount !== undefined) { setAmount(savedAmount); applied = true; }
+      const savedCurrency = storage.getItem("rc_4w_currency");
+      if (savedCurrency && isCurrency(savedCurrency)) { setCurrency(savedCurrency); applied = true; }
+      return applied;
+    },
+    persist(storage) {
+      storage.setItem("rc_4w_amount", amount);
+      storage.setItem("rc_4w_currency", currency);
+    },
+    dependencies: [amount, currency],
+  });
 
   const parsed = useMemo(() => parseMoneyInputToScaled(amount), [amount]);
 
@@ -577,11 +575,11 @@ export default function RentPaidEvery4Weeks() {
   const faqData = [
     {
       q: "What does rent paid every 4 weeks mean?",
-      a: "It means rent is due every 28 days instead of once per calendar month. Because 28 days is shorter than most months, the due date moves through the calendar over time.",
+      a: "Four-weekly or every-4-weeks rent means a payment cycle of exactly 28 days. Because 28 days is shorter than most calendar months, the due date moves through the calendar over time.",
     },
     {
       q: "How many 4-week rent payments happen in a year?",
-      a: "A 4-week schedule is often described as 13 payments in a 52-week year. Using a 365-day year, there are about 13.04 periods of 28 days.",
+      a: "Thirteen 4-week periods cover 364 days. Using the calculator's 365-day comparison year, there are about 13.04 periods of 28 days.",
     },
     {
       q: "Is 4-week rent the same as monthly rent?",
@@ -684,8 +682,10 @@ export default function RentPaidEvery4Weeks() {
 
                 <p className="mt-2 text-base text-slate-700">
                   Convert rent paid every 4 weeks into monthly, weekly, and
-                  annual equivalents. A 28-day rent cycle creates 13 payments
-                  per year, so it is not the same as monthly rent.
+                  annual equivalents. “Four-weekly” means the same 28-day
+                  cycle: 13 periods cover 364 days, so it is not the same as a
+                  calendar month. GBP remains available in the currency
+                  selector.
                 </p>
               </div>
 

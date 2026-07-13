@@ -3,6 +3,10 @@ import type { Route } from "./+types/rent-vs-take-home-pay-calculator";
 import Assumptions from "~/client/components/layout/Assumptions";
 import HowItWorks from "~/client/components/rent-vs-take-home-pay-calculator/HowItWorks";
 import ToolFit from "~/client/components/rent-vs-take-home-pay-calculator/ToolFit";
+import {
+  useHydrationSafeSavedState,
+  validSavedMoney,
+} from "~/client/utils/savedState";
 
 export const meta: Route.MetaFunction = () => {
   const title = "Rent vs Take-Home Pay Calculator | Income After Rent";
@@ -195,7 +199,6 @@ const ROUTE_WHITELIST = new Set<string>([
 
   "/rent-increase-calculator",
   "/rent-increase-percentage-calculator",
-  "/rent-after-increase-calculator",
 
   "/rent-vs-buy-calculator",
 ]);
@@ -547,33 +550,11 @@ export default function RentVsTakeHomePay() {
   const canonicalUrl =
     "https://www.rentconverter.com/rent-vs-take-home-pay-calculator";
 
-  const [takeHomePay, setTakeHomePay] = useState<string>(() => {
-    if (typeof window === "undefined") return "5000";
-    return stripCommas(localStorage.getItem("rc_rvt_takehome") ?? "5000");
-  });
-
-  const [takeHomePeriod, setTakeHomePeriod] = useState<Period>(() => {
-    if (typeof window === "undefined") return "monthly";
-    const saved = localStorage.getItem("rc_rvt_takehome_period") ?? "monthly";
-    return isPeriod(saved) ? saved : "monthly";
-  });
-
-  const [rentAmount, setRentAmount] = useState<string>(() => {
-    if (typeof window === "undefined") return "1800";
-    return stripCommas(localStorage.getItem("rc_rvt_rent") ?? "1800");
-  });
-
-  const [rentPeriod, setRentPeriod] = useState<Period>(() => {
-    if (typeof window === "undefined") return "monthly";
-    const saved = localStorage.getItem("rc_rvt_rent_period") ?? "monthly";
-    return isPeriod(saved) ? saved : "monthly";
-  });
-
-  const [currency, setCurrency] = useState<Currency>(() => {
-    if (typeof window === "undefined") return "USD";
-    const saved = localStorage.getItem("rc_rvt_currency") ?? "USD";
-    return isCurrency(saved) ? saved : "USD";
-  });
+  const [takeHomePay, setTakeHomePay] = useState<string>("5000");
+  const [takeHomePeriod, setTakeHomePeriod] = useState<Period>("monthly");
+  const [rentAmount, setRentAmount] = useState<string>("1800");
+  const [rentPeriod, setRentPeriod] = useState<Period>("monthly");
+  const [currency, setCurrency] = useState<Currency>("USD");
 
   const [takeHomeFocused, setTakeHomeFocused] = useState(false);
   const [rentFocused, setRentFocused] = useState(false);
@@ -610,22 +591,50 @@ export default function RentVsTakeHomePay() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rentAmount, rentFocused]);
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    try {
-      localStorage.setItem("rc_rvt_takehome", takeHomePay);
-      localStorage.setItem("rc_rvt_takehome_period", takeHomePeriod);
-      localStorage.setItem("rc_rvt_rent", rentAmount);
-      localStorage.setItem("rc_rvt_rent_period", rentPeriod);
-      localStorage.setItem("rc_rvt_currency", currency);
-    } catch {}
-  }, [
-    takeHomePay,
-    takeHomePeriod,
-    rentAmount,
-    rentPeriod,
-    currency,
-  ]);
+  useHydrationSafeSavedState({
+    restore(storage) {
+      const savedTakeHome = validSavedMoney(storage.getItem("rc_rvt_takehome"), {
+        allowZero: false,
+      });
+      const savedTakeHomePeriod = storage.getItem("rc_rvt_takehome_period");
+      const savedRent = validSavedMoney(storage.getItem("rc_rvt_rent"), {
+        allowZero: true,
+      });
+      const savedRentPeriod = storage.getItem("rc_rvt_rent_period");
+      const savedCurrency = storage.getItem("rc_rvt_currency");
+
+      let applied = false;
+      if (savedTakeHome !== undefined) {
+        setTakeHomePay(savedTakeHome);
+        applied = true;
+      }
+      if (savedTakeHomePeriod && isPeriod(savedTakeHomePeriod)) {
+        setTakeHomePeriod(savedTakeHomePeriod);
+        applied = true;
+      }
+      if (savedRent !== undefined) {
+        setRentAmount(savedRent);
+        applied = true;
+      }
+      if (savedRentPeriod && isPeriod(savedRentPeriod)) {
+        setRentPeriod(savedRentPeriod);
+        applied = true;
+      }
+      if (savedCurrency && isCurrency(savedCurrency)) {
+        setCurrency(savedCurrency);
+        applied = true;
+      }
+      return applied;
+    },
+    persist(storage) {
+      storage.setItem("rc_rvt_takehome", takeHomePay);
+      storage.setItem("rc_rvt_takehome_period", takeHomePeriod);
+      storage.setItem("rc_rvt_rent", rentAmount);
+      storage.setItem("rc_rvt_rent_period", rentPeriod);
+      storage.setItem("rc_rvt_currency", currency);
+    },
+    dependencies: [takeHomePay, takeHomePeriod, rentAmount, rentPeriod, currency],
+  });
 
   const parsed = useMemo(() => {
     const errors: string[] = [];

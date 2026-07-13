@@ -3,17 +3,17 @@ import { SeoToolFit } from "~/client/components/layout/SeoSupport";
 const toolFit = {
   title: "When rent increase context helps",
   bestFor: [
-    "Checking a renewal notice before responding.",
-    "Comparing the new rent with your affordability limit.",
-    "Understanding whether a fixed increase or percent increase changes the yearly budget more."
+    "Finding the percentage change when old and new rent are known.",
+    "Checking the absolute and annualized difference between two rent amounts.",
+    "Comparing like-for-like rent amounts that use the same payment period."
   ],
   notFor: [
     "Local law and lease terms can control whether an increase is allowed. This page only calculates the numbers."
   ],
   nextSteps: [
     {
-      to: "/rent-after-increase-calculator",
-      label: "Rent after increase"
+      to: "/rent-increase-calculator",
+      label: "Calculate new rent"
     },
     {
       to: "/rent-as-percentage-of-income-calculator",
