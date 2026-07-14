@@ -24,10 +24,10 @@ export function loader() {
 export const meta: Route.MetaFunction = () => {
   const title = "Rent Due Date Calculator | Next Rent Payment Date";
   const description =
-    "Calculate upcoming rent due dates and payment totals. Build monthly, weekly, biweekly, or 28-day rent schedules and print the result.";
+    "Enter a due rule and as-of date to find upcoming rent due dates for monthly, weekly, biweekly, annual, or 28-day rent cycles.";
 
   const ogTitle = "Rent Due Date Calculator | Next Rent Payment Date";
-  const ogDescription = "Calculate upcoming rent due dates and payment totals. Build monthly, weekly, biweekly, or 28-day rent schedules and print the result.";
+  const ogDescription = "Enter a due rule and as-of date to find upcoming rent due dates for monthly, weekly, biweekly, annual, or 28-day rent cycles.";
 
   const canonical = "https://www.rentconverter.com/rent-due-date-calculator";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
@@ -682,14 +682,13 @@ export default function RentDueDateCalculator() {
 
   // FIX: only whitelisted routes here
   const relatedLinks = [
-    { href: "/", text: "Rent converter hub" },
     {
-      href: "/weekly-to-monthly-rent-converter",
-      text: "Weekly to monthly rent converter",
+      href: "/rent-schedule-calculator",
+      text: "Rent schedule calculator",
     },
     {
-      href: "/rent-paid-every-4-weeks-calculator",
-      text: "Rent paid every 4 weeks calculator",
+      href: "/lease-date-calculator",
+      text: "Lease date calculator",
     },
   ];
 
@@ -716,7 +715,7 @@ export default function RentDueDateCalculator() {
     },
     {
       q: "Does this adjust for weekends, holidays, or grace periods?",
-      a: "No. It uses calendar dates and a simple cadence to illustrate timing. Lease terms and landlord policies can define different rules.",
+      a: "No. It calculates calendar dates from the due rule you enter. Check the written agreement and the relevant official authority for any separate timing rules.",
     },
     {
       q: "Why can the schedule total differ from the standard annual total?",
@@ -799,9 +798,10 @@ export default function RentDueDateCalculator() {
           </div>
 
           <p className="hidden md:flex w-full py-2 text-base text-slate-700">
-            Calculate upcoming rent due dates for monthly, weekly, biweekly, or
-            28-day rent. See the next payment date, monthly rollups, and yearly
-            counts while keeping lease terms and grace periods separate.
+            Enter the due date or cadence stated in the rental agreement to
+            calculate upcoming dates. This tool does not decide when rent is
+            legally due; use the rent schedule calculator for full
+            lease-bounded payment rows.
           </p>
 
           <div className="grid gap-x-5 gap-y-3 md:grid-cols-12">

@@ -1,7 +1,7 @@
-﻿import { redirect } from "react-router";
+import { permanentRedirectPreservingQuery } from "~/utils/redirects";
 
-export function loader() {
-  return redirect("/pw-to-pcm-calculator", { status: 301 });
+export function loader({ request }: { request: Request }) {
+  return permanentRedirectPreservingQuery(request, "/pw-to-pcm-calculator");
 }
 
 export default function PwToPmRedirect() {

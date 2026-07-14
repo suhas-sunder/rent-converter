@@ -12,16 +12,20 @@ const toolFit = {
   ],
   nextSteps: [
     {
-      to: "/rent-vs-take-home-pay-calculator",
-      label: "Rent vs take-home pay"
+      to: "/salary-to-rent-calculator",
+      label: "Salary to rent"
     },
     {
-      to: "/rent-per-paycheck-calculator",
-      label: "Rent per paycheck"
+      to: "/income-required-for-rent-calculator",
+      label: "Income required"
     },
     {
       to: "/rent-as-percentage-of-income-calculator",
       label: "Rent percentage"
+    },
+    {
+      to: "/rent-budget-calculator",
+      label: "Rent budget"
     }
   ]
 };

@@ -135,8 +135,8 @@ test("retired routes are absent from XML sitemap and generated content", () => {
   const sitemapUrls = [...sitemapSource.matchAll(/<loc>([^<]+)<\/loc>/g)].map(
     (match) => match[1],
   );
-  assert.equal(sitemapUrls.length, 66);
-  assert.equal(new Set(sitemapUrls).size, 66);
+  assert.equal(sitemapUrls.length, 60);
+  assert.equal(new Set(sitemapUrls).size, 60);
 });
 
 test("five retained destinations stay canonical and carry the merged task content", () => {
@@ -169,7 +169,7 @@ test("visible generated FAQs and FAQ schema use the same retained arrays", () =>
   assert.match(generatedPagesSource, /<Faq items=\{config\.faq \?\? \[\]\} \/>/);
 });
 
-test("route totals are 171 registered, 66 HTTP-200, and 105 redirects", () => {
+test("route totals include the methodology page alongside later redirects", () => {
   const registered =
     (routesSource.match(/\broute\(/g) ?? []).length +
     (routesSource.match(/\bindex\(/g) ?? []).length;
@@ -179,7 +179,7 @@ test("route totals are 171 registered, 66 HTTP-200, and 105 redirects", () => {
     ),
   ].length;
 
-  assert.equal(registered, 171);
-  assert.equal(redirectCount, 105);
-  assert.equal(registered - redirectCount, 66);
+  assert.equal(registered, 172);
+  assert.equal(redirectCount, 112);
+  assert.equal(registered - redirectCount, 60);
 });

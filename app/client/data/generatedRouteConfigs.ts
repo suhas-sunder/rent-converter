@@ -10,8 +10,6 @@ import type {
   RelatedLink,
   SplitToolConfig,
 } from "~/client/components/generated/GeneratedPages";
-import type { Currency } from "~/client/utils/rentMath";
-
 const link = (to: string, label: string, description?: string): RelatedLink => ({
   to,
   label,
@@ -38,7 +36,7 @@ export const australiaLinks = [
   link("/weekly-to-monthly-rent-australia", "Weekly to monthly Australia", "Compare Australian weekly listings with monthly budgets."),
   link("/weekly-to-fortnightly-rent-australia", "Weekly to fortnightly", "Convert weekly rent into fortnightly rent."),
   link("/fortnightly-to-monthly-rent-australia", "Fortnightly to monthly", "Convert fortnightly rent into calendar monthly rent."),
-  link("/bond-and-rent-in-advance-australia", "Bond and rent in advance", "Estimate common move-in costs."),
+  link("/rent-in-advance-australia", "Rent in advance and bond", "Estimate entered Australian rent-in-advance and bond amounts."),
   link("/prorated-rent-calculator-australia", "Prorated rent Australia", "Estimate partial rent for a move-in or move-out."),
 ];
 
@@ -144,6 +142,7 @@ export const infoPageConfigs: Record<string, InfoPageConfig> = {
     ],
     relatedLinks: pwPcmLinks,
     faq: pcmFaq,
+    authorAttribution: true,
   },
   "/what-does-pw-mean-rent": {
     path: "/what-does-pw-mean-rent",
@@ -185,6 +184,7 @@ export const infoPageConfigs: Record<string, InfoPageConfig> = {
     ],
     relatedLinks: pwPcmLinks,
     faq: pwFaq,
+    authorAttribution: true,
   },
   "/is-rent-due-on-the-first": {
     path: "/is-rent-due-on-the-first",
@@ -293,11 +293,11 @@ function conversionConfig(input: Omit<ConversionPageConfig, "faq" | "examples" |
 export const conversionPageConfigs: Record<string, ConversionPageConfig> = {
   "/pw-to-pcm-calculator": conversionConfig({
     path: "/pw-to-pcm-calculator",
-    title: "PW to PCM Calculator | Weekly Rent to Monthly Rent",
-    description: "Convert rent per week to rent per calendar month. See the true monthly amount, annual rent, and why weekly rent times 4 is usually too low.",
+    title: "PW to PCM Calculator | UK Weekly Rent to Monthly",
+    description: "Convert PW rent into a per-calendar-month equivalent using PW x 365 / 7 / 12. Compare the PCM result with the 4-week shortcut.",
     eyebrow: "PW to PCM calculator",
     h1: "PW to PCM Calculator",
-    lead: "Convert weekly rent into a per-calendar-month amount and compare it with the 4-week shortcut.",
+    lead: "Convert a PW rent listing into a per-calendar-month equivalent. The calculation annualizes the weekly amount before dividing by 12, so it is not the same as multiplying by 4.",
     inputLabel: "Weekly rent",
     defaultAmount: "500",
     defaultCurrency: "USD",
@@ -306,7 +306,12 @@ export const conversionPageConfigs: Record<string, ConversionPageConfig> = {
     formulaLabel: "PCM = weekly rent x 365 / 7 / 12",
     context: "Weekly rent is annualized over 365 days and divided by 12 so the monthly result matches a calendar-month budget.",
     commonAmounts: commonWeeklyAmounts,
-    relatedLinks: pwPcmLinks,
+    relatedLinks: [
+      link("/pcm-to-pw-calculator", "PCM to PW calculator", "Turn a per-calendar-month amount back into an average weekly equivalent."),
+      link("/what-does-pcm-mean-rent", "What PCM means", "Understand per calendar month rent wording."),
+      link("/what-does-pw-mean-rent", "What PW means", "Understand weekly rent wording."),
+      link("/rent-paid-every-4-weeks-calculator", "4-week rent calculator", "Compare 28-day rent cycles with calendar months."),
+    ],
     sections: [
       {
         title: "PW, PCM, and four-week rent",
@@ -340,11 +345,11 @@ export const conversionPageConfigs: Record<string, ConversionPageConfig> = {
   }),
   "/pcm-to-pw-calculator": conversionConfig({
     path: "/pcm-to-pw-calculator",
-    title: "PCM to PW Calculator | Monthly Rent to Weekly Rent",
-    description: "Convert per calendar month rent to weekly rent. See the weekly equivalent, annual cost, and formula used for monthly-to-weekly rent.",
+    title: "PCM to PW Calculator | Monthly Rent to Weekly Equivalent",
+    description: "Convert PCM rent into an average weekly equivalent using PCM x 12 x 7 / 365. Useful for comparing monthly and PW listings.",
     eyebrow: "PCM to PW calculator",
     h1: "PCM to PW Calculator",
-    lead: "Convert monthly or PCM rent into a weekly equivalent so you can compare it with PW listings.",
+    lead: "Convert monthly or PCM rent into an average weekly equivalent so you can compare it with PW listings without dividing the month by 4.",
     inputLabel: "PCM rent",
     defaultAmount: "1200",
     defaultCurrency: "GBP",
@@ -353,7 +358,12 @@ export const conversionPageConfigs: Record<string, ConversionPageConfig> = {
     formulaLabel: "PW = PCM x 12 / 365 x 7",
     context: "Monthly rent is multiplied by 12 to get annual rent, then divided into 7-day weekly periods.",
     commonAmounts: [800, 900, 1000, 1200, 1400, 1600, 1800, 2000, 2400, 3000],
-    relatedLinks: pwPcmLinks,
+    relatedLinks: [
+      link("/pw-to-pcm-calculator", "PW to PCM calculator", "Convert weekly rent into per-calendar-month rent."),
+      link("/what-does-pcm-mean-rent", "What PCM means", "Understand per calendar month rent wording."),
+      link("/what-does-pw-mean-rent", "What PW means", "Understand weekly rent wording."),
+      link("/rent-paid-every-4-weeks-calculator", "4-week rent calculator", "Compare 28-day rent cycles with calendar months."),
+    ],
     sections: [
       {
         title: "PCM to an average PW amount",
@@ -526,18 +536,19 @@ export const incomeToolConfigs: Record<string, IncomeToolConfig> = {
   }),
   "/salary-to-rent-calculator": incomeConfig({
     path: "/salary-to-rent-calculator",
-    title: "Salary to Rent Calculator | Monthly Rent from Income",
-    description: "Enter annual gross salary or income to calculate monthly income, compare 30%, 40%, and 3x rent references, and check a planned monthly rent.",
+    title: "Salary to Rent Calculator | Annual Income Rent Targets",
+    description: "Enter annual gross salary to compare monthly rent references at 30%, 40%, and 3x income, plus a planned-rent percentage check.",
     eyebrow: "Salary and income rent calculator",
     h1: "Salary to Rent Calculator",
-    lead: "Enter annual gross salary or annual gross income, then compare 30%, 40%, and 3x monthly rent references with your planned rent.",
+    lead: "Enter annual gross salary or annual gross income, then compare 30%, 40%, and 3x monthly rent references with a planned rent amount.",
     mode: "salary",
     defaultIncome: "60000",
     defaultRent: "1500",
     relatedLinks: [
       link("/rent-as-percentage-of-income-calculator", "Rent as percentage of income", "Compare a specific rent with income over matching periods."),
-      link("/income-required-for-rent-calculator", "Income required for rent", "Reverse rent and income with preset or custom multipliers."),
-      link("/rent-budget-calculator", "Rent budget calculator", "Add visible non-rent costs to a separate budget check."),
+      link("/how-much-rent-can-i-afford-calculator", "Rent affordability calculator", "Compare income-period-based rent targets."),
+      link("/rent-after-tax-income-calculator", "Rent after tax income", "Compare rent with an after-tax income estimate."),
+      link("/rent-vs-take-home-pay-calculator", "Rent vs take-home pay", "Check rent against take-home pay instead of gross salary."),
     ],
     faq: [
       {
@@ -597,37 +608,21 @@ export const incomeToolConfigs: Record<string, IncomeToolConfig> = {
   }),
 };
 
-function increaseDefaultExamples(input: Omit<IncreaseToolConfig, "faq" | "examples">): IncreaseToolConfig["examples"] {
-  if (input.mode === "regional") {
-    return [
-      { title: "Math check only", body: "Enter the current rent and the percentage you want to test. The result shows the new rent and annual impact, but it does not decide whether that percentage is allowed." },
-      { title: "Notice review", body: "Compare the calculated monthly change with the rent notice, then verify dates, exemptions, lease wording, and official guidance separately." },
-    ];
-  }
-  if (input.mode === "compound") {
-    return [
-      { title: "Annual percentage escalation", body: "Some leases describe repeated percentage increases as rent escalation. Each year applies the entered rate to the prior year’s rent, so the fifth-year rent is higher than one flat increase on the starting rent." },
-      { title: "Scope of the schedule", body: "Use the year-by-year rows to inspect starting rent, final rent, and total increase. The calculator does not model fixed-dollar, irregular, or custom annual schedules, interpret lease clauses, or calculate cumulative rent paid." },
-    ];
-  }
-  return [];
+function increaseDefaultExamples(): IncreaseToolConfig["examples"] {
+  return [
+    { title: "Annual percentage escalation", body: "Some leases describe repeated percentage increases as rent escalation. Each year applies the entered rate to the prior year’s rent, so the fifth-year rent is higher than one flat increase on the starting rent." },
+    { title: "Scope of the schedule", body: "Use the year-by-year rows to inspect starting rent, final rent, and total increase. The calculator does not model fixed-dollar, irregular, or custom annual schedules, interpret lease clauses, or calculate cumulative rent paid." },
+  ];
 }
 
 function increaseConfig(input: Omit<IncreaseToolConfig, "faq" | "examples"> & Partial<Pick<IncreaseToolConfig, "faq" | "examples">>): IncreaseToolConfig {
-  const defaultFaq = input.mode === "regional"
-    ? [
-        { q: "Is the starting percentage an official current limit?", a: "No. It is an editable arithmetic scenario, not automatically updated legal data. Verify current rules with the relevant official authority." },
-        { q: "Does the result determine whether an increase is permitted?", a: "No. Exemptions, notice requirements, local rules, and lease terms can affect whether an increase is allowed." },
-      ]
-    : input.mode === "compound"
-        ? [
-            { q: "How is the multi-year rent calculated?", a: "The entered annual percentage is applied to the prior year’s rent once per year for the whole-number term entered. This repeated compounding is sometimes described as annual rent escalation." },
-            { q: "What schedules are not supported?", a: "The calculator does not model fixed-dollar, irregular, or custom year-by-year percentages, interpret lease clauses, decide enforceability, or calculate cumulative rent paid." },
-          ]
-        : [];
+  const defaultFaq = [
+    { q: "How is the multi-year rent calculated?", a: "The entered annual percentage is applied to the prior year’s rent once per year for the whole-number term entered. This repeated compounding is sometimes described as annual rent escalation." },
+    { q: "What schedules are not supported?", a: "The calculator does not model fixed-dollar, irregular, or custom year-by-year percentages, interpret lease clauses, decide enforceability, or calculate cumulative rent paid." },
+  ];
   return {
     faq: input.faq ?? defaultFaq,
-    examples: input.examples ?? increaseDefaultExamples(input),
+    examples: input.examples ?? increaseDefaultExamples(),
     ...input,
   };
 }
@@ -643,54 +638,6 @@ export const increaseToolConfigs: Record<string, IncreaseToolConfig> = {
     mode: "compound",
     defaultRate: "4",
     relatedLinks: increaseLinks,
-  }),
-  "/ontario-rent-increase-calculator": increaseConfig({
-    path: "/ontario-rent-increase-calculator",
-    title: "Ontario Rent Increase Calculator | Estimate New Rent",
-    description: "Test an editable Ontario rent-increase percentage scenario. See the increase amount and estimated new rent, then verify current official rules.",
-    eyebrow: "Ontario rent increase",
-    h1: "Ontario Rent Increase Calculator",
-    lead: "Check the arithmetic for an Ontario rent-increase percentage scenario that you enter.",
-    mode: "regional",
-    defaultRate: "2.5",
-    relatedLinks: increaseLinks,
-    regionNote: "Not all Ontario units are covered by guideline rules. Check the LTB or official Ontario source before relying on an increase notice.",
-  }),
-  "/bc-rent-increase-calculator": increaseConfig({
-    path: "/bc-rent-increase-calculator",
-    title: "BC Rent Increase Calculator | Estimate New Rent",
-    description: "Test an editable BC rent-increase percentage scenario. See the increase amount and estimated new rent, then verify current official rules.",
-    eyebrow: "BC rent increase",
-    h1: "BC Rent Increase Calculator",
-    lead: "Check the arithmetic for a BC rent-increase percentage scenario that you enter.",
-    mode: "regional",
-    defaultRate: "3",
-    relatedLinks: increaseLinks,
-    regionNote: "BC rent rules and annual limits can change. Check the Residential Tenancy Branch for official requirements.",
-  }),
-  "/quebec-rent-increase-calculator": increaseConfig({
-    path: "/quebec-rent-increase-calculator",
-    title: "Quebec Rent Increase Calculator | Estimate New Rent",
-    description: "Test an editable Quebec rent-increase percentage scenario. See the increase amount and estimated new rent, then verify current official rules.",
-    eyebrow: "Quebec rent increase",
-    h1: "Quebec Rent Increase Calculator",
-    lead: "Estimate the math for a Quebec rent increase from an entered percentage.",
-    mode: "regional",
-    defaultRate: "4",
-    relatedLinks: increaseLinks,
-    regionNote: "Quebec rent increases can involve multiple factors. This does not replace TAL guidance or official calculation tools.",
-  }),
-  "/california-rent-increase-calculator": increaseConfig({
-    path: "/california-rent-increase-calculator",
-    title: "California Rent Increase Calculator | Estimate New Rent",
-    description: "Test an editable California rent-increase percentage scenario. See the increase amount and estimated new rent, then verify current official rules.",
-    eyebrow: "California rent increase",
-    h1: "California Rent Increase Calculator",
-    lead: "Check the arithmetic for a California rent-increase percentage scenario that you enter.",
-    mode: "regional",
-    defaultRate: "5",
-    relatedLinks: increaseLinks,
-    regionNote: "California state and local rent rules can vary. Check official local and state sources before acting on a notice.",
   }),
 };
 
@@ -727,36 +674,32 @@ export const splitToolConfigs: Record<string, SplitToolConfig> = {
 export const moveInCostConfigs: Record<string, MoveInCostConfig> = {
   "/rent-in-advance-australia": {
     path: "/rent-in-advance-australia",
-    title: "Rent in Advance Australia | Estimate Upfront Rent",
-    description: "Estimate rent in advance from weekly, fortnightly, or monthly rent in Australia and understand how upfront rent affects move-in costs.",
-    eyebrow: "Australia rent in advance",
-    h1: "Rent in Advance Australia",
-    lead: "Estimate rent in advance from weekly rent and understand how it affects move-in cash needed.",
-    mode: "advance",
+    title: "Rent in Advance and Bond Calculator Australia",
+    description: "Enter weekly rent, advance-rent weeks, and a bond amount to estimate rent in advance and the combined upfront total in AUD.",
+    eyebrow: "Australia move-in arithmetic",
+    h1: "Rent in Advance and Bond Calculator Australia",
+    lead: "Estimate rent in advance, a bond amount, and the combined upfront total from the amounts you enter.",
     defaultCurrency: "AUD",
-    relatedLinks: australiaLinks,
-    faq: [{ q: "Is rent in advance an extra fee?", a: "Usually no. It normally pays for future occupancy. Local rules and the lease control the exact treatment." }],
-    examples: [{ title: "$500 per week", body: "$500/week means 2 weeks in advance is $1,000 before separate costs such as bond or moving expenses." }],
-    sections: [
-      { title: "What rent in advance means", body: "Rent in advance is usually money paid before or at the start of the period it covers. It is different from a bond or security deposit." },
-      { title: "State and territory rules", body: "Australian rental rules vary by state and territory. Use this as a budgeting estimate, then check your lease and official tenancy authority." },
+    relatedLinks: australiaLinks.filter((related) => related.to !== "/rent-in-advance-australia"),
+    faq: [
+      { q: "Does the calculator choose a legal bond or advance-rent amount?", a: "No. You enter both the number of advance-rent weeks and the bond amount. The result is arithmetic only; check the agreement and the rules for the relevant state or territory." },
+      { q: "Can I enter a zero bond?", a: "Yes. Enter 0 intentionally when you want the estimate to include rent in advance without a bond. Leaving the field blank does not calculate a result." },
+      { q: "What is included in the upfront total?", a: "Only the calculated rent in advance and the bond amount you enter. It does not add application fees, moving costs, utilities, or other costs." },
     ],
-  },
-  "/bond-and-rent-in-advance-australia": {
-    path: "/bond-and-rent-in-advance-australia",
-    title: "Bond and Rent in Advance Australia | Move-In Cost Calculator",
-    description: "Estimate Australian rental move-in costs from weekly rent, including bond, rent in advance, and total upfront amount.",
-    eyebrow: "Australia move-in costs",
-    h1: "Bond and Rent in Advance Australia",
-    lead: "Estimate bond, rent in advance, and total upfront rental costs from weekly rent.",
-    mode: "bond-advance",
-    defaultCurrency: "AUD",
-    relatedLinks: australiaLinks,
-    faq: [{ q: "Are bond and rent in advance the same?", a: "No. Bond is usually security. Rent in advance normally pays for upcoming occupancy." }],
-    examples: [{ title: "$500 per week", body: "At $500/week, 4 weeks bond plus 2 weeks rent in advance equals $3,000 before moving costs." }],
+    examples: [{ title: "Entered amounts example", body: "At $500 weekly rent, 2 entered advance weeks produce $1,000 rent in advance. With a user-entered $1,500 bond, the displayed upfront total is $2,500." }],
+    officialResources: [
+      { label: "New South Wales renting information", url: "https://www.nsw.gov.au/housing-and-construction/renting-a-place-to-live" },
+      { label: "Consumer Affairs Victoria renting information", url: "https://www.consumer.vic.gov.au/housing/renting" },
+      { label: "Queensland Residential Tenancies Authority", url: "https://www.rta.qld.gov.au/" },
+      { label: "South Australia renting and letting information", url: "https://www.sa.gov.au/topics/housing/renting-and-letting" },
+      { label: "Western Australia Consumer Protection renting information", url: "https://www.consumerprotection.wa.gov.au/renting-home" },
+      { label: "Tasmania Consumer, Building and Occupational Services renting information", url: "https://www.cbos.tas.gov.au/topics/housing/renting" },
+      { label: "Australian Capital Territory renting and occupancy laws", url: "https://www.justice.act.gov.au/renting-and-occupancy-laws" },
+      { label: "Northern Territory Consumer Affairs residential tenancies", url: "https://consumeraffairs.nt.gov.au/for-consumers/residential-tenancies" },
+    ],
     sections: [
-      { title: "Bond vs rent in advance", body: "Bond and rent in advance are separate move-in costs. The bond is held as security, while rent in advance usually covers future rent." },
-      { title: "Use as an estimate", body: "Rules vary by state and lease. This calculator helps plan cash needed, not decide what a landlord can legally request." },
+      { title: "How the estimate is calculated", body: "Rent in advance equals weekly rent multiplied by the entered number of weeks. The upfront total equals that rent-in-advance amount plus the bond amount entered by the user." },
+      { title: "Use the entered amounts", body: "The calculator does not supply a legal default for advance weeks or bond. Check the written agreement and the rules for the state or territory where the property is located." },
     ],
   },
 };
@@ -782,13 +725,17 @@ export const prorationToolConfigs: Record<string, ProrationToolConfig> = {
 export const dateToolConfigs: Record<string, DateToolConfig> = {
   "/lease-date-calculator": {
     path: "/lease-date-calculator",
-    title: "Lease Date Calculator | Start and End Dates",
-    description: "Calculate a lease end date from a start date and a term of 1 to 120 calendar months, with explicit month-end handling.",
+    title: "Lease Start and End Date Calculator | Calendar-Month Term",
+    description: "Enter a lease start date and term in calendar months to calculate the end date, including tested month-end and 12-month lease handling.",
     eyebrow: "Lease date calculator",
     h1: "Lease Date Calculator",
-    lead: "Calculate a lease end date from a start date and a whole-number term in calendar months.",
+    lead: "Enter a lease start date and a whole-number term in calendar months to calculate the matching lease end date.",
     mode: "lease",
-    relatedLinks: dateLinks,
+    relatedLinks: [
+      link("/rent-schedule-calculator", "Rent schedule calculator", "Generate payment rows across a lease term."),
+      link("/rent-due-date-calculator", "Rent due date calculator", "Find the next or recurring rent due date."),
+      link("/methodology", "Calculation methodology", "Read how calendar-month date handling is implemented."),
+    ],
     faq: [
       { q: "How does the calculator handle month-end starts?", a: "It uses calendar months. If the original numbered day does not exist in the target month, the result uses that month’s final calendar day." },
       { q: "Can I calculate a 12-month lease?", a: "Yes. Enter 12 as the term in calendar months. Under this convention, a term starting June 1 ends May 31 the next year." },
@@ -798,12 +745,15 @@ export const dateToolConfigs: Record<string, DateToolConfig> = {
   "/rent-schedule-calculator": {
     path: "/rent-schedule-calculator",
     title: "Rent Schedule Calculator | Payment Dates and Totals",
-    description: "Generate rent payment dates from a lease start, calendar-month term, rent amount, and monthly, weekly, biweekly, or 4-week frequency.",
+    description: "Generate lease-bounded rent payment rows from a start date, calendar-month term, rent amount, and selected payment frequency.",
     eyebrow: "Rent schedule calculator",
     h1: "Rent Schedule Calculator",
-    lead: "Generate each rent payment date from the lease start, calendar-month term, rent amount, and selected frequency.",
+    lead: "Generate each rent payment date inside a lease term using the start date, calendar-month term, rent amount, and selected frequency.",
     mode: "schedule",
-    relatedLinks: dateLinks,
+    relatedLinks: [
+      link("/rent-due-date-calculator", "Rent due date calculator", "Find one next or recurring rent due date."),
+      link("/lease-date-calculator", "Lease date calculator", "Calculate the lease end date from a start date and term."),
+    ],
     faq: [
       { q: "How is the payment count calculated?", a: "The calculator generates each date individually and counts the displayed rows. It excludes dates on or after the calculated lease end." },
       { q: "Can I print the schedule?", a: "Yes. Use Print / Save PDF after the inputs are valid. The printed count and dates match the visible table." },

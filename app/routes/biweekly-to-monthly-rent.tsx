@@ -1,10 +1,9 @@
 // app/routes/rent-calculator.tsx
-import { redirect } from "@remix-run/node";
-import type { LoaderFunction } from "react-router";
+import { permanentRedirectPreservingQuery } from "~/utils/redirects";
 
-export const loader: LoaderFunction = async () => {
-  throw redirect("/biweekly-to-monthly-rent-converter", { status: 301 });
-};
+export function loader({ request }: { request: Request }) {
+  return permanentRedirectPreservingQuery(request, "/biweekly-to-monthly-rent-converter");
+}
 
 export default function RentCalculatorRedirect() {
   return null;

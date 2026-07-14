@@ -21,13 +21,6 @@ const retained = [
   "/compound-rent-increase-calculator",
 ];
 
-const regional = [
-  "/bc-rent-increase-calculator",
-  "/ontario-rent-increase-calculator",
-  "/quebec-rent-increase-calculator",
-  "/california-rent-increase-calculator",
-];
-
 const routesSource = readFileSync("app/routes.ts", "utf8");
 const registrySource = readFileSync("app/client/data/routeRegistry.ts", "utf8");
 const canonicalRegistrySource = registrySource.split(
@@ -173,9 +166,9 @@ test("no active app link points to a retired route or alias", () => {
   }
 });
 
-test("retained and regional calculators remain canonical HTTP-200 routes", () => {
+test("retained calculators remain canonical HTTP-200 routes", () => {
   const canonicalDiscoverySource = `${canonicalRegistrySource}\n${configsSource}`;
-  for (const path of [...retained, ...regional]) {
+  for (const path of retained) {
     assert.match(routesSource, new RegExp(`route\\("${escapeRegex(path.slice(1))}"`), path);
     assert.match(canonicalDiscoverySource, new RegExp(`"${escapeRegex(path)}"`), path);
     assert.doesNotMatch(routeModule(path), /permanentRedirectPreservingQuery/, path);
@@ -277,11 +270,11 @@ test("final route and XML sitemap counts reflect six canonical-to-redirect chang
     (match) => match[1],
   );
 
-  assert.equal(registered, 171);
-  assert.equal(redirectCount, 105);
-  assert.equal(registered - redirectCount, 66);
-  assert.equal(sitemapUrls.length, 66);
-  assert.equal(new Set(sitemapUrls).size, 66);
+  assert.equal(registered, 172);
+  assert.equal(redirectCount, 112);
+  assert.equal(registered - redirectCount, 60);
+  assert.equal(sitemapUrls.length, 60);
+  assert.equal(new Set(sitemapUrls).size, 60);
   sitemapUrls.forEach((url) =>
     assert.match(url, /^https:\/\/www\.rentconverter\.com(?:\/|$)/),
   );

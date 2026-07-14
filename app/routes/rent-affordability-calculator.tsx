@@ -1,9 +1,8 @@
-import { redirect } from "@remix-run/node";
-import type { LoaderFunction } from "react-router";
+import { permanentRedirectPreservingQuery } from "~/utils/redirects";
 
-export const loader: LoaderFunction = async () => {
-  throw redirect("/how-much-rent-can-i-afford-calculator", { status: 301 });
-};
+export function loader({ request }: { request: Request }) {
+  return permanentRedirectPreservingQuery(request, "/how-much-rent-can-i-afford-calculator");
+}
 
 export default function RentAffordabilityCalculatorRedirect() {
   return null;

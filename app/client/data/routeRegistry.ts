@@ -85,10 +85,7 @@ const generalCalculators: RegistryLink[] = [
   item("/rent-per-week-calculator", "Rent per week calculator", "Convert rent into a weekly amount using a 365-day daily-rate model.", ["weekly", "per week"]),
   item("/rent-paid-every-4-weeks-calculator", "Rent paid every 4 weeks calculator", "Compare 28-day rent cycles with calendar months.", ["4 weeks", "28 day"]),
   item("/rent-per-paycheck-calculator", "Rent per paycheck calculator", "Plan rent around biweekly, semi-monthly, weekly, or monthly pay.", ["paycheck", "pay"]),
-  item("/rent-split-calculator", "Rent split calculator", "Split rent and optional shared monthly costs with exact equal-share guidance.", ["split", "roommate"]),
-  item("/rent-due-date-calculator", "Rent due date calculator", "Calculate upcoming rent due dates from a start date and payment schedule.", ["due date", "calendar"]),
   item("/prorated-rent-calculator", "Prorated rent calculator", "Estimate partial-period rent for a move-in, move-out, or mid-cycle change.", ["prorated", "partial"]),
-  fromConfig(dateToolConfigs["/rent-schedule-calculator"], "Rent schedule calculator", ["schedule", "dates"]),
 ];
 
 const affordabilitySection = [
@@ -120,8 +117,6 @@ const australiaSection = [
 
 const dateSection = [
   item("/rent-due-date-calculator", "Rent due date calculator", "Calculate upcoming rent due dates.", ["due date"]),
-  item("/when-is-rent-due", "When is rent due?", "Understand lease due dates, grace periods, payment cutoffs, and timing.", ["due", "timing"]),
-  item("/do-you-pay-rent-in-advance-or-after", "Do you pay rent in advance or after?", "Understand what rental period a rent payment usually covers.", ["advance", "after"]),
   fromConfig(infoPageConfigs["/is-rent-due-on-the-first"], "Is rent due on the first?", ["first", "due"]),
   fromConfig(infoPageConfigs["/is-rent-paid-for-the-current-month-or-next-month"], "Current month or next month rent", ["current month", "next month"]),
   ...Object.values(dateToolConfigs).map((config) => fromConfig(config)),
@@ -134,13 +129,14 @@ export const sitemapSections: SitemapSection[] = [
     links: [
       item("/", "Home", "Start with the main rent converter."),
       item("/about", "About", "Learn what RentConverter is built for."),
+      item("/methodology", "Calculation methodology", "See the formulas, validation, rounding, and testing approach used by RentConverter."),
       item("/contact", "Contact", "Contact the RentConverter team."),
     ],
   },
   {
     title: "Rent converters",
     description: "Convert rent between weekly, biweekly, monthly, annual, daily, hourly, and 4-week payment periods.",
-    links: [...frequencyConverters, ...pwPcmSection],
+    links: frequencyConverters,
   },
   {
     title: "PW and PCM glossary",
@@ -159,7 +155,7 @@ export const sitemapSections: SitemapSection[] = [
   },
   {
     title: "Rent increase",
-    description: "Calculate percentage, fixed-amount, compound, and regional rent increase estimates.",
+    description: "Calculate one-step, reverse-percentage, and compound rent increase arithmetic.",
     links: increaseSection,
   },
   {
@@ -297,7 +293,14 @@ export const redirectAliases: RedirectAlias[] = [
   { from: "/monthly-rent-increase-calculator", to: "/rent-increase-calculator" },
   { from: "/rent-increase-formula", to: "/rent-increase-calculator" },
   { from: "/cpi-rent-increase-calculator", to: "/rent-increase-calculator" },
+  { from: "/bc-rent-increase-calculator", to: "/rent-increase-calculator" },
+  { from: "/ontario-rent-increase-calculator", to: "/rent-increase-calculator" },
+  { from: "/quebec-rent-increase-calculator", to: "/rent-increase-calculator" },
+  { from: "/california-rent-increase-calculator", to: "/rent-increase-calculator" },
   { from: "/rent-escalation-calculator", to: "/compound-rent-increase-calculator" },
+  { from: "/bond-and-rent-in-advance-australia", to: "/rent-in-advance-australia" },
+  { from: "/when-is-rent-due", to: "/rent-due-date-calculator" },
+  { from: "/do-you-pay-rent-in-advance-or-after", to: "/rent-due-date-calculator" },
   { from: "/rent-vs-buy", to: "/rent-vs-buy-calculator" },
   { from: "/pw-to-pcm", to: "/pw-to-pcm-calculator" },
   { from: "/pcw-to-pcm", to: "/pw-to-pcm-calculator" },
@@ -314,34 +317,54 @@ export const redirectAliases: RedirectAlias[] = [
 export const redirectAliasPaths = new Set(redirectAliases.map((entry) => entry.from));
 
 export const navItems = [
-  item("/", "Universal Rent Converter", "Convert rent across daily, weekly, monthly, annual, and 4-week periods.", ["rent", "converter", "frequency"]),
+  item("/", "Rent Converter", "Convert rent across daily, weekly, monthly, annual, and 4-week periods.", ["rent", "converter", "frequency"]),
   item("/weekly-to-monthly-rent-converter", "Weekly to Monthly", "Compare weekly rent with a true calendar-month budget.", ["weekly", "monthly", "pw", "pcm"]),
-  item("/pw-to-pcm-calculator", "PW to PCM", "Convert weekly rent to per calendar month without the 4-week shortcut.", ["pw", "pcm"]),
-  item("/rent-per-paycheck-calculator", "Rent Per Paycheck", "Plan rent around paycheck timing.", ["paycheck", "biweekly"]),
   item("/how-much-rent-can-i-afford-calculator", "Affordability", "Estimate rent targets from income and budget rules.", ["afford", "income"]),
-  ...canonicalRouteEntries.filter((entry) => !["/", "/weekly-to-monthly-rent-converter", "/pw-to-pcm-calculator", "/rent-per-paycheck-calculator", "/how-much-rent-can-i-afford-calculator"].includes(entry.href)),
+  item("/rent-increase-calculator", "Rent Increase", "Calculate one-step rent increases and their yearly effect.", ["increase"]),
+  item("/rent-split-calculator", "Split Rent", "Split rent and optional shared monthly costs equally.", ["split", "roommate"]),
+  item("/pw-to-pcm-calculator", "PW to PCM", "Convert weekly rent to per calendar month without the 4-week shortcut.", ["pw", "pcm"]),
+  ...canonicalRouteEntries.filter((entry) => !["/", "/weekly-to-monthly-rent-converter", "/how-much-rent-can-i-afford-calculator", "/rent-increase-calculator", "/rent-split-calculator", "/pw-to-pcm-calculator"].includes(entry.href)),
 ];
 
-const navSectionTitles = new Set([
-  "Rent converters",
-  "PW and PCM glossary",
-  "General rent calculators",
-  "Affordability and income",
-  "Rent increase",
-  "Rent split",
-  "Australia rent tools",
-  "Lease and date tools",
-  "Rent vs buy",
-]);
+const canonicalLinkByPath = new Map(
+  canonicalRouteEntries.map((entry) => [entry.href, entry]),
+);
 
-export const navSections: SitemapSection[] = sitemapSections
-  .filter((section) => navSectionTitles.has(section.title))
-  .map((section) => ({
-    ...section,
-    links: Array.from(
-      new Map(section.links.map((linkEntry) => [linkEntry.href, linkEntry])).values(),
-    ),
-  }));
+const compactNavSections = [
+  {
+    title: "Rent conversion",
+    description: "Compare rent periods, paycheck allocations, and PW or PCM listings.",
+    paths: ["/monthly-to-weekly-rent-converter", "/rent-paid-every-4-weeks-calculator", "/rent-per-paycheck-calculator", "/pw-to-pcm-calculator", "/pcm-to-pw-calculator", "/what-does-pcm-mean-rent", "/what-does-pw-mean-rent"],
+  },
+  {
+    title: "Affordability and income",
+    description: "Compare rent with income, budgets, and pay periods.",
+    paths: ["/how-much-rent-can-i-afford-calculator", "/salary-to-rent-calculator", "/income-required-for-rent-calculator", "/rent-as-percentage-of-income-calculator", "/rent-after-tax-income-calculator", "/rent-vs-take-home-pay-calculator", "/hourly-pay-to-rent-calculator", "/rent-budget-calculator"],
+  },
+  {
+    title: "Rent changes",
+    description: "Calculate one-step, reverse-percentage, and compound rent changes.",
+    paths: ["/rent-increase-calculator", "/rent-increase-percentage-calculator", "/compound-rent-increase-calculator"],
+  },
+  {
+    title: "Sharing and dates",
+    description: "Split rent and plan proration, due dates, schedules, and lease dates.",
+    paths: ["/rent-split-calculator", "/split-rent-based-on-income-calculator", "/rent-split-percentage-calculator", "/prorated-rent-calculator", "/rent-due-date-calculator", "/rent-schedule-calculator", "/lease-date-calculator"],
+  },
+  {
+    title: "Australia",
+    description: "Use the retained Australian conversion and proration tools.",
+    paths: ["/weekly-to-monthly-rent-australia", "/weekly-to-fortnightly-rent-australia", "/fortnightly-to-monthly-rent-australia", "/prorated-rent-calculator-australia"],
+  },
+];
+
+export const navSections: SitemapSection[] = compactNavSections.map((section) => ({
+  title: section.title,
+  description: section.description,
+  links: section.paths
+    .map((path) => canonicalLinkByPath.get(path))
+    .filter((linkEntry): linkEntry is RegistryLink => Boolean(linkEntry)),
+}));
 
 export const footerCategories = sitemapSections.filter((section) =>
   ["Rent converters", "Affordability and income", "Rent increase", "Australia rent tools", "Lease and date tools"].includes(section.title),
@@ -362,12 +385,10 @@ const toolDirectorySectionTitles = new Set([
 export const toolDirectorySections: SitemapSection[] = [
   ...sitemapSections
     .filter((section) => toolDirectorySectionTitles.has(section.title))
-    .map((section) => ({
-      ...section,
-      links: Array.from(
-        new Map(
-          section.links.map((linkEntry) => [linkEntry.href, linkEntry]),
-        ).values(),
-      ),
-    })),
-];
+    .map((section) => ({ ...section, links: Array.from(new Map(section.links.map((linkEntry) => [linkEntry.href, linkEntry])).values()) })),
+].reduce<SitemapSection[]>((sections, section) => {
+  const alreadyListed = new Set(sections.flatMap((entry) => entry.links.map((linkEntry) => linkEntry.href)));
+  const links = section.links.filter((linkEntry) => !alreadyListed.has(linkEntry.href));
+  if (links.length > 0) sections.push({ ...section, links });
+  return sections;
+}, []);

@@ -1,7 +1,7 @@
-﻿import { redirect } from "react-router";
+import { permanentRedirectPreservingQuery } from "~/utils/redirects";
 
-export function loader() {
-  return redirect("/split-rent-based-on-income-calculator", { status: 301 });
+export function loader({ request }: { request: Request }) {
+  return permanentRedirectPreservingQuery(request, "/split-rent-based-on-income-calculator");
 }
 
 export default function RentCalculatorSplitBasedOnIncomeRedirect() {

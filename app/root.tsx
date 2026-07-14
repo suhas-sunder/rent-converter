@@ -5,33 +5,35 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  redirect, // ⟵ add this
+  redirect,
 } from "react-router";
 
 import type { Route } from "./+types/root";
 import "./app.css";
 import NavBar from "./client/components/navigation/NavBar";
 import Footer from "./client/components/navigation/Footer";
-import { PHProvider } from "./provider";
+import { AnalyticsConsentPanel, PHProvider } from "./provider";
 
-/* ---------- Trailing slash helpers (one place, app-level) ---------- */
-function needsStrip(pathname: string) {
-  if (pathname === "/") return false;
-  if (!/\/+$/.test(pathname)) return false;
+/* ---------- Canonical document-path normalization ---------- */
+function canonicalDocumentPath(pathname: string) {
+  if (pathname === "/") return pathname;
   const last = pathname.split("/").filter(Boolean).pop() ?? "";
   const looksLikeFile = /\.[a-zA-Z0-9]+$/.test(last);
-  return !looksLikeFile;
-}
-function strip(pathname: string) {
-  return pathname.replace(/\/+$/, "") || "/";
+  if (looksLikeFile) return pathname;
+
+  const withoutTrailingSlash = pathname.replace(/\/+$/, "") || "/";
+  return withoutTrailingSlash.replace(/%[0-9a-f]{2}|[A-Z]/gi, (token) => {
+    if (!token.startsWith("%")) return token.toLowerCase();
+    const decoded = String.fromCharCode(Number.parseInt(token.slice(1), 16));
+    return /^[a-z0-9._~-]$/i.test(decoded) ? decoded.toLowerCase() : token;
+  });
 }
 
-/* ---------- Loader does the canonical 301 ---------- */
 export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url);
-  if (needsStrip(url.pathname)) {
-    url.pathname = strip(url.pathname);
-    return redirect(url.pathname + url.search, { status: 301 });
+  const canonicalPath = canonicalDocumentPath(url.pathname);
+  if (canonicalPath !== url.pathname) {
+    return redirect(canonicalPath + url.search, { status: 301 });
   }
   return null;
 }
@@ -64,6 +66,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           {children}
           <ScrollRestoration />
           <Scripts />
+          <AnalyticsConsentPanel />
           <Footer />
         </PHProvider>
       </body>

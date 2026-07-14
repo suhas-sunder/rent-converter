@@ -192,10 +192,10 @@ test("final route and XML sitemap counts reflect three canonical-to-redirect cha
   const redirectCount = [...registrySource.matchAll(/\{\s*from:\s*"[^"]+",\s*to:\s*"[^"]+"\s*\}/g)].length;
   const sitemapUrls = [...sitemapSource.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
 
-  assert.equal(registered, 171);
-  assert.equal(redirectCount, 105);
-  assert.equal(registered - redirectCount, 66);
-  assert.equal(sitemapUrls.length, 66);
-  assert.equal(new Set(sitemapUrls).size, 66);
+  assert.equal(registered, 172);
+  assert.equal(redirectCount, 112);
+  assert.equal(registered - redirectCount, 60);
+  assert.equal(sitemapUrls.length, 60);
+  assert.equal(new Set(sitemapUrls).size, 60);
   sitemapUrls.forEach((url) => assert.match(url, /^https:\/\/www\.rentconverter\.com(?:\/|$)/));
 });

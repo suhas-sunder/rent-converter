@@ -12,7 +12,7 @@ import {
 export const meta: Route.MetaFunction = () => {
   const title = "Rent Increase Calculator | New Rent and Percent Change";
   const description =
-    "Calculate the new rent after a fixed or percentage increase. Compare the old rent, new rent, monthly change, and yearly impact.";
+    "Apply a percentage or fixed amount you enter to calculate new rent, payment-period change, and annualized impact. Arithmetic only; local rules may apply.";
 
   const canonicalUrl = "https://www.rentconverter.com/rent-increase-calculator";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
@@ -70,6 +70,25 @@ const PERIOD_LABEL: Record<Period, string> = {
 };
 
 type IncreaseMode = "percent" | "fixed";
+
+const OFFICIAL_RENT_INCREASE_RESOURCES = [
+  {
+    label: "British Columbia residential tenancy rent-increase information",
+    href: "https://www2.gov.bc.ca/gov/content/housing-tenancy/residential-tenancies/during-a-tenancy/rent-increases",
+  },
+  {
+    label: "Ontario residential rent-increase information",
+    href: "https://www.ontario.ca/page/residential-rent-increases",
+  },
+  {
+    label: "Tribunal administratif du logement (Quebec)",
+    href: "https://www.tal.gouv.qc.ca/en",
+  },
+  {
+    label: "California Department of Justice tenant resources",
+    href: "https://oag.ca.gov/tenants",
+  },
+] as const;
 
 const SUPPORTED_CURRENCIES = [
   "USD",
@@ -914,7 +933,11 @@ export default function RentIncreaseCalculator() {
     },
     {
       q: "Can I use this for lease renewal planning?",
-      a: "Yes. It is useful for estimating the cost of a proposed rent increase before renewing a lease, comparing options, or checking the annual impact of a rent change.",
+      a: "You can use it to check the arithmetic for an entered proposal. The result does not determine whether an increase is permitted or whether notice, exemption, or local-rule requirements are satisfied.",
+    },
+    {
+      q: "Does the calculator apply a legal rent-increase limit?",
+      a: "No. It applies only the percentage or fixed amount you enter. Verify current limits, exemptions, notice requirements, and local rules with the relevant official authority.",
     },
     {
       q: "What assumptions does this page use?",
@@ -935,7 +958,7 @@ export default function RentIncreaseCalculator() {
     name: pageName,
     url: canonicalUrl,
     description:
-      "Calculate the new rent after a fixed or percentage increase. Compare the old rent, new rent, monthly change, and yearly impact.",
+      "Apply a percentage or fixed amount entered by the user to calculate new rent, payment-period change, and annualized impact.",
     isPartOf: { "@type": "WebSite", url: "https://www.rentconverter.com" },
     breadcrumb: { "@id": `${canonicalUrl}#breadcrumb` },
   };
@@ -1000,9 +1023,10 @@ export default function RentIncreaseCalculator() {
                 </h1>
 
                 <p className="mt-2 text-base text-slate-700">
-                  Calculate the new rent after a percentage or fixed increase.
-                  The result shows monthly change, yearly impact, and per-period
-                  equivalents so the increase is visible beyond one payment.
+                  Enter a percentage or fixed amount to calculate the arithmetic
+                  change in rent. The result does not decide whether an increase
+                  is permitted; legal limits, exemptions, notice requirements,
+                  and local rules may apply.
                 </p>
               </div>
 
@@ -1445,6 +1469,25 @@ export default function RentIncreaseCalculator() {
       </section>
 
       <HowItWorks safeHref={safeHref} />
+
+      <section className="mx-auto max-w-5xl px-6 py-10">
+        <h2 className="text-2xl font-bold text-sky-800">Official rent-increase resources</h2>
+        <p className="mt-3 leading-relaxed text-slate-700">
+          Use the calculator to check entered arithmetic, then verify current requirements with the relevant government or tribunal. RentConverter does not apply the rules from these resources automatically.
+        </p>
+        <ul className="mt-5 grid gap-3 sm:grid-cols-2">
+          {OFFICIAL_RENT_INCREASE_RESOURCES.map((resource) => (
+            <li key={resource.href}>
+              <a
+                href={resource.href}
+                className="font-semibold text-sky-800 underline decoration-sky-300 underline-offset-4 hover:text-sky-950 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+              >
+                {resource.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
 
       <section className="rc-breadcrumb-section rc-no-print">
         <nav aria-label="Breadcrumb" className="rc-breadcrumb-nav">

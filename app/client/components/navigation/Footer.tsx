@@ -1,8 +1,10 @@
 import { Link } from "react-router";
 import AllRentalToolsLinks from "./AllRentalToolsLinks";
+import { useAnalyticsConsent } from "~/provider";
 
 const FOOTER_LINKS = [
   { label: "About", to: "/about" },
+  { label: "Methodology", to: "/methodology" },
   { label: "Contact", to: "/contact" },
   { label: "Sitemap", to: "/sitemap" },
   { label: "Privacy Policy", to: "/privacy-policy" },
@@ -12,6 +14,7 @@ const FOOTER_LINKS = [
 
 export default function Footer() {
   const year = 2026;
+  const { openPreferences } = useAnalyticsConsent();
 
   return (
     <>
@@ -54,6 +57,13 @@ export default function Footer() {
                   {link.label}
                 </Link>
               ))}
+              <button
+                type="button"
+                onClick={openPreferences}
+                className="cursor-pointer rounded-xl px-3 py-2 text-sm font-semibold text-slate-700 transition-colors hover:bg-sky-50 hover:text-sky-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white print:hidden"
+              >
+                Analytics preferences
+              </button>
             </nav>
           </div>
 

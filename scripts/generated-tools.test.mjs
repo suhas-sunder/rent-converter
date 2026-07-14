@@ -50,16 +50,15 @@ test("compound and escalation math uses strict whole-year terms", () => {
   for (const raw of ["", "abc", "1.5", "0", "-1", "101"]) assert.equal(parseYears(raw).ok, false, raw);
 });
 
-test("regional generated routes remain editable arithmetic scenarios without Years or a shared reviewed date", () => {
+test("retired regional configs and their generated one-step renderer are removed", () => {
   const renderer = readFileSync(new URL("../app/client/components/generated/GeneratedPages.tsx", import.meta.url), "utf8");
   const config = readFileSync(new URL("../app/client/data/generatedRouteConfigs.ts", import.meta.url), "utf8");
-  const oneStep = renderer.slice(renderer.indexOf("function OneStepIncreaseTool"), renderer.indexOf("function CompoundIncreaseTool"));
-  const increaseCopy = renderer.slice(renderer.indexOf("function increaseSections"), renderer.indexOf("function splitSections"));
-  assert.match(oneStep, /Editable starting scenario only/);
-  assert.doesNotMatch(oneStep, /Number of years|setYears/);
-  assert.doesNotMatch(increaseCopy, /May 7, 2026/);
+  assert.doesNotMatch(renderer, /function OneStepIncreaseTool/);
   assert.doesNotMatch(renderer, /May 7, 2026/);
-  for (const path of ["ontario", "bc", "quebec", "california"]) assert.match(config, new RegExp(`/${path}-rent-increase-calculator[\\s\\S]*?defaultRate:`));
+  for (const path of ["ontario", "bc", "quebec", "california"]) {
+    assert.doesNotMatch(config, new RegExp(`/${path}-rent-increase-calculator`));
+  }
+  assert.doesNotMatch(config, /mode:\s*"regional"|regionNote:/);
 });
 
 test("income split handles normal, equal, and zero-income cases and reconciles cents", () => {

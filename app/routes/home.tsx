@@ -4,28 +4,29 @@ import type { Route } from "./+types/home";
 import Assumptions from "~/client/components/layout/Assumptions";
 import HowItWorks from "~/client/components/home/HowItWorks";
 import ToolFit from "~/client/components/home/ToolFit";
+import AdPlaceholder from "~/client/components/advertising/AdPlaceholder";
 
 const SITE_URL = "https://www.rentconverter.com";
 
 export const meta: Route.MetaFunction = () => [
   {
-    title: "Rent Converter: Weekly, Monthly, Daily & Annual",
+    title: "Rent Converter Calculator | Weekly, Monthly & 4-Week Rent",
   },
   {
     name: "description",
     content:
-      "Convert rent between weekly, monthly, biweekly, 4-week, daily, hourly, and annual amounts. See true monthly cost, annual cost, and 4-week vs monthly differences. Free, private, no signup.",
+      "Convert rent between weekly, monthly, 4-week, biweekly, daily, hourly, and annual periods. Compare true monthly cost, annual cost, and 28-day differences.",
   },
 
   { property: "og:type", content: "website" },
   {
     property: "og:title",
-    content: "Rent Converter: Weekly, Monthly, Daily & Annual",
+    content: "Rent Converter Calculator | Weekly, Monthly & 4-Week Rent",
   },
   {
     property: "og:description",
     content:
-      "Convert rent across weekly, monthly, biweekly, 4-week, daily, hourly, and annual periods with clear assumptions, exact decimal-safe math, and side-by-side results.",
+      "Convert rent across weekly, monthly, 4-week, biweekly, daily, hourly, and annual periods with clear assumptions and side-by-side results.",
   },
   { property: "og:url", content: SITE_URL },
   { property: "og:site_name", content: "RentConverter.com" },
@@ -34,12 +35,12 @@ export const meta: Route.MetaFunction = () => [
   { name: "twitter:card", content: "summary_large_image" },
   {
     name: "twitter:title",
-    content: "Rent Converter: Weekly, Monthly, Daily & Annual",
+    content: "Rent Converter Calculator | Weekly, Monthly & 4-Week Rent",
   },
   {
     name: "twitter:description",
     content:
-      "Find the true monthly, weekly, daily, hourly, and annual cost of rent with clear assumptions and decimal-safe calculations.",
+      "Compare weekly, monthly, 4-week, daily, hourly, and annual rent using one consistent 365-day basis.",
   },
   { name: "twitter:image", content: `${SITE_URL}/og-image.jpg` },
 
@@ -95,97 +96,6 @@ const CURRENCY_OPTIONS: Array<{ code: string; label: string }> = [
   { code: "MXN", label: "MXN" },
   { code: "BRL", label: "BRL" },
 ];
-
-/**
- * Internal link whitelist constraint: only render links that exist.
- * If a link is not in ROUTE_WHITELIST, it must not appear anywhere in the UI.
- */
-const ROUTE_WHITELIST = new Set<string>([
-  // Home
-  "/",
-
-  // Rent converter hub
-  "/rent-converter",
-
-  // Frequency converters
-  "/monthly-to-weekly-rent-converter",
-  "/weekly-to-monthly-rent-converter",
-  "/weekly-to-annual-rent-converter",
-  "/weekly-to-biweekly-rent-converter",
-
-  "/biweekly-to-weekly-rent-converter",
-  "/biweekly-to-monthly-rent-converter",
-  "/biweekly-to-annual-rent-converter",
-
-  "/monthly-to-annual-rent-converter",
-  "/annual-to-monthly-rent-converter",
-
-  "/monthly-to-daily-rent-converter",
-  "/daily-to-monthly-rent-converter",
-
-  "/monthly-to-hourly-rent-converter",
-  "/hourly-to-monthly-rent-converter",
-
-  "/hourly-to-annual-rent-converter",
-  "/annual-to-hourly-rent-converter",
-
-  "/annual-to-weekly-rent-converter",
-  "/annual-to-biweekly-rent-converter",
-  "/monthly-to-biweekly-rent-converter",
-
-  // Rent calculators
-  "/rent-calculator",
-  "/rent-per-day-calculator",
-  "/rent-per-week-calculator",
-  "/rent-paid-every-4-weeks-calculator",
-  "/rent-per-paycheck-calculator",
-  "/rent-split-calculator",
-  "/rent-due-date-calculator",
-
-  // Affordability and income
-  "/rent-as-percentage-of-income-calculator",
-  "/how-much-rent-can-i-afford-calculator",
-  "/rent-after-tax-income-calculator",
-  "/rent-vs-take-home-pay-calculator",
-
-  // Rent increases
-  "/rent-increase-calculator",
-  "/rent-increase-percentage-calculator",
-
-  // Rent vs buy
-  "/rent-vs-buy-calculator",
-]);
-
-function SafeLink({
-  href,
-  className,
-  children,
-  id,
-}: {
-  href: string;
-  className?: string;
-  children: React.ReactNode;
-  id?: string;
-}) {
-  if (!ROUTE_WHITELIST.has(href)) return null;
-  return (
-    <a id={id} href={href} className={className}>
-      {children}
-    </a>
-  );
-}
-
-function safePeriod(value: string | null, fallback: Period): Period {
-  if (!value) return fallback;
-  const v = value as Period;
-  return PERIOD_ORDER.includes(v) ? v : fallback;
-}
-
-function safeCurrency(value: string | null, fallback: string): string {
-  if (!value) return fallback;
-  const v = value.toUpperCase();
-  return CURRENCY_OPTIONS.some((c) => c.code === v) ? v : fallback;
-}
 
 /**
  * Decimal-safe math (no float drift in computation).
@@ -566,18 +476,6 @@ export default function Home() {
     return convertRational(amountR, from, to);
   }, [amountR, from, to]);
 
-  const displayMoney = useMemo(() => {
-    if (!rawResultR) return "-";
-    const scaled = toScaledUnits(rawResultR);
-    const roundedScaled = roundScaledToDigits(scaled, 2);
-    const dec = scaledToDecimalString(roundedScaled, 2, { fixed: true });
-
-    return formatMoneyFromDecimalString(dec, currency, {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
-  }, [rawResultR, currency]);
-
   const inputGroupedDisplay = useMemo(() => {
     if (amountFocused) return amount;
     if (!hasInput) return amount;
@@ -803,10 +701,18 @@ export default function Home() {
         }}
       />
 
-      <section
-        id="converter"
-        className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8"
+      <section className="mx-auto max-w-[970px] px-4 pt-5 sm:px-6 sm:pt-7">
+        <AdPlaceholder slot="home_top_banner" />
+      </section>
+
+      <div
+        className="mx-auto max-w-[1440px] px-4 sm:px-6 min-[1280px]:grid min-[1280px]:grid-cols-[160px_minmax(0,1fr)_160px] min-[1280px]:gap-6"
+        data-home-utility-layout
       >
+        <section
+          id="converter"
+          className="min-w-0 py-6 sm:py-8 min-[1280px]:col-start-2 min-[1280px]:row-start-1"
+        >
         <div className="overflow-hidden rounded-[1.75rem] bg-white">
           <div className="flex flex-col gap-3 px-5 pb-2 pt-7 sm:flex-row sm:items-start sm:justify-between sm:px-8 sm:pt-8">
             <div>
@@ -814,11 +720,12 @@ export default function Home() {
                 Rent conversion calculator
               </p>
               <h1 className="text-center mb-1 sm:mb-0 sm:text-left text-2xl sm:text-3xl capitalize font-bold text-sky-900 tracking-tight">
-                Rent Converter: Daily, Weekly, Monthly & Annual
+                Rent Converter Calculator
               </h1>
               <p className="hidden md:flex w-full pt-2 text-slate-700 leading-relaxed">
-                Convert rent between daily, weekly, monthly, and yearly rates in
-                one click. No sign-up, instant results.
+                Convert an entered rent amount between weekly, monthly,
+                4-week, biweekly, daily, hourly, and annual periods using one
+                consistent annual basis.
               </p>
             </div>
 
@@ -1060,7 +967,26 @@ export default function Home() {
         </div>
       </section>
 
+        <div className="hidden min-[1280px]:col-start-1 min-[1280px]:row-start-1 min-[1280px]:block">
+          <AdPlaceholder slot="home_left_sidebar" />
+        </div>
+        <div className="hidden min-[1280px]:col-start-3 min-[1280px]:row-start-1 min-[1280px]:block">
+          <AdPlaceholder slot="home_right_sidebar" />
+        </div>
+      </div>
+
+      <section className="mx-auto max-w-[970px] px-4 pb-6 sm:px-6 sm:pb-8">
+        <AdPlaceholder slot="home_below_utility_banner" />
+      </section>
+
       <HowItWorks />
+
+      <section className="bg-sky-50 px-4 py-8 sm:px-6 sm:py-10">
+        <div className="mx-auto flex max-w-6xl justify-center">
+          <AdPlaceholder slot="home_seo_square" />
+        </div>
+      </section>
+
       <ToolFit />
 
       <section id="faq" className="bg-white px-6 py-16">

@@ -86,7 +86,7 @@ test("exact-answer sources are absent from sitemap and canonical discovery syste
     assert.doesNotMatch(sitemapSource, new RegExp(`<loc>[^<]*${source}</loc>`), source);
   }
 
-  assert.equal((sitemapSource.match(/<loc>/g) ?? []).length, 66);
+  assert.equal((sitemapSource.match(/<loc>/g) ?? []).length, 60);
   assert.doesNotMatch(registrySource, /Exact answer pages|answerSection|weeklyAnswerPageConfigs/);
   assert.doesNotMatch(generatedConfigsSource, /weeklyAnswerPageConfigs|weeklyAnswerAmounts|answerConfig\(/);
   assert.doesNotMatch(generatedPagesSource, /WeeklyAnswerPage|exactAnswerAmounts|nearbyWeeklyAnswerLinks|exactAnswerCopy/);
@@ -117,7 +117,7 @@ test("inactive exact-answer component directories were removed", () => {
 test("route status totals preserve the exact-answer redirects after later consolidation batches", () => {
   const registered = (routesSource.match(/\broute\(/g) ?? []).length + (routesSource.match(/\bindex\(/g) ?? []).length;
   const redirects = [...registrySource.matchAll(/\{\s*from:\s*"[^"]+",\s*to:\s*"[^"]+"\s*\}/g)].length;
-  assert.equal(registered, 171);
-  assert.equal(redirects, 105);
-  assert.equal(registered - redirects, 66);
+  assert.equal(registered, 172);
+  assert.equal(redirects, 112);
+  assert.equal(registered - redirects, 60);
 });

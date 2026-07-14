@@ -12,6 +12,15 @@ const app = express();
 
 app.use(compression());
 app.disable("x-powered-by");
+app.use((_req, res, next) => {
+  res.set({
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+    "X-Frame-Options": "SAMEORIGIN",
+  });
+  next();
+});
 
 if (DEVELOPMENT) {
   console.log("Starting development server");

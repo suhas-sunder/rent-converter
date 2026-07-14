@@ -8,16 +8,16 @@ const toolFit = {
     "Understanding a 28-day rent cycle that moves through the calendar."
   ],
   notFor: [
-    "Late-fee rules, legal deadlines, and grace periods depend on the lease and local rules."
+    "Determining legal due dates, payment coverage, or enforcement rules; check the written agreement and relevant official authority."
   ],
   nextSteps: [
     {
-      to: "/when-is-rent-due",
-      label: "When rent is due"
+      to: "/rent-schedule-calculator",
+      label: "Rent schedule"
     },
     {
-      to: "/do-you-pay-rent-in-advance-or-after",
-      label: "Rent in advance"
+      to: "/lease-date-calculator",
+      label: "Lease date"
     },
     {
       to: "/rent-paid-every-4-weeks-calculator",

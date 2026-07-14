@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 type FourWeekVsMonthlyProps = {
   monthlyMinus4w: bigint;
   monthlyMinus4wPct: number;

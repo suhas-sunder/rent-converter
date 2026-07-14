@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router";
 import { toolDirectorySections } from "~/client/data/routeRegistry";
+import AdPlaceholder from "~/client/components/advertising/AdPlaceholder";
 
 function normalizePath(path: string) {
   if (!path || path === "/") return "/";
@@ -109,6 +110,10 @@ export default function AllRentalToolsLinks() {
               </div>
             </div>
           ))}
+        </div>
+
+        <div className="mt-10 flex justify-center border-t border-slate-200 pt-8">
+          <AdPlaceholder slot="home_all_tools_banner" />
         </div>
       </div>
     </section>

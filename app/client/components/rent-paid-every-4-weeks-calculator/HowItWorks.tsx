@@ -43,12 +43,12 @@ const howItWorks = {
       label: "Weekly to monthly"
     },
     {
-      to: "/rent-due-date-calculator",
-      label: "Rent due date"
+      to: "/pw-to-pcm-calculator",
+      label: "PW to PCM"
     },
     {
-      to: "/",
-      label: "Rent converter"
+      to: "/methodology",
+      label: "Calculation methodology"
     }
   ]
 };

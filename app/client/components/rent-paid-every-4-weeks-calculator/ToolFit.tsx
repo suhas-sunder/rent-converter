@@ -18,6 +18,10 @@ const toolFit = {
     {
       to: "/weekly-to-monthly-rent-converter",
       label: "Weekly to monthly"
+    },
+    {
+      to: "/pw-to-pcm-calculator",
+      label: "PW to PCM"
     }
   ]
 };

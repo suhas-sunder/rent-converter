@@ -154,3 +154,23 @@ export function calculateProration(rent, chargedDays, periodDays) {
     proratedRent: divideAndRound(rent * BigInt(chargedDays), BigInt(periodDays)),
   };
 }
+
+/**
+ * Calculate Australian move-in arithmetic from user-entered amounts.
+ * Advance weeks are represented to four decimal places so the rent-in-advance
+ * result can be rounded once to cents before adding the entered bond.
+ * @param {bigint} weeklyRent
+ * @param {number} advanceWeeks
+ * @param {bigint} bond
+ */
+export function calculateAustraliaMoveInCost(weeklyRent, advanceWeeks, bond) {
+  const advanceWeekUnits = BigInt(Math.round(advanceWeeks * 10_000));
+  const rentInAdvance = divideAndRound(weeklyRent * advanceWeekUnits, 10_000n);
+  return {
+    weeklyRent,
+    advanceWeeks,
+    rentInAdvance,
+    bond,
+    total: rentInAdvance + bond,
+  };
+}

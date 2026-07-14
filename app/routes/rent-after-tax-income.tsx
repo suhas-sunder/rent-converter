@@ -1,10 +1,9 @@
 // app/routes/rent-calculator.tsx
-import { redirect } from "@remix-run/node";
-import type { LoaderFunction } from "react-router";
+import { permanentRedirectPreservingQuery } from "~/utils/redirects";
 
-export const loader: LoaderFunction = async () => {
-  throw redirect("/rent-after-tax-income-calculator", { status: 301 });
-};
+export function loader({ request }: { request: Request }) {
+  return permanentRedirectPreservingQuery(request, "/rent-after-tax-income-calculator");
+}
 
 export default function RentCalculatorRedirect() {
   return null;

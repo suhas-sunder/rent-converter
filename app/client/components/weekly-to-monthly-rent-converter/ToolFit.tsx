@@ -23,6 +23,10 @@ const toolFit = {
     {
       to: "/monthly-to-weekly-rent-converter",
       label: "Monthly to weekly"
+    },
+    {
+      to: "/methodology",
+      label: "Calculation methodology"
     }
   ]
 };

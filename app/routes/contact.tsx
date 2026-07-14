@@ -1,5 +1,6 @@
 // routes/contact.tsx
 import type { Route } from "./+types/contact";
+import { Link } from "react-router";
 
 const SITE_URL = "https://www.rentconverter.com";
 const PAGE_PATH = "/contact";
@@ -114,6 +115,25 @@ export default function Contact() {
                 hello@rentconverter.com
               </a>
             </p>
+
+            <div className="mt-5 rounded-xl bg-white px-4 py-4">
+              <h3 className="text-sm font-semibold text-slate-950">
+                How email is handled
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-700">
+                This page does not submit a web form. The email link opens your
+                email application, and the message is delivered through the email
+                providers used by you and RentConverter. Include only information
+                needed for the request. See the{" "}
+                <Link
+                  to="/privacy-policy"
+                  className="cursor-pointer rounded font-semibold text-sky-800 underline underline-offset-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+                >
+                  privacy policy
+                </Link>{" "}
+                for details.
+              </p>
+            </div>
 
             <div className="mt-6 rounded-xl bg-white px-4 py-4">
               <h3 className="text-sm font-semibold text-slate-950">

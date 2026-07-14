@@ -12,9 +12,9 @@ function safeToFixed(n: number, digits: number): string {
 }
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Weekly to Monthly Rent Converter | PW to PCM Calculator";
+  const title = "Weekly to Monthly Rent Calculator | Per Week to Month";
   const description =
-    "Convert weekly rent to a true monthly amount using a 365-day year. Compare PW or PCW listings with monthly budgets and 4-week rent.";
+    "Enter weekly rent to calculate the average calendar-month equivalent using weekly x 365 / 7 / 12. Includes the 4-week amount for comparison.";
   const url = "https://www.rentconverter.com/weekly-to-monthly-rent-converter";
   const ogImage = "https://www.rentconverter.com/og-image.jpg";
 
@@ -641,7 +641,7 @@ export default function WeeklyToMonthlyRent() {
     "@type": "WebPage",
     name: pageName,
     description:
-      "Convert weekly rent to a true monthly amount using a 365-day year. Compare PW or PCW listings with monthly budgets and 4-week rent.",
+      "Enter weekly rent to calculate the average calendar-month equivalent using weekly x 365 / 7 / 12. Includes the 4-week amount for comparison.",
     url: canonicalUrl,
     isPartOf: { "@type": "WebSite", url: "https://www.rentconverter.com" },
     breadcrumb: { "@id": `${canonicalUrl}#breadcrumb` },
@@ -695,8 +695,10 @@ export default function WeeklyToMonthlyRent() {
                 </h1>
 
                 <p className="mt-2 text-base text-slate-700">
-                  Convert weekly rent into a monthly amount. The calculator also
-                  shows the 4-week comparison.
+                  Enter a weekly rent amount to calculate its average
+                  calendar-month equivalent. The result uses weekly rent x 365
+                  / 7 / 12, and shows the 28-day amount separately so weekly x
+                  4 is not mistaken for a calendar month.
                 </p>
               </div>
 

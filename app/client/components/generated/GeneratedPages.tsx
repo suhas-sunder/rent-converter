@@ -12,7 +12,6 @@ import {
   monthlyToAnnualCents,
   monthlyToWeeklyCents,
   parseMoneyToCents,
-  parsePositiveNumber,
   SUPPORTED_CURRENCIES,
   weeklyToAnnualCents,
   weeklyToDailyCents,
@@ -41,15 +40,17 @@ import {
 } from "~/client/utils/calendarDate.js";
 import {
   calculateCompoundIncrease,
+  calculateAustraliaMoveInCost,
   calculateIncomeSplit,
-  calculateOneStepIncrease,
   calculatePercentageSplit,
   calculateProration,
   parsePercentage,
+  parseStrictScalar,
   parseWholeNumberInRange,
   parseYears,
 } from "~/client/utils/generatedTools.js";
 import { JsonLd, makePageSchemas, type SeoConfig } from "~/client/utils/seo";
+import AuthorAttribution from "~/client/components/content/AuthorAttribution";
 
 export type RelatedLink = {
   to: string;
@@ -94,6 +95,7 @@ export type InfoPageConfig = SeoConfig & {
   examples: ExampleItem[];
   relatedLinks: RelatedLink[];
   faq: FaqItem[];
+  authorAttribution?: boolean;
 };
 
 export type ConversionMode =
@@ -146,9 +148,8 @@ export type IncreaseToolConfig = SeoConfig & {
   eyebrow: string;
   h1: string;
   lead: string;
-  mode: "compound" | "regional";
+  mode: "compound";
   defaultRate?: string;
-  regionNote?: string;
   relatedLinks: RelatedLink[];
   faq: FaqItem[];
   examples: ExampleItem[];
@@ -176,12 +177,12 @@ export type MoveInCostConfig = SeoConfig & {
   eyebrow: string;
   h1: string;
   lead: string;
-  mode: "advance" | "bond-advance";
   defaultCurrency: Currency;
   relatedLinks: RelatedLink[];
   faq: FaqItem[];
   examples: ExampleItem[];
   sections: ContentSection[];
+  officialResources: { label: string; url: string }[];
 };
 
 export type ProrationToolConfig = SeoConfig & {
@@ -664,11 +665,8 @@ function incomeSections(config: IncomeToolConfig) {
   );
 }
 
-function increaseSections(config: IncreaseToolConfig) {
-  const modeText =
-    config.mode === "compound"
-      ? "The calculator applies the entered annual percentage to the prior year’s rent for the whole-number term entered and shows each year’s resulting monthly rent. This repeated compounding is sometimes called annual rent escalation."
-      : "The calculator applies the editable scenario percentage entered by the user. The configured starting value is an arithmetic example, not a current legal limit.";
+function increaseSections() {
+  const modeText = "The calculator applies the entered annual percentage to the prior year’s rent for the whole-number term entered and shows each year’s resulting monthly rent. This repeated compounding is sometimes called annual rent escalation.";
 
   return mergeSections(
     [
@@ -678,9 +676,7 @@ function increaseSections(config: IncreaseToolConfig) {
       },
       {
         title: "When to use this page",
-        body: config.mode === "compound"
-          ? "Use it to test one repeated annual percentage scenario and inspect the year-by-year rent. It does not calculate cumulative rent paid."
-          : "Use it to check one percentage scenario against a current monthly rent.",
+        body: "Use it to test one repeated annual percentage scenario and inspect the year-by-year rent. It does not calculate cumulative rent paid.",
       },
       {
         title: "What this result does not include",
@@ -688,33 +684,16 @@ function increaseSections(config: IncreaseToolConfig) {
         bullets: [
           "Check whether the amount is a fixed increase, percentage increase, CPI-linked increase, or scheduled escalation.",
           "Confirm whether the rent amount excludes separate fees, utilities, parking, or service charges.",
-          "For regional pages, verify current official rules before using the result in a dispute or notice response.",
+          "Verify current official rules before using the result in a dispute or notice response.",
         ],
       },
-      ...(config.mode === "regional"
-        ? [
-            {
-              title: "Calculation math vs official rules",
-              body: "The percentage result only checks the numbers. It should be kept separate from legal eligibility, notice timing, exemption status, local rent-control coverage, and any official calculator or worksheet required for that region.",
-              bullets: [
-                "Use the entered rate as a scenario to test, not as a guarantee that the rate applies.",
-                "Compare the result with the notice, lease wording, and current official guidance before acting.",
-                "Local or unit-specific exceptions can matter even when the arithmetic is correct.",
-              ],
-            },
-          ]
-        : []),
       {
         title: "How to read the result",
-        body: config.mode === "compound"
-          ? "The final rent and total increase use repeated annual compounding. The table shows the monthly rent after each yearly step."
-          : "The increase amount is the difference between current and calculated new monthly rent. Any annualized difference assumes 12 monthly payments.",
+        body: "The final rent and total increase use repeated annual compounding. The table shows the monthly rent after each yearly step.",
       },
       {
         title: "Before acting on an increase",
-        body: config.mode === "regional"
-          ? "Use the calculator to check the arithmetic, then compare the notice, dates, exemption status, and allowed-increase language against the current official tenancy source for that region."
-          : "Use the calculator to check the arithmetic, then compare the result with the lease clause or rent notice. A correct percentage calculation does not prove that the increase is permitted or that every required notice step was followed.",
+        body: "Use the calculator to check the arithmetic, then compare the result with the lease clause or rent notice. A correct percentage calculation does not prove that the increase is permitted or that every required notice step was followed.",
       },
     ],
     [],
@@ -824,27 +803,23 @@ function moveInSections(config: MoveInCostConfig) {
     [
       {
         title: "How this calculator works",
-        body: config.mode === "advance"
-          ? "The calculator multiplies weekly rent by the number of weeks paid in advance and compares that with calendar-month rent."
-          : "The calculator estimates bond, rent in advance, optional moving costs, and the combined upfront amount from the weekly rent entered.",
+        body: "The calculator multiplies weekly rent by the number of advance-rent weeks entered, then adds the bond amount entered by the user. Both results are rounded and displayed in Australian dollars.",
       },
       {
         title: "When to use this page",
-        body: "Use it before applying, signing, or moving so bond, rent in advance, and other upfront costs are visible before you commit cash.",
+        body: "Use it to check the arithmetic for amounts stated in a proposed agreement or move-in request. It does not determine what may be requested.",
       },
       {
         title: "Australian move-in context",
-        body: config.mode === "advance"
-          ? "Australian listings often start from weekly rent even when renters budget by fortnight or month. Converting the weekly rent into rent-in-advance amounts helps separate future rent from bond and other move-in cash."
-          : "Bond, rent in advance, and moving costs can arrive together even though they cover different purposes. Keeping them separated makes it easier to check the lease, receipt, and state or territory guidance.",
+        body: "Australian listings commonly quote weekly rent. Keeping the calculated advance-rent amount separate from the entered bond makes the combined estimate easier to check.",
       },
       {
         title: "What to check before paying",
-        body: "Confirm the number of weeks requested, what period the advance rent covers, how bond is lodged or receipted, and whether utilities, keys, moving costs, or cleaning charges are separate.",
+        body: "Check the written agreement and the rules for the state or territory where the property is located. Confirm the amounts and what period the advance rent covers.",
       },
       {
         title: "What this result does not include",
-        body: "Rules vary by state, territory, lease, and property. This does not decide legal maximums, bond lodgement rules, utility connections, moving quotes, pet costs, or inspection fees.",
+        body: "This arithmetic estimate does not decide legal limits, bond handling, agreement terms, or whether an entered amount is permitted. It excludes moving costs, utilities, application costs, and other charges.",
       },
     ],
     config.sections,
@@ -957,6 +932,20 @@ function infoSections(config: InfoPageConfig) {
 
 export function InfoPage({ config }: { config: InfoPageConfig }) {
   const schemas = makePageSchemas({ ...config, faq: config.faq });
+  if (config.authorAttribution) {
+    schemas.push({
+      "@context": "https://schema.org",
+      "@type": "Article",
+      headline: config.h1,
+      description: config.description,
+      mainEntityOfPage: `https://www.rentconverter.com${config.path}`,
+      author: {
+        "@type": "Person",
+        name: "Suhas Sunder",
+        url: "https://www.rentconverter.com/about",
+      },
+    });
+  }
   return (
     <Shell schemas={schemas}>
       <ToolCard eyebrow={config.eyebrow} h1={config.h1} lead={config.lead}>
@@ -994,6 +983,14 @@ export function InfoPage({ config }: { config: InfoPageConfig }) {
           </div>
         </div>
       </ToolCard>
+
+      {config.authorAttribution ? (
+        <section className="bg-white px-6 pb-2">
+          <div className="mx-auto max-w-6xl">
+            <AuthorAttribution />
+          </div>
+        </section>
+      ) : null}
 
       {config.tableRows?.length ? (
         <section className="bg-white px-6 py-12 rc-no-print">
@@ -1380,42 +1377,6 @@ function InvalidGeneratedResults({ message = "Fix the highlighted fields to calc
   return <p className="mt-5 rounded-xl bg-rose-50 px-4 py-3 text-sm font-semibold text-rose-800" role="status" aria-live="polite">{message}</p>;
 }
 
-function OneStepIncreaseTool({ config }: { config: IncreaseToolConfig }) {
-  const [rent, setRent] = useState("2000");
-  const [rate, setRate] = useState(config.defaultRate ?? "5");
-  const [currency, setCurrency] = useState<Currency>("USD");
-  const rentParsed = parseIncomeMoney(rent, "Current monthly rent");
-  const rateLabel = "Scenario percentage";
-  const rateParsed = parsePercentage(rate, rateLabel);
-  const result = rentParsed.ok && rateParsed.ok
-    ? calculateOneStepIncrease(rentParsed.cents, rateParsed.value)
-    : undefined;
-  const rateHelper = "Editable starting scenario only. This is not an official or automatically updated legal limit.";
-  return (
-    <ToolCard eyebrow={config.eyebrow} h1={config.h1} lead={config.lead} onPrint={() => window.print()}>
-      <div className="mt-6 grid gap-4 lg:grid-cols-12">
-        <div className="lg:col-span-4"><TextInput id={`${config.mode}-current-rent`} label="Current monthly rent" value={rent} onChange={setRent} error={rentParsed.ok ? undefined : rentParsed.error} /></div>
-        <div className="lg:col-span-5"><TextInput id={`${config.mode}-rate`} label={rateLabel} value={rate} onChange={setRate} helper={rateHelper} error={rateParsed.ok ? undefined : rateParsed.error} /></div>
-        <div className="lg:col-span-3"><CurrencySelect value={currency} onChange={setCurrency} /></div>
-      </div>
-      {!result ? <InvalidGeneratedResults /> : (
-        <ResultPanel
-          label="Estimated new rent from the entered scenario"
-          value={formatMoney(result.newRent, currency)}
-          detail={config.regionNote ?? "This checks arithmetic only and does not determine whether an increase is legally permitted."}
-          cards={[
-            { label: "Current monthly rent", value: formatMoney(result.currentRent, currency) },
-            { label: "Entered scenario percentage", value: formatPercent(result.percentage) },
-            { label: "Increase amount", value: formatMoney(result.increase, currency) },
-            { label: "Monthly difference", value: formatMoney(result.increase, currency) },
-            { label: "Annualized difference (12 monthly payments)", value: formatMoney(result.increase * 12n, currency) },
-          ]}
-        />
-      )}
-    </ToolCard>
-  );
-}
-
 function CompoundIncreaseTool({ config }: { config: IncreaseToolConfig }) {
   const [rent, setRent] = useState("2000");
   const [rate, setRate] = useState(config.defaultRate ?? "4");
@@ -1461,10 +1422,8 @@ export function IncreaseToolPage({ config }: { config: IncreaseToolConfig }) {
   const schemas = makePageSchemas({ ...config, calculator: true, faq: config.faq });
   return (
     <Shell schemas={schemas}>
-      {config.mode === "compound"
-        ? <CompoundIncreaseTool config={config} />
-        : <OneStepIncreaseTool config={config} />}
-      <ContentBlocks sections={increaseSections(config)} examples={config.examples} />
+      <CompoundIncreaseTool config={config} />
+      <ContentBlocks sections={increaseSections()} examples={config.examples} />
       <AssumptionNote path={config.path} />
       <RelatedTools links={config.relatedLinks} />
       <Faq items={config.faq} />
@@ -1560,86 +1519,75 @@ export function SplitToolPage({ config }: { config: SplitToolConfig }) {
 
 export function MoveInCostPage({ config }: { config: MoveInCostConfig }) {
   const [weeklyRent, setWeeklyRent] = useState("500");
-  const [bondWeeks, setBondWeeks] = useState("4");
-  const [advanceWeeks, setAdvanceWeeks] = useState("2");
-  const [movingCosts, setMovingCosts] = useState("0");
-  const [currency, setCurrency] = useState<Currency>(config.defaultCurrency);
-  const weeklyParsed = useMemo(() => parseMoneyToCents(weeklyRent), [weeklyRent]);
-  const movingParsed = useMemo(() => parseMoneyToCents(movingCosts), [movingCosts]);
-  const bondWeekCount = parsePositiveNumber(bondWeeks, 4, 0, 12);
-  const advanceWeekCount = parsePositiveNumber(advanceWeeks, 2, 0, 12);
-  const bond = weeklyParsed.ok
-    ? divRound(weeklyParsed.cents * BigInt(Math.round(bondWeekCount * 100)), 100n)
+  const [advanceWeeks, setAdvanceWeeks] = useState("");
+  const [bondAmount, setBondAmount] = useState("");
+  const currency = config.defaultCurrency;
+  const weeklyParsed = parseIncomeMoney(weeklyRent, "Weekly rent");
+  const advanceWeeksParsed = parseStrictScalar(advanceWeeks, "Advance-rent weeks", {
+    min: 0,
+    max: 52,
+    maxDecimalPlaces: 4,
+  });
+  const bondParsed = parseIncomeMoney(bondAmount, "Bond amount", { allowZero: true });
+  const result = weeklyParsed.ok && advanceWeeksParsed.ok && bondParsed.ok
+    ? calculateAustraliaMoveInCost(weeklyParsed.cents, advanceWeeksParsed.value, bondParsed.cents)
     : undefined;
-  const advance = weeklyParsed.ok
-    ? divRound(weeklyParsed.cents * BigInt(Math.round(advanceWeekCount * 100)), 100n)
-    : undefined;
-  const moving = movingParsed.ok ? movingParsed.cents : 0n;
-  const total = bond !== undefined && advance !== undefined ? bond + advance + moving : undefined;
-  const advanceRows =
-    weeklyParsed.ok
-      ? [
-          ["Period", "Estimate"],
-          ["1 week in advance", formatMoney(weeklyParsed.cents, currency)],
-          ["2 weeks in advance", formatMoney(weeklyParsed.cents * 2n, currency)],
-          ["4 weeks in advance", formatMoney(weeklyParsed.cents * 4n, currency)],
-          ["1 calendar month", formatMoney(weeklyToMonthlyCents(weeklyParsed.cents), currency)],
-        ]
-      : [];
-  const bondRows =
-    weeklyParsed.ok
-      ? [
-          ["Cost", "Amount"],
-          [`Bond at ${bondWeekCount.toFixed(1)} weeks`, formatMoney(bond, currency)],
-          [`Rent in advance at ${advanceWeekCount.toFixed(1)} weeks`, formatMoney(advance, currency)],
-          ["Extra moving costs entered", formatMoney(moving, currency)],
-          ["Estimated upfront total", formatMoney(total, currency)],
-        ]
-      : [];
-  const rows = config.mode === "advance" ? advanceRows : bondRows;
-  const schemas = makePageSchemas({ ...config, calculator: true, faq: config.faq });
+  const rows = result
+    ? [
+        ["Entered amount", "AUD value"],
+        ["Weekly rent", formatMoney(result.weeklyRent, currency)],
+        [`Rent in advance (${result.advanceWeeks} weeks)`, formatMoney(result.rentInAdvance, currency)],
+        ["Bond entered by you", formatMoney(result.bond, currency)],
+        ["Estimated upfront total", formatMoney(result.total, currency)],
+      ]
+    : [];
+  const schemas = makePageSchemas({ ...config, faq: config.faq });
 
   return (
     <Shell schemas={schemas}>
       <ToolCard eyebrow={config.eyebrow} h1={config.h1} lead={config.lead} onPrint={() => window.print()}>
         <div className="mt-6 grid gap-4 lg:grid-cols-12">
           <div className="lg:col-span-4">
-            <TextInput label="Weekly rent" value={weeklyRent} onChange={setWeeklyRent} />
+            <TextInput id="australia-weekly-rent" label="Weekly rent" value={weeklyRent} onChange={setWeeklyRent} error={weeklyParsed.ok ? undefined : weeklyParsed.error} />
           </div>
-          {config.mode === "bond-advance" ? (
-            <>
-              <div className="lg:col-span-2">
-                <TextInput label="Bond weeks" value={bondWeeks} onChange={setBondWeeks} inputMode="decimal" />
-              </div>
-              <div className="lg:col-span-2">
-                <TextInput label="Advance weeks" value={advanceWeeks} onChange={setAdvanceWeeks} inputMode="decimal" />
-              </div>
-              <div className="lg:col-span-2">
-                <TextInput label="Other upfront costs" value={movingCosts} onChange={setMovingCosts} />
-              </div>
-            </>
-          ) : null}
-          <div className={config.mode === "bond-advance" ? "lg:col-span-2" : "lg:col-span-3"}>
-            <CurrencySelect value={currency} onChange={setCurrency} />
+          <div className="lg:col-span-4">
+            <TextInput id="australia-advance-weeks" label="Weeks of rent paid in advance" value={advanceWeeks} onChange={setAdvanceWeeks} inputMode="decimal" helper="Enter the number stated in the agreement or request; no legal default is supplied." error={advanceWeeksParsed.ok ? undefined : advanceWeeksParsed.error} />
+          </div>
+          <div className="lg:col-span-4">
+            <TextInput id="australia-bond-amount" label="Bond amount (AUD)" value={bondAmount} onChange={setBondAmount} helper="Enter 0 intentionally to calculate without a bond." error={bondParsed.ok ? undefined : bondParsed.error} />
           </div>
         </div>
-        {!weeklyParsed.ok ? <p className="mt-2 text-sm font-semibold text-rose-700">{weeklyParsed.error}</p> : null}
-        <ResultPanel
-          label={config.mode === "advance" ? "Rent in advance estimate" : "Estimated upfront total"}
-          value={
-            config.mode === "advance"
-              ? formatMoney(weeklyParsed.ok ? weeklyParsed.cents * 2n : undefined, currency)
-              : formatMoney(total, currency)
-          }
-          detail={
-            config.mode === "advance"
-              ? "Rent in advance usually pays for future occupancy. It is not the same as a separate fee."
-              : "Bond and rent in advance are different move-in costs. Local rules and lease terms can change exact amounts."
-          }
-          tableRows={rows}
-        />
+        {!result ? (
+          <InvalidGeneratedResults message="Enter valid weekly rent, advance-rent weeks, and bond amount to calculate the estimate." />
+        ) : (
+          <ResultPanel
+            label="Estimated upfront total"
+            value={formatMoney(result.total, currency)}
+            detail="Estimate based on the amounts you enter. Check your agreement and the rules for your state or territory."
+            cards={[
+              { label: "Rent in advance", value: formatMoney(result.rentInAdvance, currency) },
+              { label: "Bond entered by you", value: formatMoney(result.bond, currency) },
+            ]}
+            tableRows={rows}
+          />
+        )}
       </ToolCard>
       <ContentBlocks sections={moveInSections(config)} examples={config.examples} />
+      <section className="mx-auto max-w-5xl px-6 py-10">
+        <h2 className="text-2xl font-bold text-sky-800">Official state and territory rental resources</h2>
+        <p className="mt-3 text-slate-700">
+          Check the authority for the state or territory where the property is located. These links provide official information; RentConverter does not summarize or apply their legal rules.
+        </p>
+        <ul className="mt-5 grid gap-3 sm:grid-cols-2">
+          {config.officialResources.map((resource) => (
+            <li key={resource.url}>
+              <a className="font-semibold text-sky-800 underline decoration-sky-300 underline-offset-4 hover:text-sky-950 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400" href={resource.url}>
+                {resource.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
       <AssumptionNote path={config.path} />
       <RelatedTools links={config.relatedLinks} />
       <Faq items={config.faq} />

@@ -93,11 +93,6 @@ export default function ProratedRentCalculator() {
             description: "Build upcoming payment dates.",
           },
           {
-            to: "/do-you-pay-rent-in-advance-or-after",
-            label: "Rent in advance or after",
-            description: "Understand what the payment covers.",
-          },
-          {
             to: "/monthly-to-daily-rent-converter",
             label: "Monthly to daily rent",
             description: "Convert monthly rent into a daily equivalent.",

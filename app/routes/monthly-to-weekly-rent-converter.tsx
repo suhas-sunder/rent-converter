@@ -13,7 +13,7 @@ function safeToFixed(n: number, digits: number): string {
 export const meta: Route.MetaFunction = () => {
   const title = "Monthly to Weekly Rent Converter | True Weekly Rent";
   const description =
-    "Convert monthly rent to a true weekly amount. Compare PCM rent with weekly, 4-week, annual, daily, and hourly equivalents.";
+    "Enter monthly rent to calculate an average weekly equivalent using monthly x 12 x 7 / 365. Includes 4-week and annual comparisons.";
 
   const url = "https://www.rentconverter.com/monthly-to-weekly-rent-converter";
   const image = "https://www.rentconverter.com/og-image.jpg";
@@ -507,7 +507,7 @@ export default function MonthlyToWeeklyRent() {
     },
     {
       q: "What formula does the monthly to weekly rent converter use?",
-      a: "The main formula is monthly rent × 12 × 7 ÷ 365. For example, $2,000 per month is about $460.27 per week before display rounding.",
+      a: "The main formula is monthly rent x 12 x 7 / 365. For example, $2,000 per month is about $460.27 per week before display rounding.",
     },
     {
       q: "Why not divide monthly rent by 4?",
@@ -572,7 +572,7 @@ export default function MonthlyToWeeklyRent() {
     "@type": "WebPage",
     name: "Monthly to Weekly Rent Converter",
     description:
-      "Convert monthly rent to a weekly amount using the 365-day model. Includes related rent breakdowns and a 4-week comparison.",
+      "Enter monthly rent to calculate an average weekly equivalent using monthly x 12 x 7 / 365. Includes 4-week and annual comparisons.",
     url: "https://www.rentconverter.com/monthly-to-weekly-rent-converter",
   };
 
@@ -619,9 +619,10 @@ export default function MonthlyToWeeklyRent() {
                 </h1>
 
                 <p className="mt-2 max-w-6xl text-base leading-relaxed text-slate-700">
-                  Convert monthly rent into a true weekly equivalent. Use this
-                  when a monthly lease needs to be compared with weekly income,
-                  shared-room listings, or PW-style rent quotes.
+                  Enter monthly rent to calculate the average weekly
+                  equivalent. The calculator annualizes the monthly amount
+                  first, then divides it into 7-day weeks so it is not confused
+                  with a simple monthly / 4 shortcut.
                 </p>
               </div>
 
@@ -743,7 +744,7 @@ export default function MonthlyToWeeklyRent() {
                         {fmt(breakdown.weekly)}
                       </div>
                       <p className="text-sm text-slate-700">
-                        Based on monthly rent × 12 × 7 ÷ 365.
+                        Based on monthly rent x 12 x 7 / 365.
                       </p>
                     </div>
 

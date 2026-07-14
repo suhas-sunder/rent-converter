@@ -21,12 +21,12 @@ const howItWorks = {
   ],
   examples: [
     {
-      title: "$500 pw vs $2,150 pcm",
-      body: "$500 per week is about $2,172.62 pcm. On rent alone, the weekly listing is about $22.62 more per calendar month than a $2,150 pcm listing."
+      title: "$180 per week example",
+      body: "$180 per week x 365 / 7 / 12 is about $782.14 per calendar month. Multiplying by 4 gives $720.00 for 28 days, not the average monthly equivalent."
     },
     {
-      title: "$170 pw under an $800 pcm cap",
-      body: "$170 per week is about $738.69 pcm, which leaves about $61.31 of rent-only room before you hit an $800 monthly cap."
+      title: "$500 pw vs $2,150 pcm",
+      body: "$500 per week is about $2,172.62 pcm. On rent alone, the weekly listing is about $22.62 more per calendar month than a $2,150 pcm listing."
     },
     {
       title: "$410 pw against an $1,800 pcm filter",
@@ -57,6 +57,10 @@ const howItWorks = {
     {
       to: "/rent-paid-every-4-weeks-calculator",
       label: "4-week rent"
+    },
+    {
+      to: "/methodology",
+      label: "Calculation methodology"
     }
   ]
 };

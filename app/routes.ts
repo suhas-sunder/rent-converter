@@ -79,6 +79,7 @@ export default [
   route("lease-date-calculator", "routes/lease-date-calculator.tsx"),
   route("lease-start-and-end-date-calculator", "routes/lease-start-and-end-date-calculator.tsx"),
   route("max-rent-calculator", "routes/max-rent-calculator.tsx"),
+  route("methodology", "routes/methodology.tsx"),
   route("monthly-rent-increase-calculator", "routes/monthly-rent-increase-calculator.tsx"),
   route("monthly-to-annual-rent", "routes/monthly-to-annual-rent.tsx"),
   route("monthly-to-annual-rent-converter", "routes/monthly-to-annual-rent-converter.tsx"),

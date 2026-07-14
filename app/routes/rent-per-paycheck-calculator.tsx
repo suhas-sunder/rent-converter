@@ -8,7 +8,7 @@ import ToolFit from "~/client/components/rent-per-paycheck-calculator/ToolFit";
 export const meta: Route.MetaFunction = () => {
   const title = "Rent Per Paycheck Calculator | Biweekly and Semi-Monthly Rent";
   const description =
-    "Calculate how much rent to set aside from each paycheck based on rent amount and pay frequency. Useful for biweekly and semi-monthly budgeting.";
+    "Enter rent and paycheck frequency to allocate annualized rent across weekly, biweekly, semimonthly, or monthly paychecks. Taxes and pay dates are not calculated.";
 
   const canonicalUrl =
     "https://www.rentconverter.com/rent-per-paycheck-calculator";
@@ -633,7 +633,7 @@ export default function RentPerPaycheck() {
     "@type": "WebPage",
     name: pageName,
     description:
-      "Calculate how much rent to set aside from each paycheck based on rent amount and pay frequency. Useful for biweekly and semi-monthly budgeting.",
+      "Enter rent and paycheck frequency to allocate annualized rent across weekly, biweekly, semimonthly, or monthly paychecks. Taxes and pay dates are not calculated.",
     url: canonicalUrl,
     isPartOf: { "@type": "WebSite", url: "https://www.rentconverter.com" },
     breadcrumb: { "@id": `${canonicalUrl}#breadcrumb` },

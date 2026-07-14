@@ -1,11 +1,9 @@
 // app/routes/rent-converter.tsx
-import { redirect } from "@remix-run/node";
-import type { LoaderFunction } from "react-router";
+import { permanentRedirectPreservingQuery } from "~/utils/redirects";
 
-export const loader: LoaderFunction = async () => {
-  // Permanent redirect to the canonical hub (home page)
-  throw redirect("/", { status: 301 });
-};
+export function loader({ request }: { request: Request }) {
+  return permanentRedirectPreservingQuery(request, "/");
+}
 
 // Keep a component export so the module shape stays consistent.
 // It will never render because the loader always redirects.

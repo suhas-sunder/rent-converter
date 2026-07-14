@@ -39,6 +39,10 @@ const howItWorks = {
   ],
   relatedLinks: [
     {
+      to: "/salary-to-rent-calculator",
+      label: "Salary to rent"
+    },
+    {
       to: "/rent-as-percentage-of-income-calculator",
       label: "Rent as percentage of income"
     },
@@ -47,12 +51,8 @@ const howItWorks = {
       label: "Income required"
     },
     {
-      to: "/rent-vs-take-home-pay-calculator",
-      label: "Rent vs take-home pay"
-    },
-    {
-      to: "/rent-per-paycheck-calculator",
-      label: "Rent per paycheck"
+      to: "/rent-budget-calculator",
+      label: "Rent budget"
     }
   ]
 };

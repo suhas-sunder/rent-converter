@@ -117,11 +117,6 @@ export function makePageSchemas(config: SeoConfig) {
       url,
       applicationCategory: "FinanceApplication",
       operatingSystem: "All",
-      offers: {
-        "@type": "Offer",
-        price: "0",
-        priceCurrency: "USD",
-      },
     });
   }
 

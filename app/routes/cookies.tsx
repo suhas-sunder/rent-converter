@@ -1,360 +1,144 @@
-/* eslint-disable react/no-unescaped-entities */
-
-import * as React from "react";
-import { Link } from "react-router";
 import type { Route } from "./+types/cookies";
+import { useAnalyticsConsent } from "~/provider";
+import { buildMeta, JsonLd, makePageSchemas } from "~/client/utils/seo";
+import { ANALYTICS_CONSENT_STORAGE_KEY } from "~/client/utils/analyticsConsent.js";
 
-export const meta: Route.MetaFunction = () => [
-  { title: "Cookie Policy | RentConverter.com" },
-  {
-    name: "description",
-    content:
-      "Read the RentConverter.com cookie policy. Learn how cookies and similar technologies are used on RentConverter.com, including analytics and advertising where applicable.",
-  },
-  {
-    name: "keywords",
-    content:
-      "RentConverter cookie policy, cookies policy, cookies, analytics cookies, advertising cookies, tracking technologies, consent",
-  },
-  { name: "robots", content: "index,follow" },
-  { name: "author", content: "RentConverter.com" },
-  { name: "theme-color", content: "#f8fafc" },
+const seo = {
+  title: "Cookie and Browser Storage Policy | RentConverter.com",
+  description:
+    "Learn how RentConverter uses localStorage, sessionStorage, consent preferences, and optional PostHog analytics without active advertising cookies.",
+  path: "/cookies",
+  breadcrumbName: "Cookie and Browser Storage Policy",
+};
 
-  { property: "og:type", content: "website" },
-  { property: "og:site_name", content: "RentConverter.com" },
-  { property: "og:title", content: "Cookie Policy | RentConverter.com" },
-  {
-    property: "og:description",
-    content:
-      "Learn how RentConverter.com uses cookies and similar technologies, including essential, analytics, and advertising cookies where applicable.",
-  },
-  { property: "og:url", content: "https://www.rentconverter.com/cookies" },
-  {
-    property: "og:image",
-    content: "https://www.rentconverter.com/og-image.jpg",
-  },
-  { property: "og:image:alt", content: "RentConverter.com cookie policy" },
-  { property: "og:locale", content: "en_US" },
-
-  { name: "twitter:card", content: "summary_large_image" },
-  { name: "twitter:title", content: "Cookie Policy | RentConverter.com" },
-  {
-    name: "twitter:description",
-    content:
-      "Learn how RentConverter.com uses cookies and similar technologies, including essential, analytics, and advertising cookies where applicable.",
-  },
-  {
-    name: "twitter:image",
-    content: "https://www.rentconverter.com/og-image.jpg",
-  },
-
-  {
-    tagName: "link",
-    rel: "canonical",
-    href: "https://www.rentconverter.com/cookies",
-  },
-];
+export const meta: Route.MetaFunction = () => buildMeta(seo);
 
 export default function CookiesPolicy() {
-  const pageName = "Cookie Policy";
+  const { openPreferences } = useAnalyticsConsent();
 
-  const canonicalUrl = "https://www.rentconverter.com/cookies";
-
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: "https://www.rentconverter.com",
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: pageName,
-        item: canonicalUrl,
-      },
-    ],
-  };
-
-  const websiteSchema = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: "RentConverter.com",
-    url: "https://www.rentconverter.com/",
-  };
-
-  const webPageSchema = {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    name: pageName,
-    description:
-      "Read the RentConverter.com cookie policy, including how cookies and similar technologies may be used for essential functionality, analytics, and advertising where applicable.",
-    url: canonicalUrl,
-  };
   return (
-    <main className="bg-white text-slate-700 scroll-smooth antialiased">
-      <div className="max-w-6xl mx-auto px-6 pt-8 pb-12">
-        {/* Header */}
-        <header className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm">
-          <h1 className="text-4xl font-bold text-slate-950 mb-2">{pageName}</h1>
-          <p className="text-sm text-slate-700">
-            Last updated January 24, 2026
+    <main className="min-h-screen bg-sky-50 text-slate-700">
+      <JsonLd schemas={makePageSchemas(seo)} />
+
+      <section className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-10">
+        <article className="rounded-[1.75rem] bg-white px-5 py-7 sm:px-8 sm:py-9">
+          <p className="rc-page-eyebrow">Cookies and browser storage</p>
+          <h1 className="mt-3 text-3xl font-bold tracking-tight text-sky-900 sm:text-4xl">
+            Cookie and Browser Storage Policy
+          </h1>
+          <p className="mt-3 text-sm text-slate-600">
+            Last updated <time dateTime="2026-07-13">July 13, 2026</time>
+          </p>
+          <p className="mt-5 max-w-3xl text-base leading-8 text-slate-700">
+            RentConverter uses browser storage for calculator restoration and for your
+            analytics preference. These entries are not all cookies. Optional analytics
+            remains disabled unless you accept it.
           </p>
 
-          <div className="mt-5 space-y-4 text-slate-700 leading-relaxed">
-            <p>
-              This Cookie Policy explains how https://www.rentconverter.com
-              ("Company", "we", "us", and "our") uses cookies and similar
-              technologies to recognize you when you visit our website at
-              https://www.rentconverter.com ("Website"). It explains what these
-              technologies are and why we use them, as well as your choices to
-              control our use of them.
-            </p>
+          <section className="mt-9">
+            <h2 className="text-2xl font-bold tracking-tight text-sky-900">
+              Storage used by the site
+            </h2>
+            <div className="mt-4 overflow-x-auto rounded-2xl border border-slate-200">
+              <table className="min-w-[760px] w-full border-collapse text-left text-sm">
+                <thead className="bg-sky-50 text-sky-950">
+                  <tr>
+                    <th className="px-4 py-3 font-bold">Category</th>
+                    <th className="px-4 py-3 font-bold">Purpose</th>
+                    <th className="px-4 py-3 font-bold">Mechanism</th>
+                    <th className="px-4 py-3 font-bold">Optional?</th>
+                    <th className="px-4 py-3 font-bold">Duration</th>
+                    <th className="px-4 py-3 font-bold">Service or owner</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-200">
+                  <tr className="align-top">
+                    <td className="px-4 py-3 font-semibold text-slate-950">Consent preference</td>
+                    <td className="px-4 py-3">Remembers accept or reject so the prompt does not repeat.</td>
+                    <td className="px-4 py-3 break-all">localStorage: {ANALYTICS_CONSENT_STORAGE_KEY}</td>
+                    <td className="px-4 py-3">Essential preference storage; analytics itself remains optional.</td>
+                    <td className="px-4 py-3">No application-set expiry; until replaced or cleared.</td>
+                    <td className="px-4 py-3">RentConverter</td>
+                  </tr>
+                  <tr className="align-top">
+                    <td className="px-4 py-3 font-semibold text-slate-950">Calculator state</td>
+                    <td className="px-4 py-3">Restores supported calculator values and display choices in the same browser.</td>
+                    <td className="px-4 py-3">localStorage entries using route-specific <code>rc_</code> keys.</td>
+                    <td className="px-4 py-3">Functional and independent of analytics consent.</td>
+                    <td className="px-4 py-3">No application-set expiry; until replaced or cleared.</td>
+                    <td className="px-4 py-3">RentConverter</td>
+                  </tr>
+                  <tr className="align-top">
+                    <td className="px-4 py-3 font-semibold text-slate-950">Optional analytics</td>
+                    <td className="px-4 py-3">Stores an anonymous analytics identifier and session information after acceptance.</td>
+                    <td className="px-4 py-3">PostHog localStorage plus sessionStorage; cookie persistence is disabled.</td>
+                    <td className="px-4 py-3">Yes. It is not initialized before acceptance.</td>
+                    <td className="px-4 py-3">Local storage until withdrawal or clearing; session storage for the browser session.</td>
+                    <td className="px-4 py-3">PostHog</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
 
-            <p>
-              In some cases we may use cookies and similar technologies to
-              collect personal information, or that becomes personal information
-              if we combine it with other information. For more information
-              about how we handle personal information, please see our Privacy
-              Policy.
-            </p>
-          </div>
-        </header>
-
-        {/* Content */}
-        <article className="mt-6 bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm">
-          <div className="prose prose-slate max-w-none">
-            <Section title="What are cookies?">
-              <p>
-                Cookies are small data files that are placed on your computer or
-                mobile device when you visit a website. Cookies are widely used
-                by website owners to make their websites work, or to work more
-                efficiently, as well as to provide reporting information.
-              </p>
-              <p>
-                Cookies set by the website owner (in this case,
-                https://www.rentconverter.com) are called "first-party cookies."
-                Cookies set by parties other than the website owner are called
-                "third-party cookies." Third-party cookies enable third-party
-                features or functionality to be provided on or through the
-                website (for example, advertising, interactive content, and
-                analytics). The parties that set these third-party cookies can
-                recognize your device both when it visits the website in
-                question and also when it visits certain other websites.
-              </p>
-            </Section>
-
-            <Section title="Why do we use cookies?">
-              <p>
-                We use first- and third-party cookies for several reasons. Some
-                cookies are required for technical reasons in order for our
-                Website to operate, and we refer to these as "essential" or
-                "strictly necessary" cookies. Other cookies enable us to
-                understand how our Website is used and to improve performance
-                and user experience. We may also use cookies for advertising
-                purposes, including serving ads and measuring ad performance,
-                where applicable.
-              </p>
-            </Section>
-
-            <Section title="Analytics and performance cookies">
-              <p>
-                These cookies (and similar technologies) collect information
-                that is used either in aggregate form to help us understand how
-                our Website is being used, improve site performance, and help
-                diagnose errors.
-              </p>
-              <p>
-                We may use analytics tools that set cookies or use similar
-                identifiers depending on your browser and our configuration.
-              </p>
-              <p>
-                Note: The specific cookies and identifiers used can vary over
-                time (for example, due to configuration changes or vendor
-                updates).
-              </p>
-            </Section>
-
-            <Section title="Advertising cookies">
-              <p>
-                We may display advertisements on our Website through Google
-                AdSense and/or other advertising partners. Advertising providers
-                may use cookies or similar technologies to serve ads, limit ad
-                frequency, measure ad performance, and deliver ads that may be
-                relevant to your interests.
-              </p>
-
-              <h3 className="text-lg font-bold text-slate-950 mt-6">
-                Google advertising cookies
-              </h3>
-              <p>
-                Google uses cookies to help serve the ads it displays on the
-                websites of its partners, such as websites displaying Google ads
-                or participating in Google certified ad networks. When users
-                visit a Google partner website, a cookie may be dropped on that
-                user's browser.
-              </p>
-
-              <div className="mt-4 flex flex-col gap-2">
-                <a
-                  href="https://policies.google.com/technologies/cookies"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-slate-950 hover:underline underline-offset-4"
+          <div className="mt-9 space-y-8">
+            <section>
+              <h2 className="text-2xl font-bold tracking-tight text-sky-900">
+                Analytics choice
+              </h2>
+              <div className="mt-3 space-y-3 leading-7 text-slate-700">
+                <p>
+                  No saved choice and explicit rejection both keep PostHog disabled.
+                  Rejecting analytics does not disable calculators. If you later accept,
+                  the configured analytics client records pageviews but disables
+                  autocapture, session recording, person profiles, exception capture,
+                  page-leave capture, surveys, and feature flags.
+                </p>
+                <button
+                  type="button"
+                  onClick={openPreferences}
+                  className="cursor-pointer rounded-xl bg-sky-700 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-sky-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 print:hidden"
+                  data-nosnippet
                 >
-                  Find out how Google uses cookies...
-                </a>
-                <a
-                  href="https://adssettings.google.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-slate-950 hover:underline underline-offset-4"
-                >
-                  Manage Google Ads Settings...
-                </a>
-                <a
-                  href="https://optout.aboutads.info/?c=2&lang=EN"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-slate-950 hover:underline underline-offset-4"
-                >
-                  Opt out via aboutads.info...
-                </a>
+                  Manage analytics preferences
+                </button>
               </div>
-            </Section>
+            </section>
 
-            <Section title="How can I control cookies?">
-              <p>
-                You have choices about whether to accept or reject cookies. You
-                can usually exercise your cookie choices by adjusting your
-                preferences in a cookie banner or consent manager (if we display
-                one), or by changing your browser settings.
-              </p>
-              <p>
-                Please note that essential cookies may be required for core site
-                functionality. If you choose to reject cookies, you may still
-                use our Website, though your access to some functionality and
-                areas of our Website may be restricted.
-              </p>
-            </Section>
+            <section>
+              <h2 className="text-2xl font-bold tracking-tight text-sky-900">
+                Removing stored data
+              </h2>
+              <div className="mt-3 space-y-3 leading-7 text-slate-700">
+                <p>
+                  Browser settings can remove site data, including cookies,
+                  localStorage, and sessionStorage. Clearing all RentConverter storage
+                  may reset calculator values and the consent preference. Withdrawing
+                  analytics through the site does not delete separate calculator values.
+                </p>
+              </div>
+            </section>
 
-            <Section title="How can I control cookies on my browser?">
-              <p>
-                The ways you can refuse cookies through your browser controls
-                vary from browser to browser, so you should visit your browser's
-                help menu for more information.
-              </p>
-              <p>
-                Useful starting points:
-                <span className="block mt-2">
-                  Chrome, Firefox, Safari, Edge, Opera
-                </span>
-              </p>
-            </Section>
-
-            <Section title="What about other tracking technologies, like web beacons?">
-              <p>
-                Cookies are not the only way to recognize or track visitors to a
-                website. We may use other, similar technologies from time to
-                time, like web beacons (sometimes called "tracking pixels" or
-                "clear gifs"). These are tiny graphics files that contain a
-                unique identifier that enables us to recognize when someone has
-                visited our Website or interacted with our content. In many
-                instances, these technologies rely on cookies to function
-                properly, so declining cookies may impair their functioning.
-              </p>
-            </Section>
-
-            <Section title="Do you use local storage or similar technologies?">
-              <p>
-                Some site features and third-party tools may use local storage
-                (such as Local Storage, Session Storage, IndexedDB, or similar)
-                to store information on your device. These technologies are used
-                for purposes similar to cookies, such as remembering
-                preferences, improving site performance, and measuring usage.
-              </p>
-              <p>
-                You can typically clear or control local storage through your
-                browser settings. Disabling or clearing it may impact certain
-                website functionality.
-              </p>
-            </Section>
-
-            <Section title="How often will you update this Cookie Policy?">
-              <p>
-                We may update this Cookie Policy from time to time to reflect
-                changes to the cookies and technologies we use or for other
-                operational, legal, or regulatory reasons. Please revisit this
-                Cookie Policy regularly to stay informed about our use of
-                cookies and related technologies.
-              </p>
-              <p>
-                The date at the top of this Cookie Policy indicates when it was
-                last updated.
-              </p>
-            </Section>
-
-            <Section title="Where can I get further information?">
-              <p>
-                If you have any questions about our use of cookies or other
-                technologies, please contact us at: admin@rentconverter.com.
-              </p>
-            </Section>
+            <section>
+              <h2 className="text-2xl font-bold tracking-tight text-sky-900">
+                Advertising and other browser caching
+              </h2>
+              <div className="mt-3 space-y-3 leading-7 text-slate-700">
+                <p>
+                  RentConverter does not currently load advertising scripts or
+                  advertising cookies. If advertising is introduced later, this page and
+                  the consent behavior must be updated before describing it as active.
+                </p>
+                <p>
+                  Browsers may also cache normal site assets and Google Fonts files for
+                  performance. A browser cache is different from the localStorage and
+                  sessionStorage entries described above.
+                </p>
+              </div>
+            </section>
           </div>
         </article>
-
-        <section className="mt-6">
-          <p className="text-xs text-slate-700 leading-relaxed text-center">
-            <em>
-              Tools on this site are for budgeting and comparison. Always
-              confirm payment schedules, fees, and lease terms in your rental
-              agreement.
-            </em>
-          </p>
-        </section>
-        <nav className="mt-8 text-sm text-slate-700" aria-label="Breadcrumb">
-          <Link
-            to="/"
-            className="inline-flex cursor-pointer items-center gap-2 rounded-md text-sky-700 underline-offset-4 hover:text-sky-900 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
-          >
-            Home
-          </Link>{" "}
-          / <span className="text-slate-800">{pageName}</span>
-        </nav>
-      </div>
-
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
-      />
+      </section>
     </main>
-  );
-}
-
-function Section({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <section className="mt-10 first:mt-0">
-      <h2 className="text-lg md:text-xl font-bold text-slate-950">{title}</h2>
-      <div className="mt-3 text-sm md:text-base text-slate-700 leading-relaxed space-y-4">
-        {children}
-      </div>
-    </section>
   );
 }

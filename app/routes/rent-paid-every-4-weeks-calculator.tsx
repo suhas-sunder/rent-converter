@@ -11,9 +11,9 @@ function safeToFixed(n: number, digits: number): string {
 }
 
 export const meta: Route.MetaFunction = () => {
-  const title = "Rent Paid Every 4 Weeks Calculator | True Monthly Cost";
+  const title = "Rent Paid Every 4 Weeks Calculator | 28-Day to Monthly";
   const description =
-    "Convert rent paid every 4 weeks into monthly, weekly, and annual equivalents. A 28-day cycle creates 13 payments per year, not 12.";
+    "Enter rent due every 28 days to calculate average monthly, weekly, and annual equivalents. Shows why 13 four-week periods differ from 12 months.";
 
   const canonicalUrl =
     "https://www.rentconverter.com/rent-paid-every-4-weeks-calculator";
@@ -639,7 +639,7 @@ export default function RentPaidEvery4Weeks() {
     "@type": "WebPage",
     name: pageName,
     description:
-      "Convert rent paid every 4 weeks into monthly, weekly, and annual equivalents. A 28-day cycle creates 13 payments per year, not 12.",
+      "Enter rent due every 28 days to calculate average monthly, weekly, and annual equivalents. Shows why 13 four-week periods differ from 12 months.",
     url: canonicalUrl,
     isPartOf: { "@type": "WebSite", url: "https://www.rentconverter.com" },
   };
@@ -682,10 +682,10 @@ export default function RentPaidEvery4Weeks() {
 
                 <p className="mt-2 text-base text-slate-700">
                   Convert rent paid every 4 weeks into monthly, weekly, and
-                  annual equivalents. “Four-weekly” means the same 28-day
-                  cycle: 13 periods cover 364 days, so it is not the same as a
-                  calendar month. GBP remains available in the currency
-                  selector.
+                  annual equivalents. Four-weekly rent is a fixed 28-day cycle:
+                  13 periods cover 364 days, so the average monthly equivalent
+                  is not the same as one 4-week payment. GBP remains available
+                  in the currency selector.
                 </p>
               </div>
 
@@ -912,7 +912,7 @@ export default function RentPaidEvery4Weeks() {
                             {fmtMoney(computed.monthlyScaled)}
                           </div>
                           <div className="mt-0.5 text-[11px] text-slate-700">
-                            Annual total ÷ 12
+                            Annual total / 12
                           </div>
                         </div>
 
@@ -924,7 +924,7 @@ export default function RentPaidEvery4Weeks() {
                             {fmtMoney(computed.monthlyMinus4wScaled)}
                           </div>
                           <div className="mt-0.5 text-[11px] text-slate-700 tabular-nums">
-                            ≈ {safeToFixed(computed.monthlyMinus4wPct, 2)}% of
+                            About {safeToFixed(computed.monthlyMinus4wPct, 2)}% of
                             4-week
                           </div>
                         </div>

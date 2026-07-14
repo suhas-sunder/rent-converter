@@ -87,9 +87,11 @@ export default function NavBar() {
   const [mobileQuery, setMobileQuery] = useState("");
 
   const moreBtnRef = useRef<HTMLButtonElement | null>(null);
+  const mobileBtnRef = useRef<HTMLButtonElement | null>(null);
   const moreMenuRef = useRef<HTMLDivElement | null>(null);
   const mobilePanelRef = useRef<HTMLDivElement | null>(null);
   const desktopSearchRef = useRef<HTMLInputElement | null>(null);
+  const mobileSearchRef = useRef<HTMLInputElement | null>(null);
 
   const isClient = useIsClient();
   const tools: NavItem[] = useMemo(() => buildCanonicalItems(), []);
@@ -97,9 +99,11 @@ export default function NavBar() {
 
   const primaryLinks: NavItem[] = useMemo(() => {
     const desiredOrder = [
+      "/",
       "/weekly-to-monthly-rent-converter",
-      "/rent-per-paycheck-calculator",
       "/how-much-rent-can-i-afford-calculator",
+      "/rent-increase-calculator",
+      "/rent-split-calculator",
     ];
 
     const byTo = new Map(tools.map((tool) => [tool.to, tool]));
@@ -108,19 +112,19 @@ export default function NavBar() {
     for (const to of desiredOrder) {
       const item = byTo.get(to);
       if (item) primary.push(item);
-      if (primary.length >= 3) break;
+      if (primary.length >= 5) break;
     }
 
-    if (primary.length < 3) {
+    if (primary.length < 5) {
       for (const tool of tools) {
-        if (primary.length >= 3) break;
+        if (primary.length >= 5) break;
         if (tool.to !== "/" && !primary.some((item) => item.to === tool.to)) {
           primary.push(tool);
         }
       }
     }
 
-    return primary.slice(0, 3);
+    return primary.slice(0, 5);
   }, [tools]);
 
   const desktopMoreSections = useMemo(
@@ -161,6 +165,38 @@ export default function NavBar() {
       window.clearTimeout(id);
     };
   }, [moreOpen]);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const id = window.setTimeout(() => mobileSearchRef.current?.focus(), 0);
+    return () => window.clearTimeout(id);
+  }, [mobileOpen]);
+
+  function closeMobileMenuAndRestoreFocus() {
+    setMobileOpen(false);
+    window.setTimeout(() => mobileBtnRef.current?.focus(), 0);
+  }
+
+  function keepFocusInMobileMenu(event: React.KeyboardEvent<HTMLDivElement>) {
+    if (event.key !== "Tab") return;
+    const panel = mobilePanelRef.current;
+    if (!panel) return;
+    const focusable = Array.from(
+      panel.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled])',
+      ),
+    ).filter((element) => element.getClientRects().length > 0);
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
 
   function updateMoreRect() {
     const btn = moreBtnRef.current;
@@ -203,7 +239,7 @@ export default function NavBar() {
     function onKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") {
         setMoreOpen(false);
-        setMobileOpen(false);
+        if (mobileOpen) closeMobileMenuAndRestoreFocus();
       }
     }
 
@@ -213,7 +249,7 @@ export default function NavBar() {
       document.removeEventListener("mousedown", onDocMouseDown);
       document.removeEventListener("keydown", onKeyDown);
     };
-  }, [moreOpen]);
+  }, [mobileOpen, moreOpen]);
 
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
@@ -263,16 +299,6 @@ export default function NavBar() {
       zIndex: 2147483647,
     };
   }, [moreRect]);
-
-  function scrollToAllTools(onDone?: () => void) {
-    onDone?.();
-
-    window.setTimeout(() => {
-      const el = document.getElementById("all-tools");
-      if (!el) return;
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 0);
-  }
 
   function NavLinkItem({
     item,
@@ -390,26 +416,6 @@ export default function NavBar() {
     );
   }
 
-  function AllToolsButton() {
-    return (
-      <Link
-        to="/sitemap"
-        className="inline-flex cursor-pointer select-none items-center rounded-xl bg-sky-50 px-3 py-2 text-sm font-semibold text-sky-800 transition-colors hover:bg-sky-100 hover:text-sky-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-        onClick={(event) => {
-          const el = document.getElementById("all-tools");
-          if (!el) {
-            closeAll();
-            return;
-          }
-          event.preventDefault();
-          scrollToAllTools(closeAll);
-        }}
-      >
-        All tools
-      </Link>
-    );
-  }
-
   return (
     <header className="sticky top-0 z-50 bg-white/95 text-slate-700 backdrop-blur">
       <style>{`
@@ -455,8 +461,9 @@ export default function NavBar() {
           </Link>
 
           <button
+            ref={mobileBtnRef}
             type="button"
-            className="inline-flex cursor-pointer items-center justify-center rounded-xl px-3 py-2 text-slate-700 transition-colors hover:bg-sky-50 hover:text-sky-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:hidden"
+            className="inline-flex cursor-pointer items-center justify-center rounded-xl px-3 py-2 text-slate-700 transition-colors hover:bg-sky-50 hover:text-sky-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white lg:hidden"
             aria-label="Open menu"
             aria-expanded={mobileOpen}
             onClick={() => {
@@ -468,9 +475,7 @@ export default function NavBar() {
             <IconMenu />
           </button>
 
-          <nav className="hidden items-center gap-2 text-sm sm:flex">
-            <AllToolsButton />
-
+          <nav className="hidden items-center gap-1 text-sm lg:flex">
             {primaryLinks.map((linkItem) => (
               <NavLinkItem
                 key={linkItem.to}
@@ -567,6 +572,7 @@ export default function NavBar() {
                 role="dialog"
                 aria-modal="true"
                 aria-label="Menu"
+                onKeyDown={keepFocusInMobileMenu}
               >
                 <div className="shrink-0 bg-white/95 backdrop-blur">
                   <div className="flex items-center justify-between px-4 py-3">
@@ -597,7 +603,7 @@ export default function NavBar() {
                       type="button"
                       className="cursor-pointer rounded-xl px-3 py-2 text-slate-700 transition-colors hover:bg-sky-50 hover:text-sky-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                       aria-label="Close menu"
-                      onClick={() => setMobileOpen(false)}
+                      onClick={closeMobileMenuAndRestoreFocus}
                     >
                       <IconX />
                     </button>
@@ -608,6 +614,7 @@ export default function NavBar() {
                       Search rent tools
                     </label>
                     <input
+                      ref={mobileSearchRef}
                       id="mobile-tool-search"
                       value={mobileQuery}
                       onChange={(event) => setMobileQuery(event.target.value)}

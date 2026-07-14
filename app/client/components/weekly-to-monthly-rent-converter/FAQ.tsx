@@ -6,11 +6,11 @@ export default function FAQ({ includeSchema = true }: FAQProps) {
   const faqData = [
     {
       q: "What is the formula for weekly to monthly rent on this page?",
-      a: "The conversion uses annual equivalence: weekly is treated as a 7-day amount, converted to an annual total using a 365-day year (weekly ÷ 7 × 365), then divided by 12 to produce a monthly equivalent.",
+      a: "The conversion uses annual equivalence: weekly is treated as a 7-day amount, converted to an annual total using a 365-day year (weekly / 7 x 365), then divided by 12 to produce a monthly equivalent.",
     },
     {
-      q: "Why does weekly × 4 not match the monthly result?",
-      a: "Four weeks is 28 days. An average month is about 30.42 days (365 ÷ 12). Weekly × 4 matches a 28-day cycle, not a calendar-month equivalent.",
+      q: "Why does weekly x 4 not match the monthly result?",
+      a: "Four weeks is 28 days. An average month is about 30.42 days (365 / 12). Weekly x 4 matches a 28-day cycle, not a calendar-month equivalent.",
     },
     {
       q: "How is every-4-weeks rent different from monthly rent?",
@@ -26,9 +26,10 @@ export default function FAQ({ includeSchema = true }: FAQProps) {
     },
     {
       q: "Does the math change by country?",
-      a: "No. The math is the same everywhere. What changes is how rent is commonly advertised (for example, weekly in Australia and New Zealand versus monthly in Canada and the US).",
+      a: "No. The math is the same everywhere. What changes is how rent is commonly advertised.",
     },
   ];
+
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -38,6 +39,7 @@ export default function FAQ({ includeSchema = true }: FAQProps) {
       acceptedAnswer: { "@type": "Answer", text: f.a },
     })),
   };
+
   return (
     <>
       <section id="faq" className="max-w-5xl mx-auto pb-16 px-6">
@@ -51,7 +53,7 @@ export default function FAQ({ includeSchema = true }: FAQProps) {
               <summary className="cursor-pointer list-none font-semibold text-lg text-sky-800 flex items-center justify-between hover:text-sky-900">
                 <span>{f.q}</span>
                 <span className="ml-4 text-slate-400 transition-transform group-open:rotate-180">
-                  ▾
+                  v
                 </span>
               </summary>
 

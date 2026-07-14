@@ -1,11 +1,9 @@
-﻿import { MoveInCostPage } from "~/client/components/generated/GeneratedPages";
-import { moveInCostConfigs } from "~/client/data/generatedRouteConfigs";
-import { buildMeta } from "~/client/utils/seo";
+import { permanentRedirectPreservingQuery } from "~/utils/redirects";
 
-const config = moveInCostConfigs["/bond-and-rent-in-advance-australia"];
+export function loader({ request }: { request: Request }) {
+  return permanentRedirectPreservingQuery(request, "/rent-in-advance-australia");
+}
 
-export const meta = () => buildMeta(config);
-
-export default function BondAndRentInAdvanceAustraliaPage() {
-  return <MoveInCostPage config={config} />;
+export default function BondAndRentInAdvanceAustraliaRedirect() {
+  return null;
 }

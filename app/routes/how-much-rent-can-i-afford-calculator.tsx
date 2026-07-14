@@ -13,7 +13,7 @@ const OG_IMAGE_URL = `${SITE_URL}/og-image.jpg`;
 export const meta: Route.MetaFunction = () => {
   const title = "How Much Rent Can I Afford? | Income to Rent Calculator";
   const description =
-    "Estimate how much rent you can afford from income and a target rent ratio. Compare monthly, weekly, 4-week, and annual rent targets.";
+    "Enter income and period to compare monthly, weekly, 4-week, and annual rent targets at income-share percentages. Results are arithmetic references.";
 
   return [
     { title },
@@ -650,7 +650,7 @@ export default function HowMuchRentCanIAfford() {
     "@type": "WebPage",
     name: "How Much Rent Can I Afford?",
     description:
-      "Estimate rent affordability from income and compare monthly, weekly, and 4-week rent targets.",
+      "Enter income and period to compare monthly, weekly, 4-week, and annual rent targets at income-share percentages. Results are arithmetic references.",
     url: PAGE_URL,
     isPartOf: {
       "@type": "WebSite",
@@ -695,9 +695,10 @@ export default function HowMuchRentCanIAfford() {
                 </h1>
 
                 <p className="mt-2 text-base text-slate-700">
-                  Estimate rent targets from income using practical percentage
-                  rules. Compare monthly, weekly, 4-week, and annual amounts
-                  before treating a landlord rule as a personal budget.
+                  Enter income for the selected period to compare monthly,
+                  weekly, 4-week, and annual rent targets at income-share
+                  percentages. The result is a reference point, not a personal
+                  affordability decision.
                 </p>
               </div>
 
