@@ -60,7 +60,9 @@ test("SSR hosting has no obsolete SPA fallback and keeps low-risk headers", () =
   assert.match(read("react-router.config.ts"), /ssr:\s*true/);
   assert.match(read("vite.config.ts"), /netlifyPlugin\(\)/);
   assert.match(read(".netlify/v1/functions/react-router-server.mjs"), /path:\s*"\/\*"/);
-  assert.match(read("app/root.tsx"), /canonicalDocumentPath/);
+  const root = read("app/root.tsx");
+  assert.match(root, /canonicalDocumentPath/);
+  assert.match(root, /looksLikeFile[\s\S]*return pathname/);
 
   const netlify = read("netlify.toml");
   const server = read("server.js");
@@ -76,6 +78,7 @@ test("SSR hosting has no obsolete SPA fallback and keeps low-risk headers", () =
   assert.match(netlify, /for = "\/assets\/\*"[\s\S]*max-age=31536000, immutable/);
   assert.match(server, /express\.static\("build\/client\/assets", \{ immutable: true, maxAge: "1y" \}\)/);
   assert.doesNotMatch(netlify, /\/index\.html\s+200/);
+  assert.doesNotMatch(netlify, /\[\[redirects\]\][\s\S]*from\s*=\s*"\/\*\/"[\s\S]*to\s*=\s*"\/:splat"/);
 });
 
 test("source and public assets contain no local filesystem path or live ad provider", () => {
