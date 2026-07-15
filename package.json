@@ -12,20 +12,20 @@
     "typecheck": "react-router typegen && tsc -b"
   },
   "dependencies": {
-    "@react-router/express": "^7.7.1",
-    "@react-router/node": "^7.7.1",
+    "@react-router/express": "^7.18.1",
+    "@react-router/node": "^7.18.1",
     "compression": "^1.7.5",
-    "express": "^5.1.0",
+    "express": "^5.2.1",
     "isbot": "^5.1.27",
-    "morgan": "^1.10.0",
-    "posthog-js": "^1.334.1",
+    "morgan": "^1.11.0",
+    "posthog-js": "^1.400.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-router": "^7.7.1"
+    "react-router": "^7.18.1"
   },
   "devDependencies": {
     "@netlify/vite-plugin-react-router": "^1.0.1",
-    "@react-router/dev": "^7.7.1",
+    "@react-router/dev": "^7.18.1",
     "@tailwindcss/vite": "^4.1.4",
     "@types/compression": "^1.7.5",
     "@types/express": "^5.0.1",
