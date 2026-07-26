@@ -5,7 +5,6 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  redirect,
 } from "react-router";
 
 import type { Route } from "./+types/root";
@@ -13,30 +12,6 @@ import "./app.css";
 import NavBar from "./client/components/navigation/NavBar";
 import Footer from "./client/components/navigation/Footer";
 import { AnalyticsConsentPanel, PHProvider } from "./provider";
-
-/* ---------- Canonical document-path normalization ---------- */
-function canonicalDocumentPath(pathname: string) {
-  if (pathname === "/") return pathname;
-  const last = pathname.split("/").filter(Boolean).pop() ?? "";
-  const looksLikeFile = /\.[a-zA-Z0-9]+$/.test(last);
-  if (looksLikeFile) return pathname;
-
-  const withoutTrailingSlash = pathname.replace(/\/+$/, "") || "/";
-  return withoutTrailingSlash.replace(/%[0-9a-f]{2}|[A-Z]/gi, (token) => {
-    if (!token.startsWith("%")) return token.toLowerCase();
-    const decoded = String.fromCharCode(Number.parseInt(token.slice(1), 16));
-    return /^[a-z0-9._~-]$/i.test(decoded) ? decoded.toLowerCase() : token;
-  });
-}
-
-export async function loader({ request }: Route.LoaderArgs) {
-  const url = new URL(request.url);
-  const canonicalPath = canonicalDocumentPath(url.pathname);
-  if (canonicalPath !== url.pathname) {
-    return redirect(canonicalPath + url.search, { status: 301 });
-  }
-  return null;
-}
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },

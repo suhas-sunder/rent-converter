@@ -49,9 +49,9 @@ test("legal and utility routes remain registered, indexable, and present in the 
   const redirects = redirectPaths();
   const sitemap = sitemapPaths();
 
-  assert.equal(routes.length, 172);
+  assert.equal(routes.length, 60);
   assert.equal(redirects.length, 112);
-  assert.equal(routes.length - redirects.length, 60);
+  assert.equal(routes.length + redirects.length, 172);
   assert.equal(sitemap.length, 60);
   assert.equal(new Set(sitemap).size, sitemap.length);
 

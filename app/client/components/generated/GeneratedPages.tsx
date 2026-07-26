@@ -1,4 +1,4 @@
-import { useId, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
 import { Link } from "react-router";
 import {
   dailyToMonthlyCents,
@@ -32,6 +32,7 @@ import {
 } from "~/client/utils/savedState.js";
 import {
   calculateLeaseEnd,
+  currentCalendarDateString,
   formatCalendarDate,
   formatCalendarDateForDisplay,
   generateLeasePaymentSchedule,
@@ -1691,12 +1692,19 @@ function InvalidDateResults({ errors }: { errors: string[] }) {
 
 type ScheduleFrequency = "monthly" | "weekly" | "fortnightly" | "every-4-weeks";
 
-export function DateToolPage({ config, initialDate }: { config: DateToolConfig; initialDate: string }) {
-  const [start, setStart] = useState(initialDate);
+export function DateToolPage({ config }: { config: DateToolConfig }) {
+  const [start, setStart] = useState("");
+  const [browserDateReady, setBrowserDateReady] = useState(false);
   const [months, setMonths] = useState("12");
   const [rent, setRent] = useState("2000");
   const [currency, setCurrency] = useState<Currency>("USD");
   const [frequency, setFrequency] = useState<ScheduleFrequency>("monthly");
+
+  useEffect(() => {
+    setStart(currentCalendarDateString());
+    setBrowserDateReady(true);
+  }, []);
+
   const startParsed = parseCalendarDate(start, "Lease start date");
   const termParsed = parseWholeNumber(months, "Lease term", 1, 120);
   const rentParsed = parseMoneyToCents(rent);
@@ -1727,7 +1735,7 @@ export function DateToolPage({ config, initialDate }: { config: DateToolConfig; 
       <ToolCard eyebrow={config.eyebrow} h1={config.h1} lead={config.lead} onPrint={() => window.print()}>
         <div className="mt-6 grid gap-4 lg:grid-cols-12">
           <div className="lg:col-span-4">
-            <TextInput id={`${config.mode}-start-date`} type="date" label={config.mode === "schedule" ? "Lease start and first payment date" : "Lease start date"} value={start} onChange={setStart} inputMode="text" error={!startParsed.ok ? startParsed.error : undefined} />
+            <TextInput id={`${config.mode}-start-date`} type="date" label={config.mode === "schedule" ? "Lease start and first payment date" : "Lease start date"} value={start} onChange={setStart} inputMode="text" error={browserDateReady && !startParsed.ok ? startParsed.error : undefined} />
           </div>
           <div className="lg:col-span-3">
             <TextInput id={`${config.mode}-term-months`} label="Term in calendar months" value={months} onChange={setMonths} inputMode="numeric" helper="Enter a whole number from 1 through 120. Enter 12 for a 12-month lease." error={!termParsed.ok ? termParsed.error : undefined} />
@@ -1748,7 +1756,7 @@ export function DateToolPage({ config, initialDate }: { config: DateToolConfig; 
             </>
           ) : null}
         </div>
-        {errors.length ? <InvalidDateResults errors={errors} /> : config.mode === "schedule" && scheduleCalculation && rentParsed.ok ? (
+        {!browserDateReady ? null : errors.length ? <InvalidDateResults errors={errors} /> : config.mode === "schedule" && scheduleCalculation && rentParsed.ok ? (
           <ResultPanel
             label="Generated payment schedule"
             value={`${scheduleCalculation.payments.length} ${scheduleCalculation.payments.length === 1 ? "payment" : "payments"}`}

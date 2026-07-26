@@ -1,6 +1,11 @@
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import test from "node:test";
+import {
+  assertKnownRouteStateCounts,
+  assertStaticRedirect,
+  assertStaticRedirectConfiguration,
+} from "./static-route-test-helpers.mjs";
 
 import { calculateRequiredIncome } from "../app/client/utils/generatedIncome.js";
 
@@ -35,7 +40,6 @@ const requiredSource = readFileSync("app/routes/income-required-for-rent-calcula
 const ratioHowSource = readFileSync("app/client/components/rent-as-percentage-of-income-calculator/HowItWorks.tsx", "utf8");
 const requiredHowSource = readFileSync("app/client/components/income-required-for-rent-calculator/HowItWorks.tsx", "utf8");
 const sitemapSource = readFileSync("public/sitemap.xml", "utf8");
-const redirectHelperSource = readFileSync("app/utils/redirects.ts", "utf8");
 
 function escapeRegex(value) {
   return value.replace(/[.*+?^$\{\}()|[\]\\]/g, "\\$&");
@@ -52,23 +56,14 @@ function allSourceFiles(root) {
   });
 }
 
-test("four generated income variants remain registered as direct query-preserving 301 redirects", () => {
+test("four generated income variants remain static direct query-preserving 301 redirects", () => {
   assert.equal(Object.keys(redirects).length, 4);
-  assert.match(redirectHelperSource, /new URL\(request\.url\)/);
-  assert.match(redirectHelperSource, /requestUrl\.search/);
-  assert.match(redirectHelperSource, /status:\s*301/);
+  assertStaticRedirectConfiguration();
 
   const redirectSources = new Set(Object.keys(redirects));
   for (const [source, target] of Object.entries(redirects)) {
-    assert.match(routesSource, new RegExp(`route\\("${escapeRegex(source.slice(1))}"`), source);
-    const moduleSource = routeModule(source);
-    assert.match(moduleSource, /permanentRedirectPreservingQuery/);
-    assert.match(
-      moduleSource,
-      new RegExp(`permanentRedirectPreservingQuery\\(request,\\s*"${escapeRegex(target)}"\\)`),
-      source,
-    );
-    assert.doesNotMatch(moduleSource, /export const meta|buildMeta|IncomeToolPage|FAQ|schema|canonical|<h1/i, source);
+    assert.doesNotMatch(routesSource, new RegExp(`route\\("${escapeRegex(source.slice(1))}"`), source);
+    assertStaticRedirect(source, target);
     assert.equal(redirectSources.has(target), false, `${source} must not chain`);
     assert.notEqual(source, target, `${source} must not loop`);
   }
@@ -194,9 +189,9 @@ test("final route and XML sitemap counts reflect four canonical-to-redirect chan
   const redirectCount = [...registrySource.matchAll(/\{\s*from:\s*"[^"]+",\s*to:\s*"[^"]+"\s*\}/g)].length;
   const sitemapUrls = [...sitemapSource.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
 
-  assert.equal(registered, 172);
+  assert.equal(registered, 60);
   assert.equal(redirectCount, 112);
-  assert.equal(registered - redirectCount, 60);
+  assertKnownRouteStateCounts(routesSource, registrySource);
   assert.equal(sitemapUrls.length, 60);
   assert.equal(new Set(sitemapUrls).size, 60);
   sitemapUrls.forEach((url) => assert.match(url, /^https:\/\/www\.rentconverter\.com(?:\/|$)/));

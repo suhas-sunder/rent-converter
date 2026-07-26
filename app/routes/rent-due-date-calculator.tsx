@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import { useLoaderData } from "react-router";
 import type { Route } from "./+types/rent-due-date-calculator";
 import Assumptions from "~/client/components/layout/Assumptions";
 import HowItWorks from "~/client/components/rent-due-date-calculator/HowItWorks";
@@ -16,10 +15,6 @@ import {
   parseWholeNumber,
   subtractCalendarDay,
 } from "~/client/utils/calendarDate.js";
-
-export function loader() {
-  return { initialDate: currentCalendarDateString() };
-}
 
 export const meta: Route.MetaFunction = () => {
   const title = "Rent Due Date Calculator | Next Rent Payment Date";
@@ -452,25 +447,21 @@ function isBillingCycle(x: string): x is BillingCycle {
 export default function RentDueDateCalculator() {
   const pageName = "Rent Due Date Calculator";
   const canonicalUrl = "https://www.rentconverter.com/rent-due-date-calculator";
-  const { initialDate } = useLoaderData<typeof loader>();
-  const initialParsed = parseCalendarDate(initialDate, "Initial date");
-  const defaultEndDate = initialParsed.ok
-    ? formatCalendarDate(addCalendarMonths(initialParsed.date, 12).date)
-    : initialDate;
 
   const [cycle, setCycle] = useState<BillingCycle>("monthly");
   const [amount, setAmount] = useState<string>("2000");
   const [amountFocused, setAmountFocused] = useState<boolean>(false);
   const [currency, setCurrency] = useState<Currency>("USD");
-  const [asOfDate, setAsOfDate] = useState<string>(initialDate);
+  const [asOfDate, setAsOfDate] = useState<string>("");
   const [horizonMode, setHorizonMode] = useState<"years" | "end_date">("years");
   const [yearsAhead, setYearsAhead] = useState<string>("1");
-  const [endDate, setEndDate] = useState<string>(defaultEndDate);
-  const [anchorDate, setAnchorDate] = useState<string>(initialDate);
+  const [endDate, setEndDate] = useState<string>("");
+  const [anchorDate, setAnchorDate] = useState<string>("");
   const [dueDayMonthly, setDueDayMonthly] = useState<string>("1");
   const [storageRestored, setStorageRestored] = useState(false);
 
   useEffect(() => {
+    const browserDate = currentCalendarDateString();
     try {
       const savedCycle = window.localStorage.getItem("rdd2_cycle");
       if (savedCycle && isBillingCycle(savedCycle)) setCycle(savedCycle);
@@ -482,8 +473,8 @@ export default function RentDueDateCalculator() {
       if (savedCurrency && isCurrency(savedCurrency)) setCurrency(savedCurrency);
 
       const savedAsOf = window.localStorage.getItem("rdd2_asOf");
-      const restoredAsOf = savedAsOf && parseCalendarDate(savedAsOf, "As-of date").ok ? savedAsOf : initialDate;
-      if (restoredAsOf !== initialDate) setAsOfDate(restoredAsOf);
+      const restoredAsOf = savedAsOf && parseCalendarDate(savedAsOf, "As-of date").ok ? savedAsOf : browserDate;
+      setAsOfDate(restoredAsOf);
 
       const savedMode = window.localStorage.getItem("rdd2_horizonMode");
       if (savedMode === "end_date") setHorizonMode("end_date");
@@ -506,11 +497,16 @@ export default function RentDueDateCalculator() {
       const savedDueDay = window.localStorage.getItem("rdd2_dueDay");
       if (savedDueDay && parseWholeNumber(savedDueDay, "Monthly due day", 1, 31).ok) setDueDayMonthly(savedDueDay);
     } catch {
-      // Storage may be unavailable. Deterministic loader defaults remain active.
+      setAsOfDate(browserDate);
+      const parsedBrowserDate = parseCalendarDate(browserDate);
+      if (parsedBrowserDate.ok) {
+        setEndDate(formatCalendarDate(addCalendarMonths(parsedBrowserDate.date, 12).date));
+      }
+      setAnchorDate(browserDate);
     } finally {
       setStorageRestored(true);
     }
-  }, [initialDate]);
+  }, []);
 
   useEffect(() => {
     if (!storageRestored) return;
@@ -565,6 +561,7 @@ export default function RentDueDateCalculator() {
     : null;
 
   const dateErrors = useMemo(() => {
+    if (!storageRestored) return [];
     const errors: string[] = [];
     if (!parsedAsOf.ok) errors.push(parsedAsOf.error);
     if (horizonMode === "end_date" && !parsedEnd.ok) errors.push(parsedEnd.error);
@@ -572,7 +569,7 @@ export default function RentDueDateCalculator() {
     if (cycle !== "monthly" && !parsedAnchor.ok) errors.push(parsedAnchor.error);
     if (boundaryRelationError) errors.push(boundaryRelationError);
     return errors;
-  }, [boundaryRelationError, cycle, horizonMode, parsedAnchor, parsedAsOf, parsedDueDay, parsedEnd]);
+  }, [boundaryRelationError, cycle, horizonMode, parsedAnchor, parsedAsOf, parsedDueDay, parsedEnd, storageRestored]);
 
   const schedule = useMemo(() => {
     if (dateErrors.length || !parsedAsOf.ok || !computedBoundary) return [];
@@ -896,11 +893,11 @@ export default function RentDueDateCalculator() {
                 value={asOfDate}
                 onChange={(e) => setAsOfDate(e.target.value)}
                 className="cursor-pointer w-full rounded-xl bg-slate-100 px-4 py-2 text-lg outline-none focus:bg-white focus:ring-2 focus:ring-sky-200"
-                aria-invalid={!parsedAsOf.ok}
-                aria-describedby={!parsedAsOf.ok ? "rent-due-as-of-error" : "rent-due-as-of-help"}
+                aria-invalid={storageRestored && !parsedAsOf.ok}
+                aria-describedby={storageRestored && !parsedAsOf.ok ? "rent-due-as-of-error" : "rent-due-as-of-help"}
               />
               <p id="rent-due-as-of-help" className="mt-1 text-xs text-slate-600">Inclusive: a due date can be the as-of date itself.</p>
-              {!parsedAsOf.ok ? <p id="rent-due-as-of-error" role="alert" className="mt-1 text-sm font-semibold text-rose-700">{parsedAsOf.error}</p> : null}
+              {storageRestored && !parsedAsOf.ok ? <p id="rent-due-as-of-error" role="alert" className="mt-1 text-sm font-semibold text-rose-700">{parsedAsOf.error}</p> : null}
             </div>
 
             <div className="md:col-span-6">
@@ -988,7 +985,7 @@ export default function RentDueDateCalculator() {
           </div>
 
           <div className="mt-3 rounded-2xl border border-slate-200 bg-[#f7fbff] p-5 sm:px-6 rc-print-block">
-            {!computed.ok ? (
+            {!storageRestored ? null : !computed.ok ? (
               <div className="rounded-xl border border-slate-200 bg-white p-4" role="status" aria-live="polite">
                 <div className="font-semibold text-slate-800">
                   No results to show

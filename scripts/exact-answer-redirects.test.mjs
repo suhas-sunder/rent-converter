@@ -1,6 +1,11 @@
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
+import {
+  assertKnownRouteStateCounts,
+  assertStaticRedirect,
+  assertStaticRedirectConfiguration,
+} from "./static-route-test-helpers.mjs";
 
 const exactAnswerRedirects = {
   "/150-per-week-to-monthly-rent": "/weekly-to-monthly-rent-converter",
@@ -38,30 +43,12 @@ const generatedConfigsSource = readFileSync(
   "app/client/data/generatedRouteConfigs.ts",
   "utf8",
 );
-const redirectHelperSource = readFileSync("app/utils/redirects.ts", "utf8");
-
-test("all exact-answer historical routes remain registered as direct permanent redirects", () => {
+test("all exact-answer historical routes remain static direct permanent redirects", () => {
   assert.equal(Object.keys(exactAnswerRedirects).length, 22);
 
   for (const [source, target] of Object.entries(exactAnswerRedirects)) {
-    const slug = source.slice(1);
-    assert.match(
-      routesSource,
-      new RegExp(`route\\("${slug}",\\s*"routes/${slug}\\.tsx"\\)`),
-      source,
-    );
-
-    const routeModule = readFileSync(`app/routes/${slug}.tsx`, "utf8");
-    assert.match(routeModule, /export function loader\(\{ request \}/, source);
-    assert.match(
-      routeModule,
-      new RegExp(
-        `permanentRedirectPreservingQuery\\(request,\\s*"${target.replace(/[.*+?^$\{\}()|[\]\\]/g, "\\$&")}"\\)`,
-      ),
-      source,
-    );
-    assert.doesNotMatch(routeModule, /WeeklyAnswerPage|weeklyAnswerPageConfigs|buildMeta|export const meta/, source);
-    assert.match(routeModule, /return null;/, source);
+    assert.doesNotMatch(routesSource, new RegExp(`route\\("${source.slice(1)}"`), source);
+    assertStaticRedirect(source, target);
 
     const escapedSource = source.replace(/[.*+?^$\{\}()|[\]\\]/g, "\\$&");
     const escapedTarget = target.replace(/[.*+?^$\{\}()|[\]\\]/g, "\\$&");
@@ -75,10 +62,8 @@ test("all exact-answer historical routes remain registered as direct permanent r
   }
 });
 
-test("the shared redirect helper preserves the request query and uses HTTP 301", () => {
-  assert.match(redirectHelperSource, /new URL\(request\.url\)/);
-  assert.match(redirectHelperSource, /requestUrl\.search/);
-  assert.match(redirectHelperSource, /status:\s*301/);
+test("the static Netlify redirect file uses HTTP 301 and preserves queries", () => {
+  assertStaticRedirectConfiguration();
 });
 
 test("exact-answer sources are absent from sitemap and canonical discovery systems", () => {
@@ -115,9 +100,5 @@ test("inactive exact-answer component directories were removed", () => {
 });
 
 test("route status totals preserve the exact-answer redirects after later consolidation batches", () => {
-  const registered = (routesSource.match(/\broute\(/g) ?? []).length + (routesSource.match(/\bindex\(/g) ?? []).length;
-  const redirects = [...registrySource.matchAll(/\{\s*from:\s*"[^"]+",\s*to:\s*"[^"]+"\s*\}/g)].length;
-  assert.equal(registered, 172);
-  assert.equal(redirects, 112);
-  assert.equal(registered - redirects, 60);
+  assertKnownRouteStateCounts(routesSource, registrySource);
 });

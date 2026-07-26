@@ -63,7 +63,7 @@ async function waitForServer(baseUrl, processRef) {
   const started = Date.now();
   while (Date.now() - started < 15000) {
     if (processRef.exitCode !== null) {
-      throw new Error(`Production server exited early with code ${processRef.exitCode}.`);
+      throw new Error(`Static preview exited early with code ${processRef.exitCode}.`);
     }
     try {
       const response = await fetch(baseUrl, { redirect: "manual" });
@@ -368,11 +368,11 @@ async function main() {
   const paths = getRoutePaths();
   const port = await getFreePort();
   const baseUrl = `http://${LOCAL_HOST}:${port}`;
-  const server = spawn("node", ["server.js"], {
+  const server = spawn("node", ["scripts/static-server.mjs"], {
     cwd: process.cwd(),
     env: {
       ...process.env,
-      NODE_ENV: "production",
+      HOST: LOCAL_HOST,
       PORT: String(port),
     },
     stdio: ["ignore", "pipe", "pipe"],

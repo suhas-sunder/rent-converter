@@ -1,6 +1,11 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
+import {
+  assertKnownRouteStateCounts,
+  assertStaticRedirect,
+  assertStaticRedirectConfiguration,
+} from "./static-route-test-helpers.mjs";
 
 const redirects = {
   "/pcm-rent-calculator": "/pw-to-pcm-calculator",
@@ -53,29 +58,16 @@ function escapeRegex(value) {
 
 test("nine historical PW and PCM routes are direct query-preserving redirects", () => {
   assert.equal(Object.keys(redirects).length, 9);
+  assertStaticRedirectConfiguration();
 
   for (const [source, target] of Object.entries(redirects)) {
     const slug = source.slice(1);
-    assert.match(
+    assert.doesNotMatch(
       routesSource,
       new RegExp(`route\\("${escapeRegex(slug)}"`),
       source,
     );
-
-    const routeModule = readFileSync(`app/routes/${slug}.tsx`, "utf8");
-    assert.match(routeModule, /permanentRedirectPreservingQuery/);
-    assert.match(
-      routeModule,
-      new RegExp(
-        `permanentRedirectPreservingQuery\\(request,\\s*"${escapeRegex(target)}"\\)`,
-      ),
-      source,
-    );
-    assert.doesNotMatch(
-      routeModule,
-      /buildMeta|export const meta|ConversionCalculatorPage|InfoPage|schema|canonical/i,
-      source,
-    );
+    assertStaticRedirect(source, target);
   }
 });
 
@@ -86,15 +78,7 @@ test("three legacy aliases point directly to surviving destinations", () => {
   ]);
 
   for (const [source, target] of Object.entries(retargetedAliases)) {
-    const slug = source.slice(1);
-    const routeModule = readFileSync(`app/routes/${slug}.tsx`, "utf8");
-    assert.match(routeModule, /permanentRedirectPreservingQuery/);
-    assert.match(
-      routeModule,
-      new RegExp(
-        `permanentRedirectPreservingQuery\\(request,\\s*"${escapeRegex(target)}"\\)`,
-      ),
-    );
+    assertStaticRedirect(source, target);
     assert.equal(allSources.has(target), false, `${source} must not chain`);
   }
 });
@@ -179,7 +163,7 @@ test("route totals include the methodology page alongside later redirects", () =
     ),
   ].length;
 
-  assert.equal(registered, 172);
+  assert.equal(registered, 60);
   assert.equal(redirectCount, 112);
-  assert.equal(registered - redirectCount, 60);
+  assertKnownRouteStateCounts(routesSource, registrySource);
 });

@@ -7,6 +7,11 @@ import {
   calculateAustraliaMoveInCost,
   parseStrictScalar,
 } from "../app/client/utils/generatedTools.js";
+import {
+  assertKnownRouteStateCounts,
+  assertStaticRedirect,
+  assertStaticRedirectConfiguration,
+} from "./static-route-test-helpers.mjs";
 
 const redirects = {
   "/bc-rent-increase-calculator": "/rent-increase-calculator",
@@ -34,7 +39,6 @@ const increaseSource = readFileSync("app/routes/rent-increase-calculator.tsx", "
 const dueSource = readFileSync("app/routes/rent-due-date-calculator.tsx", "utf8");
 const dueHowSource = readFileSync("app/client/components/rent-due-date-calculator/HowItWorks.tsx", "utf8");
 const sitemapSource = readFileSync("public/sitemap.xml", "utf8");
-const helperSource = readFileSync("app/utils/redirects.ts", "utf8");
 const adSlotsSource = readFileSync("app/client/data/adSlots.ts", "utf8");
 
 function escapeRegex(value) {
@@ -58,18 +62,13 @@ function sitemapPaths() {
 }
 
 test("seven source-sensitive routes are direct query-preserving permanent redirects", () => {
-  assert.match(helperSource, /new URL\(request\.url\)/);
-  assert.match(helperSource, /requestUrl\.search/);
-  assert.match(helperSource, /status:\s*301/);
+  assertStaticRedirectConfiguration();
 
   const redirectSources = new Set(Object.keys(redirects));
   for (const [source, target] of Object.entries(redirects)) {
-    assert.match(routesSource, new RegExp(`route\\("${escapeRegex(source.slice(1))}"`), source);
+    assert.doesNotMatch(routesSource, new RegExp(`route\\("${escapeRegex(source.slice(1))}"`), source);
     assert.match(registrySource, new RegExp(`from: "${escapeRegex(source)}", to: "${escapeRegex(target)}"`), source);
-    const moduleSource = routeModule(source);
-    assert.match(moduleSource, /permanentRedirectPreservingQuery/);
-    assert.match(moduleSource, new RegExp(`request, "${escapeRegex(target)}"`));
-    assert.doesNotMatch(moduleSource, /export const meta|dangerouslySetInnerHTML|<h1/i);
+    assertStaticRedirect(source, target);
     assert.ok(!redirectSources.has(target), `${source} points directly to HTTP-200 ${target}`);
   }
 });
@@ -186,9 +185,9 @@ test("route, redirect, sitemap, and homepage-slot totals match the consolidated 
   const redirectCount = [...registrySource.matchAll(/\{\s*from:\s*"[^"]+",\s*to:\s*"[^"]+"\s*\}/g)].length;
   const urls = sitemapPaths();
 
-  assert.equal(registered, 172);
+  assert.equal(registered, 60);
   assert.equal(redirectCount, 112);
-  assert.equal(registered - redirectCount, 60);
+  assertKnownRouteStateCounts(routesSource, registrySource);
   assert.equal(urls.length, 60);
   assert.equal(new Set(urls).size, 60);
   for (const name of [

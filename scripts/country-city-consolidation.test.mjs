@@ -1,6 +1,11 @@
 import assert from "node:assert/strict";
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import test from "node:test";
+import {
+  assertKnownRouteStateCounts,
+  assertStaticRedirect,
+  assertStaticRedirectConfiguration,
+} from "./static-route-test-helpers.mjs";
 
 const redirects = {
   "/australia-rent-calculator": "/weekly-to-monthly-rent-australia",
@@ -46,7 +51,6 @@ const directorySource = readFileSync(
   "utf8",
 );
 const htmlSitemapSource = readFileSync("app/routes/sitemap.tsx", "utf8");
-const redirectHelperSource = readFileSync("app/utils/redirects.ts", "utf8");
 
 function escapeRegex(value) {
   return value.replace(/[.*+?^$\{\}()|[\]\\]/g, "\\$&");
@@ -63,37 +67,15 @@ function allSourceFiles(root) {
   });
 }
 
-test("five country and city clones are registered direct query-preserving 301 redirects", () => {
+test("five country and city clones are static direct query-preserving 301 redirects", () => {
   assert.equal(Object.keys(redirects).length, 5);
   const retiredSources = new Set(Object.keys(redirects));
 
-  assert.match(redirectHelperSource, /new URL\(request\.url\)/);
-  assert.match(redirectHelperSource, /requestUrl\.search/);
-  assert.match(redirectHelperSource, /status:\s*301/);
+  assertStaticRedirectConfiguration();
 
   for (const [source, target] of Object.entries(redirects)) {
-    const slug = source.slice(1);
-    assert.match(
-      routesSource,
-      new RegExp(`route\\("${escapeRegex(slug)}",\\s*"routes/${escapeRegex(slug)}\\.tsx"\\)`),
-      source,
-    );
-
-    const moduleSource = routeModule(source);
-    assert.match(moduleSource, /permanentRedirectPreservingQuery/);
-    assert.match(
-      moduleSource,
-      new RegExp(
-        `permanentRedirectPreservingQuery\\(request,\\s*"${escapeRegex(target)}"\\)`,
-      ),
-      source,
-    );
-    assert.doesNotMatch(
-      moduleSource,
-      /export const meta|buildMeta|ConversionCalculatorPage|FAQ|schema|canonical|<h1/i,
-      source,
-    );
-    assert.match(moduleSource, /return null;/);
+    assert.doesNotMatch(routesSource, new RegExp(`route\\("${escapeRegex(source.slice(1))}"`), source);
+    assertStaticRedirect(source, target);
 
     const registryMatches = registrySource.match(
       new RegExp(
@@ -241,9 +223,9 @@ test("final route and XML sitemap counts reflect five canonical-to-redirect chan
     (match) => match[1],
   );
 
-  assert.equal(registered, 172);
+  assert.equal(registered, 60);
   assert.equal(redirectCount, 112);
-  assert.equal(registered - redirectCount, 60);
+  assertKnownRouteStateCounts(routesSource, registrySource);
   assert.equal(sitemapUrls.length, 60);
   assert.equal(new Set(sitemapUrls).size, 60);
   sitemapUrls.forEach((url) =>

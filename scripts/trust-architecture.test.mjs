@@ -31,9 +31,9 @@ test("methodology is a registered, indexable canonical route with sitemap and fo
   const urls = sitemapPaths();
   const redirects = [...registry.matchAll(/\{ from: "([^"]+)", to: "([^"]+)" \}/g)];
 
-  assert.equal(paths.length, 172);
+  assert.equal(paths.length, 60);
   assert.equal(redirects.length, 112);
-  assert.equal(paths.length - redirects.length, 60);
+  assert.equal(paths.length + redirects.length, 172);
   assert.equal(urls.length, 60);
   assert.equal(new Set(urls).size, 60);
   assert.ok(paths.includes("/methodology"));

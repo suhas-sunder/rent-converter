@@ -7,6 +7,11 @@ import {
   parseIncomeMoney,
 } from "../app/client/utils/generatedIncome.js";
 import { validSavedCurrency } from "../app/client/utils/savedState.js";
+import {
+  assertKnownRouteStateCounts,
+  assertStaticRedirect,
+  assertStaticRedirectConfiguration,
+} from "./static-route-test-helpers.mjs";
 
 const destination = "/salary-to-rent-calculator";
 const redirects = [
@@ -40,7 +45,6 @@ const configsSource = readFileSync("app/client/data/generatedRouteConfigs.ts", "
 const generatedPagesSource = readFileSync("app/client/components/generated/GeneratedPages.tsx", "utf8");
 const survivorRouteSource = readFileSync("app/routes/salary-to-rent-calculator.tsx", "utf8");
 const sitemapSource = readFileSync("public/sitemap.xml", "utf8");
-const redirectHelperSource = readFileSync("app/utils/redirects.ts", "utf8");
 
 function escapeRegex(value) {
   return value.replace(/[.*+?^$\{\}()|[\]\\]/g, "\\$&");
@@ -63,23 +67,14 @@ function money(raw, label = "Annual gross salary", options) {
   return parsed.cents;
 }
 
-test("eleven salary and fixed-reference routes remain registered as direct query-preserving 301 redirects", () => {
+test("eleven salary and fixed-reference routes are static direct query-preserving 301 redirects", () => {
   assert.equal(redirects.length, 11);
-  assert.match(redirectHelperSource, /new URL\(request\.url\)/);
-  assert.match(redirectHelperSource, /requestUrl\.search/);
-  assert.match(redirectHelperSource, /status:\s*301/);
+  assertStaticRedirectConfiguration();
 
   const sources = new Set(redirects);
   for (const source of redirects) {
-    assert.match(routesSource, new RegExp(`route\\("${escapeRegex(source.slice(1))}"`), source);
-    const moduleSource = routeModule(source);
-    assert.match(moduleSource, /permanentRedirectPreservingQuery/);
-    assert.match(
-      moduleSource,
-      new RegExp(`permanentRedirectPreservingQuery\\(request,\\s*"${escapeRegex(destination)}"\\)`),
-      source,
-    );
-    assert.doesNotMatch(moduleSource, /export const meta|buildMeta|IncomeToolPage|SalaryAnswerPage|FAQ|schema|canonical|<h1/i, source);
+    assert.doesNotMatch(routesSource, new RegExp(`route\\("${escapeRegex(source.slice(1))}"`), source);
+    assertStaticRedirect(source, destination);
     assert.equal(sources.has(destination), false, `${source} must not chain`);
     assert.notEqual(source, destination, `${source} must not loop`);
   }
@@ -229,9 +224,9 @@ test("final counts reflect eleven canonical salary routes becoming redirects", (
   const redirectCount = [...registrySource.matchAll(/\{\s*from:\s*"[^"]+",\s*to:\s*"[^"]+"\s*\}/g)].length;
   const sitemapUrls = [...sitemapSource.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
 
-  assert.equal(registered, 172);
+  assert.equal(registered, 60);
   assert.equal(redirectCount, 112);
-  assert.equal(registered - redirectCount, 60);
+  assertKnownRouteStateCounts(routesSource, registrySource);
   assert.equal(sitemapUrls.length, 60);
   assert.equal(new Set(sitemapUrls).size, 60);
   sitemapUrls.forEach((url) => assert.match(url, /^https:\/\/www\.rentconverter\.com(?:\/|$)/));

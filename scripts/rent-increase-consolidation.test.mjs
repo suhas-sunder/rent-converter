@@ -1,6 +1,11 @@
 import assert from "node:assert/strict";
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import test from "node:test";
+import {
+  assertKnownRouteStateCounts,
+  assertStaticRedirect,
+  assertStaticRedirectConfiguration,
+} from "./static-route-test-helpers.mjs";
 
 const redirects = {
   "/rent-after-increase-calculator": "/rent-increase-calculator",
@@ -45,7 +50,6 @@ const directorySource = readFileSync(
   "utf8",
 );
 const htmlSitemapSource = readFileSync("app/routes/sitemap.tsx", "utf8");
-const redirectHelperSource = readFileSync("app/utils/redirects.ts", "utf8");
 
 function escapeRegex(value) {
   return value.replace(/[.*+?^$\{\}()|[\]\\]/g, "\\$&");
@@ -62,34 +66,18 @@ function allSourceFiles(root) {
   });
 }
 
-test("six non-regional clones remain registered as direct query-preserving 301 redirects", () => {
+test("six non-regional clones remain static direct query-preserving 301 redirects", () => {
   assert.equal(Object.keys(redirects).length, 6);
   const redirectSources = new Set([
     ...Object.keys(redirects),
     ...Object.keys(retargetedAlias),
   ]);
 
-  assert.match(redirectHelperSource, /new URL\(request\.url\)/);
-  assert.match(redirectHelperSource, /requestUrl\.search/);
-  assert.match(redirectHelperSource, /status:\s*301/);
+  assertStaticRedirectConfiguration();
 
   for (const [source, target] of Object.entries(redirects)) {
-    const slug = source.slice(1);
-    assert.match(routesSource, new RegExp(`route\\("${escapeRegex(slug)}"`), source);
-    const moduleSource = routeModule(source);
-    assert.match(moduleSource, /permanentRedirectPreservingQuery/);
-    assert.match(
-      moduleSource,
-      new RegExp(
-        `permanentRedirectPreservingQuery\\(request,\\s*"${escapeRegex(target)}"\\)`,
-      ),
-      source,
-    );
-    assert.doesNotMatch(
-      moduleSource,
-      /export const meta|buildMeta|IncreaseToolPage|FAQ|schema|canonical|<h1/i,
-      source,
-    );
+    assert.doesNotMatch(routesSource, new RegExp(`route\\("${escapeRegex(source.slice(1))}"`), source);
+    assertStaticRedirect(source, target);
     assert.equal(redirectSources.has(target), false, `${source} must not chain`);
     assert.notEqual(source, target, `${source} must not loop`);
   }
@@ -97,14 +85,7 @@ test("six non-regional clones remain registered as direct query-preserving 301 r
 
 test("rent-after-increase alias points directly to the surviving forward calculator", () => {
   for (const [source, target] of Object.entries(retargetedAlias)) {
-    const moduleSource = routeModule(source);
-    assert.match(moduleSource, /permanentRedirectPreservingQuery/);
-    assert.match(
-      moduleSource,
-      new RegExp(
-        `permanentRedirectPreservingQuery\\(request,\\s*"${escapeRegex(target)}"\\)`,
-      ),
-    );
+    assertStaticRedirect(source, target);
     assert.match(
       registrySource,
       new RegExp(
@@ -270,9 +251,9 @@ test("final route and XML sitemap counts reflect six canonical-to-redirect chang
     (match) => match[1],
   );
 
-  assert.equal(registered, 172);
+  assert.equal(registered, 60);
   assert.equal(redirectCount, 112);
-  assert.equal(registered - redirectCount, 60);
+  assertKnownRouteStateCounts(routesSource, registrySource);
   assert.equal(sitemapUrls.length, 60);
   assert.equal(new Set(sitemapUrls).size, 60);
   sitemapUrls.forEach((url) =>

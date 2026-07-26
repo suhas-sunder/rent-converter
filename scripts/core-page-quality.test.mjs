@@ -126,9 +126,9 @@ test("scoped core pages remain registered HTTP 200 routes with stable route coun
     assert.ok(sitemapUrls.includes(path), `${path} remains in XML sitemap`);
   }
 
-  assert.equal(paths.length, 172);
+  assert.equal(paths.length, 60);
   assert.equal(redirects.length, 112);
-  assert.equal(paths.length - redirects.length, 60);
+  assert.equal(paths.length + redirects.length, 172);
   assert.equal(sitemapUrls.length, 60);
   assert.equal(new Set(sitemapUrls).size, 60);
 });

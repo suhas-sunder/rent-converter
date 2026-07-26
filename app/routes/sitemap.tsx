@@ -33,10 +33,6 @@ export function links() {
   return [{ rel: "canonical", href: SITEMAP_URL }];
 }
 
-export function loader({ context }: Route.LoaderArgs) {
-  return { message: context.VALUE_FROM_EXPRESS };
-}
-
 export default function SitemapPage() {
   const breadcrumbSchema = makeBreadcrumbSchema({
     name: "HTML Sitemap",

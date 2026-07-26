@@ -5,3 +5,6 @@
 # React Router
 /.react-router/
 /build/
+
+# Netlify CLI and framework adapter output
+/.netlify/

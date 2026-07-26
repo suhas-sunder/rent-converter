@@ -274,7 +274,8 @@ async function main() {
 
   const http200Paths = sitemapPaths;
   const stateSummary = {
-    registered: routePaths.length,
+    registered: routePaths.length + redirectAliases.length,
+    renderableRoutes: routePaths.length,
     http200: http200Paths.length,
     indexableHttp200: sitemapPaths.length,
     noindexHttp200: 0,
@@ -282,6 +283,7 @@ async function main() {
   };
 
   if (stateSummary.registered !== 172) fail.push(`expected 172 registered routes, found ${stateSummary.registered}`);
+  if (stateSummary.renderableRoutes !== 60) fail.push(`expected 60 renderable application routes, found ${stateSummary.renderableRoutes}`);
   if (stateSummary.http200 !== 60) fail.push(`expected 60 HTTP-200 routes, found ${stateSummary.http200}`);
   if (stateSummary.indexableHttp200 !== 60) fail.push(`expected 60 indexable HTTP-200 routes, found ${stateSummary.indexableHttp200}`);
   if (stateSummary.noindexHttp200 !== 0) fail.push(`expected 0 noindex HTTP-200 routes, found ${stateSummary.noindexHttp200}`);
@@ -339,14 +341,6 @@ async function main() {
       from: "/weekly-to-monthly-rent-converter/?ref=example",
       to: "/weekly-to-monthly-rent-converter?ref=example",
     },
-    {
-      from: "/WEEKLY-TO-MONTHLY-RENT-CONVERTER?ref=example",
-      to: "/weekly-to-monthly-rent-converter?ref=example",
-    },
-    {
-      from: "/%77eekly-to-monthly-rent-converter?ref=example",
-      to: "/weekly-to-monthly-rent-converter?ref=example",
-    },
   ];
   for (const variant of canonicalVariants) {
     const { response } = await get(variant.from, { redirect: "manual" });
@@ -372,8 +366,8 @@ async function main() {
   if (missingResponse.status !== 404) {
     fail.push(`${missingPath}: expected a real HTTP 404, got ${missingResponse.status}`);
   }
-  if (!/The requested page could not be found/i.test(missingHtml)) {
-    fail.push(`${missingPath}: 404 response is missing the expected server-rendered message`);
+  if (!/Page not found|The requested page could not be found/i.test(missingHtml)) {
+    fail.push(`${missingPath}: 404 response is missing the expected static message`);
   }
 
   console.log(
