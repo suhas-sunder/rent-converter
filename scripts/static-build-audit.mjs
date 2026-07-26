@@ -54,7 +54,7 @@ if (rules.some((rule) => rule[0] === "/*" || rule[2] === "200")) {
 }
 
 for (const route of routes) {
-  const relative = route === "/" ? "index.html" : `${route.slice(1)}/index.html`;
+  const relative = route === "/" ? "index.html" : `${route.slice(1)}.html`;
   const htmlPath = path.join(publishDirectory, relative);
   if (!existsSync(htmlPath)) {
     errors.push(`${route}: missing prerendered HTML at ${htmlPath}`);
@@ -90,6 +90,9 @@ if (
 
 if (existsSync("build/server")) {
   errors.push("build/server exists; the static deployment must not emit a runtime server bundle.");
+}
+if (existsSync(path.join(publishDirectory, "__spa-fallback.html"))) {
+  errors.push("The unused SPA fallback must not remain in the Netlify publish output.");
 }
 
 const forbiddenArtifacts = filesUnder("build").filter((file) =>

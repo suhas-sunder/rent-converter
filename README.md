@@ -10,11 +10,13 @@ The production build is a fully prerendered React Router application:
 
 - `react-router.config.ts` disables runtime SSR and prerenders every static route.
 - `build/client` is the only Netlify publish directory.
-- 60 canonical routes are emitted as route-specific HTML documents.
+- 60 canonical routes are emitted as route-specific, flat HTML documents so
+  Netlify serves the established no-slash canonical URLs directly.
 - 112 retired aliases are emitted as static HTTP 301 rules in `_redirects`.
 - Unknown document paths use the static `404.html` page with a real HTTP 404.
 - There is no wildcard HTTP 200 rewrite, Netlify Function, Edge Function,
   Express server, middleware, or production `build/server` dependency.
+- The build removes React Router's unused SPA fallback document.
 - Calculator state, current-date defaults, exports, printing, and optional
   consent-gated PostHog analytics run only in the browser.
 

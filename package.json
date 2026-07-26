@@ -5,7 +5,7 @@
   "scripts": {
     "prebuild": "node scripts/generate-netlify-redirects.mjs",
     "build": "react-router build",
-    "postbuild": "node scripts/static-build-audit.mjs",
+    "postbuild": "node scripts/prepare-netlify-static-output.mjs && node scripts/static-build-audit.mjs",
     "dev": "react-router dev",
     "preview": "node scripts/static-server.mjs",
     "release:audit": "node scripts/run-release-audit.mjs",

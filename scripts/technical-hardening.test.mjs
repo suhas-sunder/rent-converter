@@ -74,6 +74,14 @@ test("static hosting emits no runtime server adapter or SPA fallback and keeps l
   assert.equal(existsSync(".netlify/v1/functions/react-router-server.mjs"), false);
   assert.equal(existsSync("server.js"), false);
   assert.equal(existsSync("server/app.ts"), false);
+  assert.match(
+    packageJson.scripts.postbuild,
+    /prepare-netlify-static-output\.mjs.*static-build-audit\.mjs/,
+  );
+  const staticOutput = read("scripts/prepare-netlify-static-output.mjs");
+  assert.match(staticOutput, /renameSync\(source, destination\)/);
+  assert.match(staticOutput, /__spa-fallback\.html/);
+  assert.match(staticOutput, /unlinkSync\(spaFallback\)/);
 
   const root = read("app/root.tsx");
   assert.doesNotMatch(root, /canonicalDocumentPath|export (?:async )?function loader|export const loader/);
