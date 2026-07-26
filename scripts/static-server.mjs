@@ -102,17 +102,6 @@ export function createStaticServer() {
       return;
     }
 
-    if (request.url.startsWith("//")) {
-      const notFound = existingFile("404.html");
-      if (notFound) {
-        sendFile(request, response, notFound, 404);
-      } else {
-        response.statusCode = 404;
-        response.end("Not Found");
-      }
-      return;
-    }
-
     const url = new URL(request.url, "http://127.0.0.1");
     let pathname;
     try {
@@ -120,17 +109,6 @@ export function createStaticServer() {
     } catch {
       response.statusCode = 400;
       response.end("Bad Request");
-      return;
-    }
-
-    if (pathname.includes("//")) {
-      const notFound = existingFile("404.html");
-      if (notFound) {
-        sendFile(request, response, notFound, 404);
-      } else {
-        response.statusCode = 404;
-        response.end("Not Found");
-      }
       return;
     }
 

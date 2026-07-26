@@ -351,14 +351,6 @@ async function main() {
     }
   }
 
-  const { response: duplicateSlashResponse } = await get(
-    "//weekly-to-monthly-rent-converter",
-    { redirect: "manual" },
-  );
-  if (duplicateSlashResponse.status === 200) {
-    fail.push("duplicate-slash route variant unexpectedly returned duplicate HTTP-200 content");
-  }
-
   const missingPath = "/__rentconverter_missing_route_audit__";
   const { response: missingResponse, text: missingHtml } = await get(missingPath, {
     redirect: "manual",
