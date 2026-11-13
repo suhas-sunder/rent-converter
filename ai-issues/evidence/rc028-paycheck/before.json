@@ -1,0 +1,32 @@
+{
+  "origin": "https://6af69b0c73337f2e792caf49--rent-converter.netlify.app",
+  "browser": "145.0.7632.6",
+  "viewport": 360,
+  "before": {
+    "active": true,
+    "tabIndex": -1,
+    "role": null,
+    "label": null,
+    "clientWidth": 256,
+    "scrollWidth": 467,
+    "scrollLeft": 0,
+    "outline": "rgb(16, 16, 16) auto 1px",
+    "shadow": "none"
+  },
+  "after": {
+    "active": true,
+    "scrollLeft": 40
+  },
+  "farRight": {
+    "scrollLeft": 211,
+    "maximum": 211
+  },
+  "pageWidths": {
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  "rows": [
+    "2027-01-08$4,503,599,627,370,246.00$4,503,599,627,370,746.00",
+    "2027-01-22$4,503,599,627,370,245.99$9,007,199,254,740,991.99"
+  ]
+}

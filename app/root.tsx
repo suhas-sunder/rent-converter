@@ -38,6 +38,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body>
         <PHProvider>
           <NavBar />
+          <noscript>
+            <p className="mx-auto max-w-5xl rounded-xl bg-amber-50 p-4 text-sm text-slate-800">
+              JavaScript is off. Calculator controls require JavaScript, and any values shown are static examples. Enable JavaScript to calculate your own amounts; explanations and navigation remain available.
+            </p>
+          </noscript>
           {children}
           <ScrollRestoration />
           <Scripts />

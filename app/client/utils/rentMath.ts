@@ -34,12 +34,19 @@ export function parseMoneyToCents(raw: string, emptyMessage = "Enter an amount."
   const source = (raw ?? "").trim();
   if (!source) return { ok: false, error: emptyMessage, warnings };
 
-  let value = source.replace(/\s+/g, "").replace(/[^\d.,-]/g, "");
-  if (!value) {
+  let value = source.replace(/^[$€£¥₹₩₽₫₴₱₦₲₵₡₺₸]\s*/u, "");
+  if (value.includes("-") || /^\(.*\)$/u.test(value)) {
+    return { ok: false, error: "Amount cannot be negative.", warnings };
+  }
+  value = value.replace(/^\+/, "");
+  if (!/\d/u.test(value) || /[^\d.,\s]/u.test(value)) {
     return { ok: false, error: "Enter a valid number, such as 1250 or 1,250.50.", warnings };
   }
-  if (value.includes("-")) {
-    return { ok: false, error: "Amount cannot be negative.", warnings };
+  if (/\s/u.test(value)) {
+    if (!/^\d{1,3}(?:\s+\d{3})+(?:[.,]\d*)?$/u.test(value)) {
+      return { ok: false, error: "Use complete groups of three digits, such as 1 250.50.", warnings };
+    }
+    value = value.replace(/\s+/gu, "");
   }
 
   const lastDot = value.lastIndexOf(".");
@@ -48,6 +55,12 @@ export function parseMoneyToCents(raw: string, emptyMessage = "Enter an amount."
 
   if (lastDot >= 0 && lastComma >= 0) {
     decimalSep = lastDot > lastComma ? "." : ",";
+    const validGrouping = decimalSep === "."
+      ? /^\d{1,3}(?:,\d{3})+\.\d*$/u
+      : /^\d{1,3}(?:\.\d{3})+,\d*$/u;
+    if (!validGrouping.test(value)) {
+      return { ok: false, error: "Use valid digit grouping, such as 1,250.50 or 1.250,50.", warnings };
+    }
   } else if (lastDot >= 0) {
     decimalSep = ".";
   } else if (lastComma >= 0) {
@@ -68,6 +81,9 @@ export function parseMoneyToCents(raw: string, emptyMessage = "Enter an amount."
         };
       }
     } else {
+      if (!/^\d{1,3}(?:,\d{3})+$/u.test(value)) {
+        return { ok: false, error: "Use complete groups of three digits, such as 1,250,000.", warnings };
+      }
       decimalSep = null;
     }
   }
@@ -124,14 +140,18 @@ export function multiplyRatio(cents: bigint, numerator: bigint, denominator: big
 
 export function formatMoney(cents: bigint | undefined, currency: Currency): string {
   if (cents === undefined) return "-";
-  const amount = Number(cents) / 100;
-  if (!Number.isFinite(amount)) return "-";
-  return new Intl.NumberFormat(undefined, {
+  const absolute = cents < 0n ? -cents : cents;
+  const whole = absolute / 100n;
+  const signedWhole = cents < 0n ? (whole === 0n ? -0 : -whole) : whole;
+  const formatter = new Intl.NumberFormat(undefined, {
     style: "currency",
     currency,
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-  }).format(amount);
+  });
+  return formatter.formatToParts(signedWhole).map((part) =>
+    part.type === "fraction" ? String(absolute % 100n).padStart(2, "0") : part.value,
+  ).join("");
 }
 
 export function formatPercent(value: number): string {
