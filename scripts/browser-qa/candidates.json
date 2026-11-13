@@ -1,0 +1,32 @@
+[
+  {
+    "id": "urgent",
+    "sha": "b69768dc8c8c66342786ba9f39eb958676637b80",
+    "origin": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app",
+    "path": "/"
+  },
+  {
+    "id": "w01",
+    "sha": "e2a62955a58d30be90a646fd99a253ca2b30bde9",
+    "origin": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app",
+    "path": "/"
+  },
+  {
+    "id": "w02",
+    "sha": "68bfad21aa48fb1425ac1a3ef695a37efc910d7c",
+    "origin": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app",
+    "path": "/rent-budget-calculator"
+  },
+  {
+    "id": "w03",
+    "sha": "5af2d234cd9a06b938c01271c2a6b740afd150e5",
+    "origin": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app",
+    "path": "/rent-per-paycheck-calculator"
+  },
+  {
+    "id": "w04",
+    "sha": "2483d5fbde07f5ec0ab74596e252dfa5075e9123",
+    "origin": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app",
+    "path": "/rent-schedule-calculator"
+  }
+]

@@ -1,0 +1,39 @@
+name: Browser acceptance (manual, previews only)
+on:
+  workflow_dispatch:
+    inputs:
+      candidate:
+        description: Candidate from the reviewed immutable candidates.json
+        type: choice
+        default: urgent
+        options: [urgent, w01, w02, w03, w04]
+permissions:
+  contents: read
+jobs:
+  acceptance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm ci --ignore-scripts
+        working-directory: scripts/browser-qa
+      - run: npx playwright install --with-deps chromium
+        working-directory: scripts/browser-qa
+      - run: node run.mjs
+        working-directory: scripts/browser-qa
+        env:
+          QA_ONLY: ${{ inputs.candidate }}
+      - run: node focused.mjs
+        working-directory: scripts/browser-qa
+        env:
+          QA_ONLY: ${{ inputs.candidate }}
+          QA_FOCUSED_OUTPUT: artifacts/focused
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: browser-acceptance-${{ inputs.candidate }}
+          path: scripts/browser-qa/artifacts/
+          retention-days: 14
