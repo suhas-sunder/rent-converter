@@ -34,3 +34,12 @@ test('protected PCM and all shared conversions retain verified numerical outputs
     assert.ok(math.formatMoney(125050n,currency).length > 0,currency);
   }
 });
+
+test('money formatting keeps exact cents beyond Number precision and preserves negative fractions', () => {
+  assert.equal(math.formatMoney(900719925474099199n,'USD'),'$9,007,199,254,740,991.99');
+  assert.equal(math.formatMoney(-1n,'USD'),'-$0.01');
+  assert.equal(math.formatMoney(-10001n,'USD'),'-$100.01');
+  for (const currency of math.SUPPORTED_CURRENCIES) {
+    assert.equal(math.formatMoney(125050n,currency), new Intl.NumberFormat(undefined,{style:'currency',currency,minimumFractionDigits:2,maximumFractionDigits:2}).format(1250.50));
+  }
+});
