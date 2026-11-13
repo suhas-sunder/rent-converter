@@ -49,3 +49,11 @@ For each real weekly release add exact branch and SHA, date built, source main S
 ## Blocked scheduling note
 
 A recurring Saturday review task was requested through the ChatGPT automations service but creation failed because the account already has five active tasks (plan limit five). No task was created. Owner can free a slot or move the release gate to an existing appropriate automation only with explicit authorization. Until then, use manual scheduled review; do not claim automation exists.
+
+## Independent final acceptance audit — November 13, 2026
+
+GitHub/Netlify cross-check reconfirmed exact draft PR #2–#6 SHAs match five ready immutable *preview* deployments; current production is still the Oct 15 main deploy. Comparing each W01–W04 branch against urgent f344ad2 confirmed one isolated feature per week (W04 includes an additional scoped mobile repair). No package moved beyond HOLD.
+
+**New W04 content defect:** the .ics event `SUMMARY:Rent due:` conflicts with its own description stating that generated dates are period starts, not verified contractual due dates. Correct the event title to describe an estimated rent payment, add regression coverage and revalidate a new W04 immutable preview before releasing. See `RC-028_FINAL_BROWSER_ACCEPTANCE.md` and comment on PR #6.
+
+**Acceptance tooling:** earlier in-app browser did not expose actual no-JavaScript, network capture or print/PDF output. The next Codex session should close these gates with Playwright/Chromium or equivalent rather than substitute source inspection for browser evidence. Separate compatible dependency-maintenance draft PR recommended; no blind forced upgrades. See `RC-028_FINAL_BROWSER_ACCEPTANCE.md`.
