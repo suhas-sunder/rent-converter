@@ -1,5 +1,6 @@
 import { useEffect, useId, useMemo, useState } from "react";
 import { Link } from "react-router";
+import HydrationSafeControls from "~/client/components/HydrationSafeControls";
 import {
   dailyToMonthlyCents,
   dailyToWeeklyCents,
@@ -234,6 +235,7 @@ function ToolCard({
 }) {
   return (
     <section className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+      <HydrationSafeControls label={h1}>
       <div className="overflow-hidden rounded-[1.75rem] bg-white px-5 py-7 sm:px-8 sm:py-8">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0 flex-1">
@@ -258,6 +260,7 @@ function ToolCard({
         </div>
         {children}
       </div>
+      </HydrationSafeControls>
     </section>
   );
 }

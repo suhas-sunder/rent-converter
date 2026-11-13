@@ -9,6 +9,7 @@ import {
 import { Link } from "react-router";
 import {
   createAnalyticsController,
+  isProductionAnalyticsOrigin,
   readAnalyticsConsent,
   writeAnalyticsConsent,
 } from "~/client/utils/analyticsConsent.js";
@@ -89,7 +90,7 @@ export function PHProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!hydrated) return;
-    if (choice === "accepted") {
+    if (choice === "accepted" && isProductionAnalyticsOrigin(window.location.origin)) {
       void analyticsController.enable();
     } else {
       analyticsController.disable();
