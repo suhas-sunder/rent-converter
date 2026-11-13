@@ -67,17 +67,17 @@ These rows are from **May–November combined** and include pre-July canonical U
 | URL/intent | All-period clicks | Impressions | Average position | Today’s likely URL status (verify redirect) |
 | --- | ---: | ---: | ---: | --- |
 | `/rent-per-paycheck-calculator` | 21 | 1507 | 10.35 | current canonical |
-| `/lease-start-and-end-date-calculator` | 12 | 1381 | 10.01 | historical alias → `/lease-date-calculator` (verify) |
+| `/lease-start-and-end-date-calculator` | 12 | 1381 | 10.01 | historical alias → `/lease-date-calculator` (verified in main `_redirects`) |
 | `/biweekly-to-weekly-rent-converter` | 11 | 267 | 10.67 | protected canonical |
 | `/12-month-lease-date-calculator` | 10 | 487 | 7.08 | historical alias → `/lease-date-calculator` (verify) |
-| `/weekly-to-monthly-rent-uk` | 7 | 4591 | 11.50 | historical alias → `/pw-to-pcm-calculator` (verify) |
+| `/weekly-to-monthly-rent-uk` | 7 | 4591 | 11.50 | historical alias → `/pw-to-pcm-calculator` (verified in main `_redirects`) |
 | `/rent-due-date-calculator` | 6 | 1007 | 13.96 | current canonical |
 | `/lease-date-calculator` | 6 | 822 | 12.34 | current canonical |
 | `/` | 5 | 7506 | 39.01 | homepage |
 | `/weekly-to-monthly-rent-australia` | 5 | 3593 | 9.56 | current canonical |
 | `/monthly-to-annual-rent-converter` | 3 | 311 | 13.97 | current canonical |
 
-Other important historical rows: `/rent-increase-calculator` 2,227 impressions at pos ~11.15 but only 1 click; `/weekly-to-monthly-rent-converter` 1,585 impressions, 2 clicks pos ~11.92; `/pcm-rent-calculator` 796 imp, 2 clicks pos ~13.48 (retired alias). **Do not reverse redirects solely from aggregate historical impressions.**
+Other important historical rows: `/rent-increase-calculator` 2,227 impressions at pos ~11.15 but only 1 click; `/weekly-to-monthly-rent-converter` 1,585 impressions, 2 clicks pos ~11.92; `/pcm-rent-calculator` 796 imp, 2 clicks pos ~13.48 (retired alias). **Redirect destinations verified against the 112-rule `public/_redirects` on main:** `/lease-start-and-end-date-calculator` and `/12-month-lease-date-calculator` → `/lease-date-calculator`; `/weekly-to-monthly-rent-uk` and `/pcm-rent-calculator` → `/pw-to-pcm-calculator`; `/rent-per-paycheck-canada` → `/rent-per-paycheck-calculator`. **Do not reverse redirects solely from aggregate historical impressions.**
 
 GSC pages aggregate **38,262 page-level impressions** vs **32,153 site-level impressions** because multiple page URLs may be credited for a search result; not an arithmetic error. Query tab totals are much lower due to detail limits.
 
