@@ -620,10 +620,10 @@ function incomeSections(config: IncomeToolConfig) {
             limit: "Annual gross salary does not show take-home pay, taxes, deductions, debt, utilities, insurance, childcare, medical costs, transportation, savings, deposits, household size, or changing income.",
           }
         : {
-            basis: "This page compares planned monthly rent with annual gross income and subtracts the visible aggregate non-rent expense amount from gross monthly income.",
+            basis: "The gross-income comparison above compares planned monthly rent with annual gross income and subtracts the visible aggregate non-rent expense amount from gross monthly income.",
             when: "Use it when you want to compare a specific rent with one combined monthly estimate for non-rent costs.",
             read: "Only the remaining-amount result uses the entered expenses. The 30%, 40%, and 3x amounts remain gross-income reference points, not expense-adjusted maximums.",
-            limit: "The calculator does not separately model taxes, debt, utilities, savings, insurance, deposits, or changing income. Include relevant recurring items in the aggregate expense field if you want them subtracted.",
+            limit: "The gross-income comparison does not separately model taxes, debt, utilities, savings, insurance, deposits, or changing income. Include relevant recurring items in its aggregate expense field, or use the separate take-home housing budget to itemize housing bills and savings. Neither tool estimates tax or deposits.",
           };
 
   return mergeSections(
@@ -1357,7 +1357,7 @@ function BudgetIncomeTool({ config }: { config: IncomeToolConfig }) {
   );
 }
 
-export function IncomeToolPage({ config }: { config: IncomeToolConfig }) {
+export function IncomeToolPage({ config, afterTool }: { config: IncomeToolConfig; afterTool?: React.ReactNode }) {
   const schemas = makePageSchemas({ ...config, calculator: true, faq: config.faq });
   const tool =
     config.mode === "salary" ? <SalaryIncomeTool config={config} />
@@ -1367,6 +1367,7 @@ export function IncomeToolPage({ config }: { config: IncomeToolConfig }) {
   return (
     <Shell schemas={schemas}>
       {tool}
+      {afterTool}
       <ContentBlocks sections={incomeSections(config)} examples={config.examples} />
       <RelatedTools links={config.relatedLinks} />
       <Faq items={config.faq} />
