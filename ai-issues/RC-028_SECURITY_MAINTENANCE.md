@@ -1,12 +1,12 @@
 # RC-028 dependency security maintenance
 
-Reviewed November 13, 2026. Separate branch `codex/rc028-security-maintenance`, based directly on production `origin/main` commit `50c4647e5a61f05e1aeb4db04f4918bbfb6c1c5a`. **HOLD for exact-preview browser acceptance and owner approval.** No production deployment or main change is authorized by this report.
+Reviewed November 13, 2026. Separate branch `codex/rc028-security-maintenance`. The original maintenance checkpoint `8c116e5d40519115ba830b7cb22d152f6f2de5d2` started from production `50c4647e5a61f05e1aeb4db04f4918bbfb6c1c5a`; the current branch merges frozen urgent `b69768dc8c8c66342786ba9f39eb958676637b80` as an explicit prerequisite. **HOLD for exact-preview browser acceptance and owner approval.** No production deployment or main change is authorized by this report.
 
 ## Result and scope
 
 The fresh registry audit reproduced **11 affected-package findings: 1 critical, 7 high, 3 moderate**. Compatible dependency updates reduce the audit to **zero reported findings**. This is the registry's known-advisory result at the review time, not proof of universal security. Three React Router entries represent one inherited advisory chain rather than three independent attack paths.
 
-Only `package.json` and `package-lock.json` change application inputs. No application source, calculator logic, route, sitemap, ad lifecycle, consent policy, paid service, test registration or product feature changes. React, React DOM, Tailwind and PostHog versions remain unchanged. There are no major-version upgrades or dependency overrides, and neither `--force` nor `--legacy-peer-deps` was used.
+Relative to the frozen urgent prerequisite, only `package.json` and `package-lock.json` change application inputs. The maintenance patch adds no application source, calculator logic, route, sitemap, ad lifecycle, consent policy, paid service or product feature changes. Urgent's 21-file test registration is preserved exactly; no weekly feature is included. React, React DOM, Tailwind and PostHog versions remain unchanged. There are no major-version upgrades or dependency overrides, and neither `--force` nor `--legacy-peer-deps` was used.
 
 | Package | Previous lock | Updated lock | Purpose / compatibility |
 | --- | --- | --- | --- |
@@ -32,9 +32,9 @@ Application applicability below is an inference from actual configuration, insta
 - **fflate / runtime dependency, affected operation not identified:** PostHog's inspected request implementation calls `gzipSync` for outbound compression. The flaw is malformed ZIP64 input during ZIP extraction; no user ZIP import or `unzipSync` application path was found. The compatible 0.4.9 patch removes the finding without changing the PostHog package. [Maintainer fix](https://github.com/101arrowz/fflate/commit/e6d5e6e1076892f72770ac732d83c81da9f3316e).
 - **Browserslist, baseline-browser-mapping, PostCSS, nanoid and source-map-js / build-time exposure:** Installed chains run through Babel, Vite, PostCSS and Tailwind. Public calculator inputs are not supplied as browser-target queries, custom stats, source maps or generator sizes. Malicious build inputs remain a development/CI concern; no equivalent public calculator request path was identified. Compatible updates clear the findings. [Browserslist maintainer advisory](https://github.com/browserslist/browserslist/security/advisories/GHSA-c83g-rgw3-j3cx), [PostCSS maintainer advisory](https://github.com/postcss/postcss/security/advisories/GHSA-fxqj-rqcc-2cmp), [nanoid maintainer patch](https://github.com/ai/nanoid/commit/e10f8d40ce9d1ab47f66d65a16b48086432730d0). Exact registry advisory IDs/ranges for every package are retained in the evidence summary.
 
-## Reproducible validation
+## Original checkpoint validation (historical 8c116e5)
 
-Executed with Node **25.9.0**, npm **10.9.0**, Windows PowerShell. `npm ci` completed successfully from the final resolved graph. The isolated branch retains the production test set; urgent/weekly test additions are intentionally absent.
+Executed with Node **25.9.0**, npm **10.9.0**, Windows PowerShell. `npm ci` completed successfully from the final resolved graph. At that original checkpoint the branch retained the production test set and urgent/weekly additions were absent. These 137-test results remain historical; current merged validation is recorded below.
 
 | Check | Actual result |
 | --- | --- |
@@ -53,10 +53,16 @@ Executed with Node **25.9.0**, npm **10.9.0**, Windows PowerShell. `npm ci` comp
 
 The initial lock-only resolver attempts failed with React Router peer conflicts because the existing lock held the three tightly coupled packages at 7.18.1. Removed only those three stale resolution entries, retained the rest of the lock, and let npm regenerate their compatible matched graph. A subsequent ordinary `npm audit fix --package-lock-only` patched remaining compatible transitives. No forced resolution, peer-check bypass or whole-lock replacement was used. A pinned npm 11 diagnostic attempt also failed and made no successful resolution; the final install/validation used npm 10.9.0.
 
+## Current guarded maintenance validation
+
+The merged candidate passed all six required checks on November 13, 2026: typecheck; **148/148 tests**, zero skips/failures; build with 60 static pages, 112 redirects and no server bundle; 112 redirect checks; 60-route/215-JSON-LD/59-BreadcrumbList validation; and local HTTP release audit of 60 routes, 112 redirects and 60 internal-link targets. A fresh full `npm audit --json` returned **zero findings**. [Guarded validation evidence](evidence/security/guarded-checks.json) records exact parent commits, command timestamps and exit codes. This supersedes the original 137-test validation for the new merged candidate, while retaining that historical record.
+
 ## Preview and release conditions
 
-This branch deliberately starts from production rather than urgent PR #2. Its unchanged provider therefore does **not** yet include urgent's exact-production-origin analytics guard. Do not interpret this as a maintenance regression, and do not send accepted-consent preview traffic to production analytics merely to test it. The browser steward must intercept/block provider destinations when testing this isolated baseline, or assemble the accepted urgent guard before that network check. Never claim the isolated maintenance preview passes the urgent privacy gate.
+The current branch now includes frozen urgent PR #2 as an explicit prerequisite, including its exact-production-origin analytics guard. This corrects the original maintenance preview limitation without adding weekly features. The original `8c116e5` preview remains historical and must not be substituted for the new merged SHA. Urgent must be reviewed and merged first; after that prerequisite is present on main, PR #7's application diff is dependency-only. This does not make maintenance a prerequisite of urgent.
 
-Exact immutable preview, hosted build environment and browser evidence must be recorded by the release steward once the draft PR build completes. Local automated checks are complete; browser, PDF, no-JavaScript and final integration acceptance are not claimed here. The maintenance change is not a dependency of the urgent fix. If urgent merges first after owner approval, assemble this dependency-only change onto that main, preserve the union of test registration and re-run all gates at the new SHA.
+The normal merge completed without conflicts. The security lock is byte-for-byte unchanged from `8c116e5`; all application/public/script/config files match frozen urgent, and package test registration retains exactly its 21 unique paths. The pre-existing generated `public/_redirects` worktree status was verified to have the same Git blob as HEAD, and earlier audit logs were preserved. No manual application edits were made during this merge.
+
+Exact immutable preview and hosted HTTP results are recorded in the PR/release ledger once the new draft build finishes. Browser, PDF, no-JavaScript and final owner approval remain pending until the browser steward records actual results at that exact SHA. The PR stays a draft and main/production remain untouched.
 
 Rollback before publication: keep the draft unmerged. After a separately authorized merge, use a reviewed revert of the maintenance package/lock changes and rerun the full suite; reverting restores vulnerable versions, so reassess exposure rather than silently treating rollback as a security solution. No automatic main reset, production deploy or paid-service change.

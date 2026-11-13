@@ -1,6 +1,13 @@
 export const ANALYTICS_CONSENT_VERSION = 1;
 export const ANALYTICS_CONSENT_STORAGE_KEY = "rc_analytics_consent_v1";
 
+/** Preview and local calculations must never send production telemetry.
+ * @param {string} origin
+ */
+export function isProductionAnalyticsOrigin(origin) {
+  return origin === "https://www.rentconverter.com";
+}
+
 /** @typedef {"accepted" | "rejected"} AnalyticsConsentChoice */
 
 /**

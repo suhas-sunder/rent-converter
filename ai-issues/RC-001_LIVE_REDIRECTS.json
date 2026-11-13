@@ -1,0 +1,790 @@
+{
+  "checkedAt": "2026-11-13T04:39:48.284Z",
+  "origin": "https://www.rentconverter.com",
+  "rules": [
+    {
+      "from": "/australia-rent-calculator",
+      "to": "/weekly-to-monthly-rent-australia",
+      "status": 301,
+      "location": "/weekly-to-monthly-rent-australia?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/weekly-to-monthly-rent-melbourne",
+      "to": "/weekly-to-monthly-rent-australia",
+      "status": 301,
+      "location": "/weekly-to-monthly-rent-australia?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/weekly-to-monthly-rent-sydney",
+      "to": "/weekly-to-monthly-rent-australia",
+      "status": 301,
+      "location": "/weekly-to-monthly-rent-australia?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/rent-per-paycheck-us",
+      "to": "/rent-per-paycheck-calculator",
+      "status": 301,
+      "location": "/rent-per-paycheck-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/rent-per-paycheck-canada",
+      "to": "/rent-per-paycheck-calculator",
+      "status": 301,
+      "location": "/rent-per-paycheck-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/pcm-rent-calculator",
+      "to": "/pw-to-pcm-calculator",
+      "status": 301,
+      "location": "/pw-to-pcm-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/weekly-to-monthly-rent-uk",
+      "to": "/pw-to-pcm-calculator",
+      "status": 301,
+      "location": "/pw-to-pcm-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/convert-weekly-rent-to-monthly-uk",
+      "to": "/pw-to-pcm-calculator",
+      "status": 301,
+      "location": "/pw-to-pcm-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/weekly-to-monthly-rent-formula-uk",
+      "to": "/pw-to-pcm-calculator",
+      "status": 301,
+      "location": "/pw-to-pcm-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/pw-rent-calculator",
+      "to": "/pcm-to-pw-calculator",
+      "status": 301,
+      "location": "/pcm-to-pw-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/4-weekly-to-monthly-rent-uk",
+      "to": "/rent-paid-every-4-weeks-calculator",
+      "status": 301,
+      "location": "/rent-paid-every-4-weeks-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/pcm-vs-pw-rent",
+      "to": "/what-does-pcm-mean-rent",
+      "status": 301,
+      "location": "/what-does-pcm-mean-rent?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/per-calendar-month-rent",
+      "to": "/what-does-pcm-mean-rent",
+      "status": 301,
+      "location": "/what-does-pcm-mean-rent?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/per-calendar-month-rent-uk",
+      "to": "/what-does-pcm-mean-rent",
+      "status": 301,
+      "location": "/what-does-pcm-mean-rent?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/150-per-week-to-monthly-rent",
+      "to": "/weekly-to-monthly-rent-converter",
+      "status": 301,
+      "location": "/weekly-to-monthly-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/160-per-week-to-monthly-rent",
+      "to": "/weekly-to-monthly-rent-converter",
+      "status": 301,
+      "location": "/weekly-to-monthly-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/170-per-week-to-monthly-rent",
+      "to": "/weekly-to-monthly-rent-converter",
+      "status": 301,
+      "location": "/weekly-to-monthly-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/180-per-week-to-monthly-rent",
+      "to": "/weekly-to-monthly-rent-converter",
+      "status": 301,
+      "location": "/weekly-to-monthly-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/200-per-week-to-monthly-rent",
+      "to": "/weekly-to-monthly-rent-converter",
+      "status": 301,
+      "location": "/weekly-to-monthly-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/220-per-week-to-monthly-rent",
+      "to": "/weekly-to-monthly-rent-converter",
+      "status": 301,
+      "location": "/weekly-to-monthly-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/230-per-week-to-monthly-rent",
+      "to": "/weekly-to-monthly-rent-converter",
+      "status": 301,
+      "location": "/weekly-to-monthly-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/250-per-week-to-monthly-rent",
+      "to": "/weekly-to-monthly-rent-converter",
+      "status": 301,
+      "location": "/weekly-to-monthly-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/300-per-week-to-monthly-rent",
+      "to": "/weekly-to-monthly-rent-converter",
+      "status": 301,
+      "location": "/weekly-to-monthly-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/320-per-week-to-monthly-rent",
+      "to": "/weekly-to-monthly-rent-converter",
+      "status": 301,
+      "location": "/weekly-to-monthly-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/350-per-week-to-monthly-rent",
+      "to": "/weekly-to-monthly-rent-converter",
+      "status": 301,
+      "location": "/weekly-to-monthly-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/370-per-week-to-monthly-rent",
+      "to": "/weekly-to-monthly-rent-converter",
+      "status": 301,
+      "location": "/weekly-to-monthly-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/400-per-week-to-monthly-rent",
+      "to": "/weekly-to-monthly-rent-converter",
+      "status": 301,
+      "location": "/weekly-to-monthly-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/450-per-week-to-monthly-rent",
+      "to": "/weekly-to-monthly-rent-converter",
+      "status": 301,
+      "location": "/weekly-to-monthly-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/500-per-week-to-monthly-rent",
+      "to": "/weekly-to-monthly-rent-converter",
+      "status": 301,
+      "location": "/weekly-to-monthly-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/550-per-week-to-monthly-rent",
+      "to": "/weekly-to-monthly-rent-converter",
+      "status": 301,
+      "location": "/weekly-to-monthly-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/600-per-week-to-monthly-rent",
+      "to": "/weekly-to-monthly-rent-converter",
+      "status": 301,
+      "location": "/weekly-to-monthly-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/650-per-week-to-monthly-rent",
+      "to": "/weekly-to-monthly-rent-converter",
+      "status": 301,
+      "location": "/weekly-to-monthly-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/750-per-week-to-monthly-rent",
+      "to": "/weekly-to-monthly-rent-converter",
+      "status": 301,
+      "location": "/weekly-to-monthly-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/500-euros-per-week-to-monthly-rent",
+      "to": "/weekly-to-monthly-rent-converter",
+      "status": 301,
+      "location": "/weekly-to-monthly-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/190-pounds-per-week-to-pcm",
+      "to": "/pw-to-pcm-calculator",
+      "status": 301,
+      "location": "/pw-to-pcm-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/60-pounds-per-night-to-monthly-rent",
+      "to": "/daily-to-monthly-rent-converter",
+      "status": 301,
+      "location": "/daily-to-monthly-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/rent-converter",
+      "to": "/",
+      "status": 301,
+      "location": "/?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/rent-calculator",
+      "to": "/",
+      "status": 301,
+      "location": "/?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/monthly-to-weekly-rent",
+      "to": "/monthly-to-weekly-rent-converter",
+      "status": 301,
+      "location": "/monthly-to-weekly-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/weekly-to-monthly-rent",
+      "to": "/weekly-to-monthly-rent-converter",
+      "status": 301,
+      "location": "/weekly-to-monthly-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/weekly-to-annual-rent",
+      "to": "/weekly-to-annual-rent-converter",
+      "status": 301,
+      "location": "/weekly-to-annual-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/weekly-to-biweekly-rent",
+      "to": "/weekly-to-biweekly-rent-converter",
+      "status": 301,
+      "location": "/weekly-to-biweekly-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/biweekly-to-weekly-rent",
+      "to": "/biweekly-to-weekly-rent-converter",
+      "status": 301,
+      "location": "/biweekly-to-weekly-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/biweekly-to-monthly-rent",
+      "to": "/biweekly-to-monthly-rent-converter",
+      "status": 301,
+      "location": "/biweekly-to-monthly-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/biweekly-to-annual-rent",
+      "to": "/biweekly-to-annual-rent-converter",
+      "status": 301,
+      "location": "/biweekly-to-annual-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/monthly-to-annual-rent",
+      "to": "/monthly-to-annual-rent-converter",
+      "status": 301,
+      "location": "/monthly-to-annual-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/annual-to-monthly-rent",
+      "to": "/annual-to-monthly-rent-converter",
+      "status": 301,
+      "location": "/annual-to-monthly-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/monthly-to-daily-rent",
+      "to": "/monthly-to-daily-rent-converter",
+      "status": 301,
+      "location": "/monthly-to-daily-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/daily-to-monthly-rent",
+      "to": "/daily-to-monthly-rent-converter",
+      "status": 301,
+      "location": "/daily-to-monthly-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/monthly-to-hourly-rent",
+      "to": "/monthly-to-hourly-rent-converter",
+      "status": 301,
+      "location": "/monthly-to-hourly-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/hourly-to-monthly-rent",
+      "to": "/hourly-to-monthly-rent-converter",
+      "status": 301,
+      "location": "/hourly-to-monthly-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/hourly-to-annual-rent",
+      "to": "/hourly-to-annual-rent-converter",
+      "status": 301,
+      "location": "/hourly-to-annual-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/annual-to-hourly-rent",
+      "to": "/annual-to-hourly-rent-converter",
+      "status": 301,
+      "location": "/annual-to-hourly-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/annual-to-weekly-rent",
+      "to": "/annual-to-weekly-rent-converter",
+      "status": 301,
+      "location": "/annual-to-weekly-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/annual-to-biweekly-rent",
+      "to": "/annual-to-biweekly-rent-converter",
+      "status": 301,
+      "location": "/annual-to-biweekly-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/monthly-to-biweekly-rent",
+      "to": "/monthly-to-biweekly-rent-converter",
+      "status": 301,
+      "location": "/monthly-to-biweekly-rent-converter?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/rent-per-day",
+      "to": "/rent-per-day-calculator",
+      "status": 301,
+      "location": "/rent-per-day-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/rent-per-week",
+      "to": "/rent-per-week-calculator",
+      "status": 301,
+      "location": "/rent-per-week-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/rent-paid-every-4-weeks",
+      "to": "/rent-paid-every-4-weeks-calculator",
+      "status": 301,
+      "location": "/rent-paid-every-4-weeks-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/rent-per-paycheck",
+      "to": "/rent-per-paycheck-calculator",
+      "status": 301,
+      "location": "/rent-per-paycheck-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/rent-split",
+      "to": "/rent-split-calculator",
+      "status": 301,
+      "location": "/rent-split-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/roommate-rent-split-calculator",
+      "to": "/rent-split-calculator",
+      "status": 301,
+      "location": "/rent-split-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/rent-due-date",
+      "to": "/rent-due-date-calculator",
+      "status": 301,
+      "location": "/rent-due-date-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/lease-start-and-end-date-calculator",
+      "to": "/lease-date-calculator",
+      "status": 301,
+      "location": "/lease-date-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/12-month-lease-date-calculator",
+      "to": "/lease-date-calculator",
+      "status": 301,
+      "location": "/lease-date-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/rent-as-percentage-of-income",
+      "to": "/rent-as-percentage-of-income-calculator",
+      "status": 301,
+      "location": "/rent-as-percentage-of-income-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/rent-to-income-ratio-calculator",
+      "to": "/rent-as-percentage-of-income-calculator",
+      "status": 301,
+      "location": "/rent-as-percentage-of-income-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/2x-rent-calculator",
+      "to": "/income-required-for-rent-calculator",
+      "status": 301,
+      "location": "/income-required-for-rent-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/2-5x-rent-calculator",
+      "to": "/income-required-for-rent-calculator",
+      "status": 301,
+      "location": "/income-required-for-rent-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/3x-rent-calculator",
+      "to": "/income-required-for-rent-calculator",
+      "status": 301,
+      "location": "/income-required-for-rent-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/how-much-rent-can-i-afford-on-50k",
+      "to": "/salary-to-rent-calculator",
+      "status": 301,
+      "location": "/salary-to-rent-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/how-much-rent-can-i-afford-on-60k",
+      "to": "/salary-to-rent-calculator",
+      "status": 301,
+      "location": "/salary-to-rent-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/how-much-rent-can-i-afford-on-65k",
+      "to": "/salary-to-rent-calculator",
+      "status": 301,
+      "location": "/salary-to-rent-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/how-much-rent-can-i-afford-on-70k",
+      "to": "/salary-to-rent-calculator",
+      "status": 301,
+      "location": "/salary-to-rent-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/how-much-rent-can-i-afford-on-80k",
+      "to": "/salary-to-rent-calculator",
+      "status": 301,
+      "location": "/salary-to-rent-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/how-much-rent-can-i-afford-on-100k",
+      "to": "/salary-to-rent-calculator",
+      "status": 301,
+      "location": "/salary-to-rent-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/rent-calculator-by-salary",
+      "to": "/salary-to-rent-calculator",
+      "status": 301,
+      "location": "/salary-to-rent-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/rent-calculator-by-income",
+      "to": "/salary-to-rent-calculator",
+      "status": 301,
+      "location": "/salary-to-rent-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/max-rent-calculator",
+      "to": "/salary-to-rent-calculator",
+      "status": 301,
+      "location": "/salary-to-rent-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/30-percent-rent-rule-calculator",
+      "to": "/salary-to-rent-calculator",
+      "status": 301,
+      "location": "/salary-to-rent-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/40-percent-rent-rule-calculator",
+      "to": "/salary-to-rent-calculator",
+      "status": 301,
+      "location": "/salary-to-rent-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/how-much-rent-can-i-afford",
+      "to": "/how-much-rent-can-i-afford-calculator",
+      "status": 301,
+      "location": "/how-much-rent-can-i-afford-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/rent-after-tax-income",
+      "to": "/rent-after-tax-income-calculator",
+      "status": 301,
+      "location": "/rent-after-tax-income-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/rent-vs-take-home-pay",
+      "to": "/rent-vs-take-home-pay-calculator",
+      "status": 301,
+      "location": "/rent-vs-take-home-pay-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/rent-affordability-calculator",
+      "to": "/how-much-rent-can-i-afford-calculator",
+      "status": 301,
+      "location": "/how-much-rent-can-i-afford-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/rent-increase",
+      "to": "/rent-increase-calculator",
+      "status": 301,
+      "location": "/rent-increase-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/rent-increase-percentage",
+      "to": "/rent-increase-percentage-calculator",
+      "status": 301,
+      "location": "/rent-increase-percentage-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/rent-after-increase",
+      "to": "/rent-increase-calculator",
+      "status": 301,
+      "location": "/rent-increase-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/rent-after-increase-calculator",
+      "to": "/rent-increase-calculator",
+      "status": 301,
+      "location": "/rent-increase-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/annual-rent-increase-calculator",
+      "to": "/rent-increase-calculator",
+      "status": 301,
+      "location": "/rent-increase-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/monthly-rent-increase-calculator",
+      "to": "/rent-increase-calculator",
+      "status": 301,
+      "location": "/rent-increase-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/rent-increase-formula",
+      "to": "/rent-increase-calculator",
+      "status": 301,
+      "location": "/rent-increase-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/cpi-rent-increase-calculator",
+      "to": "/rent-increase-calculator",
+      "status": 301,
+      "location": "/rent-increase-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/bc-rent-increase-calculator",
+      "to": "/rent-increase-calculator",
+      "status": 301,
+      "location": "/rent-increase-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/ontario-rent-increase-calculator",
+      "to": "/rent-increase-calculator",
+      "status": 301,
+      "location": "/rent-increase-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/quebec-rent-increase-calculator",
+      "to": "/rent-increase-calculator",
+      "status": 301,
+      "location": "/rent-increase-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/california-rent-increase-calculator",
+      "to": "/rent-increase-calculator",
+      "status": 301,
+      "location": "/rent-increase-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/rent-escalation-calculator",
+      "to": "/compound-rent-increase-calculator",
+      "status": 301,
+      "location": "/compound-rent-increase-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/bond-and-rent-in-advance-australia",
+      "to": "/rent-in-advance-australia",
+      "status": 301,
+      "location": "/rent-in-advance-australia?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/when-is-rent-due",
+      "to": "/rent-due-date-calculator",
+      "status": 301,
+      "location": "/rent-due-date-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/do-you-pay-rent-in-advance-or-after",
+      "to": "/rent-due-date-calculator",
+      "status": 301,
+      "location": "/rent-due-date-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/rent-vs-buy",
+      "to": "/rent-vs-buy-calculator",
+      "status": 301,
+      "location": "/rent-vs-buy-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/pw-to-pcm",
+      "to": "/pw-to-pcm-calculator",
+      "status": 301,
+      "location": "/pw-to-pcm-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/pcw-to-pcm",
+      "to": "/pw-to-pcm-calculator",
+      "status": 301,
+      "location": "/pw-to-pcm-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/pw-to-pm",
+      "to": "/pw-to-pcm-calculator",
+      "status": 301,
+      "location": "/pw-to-pcm-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/per-week-to-pcm",
+      "to": "/pw-to-pcm-calculator",
+      "status": 301,
+      "location": "/pw-to-pcm-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/pcm-to-pcw",
+      "to": "/pcm-to-pw-calculator",
+      "status": 301,
+      "location": "/pcm-to-pw-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/pcm-calculator",
+      "to": "/pw-to-pcm-calculator",
+      "status": 301,
+      "location": "/pw-to-pcm-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/rent-pcm-calculator",
+      "to": "/pw-to-pcm-calculator",
+      "status": 301,
+      "location": "/pw-to-pcm-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/pw-calculator",
+      "to": "/pcm-to-pw-calculator",
+      "status": 301,
+      "location": "/pcm-to-pw-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/rent-split-by-income-calculator",
+      "to": "/split-rent-based-on-income-calculator",
+      "status": 301,
+      "location": "/split-rent-based-on-income-calculator?rc27audit=1",
+      "pass": true
+    },
+    {
+      "from": "/rent-calculator-split-based-on-income",
+      "to": "/split-rent-based-on-income-calculator",
+      "status": 301,
+      "location": "/split-rent-based-on-income-calculator?rc27audit=1",
+      "pass": true
+    }
+  ]
+}
