@@ -12,7 +12,7 @@ const howItWorks = {
     },
     {
       title: "4-week rent is the common trap",
-      body: "Every 4 weeks creates 13 payments per year. Monthly rent creates 12. The converter highlights that difference instead of treating 28 days as a month."
+      body: "Thirteen 4-week periods cover 364 days. This converter uses a 365-day daily-rate equivalent; actual payment counts depend on the start and end dates. Monthly rent uses 12 months per year."
     },
     {
       title: "The best output depends on the decision",
@@ -26,7 +26,7 @@ const howItWorks = {
     },
     {
       title: "Every 4 weeks vs monthly",
-      body: "$2,000 every 4 weeks is $26,000/year, or about $2,166.67/month on average."
+      body: "$2,000 every 4 weeks is about $26,071.43/year, or $2,172.62/month on this calculator's 365-day basis. Thirteen actual payments total $26,000 and cover 364 days."
     },
     {
       title: "Paycheck planning",

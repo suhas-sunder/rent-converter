@@ -1,0 +1,642 @@
+{
+  "at": "2026-11-13T14:14:33.501Z",
+  "browser": "145.0.7632.6",
+  "playwright": "1.58.2",
+  "node": "v25.9.0",
+  "javaScriptEnabled": false,
+  "pages": [
+    {
+      "key": "local",
+      "url": "http://127.0.0.1:3028/",
+      "status": 200,
+      "requestHosts": [
+        "127.0.0.1",
+        "fonts.googleapis.com",
+        "fonts.gstatic.com"
+      ],
+      "errors": [],
+      "widths": [
+        {
+          "width": 360,
+          "scrollWidth": 360,
+          "controls": 7,
+          "disabled": 6,
+          "enabled": [
+            "Assumptions: 365-day year, 28-day 4-week period\u00e2\u2013\u00be"
+          ],
+          "navHrefs": [
+            "/",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/sitemap",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        },
+        {
+          "width": 390,
+          "scrollWidth": 390,
+          "controls": 7,
+          "disabled": 6,
+          "enabled": [
+            "Assumptions: 365-day year, 28-day 4-week period\u00e2\u2013\u00be"
+          ],
+          "navHrefs": [
+            "/",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/sitemap",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        },
+        {
+          "width": 768,
+          "scrollWidth": 768,
+          "controls": 8,
+          "disabled": 7,
+          "enabled": [
+            "Assumptions: 365-day year, 28-day 4-week period\u00e2\u2013\u00be"
+          ],
+          "navHrefs": [
+            "/",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/sitemap",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        },
+        {
+          "width": 1280,
+          "scrollWidth": 1280,
+          "controls": 8,
+          "disabled": 7,
+          "enabled": [
+            "Assumptions: 365-day year, 28-day 4-week period\u00e2\u2013\u00be"
+          ],
+          "navHrefs": [
+            "/",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/sitemap",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        },
+        {
+          "width": 1440,
+          "scrollWidth": 1440,
+          "controls": 8,
+          "disabled": 7,
+          "enabled": [
+            "Assumptions: 365-day year, 28-day 4-week period\u00e2\u2013\u00be"
+          ],
+          "navHrefs": [
+            "/",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/sitemap",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        }
+      ],
+      "mobileMenu": {
+        "disabled": true,
+        "before": "false",
+        "after": "false"
+      },
+      "homeNavigation": {
+        "url": "http://127.0.0.1:3028/",
+        "heading": "Rent Converter Calculator"
+      },
+      "fallbackNavigation": {
+        "url": "http://127.0.0.1:3028/sitemap",
+        "heading": "HTML Sitemap"
+      },
+      "notice": [
+        "Rent ConverterWeekly to MonthlyAffordabilityRent IncreaseSplit RentAll calculators",
+        "JavaScript is off. Calculator controls require JavaScript, and any values shown are static examples. Enable JavaScript to calculate your own amounts; explanations and navigation remain available."
+      ]
+    },
+    {
+      "key": "local",
+      "url": "http://127.0.0.1:3028/rent-budget-calculator",
+      "status": 200,
+      "requestHosts": [
+        "127.0.0.1",
+        "fonts.googleapis.com",
+        "fonts.gstatic.com"
+      ],
+      "errors": [],
+      "widths": [
+        {
+          "width": 360,
+          "scrollWidth": 360,
+          "controls": 7,
+          "disabled": 7,
+          "enabled": [],
+          "navHrefs": [
+            "/",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/sitemap",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        },
+        {
+          "width": 390,
+          "scrollWidth": 390,
+          "controls": 7,
+          "disabled": 7,
+          "enabled": [],
+          "navHrefs": [
+            "/",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/sitemap",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        },
+        {
+          "width": 768,
+          "scrollWidth": 768,
+          "controls": 7,
+          "disabled": 7,
+          "enabled": [],
+          "navHrefs": [
+            "/",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/sitemap",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        },
+        {
+          "width": 1280,
+          "scrollWidth": 1280,
+          "controls": 7,
+          "disabled": 7,
+          "enabled": [],
+          "navHrefs": [
+            "/",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/sitemap",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        },
+        {
+          "width": 1440,
+          "scrollWidth": 1440,
+          "controls": 7,
+          "disabled": 7,
+          "enabled": [],
+          "navHrefs": [
+            "/",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/sitemap",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        }
+      ],
+      "mobileMenu": {
+        "disabled": true,
+        "before": "false",
+        "after": "false"
+      },
+      "homeNavigation": {
+        "url": "http://127.0.0.1:3028/",
+        "heading": "Rent Converter Calculator"
+      },
+      "fallbackNavigation": {
+        "url": "http://127.0.0.1:3028/sitemap",
+        "heading": "HTML Sitemap"
+      },
+      "notice": [
+        "Rent ConverterWeekly to MonthlyAffordabilityRent IncreaseSplit RentAll calculators",
+        "JavaScript is off. Calculator controls require JavaScript, and any values shown are static examples. Enable JavaScript to calculate your own amounts; explanations and navigation remain available."
+      ]
+    },
+    {
+      "key": "local",
+      "url": "http://127.0.0.1:3028/rent-per-paycheck-calculator",
+      "status": 200,
+      "requestHosts": [
+        "127.0.0.1",
+        "fonts.googleapis.com",
+        "fonts.gstatic.com"
+      ],
+      "errors": [],
+      "widths": [
+        {
+          "width": 360,
+          "scrollWidth": 360,
+          "controls": 9,
+          "disabled": 9,
+          "enabled": [],
+          "navHrefs": [
+            "/",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/sitemap",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        },
+        {
+          "width": 390,
+          "scrollWidth": 390,
+          "controls": 9,
+          "disabled": 9,
+          "enabled": [],
+          "navHrefs": [
+            "/",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/sitemap",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        },
+        {
+          "width": 768,
+          "scrollWidth": 768,
+          "controls": 8,
+          "disabled": 8,
+          "enabled": [],
+          "navHrefs": [
+            "/",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/sitemap",
+            "/",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        },
+        {
+          "width": 1280,
+          "scrollWidth": 1280,
+          "controls": 8,
+          "disabled": 8,
+          "enabled": [],
+          "navHrefs": [
+            "/",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/sitemap",
+            "/",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        },
+        {
+          "width": 1440,
+          "scrollWidth": 1440,
+          "controls": 8,
+          "disabled": 8,
+          "enabled": [],
+          "navHrefs": [
+            "/",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/sitemap",
+            "/",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        }
+      ],
+      "mobileMenu": {
+        "disabled": true,
+        "before": "false",
+        "after": "false"
+      },
+      "homeNavigation": {
+        "url": "http://127.0.0.1:3028/",
+        "heading": "Rent Converter Calculator"
+      },
+      "fallbackNavigation": {
+        "url": "http://127.0.0.1:3028/sitemap",
+        "heading": "HTML Sitemap"
+      },
+      "notice": [
+        "Rent ConverterWeekly to MonthlyAffordabilityRent IncreaseSplit RentAll calculators",
+        "JavaScript is off. Calculator controls require JavaScript, and any values shown are static examples. Enable JavaScript to calculate your own amounts; explanations and navigation remain available."
+      ]
+    },
+    {
+      "key": "local",
+      "url": "http://127.0.0.1:3028/rent-schedule-calculator",
+      "status": 200,
+      "requestHosts": [
+        "127.0.0.1",
+        "fonts.googleapis.com",
+        "fonts.gstatic.com"
+      ],
+      "errors": [],
+      "widths": [
+        {
+          "width": 360,
+          "scrollWidth": 360,
+          "controls": 8,
+          "disabled": 8,
+          "enabled": [],
+          "navHrefs": [
+            "/",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/sitemap",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        },
+        {
+          "width": 390,
+          "scrollWidth": 390,
+          "controls": 8,
+          "disabled": 8,
+          "enabled": [],
+          "navHrefs": [
+            "/",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/sitemap",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        },
+        {
+          "width": 768,
+          "scrollWidth": 768,
+          "controls": 8,
+          "disabled": 8,
+          "enabled": [],
+          "navHrefs": [
+            "/",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/sitemap",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        },
+        {
+          "width": 1280,
+          "scrollWidth": 1280,
+          "controls": 8,
+          "disabled": 8,
+          "enabled": [],
+          "navHrefs": [
+            "/",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/sitemap",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        },
+        {
+          "width": 1440,
+          "scrollWidth": 1440,
+          "controls": 8,
+          "disabled": 8,
+          "enabled": [],
+          "navHrefs": [
+            "/",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/sitemap",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        }
+      ],
+      "mobileMenu": {
+        "disabled": true,
+        "before": "false",
+        "after": "false"
+      },
+      "homeNavigation": {
+        "url": "http://127.0.0.1:3028/",
+        "heading": "Rent Converter Calculator"
+      },
+      "fallbackNavigation": {
+        "url": "http://127.0.0.1:3028/sitemap",
+        "heading": "HTML Sitemap"
+      },
+      "notice": [
+        "Rent ConverterWeekly to MonthlyAffordabilityRent IncreaseSplit RentAll calculators",
+        "JavaScript is off. Calculator controls require JavaScript, and any values shown are static examples. Enable JavaScript to calculate your own amounts; explanations and navigation remain available."
+      ]
+    }
+  ]
+}
