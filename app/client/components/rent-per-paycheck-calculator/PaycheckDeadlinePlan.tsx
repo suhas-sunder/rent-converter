@@ -108,7 +108,7 @@ export default function PaycheckDeadlinePlan({ monthlyRentCents, frequency, curr
             {result.rows.length > 0 && result.remainingCents > 0n && <p className="mt-1 text-sm text-slate-700">Reserve the amounts below from each paycheck. This assumes each paycheck can cover its reserve; income and other bills are not assessed.</p>}
             {result.excessCents > 0n && <p className="mt-1 text-sm text-slate-700">{formatMoney(result.excessCents)} of the amount saved is above this payment.</p>}
           </div>
-          {result.rows.length > 0 && <div className="mt-3 overflow-x-auto rounded-xl bg-white">
+          {result.rows.length > 0 && <div role="region" aria-label="Paycheck reserve schedule" tabIndex={0} className="mt-3 overflow-x-auto rounded-xl bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-sky-500">
             <table className="w-full text-left text-sm">
               <caption className="px-3 py-2 text-left text-sm font-semibold text-sky-900">Reserve schedule for rent due {dueDate}</caption>
               <thead><tr className="bg-sky-50 text-sky-900"><th scope="col" className="p-3">Payday</th><th scope="col" className="p-3 text-right">Set aside</th><th scope="col" className="p-3 text-right">Saved total</th></tr></thead>
