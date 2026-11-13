@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useHydrationSafeSavedState, validSavedMoney } from "~/client/utils/savedState.js";
 import type { Route } from "./+types/rent-per-paycheck-calculator";
 import Assumptions from "~/client/components/layout/Assumptions";
+import HydrationSafeControls from "~/client/components/HydrationSafeControls";
 import HowItWorks from "~/client/components/rent-per-paycheck-calculator/HowItWorks";
 import ToolFit from "~/client/components/rent-per-paycheck-calculator/ToolFit";
 
@@ -690,6 +691,7 @@ export default function RentPerPaycheck() {
         id="converter"
         className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8"
       >
+        <HydrationSafeControls label="Rent per paycheck calculator">
         <div className="overflow-hidden rounded-[1.75rem] bg-white px-5 pb-6 sm:px-8">
           <div className="pt-5 sm:pt-6">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -1146,6 +1148,7 @@ export default function RentPerPaycheck() {
           <Assumptions />
 
         </div>
+        </HydrationSafeControls>
       </section>
 
       <HowItWorks />
