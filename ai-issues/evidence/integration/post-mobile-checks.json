@@ -1,0 +1,23 @@
+[
+  {
+    "check": "typecheck",
+    "exitCode": 0,
+    "startedAtUtc": "2026-11-13T05:14:40.7119788Z",
+    "finishedAtUtc": "2026-11-13T05:14:55.7019237Z",
+    "log": "post-mobile-typecheck.log"
+  },
+  {
+    "check": "test",
+    "exitCode": 0,
+    "startedAtUtc": "2026-11-13T05:14:55.7098490Z",
+    "finishedAtUtc": "2026-11-13T05:14:57.2940301Z",
+    "log": "post-mobile-test.log"
+  },
+  {
+    "check": "build",
+    "exitCode": 0,
+    "startedAtUtc": "2026-11-13T05:14:57.2944733Z",
+    "finishedAtUtc": "2026-11-13T05:15:07.9262126Z",
+    "log": "post-mobile-build.log"
+  }
+]

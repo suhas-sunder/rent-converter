@@ -1,0 +1,111 @@
+{
+  "base": "f344ad29766bb63e185515ed08277a8ac9085247",
+  "releases": [
+    "62e5e6c",
+    "f0320ba",
+    "3c36fa8",
+    "a7b1d1e"
+  ],
+  "method": "git apply --3way --cached in an isolated GIT_INDEX_FILE; no commit/ref/worktree changes",
+  "temporaryIndex": "E:\\PROJECTS-and-WORK\\work-projects\\all_projects\\rent-converter-rc27\\qa-evidence\\integration-dry-20261113.index",
+  "steps": [
+    {
+      "release": "62e5e6c",
+      "applyExit": 0,
+      "conflicts": [],
+      "resolution": "Union all registered test paths; keep each exactly once",
+      "tree": "1bda8d8c554fdc522ec3490ab444e2c229cffa7a",
+      "testFiles": 22,
+      "applyMessages": "Falling back to direct application...\nFalling back to direct application...\nFalling back to direct application...\nFalling back to direct application...\nFalling back to direct application...\nFalling back to direct application...\nFalling back to direct application...\nFalling back to direct application...\nFalling back to direct application...\nFalling back to direct application...\nFalling back to direct application...\nFalling back to direct application...\nFalling back to direct application...\nFalling back to direct application...\nFalling back to direct application...\nApplied patch to 'app/routes/home.tsx' cleanly.\nApplied patch to 'package.json' cleanly.\nFalling back to direct application..."
+    },
+    {
+      "release": "f0320ba",
+      "applyExit": 1,
+      "conflicts": [
+        "package.json"
+      ],
+      "resolution": "Union all registered test paths; keep each exactly once",
+      "tree": "3559c4a4101f10842851f91eef95d41eba570613",
+      "testFiles": 23,
+      "applyMessages": "Falling back to direct application...\nFalling back to direct application...\nFalling back to direct application...\nFalling back to direct application...\nFalling back to direct application...\nFalling back to direct application...\nFalling back to direct application...\nApplied patch to 'app/client/components/generated/GeneratedPages.tsx' cleanly.\nFalling back to direct application...\nApplied patch to 'app/routes/rent-budget-calculator.tsx' cleanly.\nApplied patch to 'package.json' with conflicts.\nFalling back to direct application...\nU package.json"
+    },
+    {
+      "release": "3c36fa8",
+      "applyExit": 1,
+      "conflicts": [
+        "package.json"
+      ],
+      "resolution": "Union all registered test paths; keep each exactly once",
+      "tree": "6b4b2bedb82193cf7ec225ac00ca4ea186a020d0",
+      "testFiles": 24,
+      "applyMessages": "Falling back to direct application...\nFalling back to direct application...\nFalling back to direct application...\nFalling back to direct application...\nFalling back to direct application...\nFalling back to direct application...\nFalling back to direct application...\nApplied patch to 'app/client/components/rent-per-paycheck-calculator/ToolFit.tsx' cleanly.\nFalling back to direct application...\nApplied patch to 'app/client/utils/rentMath.ts' cleanly.\nApplied patch to 'app/routes/rent-per-paycheck-calculator.tsx' cleanly.\nApplied patch to 'package.json' with conflicts.\nApplied patch to 'scripts/money-input.test.mjs' cleanly.\nFalling back to direct application...\nU package.json"
+    },
+    {
+      "release": "a7b1d1e",
+      "applyExit": 1,
+      "conflicts": [
+        "package.json"
+      ],
+      "resolution": "Union all registered test paths; keep each exactly once",
+      "tree": "edafde2d0389b6cef5d82252aa6b98eaf802ae8e",
+      "testFiles": 25,
+      "applyMessages": "Falling back to direct application...\nFalling back to direct application...\nFalling back to direct application...\nFalling back to direct application...\nFalling back to direct application...\nFalling back to direct application...\nApplied patch to 'app/client/components/generated/GeneratedPages.tsx' cleanly.\nFalling back to direct application...\nFalling back to direct application...\nApplied patch to 'app/client/utils/rentMath.ts' cleanly.\nApplied patch to 'package.json' with conflicts.\nApplied patch to 'scripts/money-input.test.mjs' cleanly.\nFalling back to direct application...\nU package.json"
+    }
+  ],
+  "finalTree": "edafde2d0389b6cef5d82252aa6b98eaf802ae8e",
+  "combinedTestFiles": 25,
+  "changedFiles": [
+    "ai-issues/RC-2027-W01_ACCEPTANCE.md",
+    "ai-issues/RC-2027-W02_ACCEPTANCE.md",
+    "ai-issues/RC-2027-W03_ACCEPTANCE.md",
+    "ai-issues/RC-2027-W04_ACCEPTANCE.md",
+    "ai-issues/evidence/w01/qa-build.log",
+    "ai-issues/evidence/w01/qa-release-audit.log",
+    "ai-issues/evidence/w01/qa-test.log",
+    "ai-issues/evidence/w01/qa-typecheck.log",
+    "ai-issues/evidence/w01/qa-validate-breadcrumbs.log",
+    "ai-issues/evidence/w01/qa-validate-redirects.log",
+    "ai-issues/evidence/w01/review-manifest.json",
+    "ai-issues/evidence/w01/w01-listing-1280.jpg",
+    "ai-issues/evidence/w01/w01-listing-1440.jpg",
+    "ai-issues/evidence/w01/w01-listing-360.jpg",
+    "ai-issues/evidence/w01/w01-listing-390.jpg",
+    "ai-issues/evidence/w01/w01-listing-768.jpg",
+    "ai-issues/evidence/w02/budget-1280.jpg",
+    "ai-issues/evidence/w02/budget-1440.jpg",
+    "ai-issues/evidence/w02/budget-360.jpg",
+    "ai-issues/evidence/w02/budget-390.jpg",
+    "ai-issues/evidence/w02/budget-768.jpg",
+    "ai-issues/evidence/w03/w03-deadline-1280.jpg",
+    "ai-issues/evidence/w03/w03-deadline-1440.jpg",
+    "ai-issues/evidence/w03/w03-deadline-360.jpg",
+    "ai-issues/evidence/w03/w03-deadline-390.jpg",
+    "ai-issues/evidence/w03/w03-deadline-768.jpg",
+    "ai-issues/evidence/w04/w04-calendar-1280.jpg",
+    "ai-issues/evidence/w04/w04-calendar-1440.jpg",
+    "ai-issues/evidence/w04/w04-calendar-360.jpg",
+    "ai-issues/evidence/w04/w04-calendar-390.jpg",
+    "ai-issues/evidence/w04/w04-calendar-768.jpg",
+    "app/client/components/HousingBudget.tsx",
+    "app/client/components/generated/GeneratedPages.tsx",
+    "app/client/components/generated/RentScheduleExport.tsx",
+    "app/client/components/home/ListingComparison.tsx",
+    "app/client/components/rent-per-paycheck-calculator/PaycheckDeadlinePlan.tsx",
+    "app/client/components/rent-per-paycheck-calculator/ToolFit.tsx",
+    "app/client/utils/housingBudget.js",
+    "app/client/utils/listingComparison.js",
+    "app/client/utils/paycheckDeadline.js",
+    "app/client/utils/rentCalendarExport.js",
+    "app/client/utils/rentMath.ts",
+    "app/routes/home.tsx",
+    "app/routes/rent-budget-calculator.tsx",
+    "app/routes/rent-per-paycheck-calculator.tsx",
+    "package.json",
+    "scripts/housing-budget.test.mjs",
+    "scripts/listing-comparison.test.mjs",
+    "scripts/money-input.test.mjs",
+    "scripts/paycheck-deadline.test.mjs",
+    "scripts/rent-calendar-export.test.mjs"
+  ],
+  "aggregateDifferences": []
+}

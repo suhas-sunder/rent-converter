@@ -8,7 +8,7 @@ const toolFit = {
     "Checking whether rent feels manageable after taxes and deductions."
   ],
   notFor: [
-    "Payroll deductions, tax withholding, paycheck dates, or legal affordability. This also does not change the lease due date."
+    "Payroll deductions, tax withholding, employer pay-date changes, or legal affordability. The date planner uses your entered schedule without adjusting for weekends or holidays and does not change the lease due date."
   ],
   nextSteps: [
     {

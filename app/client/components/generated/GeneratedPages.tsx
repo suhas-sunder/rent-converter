@@ -1,5 +1,6 @@
 import { useEffect, useId, useMemo, useState } from "react";
 import { Link } from "react-router";
+import RentScheduleExport from "./RentScheduleExport";
 import {
   dailyToMonthlyCents,
   dailyToWeeklyCents,
@@ -345,12 +346,14 @@ function ResultPanel({
   detail,
   cards,
   tableRows,
+  tableLabel,
 }: {
   label: string;
   value: string;
   detail?: string;
   cards?: Array<{ label: string; value: string }>;
   tableRows?: string[][];
+  tableLabel?: string;
 }) {
   return (
     <div className="mt-6 overflow-hidden rounded-[1.5rem] bg-sky-50" aria-live="polite">
@@ -377,7 +380,14 @@ function ResultPanel({
         ) : null}
 
         {tableRows?.length ? (
-          <div className="mt-5 overflow-hidden rounded-2xl bg-white">
+          <div
+            className={tableLabel
+              ? "mt-5 overflow-x-auto rounded-2xl bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-sky-500"
+              : "mt-5 overflow-hidden rounded-2xl bg-white"}
+            role={tableLabel ? "region" : undefined}
+            aria-label={tableLabel}
+            tabIndex={tableLabel ? 0 : undefined}
+          >
             <table className="w-full text-left text-sm">
               <tbody>
                 {tableRows.map((row) => (
@@ -386,7 +396,7 @@ function ResultPanel({
                       <td
                         key={`${cell}-${index}`}
                         className={[
-                          "px-4 py-2",
+                          tableLabel ? "px-2 py-2 sm:px-4" : "px-4 py-2",
                           index === 0 ? "font-semibold text-slate-800" : "text-slate-700",
                           index === row.length - 1 ? "text-right font-bold text-slate-950" : "",
                         ].join(" ")}
@@ -620,10 +630,10 @@ function incomeSections(config: IncomeToolConfig) {
             limit: "Annual gross salary does not show take-home pay, taxes, deductions, debt, utilities, insurance, childcare, medical costs, transportation, savings, deposits, household size, or changing income.",
           }
         : {
-            basis: "This page compares planned monthly rent with annual gross income and subtracts the visible aggregate non-rent expense amount from gross monthly income.",
+            basis: "The gross-income comparison above compares planned monthly rent with annual gross income and subtracts the visible aggregate non-rent expense amount from gross monthly income.",
             when: "Use it when you want to compare a specific rent with one combined monthly estimate for non-rent costs.",
             read: "Only the remaining-amount result uses the entered expenses. The 30%, 40%, and 3x amounts remain gross-income reference points, not expense-adjusted maximums.",
-            limit: "The calculator does not separately model taxes, debt, utilities, savings, insurance, deposits, or changing income. Include relevant recurring items in the aggregate expense field if you want them subtracted.",
+            limit: "The gross-income comparison does not separately model taxes, debt, utilities, savings, insurance, deposits, or changing income. Include relevant recurring items in its aggregate expense field, or use the separate take-home housing budget to itemize housing bills and savings. Neither tool estimates tax or deposits.",
           };
 
   return mergeSections(
@@ -1357,7 +1367,7 @@ function BudgetIncomeTool({ config }: { config: IncomeToolConfig }) {
   );
 }
 
-export function IncomeToolPage({ config }: { config: IncomeToolConfig }) {
+export function IncomeToolPage({ config, afterTool }: { config: IncomeToolConfig; afterTool?: React.ReactNode }) {
   const schemas = makePageSchemas({ ...config, calculator: true, faq: config.faq });
   const tool =
     config.mode === "salary" ? <SalaryIncomeTool config={config} />
@@ -1367,6 +1377,7 @@ export function IncomeToolPage({ config }: { config: IncomeToolConfig }) {
   return (
     <Shell schemas={schemas}>
       {tool}
+      {afterTool}
       <ContentBlocks sections={incomeSections(config)} examples={config.examples} />
       <RelatedTools links={config.relatedLinks} />
       <Faq items={config.faq} />
@@ -1727,6 +1738,7 @@ export function DateToolPage({ config }: { config: DateToolConfig }) {
   const errors = [
     !startParsed.ok ? startParsed.error : null,
     !termParsed.ok ? termParsed.error : null,
+    dateCalculation && dateCalculation.date.year > 9999 ? "Choose a start date and term that end no later than the year 9999." : null,
     config.mode === "schedule" && !rentParsed.ok ? rentParsed.error : null,
   ].filter((error): error is string => Boolean(error));
   const schemas = makePageSchemas({ ...config, calculator: true, faq: config.faq });
@@ -1759,6 +1771,7 @@ export function DateToolPage({ config }: { config: DateToolConfig }) {
         {!browserDateReady ? null : errors.length ? <InvalidDateResults errors={errors} /> : config.mode === "schedule" && scheduleCalculation && rentParsed.ok ? (
           <ResultPanel
             label="Generated payment schedule"
+            tableLabel="Rent payment schedule; scroll horizontally to view all columns"
             value={`${scheduleCalculation.payments.length} ${scheduleCalculation.payments.length === 1 ? "payment" : "payments"}`}
             detail="Payment dates are period starts. The schedule excludes every date on or after the calculated lease end."
             cards={[
@@ -1784,6 +1797,14 @@ export function DateToolPage({ config }: { config: DateToolConfig }) {
             ]}
           />
         ) : null}
+        {config.mode === "schedule" && <RentScheduleExport schedule={browserDateReady && !errors.length && scheduleCalculation && rentParsed.ok ? {
+        paymentDates: scheduleCalculation.payments.map(formatCalendarDate),
+        leaseStart: formatCalendarDate(scheduleCalculation.start),
+        leaseEnd: formatCalendarDate(scheduleCalculation.leaseEnd.date),
+        frequency,
+        rentCents: rentParsed.cents,
+        currency,
+      } : null} />}
       </ToolCard>
       <ContentBlocks sections={dateSections(config)} examples={dateExamples(config)} />
       <RelatedTools links={config.relatedLinks} />

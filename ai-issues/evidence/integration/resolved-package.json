@@ -1,0 +1,34 @@
+{
+  "name": "",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prebuild": "node scripts/generate-netlify-redirects.mjs",
+    "build": "react-router build",
+    "postbuild": "node scripts/prepare-netlify-static-output.mjs && node scripts/static-build-audit.mjs",
+    "dev": "react-router dev",
+    "preview": "node scripts/static-server.mjs",
+    "release:audit": "node scripts/run-release-audit.mjs",
+    "test": "node --test scripts/calendar-date.test.mjs scripts/core-page-quality.test.mjs scripts/country-city-consolidation.test.mjs scripts/exact-answer-redirects.test.mjs scripts/generated-income.test.mjs scripts/generated-tools.test.mjs scripts/home-money.test.mjs scripts/homepage-ad-layout.test.mjs scripts/housing-budget.test.mjs scripts/legal-consent.test.mjs scripts/listing-comparison.test.mjs scripts/money-input.test.mjs scripts/page-quality-audit.test.mjs scripts/paycheck-deadline.test.mjs scripts/preview-isolation.test.mjs scripts/pw-pcm-consolidation.test.mjs scripts/ratio-multiplier-consolidation.test.mjs scripts/rent-calendar-export.test.mjs scripts/rent-increase-consolidation.test.mjs scripts/salary-consolidation.test.mjs scripts/saved-state.test.mjs scripts/source-sensitive-consolidation.test.mjs scripts/split-lease-consolidation.test.mjs scripts/technical-hardening.test.mjs scripts/trust-architecture.test.mjs",
+    "validate:breadcrumbs": "node scripts/validate-breadcrumb-schema.mjs",
+    "validate:redirects": "node scripts/generate-netlify-redirects.mjs --check",
+    "typecheck": "react-router typegen && tsc -b"
+  },
+  "dependencies": {
+    "posthog-js": "^1.400.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router": "^7.18.1"
+  },
+  "devDependencies": {
+    "@react-router/dev": "^7.18.1",
+    "@tailwindcss/vite": "^4.1.4",
+    "@types/node": "^20",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "tailwindcss": "^4.1.4",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.3",
+    "vite-tsconfig-paths": "^5.1.4"
+  }
+}

@@ -1,0 +1,53 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//RentConverter.com//Rent payment schedule//EN
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+UID:rent-2028-01-31-2028-04-30-monthly-USD-900719925474099199-20280131@rent
+ converter.com
+DTSTAMP:20261113T051838Z
+DTSTART;VALUE=DATE:20280131
+DTEND;VALUE=DATE:20280201
+SUMMARY:Rent due: USD 9007199254740991.99
+DESCRIPTION:Rent payment: USD 9007199254740991.99.\nPayment frequency: mont
+ hly.\nLease start: 2028-01-31. Calculated lease end: 2028-04-30.\nThis sch
+ edule excludes dates on or after 2028-04-30. Payment dates are period star
+ ts\, not legal due-date determinations.\nNo weekend\, holiday\, grace-peri
+ od or partial-payment adjustments. Confirm the dates and amount against yo
+ ur lease.\nExported from RentConverter.com. This file is not a calendar su
+ bscription\; future changes are not synced.
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:rent-2028-01-31-2028-04-30-monthly-USD-900719925474099199-20280229@rent
+ converter.com
+DTSTAMP:20261113T051838Z
+DTSTART;VALUE=DATE:20280229
+DTEND;VALUE=DATE:20280301
+SUMMARY:Rent due: USD 9007199254740991.99
+DESCRIPTION:Rent payment: USD 9007199254740991.99.\nPayment frequency: mont
+ hly.\nLease start: 2028-01-31. Calculated lease end: 2028-04-30.\nThis sch
+ edule excludes dates on or after 2028-04-30. Payment dates are period star
+ ts\, not legal due-date determinations.\nNo weekend\, holiday\, grace-peri
+ od or partial-payment adjustments. Confirm the dates and amount against yo
+ ur lease.\nExported from RentConverter.com. This file is not a calendar su
+ bscription\; future changes are not synced.
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:rent-2028-01-31-2028-04-30-monthly-USD-900719925474099199-20280331@rent
+ converter.com
+DTSTAMP:20261113T051838Z
+DTSTART;VALUE=DATE:20280331
+DTEND;VALUE=DATE:20280401
+SUMMARY:Rent due: USD 9007199254740991.99
+DESCRIPTION:Rent payment: USD 9007199254740991.99.\nPayment frequency: mont
+ hly.\nLease start: 2028-01-31. Calculated lease end: 2028-04-30.\nThis sch
+ edule excludes dates on or after 2028-04-30. Payment dates are period star
+ ts\, not legal due-date determinations.\nNo weekend\, holiday\, grace-peri
+ od or partial-payment adjustments. Confirm the dates and amount against yo
+ ur lease.\nExported from RentConverter.com. This file is not a calendar su
+ bscription\; future changes are not synced.
+TRANSP:TRANSPARENT
+END:VEVENT
+END:VCALENDAR

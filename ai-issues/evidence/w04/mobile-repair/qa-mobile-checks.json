@@ -1,0 +1,44 @@
+[
+  {
+    "check": "typecheck",
+    "exitCode": 0,
+    "startedAtUtc": "2026-11-13T05:13:31.5932993Z",
+    "finishedAtUtc": "2026-11-13T05:13:51.6804084Z",
+    "log": "qa-mobile-typecheck.log"
+  },
+  {
+    "check": "test",
+    "exitCode": 0,
+    "startedAtUtc": "2026-11-13T05:13:51.6911800Z",
+    "finishedAtUtc": "2026-11-13T05:13:53.1148885Z",
+    "log": "qa-mobile-test.log"
+  },
+  {
+    "check": "build",
+    "exitCode": 0,
+    "startedAtUtc": "2026-11-13T05:13:53.1154285Z",
+    "finishedAtUtc": "2026-11-13T05:14:05.9510267Z",
+    "log": "qa-mobile-build.log"
+  },
+  {
+    "check": "validate:redirects",
+    "exitCode": 0,
+    "startedAtUtc": "2026-11-13T05:14:05.9515392Z",
+    "finishedAtUtc": "2026-11-13T05:14:06.3210024Z",
+    "log": "qa-mobile-validate-redirects.log"
+  },
+  {
+    "check": "validate:breadcrumbs",
+    "exitCode": 0,
+    "startedAtUtc": "2026-11-13T05:14:06.3215771Z",
+    "finishedAtUtc": "2026-11-13T05:14:07.1128620Z",
+    "log": "qa-mobile-validate-breadcrumbs.log"
+  },
+  {
+    "check": "release:audit",
+    "exitCode": 0,
+    "startedAtUtc": "2026-11-13T05:14:07.1132984Z",
+    "finishedAtUtc": "2026-11-13T05:14:08.0398977Z",
+    "log": "qa-mobile-release-audit.log"
+  }
+]

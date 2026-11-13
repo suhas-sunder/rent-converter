@@ -1,0 +1,27 @@
+{
+  "reviewDate": "2026-11-13 America/New_York",
+  "branch": "release/2027-W01-listing-comparison",
+  "baseCommit": "f344ad29766bb63e185515ed08277a8ac9085247",
+  "candidateCommit": null,
+  "note": "Reviewed W01 implementation file fingerprints; exact release commit and hosted acceptance are maintained in the release ledger. Typecheck log trailing blank line normalized without changing output.",
+  "files": {
+    "app/routes/home.tsx": "e6fcb2088136fc1244f5e33e7bd4e0053f355157d4af954e6ea7ce345a14f983",
+    "app/client/components/home/ListingComparison.tsx": "36a9144cdfad412c82f0096795f923aef8fd1c2b84c266c3c31d37f49d45565f",
+    "app/client/utils/listingComparison.js": "eb67512a8a6e3ce3dc3782df114db2d79097333129f0b9b2289339c3ad0f2d75",
+    "scripts/listing-comparison.test.mjs": "29de3597dcf8362c75217b8b249246f66fbec7a0958e995cc59c7402def627e2",
+    "package.json": "373adc89fefb4212b5d1b4ca2ea8d766a8e43036be69d6aae19cefa955b27d85"
+  },
+  "evidence": {
+    "qa-build.log": "4f7ad152e9d326c19f23135237b36df4c02e7dd255194128a9ce537157fa339e",
+    "qa-release-audit.log": "b20c168649d3c212b5878b70ce2754d6fd0fb6d59bd23266d828cd13bd8fea3c",
+    "qa-test.log": "448fb5ee1e6c3d211e669abf4ff138b115e43c44967efd5f868f95d00972681d",
+    "qa-typecheck.log": "19b073c91857d7001888084e59f569bf5bd41c208424ef29e159807d2dfa9d2e",
+    "qa-validate-breadcrumbs.log": "57bf9e87d2a737cc6b70e9094779ab41495d8af7df393ebee9b7572fde0eedb1",
+    "qa-validate-redirects.log": "f6e4cc2ebd39578baafc5054be63df3c8ebdfb902fb49a55361f1b7ea6124317",
+    "w01-listing-1280.jpg": "0e1a028c830e72f2d7d732b6e4062840364eed70c49e7b873ad0a340292a9b70",
+    "w01-listing-1440.jpg": "b2488c6c893a5796abbbd1434892f0091cb3aa0cf0408aa6d00dc420c4367ba1",
+    "w01-listing-360.jpg": "f18293f1e93be4578260e0338ead8acb3975cdea72733cf4c83c3ab73de7c2ca",
+    "w01-listing-390.jpg": "29f76af042e2580c936482a175e79140b52b0f24351d7d4068cdcb8689df87be",
+    "w01-listing-768.jpg": "00c37a84693fbc8807ac146c20f961f8fb28250a717ef34379b5a81df1a5ef3b"
+  }
+}

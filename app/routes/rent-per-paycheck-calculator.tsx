@@ -4,11 +4,13 @@ import type { Route } from "./+types/rent-per-paycheck-calculator";
 import Assumptions from "~/client/components/layout/Assumptions";
 import HowItWorks from "~/client/components/rent-per-paycheck-calculator/HowItWorks";
 import ToolFit from "~/client/components/rent-per-paycheck-calculator/ToolFit";
+import PaycheckDeadlinePlan from "~/client/components/rent-per-paycheck-calculator/PaycheckDeadlinePlan";
+import { formatMoney as formatExactMoney } from "~/client/utils/rentMath";
 
 export const meta: Route.MetaFunction = () => {
   const title = "Rent Per Paycheck Calculator | Biweekly and Semi-Monthly Rent";
   const description =
-    "Enter rent and paycheck frequency to allocate annualized rent across weekly, biweekly, semimonthly, or monthly paychecks. Taxes and pay dates are not calculated.";
+    "Compare average rent per paycheck and plan your next rent payment using actual pay dates and savings. See exact reserves before the due date; taxes are excluded.";
 
   const canonicalUrl =
     "https://www.rentconverter.com/rent-per-paycheck-calculator";
@@ -964,7 +966,7 @@ export default function RentPerPaycheck() {
                         4-week rent amount
                       </div>
                       <div className="mt-1 text-lg font-bold text-slate-950 tabular-nums whitespace-nowrap">
-                        {fmtMoney(computed.annualRentScaled / 13n)}
+                        {fmtMoney(computed.rentBreakdown.every_4_weeks)}
                       </div>
                     </div>
                     <div className="rounded-2xl bg-white px-4 py-3">
@@ -999,6 +1001,13 @@ export default function RentPerPaycheck() {
               </div>
             </div>
           </div>
+
+          <PaycheckDeadlinePlan
+            monthlyRentCents={computed.ok && rentPeriod === "monthly" ? mulDivRound(computed.amountScaled, 100n, SCALE) : undefined}
+            frequency={payFreq}
+            currency={currency}
+            formatMoney={(cents) => formatExactMoney(cents, currency)}
+          />
 
           <section className="mt-8 rc-print-block">
             <h3 className="text-center sm:text-left text-2xl font-semibold mb-3 text-sky-800">

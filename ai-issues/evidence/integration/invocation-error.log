@@ -1,0 +1,20 @@
+npm error code EUSAGE
+npm error
+npm error Manage the npm configuration files
+npm error
+npm error Usage:
+npm error npm config set <key>=<value> [<key>=<value> ...]
+npm error npm config get [<key> [<key> ...]]
+npm error npm config delete <key> [<key> ...]
+npm error npm config list [--json]
+npm error npm config edit
+npm error npm config fix
+npm error
+npm error Options:
+npm error [--json] [-g|--global] [--editor <editor>] [-L|--location <global|user|project>]
+npm error [-l|--long]
+npm error
+npm error alias: c
+npm error
+npm error Run "npm help config" for more info
+npm error A complete log of this run can be found in: C:\Users\Suhas\AppData\Local\npm-cache\_logs\2026-11-13T05_08_24_973Z-debug-0.log
