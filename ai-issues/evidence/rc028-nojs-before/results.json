@@ -1,0 +1,939 @@
+{
+  "at": "2026-11-13T14:08:49.922Z",
+  "browser": "145.0.7632.6",
+  "playwright": "1.58.2",
+  "node": "v25.9.0",
+  "javaScriptEnabled": false,
+  "pages": [
+    {
+      "key": "urgent",
+      "url": "https://6af6977a997b1f8cde73e05e--rent-converter.netlify.app/",
+      "status": 200,
+      "requestHosts": [
+        "6af6977a997b1f8cde73e05e--rent-converter.netlify.app",
+        "fonts.googleapis.com",
+        "fonts.gstatic.com"
+      ],
+      "errors": [],
+      "widths": [
+        {
+          "width": 360,
+          "scrollWidth": 360,
+          "controls": 7,
+          "disabled": 0,
+          "enabled": [
+            "Open menu",
+            "rent-amount",
+            "Currency",
+            "From period",
+            "To period",
+            "Assumptions: 365-day year, 28-day 4-week period\u00e2\u2013\u00be",
+            "Analytics preferences"
+          ],
+          "navHrefs": [
+            "/",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        },
+        {
+          "width": 390,
+          "scrollWidth": 390,
+          "controls": 7,
+          "disabled": 0,
+          "enabled": [
+            "Open menu",
+            "rent-amount",
+            "Currency",
+            "From period",
+            "To period",
+            "Assumptions: 365-day year, 28-day 4-week period\u00e2\u2013\u00be",
+            "Analytics preferences"
+          ],
+          "navHrefs": [
+            "/",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        },
+        {
+          "width": 768,
+          "scrollWidth": 768,
+          "controls": 8,
+          "disabled": 0,
+          "enabled": [
+            "Open menu",
+            "Print / Save PDF",
+            "rent-amount",
+            "Currency",
+            "From period",
+            "To period",
+            "Assumptions: 365-day year, 28-day 4-week period\u00e2\u2013\u00be",
+            "Analytics preferences"
+          ],
+          "navHrefs": [
+            "/",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        },
+        {
+          "width": 1280,
+          "scrollWidth": 1280,
+          "controls": 8,
+          "disabled": 0,
+          "enabled": [
+            "More",
+            "Print / Save PDF",
+            "rent-amount",
+            "Currency",
+            "From period",
+            "To period",
+            "Assumptions: 365-day year, 28-day 4-week period\u00e2\u2013\u00be",
+            "Analytics preferences"
+          ],
+          "navHrefs": [
+            "/",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        },
+        {
+          "width": 1440,
+          "scrollWidth": 1440,
+          "controls": 8,
+          "disabled": 0,
+          "enabled": [
+            "More",
+            "Print / Save PDF",
+            "rent-amount",
+            "Currency",
+            "From period",
+            "To period",
+            "Assumptions: 365-day year, 28-day 4-week period\u00e2\u2013\u00be",
+            "Analytics preferences"
+          ],
+          "navHrefs": [
+            "/",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        }
+      ],
+      "staleEdit": {
+        "id": "rent-amount",
+        "previous": "500",
+        "valueAfter": "98765",
+        "visibleTextUnchanged": true
+      },
+      "mobileMenu": {
+        "disabled": false,
+        "before": "false",
+        "after": "false"
+      },
+      "homeNavigation": {
+        "url": "https://6af6977a997b1f8cde73e05e--rent-converter.netlify.app/",
+        "heading": "Rent Converter Calculator"
+      },
+      "notice": [
+        "JavaScript is off. Calculator values shown here are examples and will not update when you edit inputs. Enable JavaScript to calculate your own amounts; explanations and navigation remain available."
+      ]
+    },
+    {
+      "key": "w01",
+      "url": "https://6af69ad52629bf99da003eb7--rent-converter.netlify.app/",
+      "status": 200,
+      "requestHosts": [
+        "6af69ad52629bf99da003eb7--rent-converter.netlify.app",
+        "fonts.googleapis.com",
+        "fonts.gstatic.com"
+      ],
+      "errors": [],
+      "widths": [
+        {
+          "width": 360,
+          "scrollWidth": 360,
+          "controls": 21,
+          "disabled": 14,
+          "enabled": [
+            "Open menu",
+            "rent-amount",
+            "Currency",
+            "From period",
+            "To period",
+            "Assumptions: 365-day year, 28-day 4-week period\u00e2\u2013\u00be",
+            "Analytics preferences"
+          ],
+          "navHrefs": [
+            "/",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        },
+        {
+          "width": 390,
+          "scrollWidth": 390,
+          "controls": 21,
+          "disabled": 14,
+          "enabled": [
+            "Open menu",
+            "rent-amount",
+            "Currency",
+            "From period",
+            "To period",
+            "Assumptions: 365-day year, 28-day 4-week period\u00e2\u2013\u00be",
+            "Analytics preferences"
+          ],
+          "navHrefs": [
+            "/",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        },
+        {
+          "width": 768,
+          "scrollWidth": 768,
+          "controls": 22,
+          "disabled": 14,
+          "enabled": [
+            "Open menu",
+            "Print / Save PDF",
+            "rent-amount",
+            "Currency",
+            "From period",
+            "To period",
+            "Assumptions: 365-day year, 28-day 4-week period\u00e2\u2013\u00be",
+            "Analytics preferences"
+          ],
+          "navHrefs": [
+            "/",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        },
+        {
+          "width": 1280,
+          "scrollWidth": 1280,
+          "controls": 22,
+          "disabled": 14,
+          "enabled": [
+            "More",
+            "Print / Save PDF",
+            "rent-amount",
+            "Currency",
+            "From period",
+            "To period",
+            "Assumptions: 365-day year, 28-day 4-week period\u00e2\u2013\u00be",
+            "Analytics preferences"
+          ],
+          "navHrefs": [
+            "/",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        },
+        {
+          "width": 1440,
+          "scrollWidth": 1440,
+          "controls": 22,
+          "disabled": 14,
+          "enabled": [
+            "More",
+            "Print / Save PDF",
+            "rent-amount",
+            "Currency",
+            "From period",
+            "To period",
+            "Assumptions: 365-day year, 28-day 4-week period\u00e2\u2013\u00be",
+            "Analytics preferences"
+          ],
+          "navHrefs": [
+            "/",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        }
+      ],
+      "staleEdit": {
+        "id": "rent-amount",
+        "previous": "500",
+        "valueAfter": "98765",
+        "visibleTextUnchanged": true
+      },
+      "mobileMenu": {
+        "disabled": false,
+        "before": "false",
+        "after": "false"
+      },
+      "homeNavigation": {
+        "url": "https://6af69ad52629bf99da003eb7--rent-converter.netlify.app/",
+        "heading": "Rent Converter Calculator"
+      },
+      "notice": [
+        "JavaScript is off. Calculator values shown here are examples and will not update when you edit inputs. Enable JavaScript to calculate your own amounts; explanations and navigation remain available.",
+        "JavaScript is required to edit and compare listings. The figures below are a fixed example: 500 per week plus 100 monthly extras costs 2,272.62 per month, compared with 2,200 per month with no extras. Enable JavaScript to enter your own listings, save or export."
+      ]
+    },
+    {
+      "key": "w02",
+      "url": "https://6af69ad656cfa2344539eb98--rent-converter.netlify.app/rent-budget-calculator",
+      "status": 200,
+      "requestHosts": [
+        "6af69ad656cfa2344539eb98--rent-converter.netlify.app",
+        "fonts.googleapis.com",
+        "fonts.gstatic.com"
+      ],
+      "errors": [],
+      "widths": [
+        {
+          "width": 360,
+          "scrollWidth": 360,
+          "controls": 22,
+          "disabled": 0,
+          "enabled": [
+            "Open menu",
+            "Print / Save PDF",
+            "budget-income",
+            "budget-rent",
+            "budget-expenses",
+            "USDCADEURGBPAUDNZDJPYCNYHKDSGDINRKRWCHFSEKNOKDKKMXNBRL",
+            "housing-budget-income",
+            "housing-budget-currency",
+            "housing-budget-rent",
+            "housing-budget-rent-frequency",
+            "housing-budget-utilities",
+            "housing-budget-utilities-frequency",
+            "housing-budget-parking",
+            "housing-budget-parking-frequency",
+            "housing-budget-insurance",
+            "housing-budget-insurance-frequency",
+            "housing-budget-other",
+            "housing-budget-other-frequency",
+            "housing-budget-commitments",
+            "housing-budget-savings",
+            "Print budget / Save PDF",
+            "Analytics preferences"
+          ],
+          "navHrefs": [
+            "/",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        },
+        {
+          "width": 390,
+          "scrollWidth": 390,
+          "controls": 22,
+          "disabled": 0,
+          "enabled": [
+            "Open menu",
+            "Print / Save PDF",
+            "budget-income",
+            "budget-rent",
+            "budget-expenses",
+            "USDCADEURGBPAUDNZDJPYCNYHKDSGDINRKRWCHFSEKNOKDKKMXNBRL",
+            "housing-budget-income",
+            "housing-budget-currency",
+            "housing-budget-rent",
+            "housing-budget-rent-frequency",
+            "housing-budget-utilities",
+            "housing-budget-utilities-frequency",
+            "housing-budget-parking",
+            "housing-budget-parking-frequency",
+            "housing-budget-insurance",
+            "housing-budget-insurance-frequency",
+            "housing-budget-other",
+            "housing-budget-other-frequency",
+            "housing-budget-commitments",
+            "housing-budget-savings",
+            "Print budget / Save PDF",
+            "Analytics preferences"
+          ],
+          "navHrefs": [
+            "/",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        },
+        {
+          "width": 768,
+          "scrollWidth": 768,
+          "controls": 22,
+          "disabled": 0,
+          "enabled": [
+            "Open menu",
+            "Print / Save PDF",
+            "budget-income",
+            "budget-rent",
+            "budget-expenses",
+            "USDCADEURGBPAUDNZDJPYCNYHKDSGDINRKRWCHFSEKNOKDKKMXNBRL",
+            "housing-budget-income",
+            "housing-budget-currency",
+            "housing-budget-rent",
+            "housing-budget-rent-frequency",
+            "housing-budget-utilities",
+            "housing-budget-utilities-frequency",
+            "housing-budget-parking",
+            "housing-budget-parking-frequency",
+            "housing-budget-insurance",
+            "housing-budget-insurance-frequency",
+            "housing-budget-other",
+            "housing-budget-other-frequency",
+            "housing-budget-commitments",
+            "housing-budget-savings",
+            "Print budget / Save PDF",
+            "Analytics preferences"
+          ],
+          "navHrefs": [
+            "/",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        },
+        {
+          "width": 1280,
+          "scrollWidth": 1280,
+          "controls": 22,
+          "disabled": 0,
+          "enabled": [
+            "More",
+            "Print / Save PDF",
+            "budget-income",
+            "budget-rent",
+            "budget-expenses",
+            "USDCADEURGBPAUDNZDJPYCNYHKDSGDINRKRWCHFSEKNOKDKKMXNBRL",
+            "housing-budget-income",
+            "housing-budget-currency",
+            "housing-budget-rent",
+            "housing-budget-rent-frequency",
+            "housing-budget-utilities",
+            "housing-budget-utilities-frequency",
+            "housing-budget-parking",
+            "housing-budget-parking-frequency",
+            "housing-budget-insurance",
+            "housing-budget-insurance-frequency",
+            "housing-budget-other",
+            "housing-budget-other-frequency",
+            "housing-budget-commitments",
+            "housing-budget-savings",
+            "Print budget / Save PDF",
+            "Analytics preferences"
+          ],
+          "navHrefs": [
+            "/",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        },
+        {
+          "width": 1440,
+          "scrollWidth": 1440,
+          "controls": 22,
+          "disabled": 0,
+          "enabled": [
+            "More",
+            "Print / Save PDF",
+            "budget-income",
+            "budget-rent",
+            "budget-expenses",
+            "USDCADEURGBPAUDNZDJPYCNYHKDSGDINRKRWCHFSEKNOKDKKMXNBRL",
+            "housing-budget-income",
+            "housing-budget-currency",
+            "housing-budget-rent",
+            "housing-budget-rent-frequency",
+            "housing-budget-utilities",
+            "housing-budget-utilities-frequency",
+            "housing-budget-parking",
+            "housing-budget-parking-frequency",
+            "housing-budget-insurance",
+            "housing-budget-insurance-frequency",
+            "housing-budget-other",
+            "housing-budget-other-frequency",
+            "housing-budget-commitments",
+            "housing-budget-savings",
+            "Print budget / Save PDF",
+            "Analytics preferences"
+          ],
+          "navHrefs": [
+            "/",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        }
+      ],
+      "staleEdit": {
+        "id": "budget-income",
+        "previous": "60000",
+        "valueAfter": "98765",
+        "visibleTextUnchanged": true
+      },
+      "mobileMenu": {
+        "disabled": false,
+        "before": "false",
+        "after": "false"
+      },
+      "homeNavigation": {
+        "url": "https://6af69ad656cfa2344539eb98--rent-converter.netlify.app/",
+        "heading": "Rent Converter Calculator"
+      },
+      "notice": [
+        "JavaScript is off. Calculator values shown here are examples and will not update when you edit inputs. Enable JavaScript to calculate your own amounts; explanations and navigation remain available.",
+        "Enable JavaScript for this interactive budget. To calculate manually, normalize each housing bill to a monthly amount, add them, then subtract that total, other commitments and savings from monthly take-home income."
+      ]
+    },
+    {
+      "key": "w03",
+      "url": "https://6af69b0c73337f2e792caf49--rent-converter.netlify.app/rent-per-paycheck-calculator",
+      "status": 200,
+      "requestHosts": [
+        "6af69b0c73337f2e792caf49--rent-converter.netlify.app",
+        "fonts.googleapis.com",
+        "fonts.gstatic.com"
+      ],
+      "errors": [],
+      "widths": [
+        {
+          "width": 360,
+          "scrollWidth": 360,
+          "controls": 15,
+          "disabled": 6,
+          "enabled": [
+            "Open menu",
+            "Print / Save PDF",
+            "rpc_amount_input",
+            "Currency",
+            "rpc_rent_period",
+            "rpc_pay_freq",
+            "Print / Save PDF",
+            "Assumptions: 365-day year, 28-day 4-week period\u00e2\u2013\u00be",
+            "Analytics preferences"
+          ],
+          "navHrefs": [
+            "/",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        },
+        {
+          "width": 390,
+          "scrollWidth": 390,
+          "controls": 15,
+          "disabled": 6,
+          "enabled": [
+            "Open menu",
+            "Print / Save PDF",
+            "rpc_amount_input",
+            "Currency",
+            "rpc_rent_period",
+            "rpc_pay_freq",
+            "Print / Save PDF",
+            "Assumptions: 365-day year, 28-day 4-week period\u00e2\u2013\u00be",
+            "Analytics preferences"
+          ],
+          "navHrefs": [
+            "/",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        },
+        {
+          "width": 768,
+          "scrollWidth": 768,
+          "controls": 14,
+          "disabled": 6,
+          "enabled": [
+            "Open menu",
+            "Print / Save PDF",
+            "rpc_amount_input",
+            "Currency",
+            "rpc_rent_period",
+            "rpc_pay_freq",
+            "Assumptions: 365-day year, 28-day 4-week period\u00e2\u2013\u00be",
+            "Analytics preferences"
+          ],
+          "navHrefs": [
+            "/",
+            "/",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        },
+        {
+          "width": 1280,
+          "scrollWidth": 1280,
+          "controls": 14,
+          "disabled": 6,
+          "enabled": [
+            "More",
+            "Print / Save PDF",
+            "rpc_amount_input",
+            "Currency",
+            "rpc_rent_period",
+            "rpc_pay_freq",
+            "Assumptions: 365-day year, 28-day 4-week period\u00e2\u2013\u00be",
+            "Analytics preferences"
+          ],
+          "navHrefs": [
+            "/",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        },
+        {
+          "width": 1440,
+          "scrollWidth": 1440,
+          "controls": 14,
+          "disabled": 6,
+          "enabled": [
+            "More",
+            "Print / Save PDF",
+            "rpc_amount_input",
+            "Currency",
+            "rpc_rent_period",
+            "rpc_pay_freq",
+            "Assumptions: 365-day year, 28-day 4-week period\u00e2\u2013\u00be",
+            "Analytics preferences"
+          ],
+          "navHrefs": [
+            "/",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        }
+      ],
+      "staleEdit": {
+        "id": "rpc_amount_input",
+        "previous": "2000",
+        "valueAfter": "98765",
+        "visibleTextUnchanged": true
+      },
+      "mobileMenu": {
+        "disabled": false,
+        "before": "false",
+        "after": "false"
+      },
+      "homeNavigation": {
+        "url": "https://6af69b0c73337f2e792caf49--rent-converter.netlify.app/",
+        "heading": "Rent Converter Calculator"
+      },
+      "notice": [
+        "JavaScript is off. Calculator values shown here are examples and will not update when you edit inputs. Enable JavaScript to calculate your own amounts; explanations and navigation remain available.",
+        "Enable JavaScript to calculate this date-based plan. The annual-average example above is static without JavaScript."
+      ]
+    },
+    {
+      "key": "w04",
+      "url": "https://6af69d4ceab11ecb5c38ff5b--rent-converter.netlify.app/rent-schedule-calculator",
+      "status": 200,
+      "requestHosts": [
+        "6af69d4ceab11ecb5c38ff5b--rent-converter.netlify.app",
+        "fonts.googleapis.com",
+        "fonts.gstatic.com"
+      ],
+      "errors": [],
+      "widths": [
+        {
+          "width": 360,
+          "scrollWidth": 360,
+          "controls": 9,
+          "disabled": 1,
+          "enabled": [
+            "Open menu",
+            "Print / Save PDF",
+            "schedule-start-date",
+            "schedule-term-months",
+            "schedule-rent",
+            "USDCADEURGBPAUDNZDJPYCNYHKDSGDINRKRWCHFSEKNOKDKKMXNBRL",
+            "schedule-frequency",
+            "Analytics preferences"
+          ],
+          "navHrefs": [
+            "/",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        },
+        {
+          "width": 390,
+          "scrollWidth": 390,
+          "controls": 9,
+          "disabled": 1,
+          "enabled": [
+            "Open menu",
+            "Print / Save PDF",
+            "schedule-start-date",
+            "schedule-term-months",
+            "schedule-rent",
+            "USDCADEURGBPAUDNZDJPYCNYHKDSGDINRKRWCHFSEKNOKDKKMXNBRL",
+            "schedule-frequency",
+            "Analytics preferences"
+          ],
+          "navHrefs": [
+            "/",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        },
+        {
+          "width": 768,
+          "scrollWidth": 768,
+          "controls": 9,
+          "disabled": 1,
+          "enabled": [
+            "Open menu",
+            "Print / Save PDF",
+            "schedule-start-date",
+            "schedule-term-months",
+            "schedule-rent",
+            "USDCADEURGBPAUDNZDJPYCNYHKDSGDINRKRWCHFSEKNOKDKKMXNBRL",
+            "schedule-frequency",
+            "Analytics preferences"
+          ],
+          "navHrefs": [
+            "/",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        },
+        {
+          "width": 1280,
+          "scrollWidth": 1280,
+          "controls": 9,
+          "disabled": 1,
+          "enabled": [
+            "More",
+            "Print / Save PDF",
+            "schedule-start-date",
+            "schedule-term-months",
+            "schedule-rent",
+            "USDCADEURGBPAUDNZDJPYCNYHKDSGDINRKRWCHFSEKNOKDKKMXNBRL",
+            "schedule-frequency",
+            "Analytics preferences"
+          ],
+          "navHrefs": [
+            "/",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        },
+        {
+          "width": 1440,
+          "scrollWidth": 1440,
+          "controls": 9,
+          "disabled": 1,
+          "enabled": [
+            "More",
+            "Print / Save PDF",
+            "schedule-start-date",
+            "schedule-term-months",
+            "schedule-rent",
+            "USDCADEURGBPAUDNZDJPYCNYHKDSGDINRKRWCHFSEKNOKDKKMXNBRL",
+            "schedule-frequency",
+            "Analytics preferences"
+          ],
+          "navHrefs": [
+            "/",
+            "/",
+            "/weekly-to-monthly-rent-converter",
+            "/how-much-rent-can-i-afford-calculator",
+            "/rent-increase-calculator",
+            "/rent-split-calculator",
+            "/about",
+            "/methodology",
+            "/contact",
+            "/sitemap",
+            "/privacy-policy",
+            "/terms-of-service",
+            "/cookies"
+          ]
+        }
+      ],
+      "staleEdit": {
+        "id": "schedule-start-date",
+        "previous": "",
+        "valueAfter": "2028-01-31",
+        "visibleTextUnchanged": true
+      },
+      "mobileMenu": {
+        "disabled": false,
+        "before": "false",
+        "after": "false"
+      },
+      "homeNavigation": {
+        "url": "https://6af69d4ceab11ecb5c38ff5b--rent-converter.netlify.app/",
+        "heading": "Rent Converter Calculator"
+      },
+      "notice": [
+        "JavaScript is off. Calculator values shown here are examples and will not update when you edit inputs. Enable JavaScript to calculate your own amounts; explanations and navigation remain available.",
+        "Enable JavaScript to generate and download the payment schedule."
+      ]
+    }
+  ]
+}
