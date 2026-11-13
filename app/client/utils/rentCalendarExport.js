@@ -85,7 +85,7 @@ export function buildRentCalendar(input) {
       `DTSTAMP:${stamp}`,
       `DTSTART;VALUE=DATE:${dateToken}`,
       `DTEND;VALUE=DATE:${nextDate.replace(/-/g, "")}`,
-      `SUMMARY:${escapeCalendarText(`Rent due: ${amount}`)}`,
+      `SUMMARY:${escapeCalendarText(`Rent payment period starts: ${amount}`)}`,
       `DESCRIPTION:${escapeCalendarText(description)}`,
       "TRANSP:TRANSPARENT",
       "END:VEVENT",
