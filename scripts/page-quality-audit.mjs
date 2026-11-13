@@ -1,4 +1,6 @@
 import fs from "node:fs";
+import { dirname, resolve } from "node:path";
+import { pathToFileURL } from "node:url";
 
 const SITE_ORIGIN = "https://www.rentconverter.com";
 const localOrigin = process.env.AUDIT_ORIGIN ?? "http://127.0.0.1:3011";
@@ -186,44 +188,47 @@ function includesAny(text, patterns) {
   return patterns.some((pattern) => pattern.test(text));
 }
 
-function scorePage(page) {
-  const reasons = [];
-  const isSupport = ["/about", "/contact", "/privacy-policy", "/cookies", "/terms-of-service", "/sitemap"].includes(page.path);
+export function assessPage(page) {
+  const failures = [];
+  const reviewSignals = [];
+  const isSupport = ["/about", "/contact", "/privacy-policy", "/cookies", "/terms-of-service", "/sitemap", "/methodology"].includes(page.path);
   const isHome = page.path === "/";
 
+  if (page.status !== 200) failures.push(`HTTP ${page.status}, expected 200`);
+  if (page.redirected) failures.push("sitemap URL redirects instead of serving its canonical page");
   if (!page.title || !page.description || !page.canonical || !page.h1) {
-    reasons.push("missing core metadata or H1");
+    failures.push("missing core metadata or H1");
   }
+  if (page.canonical && page.canonical !== page.url) failures.push("canonical does not match the intended URL");
+  if (page.h1Count !== 1) failures.push(`expected one H1, found ${page.h1Count}`);
+  if (/noindex/i.test(page.robots ?? "")) failures.push("noindexed page appears in XML sitemap");
+  if (page.schemaTypes.includes("InvalidJsonLd")) failures.push("invalid JSON-LD");
   if (page.title && page.h1 && !page.title.toLowerCase().includes(page.h1.toLowerCase().slice(0, 18)) && !page.h1.toLowerCase().includes(page.title.toLowerCase().split("|")[0].slice(0, 18))) {
-    reasons.push("title/H1 alignment should be checked");
+    reviewSignals.push("title/H1 alignment should be checked");
   }
-  if (!isSupport && !isHome && page.visibleWordCount < 550) {
-    reasons.push(`low visible word count (${page.visibleWordCount})`);
-  }
-  if (!isSupport && !page.hasHowWorks) reasons.push("missing clear how-this-works/methodology section");
-  if (!isSupport && !page.hasWorkedExample) reasons.push("missing worked example signal");
-  if (!isSupport && !page.hasLimitations) reasons.push("missing assumptions/limitations signal");
-  if (page.fullDirectoryCount > 0 && !isHome) reasons.push("full all-tools directory appears outside home");
-  if (!isHome && page.internalLinkCount > 28) reasons.push(`possibly directory-like internal link count (${page.internalLinkCount})`);
-  if (!isSupport && page.first250Specificity === "generic-risk") reasons.push("first 250 visible words look generic");
+  if (!isSupport && !page.hasHowWorks) reviewSignals.push("methodology wording not detected; inspect actual explanation");
+  if (!isSupport && !page.hasWorkedExample) reviewSignals.push("example wording not detected; verify whether an example would help the task");
+  if (!isSupport && !page.hasLimitations) reviewSignals.push("assumptions/limitations wording not detected");
+  if (page.fullDirectoryCount > 0 && !isHome) failures.push("full all-tools directory appears outside home");
+  if (!isHome && page.internalLinkCount > 28) reviewSignals.push(`possibly directory-like internal link count (${page.internalLinkCount})`);
+  if (!isSupport && page.first250Specificity === "generic-risk") reviewSignals.push("few route-specific tokens in first 250 words; inspect intent rather than adding keywords");
   if (/ontario|california|quebec|bc-|australia|melbourne|sydney/.test(page.path) && !/rules vary|official|lease|reviewed|authority|check/i.test(page.text)) {
-    reasons.push("regional caveat not visible");
+    reviewSignals.push("regional caveat wording not detected; verify claims against dated primary sources");
   }
   if (page.nearestSimilarPath && page.nearestSimilarity >= 0.78 && !isSupport) {
-    reasons.push(`high first-250 similarity to ${page.nearestSimilarPath} (${page.nearestSimilarity.toFixed(2)})`);
+    reviewSignals.push(`similar first-250 text to ${page.nearestSimilarPath} (${page.nearestSimilarity.toFixed(2)}); compare tasks before any consolidation`);
   }
 
-  const risk = reasons.length >= 4 || reasons.some((reason) => reason.startsWith("full all-tools") || reason.startsWith("missing core"))
-    ? "High"
-    : reasons.length >= 2
-      ? "Medium"
-      : "Low";
-
-  return { risk, reasons };
+  return {
+    structuralStatus: failures.length ? "FAIL" : "NO DETECTED FAILURE",
+    failures,
+    reviewSignals,
+    humanValueStatus: "NOT ASSESSED",
+  };
 }
 
 async function crawlPage(path, routeMap) {
-  const response = await fetch(localUrl(path));
+  const response = await fetch(localUrl(path), { signal: AbortSignal.timeout(30_000) });
   const html = await response.text();
   const mainHtml = extractMainHtml(html);
   const mainText = stripTags(mainHtml);
@@ -243,12 +248,17 @@ async function crawlPage(path, routeMap) {
     path,
     url: `${SITE_ORIGIN}${path === "/" ? "" : path}`,
     status: response.status,
+    redirected: response.redirected,
     file,
     source: classifyRoute(file),
     title,
     description: extractAttr(descriptionTag, "content"),
     canonical: extractAttr(canonicalTag, "href"),
     h1,
+    h1Count: headings.filter((heading) => heading.level === 1).length,
+    robots: extractAttr(html.match(/<meta\b[^>]*name=["']robots["'][^>]*>/i)?.[0] ?? "", "content"),
+    responseRobots: response.headers.get("x-robots-tag") ?? "",
+    ogUrl: extractAttr(html.match(/<meta\b[^>]*property=["']og:url["'][^>]*>/i)?.[0] ?? "", "content"),
     visibleWordCount: pageWords.length,
     headings,
     headingText: headings.map((heading) => `H${heading.level}: ${heading.text}`),
@@ -279,7 +289,7 @@ async function crawlPage(path, routeMap) {
       /rules vary/i,
       /check your lease/i,
     ]),
-    schemaTypes: types,
+    schemaTypes: types,    schemaUrls: schemas.flatMap((schema) => [schema, ...(schema["@graph"] ?? [])]).filter((schema) => ["WebPage", "WebApplication", "Article"].includes(schema["@type"])).map((schema) => ({ type: schema["@type"], url: schema.url ?? schema.mainEntityOfPage ?? "" })),    internalLinks: extractInternalLinks(html),
     fullDirectoryCount: (html.match(/id=["']all-tools["']/gi) ?? []).length,
     first250,
     first250Specificity: firstTextSpecificity(path, title, h1, first250),
@@ -288,67 +298,45 @@ async function crawlPage(path, routeMap) {
 }
 
 function writeReport(pages) {
-  const counts = pages.reduce(
-    (acc, page) => {
-      acc[page.risk] += 1;
-      acc[page.source] = (acc[page.source] ?? 0) + 1;
-      return acc;
-    },
-    { High: 0, Medium: 0, Low: 0 },
-  );
-
-  const lines = [];
-  lines.push("# SEO Page Quality Audit");
-  lines.push("");
-  lines.push(`Generated: ${new Date().toISOString()}`);
-  lines.push(`Origin crawled: ${localOrigin}`);
-  lines.push(`Pages crawled: ${pages.length}`);
-  lines.push("");
-  lines.push("## Summary");
-  lines.push("");
-  lines.push(`- High risk: ${counts.High}`);
-  lines.push(`- Medium risk: ${counts.Medium}`);
-  lines.push(`- Low risk: ${counts.Low}`);
-  lines.push(`- Custom/manual routes: ${counts.custom ?? 0}`);
-  lines.push(`- Generated routes: ${counts.generated ?? 0}`);
-  lines.push(`- Intent landing routes: ${counts["intent-landing"] ?? 0}`);
-  lines.push("");
-
-  for (const risk of ["High", "Medium"]) {
-    const group = pages.filter((page) => page.risk === risk);
-    lines.push(`## ${risk} Risk Pages`);
-    lines.push("");
-    if (!group.length) {
-      lines.push("None.");
-      lines.push("");
-      continue;
-    }
-    lines.push("| URL | Source | Words | Links | Reasons |");
-    lines.push("| --- | --- | ---: | ---: | --- |");
-    for (const page of group) {
-      lines.push(
-        `| ${page.path} | ${page.source} | ${page.visibleWordCount} | ${page.internalLinkCount} | ${escapeCell(page.reasons.join("; "))} |`,
-      );
-    }
-    lines.push("");
-  }
-
-  lines.push("## Full Page Inventory");
-  lines.push("");
-  lines.push("| URL | Risk | Source | Title | Description | Canonical | H1 | Words | Headings | FAQ | Links | How works | Example | Limitations | Related links | Schema | Directory | First 250 |");
-  lines.push("| --- | --- | --- | --- | --- | --- | --- | ---: | --- | ---: | ---: | --- | --- | --- | --- | --- | ---: | --- |");
-  for (const page of pages) {
-    const relatedQuality = page.fullDirectoryCount > 0
-      ? "directory"
-      : page.internalLinkCount > 28 && page.path !== "/"
-        ? "broad"
-        : "focused";
-    lines.push(
-      `| ${page.path} | ${page.risk} | ${page.source} | ${escapeCell(page.title)} | ${escapeCell(page.description)} | ${escapeCell(page.canonical)} | ${escapeCell(page.h1)} | ${page.visibleWordCount} | ${escapeCell(page.headingText.slice(0, 12).join("; "))} | ${page.faqCount} | ${page.internalLinkCount} | ${page.hasHowWorks ? "yes" : "no"} | ${page.hasWorkedExample ? "yes" : "no"} | ${page.hasLimitations ? "yes" : "no"} | ${relatedQuality} | ${escapeCell([...new Set(page.schemaTypes)].join(", "))} | ${page.fullDirectoryCount} | ${page.first250Specificity} |`,
-    );
-  }
-  lines.push("");
-
+  const failed = pages.filter((page) => page.failures.length);
+  const lines = [
+    "# Page structure and human-review evidence",
+    "",
+    `Generated: ${new Date().toISOString()}`,
+    `Origin crawled: ${localOrigin}`,
+    `Sitemap pages crawled: ${pages.length}`,
+    "",
+    `Structural failures: ${failed.length} pages. Human-value assessments: 0 completed by this crawler.`,
+    "",
+    "This crawler cannot establish usefulness, originality, correctness of calculations, accessibility, search recovery, or AdSense eligibility. Word and FAQ counts are descriptive inventory only; neither a minimum word count nor a low similarity score qualifies a page for release. A clean structural report is not human acceptance.",
+    "",
+    "## Required human evidence before acceptance",
+    "",
+    "For every candidate record the user task, nearest competing page and functional difference, before/after browser task results, input errors and keyboard behavior, five viewport screenshots, JavaScript-disabled fallback, print/export, independent numerical examples, and dated primary sources for regional claims. Record reviewer, exact tested SHA, immutable preview, remaining issues and owner decision. Missing evidence means NOT ASSESSED, never pass.",
+    "",
+    "## Structural failures",
+    "",
+    "| URL | Failures |",
+    "| --- | --- |",
+    ...failed.map((page) => `| ${page.path} | ${escapeCell(page.failures.join("; "))} |`),
+    ...(failed.length ? [] : ["| — | No detected structural failures; human acceptance remains pending. |"]),
+    "",
+    "## Editorial inspection signals (not automatic defects)",
+    "",
+    "Signals identify where a person should inspect task fit. Do not add filler, keywords, FAQs or citations merely to silence them. Similar wording is not proof that two tools solve the same task.",
+    "",
+    "| URL | Inspect | Nearest text match |",
+    "| --- | --- | --- |",
+    ...pages.filter((page) => page.reviewSignals.length).map((page) => `| ${page.path} | ${escapeCell(page.reviewSignals.join("; "))} | ${page.nearestSimilarPath} |`),
+    "",
+    "## Full page inventory",
+    "",
+    "| URL | HTTP | Structure | Human value | Title | Description | Canonical | H1 | Robots | Schema | Source | Words (descriptive only) | Links |",
+    "| --- | ---: | --- | --- | --- | --- | --- | --- | --- | --- | --- | ---: | ---: |",
+    ...pages.map((page) => `| ${page.path} | ${page.status} | ${page.structuralStatus} | ${page.humanValueStatus} | ${escapeCell(page.title)} | ${escapeCell(page.description)} | ${page.canonical} | ${escapeCell(page.h1)} | ${escapeCell(page.robots || "default index/follow")} | ${escapeCell([...new Set(page.schemaTypes)].join(", "))} | ${page.source} | ${page.visibleWordCount} | ${page.internalLinkCount} |`),
+    "",
+  ];
+  fs.mkdirSync(dirname(outputPath), { recursive: true });
   fs.writeFileSync(outputPath, `${lines.join("\n")}\n`);
 }
 
@@ -374,22 +362,22 @@ async function main() {
   }
 
   for (const page of pages) {
-    const score = scorePage(page);
-    page.risk = score.risk;
-    page.reasons = score.reasons;
+    Object.assign(page, assessPage(page));
     delete page.text;
   }
 
   writeReport(pages);
-  fs.mkdirSync(".codex-qa", { recursive: true });
+  fs.mkdirSync(dirname(jsonOutputPath), { recursive: true });
   fs.writeFileSync(jsonOutputPath, `${JSON.stringify(pages, null, 2)}\n`);
 
-  const high = pages.filter((page) => page.risk === "High").length;
-  const medium = pages.filter((page) => page.risk === "Medium").length;
-  console.log(`Crawled ${pages.length} pages. High risk: ${high}. Medium risk: ${medium}. Report: ${outputPath}`);
+  const failed = pages.filter((page) => page.failures.length).length;
+  console.log(`Crawled ${pages.length} pages. Structural failures: ${failed}. Human value: NOT ASSESSED. Report: ${outputPath}`);
+  if (failed) process.exitCode = 1;
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exit(1);
-});
+if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
+  main().catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+  });
+}
