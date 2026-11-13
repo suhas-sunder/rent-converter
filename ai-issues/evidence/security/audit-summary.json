@@ -1,0 +1,192 @@
+{
+  "checkedAtUtc": "2026-11-13T14:10:51.336Z",
+  "node": "v25.9.0",
+  "npm": "10.9.0",
+  "before": {
+    "info": 0,
+    "low": 0,
+    "moderate": 3,
+    "high": 7,
+    "critical": 1,
+    "total": 11
+  },
+  "after": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "advisories": [
+    {
+      "package": "@react-router/dev",
+      "severity": "high",
+      "direct": true,
+      "via": [
+        "@react-router/node"
+      ]
+    },
+    {
+      "package": "@react-router/node",
+      "severity": "high",
+      "direct": false,
+      "via": [
+        "react-router"
+      ]
+    },
+    {
+      "package": "baseline-browser-mapping",
+      "severity": "moderate",
+      "direct": false,
+      "via": [
+        {
+          "title": "baseline-browser-mapping process termination on invalid input causes denial of service",
+          "url": "https://github.com/advisories/GHSA-w5vr-8v7q-w6rv",
+          "range": ">=2.0.0 <2.11.0"
+        }
+      ]
+    },
+    {
+      "package": "browserslist",
+      "severity": "high",
+      "direct": false,
+      "via": [
+        {
+          "title": "Browserslist: Unbounded memory growth (no cache eviction) via distinct query results, leading to eventual OOM",
+          "url": "https://github.com/advisories/GHSA-c83g-rgw3-j3cx",
+          "range": "<=4.28.6"
+        },
+        {
+          "title": "Browserslist: Uncaught crash / prototype write via untrusted browserslist-stats.json custom stats (normalizeStats)",
+          "url": "https://github.com/advisories/GHSA-73wf-gq98-2v4g",
+          "range": "<=4.28.6"
+        }
+      ]
+    },
+    {
+      "package": "dompurify",
+      "severity": "critical",
+      "direct": false,
+      "via": [
+        {
+          "title": "DOMPurify: IN_PLACE hook removal leaves a detached subtree executable, causing XSS",
+          "url": "https://github.com/advisories/GHSA-55q2-fjhq-7xh7",
+          "range": "<=3.4.12"
+        },
+        {
+          "title": "DOMPurify: IN_PLACE returns a force-removed rawtext root whose text carries attacker markup — pure HTML reparse executes",
+          "url": "https://github.com/advisories/GHSA-6688-9rhm-gjv2",
+          "range": "<=3.4.15"
+        },
+        {
+          "title": "DOMPurify SAFE_FOR_TEMPLATES bypass: split template expressions survive in attached shadow root content on DOM output modes",
+          "url": "https://github.com/advisories/GHSA-cg2g-xh64-v4q7",
+          "range": ">=3.4.4 <=3.4.16"
+        },
+        {
+          "title": "DOMPurify IN_PLACE: hook that removes a parent or sibling leaves the detached subtree's event handlers armed (incomplete fix for GHSA-p98j-92pf-mc4p)",
+          "url": "https://github.com/advisories/GHSA-mrv2-3pqr-j5jr",
+          "range": "<=3.4.16"
+        },
+        {
+          "title": "DOMPurify: SMIL attributeName=href guard is skipped when PARSER_MEDIA_TYPE is application/xhtml+xml",
+          "url": "https://github.com/advisories/GHSA-c6gr-qvv4-5v3f",
+          "range": "<=3.4.16"
+        }
+      ]
+    },
+    {
+      "package": "fflate",
+      "severity": "moderate",
+      "direct": false,
+      "via": [
+        {
+          "title": "fflate unzipSync can enter an infinite loop when parsing malformed ZIP64 archives",
+          "url": "https://github.com/advisories/GHSA-px8p-9vwx-vf98",
+          "range": ">=0.4.5 <0.4.9"
+        }
+      ]
+    },
+    {
+      "package": "nanoid",
+      "severity": "high",
+      "direct": false,
+      "via": [
+        {
+          "title": "nanoid: custom generators can loop indefinitely when size is zero",
+          "url": "https://github.com/advisories/GHSA-2v37-7h3g-55p8",
+          "range": "<3.3.18"
+        }
+      ]
+    },
+    {
+      "package": "postcss",
+      "severity": "moderate",
+      "direct": false,
+      "via": [
+        {
+          "title": "PostCSS: incomplete fix of GHSA-6g55-p6wh-862q — attacker-controlled sourceMappingURL reads arbitrary .map files when `from` is unset",
+          "url": "https://github.com/advisories/GHSA-fxqj-rqcc-2cmp",
+          "range": "<=8.5.22"
+        }
+      ]
+    },
+    {
+      "package": "react-router",
+      "severity": "high",
+      "direct": true,
+      "via": [
+        {
+          "title": "React Router: RSC Mode CSRF Bypass Allows Action Execution Before 400 Response",
+          "url": "https://github.com/advisories/GHSA-qwww-vcr4-c8h2",
+          "range": ">=7.12.0 <7.18.2"
+        }
+      ]
+    },
+    {
+      "package": "source-map-js",
+      "severity": "high",
+      "direct": false,
+      "via": [
+        {
+          "title": "source-map-js allows event-loop denial of service through indexed source-map section offsets",
+          "url": "https://github.com/advisories/GHSA-68fv-2mgg-jv7q",
+          "range": ">=1.0.0 <1.2.2"
+        }
+      ]
+    },
+    {
+      "package": "vite",
+      "severity": "high",
+      "direct": true,
+      "via": [
+        {
+          "title": "launch-editor: escapeCmdArgs() omits % escaping on Windows",
+          "url": "https://github.com/advisories/GHSA-698v-4r3x-3vcv",
+          "range": "<=6.4.3"
+        },
+        {
+          "title": "launch-editor: Editor CLI flag misinterpretation causing arbitrary command execution for some editors",
+          "url": "https://github.com/advisories/GHSA-r825-w8mm-5pxw",
+          "range": "<=6.4.3"
+        },
+        {
+          "title": "launch-editor: `fs.existsSync()` existence check can be bypassed on Windows",
+          "url": "https://github.com/advisories/GHSA-587h-7wmj-h5pm",
+          "range": "<=6.4.3"
+        },
+        {
+          "title": "Vite: Cross origin script execution through Vite custom middleware",
+          "url": "https://github.com/advisories/GHSA-9jrq-w75r-8gcw",
+          "range": "<=6.4.3"
+        },
+        {
+          "title": "Vite: Files outside `server.fs.allow` could be served when project paths match system paths on non-Windows machine",
+          "url": "https://github.com/advisories/GHSA-rq7h-c2jc-7f22",
+          "range": "<=6.4.3"
+        }
+      ]
+    }
+  ]
+}
