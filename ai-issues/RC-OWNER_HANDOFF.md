@@ -44,3 +44,9 @@ Leave drafts unmerged to defer publication. If an owner-approved release later n
 ## Workspace state
 
 The original rent-converter checkout remains clean at 131ae371aabf8c8b1871116edc3d5d09048ba965. Remote main and the current Netlify production deploy remain 50c4647e5a61f05e1aeb4db04f4918bbfb6c1c5a (deploy 6ad02cf4ac34d1b203b9b866). Work was isolated in rent-converter-urgent, rent-converter-w01 through w04 and rent-converter-rc27. Task-generated QA logs and artifacts are intentionally retained locally; no unrelated work was discarded. The aggregate build branch is an integration/review checkpoint, not an instruction to merge all weeks together.
+
+## Subsequent independent review update — November 13, 2026
+
+After the five staged drafts, an independent GitHub/Netlify review verified each preview's exact head commit and found one new W04 issue: generated .ics events are titled `Rent due: <amount>`, but the file itself clarifies that these dates are calculated payment-period starts rather than necessarily contractual due dates. This should be corrected before publishing W04, with regression tests and a new immutable preview.
+
+The outstanding no-JavaScript browser, actual print/PDF and runtime request-capture checks remain open. Complete them using an appropriate Playwright/Chromium harness; the earlier browser tool's limitation is not proof of a site problem. All five drafts remain HOLD and main is untouched. Detailed checklist: `RC-028_FINAL_BROWSER_ACCEPTANCE.md`.
