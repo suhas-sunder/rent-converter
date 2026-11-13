@@ -1,5 +1,13 @@
 # W04 — calendar export acceptance
 
+## RC-028 calendar wording correction — 2026-11-13
+
+Following review of candidate `155b2a8247449e9523e0e950155338acf573e6c1`, calendar event titles now read `Rent payment period starts: USD …` instead of `Rent due: USD …`. The adjacent download instructions explicitly identify calculated period starts and distinguish them from confirmed contractual payment deadlines. Actual dates, exclusive next-day DTEND, exact currency amounts, UIDs, escaping/folding and existing limitations are unchanged.
+
+The updated summary assertions first failed against the old implementation. After correction, all nine calendar tests pass, including a regression that freezes expected UIDs/DTSTART/DTEND and exact ordinary/large amounts while checking the period-start title and description caveat. The complete isolated branch checks pass: typecheck; **158 tests**, zero failures/skips; production build with 60 static pages/112 redirects/no runtime server; redirect validation; 59 breadcrumb objects with zero failures; release audit of 60 HTTP-200 canonical routes, 112 redirects and 60 internal links. Output is retained locally in `qa-semantics-*.log`; prior QA logs and pre-existing redirect line-ending status are preserved.
+
+This correction requires a fresh immutable preview and a real updated download, PDF/no-JavaScript/network and accessibility acceptance from the root browser harness. Old preview identities and earlier browser limitations below describe their original review timestamps, not evidence for this new code. Root owns the final release ledger and exact preview identity. The package remains **HOLD for final browser acceptance**; no production merge or deployment is authorized by these checks.
+
 Reviewed 2026-11-13 in isolated branch `release/2027-W04-calendar-export`, based on `f344ad29766bb63e185515ed08277a8ac9085247`. Feature commit `a7b1d1e` now has an additional uncommitted mobile-table repair described below. Status: **local implementation candidate; HOLD release acceptance**.
 
 ## Implemented scope
