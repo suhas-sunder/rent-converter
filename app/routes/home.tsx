@@ -5,6 +5,7 @@ import Assumptions from "~/client/components/layout/Assumptions";
 import HowItWorks from "~/client/components/home/HowItWorks";
 import ToolFit from "~/client/components/home/ToolFit";
 import AdPlaceholder from "~/client/components/advertising/AdPlaceholder";
+import HydrationSafeControls from "~/client/components/HydrationSafeControls";
 
 const SITE_URL = "https://www.rentconverter.com";
 
@@ -218,7 +219,29 @@ function parseMoneyToScaled(input: string): {
   const raw = input.trim();
   if (!raw) return { ok: false, error: "Enter a rent amount." };
 
-  const sanitized = raw.replace(/[^\d.,+\-()\s$€£¥₹₩₽₫₴₱₦₲₵₡₺₸]/g, "");
+  // Validate before normalization: deleting letters turns "1e3" into 13.
+  if (raw.includes("-") || /^\(.*\)$/u.test(raw)) {
+    return { ok: false, error: "Rent amount cannot be negative." };
+  }
+  let numeric = raw.replace(/^[$€£¥₹₩₽₫₴₱₦₲₵₡₺₸]\s*/u, "").replace(/^\+/, "");
+  const formatError = "Enter a rent amount without letters or calculations, such as 1250.50 or 1,250.50.";
+  if (!numeric || /[^\d.,\s]/u.test(numeric)) {
+    return { ok: false, error: formatError };
+  }
+  if (/\s/u.test(numeric)) {
+    if (!/^\d{1,3}(?:\s+\d{3})+(?:[.,]\d*)?$/u.test(numeric)) {
+      return { ok: false, error: "Use complete groups of three digits, such as 1 250.50." };
+    }
+    numeric = numeric.replace(/\s+/gu, "");
+  }
+  if (numeric.includes(".") && numeric.includes(",")) {
+    const dotDecimal = numeric.lastIndexOf(".") > numeric.lastIndexOf(",");
+    const grouped = dotDecimal
+      ? /^\d{1,3}(?:,\d{3})+\.\d*$/u
+      : /^\d{1,3}(?:\.\d{3})+,\d*$/u;
+    if (!grouped.test(numeric)) return { ok: false, error: formatError };
+  }
+  const sanitized = numeric;
 
   const isParenNeg =
     sanitized.includes("(") &&
@@ -634,7 +657,7 @@ export default function Home() {
     },
     {
       q: "Does this include utilities, parking, fees, or deposits?",
-      a: "No. The calculator only converts the rent amount you enter. If you want to include utilities, parking, recurring fees, or another fixed monthly cost, add those amounts to the rent before converting.",
+      a: "No. The calculator only converts the amount you enter. Add recurring costs only when they cover the same period as that rent amount. For example, convert weekly rent to monthly before adding monthly utilities. Deposits and one-time fees are separate upfront costs.",
     },
     {
       q: "Does the calculator preserve decimals?",
@@ -677,7 +700,6 @@ export default function Home() {
     return percentStringFromRatio(breakdown.monthlyMinus4wPct, 2);
   }, [validation.ok, breakdown.monthlyMinus4wPct]);
 
-  const amountHelpId = "rent-amount-help";
   const amountStatusId = "rent-amount-status";
   const resultRegionId = "converted-rent-region";
   return (
@@ -687,7 +709,7 @@ export default function Home() {
           __html: `
             @media print {
               a[href]:after { content: ""; }
-              #top-links, #bottom-nav, #export-controls-top, #export-controls-bottom { display: none !important; }
+              #top-links, #bottom-nav, #export-controls-top, #export-controls-bottom, #all-tools, .rc-no-print { display: none !important; }
               #converter { padding-bottom: 0 !important; }
               body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             }
@@ -713,6 +735,7 @@ export default function Home() {
           id="converter"
           className="min-w-0 py-6 sm:py-8 min-[1280px]:col-start-2 min-[1280px]:row-start-1"
         >
+        <HydrationSafeControls label="Rent conversion calculator">
         <div className="overflow-hidden rounded-[1.75rem] bg-white">
           <div className="flex flex-col gap-3 px-5 pb-2 pt-7 sm:flex-row sm:items-start sm:justify-between sm:px-8 sm:pt-8">
             <div>
@@ -751,11 +774,12 @@ export default function Home() {
 
           <div className="grid gap-y-3 gap-x-5 px-5 pb-5 pt-2 sm:px-8 sm:pt-3 md:grid-cols-12">
             <div className="md:col-span-5">
-              <label className="block text-sm font-semibold text-slate-800 mb-2">
+              <label htmlFor="rent-amount" className="block text-sm font-semibold text-slate-800 mb-2">
                 Rent amount
               </label>
               <div className="flex gap-2">
                 <input
+                  id="rent-amount"
                   inputMode="decimal"
                   value={inputGroupedDisplay}
                   onFocus={() => setAmountFocused(true)}
@@ -764,7 +788,7 @@ export default function Home() {
                   placeholder="e.g. 500 or 1250.50"
                   className="cursor-pointer w-full min-w-0 rounded-xl bg-slate-100 px-4 py-3 text-base text-slate-950 placeholder:text-slate-700 outline-none transition hover:bg-sky-50 focus:bg-white focus:ring-2 focus:ring-sky-200 focus-visible:ring-sky-400"
                   aria-invalid={!validation.ok}
-                  aria-describedby={`${amountHelpId} ${amountStatusId}`}
+                  aria-describedby={!validation.ok || validation.message ? amountStatusId : undefined}
                 />
                 <select
                   value={currency}
@@ -962,6 +986,7 @@ export default function Home() {
             </div>
           </div>
         </div>
+        </HydrationSafeControls>
         <div className="home-assumptions-clean">
           <Assumptions />
         </div>
