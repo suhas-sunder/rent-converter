@@ -140,14 +140,18 @@ export function multiplyRatio(cents: bigint, numerator: bigint, denominator: big
 
 export function formatMoney(cents: bigint | undefined, currency: Currency): string {
   if (cents === undefined) return "-";
-  const amount = Number(cents) / 100;
-  if (!Number.isFinite(amount)) return "-";
-  return new Intl.NumberFormat(undefined, {
+  const absolute = cents < 0n ? -cents : cents;
+  const whole = absolute / 100n;
+  const signedWhole = cents < 0n ? (whole === 0n ? -0 : -whole) : whole;
+  const formatter = new Intl.NumberFormat(undefined, {
     style: "currency",
     currency,
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-  }).format(amount);
+  });
+  return formatter.formatToParts(signedWhole).map((part) =>
+    part.type === "fraction" ? String(absolute % 100n).padStart(2, "0") : part.value,
+  ).join("");
 }
 
 export function formatPercent(value: number): string {

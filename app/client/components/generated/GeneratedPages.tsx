@@ -1,5 +1,6 @@
 import { useEffect, useId, useMemo, useState } from "react";
 import { Link } from "react-router";
+import RentScheduleExport from "./RentScheduleExport";
 import {
   dailyToMonthlyCents,
   dailyToWeeklyCents,
@@ -1727,6 +1728,7 @@ export function DateToolPage({ config }: { config: DateToolConfig }) {
   const errors = [
     !startParsed.ok ? startParsed.error : null,
     !termParsed.ok ? termParsed.error : null,
+    dateCalculation && dateCalculation.date.year > 9999 ? "Choose a start date and term that end no later than the year 9999." : null,
     config.mode === "schedule" && !rentParsed.ok ? rentParsed.error : null,
   ].filter((error): error is string => Boolean(error));
   const schemas = makePageSchemas({ ...config, calculator: true, faq: config.faq });
@@ -1784,6 +1786,14 @@ export function DateToolPage({ config }: { config: DateToolConfig }) {
             ]}
           />
         ) : null}
+        {config.mode === "schedule" && <RentScheduleExport schedule={browserDateReady && !errors.length && scheduleCalculation && rentParsed.ok ? {
+        paymentDates: scheduleCalculation.payments.map(formatCalendarDate),
+        leaseStart: formatCalendarDate(scheduleCalculation.start),
+        leaseEnd: formatCalendarDate(scheduleCalculation.leaseEnd.date),
+        frequency,
+        rentCents: rentParsed.cents,
+        currency,
+      } : null} />}
       </ToolCard>
       <ContentBlocks sections={dateSections(config)} examples={dateExamples(config)} />
       <RelatedTools links={config.relatedLinks} />
