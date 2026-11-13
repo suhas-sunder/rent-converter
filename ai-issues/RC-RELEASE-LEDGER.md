@@ -16,7 +16,7 @@
 
 **AdSense evidence:** Screenshot dated 2026-11-01: Needs attention / Low value content; ads.txt Not found. This is NOT a search penalty proof. `public/ads.txt` exists in repo; production status and Google recrawl still need independent verification.
 
-**Search evidence:** prior verified GSC 28d 5 clicks / 1,689 impressions / 0.30% CTR / avg position 63.6; historical. Owner requested six-month GSC and Bing history, but no exports were mounted with this issue at creation. Update only from actual supplied data with dates.
+**Search evidence UPDATED 2026-11-12:** owner supplied six-month GSC and Bing exports. Verified new baseline in `ai-issues/RC-002_SEARCH_EVIDENCE_2026-11-12.md`: GSC latest settled Oct 14–Nov 10 **1 click / 802 impressions / 0.125% CTR**, prior Sep 16–Oct 13 **3 / 490 / 0.612%**; Bing **222 / 8,840** vs **260 / 8,074**. Current data ends Nov 10. Pre-May 31/June 1 Google visibility collapse roughly 97.3% impressions/day; Bing still productive. No current per-page 28d data supplied, so don't infer present page ranks from six-month aggregates.
 
 ## Rule for every update
 
