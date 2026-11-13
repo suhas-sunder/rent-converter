@@ -5,6 +5,7 @@ import Assumptions from "~/client/components/layout/Assumptions";
 import HowItWorks from "~/client/components/home/HowItWorks";
 import ToolFit from "~/client/components/home/ToolFit";
 import AdPlaceholder from "~/client/components/advertising/AdPlaceholder";
+import ListingComparison from "~/client/components/home/ListingComparison";
 
 const SITE_URL = "https://www.rentconverter.com";
 
@@ -1001,6 +1002,7 @@ export default function Home() {
         <AdPlaceholder slot="home_below_utility_banner" />
       </section>
 
+      <ListingComparison />
       <HowItWorks />
 
       <section className="bg-sky-50 px-4 py-8 sm:px-6 sm:py-10">
