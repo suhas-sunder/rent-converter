@@ -1,0 +1,2778 @@
+{
+  "evidenceDate": "2026-11-12 America/New_York",
+  "productionSHA": "50c4647e5a61f05e1aeb4db04f4918bbfb6c1c5a",
+  "sourceSHA": "d1825c9cfdc523c72bd6eb4177fe2e6451bcb7b5",
+  "scope": "Source and raw live HTTP inspection, not completed hands-on browser audit",
+  "routes": [
+    {
+      "path": "/",
+      "task": "Compare rent periods from one amount",
+      "decision": "improve",
+      "rationale": "Seven period inputs and rational equivalents; cannot retain two listing scenarios side by side. Worked 4-week example disagrees with tool's 365-day basis.",
+      "nearestTaskSiblings": [
+        "/weekly-to-monthly-rent-converter",
+        "/rent-paid-every-4-weeks-calculator"
+      ],
+      "protected": false,
+      "title": "Rent Converter Calculator | Weekly, Monthly & 4-Week Rent",
+      "h1": "Rent Converter Calculator",
+      "description": "Convert rent between weekly, monthly, 4-week, biweekly, daily, hourly, and annual periods. Compare true monthly cost, annual cost, and 28-day differences.",
+      "canonical": "https://www.rentconverter.com",
+      "ogUrl": "https://www.rentconverter.com",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "default index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/rent-converter",
+        "/rent-calculator"
+      ],
+      "sourceFile": "app/routes/home.tsx",
+      "sourceImports": [
+        "react",
+        "~/client/utils/savedState.js",
+        "./+types/home",
+        "~/client/components/layout/Assumptions",
+        "~/client/components/home/HowItWorks",
+        "~/client/components/home/ToolFit",
+        "~/client/components/advertising/AdPlaceholder"
+      ],
+      "sourceLabels": [
+        "Currency",
+        "From period",
+        "To period",
+        "Converted rent"
+      ],
+      "homepageLinked": false,
+      "nearestTextSimilarity": "/monthly-to-biweekly-rent-converter",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/about",
+      "task": "Identify who owns and maintains the calculator",
+      "decision": "keep",
+      "rationale": "Visible creator context and correction path serve trust; accuracy needs owner confirmation, not added credentials.",
+      "nearestTaskSiblings": [
+        "/methodology",
+        "/contact"
+      ],
+      "protected": false,
+      "title": "About RentConverter | Creator and Calculator Approach",
+      "h1": "Rent calculators built for clear, checkable rental math",
+      "description": "Meet the creator of RentConverter and see how its browser-based rental calculators are implemented, tested, and documented.",
+      "canonical": "https://www.rentconverter.com/about",
+      "ogUrl": "https://www.rentconverter.com/about",
+      "schema": [],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [],
+      "sourceFile": "app/routes/about.tsx",
+      "sourceImports": [
+        "react-router",
+        "~/client/assets/images/suhas.jpg",
+        "~/client/utils/seo"
+      ],
+      "sourceLabels": [],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/terms-of-service",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/annual-to-biweekly-rent-converter",
+      "task": "Convert an advertised annual amount to a biweekly equivalent",
+      "decision": "improve",
+      "rationale": "Fixed annual to biweekly entry; amount/currency and 365-day period equivalence. Shared formula does not establish standalone value; compare the focused task with home.",
+      "nearestTaskSiblings": [
+        "/biweekly-to-annual-rent-converter",
+        "/rent-per-paycheck-calculator"
+      ],
+      "protected": false,
+      "title": "Annual to Biweekly Rent Converter | 14-Day Rent Amount",
+      "h1": "Annual to Biweekly Rent Converter",
+      "description": "Convert annual rent into a biweekly 14-day amount. See monthly, weekly, 4-week, and annual comparisons with printable cents-rounded results.",
+      "canonical": "https://www.rentconverter.com/annual-to-biweekly-rent-converter",
+      "ogUrl": "https://www.rentconverter.com/annual-to-biweekly-rent-converter",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/annual-to-biweekly-rent-converter"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/annual-to-biweekly-rent"
+      ],
+      "sourceFile": "app/routes/annual-to-biweekly-rent-converter.tsx",
+      "sourceImports": [
+        "react",
+        "./+types/annual-to-biweekly-rent-converter",
+        "~/client/components/layout/Assumptions",
+        "~/client/components/layout/FourWeekVsMonthly",
+        "~/client/components/annual-to-biweekly-rent-converter/HowItWorks",
+        "~/client/components/annual-to-biweekly-rent-converter/ToolFit"
+      ],
+      "sourceLabels": [
+        "Currency"
+      ],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/annual-to-monthly-rent-converter",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/annual-to-hourly-rent-converter",
+      "task": "Convert an advertised annual amount to a hourly equivalent",
+      "decision": "improve",
+      "rationale": "Fixed annual to hourly entry; amount/currency and 365-day period equivalence. Shared formula does not establish standalone value; compare the focused task with home.",
+      "nearestTaskSiblings": [
+        "/hourly-to-annual-rent-converter",
+        "/rent-paid-every-4-weeks-calculator"
+      ],
+      "protected": false,
+      "title": "Annual to Hourly Rent Converter | Rent Per Hour",
+      "h1": "Annual to Hourly Rent Converter",
+      "description": "Convert annual rent into an hourly rent equivalent using a 365-day year. Compare hourly, daily, weekly, monthly, and optional paid-hours results.",
+      "canonical": "https://www.rentconverter.com/annual-to-hourly-rent-converter",
+      "ogUrl": "https://www.rentconverter.com/annual-to-hourly-rent-converter",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/annual-to-hourly-rent-converter"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/annual-to-hourly-rent"
+      ],
+      "sourceFile": "app/routes/annual-to-hourly-rent-converter.tsx",
+      "sourceImports": [
+        "react",
+        "./+types/annual-to-hourly-rent-converter",
+        "~/client/components/layout/Assumptions",
+        "~/client/components/layout/FourWeekVsMonthly",
+        "~/client/components/annual-to-hourly-rent-converter/HowItWorks",
+        "~/client/components/annual-to-hourly-rent-converter/ToolFit"
+      ],
+      "sourceLabels": [
+        "Toggle paid-hours scenario",
+        "Currency"
+      ],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/annual-to-monthly-rent-converter",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/annual-to-monthly-rent-converter",
+      "task": "Convert an advertised annual amount to a monthly equivalent",
+      "decision": "improve",
+      "rationale": "Fixed annual to monthly entry; amount/currency and 365-day period equivalence. Shared formula does not establish standalone value; compare the focused task with home.",
+      "nearestTaskSiblings": [
+        "/monthly-to-annual-rent-converter",
+        "/rent-paid-every-4-weeks-calculator"
+      ],
+      "protected": false,
+      "title": "Annual to Monthly Rent Converter | Yearly Rent / 12",
+      "h1": "Annual to Monthly Rent Converter",
+      "description": "Convert annual rent to monthly rent by dividing the yearly total by 12. See monthly, weekly, 4-week, daily, and hourly equivalents.",
+      "canonical": "https://www.rentconverter.com/annual-to-monthly-rent-converter",
+      "ogUrl": "https://www.rentconverter.com/annual-to-monthly-rent-converter",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/annual-to-monthly-rent-converter"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/annual-to-monthly-rent"
+      ],
+      "sourceFile": "app/routes/annual-to-monthly-rent-converter.tsx",
+      "sourceImports": [
+        "react",
+        "./+types/annual-to-monthly-rent-converter",
+        "~/client/components/layout/Assumptions",
+        "~/client/components/layout/FourWeekVsMonthly",
+        "~/client/components/annual-to-monthly-rent-converter/HowItWorks",
+        "~/client/components/annual-to-monthly-rent-converter/ToolFit"
+      ],
+      "sourceLabels": [
+        "Currency"
+      ],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/biweekly-to-weekly-rent-converter",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/annual-to-weekly-rent-converter",
+      "task": "Convert an advertised annual amount to a weekly equivalent",
+      "decision": "improve",
+      "rationale": "Fixed annual to weekly entry; amount/currency and 365-day period equivalence. Shared formula does not establish standalone value; compare the focused task with home.",
+      "nearestTaskSiblings": [
+        "/weekly-to-annual-rent-converter",
+        "/rent-paid-every-4-weeks-calculator"
+      ],
+      "protected": false,
+      "title": "Annual to Weekly Rent Converter | Yearly to Weekly Rent",
+      "h1": "Annual to Weekly Rent Converter",
+      "description": "Convert annual rent to a 7-day weekly equivalent using the 365-day rent model, with a 52-week shortcut comparison and printable rent breakdown.",
+      "canonical": "https://www.rentconverter.com/annual-to-weekly-rent-converter",
+      "ogUrl": "https://www.rentconverter.com/annual-to-weekly-rent-converter",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/annual-to-weekly-rent-converter"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/annual-to-weekly-rent"
+      ],
+      "sourceFile": "app/routes/annual-to-weekly-rent-converter.tsx",
+      "sourceImports": [
+        "react",
+        "./+types/annual-to-weekly-rent-converter",
+        "~/client/components/layout/Assumptions",
+        "~/client/components/annual-to-weekly-rent-converter/HowItWorks",
+        "~/client/components/annual-to-weekly-rent-converter/ToolFit"
+      ],
+      "sourceLabels": [
+        "Currency",
+        "Breadcrumb"
+      ],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/annual-to-monthly-rent-converter",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/biweekly-to-annual-rent-converter",
+      "task": "Convert an advertised biweekly amount to a annual equivalent",
+      "decision": "improve",
+      "rationale": "Fixed biweekly to annual entry; amount/currency and 365-day period equivalence. Shared formula does not establish standalone value; compare the focused task with home.",
+      "nearestTaskSiblings": [
+        "/annual-to-biweekly-rent-converter",
+        "/rent-per-paycheck-calculator"
+      ],
+      "protected": false,
+      "title": "Biweekly to Annual Rent Converter | 14-Day Rent",
+      "h1": "Biweekly to Annual Rent Converter",
+      "description": "Convert biweekly rent to annual rent using a 14-day rent cycle and 365-day year. See monthly, weekly, and 4-week equivalents for comparison.",
+      "canonical": "https://www.rentconverter.com/biweekly-to-annual-rent-converter",
+      "ogUrl": "https://www.rentconverter.com/biweekly-to-annual-rent-converter",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/biweekly-to-annual-rent-converter"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/biweekly-to-annual-rent"
+      ],
+      "sourceFile": "app/routes/biweekly-to-annual-rent-converter.tsx",
+      "sourceImports": [
+        "react",
+        "./+types/biweekly-to-annual-rent-converter",
+        "~/client/components/layout/Assumptions",
+        "~/client/components/biweekly-to-annual-rent-converter/HowItWorks",
+        "~/client/components/biweekly-to-annual-rent-converter/ToolFit"
+      ],
+      "sourceLabels": [
+        "Currency",
+        "Breadcrumb"
+      ],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/biweekly-to-monthly-rent-converter",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/biweekly-to-monthly-rent-converter",
+      "task": "Convert an advertised biweekly amount to a monthly equivalent",
+      "decision": "improve",
+      "rationale": "Fixed biweekly to monthly entry; amount/currency and 365-day period equivalence. Shared formula does not establish standalone value; compare the focused task with home.",
+      "nearestTaskSiblings": [
+        "/monthly-to-biweekly-rent-converter",
+        "/rent-per-paycheck-calculator"
+      ],
+      "protected": false,
+      "title": "Biweekly to Monthly Rent Converter | Average Monthly Rent",
+      "h1": "Biweekly to Monthly Rent Converter",
+      "description": "Convert biweekly rent to an average monthly amount. Compare 14-day rent cycles with monthly, weekly, and 4-week rent equivalents.",
+      "canonical": "https://www.rentconverter.com/biweekly-to-monthly-rent-converter",
+      "ogUrl": "https://www.rentconverter.com/biweekly-to-monthly-rent-converter",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/biweekly-to-monthly-rent-converter"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/biweekly-to-monthly-rent"
+      ],
+      "sourceFile": "app/routes/biweekly-to-monthly-rent-converter.tsx",
+      "sourceImports": [
+        "react",
+        "./+types/biweekly-to-monthly-rent-converter",
+        "~/client/components/layout/Assumptions",
+        "~/client/components/biweekly-to-monthly-rent-converter/HowItWorks",
+        "~/client/components/biweekly-to-monthly-rent-converter/ToolFit"
+      ],
+      "sourceLabels": [
+        "Currency",
+        "Breadcrumb"
+      ],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/biweekly-to-annual-rent-converter",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/biweekly-to-weekly-rent-converter",
+      "task": "Convert an advertised biweekly amount to a weekly equivalent",
+      "decision": "keep",
+      "rationale": "PROTECTED historical winner. Fixed biweekly to weekly entry; amount/currency and 365-day period equivalence. Shared formula does not establish standalone value; compare the focused task with home. Preserve math, metadata and URL until compelling regression-tested evidence.",
+      "nearestTaskSiblings": [
+        "/weekly-to-biweekly-rent-converter",
+        "/rent-per-paycheck-calculator"
+      ],
+      "protected": true,
+      "title": "Biweekly to Weekly Rent Converter | Two-Week Rent",
+      "h1": "Biweekly to Weekly Rent Converter",
+      "description": "Convert rent paid every two weeks into a weekly amount. See monthly, annual, and 4-week comparisons with clear 14-day assumptions.",
+      "canonical": "https://www.rentconverter.com/biweekly-to-weekly-rent-converter",
+      "ogUrl": "https://www.rentconverter.com/biweekly-to-weekly-rent-converter",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/biweekly-to-weekly-rent-converter"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/biweekly-to-weekly-rent"
+      ],
+      "sourceFile": "app/routes/biweekly-to-weekly-rent-converter.tsx",
+      "sourceImports": [
+        "react",
+        "./+types/biweekly-to-weekly-rent-converter",
+        "~/client/components/layout/Assumptions",
+        "~/client/components/layout/FourWeekVsMonthly",
+        "~/client/components/biweekly-to-weekly-rent-converter/HowItWorks",
+        "~/client/components/biweekly-to-weekly-rent-converter/ToolFit"
+      ],
+      "sourceLabels": [
+        "Currency",
+        "Breadcrumb"
+      ],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/weekly-to-biweekly-rent-converter",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/compound-rent-increase-calculator",
+      "task": "Project repeated annual percentage increases",
+      "decision": "keep",
+      "rationale": "Starting rent, percent, years produce year-by-year results. Uses per-year cent rounding; no local legal eligibility.",
+      "nearestTaskSiblings": [
+        "/rent-increase-calculator",
+        "/rent-increase-percentage-calculator"
+      ],
+      "protected": false,
+      "title": "Compound Rent Increase Calculator | Multi-Year Rent Growth",
+      "h1": "Compound Rent Increase Calculator",
+      "description": "Calculate rent after repeated annual percentage increases. See rent by year, final monthly rent, and the total increase.",
+      "canonical": "https://www.rentconverter.com/compound-rent-increase-calculator",
+      "ogUrl": "https://www.rentconverter.com/compound-rent-increase-calculator",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/compound-rent-increase-calculator"
+        },
+        {
+          "type": "WebApplication",
+          "url": "https://www.rentconverter.com/compound-rent-increase-calculator"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/rent-escalation-calculator"
+      ],
+      "sourceFile": "app/routes/compound-rent-increase-calculator.tsx",
+      "sourceImports": [
+        "~/client/components/generated/GeneratedPages",
+        "~/client/data/generatedRouteConfigs",
+        "~/client/utils/seo"
+      ],
+      "sourceLabels": [],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/rent-increase-calculator",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/contact",
+      "task": "Report a calculator error or accessibility concern",
+      "decision": "keep",
+      "rationale": "Contact path is useful; test mail/contact interaction manually and preserve privacy.",
+      "nearestTaskSiblings": [
+        "/about",
+        "/methodology"
+      ],
+      "protected": false,
+      "title": "Contact RentConverter.com | Feedback and Corrections",
+      "h1": "Contact",
+      "description": "Contact RentConverter.com with calculator feedback, corrections, or questions about rent conversion assumptions and rental math pages.",
+      "canonical": "https://www.rentconverter.com/contact",
+      "ogUrl": "https://www.rentconverter.com/contact",
+      "schema": [],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [],
+      "sourceFile": "app/routes/contact.tsx",
+      "sourceImports": [
+        "./+types/contact",
+        "react-router"
+      ],
+      "sourceLabels": [],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/monthly-to-daily-rent-converter",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/cookies",
+      "task": "Understand cookie use and consent choices",
+      "decision": "keep",
+      "rationale": "Policy supports informed privacy choices; owner review must reflect actual third-party behavior.",
+      "nearestTaskSiblings": [
+        "/privacy-policy",
+        "/terms-of-service"
+      ],
+      "protected": false,
+      "title": "Cookie and Browser Storage Policy | RentConverter.com",
+      "h1": "Cookie and Browser Storage Policy",
+      "description": "Learn how RentConverter uses localStorage, sessionStorage, consent preferences, and optional PostHog analytics without active advertising cookies.",
+      "canonical": "https://www.rentconverter.com/cookies",
+      "ogUrl": "https://www.rentconverter.com/cookies",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/cookies"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [],
+      "sourceFile": "app/routes/cookies.tsx",
+      "sourceImports": [
+        "./+types/cookies",
+        "~/provider",
+        "~/client/utils/seo",
+        "~/client/utils/analyticsConsent.js"
+      ],
+      "sourceLabels": [],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/privacy-policy",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/daily-to-monthly-rent-converter",
+      "task": "Convert an advertised daily amount to a monthly equivalent",
+      "decision": "improve",
+      "rationale": "Fixed daily to monthly entry; amount/currency and 365-day period equivalence. Shared formula does not establish standalone value; compare the focused task with home.",
+      "nearestTaskSiblings": [
+        "/monthly-to-daily-rent-converter",
+        "/rent-paid-every-4-weeks-calculator"
+      ],
+      "protected": false,
+      "title": "Daily to Monthly Rent Converter | Average Monthly Rent",
+      "h1": "Daily to Monthly Rent Converter",
+      "description": "Convert daily rent to an average monthly amount using a 365-day year. Compare the result with a 30-day month, weekly rent, and annual rent.",
+      "canonical": "https://www.rentconverter.com/daily-to-monthly-rent-converter",
+      "ogUrl": "https://www.rentconverter.com/daily-to-monthly-rent-converter",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/daily-to-monthly-rent-converter"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/60-pounds-per-night-to-monthly-rent",
+        "/daily-to-monthly-rent"
+      ],
+      "sourceFile": "app/routes/daily-to-monthly-rent-converter.tsx",
+      "sourceImports": [
+        "react",
+        "~/client/utils/savedState.js",
+        "./+types/daily-to-monthly-rent-converter",
+        "~/client/components/layout/Assumptions",
+        "~/client/components/layout/FourWeekVsMonthly",
+        "~/client/components/daily-to-monthly-rent-converter/HowItWorks",
+        "~/client/components/daily-to-monthly-rent-converter/ToolFit"
+      ],
+      "sourceLabels": [
+        "Currency",
+        "Monthly amount results",
+        "Breadcrumb"
+      ],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/hourly-to-monthly-rent-converter",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/fortnightly-to-monthly-rent-australia",
+      "task": "Interpret 14-day Australian rent as a monthly equivalent",
+      "decision": "improve",
+      "rationale": "AU terminology and AUD context; underlying daily-rate formula duplicates biweekly converter. Retain pending jurisdiction/task evidence.",
+      "nearestTaskSiblings": [
+        "/biweekly-to-monthly-rent-converter",
+        "/weekly-to-monthly-rent-australia"
+      ],
+      "protected": false,
+      "title": "Fortnightly to Monthly Rent Australia | Rent Calculator",
+      "h1": "Fortnightly to Monthly Rent Australia",
+      "description": "Convert fortnightly rent to true monthly rent in Australia. See annual cost and why two fortnightly payments are not the same as a calendar month.",
+      "canonical": "https://www.rentconverter.com/fortnightly-to-monthly-rent-australia",
+      "ogUrl": "https://www.rentconverter.com/fortnightly-to-monthly-rent-australia",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/fortnightly-to-monthly-rent-australia"
+        },
+        {
+          "type": "WebApplication",
+          "url": "https://www.rentconverter.com/fortnightly-to-monthly-rent-australia"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [],
+      "sourceFile": "app/routes/fortnightly-to-monthly-rent-australia.tsx",
+      "sourceImports": [
+        "~/client/components/generated/GeneratedPages",
+        "~/client/data/generatedRouteConfigs",
+        "~/client/utils/seo"
+      ],
+      "sourceLabels": [],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/pcm-to-pw-calculator",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/hourly-pay-to-rent-calculator",
+      "task": "Translate hourly earnings and paid hours into rent references",
+      "decision": "improve",
+      "rationale": "Hourly wage and hours produce 52-paid-week gross annual income and 30/40/3x references; unpaid weeks, taxes and variable income omitted.",
+      "nearestTaskSiblings": [
+        "/salary-to-rent-calculator",
+        "/rent-budget-calculator"
+      ],
+      "protected": false,
+      "title": "Hourly Pay to Rent Calculator | Rent Budget from Hourly Wage",
+      "h1": "Hourly Pay to Rent Calculator",
+      "description": "Convert hourly pay and weekly hours into estimated gross income, then compare 30%, 40%, and 3x monthly rent reference amounts.",
+      "canonical": "https://www.rentconverter.com/hourly-pay-to-rent-calculator",
+      "ogUrl": "https://www.rentconverter.com/hourly-pay-to-rent-calculator",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/hourly-pay-to-rent-calculator"
+        },
+        {
+          "type": "WebApplication",
+          "url": "https://www.rentconverter.com/hourly-pay-to-rent-calculator"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [],
+      "sourceFile": "app/routes/hourly-pay-to-rent-calculator.tsx",
+      "sourceImports": [
+        "~/client/components/generated/GeneratedPages",
+        "~/client/data/generatedRouteConfigs",
+        "~/client/utils/seo"
+      ],
+      "sourceLabels": [],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/salary-to-rent-calculator",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/hourly-to-annual-rent-converter",
+      "task": "Convert an advertised hourly amount to a annual equivalent",
+      "decision": "improve",
+      "rationale": "Fixed hourly to annual entry; amount/currency and 365-day period equivalence. Shared formula does not establish standalone value; compare the focused task with home.",
+      "nearestTaskSiblings": [
+        "/annual-to-hourly-rent-converter",
+        "/rent-paid-every-4-weeks-calculator"
+      ],
+      "protected": false,
+      "title": "Hourly to Annual Rent Converter | Yearly Rent Equivalent",
+      "h1": "Hourly to Annual Rent Converter",
+      "description": "Convert hourly rent to an annual rent equivalent using a 365-day year. Compare clock-hour and paid-hour scenarios with monthly and weekly results.",
+      "canonical": "https://www.rentconverter.com/hourly-to-annual-rent-converter",
+      "ogUrl": "https://www.rentconverter.com/hourly-to-annual-rent-converter",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/hourly-to-annual-rent-converter"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/hourly-to-annual-rent"
+      ],
+      "sourceFile": "app/routes/hourly-to-annual-rent-converter.tsx",
+      "sourceImports": [
+        "react",
+        "./+types/hourly-to-annual-rent-converter",
+        "~/client/components/layout/Assumptions",
+        "~/client/components/layout/FourWeekVsMonthly",
+        "~/client/components/hourly-to-annual-rent-converter/HowItWorks",
+        "~/client/components/hourly-to-annual-rent-converter/ToolFit"
+      ],
+      "sourceLabels": [
+        "Hour interpretation",
+        "Use 24/7 clock-hour equivalence",
+        "Use paid-hours per week scenario",
+        "Currency",
+        "Annual amount results",
+        "Breadcrumb"
+      ],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/annual-to-monthly-rent-converter",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/hourly-to-monthly-rent-converter",
+      "task": "Convert an advertised hourly amount to a monthly equivalent",
+      "decision": "improve",
+      "rationale": "Fixed hourly to monthly entry; amount/currency and 365-day period equivalence. Shared formula does not establish standalone value; compare the focused task with home.",
+      "nearestTaskSiblings": [
+        "/monthly-to-hourly-rent-converter",
+        "/rent-paid-every-4-weeks-calculator"
+      ],
+      "protected": false,
+      "title": "Hourly to Monthly Rent Converter | Average Monthly Rent",
+      "h1": "Hourly to Monthly Rent Converter",
+      "description": "Convert hourly rent to an average monthly rent amount. See daily, weekly, 4-week, annual, and 30-day month comparisons.",
+      "canonical": "https://www.rentconverter.com/hourly-to-monthly-rent-converter",
+      "ogUrl": "https://www.rentconverter.com/hourly-to-monthly-rent-converter",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/hourly-to-monthly-rent-converter"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/hourly-to-monthly-rent"
+      ],
+      "sourceFile": "app/routes/hourly-to-monthly-rent-converter.tsx",
+      "sourceImports": [
+        "react",
+        "./+types/hourly-to-monthly-rent-converter",
+        "~/client/components/layout/Assumptions",
+        "~/client/components/layout/FourWeekVsMonthly",
+        "~/client/components/hourly-to-monthly-rent-converter/HowItWorks",
+        "~/client/components/hourly-to-monthly-rent-converter/ToolFit"
+      ],
+      "sourceLabels": [
+        "Currency",
+        "Monthly amount results",
+        "Breadcrumb"
+      ],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/daily-to-monthly-rent-converter",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/how-much-rent-can-i-afford-calculator",
+      "task": "Estimate a rent target from income and budget assumptions",
+      "decision": "improve",
+      "rationale": "Income-based estimates need expense-aware interpretation; cannot determine eligibility or exact affordability.",
+      "nearestTaskSiblings": [
+        "/rent-budget-calculator",
+        "/rent-vs-take-home-pay-calculator"
+      ],
+      "protected": false,
+      "title": "How Much Rent Can I Afford? | Income to Rent Calculator",
+      "h1": "How Much Rent Can I Afford?",
+      "description": "Enter income and period to compare monthly, weekly, 4-week, and annual rent targets at income-share percentages. Results are arithmetic references.",
+      "canonical": "https://www.rentconverter.com/how-much-rent-can-i-afford-calculator",
+      "ogUrl": "https://www.rentconverter.com/how-much-rent-can-i-afford-calculator",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/how-much-rent-can-i-afford-calculator"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/how-much-rent-can-i-afford",
+        "/rent-affordability-calculator"
+      ],
+      "sourceFile": "app/routes/how-much-rent-can-i-afford-calculator.tsx",
+      "sourceImports": [
+        "react",
+        "~/client/utils/savedState.js",
+        "./+types/how-much-rent-can-i-afford-calculator",
+        "~/client/components/layout/Assumptions",
+        "~/client/components/how-much-rent-can-i-afford-calculator/HowItWorks",
+        "~/client/components/how-much-rent-can-i-afford-calculator/ToolFit"
+      ],
+      "sourceLabels": [
+        "Income period",
+        "Currency",
+        "Rent affordability results",
+        "Breadcrumb"
+      ],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/rent-as-percentage-of-income-calculator",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/income-required-for-rent-calculator",
+      "task": "Test a landlord income multiple in either direction",
+      "decision": "keep",
+      "rationale": "Preset/custom multiplier and reverse mode have a distinct screening task; a multiple is not a household spending budget.",
+      "nearestTaskSiblings": [
+        "/salary-to-rent-calculator",
+        "/rent-as-percentage-of-income-calculator"
+      ],
+      "protected": false,
+      "title": "Income Required for Rent Calculator | 2x 3x Rent Rule",
+      "h1": "Income Required for Rent Calculator",
+      "description": "Calculate the income required for rent using 2x, 2.5x, 3x, or a custom multiplier. See monthly and annual income targets with printable results.",
+      "canonical": "https://www.rentconverter.com/income-required-for-rent-calculator",
+      "ogUrl": "https://www.rentconverter.com/income-required-for-rent-calculator",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/income-required-for-rent-calculator"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/2x-rent-calculator",
+        "/2-5x-rent-calculator",
+        "/3x-rent-calculator"
+      ],
+      "sourceFile": "app/routes/income-required-for-rent-calculator.tsx",
+      "sourceImports": [
+        "react",
+        "./+types/income-required-for-rent-calculator",
+        "~/client/components/layout/Assumptions",
+        "../client/components/income-required-for-rent-calculator/HowItWorks",
+        "~/client/components/income-required-for-rent-calculator/ToolFit",
+        "~/client/utils/savedState"
+      ],
+      "sourceLabels": [
+        "Currency",
+        "Currency",
+        "Income multiplier preset"
+      ],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/rent-as-percentage-of-income-calculator",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/is-rent-due-on-the-first",
+      "task": "Interpret a lease's monthly payment day",
+      "decision": "improve",
+      "rationale": "Reference explanation rather than distinct computation; keep guidance bounded and source relevant legal claims.",
+      "nearestTaskSiblings": [
+        "/rent-due-date-calculator",
+        "/is-rent-paid-for-the-current-month-or-next-month"
+      ],
+      "protected": false,
+      "title": "Is Rent Due on the First? | Rent Due Date Explained",
+      "h1": "Is Rent Due on the First?",
+      "description": "Learn whether rent is due on the first of the month, how lease due dates work, and how to calculate upcoming rent payment dates.",
+      "canonical": "https://www.rentconverter.com/is-rent-due-on-the-first",
+      "ogUrl": "https://www.rentconverter.com/is-rent-due-on-the-first",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/is-rent-due-on-the-first"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [],
+      "sourceFile": "app/routes/is-rent-due-on-the-first.tsx",
+      "sourceImports": [
+        "~/client/components/generated/GeneratedPages",
+        "~/client/data/generatedRouteConfigs",
+        "~/client/utils/seo"
+      ],
+      "sourceLabels": [],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/is-rent-paid-for-the-current-month-or-next-month",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/is-rent-paid-for-the-current-month-or-next-month",
+      "task": "Understand which period a rent payment covers",
+      "decision": "improve",
+      "rationale": "Reference task differs from calculating dates. Lease terms control; do not invent universal legal timing.",
+      "nearestTaskSiblings": [
+        "/rent-in-advance-australia",
+        "/rent-due-date-calculator"
+      ],
+      "protected": false,
+      "title": "Is Rent Paid for the Current Month or Next Month?",
+      "h1": "Is Rent Paid for the Current Month or Next Month?",
+      "description": "Understand what period rent usually covers, how rent in advance works, and how to check your lease payment dates.",
+      "canonical": "https://www.rentconverter.com/is-rent-paid-for-the-current-month-or-next-month",
+      "ogUrl": "https://www.rentconverter.com/is-rent-paid-for-the-current-month-or-next-month",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/is-rent-paid-for-the-current-month-or-next-month"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [],
+      "sourceFile": "app/routes/is-rent-paid-for-the-current-month-or-next-month.tsx",
+      "sourceImports": [
+        "~/client/components/generated/GeneratedPages",
+        "~/client/data/generatedRouteConfigs",
+        "~/client/utils/seo"
+      ],
+      "sourceLabels": [],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/is-rent-due-on-the-first",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/lease-date-calculator",
+      "task": "Find a lease end from a start date and month term",
+      "decision": "keep",
+      "rationale": "Calendar arithmetic clamps missing month days and explains contractual limitation; verify end inclusivity and preserve historical redirect traffic.",
+      "nearestTaskSiblings": [
+        "/rent-schedule-calculator",
+        "/rent-due-date-calculator"
+      ],
+      "protected": false,
+      "title": "Lease Start and End Date Calculator | Calendar-Month Term",
+      "h1": "Lease Date Calculator",
+      "description": "Enter a lease start date and term in calendar months to calculate the end date, including tested month-end and 12-month lease handling.",
+      "canonical": "https://www.rentconverter.com/lease-date-calculator",
+      "ogUrl": "https://www.rentconverter.com/lease-date-calculator",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/lease-date-calculator"
+        },
+        {
+          "type": "WebApplication",
+          "url": "https://www.rentconverter.com/lease-date-calculator"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/lease-start-and-end-date-calculator",
+        "/12-month-lease-date-calculator"
+      ],
+      "sourceFile": "app/routes/lease-date-calculator.tsx",
+      "sourceImports": [
+        "~/client/components/generated/GeneratedPages",
+        "~/client/data/generatedRouteConfigs",
+        "~/client/utils/seo"
+      ],
+      "sourceLabels": [],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/rent-schedule-calculator",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/methodology",
+      "task": "Check calculation assumptions, testing and correction process",
+      "decision": "improve",
+      "rationale": "Cross-cutting method explanation; precision wording must reflect differing rational and cent-rounded implementations.",
+      "nearestTaskSiblings": [
+        "/about",
+        "/contact"
+      ],
+      "protected": false,
+      "title": "Calculation Methodology | RentConverter",
+      "h1": "Calculation methodology",
+      "description": "See how RentConverter handles rent-period normalization, validation, dates, rounding, browser storage, and testing.",
+      "canonical": "https://www.rentconverter.com/methodology",
+      "ogUrl": "https://www.rentconverter.com/methodology",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/methodology"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [],
+      "sourceFile": "app/routes/methodology.tsx",
+      "sourceImports": [
+        "react-router",
+        "~/client/utils/seo"
+      ],
+      "sourceLabels": [],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/rent-due-date-calculator",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/monthly-to-annual-rent-converter",
+      "task": "Convert an advertised monthly amount to a annual equivalent",
+      "decision": "improve",
+      "rationale": "Fixed monthly to annual entry; amount/currency and 365-day period equivalence. Shared formula does not establish standalone value; compare the focused task with home.",
+      "nearestTaskSiblings": [
+        "/annual-to-monthly-rent-converter",
+        "/rent-paid-every-4-weeks-calculator"
+      ],
+      "protected": false,
+      "title": "Monthly to Annual Rent Converter | Yearly Rent",
+      "h1": "Monthly to Annual Rent Converter",
+      "description": "Convert monthly rent to annual rent by multiplying by 12. See weekly, 4-week, daily, hourly, and yearly comparisons.",
+      "canonical": "https://www.rentconverter.com/monthly-to-annual-rent-converter",
+      "ogUrl": "https://www.rentconverter.com/monthly-to-annual-rent-converter",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/monthly-to-annual-rent-converter"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/monthly-to-annual-rent"
+      ],
+      "sourceFile": "app/routes/monthly-to-annual-rent-converter.tsx",
+      "sourceImports": [
+        "react",
+        "./+types/monthly-to-annual-rent-converter",
+        "~/client/components/layout/Assumptions",
+        "~/client/components/monthly-to-annual-rent-converter/HowItWorks",
+        "~/client/components/monthly-to-annual-rent-converter/ToolFit"
+      ],
+      "sourceLabels": [
+        "Currency",
+        "Annual rent results",
+        "Breadcrumb"
+      ],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/monthly-to-biweekly-rent-converter",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/monthly-to-biweekly-rent-converter",
+      "task": "Convert an advertised monthly amount to a biweekly equivalent",
+      "decision": "improve",
+      "rationale": "Fixed monthly to biweekly entry; amount/currency and 365-day period equivalence. Shared formula does not establish standalone value; compare the focused task with home.",
+      "nearestTaskSiblings": [
+        "/biweekly-to-monthly-rent-converter",
+        "/rent-per-paycheck-calculator"
+      ],
+      "protected": false,
+      "title": "Monthly to Biweekly Rent Converter | 14-Day Rent",
+      "h1": "Monthly to Biweekly Rent Converter",
+      "description": "Convert monthly rent to a biweekly 14-day amount. Compare the result with weekly, 4-week, annual, and twice-monthly rent.",
+      "canonical": "https://www.rentconverter.com/monthly-to-biweekly-rent-converter",
+      "ogUrl": "https://www.rentconverter.com/monthly-to-biweekly-rent-converter",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/monthly-to-biweekly-rent-converter"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/monthly-to-biweekly-rent"
+      ],
+      "sourceFile": "app/routes/monthly-to-biweekly-rent-converter.tsx",
+      "sourceImports": [
+        "react",
+        "./+types/monthly-to-biweekly-rent-converter",
+        "~/client/components/layout/Assumptions",
+        "~/client/components/monthly-to-biweekly-rent-converter/HowItWorks",
+        "~/client/components/monthly-to-biweekly-rent-converter/ToolFit"
+      ],
+      "sourceLabels": [
+        "Currency",
+        "Biweekly rent results",
+        "Breadcrumb"
+      ],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/monthly-to-annual-rent-converter",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/monthly-to-daily-rent-converter",
+      "task": "Convert an advertised monthly amount to a daily equivalent",
+      "decision": "improve",
+      "rationale": "Fixed monthly to daily entry; amount/currency and 365-day period equivalence. Shared formula does not establish standalone value; compare the focused task with home.",
+      "nearestTaskSiblings": [
+        "/daily-to-monthly-rent-converter",
+        "/rent-paid-every-4-weeks-calculator"
+      ],
+      "protected": false,
+      "title": "Monthly to Daily Rent Converter | Rent Per Day",
+      "h1": "Monthly to Daily Rent Converter",
+      "description": "Convert monthly rent to a daily amount using an average 365-day month. Compare daily rent with weekly, 4-week, and annual totals.",
+      "canonical": "https://www.rentconverter.com/monthly-to-daily-rent-converter",
+      "ogUrl": "https://www.rentconverter.com/monthly-to-daily-rent-converter",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/monthly-to-daily-rent-converter"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/monthly-to-daily-rent"
+      ],
+      "sourceFile": "app/routes/monthly-to-daily-rent-converter.tsx",
+      "sourceImports": [
+        "react",
+        "./+types/monthly-to-daily-rent-converter",
+        "~/client/components/layout/Assumptions",
+        "~/client/components/monthly-to-daily-rent-converter/HowItWorks",
+        "~/client/components/monthly-to-daily-rent-converter/ToolFit"
+      ],
+      "sourceLabels": [
+        "Currency",
+        "Daily rent results",
+        "Breadcrumb"
+      ],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/monthly-to-biweekly-rent-converter",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/monthly-to-hourly-rent-converter",
+      "task": "Convert an advertised monthly amount to a hourly equivalent",
+      "decision": "improve",
+      "rationale": "Fixed monthly to hourly entry; amount/currency and 365-day period equivalence. Shared formula does not establish standalone value; compare the focused task with home.",
+      "nearestTaskSiblings": [
+        "/hourly-to-monthly-rent-converter",
+        "/rent-paid-every-4-weeks-calculator"
+      ],
+      "protected": false,
+      "title": "Monthly to Hourly Rent Converter | Rent Per Hour",
+      "h1": "Monthly to Hourly Rent Converter",
+      "description": "Convert monthly rent to an hourly equivalent using a 365-day year. See hourly, daily, weekly, and 30-day month comparisons.",
+      "canonical": "https://www.rentconverter.com/monthly-to-hourly-rent-converter",
+      "ogUrl": "https://www.rentconverter.com/monthly-to-hourly-rent-converter",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/monthly-to-hourly-rent-converter"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/monthly-to-hourly-rent"
+      ],
+      "sourceFile": "app/routes/monthly-to-hourly-rent-converter.tsx",
+      "sourceImports": [
+        "react",
+        "./+types/monthly-to-hourly-rent-converter",
+        "~/client/components/layout/Assumptions",
+        "~/client/components/monthly-to-hourly-rent-converter/HowItWorks",
+        "~/client/components/monthly-to-hourly-rent-converter/ToolFit"
+      ],
+      "sourceLabels": [
+        "Currency",
+        "Breadcrumb"
+      ],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/monthly-to-weekly-rent-converter",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/monthly-to-weekly-rent-converter",
+      "task": "Convert an advertised monthly amount to a weekly equivalent",
+      "decision": "improve",
+      "rationale": "Fixed monthly to weekly entry; amount/currency and 365-day period equivalence. Shared formula does not establish standalone value; compare the focused task with home.",
+      "nearestTaskSiblings": [
+        "/weekly-to-monthly-rent-converter",
+        "/rent-paid-every-4-weeks-calculator"
+      ],
+      "protected": false,
+      "title": "Monthly to Weekly Rent Converter | True Weekly Rent",
+      "h1": "Monthly to Weekly Rent Converter",
+      "description": "Enter monthly rent to calculate an average weekly equivalent using monthly x 12 x 7 / 365. Includes 4-week and annual comparisons.",
+      "canonical": "https://www.rentconverter.com/monthly-to-weekly-rent-converter",
+      "ogUrl": "https://www.rentconverter.com/monthly-to-weekly-rent-converter",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/monthly-to-weekly-rent-converter"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/monthly-to-weekly-rent"
+      ],
+      "sourceFile": "app/routes/monthly-to-weekly-rent-converter.tsx",
+      "sourceImports": [
+        "react",
+        "~/client/utils/savedState.js",
+        "./+types/monthly-to-weekly-rent-converter",
+        "~/client/components/layout/Assumptions",
+        "~/client/components/monthly-to-weekly-rent-converter/HowItWorks",
+        "~/client/components/monthly-to-weekly-rent-converter/ToolFit"
+      ],
+      "sourceLabels": [
+        "Currency",
+        "Breadcrumb"
+      ],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/monthly-to-hourly-rent-converter",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/pcm-to-pw-calculator",
+      "task": "Translate a PCM listing into a weekly equivalent",
+      "decision": "keep",
+      "rationale": "PROTECTED historical winner. GBP terminology and 365-day formula; do not silently replace with 52-week convention.",
+      "nearestTaskSiblings": [
+        "/monthly-to-weekly-rent-converter",
+        "/pw-to-pcm-calculator"
+      ],
+      "protected": true,
+      "title": "PCM to PW Calculator | Monthly Rent to Weekly Equivalent",
+      "h1": "PCM to PW Calculator",
+      "description": "Convert PCM rent into an average weekly equivalent using PCM x 12 x 7 / 365. Useful for comparing monthly and PW listings.",
+      "canonical": "https://www.rentconverter.com/pcm-to-pw-calculator",
+      "ogUrl": "https://www.rentconverter.com/pcm-to-pw-calculator",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/pcm-to-pw-calculator"
+        },
+        {
+          "type": "WebApplication",
+          "url": "https://www.rentconverter.com/pcm-to-pw-calculator"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/pw-rent-calculator",
+        "/pcm-to-pcw",
+        "/pw-calculator"
+      ],
+      "sourceFile": "app/routes/pcm-to-pw-calculator.tsx",
+      "sourceImports": [
+        "~/client/components/generated/GeneratedPages",
+        "~/client/data/generatedRouteConfigs",
+        "~/client/utils/seo"
+      ],
+      "sourceLabels": [],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/fortnightly-to-monthly-rent-australia",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/privacy-policy",
+      "task": "Understand data handling before using the site",
+      "decision": "keep",
+      "rationale": "Legal trust content rather than a calculator; reconcile claims with actual consent/network tests.",
+      "nearestTaskSiblings": [
+        "/cookies",
+        "/about"
+      ],
+      "protected": false,
+      "title": "Privacy Policy | RentConverter.com",
+      "h1": "Privacy Policy",
+      "description": "Learn how RentConverter handles calculator values, browser storage, optional PostHog analytics, email contact, and privacy choices.",
+      "canonical": "https://www.rentconverter.com/privacy-policy",
+      "ogUrl": "https://www.rentconverter.com/privacy-policy",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/privacy-policy"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [],
+      "sourceFile": "app/routes/privacy-policy.tsx",
+      "sourceImports": [
+        "react-router",
+        "./+types/privacy-policy",
+        "~/client/utils/seo"
+      ],
+      "sourceLabels": [],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/cookies",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/prorated-rent-calculator",
+      "task": "Calculate partial rent for a date range",
+      "decision": "keep",
+      "rationale": "Partial-period task distinct from average rent conversion. Lease denominator and date inclusion assumptions must be visible.",
+      "nearestTaskSiblings": [
+        "/prorated-rent-calculator-australia",
+        "/rent-schedule-calculator"
+      ],
+      "protected": false,
+      "title": "Prorated Rent Calculator | Partial Month Rent",
+      "h1": "Prorated Rent Calculator",
+      "description": "Calculate prorated rent for a partial rental period. Enter rent, charged days, and days in the period to see the daily rate and prorated amount.",
+      "canonical": "https://www.rentconverter.com/prorated-rent-calculator",
+      "ogUrl": "https://www.rentconverter.com/prorated-rent-calculator",
+      "schema": [
+        {
+          "type": "WebApplication",
+          "url": "https://www.rentconverter.com/prorated-rent-calculator"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [],
+      "sourceFile": "app/routes/prorated-rent-calculator.tsx",
+      "sourceImports": [
+        "./+types/prorated-rent-calculator",
+        "~/client/components/layout/ProratedRentCalculatorPage",
+        "~/client/components/layout/IntentLandingPage",
+        "~/client/utils/seo"
+      ],
+      "sourceLabels": [],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/prorated-rent-calculator-australia",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/prorated-rent-calculator-australia",
+      "task": "Estimate Australian partial-period rent",
+      "decision": "improve",
+      "rationale": "AU weekly/fortnightly context and AUD; actual same shared proration UI warrants regional distinction review before consolidation.",
+      "nearestTaskSiblings": [
+        "/prorated-rent-calculator",
+        "/rent-in-advance-australia"
+      ],
+      "protected": false,
+      "title": "Prorated Rent Calculator Australia | Partial Rent",
+      "h1": "Prorated Rent Calculator Australia",
+      "description": "Calculate partial rent in Australia for a mid-month or mid-period move-in or move-out using weekly, fortnightly, or monthly rent.",
+      "canonical": "https://www.rentconverter.com/prorated-rent-calculator-australia",
+      "ogUrl": "https://www.rentconverter.com/prorated-rent-calculator-australia",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/prorated-rent-calculator-australia"
+        },
+        {
+          "type": "WebApplication",
+          "url": "https://www.rentconverter.com/prorated-rent-calculator-australia"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [],
+      "sourceFile": "app/routes/prorated-rent-calculator-australia.tsx",
+      "sourceImports": [
+        "~/client/components/generated/GeneratedPages",
+        "~/client/data/generatedRouteConfigs",
+        "~/client/utils/seo"
+      ],
+      "sourceLabels": [],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/prorated-rent-calculator",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/pw-to-pcm-calculator",
+      "task": "Translate PW or PCW listings into calendar-month comparison",
+      "decision": "improve",
+      "rationale": "Daily-rate conversion with GBP wording; heavily aliased historical entry. Needs clear 52-week versus 365-day convention evidence before changing math.",
+      "nearestTaskSiblings": [
+        "/weekly-to-monthly-rent-converter",
+        "/what-does-pcm-mean-rent"
+      ],
+      "protected": false,
+      "title": "PW to PCM Calculator | UK Weekly Rent to Monthly",
+      "h1": "PW to PCM Calculator",
+      "description": "Convert PW rent into a per-calendar-month equivalent using PW x 365 / 7 / 12. Compare the PCM result with the 4-week shortcut.",
+      "canonical": "https://www.rentconverter.com/pw-to-pcm-calculator",
+      "ogUrl": "https://www.rentconverter.com/pw-to-pcm-calculator",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/pw-to-pcm-calculator"
+        },
+        {
+          "type": "WebApplication",
+          "url": "https://www.rentconverter.com/pw-to-pcm-calculator"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/pcm-rent-calculator",
+        "/weekly-to-monthly-rent-uk",
+        "/convert-weekly-rent-to-monthly-uk",
+        "/weekly-to-monthly-rent-formula-uk",
+        "/190-pounds-per-week-to-pcm",
+        "/pw-to-pcm",
+        "/pcw-to-pcm",
+        "/pw-to-pm",
+        "/per-week-to-pcm",
+        "/pcm-calculator",
+        "/rent-pcm-calculator"
+      ],
+      "sourceFile": "app/routes/pw-to-pcm-calculator.tsx",
+      "sourceImports": [
+        "~/client/components/generated/GeneratedPages",
+        "~/client/data/generatedRouteConfigs",
+        "~/client/utils/seo"
+      ],
+      "sourceLabels": [],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/pcm-to-pw-calculator",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/rent-after-tax-income-calculator",
+      "task": "Compare rent against entered after-tax income",
+      "decision": "improve",
+      "rationale": "Entered net-income comparison, not a tax calculation. Inspect task overlap with take-home page before any redirect.",
+      "nearestTaskSiblings": [
+        "/rent-vs-take-home-pay-calculator",
+        "/rent-as-percentage-of-income-calculator"
+      ],
+      "protected": false,
+      "title": "Rent After-Tax Income Calculator | Take-Home Rent Share",
+      "h1": "Rent After-Tax Income Calculator",
+      "description": "Estimate rent as a percentage of after-tax income. Enter income, tax rate, and rent to compare rent with take-home pay.",
+      "canonical": "https://www.rentconverter.com/rent-after-tax-income-calculator",
+      "ogUrl": "https://www.rentconverter.com/rent-after-tax-income-calculator",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/rent-after-tax-income-calculator"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/rent-after-tax-income"
+      ],
+      "sourceFile": "app/routes/rent-after-tax-income-calculator.tsx",
+      "sourceImports": [
+        "react",
+        "./+types/rent-after-tax-income-calculator",
+        "~/client/components/layout/Assumptions",
+        "~/client/components/rent-after-tax-income-calculator/HowItWorks",
+        "~/client/components/rent-after-tax-income-calculator/ToolFit",
+        "~/client/utils/savedState"
+      ],
+      "sourceLabels": [
+        "Income period",
+        "Rent period",
+        "Currency",
+        "Breadcrumb"
+      ],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/rent-increase-percentage-calculator",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/rent-as-percentage-of-income-calculator",
+      "task": "Measure income share for different rent and income periods",
+      "decision": "keep",
+      "rationale": "Period-normalized ratio is a distinct result; must not confuse gross screening with spendable cash.",
+      "nearestTaskSiblings": [
+        "/rent-vs-take-home-pay-calculator",
+        "/income-required-for-rent-calculator"
+      ],
+      "protected": false,
+      "title": "Rent as Percentage of Income Calculator | Income Ratio",
+      "h1": "Rent as Percentage of Income Calculator",
+      "description": "Calculate rent as a percentage of income across monthly, weekly, 4-week, and annual periods. Useful for checking rent-to-income ratio.",
+      "canonical": "https://www.rentconverter.com/rent-as-percentage-of-income-calculator",
+      "ogUrl": "https://www.rentconverter.com/rent-as-percentage-of-income-calculator",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/rent-as-percentage-of-income-calculator"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/rent-as-percentage-of-income",
+        "/rent-to-income-ratio-calculator"
+      ],
+      "sourceFile": "app/routes/rent-as-percentage-of-income-calculator.tsx",
+      "sourceImports": [
+        "react",
+        "./+types/rent-as-percentage-of-income-calculator",
+        "~/client/components/layout/Assumptions",
+        "~/client/components/rent-as-percentage-of-income-calculator/HowItWorks",
+        "~/client/components/rent-as-percentage-of-income-calculator/ToolFit",
+        "~/client/utils/savedState"
+      ],
+      "sourceLabels": [
+        "Rent period",
+        "Income period",
+        "Currency",
+        "Breadcrumb"
+      ],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/monthly-to-weekly-rent-converter",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/rent-budget-calculator",
+      "task": "Subtract rent and non-rent costs from income",
+      "decision": "improve",
+      "rationale": "Currently annual GROSS income with one aggregate expense input; remaining amount is not take-home cash. Categories and explicit net planning would add value.",
+      "nearestTaskSiblings": [
+        "/how-much-rent-can-i-afford-calculator",
+        "/rent-vs-take-home-pay-calculator"
+      ],
+      "protected": false,
+      "title": "Rent Budget Calculator | Compare Rent, Income and Expenses",
+      "h1": "Rent Budget Calculator",
+      "description": "Compare planned monthly rent with annual gross income and aggregate non-rent expenses. See the remaining amount and income-based reference rules.",
+      "canonical": "https://www.rentconverter.com/rent-budget-calculator",
+      "ogUrl": "https://www.rentconverter.com/rent-budget-calculator",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/rent-budget-calculator"
+        },
+        {
+          "type": "WebApplication",
+          "url": "https://www.rentconverter.com/rent-budget-calculator"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [],
+      "sourceFile": "app/routes/rent-budget-calculator.tsx",
+      "sourceImports": [
+        "~/client/components/generated/GeneratedPages",
+        "~/client/data/generatedRouteConfigs",
+        "~/client/utils/seo"
+      ],
+      "sourceLabels": [],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/salary-to-rent-calculator",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/rent-due-date-calculator",
+      "task": "Generate upcoming payment dates and period totals",
+      "decision": "keep",
+      "rationale": "As-of date, horizon and rent cycle have real calendar task; month-end and leap-day handling need regression protection.",
+      "nearestTaskSiblings": [
+        "/rent-schedule-calculator",
+        "/lease-date-calculator"
+      ],
+      "protected": false,
+      "title": "Rent Due Date Calculator | Next Rent Payment Date",
+      "h1": "Rent Due Date Calculator",
+      "description": "Enter a due rule and as-of date to find upcoming rent due dates for monthly, weekly, biweekly, annual, or 28-day rent cycles.",
+      "canonical": "https://www.rentconverter.com/rent-due-date-calculator",
+      "ogUrl": "https://www.rentconverter.com/rent-due-date-calculator",
+      "schema": [],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/rent-due-date",
+        "/when-is-rent-due",
+        "/do-you-pay-rent-in-advance-or-after"
+      ],
+      "sourceFile": "app/routes/rent-due-date-calculator.tsx",
+      "sourceImports": [
+        "react",
+        "./+types/rent-due-date-calculator",
+        "~/client/components/layout/Assumptions",
+        "~/client/components/rent-due-date-calculator/HowItWorks",
+        "~/client/components/rent-due-date-calculator/ToolFit",
+        "~/client/utils/calendarDate.js"
+      ],
+      "sourceLabels": [
+        "Currency",
+        "Monthly due day",
+        "Breadcrumb"
+      ],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/rent-as-percentage-of-income-calculator",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/rent-in-advance-australia",
+      "task": "Add entered advance rent and bond for move-in planning",
+      "decision": "keep",
+      "rationale": "Weekly rent, advance weeks and bond produce upfront total; cannot prescribe lawful bond or advance limits.",
+      "nearestTaskSiblings": [
+        "/prorated-rent-calculator-australia",
+        "/rent-schedule-calculator"
+      ],
+      "protected": false,
+      "title": "Rent in Advance and Bond Calculator Australia",
+      "h1": "Rent in Advance and Bond Calculator Australia",
+      "description": "Enter weekly rent, advance-rent weeks, and a bond amount to estimate rent in advance and the combined upfront total in AUD.",
+      "canonical": "https://www.rentconverter.com/rent-in-advance-australia",
+      "ogUrl": "https://www.rentconverter.com/rent-in-advance-australia",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/rent-in-advance-australia"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/bond-and-rent-in-advance-australia"
+      ],
+      "sourceFile": "app/routes/rent-in-advance-australia.tsx",
+      "sourceImports": [
+        "~/client/components/generated/GeneratedPages",
+        "~/client/data/generatedRouteConfigs",
+        "~/client/utils/seo"
+      ],
+      "sourceLabels": [],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/prorated-rent-calculator-australia",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/rent-increase-calculator",
+      "task": "Find new rent and cash impact from a percentage change",
+      "decision": "keep",
+      "rationale": "Forward one-step calculation is distinct from reverse percentage; preserve all regional/increase aliases and avoid legality claims.",
+      "nearestTaskSiblings": [
+        "/rent-increase-percentage-calculator",
+        "/compound-rent-increase-calculator"
+      ],
+      "protected": false,
+      "title": "Rent Increase Calculator | New Rent and Percent Change",
+      "h1": "Rent Increase Calculator",
+      "description": "Apply a percentage or fixed amount you enter to calculate new rent, payment-period change, and annualized impact. Arithmetic only; local rules may apply.",
+      "canonical": "https://www.rentconverter.com/rent-increase-calculator",
+      "ogUrl": "https://www.rentconverter.com/rent-increase-calculator",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/rent-increase-calculator"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/rent-increase",
+        "/rent-after-increase",
+        "/rent-after-increase-calculator",
+        "/annual-rent-increase-calculator",
+        "/monthly-rent-increase-calculator",
+        "/rent-increase-formula",
+        "/cpi-rent-increase-calculator",
+        "/bc-rent-increase-calculator",
+        "/ontario-rent-increase-calculator",
+        "/quebec-rent-increase-calculator",
+        "/california-rent-increase-calculator"
+      ],
+      "sourceFile": "app/routes/rent-increase-calculator.tsx",
+      "sourceImports": [
+        "react",
+        "./+types/rent-increase-calculator",
+        "~/client/components/rent-increase-calculator/HowItWorks",
+        "~/client/components/rent-increase-calculator/ToolFit",
+        "~/client/utils/savedState"
+      ],
+      "sourceLabels": [
+        "Rent period",
+        "Currency",
+        "Breadcrumb"
+      ],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/rent-increase-percentage-calculator",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/rent-increase-percentage-calculator",
+      "task": "Find percentage change between old and new rent",
+      "decision": "keep",
+      "rationale": "Reverse percentage calculation; zero denominator, decrease and unchanged-rent cases need explicit results.",
+      "nearestTaskSiblings": [
+        "/rent-increase-calculator",
+        "/compound-rent-increase-calculator"
+      ],
+      "protected": false,
+      "title": "Rent Increase Percentage Calculator | Before and After Rent",
+      "h1": "Rent Increase Percentage Calculator",
+      "description": "Calculate the percentage increase between old rent and new rent. See the rent change, annual impact, and common billing-period breakdowns.",
+      "canonical": "https://www.rentconverter.com/rent-increase-percentage-calculator",
+      "ogUrl": "https://www.rentconverter.com/rent-increase-percentage-calculator",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/rent-increase-percentage-calculator"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/rent-increase-percentage"
+      ],
+      "sourceFile": "app/routes/rent-increase-percentage-calculator.tsx",
+      "sourceImports": [
+        "react",
+        "./+types/rent-increase-percentage-calculator",
+        "~/client/components/layout/Assumptions",
+        "~/client/components/rent-increase-percentage-calculator/HowItWorks",
+        "~/client/components/rent-increase-percentage-calculator/ToolFit",
+        "~/client/utils/savedState"
+      ],
+      "sourceLabels": [
+        "Billing period",
+        "Currency",
+        "Results",
+        "Breadcrumb"
+      ],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/rent-after-tax-income-calculator",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/rent-paid-every-4-weeks-calculator",
+      "task": "Compare 28-day billing with a calendar-month budget",
+      "decision": "improve",
+      "rationale": "Useful billing distinction but rate-equivalent annualization is not an actual integer payment count. Audit all 13-payment explanations.",
+      "nearestTaskSiblings": [
+        "/",
+        "/rent-schedule-calculator"
+      ],
+      "protected": false,
+      "title": "Rent Paid Every 4 Weeks Calculator | 28-Day to Monthly",
+      "h1": "Rent Paid Every 4 Weeks Calculator",
+      "description": "Enter rent due every 28 days to calculate average monthly, weekly, and annual equivalents. Shows why 13 four-week periods differ from 12 months.",
+      "canonical": "https://www.rentconverter.com/rent-paid-every-4-weeks-calculator",
+      "ogUrl": "https://www.rentconverter.com/rent-paid-every-4-weeks-calculator",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/rent-paid-every-4-weeks-calculator"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/4-weekly-to-monthly-rent-uk",
+        "/rent-paid-every-4-weeks"
+      ],
+      "sourceFile": "app/routes/rent-paid-every-4-weeks-calculator.tsx",
+      "sourceImports": [
+        "react",
+        "~/client/utils/savedState.js",
+        "./+types/rent-paid-every-4-weeks-calculator",
+        "~/client/components/layout/Assumptions",
+        "~/client/components/rent-paid-every-4-weeks-calculator/HowItWorks",
+        "~/client/components/rent-paid-every-4-weeks-calculator/ToolFit"
+      ],
+      "sourceLabels": [
+        "Currency",
+        "Results",
+        "Breadcrumb"
+      ],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/rent-per-paycheck-calculator",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/rent-per-day-calculator",
+      "task": "Convert an entered period to a daily rate",
+      "decision": "improve",
+      "rationale": "Flexible source period differs from fixed monthly converter; average daily rate must not be presented as lease proration rule.",
+      "nearestTaskSiblings": [
+        "/monthly-to-daily-rent-converter",
+        "/prorated-rent-calculator"
+      ],
+      "protected": false,
+      "title": "Rent Per Day Calculator | Daily Rent Equivalent",
+      "h1": "Rent Per Day Calculator",
+      "description": "Calculate rent per day from monthly, weekly, 4-week, biweekly, hourly, or annual rent using stated 365-day assumptions.",
+      "canonical": "https://www.rentconverter.com/rent-per-day-calculator",
+      "ogUrl": "https://www.rentconverter.com/rent-per-day-calculator",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/rent-per-day-calculator"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/rent-per-day"
+      ],
+      "sourceFile": "app/routes/rent-per-day-calculator.tsx",
+      "sourceImports": [
+        "react",
+        "./+types/rent-per-day-calculator",
+        "~/client/components/layout/Assumptions",
+        "~/client/components/rent-per-day-calculator/HowItWorks",
+        "~/client/components/rent-per-day-calculator/ToolFit"
+      ],
+      "sourceLabels": [
+        "Currency",
+        "Results",
+        "Breadcrumb"
+      ],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/rent-per-week-calculator",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/rent-per-paycheck-calculator",
+      "task": "Set aside annualized rent across paychecks",
+      "decision": "improve",
+      "rationale": "Fixed 52/26/24/12 allocation supports averages but cannot show whether next rent is funded before due date. Dates and reserve inputs would add real value.",
+      "nearestTaskSiblings": [
+        "/rent-due-date-calculator",
+        "/rent-vs-take-home-pay-calculator"
+      ],
+      "protected": false,
+      "title": "Rent Per Paycheck Calculator | Biweekly and Semi-Monthly Rent",
+      "h1": "Rent Per Paycheck Calculator",
+      "description": "Enter rent and paycheck frequency to allocate annualized rent across weekly, biweekly, semimonthly, or monthly paychecks. Taxes and pay dates are not calculated.",
+      "canonical": "https://www.rentconverter.com/rent-per-paycheck-calculator",
+      "ogUrl": "https://www.rentconverter.com/rent-per-paycheck-calculator",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/rent-per-paycheck-calculator"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/rent-per-paycheck-us",
+        "/rent-per-paycheck-canada",
+        "/rent-per-paycheck"
+      ],
+      "sourceFile": "app/routes/rent-per-paycheck-calculator.tsx",
+      "sourceImports": [
+        "react",
+        "~/client/utils/savedState.js",
+        "./+types/rent-per-paycheck-calculator",
+        "~/client/components/layout/Assumptions",
+        "~/client/components/rent-per-paycheck-calculator/HowItWorks",
+        "~/client/components/rent-per-paycheck-calculator/ToolFit"
+      ],
+      "sourceLabels": [
+        "Currency",
+        "Results",
+        "Breadcrumb"
+      ],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/rent-increase-percentage-calculator",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/rent-per-week-calculator",
+      "task": "Convert an entered period to a weekly rate",
+      "decision": "improve",
+      "rationale": "Flexible input period, but same 365-day basis as home; needs stronger user journey than another output-default clone.",
+      "nearestTaskSiblings": [
+        "/monthly-to-weekly-rent-converter",
+        "/pcm-to-pw-calculator"
+      ],
+      "protected": false,
+      "title": "Rent Per Week Calculator | Weekly Rent Equivalent",
+      "h1": "Rent Per Week Calculator",
+      "description": "Calculate rent per week from monthly, 4-week, biweekly, daily, hourly, or annual rent using clear period assumptions.",
+      "canonical": "https://www.rentconverter.com/rent-per-week-calculator",
+      "ogUrl": "https://www.rentconverter.com/rent-per-week-calculator",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/rent-per-week-calculator"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/rent-per-week"
+      ],
+      "sourceFile": "app/routes/rent-per-week-calculator.tsx",
+      "sourceImports": [
+        "react",
+        "./+types/rent-per-week-calculator",
+        "~/client/components/layout/Assumptions",
+        "~/client/components/rent-per-week-calculator/HowItWorks"
+      ],
+      "sourceLabels": [
+        "Currency",
+        "Results",
+        "Results",
+        "Breadcrumb"
+      ],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/rent-per-day-calculator",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/rent-schedule-calculator",
+      "task": "Generate lease-bounded payment rows",
+      "decision": "improve",
+      "rationale": "Start, term, frequency and amount produce table; excludes dates on or after lease end and does not prorate final payment. Explain and test boundary convention.",
+      "nearestTaskSiblings": [
+        "/rent-due-date-calculator",
+        "/lease-date-calculator"
+      ],
+      "protected": false,
+      "title": "Rent Schedule Calculator | Payment Dates and Totals",
+      "h1": "Rent Schedule Calculator",
+      "description": "Generate lease-bounded rent payment rows from a start date, calendar-month term, rent amount, and selected payment frequency.",
+      "canonical": "https://www.rentconverter.com/rent-schedule-calculator",
+      "ogUrl": "https://www.rentconverter.com/rent-schedule-calculator",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/rent-schedule-calculator"
+        },
+        {
+          "type": "WebApplication",
+          "url": "https://www.rentconverter.com/rent-schedule-calculator"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [],
+      "sourceFile": "app/routes/rent-schedule-calculator.tsx",
+      "sourceImports": [
+        "~/client/components/generated/GeneratedPages",
+        "~/client/data/generatedRouteConfigs",
+        "~/client/utils/seo"
+      ],
+      "sourceLabels": [],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/lease-date-calculator",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/rent-split-calculator",
+      "task": "Allocate rent and shared monthly costs equally",
+      "decision": "keep",
+      "rationale": "Participant count and cent-reconciled totals useful. Equal-share explanation differs from income weighting; preserve current exports.",
+      "nearestTaskSiblings": [
+        "/split-rent-based-on-income-calculator",
+        "/rent-split-percentage-calculator"
+      ],
+      "protected": false,
+      "title": "Rent Split Calculator | Split Rent by Roommates",
+      "h1": "Rent Split Calculator",
+      "description": "Split rent and optional shared monthly costs evenly. See each person's share by rent period, with exact cent-remainder guidance.",
+      "canonical": "https://www.rentconverter.com/rent-split-calculator",
+      "ogUrl": "https://www.rentconverter.com/rent-split-calculator",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/rent-split-calculator"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/rent-split",
+        "/roommate-rent-split-calculator"
+      ],
+      "sourceFile": "app/routes/rent-split-calculator.tsx",
+      "sourceImports": [
+        "react",
+        "./+types/rent-split-calculator",
+        "~/client/components/layout/Assumptions",
+        "~/client/components/rent-split-calculator/HowItWorks",
+        "~/client/components/rent-split-calculator/ToolFit",
+        "~/client/utils/savedState",
+        "~/client/utils/generatedTools.js"
+      ],
+      "sourceLabels": [
+        "Currency",
+        "Results",
+        "Breadcrumb"
+      ],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/rent-paid-every-4-weeks-calculator",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/rent-split-percentage-calculator",
+      "task": "Split two-person costs by an agreed custom share",
+      "decision": "improve",
+      "rationale": "Two people only and complement of Person A percent; no multi-person percentages or room-size inputs. Check displayed cents reconcile.",
+      "nearestTaskSiblings": [
+        "/split-rent-based-on-income-calculator",
+        "/rent-split-calculator"
+      ],
+      "protected": false,
+      "title": "Rent Split Percentage Calculator | Custom Shares",
+      "h1": "Rent Split Percentage Calculator",
+      "description": "Split rent and optional shared monthly costs between two people. Enter Person A’s percentage and Person B receives the remainder.",
+      "canonical": "https://www.rentconverter.com/rent-split-percentage-calculator",
+      "ogUrl": "https://www.rentconverter.com/rent-split-percentage-calculator",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/rent-split-percentage-calculator"
+        },
+        {
+          "type": "WebApplication",
+          "url": "https://www.rentconverter.com/rent-split-percentage-calculator"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [],
+      "sourceFile": "app/routes/rent-split-percentage-calculator.tsx",
+      "sourceImports": [
+        "~/client/components/generated/GeneratedPages",
+        "~/client/data/generatedRouteConfigs",
+        "~/client/utils/seo"
+      ],
+      "sourceLabels": [],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/split-rent-based-on-income-calculator",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/rent-vs-buy-calculator",
+      "task": "Compare renting with ownership under entered assumptions",
+      "decision": "improve",
+      "rationale": "Many housing/loan/maintenance/growth inputs and cash-flow projection; sensitivity, opportunity cost exclusions and large input validation need separate deep acceptance.",
+      "nearestTaskSiblings": [
+        "/rent-budget-calculator",
+        "/compound-rent-increase-calculator"
+      ],
+      "protected": false,
+      "title": "Rent vs Buy Calculator | Compare Renting and Buying",
+      "h1": "Rent vs Buy Calculator",
+      "description": "Compare renting vs buying over time with rent paid, ownership costs, equity, and break-even estimates. Results calculate in your browser.",
+      "canonical": "https://www.rentconverter.com/rent-vs-buy-calculator",
+      "ogUrl": "https://www.rentconverter.com/rent-vs-buy-calculator",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/rent-vs-buy-calculator"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/rent-vs-buy"
+      ],
+      "sourceFile": "app/routes/rent-vs-buy-calculator.tsx",
+      "sourceImports": [
+        "react",
+        "./+types/rent-vs-buy-calculator",
+        "~/client/components/layout/Assumptions",
+        "~/client/components/rent-vs-buy-calculator/HowItWorks",
+        "~/client/components/rent-vs-buy-calculator/ToolFit"
+      ],
+      "sourceLabels": [
+        "Currency",
+        "Results",
+        "Results",
+        "Breadcrumb"
+      ],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/compound-rent-increase-calculator",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/rent-vs-take-home-pay-calculator",
+      "task": "Measure rent burden and money left from net pay",
+      "decision": "improve",
+      "rationale": "Period-normalized net pay less rent is useful, but overlaps after-tax page and excludes remaining bills.",
+      "nearestTaskSiblings": [
+        "/rent-after-tax-income-calculator",
+        "/rent-budget-calculator"
+      ],
+      "protected": false,
+      "title": "Rent vs Take-Home Pay Calculator | Income After Rent",
+      "h1": "Rent vs Take-Home Pay Calculator",
+      "description": "Compare rent with take-home pay. See rent as a percentage of net income and how much income remains after rent.",
+      "canonical": "https://www.rentconverter.com/rent-vs-take-home-pay-calculator",
+      "ogUrl": "https://www.rentconverter.com/rent-vs-take-home-pay-calculator",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/rent-vs-take-home-pay-calculator"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/rent-vs-take-home-pay"
+      ],
+      "sourceFile": "app/routes/rent-vs-take-home-pay-calculator.tsx",
+      "sourceImports": [
+        "react",
+        "./+types/rent-vs-take-home-pay-calculator",
+        "~/client/components/layout/Assumptions",
+        "~/client/components/rent-vs-take-home-pay-calculator/HowItWorks",
+        "~/client/components/rent-vs-take-home-pay-calculator/ToolFit",
+        "~/client/utils/savedState"
+      ],
+      "sourceLabels": [
+        "Take-home pay period",
+        "Rent period",
+        "Currency",
+        "Results",
+        "Results",
+        "Breadcrumb"
+      ],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/rent-as-percentage-of-income-calculator",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/salary-to-rent-calculator",
+      "task": "Compare salary-based rent references with planned rent",
+      "decision": "keep",
+      "rationale": "Annual gross salary and planned monthly rent show 30/40/3x comparisons; preserves exact-salary alias continuity without answer-page sprawl.",
+      "nearestTaskSiblings": [
+        "/income-required-for-rent-calculator",
+        "/rent-budget-calculator"
+      ],
+      "protected": false,
+      "title": "Salary to Rent Calculator | Annual Income Rent Targets",
+      "h1": "Salary to Rent Calculator",
+      "description": "Enter annual gross salary to compare monthly rent references at 30%, 40%, and 3x income, plus a planned-rent percentage check.",
+      "canonical": "https://www.rentconverter.com/salary-to-rent-calculator",
+      "ogUrl": "https://www.rentconverter.com/salary-to-rent-calculator",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/salary-to-rent-calculator"
+        },
+        {
+          "type": "WebApplication",
+          "url": "https://www.rentconverter.com/salary-to-rent-calculator"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/how-much-rent-can-i-afford-on-50k",
+        "/how-much-rent-can-i-afford-on-60k",
+        "/how-much-rent-can-i-afford-on-65k",
+        "/how-much-rent-can-i-afford-on-70k",
+        "/how-much-rent-can-i-afford-on-80k",
+        "/how-much-rent-can-i-afford-on-100k",
+        "/rent-calculator-by-salary",
+        "/rent-calculator-by-income",
+        "/max-rent-calculator",
+        "/30-percent-rent-rule-calculator",
+        "/40-percent-rent-rule-calculator"
+      ],
+      "sourceFile": "app/routes/salary-to-rent-calculator.tsx",
+      "sourceImports": [
+        "~/client/components/generated/GeneratedPages",
+        "~/client/data/generatedRouteConfigs",
+        "~/client/utils/seo"
+      ],
+      "sourceLabels": [],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/hourly-pay-to-rent-calculator",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/sitemap",
+      "task": "Find a known tool among all canonical pages",
+      "decision": "keep",
+      "rationale": "Human directory remains useful away from primary calculation; it is not evidence every listed task deserves indexing.",
+      "nearestTaskSiblings": [
+        "/",
+        "/rent-schedule-calculator"
+      ],
+      "protected": false,
+      "title": "HTML Sitemap | RentConverter",
+      "h1": "HTML Sitemap",
+      "description": "Browse every RentConverter tool and page in one place, including rent frequency converters, affordability calculators, rent increase calculators, and legal pages.",
+      "canonical": "https://www.rentconverter.com/sitemap",
+      "ogUrl": "https://www.rentconverter.com/sitemap",
+      "schema": [],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "default index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [],
+      "sourceFile": "app/routes/sitemap.tsx",
+      "sourceImports": [
+        "./+types/sitemap",
+        "react-router",
+        "~/client/data/routeRegistry",
+        "~/client/utils/seo"
+      ],
+      "sourceLabels": [],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/annual-to-biweekly-rent-converter",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/split-rent-based-on-income-calculator",
+      "task": "Allocate two-person household cost by entered incomes",
+      "decision": "improve",
+      "rationale": "Two incomes determine proportional shares and reconcile totals; mixed gross/net basis can mislead and more occupants unsupported.",
+      "nearestTaskSiblings": [
+        "/rent-split-percentage-calculator",
+        "/rent-split-calculator"
+      ],
+      "protected": false,
+      "title": "Split Rent Based on Income Calculator",
+      "h1": "Split Rent Based on Income Calculator",
+      "description": "Split rent and optional shared monthly costs between two people in proportion to each person’s entered monthly income.",
+      "canonical": "https://www.rentconverter.com/split-rent-based-on-income-calculator",
+      "ogUrl": "https://www.rentconverter.com/split-rent-based-on-income-calculator",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/split-rent-based-on-income-calculator"
+        },
+        {
+          "type": "WebApplication",
+          "url": "https://www.rentconverter.com/split-rent-based-on-income-calculator"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/rent-split-by-income-calculator",
+        "/rent-calculator-split-based-on-income"
+      ],
+      "sourceFile": "app/routes/split-rent-based-on-income-calculator.tsx",
+      "sourceImports": [
+        "~/client/components/generated/GeneratedPages",
+        "~/client/data/generatedRouteConfigs",
+        "~/client/utils/seo"
+      ],
+      "sourceLabels": [],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/rent-split-percentage-calculator",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/terms-of-service",
+      "task": "Understand tool limitations and terms",
+      "decision": "keep",
+      "rationale": "Intentional existing indexable legal page; no new indexing decision without owner review.",
+      "nearestTaskSiblings": [
+        "/privacy-policy",
+        "/methodology"
+      ],
+      "protected": false,
+      "title": "Terms of Service | RentConverter.com",
+      "h1": "Terms of Service",
+      "description": "Read the terms for using RentConverter's free browser-based rental calculators, informational pages, and reference results.",
+      "canonical": "https://www.rentconverter.com/terms-of-service",
+      "ogUrl": "https://www.rentconverter.com/terms-of-service",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/terms-of-service"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [],
+      "sourceFile": "app/routes/terms-of-service.tsx",
+      "sourceImports": [
+        "react-router",
+        "./+types/terms-of-service",
+        "~/client/utils/seo"
+      ],
+      "sourceLabels": [],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/privacy-policy",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/weekly-to-annual-rent-converter",
+      "task": "Convert an advertised weekly amount to a annual equivalent",
+      "decision": "improve",
+      "rationale": "Fixed weekly to annual entry; amount/currency and 365-day period equivalence. Shared formula does not establish standalone value; compare the focused task with home.",
+      "nearestTaskSiblings": [
+        "/annual-to-weekly-rent-converter",
+        "/rent-paid-every-4-weeks-calculator"
+      ],
+      "protected": false,
+      "title": "Weekly to Annual Rent Converter | Yearly Rent",
+      "h1": "Weekly to Annual Rent Converter",
+      "description": "Convert weekly rent into an annual rent amount using a 365-day year. See monthly, 4-week, daily, and hourly breakdowns.",
+      "canonical": "https://www.rentconverter.com/weekly-to-annual-rent-converter",
+      "ogUrl": "https://www.rentconverter.com/weekly-to-annual-rent-converter",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/weekly-to-annual-rent-converter"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/weekly-to-annual-rent"
+      ],
+      "sourceFile": "app/routes/weekly-to-annual-rent-converter.tsx",
+      "sourceImports": [
+        "react",
+        "./+types/weekly-to-annual-rent-converter",
+        "~/client/components/layout/Assumptions",
+        "~/client/components/weekly-to-annual-rent-converter/HowItWorks",
+        "~/client/components/weekly-to-annual-rent-converter/ToolFit"
+      ],
+      "sourceLabels": [
+        "Currency",
+        "Results",
+        "Results",
+        "Breadcrumb"
+      ],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/weekly-to-biweekly-rent-converter",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/weekly-to-biweekly-rent-converter",
+      "task": "Convert an advertised weekly amount to a biweekly equivalent",
+      "decision": "improve",
+      "rationale": "Fixed weekly to biweekly entry; amount/currency and 365-day period equivalence. Shared formula does not establish standalone value; compare the focused task with home.",
+      "nearestTaskSiblings": [
+        "/biweekly-to-weekly-rent-converter",
+        "/rent-per-paycheck-calculator"
+      ],
+      "protected": false,
+      "title": "Weekly to Biweekly Rent Converter | Every 2 Weeks",
+      "h1": "Weekly to Biweekly Rent Converter",
+      "description": "Convert weekly rent into rent every two weeks. See biweekly, monthly, 4-week, daily, and annual rent breakdowns.",
+      "canonical": "https://www.rentconverter.com/weekly-to-biweekly-rent-converter",
+      "ogUrl": "https://www.rentconverter.com/weekly-to-biweekly-rent-converter",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/weekly-to-biweekly-rent-converter"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/weekly-to-biweekly-rent"
+      ],
+      "sourceFile": "app/routes/weekly-to-biweekly-rent-converter.tsx",
+      "sourceImports": [
+        "react",
+        "./+types/weekly-to-biweekly-rent-converter",
+        "~/client/components/layout/Assumptions",
+        "~/client/components/weekly-to-biweekly-rent-converter/HowItWorks",
+        "~/client/components/weekly-to-biweekly-rent-converter/ToolFit"
+      ],
+      "sourceLabels": [
+        "Currency",
+        "Results",
+        "Results",
+        "Breadcrumb"
+      ],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/weekly-to-annual-rent-converter",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/weekly-to-fortnightly-rent-australia",
+      "task": "Translate weekly rent into a 14-day Australian amount",
+      "decision": "improve",
+      "rationale": "AUD and fortnight language; math matches weekly-to-biweekly. Need source-backed task distinction, not regional keyword padding.",
+      "nearestTaskSiblings": [
+        "/weekly-to-biweekly-rent-converter",
+        "/fortnightly-to-monthly-rent-australia"
+      ],
+      "protected": false,
+      "title": "Weekly to Fortnightly Rent Australia | Rent Calculator",
+      "h1": "Weekly to Fortnightly Rent Australia",
+      "description": "Convert weekly rent to fortnightly rent in Australia and see the true monthly and annual equivalent.",
+      "canonical": "https://www.rentconverter.com/weekly-to-fortnightly-rent-australia",
+      "ogUrl": "https://www.rentconverter.com/weekly-to-fortnightly-rent-australia",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/weekly-to-fortnightly-rent-australia"
+        },
+        {
+          "type": "WebApplication",
+          "url": "https://www.rentconverter.com/weekly-to-fortnightly-rent-australia"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [],
+      "sourceFile": "app/routes/weekly-to-fortnightly-rent-australia.tsx",
+      "sourceImports": [
+        "~/client/components/generated/GeneratedPages",
+        "~/client/data/generatedRouteConfigs",
+        "~/client/utils/seo"
+      ],
+      "sourceLabels": [],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/fortnightly-to-monthly-rent-australia",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/weekly-to-monthly-rent-australia",
+      "task": "Compare Australian weekly listings with monthly budgeting",
+      "decision": "improve",
+      "rationale": "Australian wording/AUD and 365-day model; historical traffic merits careful source review, not blanket pruning.",
+      "nearestTaskSiblings": [
+        "/weekly-to-monthly-rent-converter",
+        "/fortnightly-to-monthly-rent-australia"
+      ],
+      "protected": false,
+      "title": "Weekly to Monthly Rent Calculator Australia | PW to PCM",
+      "h1": "Weekly to Monthly Rent Converter Australia",
+      "description": "Convert weekly rent to monthly rent in Australia using a true 365-day year. Compare PW rent with monthly and 4-week totals.",
+      "canonical": "https://www.rentconverter.com/weekly-to-monthly-rent-australia",
+      "ogUrl": "https://www.rentconverter.com/weekly-to-monthly-rent-australia",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/weekly-to-monthly-rent-australia"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/australia-rent-calculator",
+        "/weekly-to-monthly-rent-melbourne",
+        "/weekly-to-monthly-rent-sydney"
+      ],
+      "sourceFile": "app/routes/weekly-to-monthly-rent-australia.tsx",
+      "sourceImports": [
+        "react",
+        "~/client/utils/savedState.js",
+        "./+types/weekly-to-monthly-rent-australia",
+        "~/client/components/layout/Assumptions",
+        "~/client/components/weekly-to-monthly-rent-australia/HowItWorks",
+        "~/client/components/weekly-to-monthly-rent-australia/ToolFit",
+        "~/client/components/weekly-to-monthly-rent-australia/FAQ"
+      ],
+      "sourceLabels": [
+        "Currency",
+        "Results",
+        "Results",
+        "Breadcrumb"
+      ],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/weekly-to-monthly-rent-converter",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/weekly-to-monthly-rent-converter",
+      "task": "Convert an advertised weekly amount to a monthly equivalent",
+      "decision": "keep",
+      "rationale": "PROTECTED historical winner. Fixed weekly to monthly entry; amount/currency and 365-day period equivalence. Shared formula does not establish standalone value; compare the focused task with home. Preserve math, metadata and URL until compelling regression-tested evidence.",
+      "nearestTaskSiblings": [
+        "/monthly-to-weekly-rent-converter",
+        "/rent-paid-every-4-weeks-calculator"
+      ],
+      "protected": true,
+      "title": "Weekly to Monthly Rent Calculator | Per Week to Month",
+      "h1": "Weekly to Monthly Rent Converter",
+      "description": "Enter weekly rent to calculate the average calendar-month equivalent using weekly x 365 / 7 / 12. Includes the 4-week amount for comparison.",
+      "canonical": "https://www.rentconverter.com/weekly-to-monthly-rent-converter",
+      "ogUrl": "https://www.rentconverter.com/weekly-to-monthly-rent-converter",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/weekly-to-monthly-rent-converter"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/150-per-week-to-monthly-rent",
+        "/160-per-week-to-monthly-rent",
+        "/170-per-week-to-monthly-rent",
+        "/180-per-week-to-monthly-rent",
+        "/200-per-week-to-monthly-rent",
+        "/220-per-week-to-monthly-rent",
+        "/230-per-week-to-monthly-rent",
+        "/250-per-week-to-monthly-rent",
+        "/300-per-week-to-monthly-rent",
+        "/320-per-week-to-monthly-rent",
+        "/350-per-week-to-monthly-rent",
+        "/370-per-week-to-monthly-rent",
+        "/400-per-week-to-monthly-rent",
+        "/450-per-week-to-monthly-rent",
+        "/500-per-week-to-monthly-rent",
+        "/550-per-week-to-monthly-rent",
+        "/600-per-week-to-monthly-rent",
+        "/650-per-week-to-monthly-rent",
+        "/750-per-week-to-monthly-rent",
+        "/500-euros-per-week-to-monthly-rent",
+        "/weekly-to-monthly-rent"
+      ],
+      "sourceFile": "app/routes/weekly-to-monthly-rent-converter.tsx",
+      "sourceImports": [
+        "react",
+        "~/client/utils/savedState.js",
+        "./+types/weekly-to-monthly-rent-converter",
+        "~/client/components/layout/Assumptions",
+        "~/client/components/weekly-to-monthly-rent-converter/HowItWorks",
+        "~/client/components/weekly-to-monthly-rent-converter/ToolFit",
+        "~/client/components/weekly-to-monthly-rent-converter/FAQ"
+      ],
+      "sourceLabels": [
+        "Currency",
+        "Results",
+        "Results",
+        "Breadcrumb"
+      ],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/weekly-to-monthly-rent-australia",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/what-does-pcm-mean-rent",
+      "task": "Understand per-calendar-month listing terminology",
+      "decision": "keep",
+      "rationale": "Glossary table and contextual comparison answer a definition task; source and convention distinctions matter more than extra prose.",
+      "nearestTaskSiblings": [
+        "/pw-to-pcm-calculator",
+        "/what-does-pw-mean-rent"
+      ],
+      "protected": false,
+      "title": "What Does PCM Mean in Rent? | Per Calendar Month Explained",
+      "h1": "What Does PCM Mean in Rent?",
+      "description": "Learn what PCM means in rent listings, how it differs from weekly and 4-week rent, and how to convert PW rent to a true monthly amount.",
+      "canonical": "https://www.rentconverter.com/what-does-pcm-mean-rent",
+      "ogUrl": "https://www.rentconverter.com/what-does-pcm-mean-rent",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/what-does-pcm-mean-rent"
+        },
+        {
+          "type": "Article",
+          "url": "https://www.rentconverter.com/what-does-pcm-mean-rent"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [
+        "/pcm-vs-pw-rent",
+        "/per-calendar-month-rent",
+        "/per-calendar-month-rent-uk"
+      ],
+      "sourceFile": "app/routes/what-does-pcm-mean-rent.tsx",
+      "sourceImports": [
+        "~/client/components/generated/GeneratedPages",
+        "~/client/data/generatedRouteConfigs",
+        "~/client/utils/seo"
+      ],
+      "sourceLabels": [],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/what-does-pw-mean-rent",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    },
+    {
+      "path": "/what-does-pw-mean-rent",
+      "task": "Understand weekly listing terminology",
+      "decision": "keep",
+      "rationale": "Definition task independent of arithmetic; linked converter is next action. Avoid implying 365-day basis is every lease's contractual method.",
+      "nearestTaskSiblings": [
+        "/pcm-to-pw-calculator",
+        "/what-does-pcm-mean-rent"
+      ],
+      "protected": false,
+      "title": "What Does PW Mean in Rent? | Weekly Rent Explained",
+      "h1": "What Does PW Mean in Rent?",
+      "description": "PW means per week in rent listings. Learn how weekly rent compares with monthly rent and why PW x 4 understates the real monthly cost.",
+      "canonical": "https://www.rentconverter.com/what-does-pw-mean-rent",
+      "ogUrl": "https://www.rentconverter.com/what-does-pw-mean-rent",
+      "schema": [
+        {
+          "type": "WebPage",
+          "url": "https://www.rentconverter.com/what-does-pw-mean-rent"
+        },
+        {
+          "type": "Article",
+          "url": "https://www.rentconverter.com/what-does-pw-mean-rent"
+        }
+      ],
+      "sitemap": true,
+      "httpStatus": 200,
+      "robots": "index,follow",
+      "responseRobots": "",
+      "redirectAncestors": [],
+      "sourceFile": "app/routes/what-does-pw-mean-rent.tsx",
+      "sourceImports": [
+        "~/client/components/generated/GeneratedPages",
+        "~/client/data/generatedRouteConfigs",
+        "~/client/utils/seo"
+      ],
+      "sourceLabels": [],
+      "homepageLinked": true,
+      "nearestTextSimilarity": "/what-does-pcm-mean-rent",
+      "currentPageSearchEvidence": "NOT MEASURED; six-month aggregates in RC-002 are not current URL ranks",
+      "browserReview": "PENDING; source and HTTP audit only",
+      "ownerGate": "Required before any redirect/noindex or protected-page change; no indexation change authorized by this recommendation"
+    }
+  ]
+}
