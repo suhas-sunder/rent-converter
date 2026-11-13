@@ -1,5 +1,7 @@
 import { useEffect, useId, useMemo, useState } from "react";
 import { Link } from "react-router";
+import RentScheduleExport from "./RentScheduleExport";
+import HydrationSafeControls from "~/client/components/HydrationSafeControls";
 import {
   dailyToMonthlyCents,
   dailyToWeeklyCents,
@@ -234,6 +236,7 @@ function ToolCard({
 }) {
   return (
     <section className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+      <HydrationSafeControls label={h1}>
       <div className="overflow-hidden rounded-[1.75rem] bg-white px-5 py-7 sm:px-8 sm:py-8">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0 flex-1">
@@ -258,6 +261,7 @@ function ToolCard({
         </div>
         {children}
       </div>
+      </HydrationSafeControls>
     </section>
   );
 }
@@ -345,12 +349,14 @@ function ResultPanel({
   detail,
   cards,
   tableRows,
+  tableLabel,
 }: {
   label: string;
   value: string;
   detail?: string;
   cards?: Array<{ label: string; value: string }>;
   tableRows?: string[][];
+  tableLabel?: string;
 }) {
   return (
     <div className="mt-6 overflow-hidden rounded-[1.5rem] bg-sky-50" aria-live="polite">
@@ -377,7 +383,14 @@ function ResultPanel({
         ) : null}
 
         {tableRows?.length ? (
-          <div className="mt-5 overflow-hidden rounded-2xl bg-white">
+          <div
+            className={tableLabel
+              ? "mt-5 overflow-x-auto rounded-2xl bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-sky-500"
+              : "mt-5 overflow-hidden rounded-2xl bg-white"}
+            role={tableLabel ? "region" : undefined}
+            aria-label={tableLabel}
+            tabIndex={tableLabel ? 0 : undefined}
+          >
             <table className="w-full text-left text-sm">
               <tbody>
                 {tableRows.map((row) => (
@@ -386,7 +399,7 @@ function ResultPanel({
                       <td
                         key={`${cell}-${index}`}
                         className={[
-                          "px-4 py-2",
+                          tableLabel ? "px-2 py-2 sm:px-4" : "px-4 py-2",
                           index === 0 ? "font-semibold text-slate-800" : "text-slate-700",
                           index === row.length - 1 ? "text-right font-bold text-slate-950" : "",
                         ].join(" ")}
@@ -1727,6 +1740,7 @@ export function DateToolPage({ config }: { config: DateToolConfig }) {
   const errors = [
     !startParsed.ok ? startParsed.error : null,
     !termParsed.ok ? termParsed.error : null,
+    dateCalculation && dateCalculation.date.year > 9999 ? "Choose a start date and term that end no later than the year 9999." : null,
     config.mode === "schedule" && !rentParsed.ok ? rentParsed.error : null,
   ].filter((error): error is string => Boolean(error));
   const schemas = makePageSchemas({ ...config, calculator: true, faq: config.faq });
@@ -1759,6 +1773,7 @@ export function DateToolPage({ config }: { config: DateToolConfig }) {
         {!browserDateReady ? null : errors.length ? <InvalidDateResults errors={errors} /> : config.mode === "schedule" && scheduleCalculation && rentParsed.ok ? (
           <ResultPanel
             label="Generated payment schedule"
+            tableLabel="Rent payment schedule; scroll horizontally to view all columns"
             value={`${scheduleCalculation.payments.length} ${scheduleCalculation.payments.length === 1 ? "payment" : "payments"}`}
             detail="Payment dates are period starts. The schedule excludes every date on or after the calculated lease end."
             cards={[
@@ -1784,6 +1799,14 @@ export function DateToolPage({ config }: { config: DateToolConfig }) {
             ]}
           />
         ) : null}
+        {config.mode === "schedule" && <RentScheduleExport schedule={browserDateReady && !errors.length && scheduleCalculation && rentParsed.ok ? {
+        paymentDates: scheduleCalculation.payments.map(formatCalendarDate),
+        leaseStart: formatCalendarDate(scheduleCalculation.start),
+        leaseEnd: formatCalendarDate(scheduleCalculation.leaseEnd.date),
+        frequency,
+        rentCents: rentParsed.cents,
+        currency,
+      } : null} />}
       </ToolCard>
       <ContentBlocks sections={dateSections(config)} examples={dateExamples(config)} />
       <RelatedTools links={config.relatedLinks} />
