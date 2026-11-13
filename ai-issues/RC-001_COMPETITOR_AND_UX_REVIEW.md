@@ -1,7 +1,7 @@
 # RC-001 — Independent competitor, policy and ads.txt evidence
 
-**Observed:** November 12, 2026, America/New_York (HTTP observations 2026-11-13 04:35–04:37 UTC).  
-**Scope:** independent research supporting implementation; not release acceptance or an AdSense approval prediction.  
+**Observed:** November 12, 2026, America/New_York (HTTP observations 2026-11-13 04:35–04:37 UTC).
+**Scope:** independent research supporting implementation; not release acceptance or an AdSense approval prediction.
 **Production reference:** `50c4647e5a61f05e1aeb4db04f4918bbfb6c1c5a`; immutable deployment `https://6ad02cf4ac34d1b203b9b866--rent-converter.netlify.app` (production SHA verified by lead agent through Netlify).
 
 ## Evidence boundaries
