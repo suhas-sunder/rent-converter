@@ -346,12 +346,14 @@ function ResultPanel({
   detail,
   cards,
   tableRows,
+  tableLabel,
 }: {
   label: string;
   value: string;
   detail?: string;
   cards?: Array<{ label: string; value: string }>;
   tableRows?: string[][];
+  tableLabel?: string;
 }) {
   return (
     <div className="mt-6 overflow-hidden rounded-[1.5rem] bg-sky-50" aria-live="polite">
@@ -378,7 +380,14 @@ function ResultPanel({
         ) : null}
 
         {tableRows?.length ? (
-          <div className="mt-5 overflow-hidden rounded-2xl bg-white">
+          <div
+            className={tableLabel
+              ? "mt-5 overflow-x-auto rounded-2xl bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-sky-500"
+              : "mt-5 overflow-hidden rounded-2xl bg-white"}
+            role={tableLabel ? "region" : undefined}
+            aria-label={tableLabel}
+            tabIndex={tableLabel ? 0 : undefined}
+          >
             <table className="w-full text-left text-sm">
               <tbody>
                 {tableRows.map((row) => (
@@ -387,7 +396,7 @@ function ResultPanel({
                       <td
                         key={`${cell}-${index}`}
                         className={[
-                          "px-4 py-2",
+                          tableLabel ? "px-2 py-2 sm:px-4" : "px-4 py-2",
                           index === 0 ? "font-semibold text-slate-800" : "text-slate-700",
                           index === row.length - 1 ? "text-right font-bold text-slate-950" : "",
                         ].join(" ")}
@@ -1761,6 +1770,7 @@ export function DateToolPage({ config }: { config: DateToolConfig }) {
         {!browserDateReady ? null : errors.length ? <InvalidDateResults errors={errors} /> : config.mode === "schedule" && scheduleCalculation && rentParsed.ok ? (
           <ResultPanel
             label="Generated payment schedule"
+            tableLabel="Rent payment schedule; scroll horizontally to view all columns"
             value={`${scheduleCalculation.payments.length} ${scheduleCalculation.payments.length === 1 ? "payment" : "payments"}`}
             detail="Payment dates are period starts. The schedule excludes every date on or after the calculated lease end."
             cards={[

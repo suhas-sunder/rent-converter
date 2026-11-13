@@ -1,6 +1,6 @@
 # W04 — calendar export acceptance
 
-Reviewed 2026-11-13 in isolated branch `release/2027-W04-calendar-export`, based on `f344ad29766bb63e185515ed08277a8ac9085247`. Candidate changes are uncommitted; this is not a deployed SHA. Status: **local implementation candidate; HOLD release acceptance**.
+Reviewed 2026-11-13 in isolated branch `release/2027-W04-calendar-export`, based on `f344ad29766bb63e185515ed08277a8ac9085247`. Feature commit `a7b1d1e` now has an additional uncommitted mobile-table repair described below. Status: **local implementation candidate; HOLD release acceptance**.
 
 ## Implemented scope
 
@@ -22,7 +22,7 @@ Shared money tests verify exact cents beyond Number precision, negative sub-unit
 
 Root reports actual local use at port 3013 with start 2028-01-31, term three months and monthly rent 1,800.25. The visible schedule contained January 31, February 29 and March 31, ending April 30. It downloaded `C:/Users/Suhas/Downloads/rent-payments-2028-01-31.ics` and read the file: three events, exact 1,800.25 amount, matching DTSTART and next-day DTEND including leap February, CRLF folding, no RRULE or alarms. Entering `1e3` displayed validation feedback and disabled download.
 
-Root reports no horizontal overflow at 360, 390, 768, 1280 and 1440 pixels. Its screenshots are copied under `ai-issues/evidence/w04/w04-calendar-{width}.jpg`. This report's author also visually inspected the 390 and 1440 captures: all three payment rows, export control, explanatory text and three-payment feedback are visible without clipped content. This inspection is of saved evidence, not an additional interactive browser session.
+Root originally reported no document horizontal overflow at 360, 390, 768, 1280 and 1440 pixels. Its screenshots are copied under `ai-issues/evidence/w04/w04-calendar-{width}.jpg`. This report's author visually inspected the 390 and 1440 captures. A subsequent independent hosted review found that the 360-pixel schedule table clipped amount cents inside its overflow-hidden wrapper. Absence of document overflow did not establish complete table visibility; the earlier general mobile acceptance is superseded by this finding.
 
 These browser observations precede the latest exact formatter and maximum-year changes. They establish ordinary-input behavior only; they do not establish final-build large-money or maximum-year browser acceptance. Hosted checks must use the exact final candidate.
 
@@ -35,6 +35,14 @@ These browser observations precede the latest exact formatter and maximum-year c
 - Final keyboard/screen-reader behavior and final exact candidate review remain release-owner checks. The author implemented this feature; this document is not independent reviewer sign-off.
 
 No commit, push or production deployment was performed during this acceptance pass.
+
+## Mobile table correction — hosted recapture pending
+
+The isolated W04 and aggregate worktrees now contain the same small repair in `app/client/components/generated/GeneratedPages.tsx`. Only the schedule passes the new optional `tableLabel`: its table wrapper allows horizontal scrolling, has a descriptive region label, keyboard focus and a visible inset focus ring, and cells use smaller horizontal padding below the small-screen breakpoint. Other result panels retain their original classes and behavior. No formula, dates, currency formatting, export data, route, indexation, sitemap or advertising behavior changed.
+
+The release owner must recapture the repaired hosted candidate at 360 pixels with monthly rent 1,800.25 and three payments: all date and amount text, including cents, should fit without scrolling. Repeat with a very large accepted rent and verify the focused table scrolls horizontally with the keyboard, preserving all digits without document overflow. Also recheck 390, 768, 1280 and 1440 widths. These are pending visual/interaction checks, not claims inferred from CSS or passing unit tests. No new source-pattern test was added for this visual repair.
+
+After the repair, all six full checks passed again: typecheck; 157 tests, zero failures/skips; build; 112-redirect validation; breadcrumb validation; and the release audit of 60 canonical routes, 112 redirects and 60 unique internal links. Current evidence is in `ai-issues/evidence/w04/mobile-repair/`; original logs below describe the prior candidate. Print/PDF, JavaScript-off and exact hosted candidate acceptance remain HOLD. No commit or push was performed for this repair.
 
 ## Completed full checks
 
