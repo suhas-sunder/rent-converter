@@ -6,6 +6,7 @@ import HowItWorks from "~/client/components/home/HowItWorks";
 import ToolFit from "~/client/components/home/ToolFit";
 import AdPlaceholder from "~/client/components/advertising/AdPlaceholder";
 import ListingComparison from "~/client/components/home/ListingComparison";
+import HydrationSafeControls from "~/client/components/HydrationSafeControls";
 
 const SITE_URL = "https://www.rentconverter.com";
 
@@ -709,7 +710,7 @@ export default function Home() {
           __html: `
             @media print {
               a[href]:after { content: ""; }
-              #top-links, #bottom-nav, #export-controls-top, #export-controls-bottom { display: none !important; }
+              #top-links, #bottom-nav, #export-controls-top, #export-controls-bottom, #all-tools, .rc-no-print { display: none !important; }
               #converter { padding-bottom: 0 !important; }
               body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             }
@@ -735,6 +736,7 @@ export default function Home() {
           id="converter"
           className="min-w-0 py-6 sm:py-8 min-[1280px]:col-start-2 min-[1280px]:row-start-1"
         >
+        <HydrationSafeControls label="Rent conversion calculator">
         <div className="overflow-hidden rounded-[1.75rem] bg-white">
           <div className="flex flex-col gap-3 px-5 pb-2 pt-7 sm:flex-row sm:items-start sm:justify-between sm:px-8 sm:pt-8">
             <div>
@@ -985,6 +987,7 @@ export default function Home() {
             </div>
           </div>
         </div>
+        </HydrationSafeControls>
         <div className="home-assumptions-clean">
           <Assumptions />
         </div>
