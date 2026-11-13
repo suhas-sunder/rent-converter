@@ -417,7 +417,7 @@ export default function NavBar() {
   }
 
   return (
-    <header className="sticky top-0 z-50 bg-white/95 text-slate-700 backdrop-blur">
+    <header className="sticky top-0 z-50 bg-white/95 text-slate-700 backdrop-blur print:hidden">
       <style>{`
         .${SCROLL_CLASS} {
           scrollbar-width: thin;
@@ -452,7 +452,7 @@ export default function NavBar() {
             />
             <div className="text-left leading-tight">
               <div className="text-base font-bold tracking-tight text-slate-950 group-hover:text-sky-800">
-                RentConverter<span className="text-sky-600">.com</span>
+                RentConverter<span className="text-sky-700">.com</span>
               </div>
               <div className="text-xs font-semibold text-slate-600">
                 Fast, private rent calculators
@@ -462,6 +462,7 @@ export default function NavBar() {
 
           <button
             ref={mobileBtnRef}
+            disabled={!isClient}
             type="button"
             className="inline-flex cursor-pointer items-center justify-center rounded-xl px-3 py-2 text-slate-700 transition-colors hover:bg-sky-50 hover:text-sky-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white lg:hidden"
             aria-label="Open menu"
@@ -486,6 +487,7 @@ export default function NavBar() {
 
             <button
               ref={moreBtnRef}
+              disabled={!isClient}
               type="button"
               className="inline-flex cursor-pointer items-center gap-2 rounded-xl px-3 py-2 font-semibold text-slate-700 transition-colors hover:bg-sky-50 hover:text-sky-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
               aria-haspopup="menu"
@@ -503,6 +505,13 @@ export default function NavBar() {
           </nav>
         </div>
       </div>
+
+      <noscript>
+        <nav aria-label="Navigation without JavaScript" className="mx-auto flex max-w-6xl flex-wrap gap-2 px-4 pb-3 text-sm sm:px-6">
+          {primaryLinks.map((item) => <a key={item.to} href={item.to} className="cursor-pointer rounded-lg px-2 py-1 text-sky-800 hover:bg-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400">{item.label}</a>)}
+          <a href="/sitemap" className="cursor-pointer rounded-lg px-2 py-1 font-semibold text-sky-800 hover:bg-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400">All calculators</a>
+        </nav>
+      </noscript>
 
       <div
         className="h-1 w-full bg-gradient-to-r from-sky-500 to-emerald-400 opacity-20"

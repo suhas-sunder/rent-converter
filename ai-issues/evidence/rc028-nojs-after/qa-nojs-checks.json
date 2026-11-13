@@ -1,0 +1,32 @@
+[
+  {
+    "check": "typecheck",
+    "exitCode": 0,
+    "log": "qa-nojs-typecheck.log"
+  },
+  {
+    "check": "test",
+    "exitCode": 0,
+    "log": "qa-nojs-test.log"
+  },
+  {
+    "check": "build",
+    "exitCode": 0,
+    "log": "qa-nojs-build.log"
+  },
+  {
+    "check": "validate:redirects",
+    "exitCode": 0,
+    "log": "qa-nojs-validate-redirects.log"
+  },
+  {
+    "check": "validate:breadcrumbs",
+    "exitCode": 0,
+    "log": "qa-nojs-validate-breadcrumbs.log"
+  },
+  {
+    "check": "release:audit",
+    "exitCode": 0,
+    "log": "qa-nojs-release-audit.log"
+  }
+]
