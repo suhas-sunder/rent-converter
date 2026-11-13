@@ -11,7 +11,7 @@ Owner-provided AdSense screenshot (2026-11-01) shows **Low value content** rejec
 
 ## Task A — Establish a six-month search and page-value ledger
 
-**Inputs pending:** latest six months GSC + Bing owner exports. None attached when this issue was written. Continue code and page review without guessing. Once supplied, analyze 28-vs-28 and 6-month trends, page-query overlaps and winning intents. Do not use GSC Wizard. Label evidence snapshot vs observation.
+**Verified input now received:** see `ai-issues/RC-002_SEARCH_EVIDENCE_2026-11-12.md` for six months of owner-supplied GSC/Bing daily exports and 28-vs-28 comparison. GSC latest 28 days **1 click/802 impressions** (prior 3/490), Bing **222 clicks/8,840 impressions** (prior 260/8,074); historical pre-collapse May and the May 31/June 1 changepoint are critical. These exports have aggregated six-month pages and top-1,000 queries, NOT latest-28 page-query pairs; don't invent them. Only request narrower current GSC page-query or indexing exports when a sensitive URL decision needs them. Do not use GSC Wizard. Label evidence snapshot vs observation.
 
 Inventory all 60 canonical indexable routes and all 112 aliases from source, built HTML and sitemap, cross-check. For every route record:
 - URL / title / H1 / description / canonical / schema / sitemap yes-no / HTTP response / robots / redirect ancestry.
