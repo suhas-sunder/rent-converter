@@ -1,4 +1,5 @@
-﻿import { MoveInCostPage } from "~/client/components/generated/GeneratedPages";
+import AustraliaPaymentCoverage from "~/client/components/AustraliaPaymentCoverage";
+import { MoveInCostPage } from "~/client/components/generated/GeneratedPages";
 import { moveInCostConfigs } from "~/client/data/generatedRouteConfigs";
 import { buildMeta } from "~/client/utils/seo";
 
@@ -7,5 +8,5 @@ const config = moveInCostConfigs["/rent-in-advance-australia"];
 export const meta = () => buildMeta(config);
 
 export default function RentInAdvanceAustraliaPage() {
-  return <MoveInCostPage config={config} />;
+  return <MoveInCostPage config={config} coverage={(weeklyRent) => <AustraliaPaymentCoverage weeklyRent={weeklyRent} />} />;
 }

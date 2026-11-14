@@ -1539,7 +1539,7 @@ export function SplitToolPage({ config }: { config: SplitToolConfig }) {
   </Shell>;
 }
 
-export function MoveInCostPage({ config }: { config: MoveInCostConfig }) {
+export function MoveInCostPage({ config, coverage }: { config: MoveInCostConfig; coverage?: (weeklyRent: string) => React.ReactNode }) {
   const [weeklyRent, setWeeklyRent] = useState("500");
   const [advanceWeeks, setAdvanceWeeks] = useState("");
   const [bondAmount, setBondAmount] = useState("");
@@ -1594,6 +1594,7 @@ export function MoveInCostPage({ config }: { config: MoveInCostConfig }) {
           />
         )}
       </ToolCard>
+      {coverage?.(weeklyRent)}
       <ContentBlocks sections={moveInSections(config)} examples={config.examples} />
       <section className="mx-auto max-w-5xl px-6 py-10">
         <h2 className="text-2xl font-bold text-sky-800">Official state and territory rental resources</h2>
