@@ -611,14 +611,14 @@ export const incomeToolConfigs: Record<string, IncomeToolConfig> = {
 function increaseDefaultExamples(): IncreaseToolConfig["examples"] {
   return [
     { title: "Annual percentage escalation", body: "Some leases describe repeated percentage increases as rent escalation. Each year applies the entered rate to the prior year’s rent, so the fifth-year rent is higher than one flat increase on the starting rent." },
-    { title: "Scope of the schedule", body: "Use the year-by-year rows to inspect starting rent, final rent, and total increase. The calculator does not model fixed-dollar, irregular, or custom annual schedules, interpret lease clauses, or calculate cumulative rent paid." },
+    { title: "Scope of the schedule", body: "Use the year-by-year rows to inspect starting rent, final rent, and total increase. Open the cost comparison for total monthly payments within the chosen horizon. The calculator does not model fixed-dollar, irregular, or custom annual schedules, or interpret lease clauses." },
   ];
 }
 
 function increaseConfig(input: Omit<IncreaseToolConfig, "faq" | "examples"> & Partial<Pick<IncreaseToolConfig, "faq" | "examples">>): IncreaseToolConfig {
   const defaultFaq = [
     { q: "How is the multi-year rent calculated?", a: "The entered annual percentage is applied to the prior year’s rent once per year for the whole-number term entered. This repeated compounding is sometimes described as annual rent escalation." },
-    { q: "What schedules are not supported?", a: "The calculator does not model fixed-dollar, irregular, or custom year-by-year percentages, interpret lease clauses, decide enforceability, or calculate cumulative rent paid." },
+    { q: "What schedules are not supported?", a: "The calculator does not model fixed-dollar, irregular, or custom year-by-year percentages, interpret lease clauses, or decide enforceability. The optional cost comparison assumes twelve monthly payments per year, with the first increase after the first year." },
   ];
   return {
     faq: input.faq ?? defaultFaq,
