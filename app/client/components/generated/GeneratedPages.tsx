@@ -1,6 +1,7 @@
 import { useEffect, useId, useMemo, useState } from "react";
 import { Link } from "react-router";
 import RentScheduleExport from "./RentScheduleExport";
+import IncreaseCostComparison from "./IncreaseCostComparison";
 import HydrationSafeControls from "~/client/components/HydrationSafeControls";
 import {
   dailyToMonthlyCents,
@@ -690,7 +691,7 @@ function increaseSections() {
       },
       {
         title: "When to use this page",
-        body: "Use it to test one repeated annual percentage scenario and inspect the year-by-year rent. It does not calculate cumulative rent paid.",
+        body: "Inspect the rent after each annual change, then open the cost comparison to compare whole years of monthly payments against another annual rate. The payment horizon starts with a year at the original rent.",
       },
       {
         title: "What this result does not include",
@@ -1408,7 +1409,7 @@ function CompoundIncreaseTool({ config }: { config: IncreaseToolConfig }) {
     ? [["Year", "Monthly rent", "Annualized rent"], ...result.rows.map((row) => [String(row.year), formatMoney(row.rent, currency), formatMoney(row.rent * 12n, currency)])]
     : [];
   return (
-    <ToolCard eyebrow={config.eyebrow} h1={config.h1} lead={config.lead} onPrint={() => window.print()}>
+    <div className="[overflow-wrap:anywhere]"><ToolCard eyebrow={config.eyebrow} h1={config.h1} lead={config.lead} onPrint={() => window.print()}>
       <div className="mt-6 grid gap-4 lg:grid-cols-12">
         <div className="lg:col-span-4"><TextInput id={`${config.mode}-starting-rent`} label="Starting monthly rent" value={rent} onChange={setRent} error={rentParsed.ok ? undefined : rentParsed.error} /></div>
         <div className="lg:col-span-3"><TextInput id={`${config.mode}-rate`} label={rateLabel} value={rate} onChange={setRate} error={rateParsed.ok ? undefined : rateParsed.error} /></div>
@@ -1427,9 +1428,11 @@ function CompoundIncreaseTool({ config }: { config: IncreaseToolConfig }) {
             { label: "Total percentage increase", value: formatPercent(result.totalPercentage) },
           ]}
           tableRows={rows}
+          tableLabel="Monthly rent after each annual change"
         />
       )}
-    </ToolCard>
+      {result ? <IncreaseCostComparison rent={result.startingRent} rate={result.percentage} years={result.years} currency={currency} /> : null}
+    </ToolCard></div>
   );
 }
 
