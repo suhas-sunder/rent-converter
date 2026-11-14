@@ -47,6 +47,7 @@ for (const candidate of selected) {
     const navigation = nojsPage.getByRole('navigation',{name:'Footer'}).getByRole('link',{name:'About',exact:true});
     await navigation.click(); assert.match(nojsPage.url(),/\/about$/);
     result.nojs = {controls,requests:nojsRequests};
+    assert.equal(nojsRequests.filter(r=>forbidden.test(new URL(r.url).hostname)).length,0,'JS-off preview sent analytics/ad requests');
     assert.equal(controls.filter(c=>!c.disabled && ['INPUT','SELECT','TEXTAREA'].includes(c.tag)).length,0,'JS-off calculator inputs must not invite edits that cannot update results');
     return {navigation:'About reached',controls:controls.length,hosts:[...new Set(nojsRequests.map(r=>new URL(r.url).hostname))]};
   });
@@ -87,13 +88,7 @@ for (const candidate of selected) {
           result.responsive.push(geometry);
           assert.ok(geometry.page<=geometry.viewport+1,'Page overflows at '+width);
         }
-        await page.setViewportSize({width:720,height:900});
-        // Historical CSS-only stress probe, NOT native browser zoom. See zoom.mjs for actual tabs.setZoom acceptance.
-        await page.evaluate(()=>document.documentElement.style.zoom='2');
-        await capture(page,candidate.id+'-css-zoom-stress.png');
-        result.zoom=await page.evaluate(()=>({viewport:innerWidth,page:document.documentElement.scrollWidth}));
-        await page.evaluate(()=>document.documentElement.style.zoom='');
-        assert.ok(result.zoom.page<=result.zoom.viewport+1, 'Page overflows at 200% CSS zoom');
+        // Native 200% browser zoom is exercised by zoom.mjs, not CSS scaling.
         return result.responsive;
       });
       await gate(result,'live-result-semantics',async()=>{

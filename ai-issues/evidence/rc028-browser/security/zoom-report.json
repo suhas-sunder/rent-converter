@@ -1,0 +1,63 @@
+{
+  "started": "2026-11-13T23:57:57.467Z",
+  "method": "Actual chrome.tabs.setZoom(2) in a fresh, disposable Chromium profile with a local QA-only extension",
+  "candidates": [
+    {
+      "id": "urgent",
+      "package": "security",
+      "sha": "d6906eff00cc3efdbf1f833580a2fd96e8b9c53a",
+      "origin": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app",
+      "path": "/",
+      "views": [
+        {
+          "physicalViewport": 1440,
+          "innerWidth": 720,
+          "devicePixelRatio": 2,
+          "scrollWidth": 720,
+          "sm": true,
+          "cssZoom": "1",
+          "clippedMoney": [],
+          "captureMetrics": {
+            "content": {
+              "x": 0,
+              "y": 0,
+              "width": 1440,
+              "height": 23488
+            },
+            "cssContent": {
+              "x": 0,
+              "y": 0,
+              "width": 720,
+              "height": 11744
+            }
+          }
+        },
+        {
+          "physicalViewport": 720,
+          "innerWidth": 360,
+          "devicePixelRatio": 2,
+          "scrollWidth": 360,
+          "sm": false,
+          "cssZoom": "1",
+          "clippedMoney": [],
+          "captureMetrics": {
+            "content": {
+              "x": 0,
+              "y": 0,
+              "width": 720,
+              "height": 36472
+            },
+            "cssContent": {
+              "x": 0,
+              "y": 0,
+              "width": 360,
+              "height": 18236
+            }
+          }
+        }
+      ],
+      "pass": true
+    }
+  ],
+  "finished": "2026-11-13T23:58:02.190Z"
+}

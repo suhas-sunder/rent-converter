@@ -1,0 +1,74 @@
+{
+  "sha": "d6906eff00cc3efdbf1f833580a2fd96e8b9c53a",
+  "deployId": "6af7a3c1af5d128563435779",
+  "origin": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app",
+  "netlifyState": "ready",
+  "netlifyCommitVerified": true,
+  "context": "deploy-preview",
+  "http": {
+    "command": "AUDIT_ORIGIN=origin node scripts/release-audit.mjs",
+    "exitCode": 0,
+    "routes": 60,
+    "redirects": 112,
+    "internalLinkTargets": 60,
+    "log": "qa-hosted-guarded-security.log"
+  },
+  "browser": {
+    "browser": "145.0.7632.6",
+    "at": "2026-11-13T23:57:44.474Z",
+    "base": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app",
+    "checks": [
+      {
+        "path": "/",
+        "preHydrationDisabled": true,
+        "postHydrationEditable": true,
+        "recalculated": true,
+        "menuKeyboardEscape": true,
+        "errors": []
+      },
+      {
+        "path": "/rent-budget-calculator",
+        "preHydrationDisabled": true,
+        "postHydrationEditable": true,
+        "recalculated": true,
+        "menuKeyboardEscape": true,
+        "errors": []
+      },
+      {
+        "path": "/rent-per-paycheck-calculator",
+        "preHydrationDisabled": true,
+        "postHydrationEditable": true,
+        "recalculated": true,
+        "menuKeyboardEscape": true,
+        "errors": []
+      },
+      {
+        "path": "/rent-schedule-calculator",
+        "preHydrationDisabled": true,
+        "postHydrationEditable": true,
+        "recalculated": true,
+        "menuKeyboardEscape": true,
+        "errors": []
+      },
+      {
+        "path": "/weekly-to-monthly-rent-converter",
+        "amount": "700.50",
+        "expected": "3,043.84",
+        "pass": true
+      },
+      {
+        "path": "/biweekly-to-weekly-rent-converter",
+        "amount": "900.50",
+        "expected": "450.25",
+        "pass": true
+      },
+      {
+        "path": "/pcm-to-pw-calculator",
+        "amount": "1500.50",
+        "expected": "345.32",
+        "pass": true
+      }
+    ]
+  },
+  "remaining": "Parent owns nine-gate baseline, storage, native zoom and PDF acceptance; owner approval still required"
+}

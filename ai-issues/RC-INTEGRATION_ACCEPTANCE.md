@@ -1,5 +1,6 @@
 # Release integration review — 2026-11-13
 
+> **RC-028 closure update:** The historical findings/status below are superseded for current candidates by [completed browser acceptance](RC-028_BROWSER_ACCEPTANCE_EVIDENCE.md) and the [release ledger](RC-RELEASE-LEDGER.md). Preserve this report as evidence for its listed original commits.
 **Automated integration checks PASS; hosted and release-owner acceptance HOLD.** This review assembled the four separately based release changes in an isolated Git index without merging, rebasing, committing or pushing any real branch. The aggregate application was tested locally. This is an integration review, not independent authorship review of every feature: the reviewer previously contributed W01 and the route inventory.
 
 ## Candidate identity and assembly result

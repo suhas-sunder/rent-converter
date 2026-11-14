@@ -1,0 +1,3 @@
+# Keep captured bytes, including RFC 5545 CRLF. Treat CR as a line ending in whitespace checks.
+* -text whitespace=cr-at-eol
+*.ics -diff

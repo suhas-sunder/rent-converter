@@ -42,6 +42,19 @@ node run.mjs
 
 PDF creation alone is not acceptance. Run `inspect_pdfs.py` with the project's available PDF Python environment (requires `pdfplumber` and its rendering dependencies), passing the output directory, then visually inspect the rendered page PNGs. The script extracts text, checks required amounts/dates, flags blank/out-of-bounds content and advertisement text. Its fixtures must match the run's synthetic inputs. Native OS print-dialog behavior and physical printing are not certified by Chromium PDF output.
 
+## Real browser 200% zoom
+
+```powershell
+$env:QA_ZOOM_OUTPUT = 'artifacts/zoom-final'
+node zoom.mjs
+```
+
+This runner loads a minimal local QA extension into a fresh disposable Chromium profile and calls `chrome.tabs.setZoom(2)`. It does not install anything into a personal browser. At physical widths 1440 and 720, it verifies CSS viewport widths 720 and 360, devicePixelRatio 2, unchanged CSS zoom 1, correct responsive breakpoints and no ellipsized money. CDP captures use device-coordinate content bounds to avoid Playwright's full-page native-zoom clipping; viewport images provide independent confirmation. Very tall full-page captures can have compositor artifacts below the tool; inspect the normal-width and viewport images too.
+
+CSS `zoom:2` is not equivalent: it leaves media-query breakpoints unchanged. Historical CSS stress PNGs are retained locally as diagnostic artifacts but do not establish browser-zoom acceptance. The actual native-zoom evidence supersedes them.
+
+Implementation follows [Playwright's extension guide](https://playwright.dev/docs/chrome-extensions) and [Chrome's tabs zoom API](https://developer.chrome.com/docs/extensions/reference/api/tabs/).
+
 ## Run focused edge cases
 
 ```powershell
@@ -74,6 +87,10 @@ Artifacts include `focused-report.json`, synthetic CSV downloads, screenshots an
 
 ## Manual CI usage and limits
 
-The repository's `.github/workflows/browser-acceptance.yml` provides a manual `workflow_dispatch` job with a fixed choice of the five candidate IDs, read-only contents permission, Node 24, pinned package installation, Chromium installation, both runners, and 14-day artifact retention. Its `if: always()` artifact collection preserves failures. It accepts no arbitrary URL and has no production/deployment credentials or merge action. The workflow itself has not been executed merely because local commands pass; record its run URL and actual result if used. PDF Python rendering is a separate step and is not currently performed by this workflow.
+The repository's `.github/workflows/browser-acceptance.yml` provides a manual `workflow_dispatch` job with a fixed choice of the five candidate IDs, read-only contents permission, Node 24, pinned package installation, Chromium installation, all three runners, and 14-day artifact retention. Its `if: always()` artifact collection preserves failures. It accepts no arbitrary URL and has no production/deployment credentials or merge action. The workflow itself has not been executed merely because local commands pass; record its run URL and actual result if used. PDF Python rendering is a separate step and is not currently performed by this workflow.
 
 Automated axe checks cannot certify accessibility. DOM focus indicators, keyboard behavior and screenshot dimensions do not replace visual judgment or assistive-technology testing. Network observations cover the exercised navigation/interactions and bounded wait window only. JavaScript-disabled sessions, screenshots, PDF extraction and browser downloads must each be assessed on their own evidence, not inferred from source code or a successful HTTP response.
+
+## Guarded maintenance candidate
+
+`security-candidate.json` records final PR #7 after the urgent prerequisite. It uses the `urgent` fixture ID because maintenance introduces no weekly feature. Run each runner with `QA_CANDIDATES=security-candidate.json` and separate output directories. The recorded exact SHA must still match Netlify before accepting consent. Its nine browser gates, two storage cases, native zoom and valid/invalid PDFs are additional maintenance evidence, not duplicate weekly features.

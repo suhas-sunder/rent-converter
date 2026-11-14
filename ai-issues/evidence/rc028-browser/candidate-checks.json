@@ -1,0 +1,338 @@
+[
+  {
+    "package": "urgent",
+    "sha": "b69768dc8c8c66342786ba9f39eb958676637b80",
+    "immutablePreview": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app",
+    "netlifyVerifiedState": "ready",
+    "context": "deploy-preview",
+    "publishedAt": null,
+    "testsPassed": 148,
+    "fullChecks": [
+      {
+        "check": "typecheck",
+        "exitCode": 0,
+        "log": "qa-rc028-typecheck.log"
+      },
+      {
+        "check": "test",
+        "exitCode": 0,
+        "log": "qa-rc028-test.log"
+      },
+      {
+        "check": "build",
+        "exitCode": 0,
+        "log": "qa-rc028-build.log"
+      },
+      {
+        "check": "validate:redirects",
+        "exitCode": 0,
+        "log": "qa-rc028-validate-redirects.log"
+      },
+      {
+        "check": "validate:breadcrumbs",
+        "exitCode": 0,
+        "log": "qa-rc028-validate-breadcrumbs.log"
+      },
+      {
+        "check": "release:audit",
+        "exitCode": 0,
+        "log": "qa-rc028-release-audit.log"
+      }
+    ],
+    "hostedHttp": "Audited 60 indexable HTTP-200 routes, 112 redirects, and 60 unique internal links.\nRelease audit passed.",
+    "noJsPages": [
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/",
+        "status": 200,
+        "noStaleEdit": true,
+        "widths": [
+          360,
+          390,
+          768,
+          1280,
+          1440
+        ],
+        "nativeNavigation": {
+          "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/sitemap",
+          "heading": "HTML Sitemap"
+        },
+        "errors": []
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/rent-budget-calculator",
+        "status": 200,
+        "noStaleEdit": true,
+        "widths": [
+          360,
+          390,
+          768,
+          1280,
+          1440
+        ],
+        "nativeNavigation": {
+          "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/sitemap",
+          "heading": "HTML Sitemap"
+        },
+        "errors": []
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/rent-per-paycheck-calculator",
+        "status": 200,
+        "noStaleEdit": true,
+        "widths": [
+          360,
+          390,
+          768,
+          1280,
+          1440
+        ],
+        "nativeNavigation": {
+          "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/sitemap",
+          "heading": "HTML Sitemap"
+        },
+        "errors": []
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/rent-schedule-calculator",
+        "status": 200,
+        "noStaleEdit": true,
+        "widths": [
+          360,
+          390,
+          768,
+          1280,
+          1440
+        ],
+        "nativeNavigation": {
+          "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/sitemap",
+          "heading": "HTML Sitemap"
+        },
+        "errors": []
+      }
+    ]
+  },
+  {
+    "package": "w01",
+    "sha": "e2a62955a58d30be90a646fd99a253ca2b30bde9",
+    "immutablePreview": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app",
+    "netlifyVerifiedState": "ready",
+    "context": "deploy-preview",
+    "publishedAt": null,
+    "testsPassed": 157,
+    "fullChecks": [
+      {
+        "check": "typecheck",
+        "exitCode": 0,
+        "log": "qa-rc028-typecheck.log"
+      },
+      {
+        "check": "test",
+        "exitCode": 0,
+        "log": "qa-rc028-test.log"
+      },
+      {
+        "check": "build",
+        "exitCode": 0,
+        "log": "qa-rc028-build.log"
+      },
+      {
+        "check": "validate:redirects",
+        "exitCode": 0,
+        "log": "qa-rc028-validate-redirects.log"
+      },
+      {
+        "check": "validate:breadcrumbs",
+        "exitCode": 0,
+        "log": "qa-rc028-validate-breadcrumbs.log"
+      },
+      {
+        "check": "release:audit",
+        "exitCode": 0,
+        "log": "qa-rc028-release-audit.log"
+      }
+    ],
+    "hostedHttp": "Audited 60 indexable HTTP-200 routes, 112 redirects, and 60 unique internal links.\nRelease audit passed.",
+    "noJsPages": [
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/",
+        "status": 200,
+        "noStaleEdit": true,
+        "widths": [
+          360,
+          390,
+          768,
+          1280,
+          1440
+        ],
+        "nativeNavigation": {
+          "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/sitemap",
+          "heading": "HTML Sitemap"
+        },
+        "errors": []
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/rent-budget-calculator",
+        "status": 200,
+        "noStaleEdit": true,
+        "widths": [
+          360,
+          390,
+          768,
+          1280,
+          1440
+        ],
+        "nativeNavigation": {
+          "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/sitemap",
+          "heading": "HTML Sitemap"
+        },
+        "errors": []
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/rent-per-paycheck-calculator",
+        "status": 200,
+        "noStaleEdit": true,
+        "widths": [
+          360,
+          390,
+          768,
+          1280,
+          1440
+        ],
+        "nativeNavigation": {
+          "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/sitemap",
+          "heading": "HTML Sitemap"
+        },
+        "errors": []
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/rent-schedule-calculator",
+        "status": 200,
+        "noStaleEdit": true,
+        "widths": [
+          360,
+          390,
+          768,
+          1280,
+          1440
+        ],
+        "nativeNavigation": {
+          "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/sitemap",
+          "heading": "HTML Sitemap"
+        },
+        "errors": []
+      }
+    ]
+  },
+  {
+    "package": "w02",
+    "sha": "68bfad21aa48fb1425ac1a3ef695a37efc910d7c",
+    "immutablePreview": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app",
+    "netlifyVerifiedState": "ready",
+    "context": "deploy-preview",
+    "publishedAt": null,
+    "testsPassed": 156,
+    "fullChecks": [
+      {
+        "check": "typecheck",
+        "exitCode": 0,
+        "log": "qa-rc028-typecheck.log"
+      },
+      {
+        "check": "test",
+        "exitCode": 0,
+        "log": "qa-rc028-test.log"
+      },
+      {
+        "check": "build",
+        "exitCode": 0,
+        "log": "qa-rc028-build.log"
+      },
+      {
+        "check": "validate:redirects",
+        "exitCode": 0,
+        "log": "qa-rc028-validate-redirects.log"
+      },
+      {
+        "check": "validate:breadcrumbs",
+        "exitCode": 0,
+        "log": "qa-rc028-validate-breadcrumbs.log"
+      },
+      {
+        "check": "release:audit",
+        "exitCode": 0,
+        "log": "qa-rc028-release-audit.log"
+      }
+    ],
+    "hostedHttp": "Audited 60 indexable HTTP-200 routes, 112 redirects, and 60 unique internal links.\nRelease audit passed.",
+    "noJsPages": [
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/",
+        "status": 200,
+        "noStaleEdit": true,
+        "widths": [
+          360,
+          390,
+          768,
+          1280,
+          1440
+        ],
+        "nativeNavigation": {
+          "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/sitemap",
+          "heading": "HTML Sitemap"
+        },
+        "errors": []
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/rent-budget-calculator",
+        "status": 200,
+        "noStaleEdit": true,
+        "widths": [
+          360,
+          390,
+          768,
+          1280,
+          1440
+        ],
+        "nativeNavigation": {
+          "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/sitemap",
+          "heading": "HTML Sitemap"
+        },
+        "errors": []
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/rent-per-paycheck-calculator",
+        "status": 200,
+        "noStaleEdit": true,
+        "widths": [
+          360,
+          390,
+          768,
+          1280,
+          1440
+        ],
+        "nativeNavigation": {
+          "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/sitemap",
+          "heading": "HTML Sitemap"
+        },
+        "errors": []
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/rent-schedule-calculator",
+        "status": 200,
+        "noStaleEdit": true,
+        "widths": [
+          360,
+          390,
+          768,
+          1280,
+          1440
+        ],
+        "nativeNavigation": {
+          "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/sitemap",
+          "heading": "HTML Sitemap"
+        },
+        "errors": []
+      }
+    ]
+  }
+]

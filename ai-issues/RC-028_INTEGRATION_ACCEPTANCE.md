@@ -11,9 +11,9 @@
 | 2 | W02 housing budget | `68bfad21aa48fb1425ac1a3ef695a37efc910d7c` |
 | 3 | W03 paycheck deadline | `5af2d234cd9a06b938c01271c2a6b740afd150e5` |
 | 4 | W04 calendar export | `2483d5fbde07f5ec0ab74596e252dfa5075e9123` |
-| 5 | Independent security maintenance | `8c116e5d40519115ba830b7cb22d152f6f2de5d2` |
+| 5 | Independent security maintenance | `d6906eff00cc3efdbf1f833580a2fd96e8b9c53a` |
 
-Package owners confirmed these frozen heads. The acceptance worktree's application-source checkpoint is `5aeeced6006d2536d31039d490591ec5bf06c47d`. Its local static build is served at `http://localhost:3029`; that URL is local assembled evidence, not an immutable preview or a production deployment.
+Package owners confirmed these frozen heads. After security incorporated the urgent prerequisite, the release steward reran the independent reproducer against its final d6906ef head: the same 223 production files still match with zero differences. Original independent authorship/review and final steward rerun are distinguished here. The acceptance worktree's application-source checkpoint is `5aeeced6006d2536d31039d490591ec5bf06c47d`. Its local static build is served at `http://localhost:3029`; that URL is local assembled evidence, not an immutable preview or a production deployment.
 
 ## Actual sequential merge experiment
 
@@ -29,7 +29,7 @@ The [reproducer](evidence/rc028-integration/assemble.mjs) ran Git's actual three
 
 For each package conflict, the reproducer parsed both sides, removed only `scripts.test` for comparison, and asserted **all other package fields were identical** before constructing the sorted test union. It did not choose an entire side, discard another feature's tests or assume a merge succeeded merely because files looked similar. The final command registers **25 test files exactly once**. Their complete list, raw merge output, intermediate trees and parent commits are in [assembly-report.json](evidence/rc028-integration/assembly-report.json).
 
-Final independently assembled full tree: `6ed19ae34ecad1993b20bedd375bba7ff2c09e93`. This is a Git **tree**, not a release commit or published deployment; documentation differences from the acceptance branch are expected because this experiment assembled release branch histories independently.
+Final independently assembled full tree: `239b8466ac3e965b62a07244ffcdccea6a33ae08`. This is a Git **tree**, not a release commit or published deployment; documentation differences from the acceptance branch are expected because this experiment assembled release branch histories independently.
 
 ## Source equivalence
 

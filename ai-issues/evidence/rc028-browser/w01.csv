@@ -1,0 +1,5 @@
+"Listing","Currency","Entered rent","Rent period","Entered monthly extras","Monthly total","Annual total","Monthly difference from lowest","Annual difference from lowest"
+"Weekly listing","USD","500","Weekly","100","2272.62","27271.43","72.62","871.43"
+"Monthly listing","USD","2200","Monthly","0","2200.00","26400.00","0.00","0.00"
+"Third listing — utilities included","USD","2250","Monthly","0","2250.00","27000.00","50.00","600.00"
+"Assumptions","365-day daily-rate equivalents; 12 calendar months; extras recur monthly; no currency exchange; deposits and one-off costs excluded unless manually annualized. Differences use displayed rounded totals."

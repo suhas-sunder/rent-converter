@@ -1,0 +1,718 @@
+{
+  "started": "2026-11-13T14:33:46.732Z",
+  "finished": "2026-11-13T14:35:21.370Z",
+  "node": "v25.9.0",
+  "browser": "145.0.7632.6",
+  "candidates": [
+    {
+      "id": "urgent",
+      "sha": "5bc6441f4eb568d6ca5c0bd32ea56410b4d5f5aa",
+      "origin": "http://localhost:3029",
+      "referenceCandidateSha": "b69768dc8c8c66342786ba9f39eb958676637b80",
+      "gates": [
+        {
+          "name": "javascript-disabled",
+          "pass": true,
+          "evidence": {
+            "navigation": "About reached",
+            "controls": 19,
+            "hosts": [
+              "localhost",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ]
+          }
+        },
+        {
+          "name": "network-accepted",
+          "pass": true,
+          "evidence": {
+            "requests": 42,
+            "hosts": [
+              "localhost",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ],
+            "failures": []
+          }
+        },
+        {
+          "name": "network-rejected",
+          "pass": true,
+          "evidence": {
+            "requests": 42,
+            "hosts": [
+              "localhost",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ],
+            "failures": []
+          }
+        },
+        {
+          "name": "interactive-and-responsive",
+          "pass": true,
+          "evidence": [
+            {
+              "viewport": 360,
+              "page": 360
+            },
+            {
+              "viewport": 390,
+              "page": 390
+            },
+            {
+              "viewport": 768,
+              "page": 768
+            },
+            {
+              "viewport": 1280,
+              "page": 1280
+            },
+            {
+              "viewport": 1440,
+              "page": 1440
+            }
+          ]
+        },
+        {
+          "name": "live-result-semantics",
+          "pass": true,
+          "evidence": {
+            "regions": 3,
+            "expected": "2,172.62",
+            "note": "DOM announcement semantics verified; no screen-reader speech certification"
+          }
+        },
+        {
+          "name": "axe",
+          "pass": true,
+          "evidence": {
+            "passes": 31
+          }
+        },
+        {
+          "name": "keyboard",
+          "pass": true,
+          "evidence": {
+            "steps": 70,
+            "fieldFocusIndicators": 13,
+            "nativeDatePickerStops": 0,
+            "note": "Native Chromium date picker button focus uses a UA shadow-control indicator; inspect captured picker images, not only host styles"
+          }
+        },
+        {
+          "name": "print-pdf",
+          "pass": true,
+          "evidence": {
+            "pdf": "urgent.pdf",
+            "note": "PDF rendering/text extraction required separately; not native OS print-dialog certification"
+          }
+        },
+        {
+          "name": "errors-and-export",
+          "pass": true,
+          "evidence": "Recorded assertion and download checks passed"
+        }
+      ],
+      "responsive": [
+        {
+          "viewport": 360,
+          "page": 360
+        },
+        {
+          "viewport": 390,
+          "page": 390
+        },
+        {
+          "viewport": 768,
+          "page": 768
+        },
+        {
+          "viewport": 1280,
+          "page": 1280
+        },
+        {
+          "viewport": 1440,
+          "page": 1440
+        }
+      ],
+      "axe": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "nodes": 7
+          }
+        ],
+        "passes": 31
+      }
+    },
+    {
+      "id": "w01",
+      "sha": "5bc6441f4eb568d6ca5c0bd32ea56410b4d5f5aa",
+      "origin": "http://localhost:3029",
+      "referenceCandidateSha": "e2a62955a58d30be90a646fd99a253ca2b30bde9",
+      "gates": [
+        {
+          "name": "javascript-disabled",
+          "pass": true,
+          "evidence": {
+            "navigation": "About reached",
+            "controls": 19,
+            "hosts": [
+              "localhost",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ]
+          }
+        },
+        {
+          "name": "network-accepted",
+          "pass": true,
+          "evidence": {
+            "requests": 42,
+            "hosts": [
+              "localhost",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ],
+            "failures": []
+          }
+        },
+        {
+          "name": "network-rejected",
+          "pass": true,
+          "evidence": {
+            "requests": 42,
+            "hosts": [
+              "localhost",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ],
+            "failures": []
+          }
+        },
+        {
+          "name": "interactive-and-responsive",
+          "pass": true,
+          "evidence": [
+            {
+              "viewport": 360,
+              "page": 360
+            },
+            {
+              "viewport": 390,
+              "page": 390
+            },
+            {
+              "viewport": 768,
+              "page": 768
+            },
+            {
+              "viewport": 1280,
+              "page": 1280
+            },
+            {
+              "viewport": 1440,
+              "page": 1440
+            }
+          ]
+        },
+        {
+          "name": "live-result-semantics",
+          "pass": true,
+          "evidence": {
+            "regions": 3,
+            "expected": "2,272.62",
+            "note": "DOM announcement semantics verified; no screen-reader speech certification"
+          }
+        },
+        {
+          "name": "axe",
+          "pass": true,
+          "evidence": {
+            "passes": 31
+          }
+        },
+        {
+          "name": "keyboard",
+          "pass": true,
+          "evidence": {
+            "steps": 70,
+            "fieldFocusIndicators": 17,
+            "nativeDatePickerStops": 0,
+            "note": "Native Chromium date picker button focus uses a UA shadow-control indicator; inspect captured picker images, not only host styles"
+          }
+        },
+        {
+          "name": "print-pdf",
+          "pass": true,
+          "evidence": {
+            "pdf": "w01.pdf",
+            "note": "PDF rendering/text extraction required separately; not native OS print-dialog certification"
+          }
+        },
+        {
+          "name": "errors-and-export",
+          "pass": true,
+          "evidence": "Recorded assertion and download checks passed"
+        }
+      ],
+      "responsive": [
+        {
+          "viewport": 360,
+          "page": 360
+        },
+        {
+          "viewport": 390,
+          "page": 390
+        },
+        {
+          "viewport": 768,
+          "page": 768
+        },
+        {
+          "viewport": 1280,
+          "page": 1280
+        },
+        {
+          "viewport": 1440,
+          "page": 1440
+        }
+      ],
+      "axe": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "nodes": 7
+          }
+        ],
+        "passes": 31
+      }
+    },
+    {
+      "id": "w02",
+      "sha": "5bc6441f4eb568d6ca5c0bd32ea56410b4d5f5aa",
+      "origin": "http://localhost:3029",
+      "referenceCandidateSha": "68bfad21aa48fb1425ac1a3ef695a37efc910d7c",
+      "gates": [
+        {
+          "name": "javascript-disabled",
+          "pass": true,
+          "evidence": {
+            "navigation": "About reached",
+            "controls": 20,
+            "hosts": [
+              "localhost",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ]
+          }
+        },
+        {
+          "name": "network-accepted",
+          "pass": true,
+          "evidence": {
+            "requests": 44,
+            "hosts": [
+              "localhost",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ],
+            "failures": []
+          }
+        },
+        {
+          "name": "network-rejected",
+          "pass": true,
+          "evidence": {
+            "requests": 44,
+            "hosts": [
+              "localhost",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ],
+            "failures": []
+          }
+        },
+        {
+          "name": "interactive-and-responsive",
+          "pass": true,
+          "evidence": [
+            {
+              "viewport": 360,
+              "page": 360
+            },
+            {
+              "viewport": 390,
+              "page": 390
+            },
+            {
+              "viewport": 768,
+              "page": 768
+            },
+            {
+              "viewport": 1280,
+              "page": 1280
+            },
+            {
+              "viewport": 1440,
+              "page": 1440
+            }
+          ]
+        },
+        {
+          "name": "live-result-semantics",
+          "pass": true,
+          "evidence": {
+            "regions": 2,
+            "expected": "2,282.62",
+            "note": "DOM announcement semantics verified; no screen-reader speech certification"
+          }
+        },
+        {
+          "name": "axe",
+          "pass": true,
+          "evidence": {
+            "passes": 33
+          }
+        },
+        {
+          "name": "keyboard",
+          "pass": true,
+          "evidence": {
+            "steps": 43,
+            "fieldFocusIndicators": 18,
+            "nativeDatePickerStops": 0,
+            "note": "Native Chromium date picker button focus uses a UA shadow-control indicator; inspect captured picker images, not only host styles"
+          }
+        },
+        {
+          "name": "print-pdf",
+          "pass": true,
+          "evidence": {
+            "pdf": "w02.pdf",
+            "note": "PDF rendering/text extraction required separately; not native OS print-dialog certification"
+          }
+        },
+        {
+          "name": "errors-and-export",
+          "pass": true,
+          "evidence": "Recorded assertion and download checks passed"
+        }
+      ],
+      "responsive": [
+        {
+          "viewport": 360,
+          "page": 360
+        },
+        {
+          "viewport": 390,
+          "page": 390
+        },
+        {
+          "viewport": 768,
+          "page": 768
+        },
+        {
+          "viewport": 1280,
+          "page": 1280
+        },
+        {
+          "viewport": 1440,
+          "page": 1440
+        }
+      ],
+      "axe": {
+        "violations": [],
+        "incomplete": [],
+        "passes": 33
+      }
+    },
+    {
+      "id": "w03",
+      "sha": "5bc6441f4eb568d6ca5c0bd32ea56410b4d5f5aa",
+      "origin": "http://localhost:3029",
+      "referenceCandidateSha": "5af2d234cd9a06b938c01271c2a6b740afd150e5",
+      "gates": [
+        {
+          "name": "javascript-disabled",
+          "pass": true,
+          "evidence": {
+            "navigation": "About reached",
+            "controls": 13,
+            "hosts": [
+              "localhost",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ]
+          }
+        },
+        {
+          "name": "network-accepted",
+          "pass": true,
+          "evidence": {
+            "requests": 44,
+            "hosts": [
+              "localhost",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ],
+            "failures": []
+          }
+        },
+        {
+          "name": "network-rejected",
+          "pass": true,
+          "evidence": {
+            "requests": 44,
+            "hosts": [
+              "localhost",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ],
+            "failures": []
+          }
+        },
+        {
+          "name": "interactive-and-responsive",
+          "pass": true,
+          "evidence": [
+            {
+              "viewport": 360,
+              "page": 360
+            },
+            {
+              "viewport": 390,
+              "page": 390
+            },
+            {
+              "viewport": 768,
+              "page": 768
+            },
+            {
+              "viewport": 1280,
+              "page": 1280
+            },
+            {
+              "viewport": 1440,
+              "page": 1440
+            }
+          ]
+        },
+        {
+          "name": "live-result-semantics",
+          "pass": true,
+          "evidence": {
+            "regions": 2,
+            "expected": "750.00",
+            "note": "DOM announcement semantics verified; no screen-reader speech certification"
+          }
+        },
+        {
+          "name": "axe",
+          "pass": true,
+          "evidence": {
+            "passes": 31
+          }
+        },
+        {
+          "name": "keyboard",
+          "pass": true,
+          "evidence": {
+            "steps": 48,
+            "fieldFocusIndicators": 15,
+            "nativeDatePickerStops": 2,
+            "note": "Native Chromium date picker button focus uses a UA shadow-control indicator; inspect captured picker images, not only host styles"
+          }
+        },
+        {
+          "name": "print-pdf",
+          "pass": true,
+          "evidence": {
+            "pdf": "w03.pdf",
+            "note": "PDF rendering/text extraction required separately; not native OS print-dialog certification"
+          }
+        },
+        {
+          "name": "errors-and-export",
+          "pass": true,
+          "evidence": "Recorded assertion and download checks passed"
+        }
+      ],
+      "responsive": [
+        {
+          "viewport": 360,
+          "page": 360
+        },
+        {
+          "viewport": 390,
+          "page": 390
+        },
+        {
+          "viewport": 768,
+          "page": 768
+        },
+        {
+          "viewport": 1280,
+          "page": 1280
+        },
+        {
+          "viewport": 1440,
+          "page": 1440
+        }
+      ],
+      "axe": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "nodes": 7
+          }
+        ],
+        "passes": 31
+      }
+    },
+    {
+      "id": "w04",
+      "sha": "5bc6441f4eb568d6ca5c0bd32ea56410b4d5f5aa",
+      "origin": "http://localhost:3029",
+      "referenceCandidateSha": "2483d5fbde07f5ec0ab74596e252dfa5075e9123",
+      "gates": [
+        {
+          "name": "javascript-disabled",
+          "pass": true,
+          "evidence": {
+            "navigation": "About reached",
+            "controls": 7,
+            "hosts": [
+              "localhost",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ]
+          }
+        },
+        {
+          "name": "network-accepted",
+          "pass": true,
+          "evidence": {
+            "requests": 44,
+            "hosts": [
+              "localhost",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ],
+            "failures": []
+          }
+        },
+        {
+          "name": "network-rejected",
+          "pass": true,
+          "evidence": {
+            "requests": 44,
+            "hosts": [
+              "localhost",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ],
+            "failures": []
+          }
+        },
+        {
+          "name": "interactive-and-responsive",
+          "pass": true,
+          "evidence": [
+            {
+              "viewport": 360,
+              "page": 360
+            },
+            {
+              "viewport": 390,
+              "page": 390
+            },
+            {
+              "viewport": 768,
+              "page": 768
+            },
+            {
+              "viewport": 1280,
+              "page": 1280
+            },
+            {
+              "viewport": 1440,
+              "page": 1440
+            }
+          ]
+        },
+        {
+          "name": "live-result-semantics",
+          "pass": true,
+          "evidence": {
+            "regions": 1,
+            "expected": "3 payments",
+            "note": "DOM announcement semantics verified; no screen-reader speech certification"
+          }
+        },
+        {
+          "name": "axe",
+          "pass": true,
+          "evidence": {
+            "passes": 28
+          }
+        },
+        {
+          "name": "keyboard",
+          "pass": true,
+          "evidence": {
+            "steps": 31,
+            "fieldFocusIndicators": 8,
+            "nativeDatePickerStops": 1,
+            "note": "Native Chromium date picker button focus uses a UA shadow-control indicator; inspect captured picker images, not only host styles"
+          }
+        },
+        {
+          "name": "print-pdf",
+          "pass": true,
+          "evidence": {
+            "pdf": "w04.pdf",
+            "note": "PDF rendering/text extraction required separately; not native OS print-dialog certification"
+          }
+        },
+        {
+          "name": "errors-and-export",
+          "pass": true,
+          "evidence": "Recorded assertion and download checks passed"
+        }
+      ],
+      "responsive": [
+        {
+          "viewport": 360,
+          "page": 360
+        },
+        {
+          "viewport": 390,
+          "page": 390
+        },
+        {
+          "viewport": 768,
+          "page": 768
+        },
+        {
+          "viewport": 1280,
+          "page": 1280
+        },
+        {
+          "viewport": 1440,
+          "page": 1440
+        }
+      ],
+      "axe": {
+        "violations": [],
+        "incomplete": [],
+        "passes": 28
+      }
+    }
+  ]
+}

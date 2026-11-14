@@ -1,0 +1,30 @@
+Rent schedule calculator Print / Save PDF
+Rent Schedule Calculator
+Generate each rent payment date inside a lease term using the start date,
+calendar-month term, rent amount, and selected frequency.
+Lease start and first payment date
+01/31/2028
+Term in calendar months
+3
+Enter a whole number from 1 through 120. Enter 12 for a 12-month lease.
+Rent per payment
+1800.25
+Currency
+USD
+Payment frequency
+Monthly
+Generated payment schedule
+3 payments
+Payment dates are period starts. The schedule excludes every date on or after the
+calculated lease end.
+Lease start Calculated lease end
+2028-01-31 2028-04-30
+Term Frequency
+3 months Monthly
+Payment Payment date Amount
+1 2028-01-31 $1,800.25
+2 2028-02-29 $1,800.25
+3 2028-03-31 $1,800.25
+Frequently Asked Questions
+How is the payment count calculated? v
+Can I print the schedule? v

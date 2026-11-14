@@ -26,7 +26,7 @@ const refs = {
   w02: '68bfad21aa48fb1425ac1a3ef695a37efc910d7c',
   w03: '5af2d234cd9a06b938c01271c2a6b740afd150e5',
   w04: '2483d5fbde07f5ec0ab74596e252dfa5075e9123',
-  security: '8c116e5d40519115ba830b7cb22d152f6f2de5d2',
+  security: 'd6906eff00cc3efdbf1f833580a2fd96e8b9c53a',
 };
 const packageAt = ref => JSON.parse(must(['show', `${ref}:package.json`]));
 const testsOf = pkg => {

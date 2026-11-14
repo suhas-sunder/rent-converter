@@ -1,0 +1,9 @@
+{
+  "sourceCommit": "5bc6441f4eb568d6ca5c0bd32ea56410b4d5f5aa",
+  "cli": "netlify-cli@27.17.0",
+  "mode": "draft, --no-build, explicit site, --context deploy-preview; no --prod",
+  "result": "Unauthorized: could not retrieve project",
+  "uploaded": false,
+  "deployed": false,
+  "productionChanged": false
+}

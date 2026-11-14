@@ -1,0 +1,2172 @@
+{
+  "started": "2026-11-13T14:25:21.855Z",
+  "finished": "2026-11-13T14:26:56.972Z",
+  "node": "v25.9.0",
+  "browser": "145.0.7632.6",
+  "note": "CSS zoom metrics in the original run were diagnostic only; native zoom-report.json supersedes that approximation. Native date picker focus is visually reviewed separately.",
+  "candidates": [
+    {
+      "id": "urgent",
+      "sha": "b69768dc8c8c66342786ba9f39eb958676637b80",
+      "origin": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app",
+      "path": "/",
+      "gates": [
+        {
+          "name": "javascript-disabled",
+          "pass": true,
+          "evidence": {
+            "navigation": "About reached",
+            "controls": 5,
+            "hosts": [
+              "6af71c5e4823f67fc16818e6--rent-converter.netlify.app",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ]
+          }
+        },
+        {
+          "name": "network-accepted",
+          "pass": true,
+          "evidence": {
+            "requests": 40,
+            "hosts": [
+              "6af71c5e4823f67fc16818e6--rent-converter.netlify.app",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ],
+            "failures": []
+          }
+        },
+        {
+          "name": "network-rejected",
+          "pass": true,
+          "evidence": {
+            "requests": 40,
+            "hosts": [
+              "6af71c5e4823f67fc16818e6--rent-converter.netlify.app",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ],
+            "failures": []
+          }
+        },
+        {
+          "name": "interactive-and-responsive",
+          "pass": true,
+          "evidence": [
+            {
+              "viewport": 360,
+              "page": 360
+            },
+            {
+              "viewport": 390,
+              "page": 390
+            },
+            {
+              "viewport": 768,
+              "page": 768
+            },
+            {
+              "viewport": 1280,
+              "page": 1280
+            },
+            {
+              "viewport": 1440,
+              "page": 1440
+            }
+          ]
+        },
+        {
+          "name": "live-result-semantics",
+          "pass": true,
+          "evidence": {
+            "regions": 1,
+            "expected": "2,172.62",
+            "note": "DOM announcement semantics verified; no screen-reader speech certification"
+          }
+        },
+        {
+          "name": "axe",
+          "pass": true,
+          "evidence": {
+            "passes": 28
+          }
+        },
+        {
+          "name": "keyboard",
+          "pass": true,
+          "evidence": {
+            "steps": 70,
+            "fieldFocusIndicators": 4,
+            "nativeDatePickerStops": 0,
+            "note": "Native Chromium date picker button focus uses a UA shadow-control indicator; inspect captured picker images, not only host styles"
+          }
+        },
+        {
+          "name": "print-pdf",
+          "pass": true,
+          "evidence": {
+            "pdf": "urgent.pdf",
+            "note": "PDF rendering/text extraction required separately; not native OS print-dialog certification"
+          }
+        },
+        {
+          "name": "errors-and-export",
+          "pass": true,
+          "evidence": "Recorded assertion and download checks passed"
+        }
+      ],
+      "responsive": [
+        {
+          "viewport": 360,
+          "page": 360
+        },
+        {
+          "viewport": 390,
+          "page": 390
+        },
+        {
+          "viewport": 768,
+          "page": 768
+        },
+        {
+          "viewport": 1280,
+          "page": 1280
+        },
+        {
+          "viewport": 1440,
+          "page": 1440
+        }
+      ],
+      "axe": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "nodes": 7
+          }
+        ],
+        "passes": 28
+      },
+      "liveRegions": [
+        "Monthly rent$2,172.62Hourly rent$2.98Daily rent$71.43Weekly rent$500.00Every 2 weeks rent$1,000.00Every 4 weeks (28 days) rent$2,000.00Annual rent$26,071.434-week vs monthlyMonthly minus 4-week = $172.62Difference \u2248 8.63%A 4-week rent period is 28 days. A true average month is about 30.42 days, so the monthly equivalent is different."
+      ],
+      "nojs": {
+        "controls": [
+          {
+            "tag": "INPUT",
+            "id": "rent-amount",
+            "text": "",
+            "disabled": true
+          },
+          {
+            "tag": "SELECT",
+            "id": "",
+            "text": "Currency",
+            "disabled": true
+          },
+          {
+            "tag": "SELECT",
+            "id": "",
+            "text": "From period",
+            "disabled": true
+          },
+          {
+            "tag": "SELECT",
+            "id": "",
+            "text": "To period",
+            "disabled": true
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "text": "Assumptions: 365-day year, 28-day 4-week period\u25be",
+            "disabled": false
+          }
+        ],
+        "hosts": [
+          "6af71c5e4823f67fc16818e6--rent-converter.netlify.app",
+          "fonts.googleapis.com",
+          "fonts.gstatic.com"
+        ]
+      },
+      "keyboard": [
+        {
+          "tag": "INPUT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "rent-amount",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 36, 65)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "SELECT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": true,
+          "text": "Currency",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "SELECT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": true,
+          "text": "From period",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "SELECT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": true,
+          "text": "To period",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        }
+      ],
+      "printAds": 0,
+      "network_accepted": {
+        "requests": 40,
+        "hosts": [
+          "6af71c5e4823f67fc16818e6--rent-converter.netlify.app",
+          "fonts.googleapis.com",
+          "fonts.gstatic.com"
+        ],
+        "failures": [],
+        "errors": [],
+        "prohibited": [],
+        "boundedObservationMs": 3500
+      },
+      "network_rejected": {
+        "requests": 61,
+        "hosts": [
+          "6af71c5e4823f67fc16818e6--rent-converter.netlify.app",
+          "fonts.googleapis.com",
+          "fonts.gstatic.com"
+        ],
+        "failures": [],
+        "errors": [],
+        "prohibited": [],
+        "boundedObservationMs": 3500
+      }
+    },
+    {
+      "id": "w01",
+      "sha": "e2a62955a58d30be90a646fd99a253ca2b30bde9",
+      "origin": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app",
+      "path": "/",
+      "gates": [
+        {
+          "name": "javascript-disabled",
+          "pass": true,
+          "evidence": {
+            "navigation": "About reached",
+            "controls": 19,
+            "hosts": [
+              "6af71cdb73b3fcc994c158f0--rent-converter.netlify.app",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ]
+          }
+        },
+        {
+          "name": "network-accepted",
+          "pass": true,
+          "evidence": {
+            "requests": 42,
+            "hosts": [
+              "6af71cdb73b3fcc994c158f0--rent-converter.netlify.app",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ],
+            "failures": []
+          }
+        },
+        {
+          "name": "network-rejected",
+          "pass": true,
+          "evidence": {
+            "requests": 42,
+            "hosts": [
+              "6af71cdb73b3fcc994c158f0--rent-converter.netlify.app",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ],
+            "failures": []
+          }
+        },
+        {
+          "name": "interactive-and-responsive",
+          "pass": true,
+          "evidence": [
+            {
+              "viewport": 360,
+              "page": 360
+            },
+            {
+              "viewport": 390,
+              "page": 390
+            },
+            {
+              "viewport": 768,
+              "page": 768
+            },
+            {
+              "viewport": 1280,
+              "page": 1280
+            },
+            {
+              "viewport": 1440,
+              "page": 1440
+            }
+          ]
+        },
+        {
+          "name": "live-result-semantics",
+          "pass": true,
+          "evidence": {
+            "regions": 3,
+            "expected": "2,272.62",
+            "note": "DOM announcement semantics verified; no screen-reader speech certification"
+          }
+        },
+        {
+          "name": "axe",
+          "pass": true,
+          "evidence": {
+            "passes": 31
+          }
+        },
+        {
+          "name": "keyboard",
+          "pass": true,
+          "evidence": {
+            "steps": 70,
+            "fieldFocusIndicators": 17,
+            "nativeDatePickerStops": 0,
+            "note": "Native Chromium date picker button focus uses a UA shadow-control indicator; inspect captured picker images, not only host styles"
+          }
+        },
+        {
+          "name": "print-pdf",
+          "pass": true,
+          "evidence": {
+            "pdf": "w01.pdf",
+            "note": "PDF rendering/text extraction required separately; not native OS print-dialog certification"
+          }
+        },
+        {
+          "name": "errors-and-export",
+          "pass": true,
+          "evidence": "Recorded assertion and download checks passed"
+        }
+      ],
+      "responsive": [
+        {
+          "viewport": 360,
+          "page": 360
+        },
+        {
+          "viewport": 390,
+          "page": 390
+        },
+        {
+          "viewport": 768,
+          "page": 768
+        },
+        {
+          "viewport": 1280,
+          "page": 1280
+        },
+        {
+          "viewport": 1440,
+          "page": 1440
+        }
+      ],
+      "axe": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "nodes": 7
+          }
+        ],
+        "passes": 31
+      },
+      "liveRegions": [
+        "Monthly rent$2,172.62Hourly rent$2.98Daily rent$71.43Weekly rent$500.00Every 2 weeks rent$1,000.00Every 4 weeks (28 days) rent$2,000.00Annual rent$26,071.434-week vs monthlyMonthly minus 4-week = $172.62Difference \u2248 8.63%A 4-week rent period is 28 days. A true average month is about 30.42 days, so the monthly equivalent is different.",
+        "Weekly listing: $2,272.62 per month. Monthly listing: $2,200.00 per month, lowest estimated cost. Third listing \u2014 utilities included: $2,250.00 per month."
+      ],
+      "nojs": {
+        "controls": [
+          {
+            "tag": "INPUT",
+            "id": "rent-amount",
+            "text": "",
+            "disabled": true
+          },
+          {
+            "tag": "SELECT",
+            "id": "",
+            "text": "Currency",
+            "disabled": true
+          },
+          {
+            "tag": "SELECT",
+            "id": "",
+            "text": "From period",
+            "disabled": true
+          },
+          {
+            "tag": "SELECT",
+            "id": "",
+            "text": "To period",
+            "disabled": true
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "text": "Assumptions: 365-day year, 28-day 4-week period\u25be",
+            "disabled": false
+          },
+          {
+            "tag": "SELECT",
+            "id": "listing-currency",
+            "text": "USDCADEURGBPAUDNZDJPYCNYHKDSGDINRKRWCHFSEKNOKDKKMXNBRL",
+            "disabled": true
+          },
+          {
+            "tag": "INPUT",
+            "id": "listing-1-name",
+            "text": "",
+            "disabled": true
+          },
+          {
+            "tag": "INPUT",
+            "id": "listing-1-rent",
+            "text": "",
+            "disabled": true
+          },
+          {
+            "tag": "SELECT",
+            "id": "listing-1-period",
+            "text": "WeeklyEvery 2 weeksEvery 4 weeks (28 days)MonthlyAnnual",
+            "disabled": true
+          },
+          {
+            "tag": "INPUT",
+            "id": "listing-1-extras",
+            "text": "",
+            "disabled": true
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "text": "Remove Weekly listing",
+            "disabled": true
+          },
+          {
+            "tag": "INPUT",
+            "id": "listing-2-name",
+            "text": "",
+            "disabled": true
+          },
+          {
+            "tag": "INPUT",
+            "id": "listing-2-rent",
+            "text": "",
+            "disabled": true
+          },
+          {
+            "tag": "SELECT",
+            "id": "listing-2-period",
+            "text": "WeeklyEvery 2 weeksEvery 4 weeks (28 days)MonthlyAnnual",
+            "disabled": true
+          },
+          {
+            "tag": "INPUT",
+            "id": "listing-2-extras",
+            "text": "",
+            "disabled": true
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "text": "Remove Monthly listing",
+            "disabled": true
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "text": "Add a listing",
+            "disabled": true
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "text": "Download comparison CSV",
+            "disabled": true
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "text": "Save in this browser",
+            "disabled": true
+          }
+        ],
+        "hosts": [
+          "6af71cdb73b3fcc994c158f0--rent-converter.netlify.app",
+          "fonts.googleapis.com",
+          "fonts.gstatic.com"
+        ]
+      },
+      "keyboard": [
+        {
+          "tag": "INPUT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "rent-amount",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 9, 28)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "SELECT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": true,
+          "text": "Currency",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "SELECT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": true,
+          "text": "From period",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "SELECT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": true,
+          "text": "To period",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "SELECT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "listing-currency",
+          "inMain": true,
+          "text": "USDCADEURGBPAUDNZDJPYCNYHKDSGDINRKRWCHFSEKNOKDKKMXNBRL",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "INPUT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "listing-1-name",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "INPUT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "listing-1-rent",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "SELECT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "listing-1-period",
+          "inMain": true,
+          "text": "WeeklyEvery 2 weeksEvery 4 weeks (28 days)MonthlyAnnual",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "INPUT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "listing-1-extras",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "INPUT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "listing-2-name",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "INPUT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "listing-2-rent",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "SELECT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "listing-2-period",
+          "inMain": true,
+          "text": "WeeklyEvery 2 weeksEvery 4 weeks (28 days)MonthlyAnnual",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "INPUT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "listing-2-extras",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "INPUT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "listing-3-name",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "INPUT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "listing-3-rent",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 7, 24)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "SELECT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "listing-3-period",
+          "inMain": true,
+          "text": "WeeklyEvery 2 weeksEvery 4 weeks (28 days)MonthlyAnnual",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "INPUT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "listing-3-extras",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        }
+      ],
+      "printAds": 0,
+      "network_accepted": {
+        "requests": 42,
+        "hosts": [
+          "6af71cdb73b3fcc994c158f0--rent-converter.netlify.app",
+          "fonts.googleapis.com",
+          "fonts.gstatic.com"
+        ],
+        "failures": [],
+        "errors": [],
+        "prohibited": [],
+        "boundedObservationMs": 3500
+      },
+      "network_rejected": {
+        "requests": 64,
+        "hosts": [
+          "6af71cdb73b3fcc994c158f0--rent-converter.netlify.app",
+          "fonts.googleapis.com",
+          "fonts.gstatic.com"
+        ],
+        "failures": [],
+        "errors": [],
+        "prohibited": [],
+        "boundedObservationMs": 3500
+      }
+    },
+    {
+      "id": "w02",
+      "sha": "68bfad21aa48fb1425ac1a3ef695a37efc910d7c",
+      "origin": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app",
+      "path": "/rent-budget-calculator",
+      "gates": [
+        {
+          "name": "javascript-disabled",
+          "pass": true,
+          "evidence": {
+            "navigation": "About reached",
+            "controls": 20,
+            "hosts": [
+              "6af71d435cdb0c47031df3bd--rent-converter.netlify.app",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ]
+          }
+        },
+        {
+          "name": "network-accepted",
+          "pass": true,
+          "evidence": {
+            "requests": 44,
+            "hosts": [
+              "6af71d435cdb0c47031df3bd--rent-converter.netlify.app",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ],
+            "failures": []
+          }
+        },
+        {
+          "name": "network-rejected",
+          "pass": true,
+          "evidence": {
+            "requests": 44,
+            "hosts": [
+              "6af71d435cdb0c47031df3bd--rent-converter.netlify.app",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ],
+            "failures": []
+          }
+        },
+        {
+          "name": "interactive-and-responsive",
+          "pass": true,
+          "evidence": [
+            {
+              "viewport": 360,
+              "page": 360
+            },
+            {
+              "viewport": 390,
+              "page": 390
+            },
+            {
+              "viewport": 768,
+              "page": 768
+            },
+            {
+              "viewport": 1280,
+              "page": 1280
+            },
+            {
+              "viewport": 1440,
+              "page": 1440
+            }
+          ]
+        },
+        {
+          "name": "live-result-semantics",
+          "pass": true,
+          "evidence": {
+            "regions": 2,
+            "expected": "2,282.62",
+            "note": "DOM announcement semantics verified; no screen-reader speech certification"
+          }
+        },
+        {
+          "name": "axe",
+          "pass": true,
+          "evidence": {
+            "passes": 33
+          }
+        },
+        {
+          "name": "keyboard",
+          "pass": true,
+          "evidence": {
+            "steps": 43,
+            "fieldFocusIndicators": 18,
+            "nativeDatePickerStops": 0,
+            "note": "Native Chromium date picker button focus uses a UA shadow-control indicator; inspect captured picker images, not only host styles"
+          }
+        },
+        {
+          "name": "print-pdf",
+          "pass": true,
+          "evidence": {
+            "pdf": "w02.pdf",
+            "note": "PDF rendering/text extraction required separately; not native OS print-dialog certification"
+          }
+        },
+        {
+          "name": "errors-and-export",
+          "pass": true,
+          "evidence": "Recorded assertion and download checks passed"
+        }
+      ],
+      "responsive": [
+        {
+          "viewport": 360,
+          "page": 360
+        },
+        {
+          "viewport": 390,
+          "page": 390
+        },
+        {
+          "viewport": 768,
+          "page": 768
+        },
+        {
+          "viewport": 1280,
+          "page": 1280
+        },
+        {
+          "viewport": 1440,
+          "page": 1440
+        }
+      ],
+      "axe": {
+        "violations": [],
+        "incomplete": [],
+        "passes": 33
+      },
+      "liveRegions": [
+        "Planned rent as a percentage of monthly gross income30.00%The remaining amount subtracts the visible planned rent and aggregate non-rent expenses. The reference amounts are based only on gross income.Monthly gross income$5,000.00Remaining after planned rent and non-rent expenses$2,600.0030% income-based reference amount$1,500.0040% income-based reference amount$2,000.003x income-requirement comparison amount$1,666.67",
+        "Average monthly housing cost$2,282.62Share of take-home income57.07%Monthly amount remaining after costs and savings$217.38Monthly breakdown (USD)ItemMonthly amountTake-home income$4,000.00Rent 500 USD \u00b7 Weekly$2,172.62Utilities 300 USD \u00b7 Every 3 months$100.00Parking 0 USD \u00b7 Monthly$0.00Insurance 120 USD \u00b7 Yearly$10.00Other housing costs 0 USD \u00b7 Monthly$0.00Non-housing commitments$1,000.00Savings target$500.00This remainder covers only costs you have not already entered. It is not a rent recommendation or an approval decision."
+      ],
+      "nojs": {
+        "controls": [
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "text": "Print / Save PDF",
+            "disabled": true
+          },
+          {
+            "tag": "INPUT",
+            "id": "budget-income",
+            "text": "",
+            "disabled": true
+          },
+          {
+            "tag": "INPUT",
+            "id": "budget-rent",
+            "text": "",
+            "disabled": true
+          },
+          {
+            "tag": "INPUT",
+            "id": "budget-expenses",
+            "text": "",
+            "disabled": true
+          },
+          {
+            "tag": "SELECT",
+            "id": "",
+            "text": "USDCADEURGBPAUDNZDJPYCNYHKDSGDINRKRWCHFSEKNOKDKKMXNBRL",
+            "disabled": true
+          },
+          {
+            "tag": "INPUT",
+            "id": "housing-budget-income",
+            "text": "",
+            "disabled": true
+          },
+          {
+            "tag": "SELECT",
+            "id": "housing-budget-currency",
+            "text": "USDCADEURGBPAUDNZDJPYCNYHKDSGDINRKRWCHFSEKNOKDKKMXNBRL",
+            "disabled": true
+          },
+          {
+            "tag": "INPUT",
+            "id": "housing-budget-rent",
+            "text": "",
+            "disabled": true
+          },
+          {
+            "tag": "SELECT",
+            "id": "housing-budget-rent-frequency",
+            "text": "MonthlyWeeklyEvery 2 weeksEvery 3 monthsYearly",
+            "disabled": true
+          },
+          {
+            "tag": "INPUT",
+            "id": "housing-budget-utilities",
+            "text": "",
+            "disabled": true
+          },
+          {
+            "tag": "SELECT",
+            "id": "housing-budget-utilities-frequency",
+            "text": "MonthlyWeeklyEvery 2 weeksEvery 3 monthsYearly",
+            "disabled": true
+          },
+          {
+            "tag": "INPUT",
+            "id": "housing-budget-parking",
+            "text": "",
+            "disabled": true
+          },
+          {
+            "tag": "SELECT",
+            "id": "housing-budget-parking-frequency",
+            "text": "MonthlyWeeklyEvery 2 weeksEvery 3 monthsYearly",
+            "disabled": true
+          },
+          {
+            "tag": "INPUT",
+            "id": "housing-budget-insurance",
+            "text": "",
+            "disabled": true
+          },
+          {
+            "tag": "SELECT",
+            "id": "housing-budget-insurance-frequency",
+            "text": "MonthlyWeeklyEvery 2 weeksEvery 3 monthsYearly",
+            "disabled": true
+          },
+          {
+            "tag": "INPUT",
+            "id": "housing-budget-other",
+            "text": "",
+            "disabled": true
+          },
+          {
+            "tag": "SELECT",
+            "id": "housing-budget-other-frequency",
+            "text": "MonthlyWeeklyEvery 2 weeksEvery 3 monthsYearly",
+            "disabled": true
+          },
+          {
+            "tag": "INPUT",
+            "id": "housing-budget-commitments",
+            "text": "",
+            "disabled": true
+          },
+          {
+            "tag": "INPUT",
+            "id": "housing-budget-savings",
+            "text": "",
+            "disabled": true
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "text": "Print budget / Save PDF",
+            "disabled": true
+          }
+        ],
+        "hosts": [
+          "6af71d435cdb0c47031df3bd--rent-converter.netlify.app",
+          "fonts.googleapis.com",
+          "fonts.gstatic.com"
+        ]
+      },
+      "keyboard": [
+        {
+          "tag": "INPUT",
+          "type": "text",
+          "focus": true,
+          "focusWithin": true,
+          "id": "budget-income",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "INPUT",
+          "type": "text",
+          "focus": true,
+          "focusWithin": true,
+          "id": "budget-rent",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "INPUT",
+          "type": "text",
+          "focus": true,
+          "focusWithin": true,
+          "id": "budget-expenses",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "SELECT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": true,
+          "text": "USDCADEURGBPAUDNZDJPYCNYHKDSGDINRKRWCHFSEKNOKDKKMXNBRL",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "INPUT",
+          "type": "text",
+          "focus": true,
+          "focusWithin": true,
+          "id": "housing-budget-income",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "SELECT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "housing-budget-currency",
+          "inMain": true,
+          "text": "USDCADEURGBPAUDNZDJPYCNYHKDSGDINRKRWCHFSEKNOKDKKMXNBRL",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "INPUT",
+          "type": "text",
+          "focus": true,
+          "focusWithin": true,
+          "id": "housing-budget-rent",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "SELECT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "housing-budget-rent-frequency",
+          "inMain": true,
+          "text": "MonthlyWeeklyEvery 2 weeksEvery 3 monthsYearly",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "INPUT",
+          "type": "text",
+          "focus": true,
+          "focusWithin": true,
+          "id": "housing-budget-utilities",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "SELECT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "housing-budget-utilities-frequency",
+          "inMain": true,
+          "text": "MonthlyWeeklyEvery 2 weeksEvery 3 monthsYearly",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "INPUT",
+          "type": "text",
+          "focus": true,
+          "focusWithin": true,
+          "id": "housing-budget-parking",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "SELECT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "housing-budget-parking-frequency",
+          "inMain": true,
+          "text": "MonthlyWeeklyEvery 2 weeksEvery 3 monthsYearly",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "INPUT",
+          "type": "text",
+          "focus": true,
+          "focusWithin": true,
+          "id": "housing-budget-insurance",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "SELECT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "housing-budget-insurance-frequency",
+          "inMain": true,
+          "text": "MonthlyWeeklyEvery 2 weeksEvery 3 monthsYearly",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "INPUT",
+          "type": "text",
+          "focus": true,
+          "focusWithin": true,
+          "id": "housing-budget-other",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "SELECT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "housing-budget-other-frequency",
+          "inMain": true,
+          "text": "MonthlyWeeklyEvery 2 weeksEvery 3 monthsYearly",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "INPUT",
+          "type": "text",
+          "focus": true,
+          "focusWithin": true,
+          "id": "housing-budget-commitments",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "INPUT",
+          "type": "text",
+          "focus": true,
+          "focusWithin": true,
+          "id": "housing-budget-savings",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        }
+      ],
+      "printAds": 0,
+      "network_accepted": {
+        "requests": 44,
+        "hosts": [
+          "6af71d435cdb0c47031df3bd--rent-converter.netlify.app",
+          "fonts.googleapis.com",
+          "fonts.gstatic.com"
+        ],
+        "failures": [],
+        "errors": [],
+        "prohibited": [],
+        "boundedObservationMs": 3500
+      },
+      "network_rejected": {
+        "requests": 67,
+        "hosts": [
+          "6af71d435cdb0c47031df3bd--rent-converter.netlify.app",
+          "fonts.googleapis.com",
+          "fonts.gstatic.com"
+        ],
+        "failures": [],
+        "errors": [],
+        "prohibited": [],
+        "boundedObservationMs": 3500
+      }
+    },
+    {
+      "id": "w03",
+      "sha": "5af2d234cd9a06b938c01271c2a6b740afd150e5",
+      "origin": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app",
+      "path": "/rent-per-paycheck-calculator",
+      "gates": [
+        {
+          "name": "javascript-disabled",
+          "pass": true,
+          "evidence": {
+            "navigation": "About reached",
+            "controls": 13,
+            "hosts": [
+              "6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ]
+          }
+        },
+        {
+          "name": "network-accepted",
+          "pass": true,
+          "evidence": {
+            "requests": 44,
+            "hosts": [
+              "6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ],
+            "failures": []
+          }
+        },
+        {
+          "name": "network-rejected",
+          "pass": true,
+          "evidence": {
+            "requests": 44,
+            "hosts": [
+              "6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ],
+            "failures": []
+          }
+        },
+        {
+          "name": "interactive-and-responsive",
+          "pass": true,
+          "evidence": [
+            {
+              "viewport": 360,
+              "page": 360
+            },
+            {
+              "viewport": 390,
+              "page": 390
+            },
+            {
+              "viewport": 768,
+              "page": 768
+            },
+            {
+              "viewport": 1280,
+              "page": 1280
+            },
+            {
+              "viewport": 1440,
+              "page": 1440
+            }
+          ]
+        },
+        {
+          "name": "live-result-semantics",
+          "pass": true,
+          "evidence": {
+            "regions": 2,
+            "expected": "750.00",
+            "note": "DOM announcement semantics verified; no screen-reader speech certification"
+          }
+        },
+        {
+          "name": "axe",
+          "pass": true,
+          "evidence": {
+            "passes": 31
+          }
+        },
+        {
+          "name": "keyboard",
+          "pass": true,
+          "evidence": {
+            "steps": 48,
+            "fieldFocusIndicators": 15,
+            "nativeDatePickerStops": 2,
+            "note": "Native Chromium date picker button focus uses a UA shadow-control indicator; inspect captured picker images, not only host styles"
+          }
+        },
+        {
+          "name": "print-pdf",
+          "pass": true,
+          "evidence": {
+            "pdf": "w03.pdf",
+            "note": "PDF rendering/text extraction required separately; not native OS print-dialog certification"
+          }
+        },
+        {
+          "name": "errors-and-export",
+          "pass": true,
+          "evidence": "Recorded assertion and download checks passed"
+        }
+      ],
+      "responsive": [
+        {
+          "viewport": 360,
+          "page": 360
+        },
+        {
+          "viewport": 390,
+          "page": 390
+        },
+        {
+          "viewport": 768,
+          "page": 768
+        },
+        {
+          "viewport": 1280,
+          "page": 1280
+        },
+        {
+          "viewport": 1440,
+          "page": 1440
+        }
+      ],
+      "axe": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "nodes": 7
+          }
+        ],
+        "passes": 31
+      },
+      "liveRegions": [
+        "Rent to set aside per paycheck$923.08Based on annual rent divided by 26 paychecks per year.Weekly paycheck$461.54Biweekly paycheck$923.08Semimonthly paycheck$1,000.00Monthly paycheck$2,000.00Monthly rent amount$2,000.004-week rent amount$1,841.10Annual rent$24,000.00Print / Save PDF",
+        "$1,500.00 still needed across 2 paydays.Reserve the amounts below from each paycheck. This assumes each paycheck can cover its reserve; income and other bills are not assessed.Reserve schedule for rent due 2027-02-01PaydaySet asideSaved total2027-01-08$750.00$1,250.002027-01-22$750.00$2,000.00"
+      ],
+      "nojs": {
+        "controls": [
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "text": "Print / Save PDF",
+            "disabled": true
+          },
+          {
+            "tag": "INPUT",
+            "id": "rpc_amount_input",
+            "text": "",
+            "disabled": true
+          },
+          {
+            "tag": "SELECT",
+            "id": "",
+            "text": "Currency",
+            "disabled": true
+          },
+          {
+            "tag": "SELECT",
+            "id": "rpc_rent_period",
+            "text": "HourlyDailyWeekly2 weeks4 weeks (28 days)Monthly (average)Annual",
+            "disabled": true
+          },
+          {
+            "tag": "SELECT",
+            "id": "rpc_pay_freq",
+            "text": "Weekly paycheckBiweekly paycheck (every 2 weeks)Semimonthly paycheck (",
+            "disabled": true
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "text": "Print / Save PDF",
+            "disabled": true
+          },
+          {
+            "tag": "INPUT",
+            "id": "deadline-rent",
+            "text": "",
+            "disabled": true
+          },
+          {
+            "tag": "INPUT",
+            "id": "deadline-saved",
+            "text": "",
+            "disabled": true
+          },
+          {
+            "tag": "INPUT",
+            "id": "deadline-next-payday",
+            "text": "",
+            "disabled": true
+          },
+          {
+            "tag": "INPUT",
+            "id": "deadline-due-date",
+            "text": "",
+            "disabled": true
+          },
+          {
+            "tag": "INPUT",
+            "id": "",
+            "text": "",
+            "disabled": true
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "text": "Calculate deadline plan",
+            "disabled": true
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "text": "Assumptions: 365-day year, 28-day 4-week period\u25be",
+            "disabled": true
+          }
+        ],
+        "hosts": [
+          "6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app",
+          "fonts.googleapis.com",
+          "fonts.gstatic.com"
+        ]
+      },
+      "keyboard": [
+        {
+          "tag": "INPUT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "rpc_amount_input",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "SELECT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": true,
+          "text": "Currency",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "SELECT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "rpc_rent_period",
+          "inMain": true,
+          "text": "HourlyDailyWeekly2 weeks4 weeks (28 days)Monthly (average)Annual",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "SELECT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "rpc_pay_freq",
+          "inMain": true,
+          "text": "Weekly paycheckBiweekly paycheck (every 2 weeks)Semimonthly paycheck (twice",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "INPUT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "deadline-rent",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "INPUT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "deadline-saved",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "INPUT",
+          "type": "date",
+          "focus": true,
+          "focusWithin": true,
+          "id": "deadline-next-payday",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "INPUT",
+          "type": "date",
+          "focus": true,
+          "focusWithin": true,
+          "id": "deadline-next-payday",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "INPUT",
+          "type": "date",
+          "focus": true,
+          "focusWithin": true,
+          "id": "deadline-next-payday",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "INPUT",
+          "type": "date",
+          "focus": false,
+          "focusWithin": true,
+          "id": "deadline-next-payday",
+          "inMain": true,
+          "text": "",
+          "outline": "none",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "0px",
+          "shadow": "none",
+          "nativeDatePicker": true,
+          "focusEvidence": "w03-deadline-next-payday-native-picker-focus.png"
+        },
+        {
+          "tag": "INPUT",
+          "type": "date",
+          "focus": true,
+          "focusWithin": true,
+          "id": "deadline-due-date",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "INPUT",
+          "type": "date",
+          "focus": true,
+          "focusWithin": true,
+          "id": "deadline-due-date",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "INPUT",
+          "type": "date",
+          "focus": true,
+          "focusWithin": true,
+          "id": "deadline-due-date",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "INPUT",
+          "type": "date",
+          "focus": false,
+          "focusWithin": true,
+          "id": "deadline-due-date",
+          "inMain": true,
+          "text": "",
+          "outline": "none",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "0px",
+          "shadow": "none",
+          "nativeDatePicker": true,
+          "focusEvidence": "w03-deadline-due-date-native-picker-focus.png"
+        },
+        {
+          "tag": "INPUT",
+          "type": "checkbox",
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(3, 105, 161)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        }
+      ],
+      "printAds": 0,
+      "network_accepted": {
+        "requests": 44,
+        "hosts": [
+          "6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app",
+          "fonts.googleapis.com",
+          "fonts.gstatic.com"
+        ],
+        "failures": [],
+        "errors": [],
+        "prohibited": [],
+        "boundedObservationMs": 3500
+      },
+      "network_rejected": {
+        "requests": 67,
+        "hosts": [
+          "6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app",
+          "fonts.googleapis.com",
+          "fonts.gstatic.com"
+        ],
+        "failures": [],
+        "errors": [],
+        "prohibited": [],
+        "boundedObservationMs": 3500
+      }
+    },
+    {
+      "id": "w04",
+      "sha": "2483d5fbde07f5ec0ab74596e252dfa5075e9123",
+      "origin": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app",
+      "path": "/rent-schedule-calculator",
+      "gates": [
+        {
+          "name": "javascript-disabled",
+          "pass": true,
+          "evidence": {
+            "navigation": "About reached",
+            "controls": 7,
+            "hosts": [
+              "6af71cc278ec6b9561a53817--rent-converter.netlify.app",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ]
+          }
+        },
+        {
+          "name": "network-accepted",
+          "pass": true,
+          "evidence": {
+            "requests": 44,
+            "hosts": [
+              "6af71cc278ec6b9561a53817--rent-converter.netlify.app",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ],
+            "failures": []
+          }
+        },
+        {
+          "name": "network-rejected",
+          "pass": true,
+          "evidence": {
+            "requests": 44,
+            "hosts": [
+              "6af71cc278ec6b9561a53817--rent-converter.netlify.app",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ],
+            "failures": []
+          }
+        },
+        {
+          "name": "interactive-and-responsive",
+          "pass": true,
+          "evidence": [
+            {
+              "viewport": 360,
+              "page": 360
+            },
+            {
+              "viewport": 390,
+              "page": 390
+            },
+            {
+              "viewport": 768,
+              "page": 768
+            },
+            {
+              "viewport": 1280,
+              "page": 1280
+            },
+            {
+              "viewport": 1440,
+              "page": 1440
+            }
+          ]
+        },
+        {
+          "name": "live-result-semantics",
+          "pass": true,
+          "evidence": {
+            "regions": 1,
+            "expected": "3 payments",
+            "note": "DOM announcement semantics verified; no screen-reader speech certification"
+          }
+        },
+        {
+          "name": "axe",
+          "pass": true,
+          "evidence": {
+            "passes": 28
+          }
+        },
+        {
+          "name": "keyboard",
+          "pass": true,
+          "evidence": {
+            "steps": 31,
+            "fieldFocusIndicators": 8,
+            "nativeDatePickerStops": 1,
+            "note": "Native Chromium date picker button focus uses a UA shadow-control indicator; inspect captured picker images, not only host styles"
+          }
+        },
+        {
+          "name": "print-pdf",
+          "pass": true,
+          "evidence": {
+            "pdf": "w04.pdf",
+            "note": "PDF rendering/text extraction required separately; not native OS print-dialog certification"
+          }
+        },
+        {
+          "name": "errors-and-export",
+          "pass": true,
+          "evidence": "Recorded assertion and download checks passed"
+        }
+      ],
+      "responsive": [
+        {
+          "viewport": 360,
+          "page": 360
+        },
+        {
+          "viewport": 390,
+          "page": 390
+        },
+        {
+          "viewport": 768,
+          "page": 768
+        },
+        {
+          "viewport": 1280,
+          "page": 1280
+        },
+        {
+          "viewport": 1440,
+          "page": 1440
+        }
+      ],
+      "axe": {
+        "violations": [],
+        "incomplete": [],
+        "passes": 28
+      },
+      "liveRegions": [
+        "Generated payment schedule3 paymentsPayment dates are period starts. The schedule excludes every date on or after the calculated lease end.Lease start2028-01-31Calculated lease end2028-04-30Term3 monthsFrequencyMonthlyPaymentPayment dateAmount12028-01-31$1,800.2522028-02-29$1,800.2532028-03-31$1,800.25"
+      ],
+      "nojs": {
+        "controls": [
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "text": "Print / Save PDF",
+            "disabled": true
+          },
+          {
+            "tag": "INPUT",
+            "id": "schedule-start-date",
+            "text": "",
+            "disabled": true
+          },
+          {
+            "tag": "INPUT",
+            "id": "schedule-term-months",
+            "text": "",
+            "disabled": true
+          },
+          {
+            "tag": "INPUT",
+            "id": "schedule-rent",
+            "text": "",
+            "disabled": true
+          },
+          {
+            "tag": "SELECT",
+            "id": "",
+            "text": "USDCADEURGBPAUDNZDJPYCNYHKDSGDINRKRWCHFSEKNOKDKKMXNBRL",
+            "disabled": true
+          },
+          {
+            "tag": "SELECT",
+            "id": "schedule-frequency",
+            "text": "MonthlyWeeklyFortnightly or biweekly (14 days)Every 4 weeks (28 days)",
+            "disabled": true
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "text": "Download calendar (.ics)",
+            "disabled": true
+          }
+        ],
+        "hosts": [
+          "6af71cc278ec6b9561a53817--rent-converter.netlify.app",
+          "fonts.googleapis.com",
+          "fonts.gstatic.com"
+        ]
+      },
+      "keyboard": [
+        {
+          "tag": "INPUT",
+          "type": "date",
+          "focus": true,
+          "focusWithin": true,
+          "id": "schedule-start-date",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "INPUT",
+          "type": "date",
+          "focus": true,
+          "focusWithin": true,
+          "id": "schedule-start-date",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "INPUT",
+          "type": "date",
+          "focus": true,
+          "focusWithin": true,
+          "id": "schedule-start-date",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "INPUT",
+          "type": "date",
+          "focus": false,
+          "focusWithin": true,
+          "id": "schedule-start-date",
+          "inMain": true,
+          "text": "",
+          "outline": "none",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "0px",
+          "shadow": "none",
+          "nativeDatePicker": true,
+          "focusEvidence": "w04-schedule-start-date-native-picker-focus.png"
+        },
+        {
+          "tag": "INPUT",
+          "type": "text",
+          "focus": true,
+          "focusWithin": true,
+          "id": "schedule-term-months",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "INPUT",
+          "type": "text",
+          "focus": true,
+          "focusWithin": true,
+          "id": "schedule-rent",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 22, 45)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "SELECT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": true,
+          "text": "USDCADEURGBPAUDNZDJPYCNYHKDSGDINRKRWCHFSEKNOKDKKMXNBRL",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "SELECT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "schedule-frequency",
+          "inMain": true,
+          "text": "MonthlyWeeklyFortnightly or biweekly (14 days)Every 4 weeks (28 days)",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        }
+      ],
+      "printAds": 0,
+      "network_accepted": {
+        "requests": 44,
+        "hosts": [
+          "6af71cc278ec6b9561a53817--rent-converter.netlify.app",
+          "fonts.googleapis.com",
+          "fonts.gstatic.com"
+        ],
+        "failures": [],
+        "errors": [],
+        "prohibited": [],
+        "boundedObservationMs": 3500
+      },
+      "network_rejected": {
+        "requests": 67,
+        "hosts": [
+          "6af71cc278ec6b9561a53817--rent-converter.netlify.app",
+          "fonts.googleapis.com",
+          "fonts.gstatic.com"
+        ],
+        "failures": [],
+        "errors": [],
+        "prohibited": [],
+        "boundedObservationMs": 3500
+      }
+    }
+  ]
+}

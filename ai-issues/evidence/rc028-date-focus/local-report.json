@@ -1,0 +1,92 @@
+[
+  {
+    "id": "deadline-next-payday",
+    "tag": "INPUT",
+    "focus": true,
+    "focusWithin": true,
+    "focusVisible": true,
+    "outline": "rgb(3, 105, 161) solid 2px",
+    "shadow": "none"
+  },
+  {
+    "id": "deadline-next-payday",
+    "tag": "INPUT",
+    "focus": true,
+    "focusWithin": true,
+    "focusVisible": true,
+    "outline": "rgb(3, 105, 161) solid 2px",
+    "shadow": "none"
+  },
+  {
+    "id": "deadline-next-payday",
+    "tag": "INPUT",
+    "focus": true,
+    "focusWithin": true,
+    "focusVisible": true,
+    "outline": "rgb(3, 105, 161) solid 2px",
+    "shadow": "none"
+  },
+  {
+    "id": "deadline-next-payday",
+    "tag": "INPUT",
+    "focus": false,
+    "focusWithin": true,
+    "focusVisible": false,
+    "outline": "rgb(2, 6, 23) none 0px",
+    "shadow": "none"
+  },
+  {
+    "id": "deadline-due-date",
+    "tag": "INPUT",
+    "focus": true,
+    "focusWithin": true,
+    "focusVisible": true,
+    "outline": "rgb(3, 105, 161) solid 2px",
+    "shadow": "none"
+  },
+  {
+    "id": "deadline-due-date",
+    "tag": "INPUT",
+    "focus": true,
+    "focusWithin": true,
+    "focusVisible": true,
+    "outline": "rgb(3, 105, 161) solid 2px",
+    "shadow": "none"
+  },
+  {
+    "id": "deadline-due-date",
+    "tag": "INPUT",
+    "focus": true,
+    "focusWithin": true,
+    "focusVisible": true,
+    "outline": "rgb(3, 105, 161) solid 2px",
+    "shadow": "none"
+  },
+  {
+    "id": "deadline-due-date",
+    "tag": "INPUT",
+    "focus": false,
+    "focusWithin": true,
+    "focusVisible": false,
+    "outline": "rgb(2, 6, 23) none 0px",
+    "shadow": "none"
+  },
+  {
+    "id": "",
+    "tag": "INPUT",
+    "focus": true,
+    "focusWithin": true,
+    "focusVisible": true,
+    "outline": "rgb(3, 105, 161) solid 2px",
+    "shadow": "none"
+  },
+  {
+    "id": "",
+    "tag": "BUTTON",
+    "focus": true,
+    "focusWithin": true,
+    "focusVisible": true,
+    "outline": "rgb(16, 16, 16) none 0px",
+    "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.685 0.169 237.323) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+  }
+]

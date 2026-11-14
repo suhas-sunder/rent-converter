@@ -1,5 +1,6 @@
 # RC-028 — Final acceptance closure: real browser, network, print, accessibility and W04 semantics
 
+> **RC-028 closure update:** The historical findings/status below are superseded for current candidates by [completed browser acceptance](RC-028_BROWSER_ACCEPTANCE_EVIDENCE.md) and the [release ledger](RC-RELEASE-LEDGER.md). Preserve this report as evidence for its listed original commits.
 **Created:** 2026-11-13. **Status: BLOCKING RELEASE; no production merge authorized.**
 **Base for review:** verified staged draft PRs #2–#6 and exact Netlify immutable previews in `RC-RELEASE-LEDGER.md`; integration checkpoint `build/rc27-recovery` @ `2aa240d30c8eab0bea062a1d781eae630da7cff0` prior to this note.
 **Reviewer:** independent GitHub/Netlify code, branch and deploy audit.

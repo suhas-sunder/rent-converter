@@ -1,14 +1,14 @@
 {
-  "checkedAtUtc": "2026-11-13T14:24:20.575Z",
+  "checkedAtUtc": "2026-11-13T23:58:24.554Z",
   "refs": {
     "urgent": "b69768dc8c8c66342786ba9f39eb958676637b80",
     "w01": "e2a62955a58d30be90a646fd99a253ca2b30bde9",
     "w02": "68bfad21aa48fb1425ac1a3ef695a37efc910d7c",
     "w03": "5af2d234cd9a06b938c01271c2a6b740afd150e5",
     "w04": "2483d5fbde07f5ec0ab74596e252dfa5075e9123",
-    "security": "8c116e5d40519115ba830b7cb22d152f6f2de5d2"
+    "security": "d6906eff00cc3efdbf1f833580a2fd96e8b9c53a"
   },
-  "workingHead": "5aeeced6006d2536d31039d490591ec5bf06c47d",
+  "workingHead": "5bc6441f4eb568d6ca5c0bd32ea56410b4d5f5aa",
   "mergeSteps": [
     {
       "package": "w01",
@@ -22,69 +22,69 @@
       "rawMergeOutput": "9c6f59979dde57dcd483bf5ab9a98d0796132ea7",
       "resolution": "automatic Git three-way merge",
       "resultTree": "9c6f59979dde57dcd483bf5ab9a98d0796132ea7",
-      "syntheticCommit": "7afad382e57d0e466aa9e33aa2ce19e1fecb71f6"
+      "syntheticCommit": "96ecc8442ef0d7541eb9abdc78cbce410a6cdd1a"
     },
     {
       "package": "w02",
       "incoming": "68bfad21aa48fb1425ac1a3ef695a37efc910d7c",
       "parents": [
-        "7afad382e57d0e466aa9e33aa2ce19e1fecb71f6",
+        "96ecc8442ef0d7541eb9abdc78cbce410a6cdd1a",
         "68bfad21aa48fb1425ac1a3ef695a37efc910d7c"
       ],
       "mergeExitCode": 1,
       "conflicts": [
         "package.json"
       ],
-      "rawMergeOutput": "5ec7e062cba47ba4c332942a32541ddf11a2866a\npackage.json\n\nAuto-merging package.json\nCONFLICT (content): Merge conflict in package.json",
+      "rawMergeOutput": "9f122853de4a84a51b7df993c761fa6c80174aff\npackage.json\n\nAuto-merging package.json\nCONFLICT (content): Merge conflict in package.json",
       "resolution": "Union of 23 unique sorted test paths; all other package fields equal before resolution",
       "resultTree": "9c3dbdca1c1c184a0ac3805aa7c538b7010c0154",
-      "syntheticCommit": "a44776f29d5fb0ae0e0bd157fda7437431e03a11"
+      "syntheticCommit": "9ba5b492a5751f17e6e410a4398ea20ac0547112"
     },
     {
       "package": "w03",
       "incoming": "5af2d234cd9a06b938c01271c2a6b740afd150e5",
       "parents": [
-        "a44776f29d5fb0ae0e0bd157fda7437431e03a11",
+        "9ba5b492a5751f17e6e410a4398ea20ac0547112",
         "5af2d234cd9a06b938c01271c2a6b740afd150e5"
       ],
       "mergeExitCode": 1,
       "conflicts": [
         "package.json"
       ],
-      "rawMergeOutput": "f4f4fb0b2122505d710590481b4f1461b6d8e792\npackage.json\n\nAuto-merging package.json\nCONFLICT (content): Merge conflict in package.json",
+      "rawMergeOutput": "7e362c2c7c5ec4aa34dff5223bfb496ef904be05\npackage.json\n\nAuto-merging package.json\nCONFLICT (content): Merge conflict in package.json",
       "resolution": "Union of 24 unique sorted test paths; all other package fields equal before resolution",
       "resultTree": "2977f3a278521590088b468df8fd5fd583e551c6",
-      "syntheticCommit": "65e0b0d667e658be3b202ec010db60d2717509b2"
+      "syntheticCommit": "b641ad6fce4e16ad3edd44315ef91463c76383d2"
     },
     {
       "package": "w04",
       "incoming": "2483d5fbde07f5ec0ab74596e252dfa5075e9123",
       "parents": [
-        "65e0b0d667e658be3b202ec010db60d2717509b2",
+        "b641ad6fce4e16ad3edd44315ef91463c76383d2",
         "2483d5fbde07f5ec0ab74596e252dfa5075e9123"
       ],
       "mergeExitCode": 1,
       "conflicts": [
         "package.json"
       ],
-      "rawMergeOutput": "2cc4fb94b18df493fd38f6d7735126933f7920d9\npackage.json\n\nAuto-merging app/client/components/generated/GeneratedPages.tsx\nAuto-merging package.json\nCONFLICT (content): Merge conflict in package.json",
+      "rawMergeOutput": "52c63c9a62b359c5121a685432ed21c5256a504c\npackage.json\n\nAuto-merging app/client/components/generated/GeneratedPages.tsx\nAuto-merging package.json\nCONFLICT (content): Merge conflict in package.json",
       "resolution": "Union of 25 unique sorted test paths; all other package fields equal before resolution",
       "resultTree": "5b02d3457ac42aa72e722c8d3177c8e9c1b46dd7",
-      "syntheticCommit": "d94148a15ee48b3fa59c55f63c6b2865209b9ada"
+      "syntheticCommit": "5e5e2cdc6b07aa2a4b163dc259eeaf191c87876b"
     },
     {
       "package": "security",
-      "incoming": "8c116e5d40519115ba830b7cb22d152f6f2de5d2",
+      "incoming": "d6906eff00cc3efdbf1f833580a2fd96e8b9c53a",
       "parents": [
-        "d94148a15ee48b3fa59c55f63c6b2865209b9ada",
-        "8c116e5d40519115ba830b7cb22d152f6f2de5d2"
+        "5e5e2cdc6b07aa2a4b163dc259eeaf191c87876b",
+        "d6906eff00cc3efdbf1f833580a2fd96e8b9c53a"
       ],
       "mergeExitCode": 0,
       "conflicts": [],
-      "rawMergeOutput": "6ed19ae34ecad1993b20bedd375bba7ff2c09e93\n\nAuto-merging package.json",
+      "rawMergeOutput": "239b8466ac3e965b62a07244ffcdccea6a33ae08\n\nAuto-merging package.json",
       "resolution": "automatic Git three-way merge",
-      "resultTree": "6ed19ae34ecad1993b20bedd375bba7ff2c09e93",
-      "syntheticCommit": "ac1bb9e201ea65f430d9d3f507e1b792e592fb4d"
+      "resultTree": "239b8466ac3e965b62a07244ffcdccea6a33ae08",
+      "syntheticCommit": "cafb5c59a4540f78ac8245be154ef75883070f45"
     }
   ],
   "expectedTests": [
@@ -114,7 +114,7 @@
     "scripts/technical-hardening.test.mjs",
     "scripts/trust-architecture.test.mjs"
   ],
-  "finalTree": "6ed19ae34ecad1993b20bedd375bba7ff2c09e93",
+  "finalTree": "239b8466ac3e965b62a07244ffcdccea6a33ae08",
   "packageFieldsMatch": true,
   "checkedProductionFiles": 223,
   "mismatches": [],
