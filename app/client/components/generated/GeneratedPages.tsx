@@ -1,6 +1,7 @@
 import { useEffect, useId, useMemo, useState } from "react";
 import { Link } from "react-router";
 import RentScheduleExport from "./RentScheduleExport";
+import LeaseBoundaryCheck from "./LeaseBoundaryCheck";
 import HydrationSafeControls from "~/client/components/HydrationSafeControls";
 import {
   dailyToMonthlyCents,
@@ -1800,6 +1801,7 @@ export function DateToolPage({ config }: { config: DateToolConfig }) {
             ]}
           />
         ) : null}
+        {config.mode === "lease" && browserDateReady && !errors.length && dateCalculation && <LeaseBoundaryCheck start={start} calculatedEnd={formatCalendarDate(dateCalculation.date)} />}
         {config.mode === "schedule" && <RentScheduleExport schedule={browserDateReady && !errors.length && scheduleCalculation && rentParsed.ok ? {
         paymentDates: scheduleCalculation.payments.map(formatCalendarDate),
         leaseStart: formatCalendarDate(scheduleCalculation.start),
