@@ -38,8 +38,8 @@ export default function RentConventionComparison() {
         </>}
       </div>
       <p className="mt-4 text-sm leading-6">Both directions use matching fractions; reversing a rounded display may differ by a few pence. Calculations retain decimal precision until display rounding. A 52-week budget covers 364 days; the daily-rate model spreads 365 days over 12 months, including in leap years. Neither counts the actual payments in a particular year, nor determines what your contract requires. GBP is a currency label, with no exchange conversion.</p>
-      <p className="mt-3 text-sm leading-6">Source checked 13 November 2026: <a href="https://www.gov.uk/government/publications/universal-credit-and-landlords/universal-credit-and-rented-housing-guide-for-landlords" className="text-sky-800 underline hover:text-sky-950">DWP’s rented-housing guide</a> uses weekly × 52 ÷ 12 for Universal Credit. That benefit calculation does not prescribe every private agreement. The 365-day figure is RentConverter’s stated comparison model, not a UK legal rule. This comparison is not legal or financial advice.</p>
-      <Link to="/pw-to-pcm-calculator" className="mt-4 inline-block cursor-pointer font-semibold text-sky-800 underline hover:text-sky-950">Use the standard 365-day PW-to-PCM converter</Link>
+      <p className="mt-3 text-sm leading-6">Source checked 13 November 2026: <a href="https://www.gov.uk/government/publications/universal-credit-and-landlords/universal-credit-and-rented-housing-guide-for-landlords" className="cursor-pointer text-sky-800 underline hover:text-sky-950 focus-visible:outline-2">DWP’s rented-housing guide</a> uses weekly × 52 ÷ 12 for Universal Credit. That benefit calculation does not prescribe every private agreement. The 365-day figure is RentConverter’s stated comparison model, not a UK legal rule. This comparison is not legal or financial advice.</p>
+      <Link to="/pw-to-pcm-calculator" className="mt-4 inline-block cursor-pointer font-semibold text-sky-800 underline hover:text-sky-950 focus-visible:outline-2">Use the standard 365-day PW-to-PCM converter</Link>
     </div>
   </section>;
 }
