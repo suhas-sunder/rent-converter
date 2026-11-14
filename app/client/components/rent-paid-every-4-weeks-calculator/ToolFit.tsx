@@ -4,7 +4,7 @@ const toolFit = {
   title: "When a 28-day rent cycle matters",
   bestFor: [
     "Checking true monthly cost when rent is paid every 4 weeks.",
-    "Explaining why 13 payments per year can cost more than 12 monthly payments.",
+    "Separating 13 payments over 364 days from a 365-day rate equivalent.",
     "Planning around due dates that move through the calendar."
   ],
   notFor: [
