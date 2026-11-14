@@ -26,3 +26,7 @@ Changed source: four-week HowItWorks/ToolFit, four-week route hydration wrapper,
 W05–W08 do not yet have implementation/acceptance branches. W12 is independently reviewable against the accepted development checkpoint but cannot be called a publication-ready next week. An immutable nonproduction preview is not yet available. Native OS printing and screen-reader speech remain manual boundaries. Do not use older browser evidence as acceptance for a new SHA.
 
 Before publication, leave this draft unmerged to roll back. After a future owner-approved release, revert its scoped implementation on a new branch, retaining shared hydration primitives and other accepted features. Rebuild and repeat all checks against then-current main. Never reset or force-push main.
+
+## Final mobile accessibility followup
+
+A supplemental 390px axe scan found the existing supporting schedule table lacked an explicit keyboard focus target. Added a named region, tab stop and visible focus ring without changing table data, formulas or layout. Final integration acceptance includes a focused ArrowRight/Tab exit test and mobile axe scan. The earlier desktop-only axe result did not cover this narrow-width condition.

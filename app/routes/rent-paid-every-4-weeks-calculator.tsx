@@ -981,7 +981,7 @@ export default function RentPaidEvery4Weeks() {
                 The table shows the difference between common schedule counts.
               </p>
 
-              <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
+              <div role="region" aria-label="Rent schedule comparison" tabIndex={0} className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-600 focus-visible:ring-offset-2">
                 <table className="min-w-full bg-white">
                   <thead className="bg-sky-50/70">
                     <tr>
