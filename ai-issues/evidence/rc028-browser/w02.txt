@@ -1,0 +1,85 @@
+Rent budget calculator Print / Save PDF
+Rent Budget Calculator
+Compare planned rent with gross monthly income and one aggregate non-
+rent expense amount, then review common income-based reference rules.
+Annual gross income
+60000
+Planned monthly rent
+1500
+Monthly non-rent expenses
+900
+Enter one aggregate amount. You can include debt, utilities, savings, or other non-rent costs here.
+Currency
+USD
+Planned rent as a percentage of monthly gross income
+30.00%
+The remaining amount subtracts the visible planned rent and aggregate non-rent
+expenses. The reference amounts are based only on gross income.
+Monthly gross income Remaining after planned rent and non-rent
+expenses
+$5,000.00
+$2,600.00
+30% income-based reference amount 40% income-based reference amount
+$1,500.00 $2,000.00
+3x income-requirement comparison
+amount
+$1,666.67
+Check your take-home housing budget
+Add bills with different payment periods and see what remains after other commitments and savings.
+This is a separate budget from the gross-income comparison above. Enter your own after-tax income and
+costs; values are not copied between the tools. Use one currency throughout.
+Monthly take-home income Budget currency
+4000 USD
+Income available after tax and payroll deductions. Changes the currency label, not the exchange rate.
+Enter 0 if there is no income.
+Recurring housing costs
+Use 0 for costs already included in rent. Leave deposits and one-off moving costs out of this recurring budget.
+Rent Rent billing period
+500 Weekly
+Utilities Utilities billing period
+300 Every 3 months
+Parking Parking billing period
+0 Monthly
+Insurance Insurance billing period
+120 Yearly
+Other housing costs Other housing costs billing period
+0 Monthly
+Monthly non-housing commitments Monthly savings target
+1000 500
+Include food, transport, debt and other spending. Do Additional savings from take-home income; exclude
+not repeat the housing bills above or savings below. savings already deducted from your paycheck.
+Average monthly housing cost
+$2,282.62
+Share of take-home income Monthly amount remaining after costs and
+savings
+57.07%
+$217.38
+Monthly breakdown (USD)
+Item Monthly amount
+Take-home income $4,000.00
+Rent
+$2,172.62
+500 USD · Weekly
+Utilities
+$100.00
+300 USD · Every 3 months
+Parking
+$0.00
+0 USD · Monthly
+Insurance
+$10.00
+120 USD · Yearly
+Other housing costs
+$0.00
+0 USD · Monthly
+Non-housing commitments $1,000.00
+Savings target $500.00
+This remainder covers only costs you have not already entered. It is not a rent recommendation or an
+approval decision.
+Weekly and two-week bills use a 365-day year: weekly × 365 ÷ 7 ÷ 12, or two-week × 365 ÷ 14 ÷ 12. Quarterly
+bills divide by 3 and yearly bills by 12. This estimates an average month, not the exact cash needed on each
+payment date. Calculations retain precision until display; rounded rows may differ from the rounded total by a
+cent. This is a planning calculation, not financial advice.
+Frequently Asked Questions
+What belongs in non-rent expenses? v
+Do expenses change the 30%, 40%, or 3x amounts? v

@@ -1,0 +1,807 @@
+{
+  "started": "2026-11-13T14:09:55.921Z",
+  "browser": "145.0.7632.6",
+  "node": "v25.9.0",
+  "note": "Historical failing baseline; current candidate identity and repaired results are recorded separately. Urgent errors/export failure was a harness regex defect (period labels contained digits); corrected regex checks money.",
+  "candidates": [
+    {
+      "id": "urgent",
+      "sha": "f344ad29766bb63e185515ed08277a8ac9085247",
+      "origin": "https://6af6977a997b1f8cde73e05e--rent-converter.netlify.app",
+      "gates": [
+        {
+          "name": "javascript-disabled",
+          "pass": false,
+          "error": "JS-off calculator inputs must not invite edits that cannot update results\n\n4 !== 0\n"
+        },
+        {
+          "name": "network-accepted",
+          "pass": true,
+          "evidence": {
+            "requests": 38,
+            "hosts": [
+              "6af6977a997b1f8cde73e05e--rent-converter.netlify.app",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ],
+            "failures": []
+          }
+        },
+        {
+          "name": "network-rejected",
+          "pass": true,
+          "evidence": {
+            "requests": 38,
+            "hosts": [
+              "6af6977a997b1f8cde73e05e--rent-converter.netlify.app",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ],
+            "failures": []
+          }
+        },
+        {
+          "name": "interactive-and-responsive",
+          "pass": true,
+          "evidence": [
+            {
+              "viewport": 360,
+              "page": 360
+            },
+            {
+              "viewport": 390,
+              "page": 390
+            },
+            {
+              "viewport": 768,
+              "page": 768
+            },
+            {
+              "viewport": 1280,
+              "page": 1280
+            },
+            {
+              "viewport": 1440,
+              "page": 1440
+            }
+          ]
+        },
+        {
+          "name": "axe",
+          "pass": false,
+          "error": "Axe violations: color-contrast\n\n1 !== 0\n"
+        },
+        {
+          "name": "keyboard",
+          "pass": true,
+          "evidence": {
+            "steps": 70
+          }
+        },
+        {
+          "name": "print-pdf",
+          "pass": true,
+          "evidence": {
+            "pdf": "urgent.pdf",
+            "note": "PDF rendering/text extraction required separately; not native OS print-dialog certification"
+          }
+        },
+        {
+          "name": "errors-and-export",
+          "pass": false,
+          "error": "The input was expected to not match the regular expression /\\d/. Input:\n\n'Monthly rent\\n' +\n  '-\\n' +\n  'Hourly rent\\n' +\n  '-\\n' +\n  'Daily rent\\n' +\n  '-\\n' +\n  'Weekly rent\\n' +\n  '-\\n' +\n  'Every 2 weeks rent\\n' +\n  '-\\n' +\n  'Every 4 weeks (28 days) rent\\n' +\n  '-\\n' +\n  'Annual rent\\n' +\n  '-\\n' +\n  '4-week vs monthly\\n' +\n  'Monthly minus 4-week = -\\n' +\n  'Difference \u2248 -\\n' +\n  '\\n' +\n  'A 4-week rent period is 28 days. A true average month is about 30.42 days, so the monthly equivalent is different.'\n"
+        }
+      ],
+      "axe": {
+        "violations": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+            "nodes": [
+              {
+                "target": [
+                  ".text-left.leading-tight > .group-hover\\:text-sky-800.text-base.text-slate-950 > .text-sky-600"
+                ],
+                "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.02 (foreground color: #0084d1, background color: #ffffff, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".sm\\:justify-start > div > .group-hover\\:text-sky-800.text-base.text-slate-950 > .text-sky-600"
+                ],
+                "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.01 (foreground color: #0084d1, background color: #feffff, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1"
+              }
+            ]
+          }
+        ],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "nodes": 9
+          }
+        ],
+        "passes": 28
+      },
+      "nojsEnabledInputs": [
+        {
+          "tag": "INPUT",
+          "id": "rent-amount",
+          "text": "",
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "id": "",
+          "text": "Currency",
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "id": "",
+          "text": "From period",
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "id": "",
+          "text": "To period",
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "id": "w01",
+      "sha": "62e5e6c0eabeac0c939dabcab21a580e71c8f89d",
+      "origin": "https://6af69ad52629bf99da003eb7--rent-converter.netlify.app",
+      "gates": [
+        {
+          "name": "javascript-disabled",
+          "pass": false,
+          "error": "JS-off calculator inputs must not invite edits that cannot update results\n\n4 !== 0\n"
+        },
+        {
+          "name": "network-accepted",
+          "pass": true,
+          "evidence": {
+            "requests": 40,
+            "hosts": [
+              "6af69ad52629bf99da003eb7--rent-converter.netlify.app",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ],
+            "failures": []
+          }
+        },
+        {
+          "name": "network-rejected",
+          "pass": true,
+          "evidence": {
+            "requests": 40,
+            "hosts": [
+              "6af69ad52629bf99da003eb7--rent-converter.netlify.app",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ],
+            "failures": []
+          }
+        },
+        {
+          "name": "interactive-and-responsive",
+          "pass": true,
+          "evidence": [
+            {
+              "viewport": 360,
+              "page": 360
+            },
+            {
+              "viewport": 390,
+              "page": 390
+            },
+            {
+              "viewport": 768,
+              "page": 768
+            },
+            {
+              "viewport": 1280,
+              "page": 1280
+            },
+            {
+              "viewport": 1440,
+              "page": 1440
+            }
+          ]
+        },
+        {
+          "name": "axe",
+          "pass": false,
+          "error": "Axe violations: color-contrast\n\n1 !== 0\n"
+        },
+        {
+          "name": "keyboard",
+          "pass": true,
+          "evidence": {
+            "steps": 70
+          }
+        },
+        {
+          "name": "print-pdf",
+          "pass": true,
+          "evidence": {
+            "pdf": "w01.pdf",
+            "note": "PDF rendering/text extraction required separately; not native OS print-dialog certification"
+          }
+        },
+        {
+          "name": "errors-and-export",
+          "pass": true,
+          "evidence": "Recorded assertion and download checks passed"
+        }
+      ],
+      "axe": {
+        "violations": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+            "nodes": [
+              {
+                "target": [
+                  ".sm\\:justify-start > div > .group-hover\\:text-sky-800.text-base.tracking-tight > .text-sky-600"
+                ],
+                "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.01 (foreground color: #0084d1, background color: #feffff, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1"
+              }
+            ]
+          }
+        ],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "nodes": 10
+          }
+        ],
+        "passes": 31
+      },
+      "nojsEnabledInputs": [
+        {
+          "tag": "INPUT",
+          "id": "rent-amount",
+          "text": "",
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "id": "",
+          "text": "Currency",
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "id": "",
+          "text": "From period",
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "id": "",
+          "text": "To period",
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "id": "w02",
+      "sha": "f0320bae61112269b85465aa5f23ff91abeba8ad",
+      "origin": "https://6af69ad656cfa2344539eb98--rent-converter.netlify.app",
+      "gates": [
+        {
+          "name": "javascript-disabled",
+          "pass": false,
+          "error": "JS-off calculator inputs must not invite edits that cannot update results\n\n18 !== 0\n"
+        },
+        {
+          "name": "network-accepted",
+          "pass": true,
+          "evidence": {
+            "requests": 42,
+            "hosts": [
+              "6af69ad656cfa2344539eb98--rent-converter.netlify.app",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ],
+            "failures": []
+          }
+        },
+        {
+          "name": "network-rejected",
+          "pass": true,
+          "evidence": {
+            "requests": 42,
+            "hosts": [
+              "6af69ad656cfa2344539eb98--rent-converter.netlify.app",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ],
+            "failures": []
+          }
+        },
+        {
+          "name": "interactive-and-responsive",
+          "pass": true,
+          "evidence": [
+            {
+              "viewport": 360,
+              "page": 360
+            },
+            {
+              "viewport": 390,
+              "page": 390
+            },
+            {
+              "viewport": 768,
+              "page": 768
+            },
+            {
+              "viewport": 1280,
+              "page": 1280
+            },
+            {
+              "viewport": 1440,
+              "page": 1440
+            }
+          ]
+        },
+        {
+          "name": "axe",
+          "pass": false,
+          "error": "Axe violations: color-contrast\n\n1 !== 0\n"
+        },
+        {
+          "name": "keyboard",
+          "pass": true,
+          "evidence": {
+            "steps": 43
+          }
+        },
+        {
+          "name": "print-pdf",
+          "pass": true,
+          "evidence": {
+            "pdf": "w02.pdf",
+            "note": "PDF rendering/text extraction required separately; not native OS print-dialog certification"
+          }
+        },
+        {
+          "name": "errors-and-export",
+          "pass": true,
+          "evidence": "Recorded assertion and download checks passed"
+        }
+      ],
+      "axe": {
+        "violations": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+            "nodes": [
+              {
+                "target": [
+                  ".leading-tight > .group-hover\\:text-sky-800.tracking-tight.text-base > .text-sky-600"
+                ],
+                "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.02 (foreground color: #0084d1, background color: #ffffff, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".sm\\:justify-start > div > .group-hover\\:text-sky-800.tracking-tight.text-base > .text-sky-600"
+                ],
+                "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.01 (foreground color: #0084d1, background color: #feffff, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": 33
+      },
+      "nojsEnabledInputs": [
+        {
+          "tag": "INPUT",
+          "id": "budget-income",
+          "text": "",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "id": "budget-rent",
+          "text": "",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "id": "budget-expenses",
+          "text": "",
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "id": "",
+          "text": "USDCADEURGBPAUDNZDJPYCNYHKDSGDINRKRWCHFSEKNOKDKKMXNBRL",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "id": "housing-budget-income",
+          "text": "",
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "id": "housing-budget-currency",
+          "text": "USDCADEURGBPAUDNZDJPYCNYHKDSGDINRKRWCHFSEKNOKDKKMXNBRL",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "id": "housing-budget-rent",
+          "text": "",
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "id": "housing-budget-rent-frequency",
+          "text": "MonthlyWeeklyEvery 2 weeksEvery 3 monthsYearly",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "id": "housing-budget-utilities",
+          "text": "",
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "id": "housing-budget-utilities-frequency",
+          "text": "MonthlyWeeklyEvery 2 weeksEvery 3 monthsYearly",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "id": "housing-budget-parking",
+          "text": "",
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "id": "housing-budget-parking-frequency",
+          "text": "MonthlyWeeklyEvery 2 weeksEvery 3 monthsYearly",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "id": "housing-budget-insurance",
+          "text": "",
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "id": "housing-budget-insurance-frequency",
+          "text": "MonthlyWeeklyEvery 2 weeksEvery 3 monthsYearly",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "id": "housing-budget-other",
+          "text": "",
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "id": "housing-budget-other-frequency",
+          "text": "MonthlyWeeklyEvery 2 weeksEvery 3 monthsYearly",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "id": "housing-budget-commitments",
+          "text": "",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "id": "housing-budget-savings",
+          "text": "",
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "id": "w03",
+      "sha": "3c36fa89472caf610b81767fd051b74dbfc13cf8",
+      "origin": "https://6af69b0c73337f2e792caf49--rent-converter.netlify.app",
+      "gates": [
+        {
+          "name": "javascript-disabled",
+          "pass": false,
+          "error": "JS-off calculator inputs must not invite edits that cannot update results\n\n4 !== 0\n"
+        },
+        {
+          "name": "network-accepted",
+          "pass": true,
+          "evidence": {
+            "requests": 42,
+            "hosts": [
+              "6af69b0c73337f2e792caf49--rent-converter.netlify.app",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ],
+            "failures": []
+          }
+        },
+        {
+          "name": "network-rejected",
+          "pass": true,
+          "evidence": {
+            "requests": 42,
+            "hosts": [
+              "6af69b0c73337f2e792caf49--rent-converter.netlify.app",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ],
+            "failures": []
+          }
+        },
+        {
+          "name": "interactive-and-responsive",
+          "pass": true,
+          "evidence": [
+            {
+              "viewport": 360,
+              "page": 360
+            },
+            {
+              "viewport": 390,
+              "page": 390
+            },
+            {
+              "viewport": 768,
+              "page": 768
+            },
+            {
+              "viewport": 1280,
+              "page": 1280
+            },
+            {
+              "viewport": 1440,
+              "page": 1440
+            }
+          ]
+        },
+        {
+          "name": "axe",
+          "pass": false,
+          "error": "Axe violations: color-contrast\n\n1 !== 0\n"
+        },
+        {
+          "name": "keyboard",
+          "pass": true,
+          "evidence": {
+            "steps": 47
+          }
+        },
+        {
+          "name": "print-pdf",
+          "pass": true,
+          "evidence": {
+            "pdf": "w03.pdf",
+            "note": "PDF rendering/text extraction required separately; not native OS print-dialog certification"
+          }
+        },
+        {
+          "name": "errors-and-export",
+          "pass": true,
+          "evidence": "Recorded assertion and download checks passed"
+        }
+      ],
+      "axe": {
+        "violations": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+            "nodes": [
+              {
+                "target": [
+                  ".leading-tight.text-left > .group-hover\\:text-sky-800.text-base.tracking-tight > .text-sky-600"
+                ],
+                "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.02 (foreground color: #0084d1, background color: #ffffff, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".sm\\:justify-start > div > .group-hover\\:text-sky-800.text-base.tracking-tight > .text-sky-600"
+                ],
+                "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.01 (foreground color: #0084d1, background color: #feffff, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1"
+              }
+            ]
+          }
+        ],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "nodes": 7
+          }
+        ],
+        "passes": 31
+      },
+      "nojsEnabledInputs": [
+        {
+          "tag": "INPUT",
+          "id": "rpc_amount_input",
+          "text": "",
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "id": "",
+          "text": "Currency",
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "id": "rpc_rent_period",
+          "text": "HourlyDailyWeekly2 weeks4 weeks (28 days)Monthly (average)Annual",
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "id": "rpc_pay_freq",
+          "text": "Weekly paycheckBiweekly paycheck (every 2 weeks)Semimonthly paycheck (",
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "id": "w04",
+      "sha": "155b2a8247449e9523e0e950155338acf573e6c1",
+      "origin": "https://6af69d4ceab11ecb5c38ff5b--rent-converter.netlify.app",
+      "gates": [
+        {
+          "name": "javascript-disabled",
+          "pass": false,
+          "error": "JS-off calculator inputs must not invite edits that cannot update results\n\n5 !== 0\n"
+        },
+        {
+          "name": "network-accepted",
+          "pass": true,
+          "evidence": {
+            "requests": 42,
+            "hosts": [
+              "6af69d4ceab11ecb5c38ff5b--rent-converter.netlify.app",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ],
+            "failures": []
+          }
+        },
+        {
+          "name": "network-rejected",
+          "pass": true,
+          "evidence": {
+            "requests": 42,
+            "hosts": [
+              "6af69d4ceab11ecb5c38ff5b--rent-converter.netlify.app",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ],
+            "failures": []
+          }
+        },
+        {
+          "name": "interactive-and-responsive",
+          "pass": true,
+          "evidence": [
+            {
+              "viewport": 360,
+              "page": 360
+            },
+            {
+              "viewport": 390,
+              "page": 390
+            },
+            {
+              "viewport": 768,
+              "page": 768
+            },
+            {
+              "viewport": 1280,
+              "page": 1280
+            },
+            {
+              "viewport": 1440,
+              "page": 1440
+            }
+          ]
+        },
+        {
+          "name": "axe",
+          "pass": false,
+          "error": "Axe violations: color-contrast\n\n1 !== 0\n"
+        },
+        {
+          "name": "keyboard",
+          "pass": true,
+          "evidence": {
+            "steps": 31
+          }
+        },
+        {
+          "name": "print-pdf",
+          "pass": true,
+          "evidence": {
+            "pdf": "w04.pdf",
+            "note": "PDF rendering/text extraction required separately; not native OS print-dialog certification"
+          }
+        },
+        {
+          "name": "errors-and-export",
+          "pass": false,
+          "error": "The input did not match the regular expression /SUMMARY:Rent payment period starts: USD 1800\\.25/. Input:\n\n'BEGIN:VCALENDAR\\r\\n' +\n  'VERSION:2.0\\r\\n' +\n  'PRODID:-//RentConverter.com//Rent payment schedule//EN\\r\\n' +\n  'CALSCALE:GREGORIAN\\r\\n' +\n  'BEGIN:VEVENT\\r\\n' +\n  'UID:rent-2028-01-31-2028-04-30-monthly-USD-180025-20280131@rentconverter.com\\r\\n' +\n  'DTSTAMP:20261113T141125Z\\r\\n' +\n  'DTSTART;VALUE=DATE:20280131\\r\\n' +\n  'DTEND;VALUE=DATE:20280201\\r\\n' +\n  'SUMMARY:Rent due: USD 1800.25\\r\\n' +\n  'DESCRIPTION:Rent payment: USD 1800.25.\\\\nPayment frequency: monthly.\\\\nLease start: 2028-01-31. Calculated lease end: 2028-04-30.\\\\nThis schedule excludes dates on or after 2028-04-30. Payment dates are period starts\\\\, not legal due-date determinations.\\\\nNo weekend\\\\, holiday\\\\, grace-period or partial-payment adjustments. Confirm the dates and amount against your lease.\\\\nExported from RentConverter.com. This file is not a calendar subscription\\\\; future changes are not synced.\\r\\n' +\n  'TRANSP:TRANSPARENT\\r\\n' +\n  'END:VEVENT\\r\\n' +\n  'BEGIN:VEVENT\\r\\n' +\n  'UID:rent-2028-01-31-2028-04-30-monthly-USD-180025-20280229@rentconverter.com\\r\\n' +\n  'DTSTAMP:20261113T141125Z\\r\\n' +\n  'DTSTART;VALUE=DATE:20280229\\r\\n' +\n  'DTEND;VALUE=DATE:20280301\\r\\n' +\n  'SUMMARY:Rent due: USD 1800.25\\r\\n' +\n  'DESCRIPTION:Rent payment: USD 1800.25.\\\\nPayment frequency: monthly.\\\\nLease start: 2028-01-31. Calculated lease end: 2028-04-30.\\\\nThis schedule excludes dates on or after 2028-04-30. Payment dates are period starts\\\\, not legal due-date determinations.\\\\nNo weekend\\\\, holiday\\\\, grace-period or partial-payment adjustments. Confirm the dates and amount against your lease.\\\\nExported from RentConverter.com. This file is not a calendar subscription\\\\; future changes are not synced.\\r\\n' +\n  'TRANSP:TRANSPARENT\\r\\n' +\n  'END:VEVENT\\r\\n' +\n  'BEGIN:VEVENT\\r\\n' +\n  'UID:rent-2028-01-31-2028-04-30-monthly-USD-180025-20280331@rentconverter.com\\r\\n' +\n  'DTSTAMP:20261113T141125Z\\r\\n' +\n  'DTSTART;VALUE=DATE:20280331\\r\\n' +\n  'DTEND;VALUE=DATE:20280401\\r\\n' +\n  'SUMMARY:Rent due: USD 1800.25\\r\\n' +\n  'DESCRIPTION:Rent payment: USD 1800.25.\\\\nPayment frequency: monthly.\\\\nLease start: 2028-01-31. Calculated lease end: 2028-04-30.\\\\nThis schedule excludes dates on or after 2028-04-30. Payment dates are period starts\\\\, not legal due-date determinations.\\\\nNo weekend\\\\, holiday\\\\, grace-period or partial-payment adjustments. Confirm the dates and amount against your lease.\\\\nExported from RentConverter.com. This file is not a calendar subscription\\\\; future changes are not synced.\\r\\n' +\n  'TRANSP:TRANSPARENT\\r\\n' +\n  'END:VEVENT\\r\\n' +\n  'END:VCALENDAR\\r\\n'\n"
+        }
+      ],
+      "axe": {
+        "violations": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+            "nodes": [
+              {
+                "target": [
+                  ".leading-tight > .group-hover\\:text-sky-800.text-base.tracking-tight > .text-sky-600"
+                ],
+                "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.01 (foreground color: #0084d1, background color: #feffff, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".sm\\:justify-start > div > .group-hover\\:text-sky-800.text-base.tracking-tight > .text-sky-600"
+                ],
+                "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.01 (foreground color: #0084d1, background color: #feffff, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": 28
+      },
+      "nojsEnabledInputs": [
+        {
+          "tag": "INPUT",
+          "id": "schedule-start-date",
+          "text": "",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "id": "schedule-term-months",
+          "text": "",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "id": "schedule-rent",
+          "text": "",
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "id": "",
+          "text": "USDCADEURGBPAUDNZDJPYCNYHKDSGDINRKRWCHFSEKNOKDKKMXNBRL",
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "id": "schedule-frequency",
+          "text": "MonthlyWeeklyFortnightly or biweekly (14 days)Every 4 weeks (28 days)",
+          "disabled": false
+        }
+      ]
+    }
+  ]
+}

@@ -14,7 +14,7 @@ const FOOTER_LINKS = [
 
 export default function Footer() {
   const year = 2026;
-  const { openPreferences } = useAnalyticsConsent();
+  const { openPreferences, hydrated } = useAnalyticsConsent();
 
   return (
     <>
@@ -36,7 +36,7 @@ export default function Footer() {
               />
               <div>
                 <div className="text-base font-bold tracking-tight text-slate-950 group-hover:text-sky-800">
-                  RentConverter<span className="text-sky-600">.com</span>
+                  RentConverter<span className="text-sky-700">.com</span>
                 </div>
                 <div className="text-xs font-semibold text-slate-600">
                   Fast, private rent calculators
@@ -60,6 +60,7 @@ export default function Footer() {
               <button
                 type="button"
                 onClick={openPreferences}
+                disabled={!hydrated}
                 className="cursor-pointer rounded-xl px-3 py-2 text-sm font-semibold text-slate-700 transition-colors hover:bg-sky-50 hover:text-sky-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white print:hidden"
               >
                 Analytics preferences

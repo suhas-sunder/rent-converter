@@ -1,0 +1,8 @@
+{
+  "events": 3,
+  "CRLF": true,
+  "allPhysicalLinesAtMost75Bytes": true,
+  "UIDsAndDateOnlyStartEndMatchPreRepair": true,
+  "summary": "Rent payment period starts: USD 1800.25",
+  "alarms": false
+}

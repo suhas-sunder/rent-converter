@@ -1,0 +1,57 @@
+{
+  "browser": "145.0.7632.6",
+  "at": "2026-11-13T14:14:14.297Z",
+  "base": "http://127.0.0.1:3028",
+  "checks": [
+    {
+      "path": "/",
+      "preHydrationDisabled": true,
+      "postHydrationEditable": true,
+      "recalculated": true,
+      "menuKeyboardEscape": true,
+      "errors": []
+    },
+    {
+      "path": "/rent-budget-calculator",
+      "preHydrationDisabled": true,
+      "postHydrationEditable": true,
+      "recalculated": true,
+      "menuKeyboardEscape": true,
+      "errors": []
+    },
+    {
+      "path": "/rent-per-paycheck-calculator",
+      "preHydrationDisabled": true,
+      "postHydrationEditable": true,
+      "recalculated": true,
+      "menuKeyboardEscape": true,
+      "errors": []
+    },
+    {
+      "path": "/rent-schedule-calculator",
+      "preHydrationDisabled": true,
+      "postHydrationEditable": true,
+      "recalculated": true,
+      "menuKeyboardEscape": true,
+      "errors": []
+    },
+    {
+      "path": "/weekly-to-monthly-rent-converter",
+      "amount": "700.50",
+      "expected": "3,043.84",
+      "pass": true
+    },
+    {
+      "path": "/biweekly-to-weekly-rent-converter",
+      "amount": "900.50",
+      "expected": "450.25",
+      "pass": true
+    },
+    {
+      "path": "/pcm-to-pw-calculator",
+      "amount": "1500.50",
+      "expected": "345.32",
+      "pass": true
+    }
+  ]
+}

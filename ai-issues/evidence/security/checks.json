@@ -1,0 +1,44 @@
+[
+  {
+    "check": "typecheck",
+    "exitCode": 0,
+    "startedAtUtc": "2026-11-13T14:08:46.0190278Z",
+    "finishedAtUtc": "2026-11-13T14:08:53.5925530Z",
+    "log": "qa-typecheck.log"
+  },
+  {
+    "check": "test",
+    "exitCode": 0,
+    "startedAtUtc": "2026-11-13T14:08:53.6134171Z",
+    "finishedAtUtc": "2026-11-13T14:08:54.3692971Z",
+    "log": "qa-test.log"
+  },
+  {
+    "check": "build",
+    "exitCode": 0,
+    "startedAtUtc": "2026-11-13T14:08:54.3737375Z",
+    "finishedAtUtc": "2026-11-13T14:09:04.0109373Z",
+    "log": "qa-build.log"
+  },
+  {
+    "check": "validate:redirects",
+    "exitCode": 0,
+    "startedAtUtc": "2026-11-13T14:09:04.0129853Z",
+    "finishedAtUtc": "2026-11-13T14:09:04.3567833Z",
+    "log": "qa-validate-redirects.log"
+  },
+  {
+    "check": "validate:breadcrumbs",
+    "exitCode": 0,
+    "startedAtUtc": "2026-11-13T14:09:04.3580983Z",
+    "finishedAtUtc": "2026-11-13T14:09:05.1278340Z",
+    "log": "qa-validate-breadcrumbs.log"
+  },
+  {
+    "check": "release:audit",
+    "exitCode": 0,
+    "startedAtUtc": "2026-11-13T14:09:05.1289956Z",
+    "finishedAtUtc": "2026-11-13T14:09:06.0353760Z",
+    "log": "qa-release-audit.log"
+  }
+]

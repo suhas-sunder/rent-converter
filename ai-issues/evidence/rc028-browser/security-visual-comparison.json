@@ -1,0 +1,58 @@
+[
+  {
+    "file": "security-final\\urgent-screen-1280.png",
+    "matchesReviewedProductImage": true
+  },
+  {
+    "file": "security-final\\urgent-screen-1440.png",
+    "matchesReviewedProductImage": true
+  },
+  {
+    "file": "security-final\\urgent-screen-360.png",
+    "matchesReviewedProductImage": true
+  },
+  {
+    "file": "security-final\\urgent-screen-390.png",
+    "matchesReviewedProductImage": true
+  },
+  {
+    "file": "security-final\\urgent-screen-768.png",
+    "matchesReviewedProductImage": true
+  },
+  {
+    "file": "security-final\\urgent-nojs-1280.png",
+    "matchesReviewedProductImage": true
+  },
+  {
+    "file": "security-final\\urgent-nojs-1440.png",
+    "matchesReviewedProductImage": true
+  },
+  {
+    "file": "security-final\\urgent-nojs-360.png",
+    "matchesReviewedProductImage": true
+  },
+  {
+    "file": "security-final\\urgent-nojs-390.png",
+    "matchesReviewedProductImage": true
+  },
+  {
+    "file": "security-final\\urgent-nojs-768.png",
+    "matchesReviewedProductImage": true
+  },
+  {
+    "file": "security-zoom\\urgent-native-zoom200-1440-viewport.png",
+    "matchesReviewedProductImage": false
+  },
+  {
+    "file": "security-zoom\\urgent-native-zoom200-1440.png",
+    "matchesReviewedProductImage": false
+  },
+  {
+    "file": "security-zoom\\urgent-native-zoom200-720-viewport.png",
+    "matchesReviewedProductImage": false
+  },
+  {
+    "file": "security-zoom\\urgent-native-zoom200-720.png",
+    "matchesReviewedProductImage": false
+  }
+]

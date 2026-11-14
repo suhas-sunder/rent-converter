@@ -1,52 +1,45 @@
-# RentConverter implementation handoff — November 13, 2026
+# RentConverter owner handoff — RC-028 acceptance complete
 
-Five implemented candidates are available as draft PRs and immutable previews. Production is unchanged. **Do not merge yet:** the requested print/PDF, JavaScript-disabled and runtime network checks remain incomplete. This is a substantial implementation milestone with explicit acceptance gaps, not a completed SEO recovery or AdSense approval.
+**Recommend approving urgent PR #2 first.** The five existing implementations now pass the requested scoped browser acceptance after genuine fallback, keyboard-focus, contrast, print and calendar-wording repairs. Every release is still a draft; main and production are unchanged.
 
-The [release ledger](RC-RELEASE-LEDGER.md) is the source of truth for exact branches, SHAs, PRs and previews. The [browser report](RC-HOSTED_BROWSER_ACCEPTANCE.md), [HTTP report](RC-HOSTED_HTTP_ACCEPTANCE.md), [visual review](RC-HOSTED_VISUAL_REVIEW.md) and [integration report](RC-INTEGRATION_ACCEPTANCE.md) distinguish direct observations from test/source evidence. Earlier package reports retain their local-review timestamps and may say a preview was pending; use the ledger for the later staged identity.
+The [release ledger](RC-RELEASE-LEDGER.md) contains all exact final commits and immutable preview links. The [browser evidence report](RC-028_BROWSER_ACCEPTANCE_EVIDENCE.md) links actual PDFs, CSV/ICS downloads, network traces, screenshots, test results and remaining limits. It supersedes the previous tooling-limit HOLD notes.
 
-## What a renter can do now
-
-| Candidate | Actual improvement | Publication recommendation |
+| Review order | What the owner is approving | Recommendation |
 | --- | --- | --- |
-| Urgent, PR 2 | Invalid money no longer silently changes value; four-week examples agree with calculator math; preview analytics are gated to the production origin | First merge candidate only after remaining gates pass |
-| W01, PR 3 | Compare up to three listings with different rent periods and recurring extras; save locally and export CSV | Future weekly release, currently HOLD |
-| W02, PR 4 | Itemize housing bills against take-home income, commitments and savings | Future weekly release, currently HOLD |
-| W03, PR 5 | Allocate the rent still needed across actual paydays before a deadline, preserving every cent | Future weekly release, currently HOLD |
-| W04, PR 6 | Download displayed rent dates and amounts as an all-day calendar file | Future weekly release, currently HOLD; inspect the repaired mobile table |
+| [Urgent PR #2](https://github.com/suhas-sunder/rent-converter/pull/2) | Reject silently misinterpreted money, correct four-week copy, isolate preview analytics; disable nonfunctional no-JS controls, preserve native navigation, repair focus/contrast/print | **RELEASE FOR OWNER APPROVAL — first** |
+| [Security PR #7](https://github.com/suhas-sunder/rent-converter/pull/7) | Compatible package/lock patches, audit 11 → 0; no weekly product changes | **RELEASE FOR OWNER APPROVAL — separately after urgent** |
+| [W01 PR #3](https://github.com/suhas-sunder/rent-converter/pull/3) | Compare and export up to three listings, with explicit local saving | **RELEASE FOR OWNER APPROVAL — its scheduled week** |
+| [W02 PR #4](https://github.com/suhas-sunder/rent-converter/pull/4) | Itemized take-home housing budget, independent of gross-income comparison | **RELEASE FOR OWNER APPROVAL — its scheduled week** |
+| [W03 PR #5](https://github.com/suhas-sunder/rent-converter/pull/5) | Exact reserves across actual paydays, with named keyboard-scrollable table | **RELEASE FOR OWNER APPROVAL — its scheduled week** |
+| [W04 PR #6](https://github.com/suhas-sunder/rent-converter/pull/6) | Date-only calendar export now titled “Rent payment period starts” | **RELEASE FOR OWNER APPROVAL — its scheduled week** |
+| [QA PR #8](https://github.com/suhas-sunder/rent-converter/pull/8) | Harness, evidence and assembled integration checkpoint, targeting build/rc27-recovery | **HOLD FOR PRODUCTION / REVIEW ONLY** |
 
-The original calculators remain. No new indexable pages were created. No ad settings, ad lifecycle, ads.txt contents, canonicals, sitemap population or redirects were changed. The public ads.txt endpoint already works; changing it would not resolve an account-side refresh delay. Search history is retained as history, not represented as fresh rankings.
+Approval recommendations are not merge authorization. Each weekly package depends on urgent; none includes the other weeks' features. Security now explicitly includes urgent as a prerequisite and contains no weekly features. Its final guarded immutable preview passes all browser, network, storage, native zoom and PDF checks, plus four delayed-hydration and three protected-converter checks. The earlier CLI authentication obstacle was bypassed through the existing PR preview build. Review urgent first so the subsequent maintenance diff remains easy to inspect.
 
-## Fifteen-minute owner review
+## What was actually verified
 
-1. **Minutes 0–3: urgent preview.** Enter 1e3 in the homepage rent field. Expect an error and dashes. Enter 500 weekly: expect 2,172.62 monthly and 2,000 every four weeks. Print/save PDF, inspect actual pagination and verify useful results are present. Repeat one protected converter if time permits.
-2. **Minutes 3–6: W01.** Compare 500 weekly plus 100 monthly extras against 2,200 monthly. Expect 2,272.62 versus 2,200. Add a third listing, save, reload and explicitly load it. Download CSV and compare displayed totals. Check the lower cards at 360px.
-3. **Minutes 6–9: W02.** Expand the optional budget. Enter take-home income 4,000; rent 500 weekly; utilities 300 quarterly; insurance 120 yearly; other commitments 1,000; savings 500. Expect housing 2,282.62 and remaining 217.38. Enter negative rent: the result must disappear. Restore it, reload and print the expanded panel.
-4. **Minutes 9–12: W03.** Use biweekly pay, bill 2,000, saved 500, next payday January 8, 2027 and due February 1. Expect two 750 reserves. Move the due date to January 22 and compare excluding/including that payday. Print with the section open.
-5. **Minutes 12–15: W04.** Enter January 31, 2028, three months, 1,800.25 monthly. Expect January 31, February 29 and March 31. At 360px check complete amounts and dates. Download the calendar file, preview it in a disposable/test calendar without importing into a personal calendar unless desired, and check all three dates and amounts.
+- All six local checks on each final product branch: **148 /157 /156 /160 /158 tests**, successful typecheck/build, redirect/breadcrumb validation and release audit. Each exact immutable preview passes 60-route /112-redirect /60-link HTTP checks.
+- **45/45 main browser gates**, **11/11 focused gates**, five widths and actual native 200% Chromium zoom at two physical widths per candidate. Keyboard operation, labels/errors, live-region DOM semantics, storage failures, large values and real downloads exercised.
+- **Six actual PDFs /18 pages**, extracted, rendered and visually reviewed. Required amounts/dates/assumptions remain; no blank pages, clipped results, navigation overlap or ad placeholders.
+- Both accepted and rejected synthetic consent sessions captured actual requests: **540 requests**, only preview assets plus Google Fonts; no production analytics/ad providers or request/page errors.
+- Axe zero automated violations. All incomplete disclosure-glyph contrast checks were manually measured and visually reviewed; they pass. Actual screen-reader speech is outside the claim.
+- Security final preview: **148 tests**, zero audit findings, 9 browser gates, 2 storage cases, native 200% zoom and two PDFs; both consent states isolated.
+- Assembled source plus security: **186 tests /25 registered test files**, all full checks, real browser checks and independent Git source-equivalence proof across **223 production files**.
 
-Additional release checks require a browser with suitable controls: disable JavaScript and reload each candidate to check the visible fallback and inactive controls; restore JavaScript afterward. In developer tools, inspect requests after rejecting and accepting optional analytics on previews: no live analytics or ad requests should be sent. Check keyboard navigation and a screen reader, and confirm usable PDF output on each affected page. These are outstanding checks, not conditions the agent observed passing.
+## Short owner review
 
-## Release and rollback discipline
+1. Open urgent's exact preview from the ledger. `1e3` must produce an error and dashes; 500 weekly produces 2,172.62 monthly and 2,000 every four weeks. Review the attached valid/invalid PDFs.
+2. W01: compare 500 weekly +100 monthly extras with 2,200 monthly; add a third listing at 2,250. Inspect all three totals and downloaded CSV.
+3. W02: take-home 4,000; rent 500 weekly; utilities 300 quarterly; insurance 120 yearly; commitments 1,000; savings 500. Housing is 2,282.62 and remainder 217.38. Negative rent removes stale results.
+4. W03: bill 2,000, saved 500, biweekly payday January 8 2027, due February 1: two 750 reserves. Test the explicitly optional due-day payday inclusion.
+5. W04: January 31 2028, three months, 1,800.25 monthly: January 31, February 29 and March 31; downloaded titles describe period starts, not confirmed legal deadlines.
 
-Review urgent separately before the weekly features. All weekly branches share its f344ad2 base and are independent of one another. The common one-line test command conflicts when combining weeks: preserve every test file exactly once. W03/W04 share the same precision formatter; retain it once. The integration report proves the original combination and records the mobile repair separately. Any assembled production candidate needs a new exact SHA, full suites and hosted smoke check.
+Optional environment smoke checks are the owner's native Print/Save PDF dialog, preferred screen reader and a disposable calendar import. These do not replace or negate the completed browser/PDF checks. Minor print pagination/utility-label polish and tall screenshot-compositor limits are documented.
 
-Leave drafts unmerged to defer publication. If an owner-approved release later needs rollback, prepare a separate reviewed revert branch, preserve dependent shared fixes and tests, validate it, then ask the owner to merge. No reset or automatic rollback deploy is authorized.
+## Merge and rollback discipline
 
-## Known remaining work
+Do not merge the combined review branch into main. Release urgent, security and each week independently. Preserve the unique union of test registrations when package.json conflicts; retain shared exact-money formatting. Rebuild and rerun appropriate gates on each new candidate assembled with then-current main.
 
-- Finish the browser gates above. The available in-app browser has no JavaScript-disable or request-capture capability. Its print action blocked input and exposed no targetable print dialog; closing the test tab recovered it. No PDF acceptance is claimed.
-- Complete exhaustive interactive/human-value review of all canonical routes. The full static/HTTP route and redirect inventory is complete, but the working editorial matrix is not a substitute for every user journey.
-- Address existing dependency advisories in a separate reviewed patch. The clean install still reports 11 findings, including one critical; counts match the pre-change baseline. No dependency was added by these features. See the independent review for applicability and suggested Vite patch investigation.
-- Recheck current ranking/page data before future consolidation decisions; supplied search exports end November 10. No bulk noindex, route expansion or keyword-page factory was performed.
-- Keep the protected ad-placeholder policy intact. Current source has static reserves; do not invent a filled-ad lifecycle to satisfy a policy assertion.
-- Continue later roadmap work only as genuinely useful, independently validated packages. No empty W05–W52 branches were created.
+Before publication, simply leave the draft unmerged. After a separately approved release, use a reviewed revert branch, preserve fixes needed by later packages, run checks and obtain the owner's merge decision. Do not reset main or automatically restore an old Netlify deployment. Reverting security reintroduces known vulnerable versions.
 
-## Workspace state
-
-The original rent-converter checkout remains clean at 131ae371aabf8c8b1871116edc3d5d09048ba965. Remote main and the current Netlify production deploy remain 50c4647e5a61f05e1aeb4db04f4918bbfb6c1c5a (deploy 6ad02cf4ac34d1b203b9b866). Work was isolated in rent-converter-urgent, rent-converter-w01 through w04 and rent-converter-rc27. Task-generated QA logs and artifacts are intentionally retained locally; no unrelated work was discarded. The aggregate build branch is an integration/review checkpoint, not an instruction to merge all weeks together.
-
-## Subsequent independent review update — November 13, 2026
-
-After the five staged drafts, an independent GitHub/Netlify review verified each preview's exact head commit and found one new W04 issue: generated .ics events are titled `Rent due: <amount>`, but the file itself clarifies that these dates are calculated payment-period starts rather than necessarily contractual due dates. This should be corrected before publishing W04, with regression tests and a new immutable preview.
-
-The outstanding no-JavaScript browser, actual print/PDF and runtime request-capture checks remain open. Complete them using an appropriate Playwright/Chromium harness; the earlier browser tool's limitation is not proof of a site problem. All five drafts remain HOLD and main is untouched. Detailed checklist: `RC-028_FINAL_BROWSER_ACCEPTANCE.md`.
+Production remains main `50c4647e5a61f05e1aeb4db04f4918bbfb6c1c5a`, Netlify `6ad02cf4ac34d1b203b9b866`. The original checkout remains clean. No paid-service, AdSense, ad lifecycle, route, sitemap, canonical or schema changes were made. Later roadmap work and broader editorial/SEO recovery remain separate tasks; no recovery or approval outcome is promised.

@@ -1,0 +1,79 @@
+Rent conversion calculator
+Rent Converter Calculator
+Convert an entered rent amount between weekly, monthly, 4-week, biweekly, daily, hourly, and
+annual periods using one consistent annual basis.
+Rent amount From To
+500 USD Weekly Monthly
+Monthly rent
+$2,172.62
+Hourly rent Daily rent
+$2.98 $71.43
+Weekly rent Every 2 weeks rent
+$500.00 $1,000.00
+Every 4 weeks (28 days) rent Annual rent
+$2,000.00 $26,071.43
+4-week vs monthly
+Monthly minus 4-week = $172.62 Difference ≈ 8.63%
+A 4-week rent period is 28 days. A true average month is about 30.42 days, so the monthly equivalent is different.
+Assumptions: 365-day year, 28-day 4-week period ▾
+Compare rental listings All listings use
+Compare up to three places on the same monthly and annual basis, including recurring bills. USD
+Replace the example listings with your own amounts.
+Currency labels apply to every listing; no exchange-rate conversion is performed. Monthly extras can include utilities,
+parking, insurance or recurring fees.
+Listing 1 Listing 2 Listing 3
+Listing name Listing name Listing name
+Weekly listing Monthly listing Third listing — utilities inc
+Advertised rent (USD) Advertised rent (USD) Advertised rent (USD)
+500 2200 2250
+Rent period Rent period Rent period
+Weekly Monthly Monthly
+Monthly extras (USD) Monthly extras (USD) Monthly extras (USD)
+100 0 0
+Enter 0 if none. Add only costs not Enter 0 if none. Add only costs not Enter 0 if none. Add only costs not
+included in the advertised rent. included in the advertised rent. included in the advertised rent.
+Total recurring housing cost · USD
+Lowest estimated cost: Monthly listing. Compare location and included services separately.
+Weekly listing Monthly listing Third listing — utilities
+included
+$2,272.62 $2,200.00
+$2,250.00
+monthly total monthly total
+monthly total
+Monthly rent equivalent Monthly rent equivalent
+$2,172.62 $2,200.00 Monthly rent equivalent
+Monthly extras Monthly extras $2,250.00
+$100.00 $0.00 Monthly extras
+Annual total Annual total $0.00
+$27,271.43 $26,400.00 Annual total
+$27,000.00
+More than the lowest cost More than the lowest cost
+$72.62/month $0.00/month More than the lowest cost
+$871.43/year $0.00/year $50.00/month
+$600.00/year
+Weekly, 14-day and 28-day rents use a 365-day daily-rate equivalent; monthly rents use 12 months. These are cost
+comparisons, not actual payment schedules. Deposits and one-off move-in costs are excluded. Precision is retained
+internally; money and differences between displayed totals are rounded to cents, so displayed parts can differ from
+totals by a cent.
+Listings stay on this device. Nothing is saved until you choose “Save in this browser”; changes are not saved automatically. Saving replaces
+the previous comparison on this browser. Avoid entering private addresses or personal details on shared devices. Use the page’s Print /
+Save PDF control to print this comparison.
+Frequently Asked Questions
+▾
+What does this rent converter calculate?
+▾
+How do you convert weekly rent to monthly rent?
+▾
+Why is every-4-weeks rent different from monthly rent?
+▾
+Does this include utilities, parking, fees, or deposits?
+▾
+Does the calculator preserve decimals?
+▾
+Can I save or share the result?
+RentConverter.com About Methodology Contact Sitemap Privacy Policy
+Fast, private rent
+calculators Terms of Service Cookies
+(c) 2026 RentConverter.com. Rent conversion and renter tools.
+Tools on this site are for informational, budgeting, and comparison purposes only. Always confirm payment schedules
+and lease terms in your rental agreement. This website does not provide financial, legal, or tax advice.

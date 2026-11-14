@@ -1,5 +1,6 @@
 # Hosted browser acceptance — November 13, 2026
 
+> **RC-028 closure update:** The historical findings/status below are superseded for current candidates by [completed browser acceptance](RC-028_BROWSER_ACCEPTANCE_EVIDENCE.md) and the [release ledger](RC-RELEASE-LEDGER.md). Preserve this report as evidence for its listed original commits.
 These are actual JavaScript-enabled browser observations on immutable Netlify previews, not assertions inferred from unit tests. Exact candidate identities are in RC-RELEASE-LEDGER.md. Screenshots and downloaded synthetic examples are in evidence/hosted. No personal rental or financial data was used.
 
 ## Urgent candidate

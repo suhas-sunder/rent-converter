@@ -1,0 +1,243 @@
+{
+  "started": "2026-11-13T23:57:57.556Z",
+  "node": "v25.9.0",
+  "browser": "145.0.7632.6",
+  "networkMode": "off-origin requests blocked except Google Fonts GET CSS/font; no production consent acceptance",
+  "localAssembly": null,
+  "candidates": [
+    {
+      "id": "urgent",
+      "package": "security",
+      "sha": "d6906eff00cc3efdbf1f833580a2fd96e8b9c53a",
+      "origin": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app",
+      "path": "/",
+      "gates": [
+        {
+          "name": "storage-corrupt",
+          "pass": true,
+          "evidence": {
+            "mode": "corrupt",
+            "calculationUsable": true,
+            "storageScope": "synthetic context only"
+          },
+          "pageErrors": [],
+          "network": [
+            {
+              "host": "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "type": "document",
+              "action": "allow"
+            },
+            {
+              "host": "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "type": "image",
+              "action": "allow"
+            },
+            {
+              "host": "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "type": "script",
+              "action": "allow"
+            },
+            {
+              "host": "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "type": "script",
+              "action": "allow"
+            },
+            {
+              "host": "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "type": "script",
+              "action": "allow"
+            },
+            {
+              "host": "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "type": "script",
+              "action": "allow"
+            },
+            {
+              "host": "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "type": "script",
+              "action": "allow"
+            },
+            {
+              "host": "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "type": "script",
+              "action": "allow"
+            },
+            {
+              "host": "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "type": "script",
+              "action": "allow"
+            },
+            {
+              "host": "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "type": "script",
+              "action": "allow"
+            },
+            {
+              "host": "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "type": "script",
+              "action": "allow"
+            },
+            {
+              "host": "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "type": "script",
+              "action": "allow"
+            },
+            {
+              "host": "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "type": "script",
+              "action": "allow"
+            },
+            {
+              "host": "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "type": "script",
+              "action": "allow"
+            },
+            {
+              "host": "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "type": "script",
+              "action": "allow"
+            },
+            {
+              "host": "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "type": "script",
+              "action": "allow"
+            },
+            {
+              "host": "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "type": "script",
+              "action": "allow"
+            },
+            {
+              "host": "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "type": "stylesheet",
+              "action": "allow"
+            },
+            {
+              "host": "fonts.googleapis.com",
+              "type": "stylesheet",
+              "action": "allow"
+            },
+            {
+              "host": "fonts.gstatic.com",
+              "type": "font",
+              "action": "allow"
+            }
+          ]
+        },
+        {
+          "name": "storage-unavailable",
+          "pass": true,
+          "evidence": {
+            "mode": "unavailable",
+            "calculationUsable": true,
+            "storageScope": "synthetic context only"
+          },
+          "pageErrors": [],
+          "network": [
+            {
+              "host": "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "type": "document",
+              "action": "allow"
+            },
+            {
+              "host": "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "type": "image",
+              "action": "allow"
+            },
+            {
+              "host": "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "type": "script",
+              "action": "allow"
+            },
+            {
+              "host": "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "type": "script",
+              "action": "allow"
+            },
+            {
+              "host": "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "type": "script",
+              "action": "allow"
+            },
+            {
+              "host": "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "type": "script",
+              "action": "allow"
+            },
+            {
+              "host": "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "type": "script",
+              "action": "allow"
+            },
+            {
+              "host": "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "type": "script",
+              "action": "allow"
+            },
+            {
+              "host": "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "type": "script",
+              "action": "allow"
+            },
+            {
+              "host": "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "type": "script",
+              "action": "allow"
+            },
+            {
+              "host": "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "type": "script",
+              "action": "allow"
+            },
+            {
+              "host": "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "type": "script",
+              "action": "allow"
+            },
+            {
+              "host": "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "type": "script",
+              "action": "allow"
+            },
+            {
+              "host": "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "type": "script",
+              "action": "allow"
+            },
+            {
+              "host": "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "type": "script",
+              "action": "allow"
+            },
+            {
+              "host": "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "type": "script",
+              "action": "allow"
+            },
+            {
+              "host": "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "type": "script",
+              "action": "allow"
+            },
+            {
+              "host": "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "type": "stylesheet",
+              "action": "allow"
+            },
+            {
+              "host": "fonts.googleapis.com",
+              "type": "stylesheet",
+              "action": "allow"
+            },
+            {
+              "host": "fonts.gstatic.com",
+              "type": "font",
+              "action": "allow"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "finished": "2026-11-13T23:58:00.882Z"
+}

@@ -1,0 +1,282 @@
+{
+  "started": "2026-11-13T14:40:23.132Z",
+  "method": "Actual chrome.tabs.setZoom(2) in a fresh, disposable Chromium profile with a local QA-only extension",
+  "candidates": [
+    {
+      "id": "urgent",
+      "sha": "5bc6441f4eb568d6ca5c0bd32ea56410b4d5f5aa",
+      "origin": "http://localhost:3029",
+      "path": "/",
+      "views": [
+        {
+          "physicalViewport": 1440,
+          "innerWidth": 720,
+          "devicePixelRatio": 2,
+          "scrollWidth": 720,
+          "sm": true,
+          "cssZoom": "1",
+          "clippedMoney": [],
+          "captureMetrics": {
+            "content": {
+              "x": 0,
+              "y": 0,
+              "width": 1440,
+              "height": 28088
+            },
+            "cssContent": {
+              "x": 0,
+              "y": 0,
+              "width": 720,
+              "height": 14044
+            }
+          }
+        },
+        {
+          "physicalViewport": 720,
+          "innerWidth": 360,
+          "devicePixelRatio": 2,
+          "scrollWidth": 360,
+          "sm": false,
+          "cssZoom": "1",
+          "clippedMoney": [],
+          "captureMetrics": {
+            "content": {
+              "x": 0,
+              "y": 0,
+              "width": 720,
+              "height": 41939
+            },
+            "cssContent": {
+              "x": 0,
+              "y": 0,
+              "width": 360,
+              "height": 20969
+            }
+          }
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "w01",
+      "sha": "5bc6441f4eb568d6ca5c0bd32ea56410b4d5f5aa",
+      "origin": "http://localhost:3029",
+      "path": "/",
+      "views": [
+        {
+          "physicalViewport": 1440,
+          "innerWidth": 720,
+          "devicePixelRatio": 2,
+          "scrollWidth": 720,
+          "sm": true,
+          "cssZoom": "1",
+          "clippedMoney": [],
+          "captureMetrics": {
+            "content": {
+              "x": 0,
+              "y": 0,
+              "width": 1440,
+              "height": 29631
+            },
+            "cssContent": {
+              "x": 0,
+              "y": 0,
+              "width": 720,
+              "height": 14815
+            }
+          }
+        },
+        {
+          "physicalViewport": 720,
+          "innerWidth": 360,
+          "devicePixelRatio": 2,
+          "scrollWidth": 360,
+          "sm": false,
+          "cssZoom": "1",
+          "clippedMoney": [],
+          "captureMetrics": {
+            "content": {
+              "x": 0,
+              "y": 0,
+              "width": 720,
+              "height": 43514
+            },
+            "cssContent": {
+              "x": 0,
+              "y": 0,
+              "width": 360,
+              "height": 21757
+            }
+          }
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "w02",
+      "sha": "5bc6441f4eb568d6ca5c0bd32ea56410b4d5f5aa",
+      "origin": "http://localhost:3029",
+      "path": "/rent-budget-calculator",
+      "views": [
+        {
+          "physicalViewport": 1440,
+          "innerWidth": 720,
+          "devicePixelRatio": 2,
+          "scrollWidth": 720,
+          "sm": true,
+          "cssZoom": "1",
+          "clippedMoney": [],
+          "captureMetrics": {
+            "content": {
+              "x": 0,
+              "y": 0,
+              "width": 1440,
+              "height": 11960
+            },
+            "cssContent": {
+              "x": 0,
+              "y": 0,
+              "width": 720,
+              "height": 5980
+            }
+          }
+        },
+        {
+          "physicalViewport": 720,
+          "innerWidth": 360,
+          "devicePixelRatio": 2,
+          "scrollWidth": 360,
+          "sm": false,
+          "cssZoom": "1",
+          "clippedMoney": [],
+          "captureMetrics": {
+            "content": {
+              "x": 0,
+              "y": 0,
+              "width": 720,
+              "height": 17766
+            },
+            "cssContent": {
+              "x": 0,
+              "y": 0,
+              "width": 360,
+              "height": 8883
+            }
+          }
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "w03",
+      "sha": "5bc6441f4eb568d6ca5c0bd32ea56410b4d5f5aa",
+      "origin": "http://localhost:3029",
+      "path": "/rent-per-paycheck-calculator",
+      "views": [
+        {
+          "physicalViewport": 1440,
+          "innerWidth": 720,
+          "devicePixelRatio": 2,
+          "scrollWidth": 720,
+          "sm": true,
+          "cssZoom": "1",
+          "clippedMoney": [],
+          "captureMetrics": {
+            "content": {
+              "x": 0,
+              "y": 0,
+              "width": 1440,
+              "height": 11615
+            },
+            "cssContent": {
+              "x": 0,
+              "y": 0,
+              "width": 720,
+              "height": 5807
+            }
+          }
+        },
+        {
+          "physicalViewport": 720,
+          "innerWidth": 360,
+          "devicePixelRatio": 2,
+          "scrollWidth": 360,
+          "sm": false,
+          "cssZoom": "1",
+          "clippedMoney": [],
+          "captureMetrics": {
+            "content": {
+              "x": 0,
+              "y": 0,
+              "width": 720,
+              "height": 17017
+            },
+            "cssContent": {
+              "x": 0,
+              "y": 0,
+              "width": 360,
+              "height": 8508
+            }
+          }
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "w04",
+      "sha": "5bc6441f4eb568d6ca5c0bd32ea56410b4d5f5aa",
+      "origin": "http://localhost:3029",
+      "path": "/rent-schedule-calculator",
+      "views": [
+        {
+          "physicalViewport": 1440,
+          "innerWidth": 720,
+          "devicePixelRatio": 2,
+          "scrollWidth": 720,
+          "sm": true,
+          "cssZoom": "1",
+          "clippedMoney": [],
+          "captureMetrics": {
+            "content": {
+              "x": 0,
+              "y": 0,
+              "width": 1440,
+              "height": 6254
+            },
+            "cssContent": {
+              "x": 0,
+              "y": 0,
+              "width": 720,
+              "height": 3127
+            }
+          }
+        },
+        {
+          "physicalViewport": 720,
+          "innerWidth": 360,
+          "devicePixelRatio": 2,
+          "scrollWidth": 360,
+          "sm": false,
+          "cssZoom": "1",
+          "clippedMoney": [],
+          "captureMetrics": {
+            "content": {
+              "x": 0,
+              "y": 0,
+              "width": 720,
+              "height": 8417
+            },
+            "cssContent": {
+              "x": 0,
+              "y": 0,
+              "width": 360,
+              "height": 4208
+            }
+          }
+        }
+      ],
+      "pass": true
+    }
+  ],
+  "finished": "2026-11-13T14:40:40.968Z"
+}

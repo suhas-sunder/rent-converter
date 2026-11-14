@@ -1,59 +1,62 @@
-# RC-RELEASE-LEDGER — Canonical 2026/2027 weekly release state
+# RC-RELEASE-LEDGER — Canonical release state
 
-**Last reviewed:** 2026-11-13. This ledger records actual evidence only. All five candidates below are implemented, tested and staged as drafts. None is accepted for production. Package-local reports preserve the earlier local review; the hosted reports and this ledger supersede their pending-SHA/preview fields.
+**Last reviewed: November 13, 2026, RC-028 acceptance closure.** All candidates remain draft and unmerged. The following recommendations supersede earlier HOLD notes for the old SHAs. Owner approval has not been given and no production publication is authorized by this document.
 
-| Package | Current status | Branch / exact tested SHA | Preview and tests | Owner / production |
-| --- | --- | --- | --- | --- |
-| PLAN-2026-11 | DOCUMENTED / DRAFT PR | planning/2026-11-2027-rebuild at d1825c9cfdc523c72bd6eb4177fe2e6451bcb7b5 | Authoritative fetched planning baseline; docs only | No main push |
-| RC-001 immediate recovery | IMPLEMENTED / HOLD | build/2026-W47-rentconverter-value-recovery at f344ad29766bb63e185515ed08277a8ac9085247 | [Draft PR 2](https://github.com/suhas-sunder/rent-converter/pull/2), [immutable preview](https://6af6977a997b1f8cde73e05e--rent-converter.netlify.app); 148 tests, all full suites and hosted HTTP audit pass | Proposed urgent fix; not merged |
-| 2027 W01 | IMPLEMENTED / HOLD | release/2027-W01-listing-comparison at 62e5e6c0eabeac0c939dabcab21a580e71c8f89d | [Draft PR 3](https://github.com/suhas-sunder/rent-converter/pull/3), [immutable preview](https://6af69ad52629bf99da003eb7--rent-converter.netlify.app); 157 tests, all full suites and hosted HTTP audit pass | Future weekly package; not shipped |
-| 2027 W02 | IMPLEMENTED / HOLD | release/2027-W02-housing-budget at f0320bae61112269b85465aa5f23ff91abeba8ad | [Draft PR 4](https://github.com/suhas-sunder/rent-converter/pull/4), [immutable preview](https://6af69ad656cfa2344539eb98--rent-converter.netlify.app/rent-budget-calculator); 156 tests, all full suites and hosted HTTP audit pass | Future weekly package; not shipped |
-| 2027 W03 | IMPLEMENTED / HOLD | release/2027-W03-paycheck-deadline at 3c36fa89472caf610b81767fd051b74dbfc13cf8 | [Draft PR 5](https://github.com/suhas-sunder/rent-converter/pull/5), [immutable preview](https://6af69b0c73337f2e792caf49--rent-converter.netlify.app/rent-per-paycheck-calculator); 160 tests, all full suites and hosted HTTP audit pass | Future weekly package; not shipped |
-| 2027 W04 | IMPLEMENTED / MOBILE REPAIR VERIFIED / HOLD | release/2027-W04-calendar-export at 155b2a8247449e9523e0e950155338acf573e6c1 | [Draft PR 6](https://github.com/suhas-sunder/rent-converter/pull/6), [immutable preview](https://6af69d4ceab11ecb5c38ff5b--rent-converter.netlify.app/rent-schedule-calculator); 157 tests, full suites and final HTTP audit pass; five-width recapture and keyboard scrolling verified | Future weekly package; not shipped |
-| 2027 W05–W52 | ROADMAP ONLY | No empty branch factory | Acceptance & scope only when work exists | Not shipped |
+## Current exact candidates
 
-**Current production evidence:** Netlify project rent-converter deployed `main` commit `50c4647e5a61f05e1aeb4db04f4918bbfb6c1c5a` on 2026-10-15 (deployed, ready). 60 canonical routes/112 aliases per source README. Current baseline should be independently re-verified in upcoming package.
+| Package | Branch | Exact tested commit | Immutable deployment | Tests | Decision |
+| --- | --- | --- | --- | ---: | --- |
+| [URGENT PR #2](https://github.com/suhas-sunder/rent-converter/pull/2) | `build/2026-W47-rentconverter-value-recovery` | `b69768dc8c8c66342786ba9f39eb958676637b80` | [preview](https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/) | 148 | **RELEASE FOR OWNER APPROVAL** — first |
+| [W01 PR #3](https://github.com/suhas-sunder/rent-converter/pull/3) | `release/2027-W01-listing-comparison` | `e2a62955a58d30be90a646fd99a253ca2b30bde9` | [preview](https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/) | 157 | **RELEASE FOR OWNER APPROVAL** — separate week after urgent |
+| [W02 PR #4](https://github.com/suhas-sunder/rent-converter/pull/4) | `release/2027-W02-housing-budget` | `68bfad21aa48fb1425ac1a3ef695a37efc910d7c` | [preview](https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/rent-budget-calculator) | 156 | **RELEASE FOR OWNER APPROVAL** — separate week after urgent |
+| [W03 PR #5](https://github.com/suhas-sunder/rent-converter/pull/5) | `release/2027-W03-paycheck-deadline` | `5af2d234cd9a06b938c01271c2a6b740afd150e5` | [preview](https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/rent-per-paycheck-calculator) | 160 | **RELEASE FOR OWNER APPROVAL** — separate week after urgent |
+| [W04 PR #6](https://github.com/suhas-sunder/rent-converter/pull/6) | `release/2027-W04-calendar-export` | `2483d5fbde07f5ec0ab74596e252dfa5075e9123` | [preview](https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/rent-schedule-calculator) | 158 | **RELEASE FOR OWNER APPROVAL** — separate week after urgent |
+| [Security PR #7](https://github.com/suhas-sunder/rent-converter/pull/7) | `codex/rc028-security-maintenance` | `d6906eff00cc3efdbf1f833580a2fd96e8b9c53a` | [preview](https://6af7a3c1af5d128563435779--rent-converter.netlify.app) | 148 | **RELEASE FOR OWNER APPROVAL** — after urgent |
 
-**AdSense evidence:** Screenshot dated 2026-11-01: Needs attention / Low value content; ads.txt Not found. This is not proof of a Search manual penalty. Live apex HTTPS redirects to www and returns the correct 58-byte seller record with HTTP 200; robots permits access and deployed contents match the repository. No ads.txt change was justified. Account refresh/verification timing is external and was not changed. Ad placeholders remain untouched; the repository contains static reserves, not a real ad lifecycle that could prove first-filled-ad suppression.
+All five product previews match Netlify `commit_ref`, are READY deploy previews and pass all six local checks plus hosted HTTP audits (60 routes /112 redirects /60 link targets). Main suite **45/45 browser gates**, focused **11/11**, native zoom **5/5** with two physical widths each. Six actual PDFs, **18 pages**, were extracted/rendered and visually checked. Runtime request traces under both consent choices contain no analytics/ad providers. [Full acceptance evidence and artifact links](RC-028_BROWSER_ACCEPTANCE_EVIDENCE.md).
 
-## What was actually built
+Security PR #7 now explicitly includes urgent as its prerequisite, without any weekly feature. Its final guarded preview passes 9 browser gates, 2 storage cases, native 200% zoom, actual valid/invalid PDFs, 4 delayed-hydration interactions and 3 protected converter regressions. Both consent states remain isolated. After urgent merges, the remaining application diff is the reviewed package/lock patch. Audit **11 → 0**, no major upgrades. [Security applicability](RC-028_SECURITY_MAINTENANCE.md). The earlier CLI-authentication failure was bypassed through the existing PR preview build; it is no longer a maintenance release blocker.
 
-- Urgent: prevents malformed money such as 1e3 being silently reinterpreted, corrects directly broken four-week explanations, adds a truthful no-JS notice, isolates preview analytics, and removes word-count-based quality certification.
-- W01: two/three rental listing comparison with unlike periods, recurring extras, explicit browser save/load/delete and CSV export on the homepage.
-- W02: optional itemized housing budget using actual take-home income, independent bill periods, commitments and savings; no tax or approval prediction.
-- W03: actual-payday reserves before a rent deadline, exact cent allocation, due-date opt-in and a corrected four-week summary.
-- W04: downloadable all-day rent calendar events with exact displayed dates/amounts, import limitations and date-range validation.
+The [QA review PR #8](https://github.com/suhas-sunder/rent-converter/pull/8) targets `build/rc27-recovery`, not main. **HOLD FOR PRODUCTION / REVIEW ONLY**: never use it to publish all weeks together. Production source checkpoint `5aeeced6006d2536d31039d490591ec5bf06c47d`, tooling/review checkpoint `5bc6441f4eb568d6ca5c0bd32ea56410b4d5f5aa`. Later evidence-only commits do not alter that application source. Independent assembly matches all 223 production files, retains 25 unique test files and passes 186 tests. [Assembly report](RC-028_INTEGRATION_ACCEPTANCE.md).
 
-No new routes, sitemap expansion, canonical changes, route retirements, raw analytics exports, ad-account changes or production deployments were made. Existing 60 canonical routes and 112 redirects are retained. Shared exact BigInt money formatting is identically included in W03 and W04.
+## Implemented behavior
 
-## Acceptance evidence and honest limits
+- **Urgent:** malformed money such as `1e3` shows errors instead of silently changing value; four-week explanations match calculation; preview analytics stay isolated. Browser-discovered repairs add honest disabled no-JS examples, native fallback links, visible keyboard outlines, adequate brand contrast and useful print output without an overlapping sticky header.
+- **W01:** compare two/three listings with unlike periods and recurring extras, save/load/delete explicitly in browser storage, export CSV. No change to the primary converter's independent state.
+- **W02:** optional take-home housing budget with independently timed bills, commitments and savings, now disabled until hydration. Existing gross-income comparison remains distinct.
+- **W03:** reserve exact cents across actual paydays before a rent deadline. The table is a named, focusable scroll region; four-week summaries and shared large-money formatting are retained.
+- **W04:** download date-only calendar events matching displayed schedule dates/amounts. Titles now explicitly say **Rent payment period starts**, preserving stable IDs, exact cents, folding and exclusions. Ordinary mobile amounts fit; extreme rows scroll by keyboard.
+- **Security:** compatible React Router/Vite and transitive patches eliminate the reviewed registry findings without changing feature scope.
 
-Every isolated candidate ran typecheck, tests, build, redirect validation, breadcrumb validation and release audit. Every initial immutable preview passed the remote HTTP audit of 60 pages, 112 redirects and 60 internal-link targets. Three protected routes on all five previews matched the production artifact's metadata, defaults and rendered money anchors. Browser task checks and screenshots used all five requested widths. Actual CSV and calendar downloads were inspected.
+No new routes, indexation/sitemap expansion, canonical/schema changes, route retirements, paid-service changes, AdSense submissions or ad-placeholder lifecycle edits. Existing 60 canonical routes /112 redirects remain.
 
-Read [hosted HTTP evidence](RC-HOSTED_HTTP_ACCEPTANCE.md), [hosted browser evidence](RC-HOSTED_BROWSER_ACCEPTANCE.md), [visual review](RC-HOSTED_VISUAL_REVIEW.md), [independent code review](RC-027_INDEPENDENT_REVIEW.md), [integration evidence](RC-INTEGRATION_ACCEPTANCE.md) and the per-package acceptance reports.
+## Approval order and validation after future merges
 
-**All candidates remain HOLD:** real print/PDF output, a JavaScript-disabled browser session and runtime request capture could not be verified through the available browser interfaces. Print blocked browser input until the test tab closed; no native print dialog was exposed. The browser exposes no JS-disable or network-capture capability. Source/SSR/deployed-bundle checks are recorded without treating them as those missing browser checks. Full keyboard/screen-reader coverage and exhaustive interactive human review of every canonical page remain incomplete. No search recovery or AdSense approval is promised.
+1. Recommend **PR #2 first** because it corrects silent input reinterpretation and shared browser defects independently of future features.
+2. Recommend **PR #7 separately next**, preserving urgent tests/guard. Its current guarded immutable preview passes hosted acceptance; do not revert to the older production-based snapshot.
+3. Keep W01–W04 as independent scheduled weekly releases. Their current candidates pass; future main merges produce new SHAs and require a new build/full suite/hosted browser audit before publication.
+4. Resolve package.json conflicts by retaining the union of registered tests exactly once, not by choosing either entire side. Retain the identical exact-money formatter shared by W03/W04. The independent assembly experiment found only test-command conflicts at W02/W03/W04.
 
-## Release assembly and rollback
+Before approval, rollback is leaving a draft unmerged. After an owner-approved release, create a separate reviewed revert, retain shared fixes still needed by later packages, validate and request the owner's merge decision. Never reset main, force-push or automatically republish an old deploy. Reverting security restores known advisories and needs explicit reassessment.
 
-All weekly branches independently start from the urgent f344ad2 candidate. Review and merge urgent separately first only after its missing gates pass. Weekly packages do not contain the other weeks' features. Each adds a test entry on the same package.json line, so later merges require preserving the union of every test path exactly once; do not choose one side wholesale. W02/W04 component edits merge cleanly, and W03/W04 share an identical formatter fix. See the integration report for the simulated merge and aggregate suite evidence. Re-run all gates against each newly assembled release SHA before its planned weekly publication.
+## Remaining manual scope and honest limits
 
-Before publication, rollback means leaving the draft unmerged. After an explicitly owner-approved production merge, prepare a reviewed revert of that package on a separate branch, run all checks, and obtain the owner's production merge decision. Do not reset main or republish an older Netlify deployment automatically. Reverting urgent after dependent weeks have shipped requires dependency review.
+Native operating-system print dialogs, physical printing, actual screen-reader speech and calendar-app imports were not certified. The browser/PDF/network/keyboard/reflow tests are complete for the recorded synthetic cases, not every possible input or every canonical page's editorial quality. Nonblocking print polish (FAQ/footer-heavy pages, some page-break splits and printed utility labels) is recorded. No search recovery or AdSense approval is promised.
+
+[Visual review](RC-028_VISUAL_REVIEW.md), [W03/W04/PDF/date focus review](RC-028_DATE_FOCUS_REVIEW.md), [manual axe warning review](RC-028_AXE_REVIEW.md). Earlier RC-027, hosted browser and package acceptance reports remain historical evidence for their explicitly listed commits; use this ledger and RC-028 for current status.
+
+## Production and workspace preservation
+
+Final remote main remains `50c4647e5a61f05e1aeb4db04f4918bbfb6c1c5a`; Netlify current production deploy is still `6ad02cf4ac34d1b203b9b866` (READY). Original checkout remains clean at `131ae371aabf8c8b1871116edc3d5d09048ba965`. Work stayed in isolated worktrees. Task-generated logs, ignored browser artifacts and pre-existing line-ending-only `public/_redirects` state were preserved; no unrelated work was reset or discarded.
+
+## Planning and prior business evidence
+
+PLAN-2026-11 remains documented at `d1825c9cfdc523c72bd6eb4177fe2e6451bcb7b5`. W05–W52 remain roadmap only; no empty branch factory or fabricated shipped status.
+
+AdSense screenshot dated 2026-11-01 reported Needs attention / Low value content and ads.txt Not found. This is not proof of a search manual penalty. The live HTTPS endpoint already returns the correct seller record; no ads.txt change was justified. Account refresh timing was not changed. Current ad code contains static reserves, not a filled-ad lifecycle whose suppression can be certified.
 
 **Search evidence UPDATED 2026-11-12:** owner supplied six-month GSC and Bing exports. Verified new baseline in `ai-issues/RC-002_SEARCH_EVIDENCE_2026-11-12.md`: GSC latest settled Oct 14–Nov 10 **1 click / 802 impressions / 0.125% CTR**, prior Sep 16–Oct 13 **3 / 490 / 0.612%**; Bing **222 / 8,840** vs **260 / 8,074**. Current data ends Nov 10. Pre-May 31/June 1 Google visibility collapse roughly 97.3% impressions/day; Bing still productive. No current per-page 28d data supplied, so don't infer present page ranks from six-month aggregates.
 
-## Rule for every update
-
-For each real weekly release add exact branch and SHA, date built, source main SHA, number of changed pages, exact implementation, human review notes, unit/build/redirect/canonical/JS-noJS/mobile/AdSense preview isolation acceptance, immutable preview URL, independent reviewer, owner approved date, merge SHA (if any), Netlify deploy ID (if any), post-deploy smoke + rollback. A branch name alone is NOT proof of readiness.
-
-## Blocked scheduling note
+## Existing scheduling limitation
 
 A recurring Saturday review task was requested through the ChatGPT automations service but creation failed because the account already has five active tasks (plan limit five). No task was created. Owner can free a slot or move the release gate to an existing appropriate automation only with explicit authorization. Until then, use manual scheduled review; do not claim automation exists.
-
-## Independent final acceptance audit — November 13, 2026
-
-GitHub/Netlify cross-check reconfirmed exact draft PR #2–#6 SHAs match five ready immutable *preview* deployments; current production is still the Oct 15 main deploy. Comparing each W01–W04 branch against urgent f344ad2 confirmed one isolated feature per week (W04 includes an additional scoped mobile repair). No package moved beyond HOLD.
-
-**New W04 content defect:** the .ics event `SUMMARY:Rent due:` conflicts with its own description stating that generated dates are period starts, not verified contractual due dates. Correct the event title to describe an estimated rent payment, add regression coverage and revalidate a new W04 immutable preview before releasing. See `RC-028_FINAL_BROWSER_ACCEPTANCE.md` and comment on PR #6.
-
-**Acceptance tooling:** earlier in-app browser did not expose actual no-JavaScript, network capture or print/PDF output. The next Codex session should close these gates with Playwright/Chromium or equivalent rather than substitute source inspection for browser evidence. Separate compatible dependency-maintenance draft PR recommended; no blind forced upgrades. See `RC-028_FINAL_BROWSER_ACCEPTANCE.md`.

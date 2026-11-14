@@ -21,10 +21,28 @@ test("all-day events preserve leap and month-end dates with exclusive next-day e
   assert.equal((text.match(/BEGIN:VEVENT/g) ?? []).length, 3);
   assert.match(text, /DTSTART;VALUE=DATE:20280229\r\nDTEND;VALUE=DATE:20280301/);
   assert.match(text, /DTSTART;VALUE=DATE:20280131\r\nDTEND;VALUE=DATE:20280201/);
-  assert.match(text, /SUMMARY:Rent due: USD 1234\.56/);
+  assert.match(text, /SUMMARY:Rent payment period starts: USD 1234\.56/);
   assert.match(text, /DTSTAMP:20261112T170000Z/);
   assert.doesNotMatch(text, /TZID|VALARM|ATTENDEE|ORGANIZER|RRULE/);
   assert.ok(result.contents.endsWith("END:VCALENDAR\r\n"));
+});
+
+test("event titles describe period starts without changing identities, dates or exact amounts", () => {
+  for (const [rentCents, amount] of [[180025n, "1800.25"], [900719925474099199n, "9007199254740991.99"]]) {
+    const result = buildRentCalendar({ ...input, rentCents });
+    assert.equal(result.ok, true);
+    const text = unfold(result.contents);
+    const properties = (name) => [...text.matchAll(new RegExp(`^${name}:(.*)\\r$`, "gm"))].map((match) => match[1]);
+    assert.deepEqual(properties("SUMMARY"), Array(3).fill(`Rent payment period starts: USD ${amount}`));
+    assert.doesNotMatch(text, /SUMMARY:Rent due:/);
+    assert.deepEqual(properties("UID"), ["20280131", "20280229", "20280331"].map((date) => `rent-2028-01-31-2028-04-30-monthly-USD-${rentCents}-${date}@rentconverter.com`));
+    assert.deepEqual(properties("DTSTART;VALUE=DATE"), ["20280131", "20280229", "20280331"]);
+    assert.deepEqual(properties("DTEND;VALUE=DATE"), ["20280201", "20280301", "20280401"]);
+    for (const description of properties("DESCRIPTION")) {
+      assert.ok(description.includes(`Rent payment: USD ${amount}.`));
+      assert.ok(description.includes(escapeCalendarText("Payment dates are period starts, not legal due-date determinations.")));
+    }
+  }
 });
 
 test("export consumes exactly the calculated lease-bounded dates, without new recurrence rules", () => {

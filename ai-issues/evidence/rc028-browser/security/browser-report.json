@@ -1,0 +1,2253 @@
+{
+  "started": "2026-11-13T23:57:57.845Z",
+  "node": "v25.9.0",
+  "browser": "145.0.7632.6",
+  "candidates": [
+    {
+      "id": "urgent",
+      "package": "security",
+      "sha": "d6906eff00cc3efdbf1f833580a2fd96e8b9c53a",
+      "origin": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app",
+      "path": "/",
+      "gates": [
+        {
+          "name": "javascript-disabled",
+          "pass": true,
+          "evidence": {
+            "navigation": "About reached",
+            "controls": 5,
+            "hosts": [
+              "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ]
+          }
+        },
+        {
+          "name": "network-accepted",
+          "pass": true,
+          "evidence": {
+            "requests": 40,
+            "hosts": [
+              "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ],
+            "failures": []
+          }
+        },
+        {
+          "name": "network-rejected",
+          "pass": true,
+          "evidence": {
+            "requests": 40,
+            "hosts": [
+              "6af7a3c1af5d128563435779--rent-converter.netlify.app",
+              "fonts.googleapis.com",
+              "fonts.gstatic.com"
+            ],
+            "failures": []
+          }
+        },
+        {
+          "name": "interactive-and-responsive",
+          "pass": true,
+          "evidence": [
+            {
+              "viewport": 360,
+              "page": 360
+            },
+            {
+              "viewport": 390,
+              "page": 390
+            },
+            {
+              "viewport": 768,
+              "page": 768
+            },
+            {
+              "viewport": 1280,
+              "page": 1280
+            },
+            {
+              "viewport": 1440,
+              "page": 1440
+            }
+          ]
+        },
+        {
+          "name": "live-result-semantics",
+          "pass": true,
+          "evidence": {
+            "regions": 1,
+            "expected": "2,172.62",
+            "note": "DOM announcement semantics verified; no screen-reader speech certification"
+          }
+        },
+        {
+          "name": "axe",
+          "pass": true,
+          "evidence": {
+            "passes": 28
+          }
+        },
+        {
+          "name": "keyboard",
+          "pass": true,
+          "evidence": {
+            "steps": 70,
+            "fieldFocusIndicators": 4,
+            "nativeDatePickerStops": 0,
+            "note": "Native Chromium date picker button focus uses a UA shadow-control indicator; inspect captured picker images, not only host styles"
+          }
+        },
+        {
+          "name": "print-pdf",
+          "pass": true,
+          "evidence": {
+            "pdf": "urgent.pdf",
+            "note": "PDF rendering/text extraction required separately; not native OS print-dialog certification"
+          }
+        },
+        {
+          "name": "errors-and-export",
+          "pass": true,
+          "evidence": "Recorded assertion and download checks passed"
+        }
+      ],
+      "nojs": {
+        "controls": [
+          {
+            "tag": "INPUT",
+            "id": "rent-amount",
+            "text": "",
+            "disabled": true
+          },
+          {
+            "tag": "SELECT",
+            "id": "",
+            "text": "Currency",
+            "disabled": true
+          },
+          {
+            "tag": "SELECT",
+            "id": "",
+            "text": "From period",
+            "disabled": true
+          },
+          {
+            "tag": "SELECT",
+            "id": "",
+            "text": "To period",
+            "disabled": true
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "text": "Assumptions: 365-day year, 28-day 4-week period▾",
+            "disabled": false
+          }
+        ],
+        "requests": [
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/",
+            "type": "document"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+            "type": "image"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/root-lQGglv2t.css",
+            "type": "stylesheet"
+          },
+          {
+            "url": "https://fonts.googleapis.com/css2",
+            "type": "stylesheet"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/manifest-10b5ae2c.js",
+            "type": "script"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/entry.client-j8TK5Dre.js",
+            "type": "script"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/jsx-runtime-DZ7Lf66K.js",
+            "type": "script"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/index-CxpeHdp4.js",
+            "type": "script"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/root-DhLKKQEc.js",
+            "type": "script"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+            "type": "script"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/AdPlaceholder-Bm3GwyRn.js",
+            "type": "script"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/provider-C0vB4Qjy.js",
+            "type": "script"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+            "type": "script"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/home-DNW0mNex.js",
+            "type": "script"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/savedState-CDk6u79P.js",
+            "type": "script"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/Assumptions-CLwoOUYf.js",
+            "type": "script"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/SeoSupport-DpZfaJ3k.js",
+            "type": "script"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/HydrationSafeControls-DmeKg_5I.js",
+            "type": "script"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+            "type": "script"
+          },
+          {
+            "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+            "type": "font"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/about",
+            "type": "document"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+            "type": "image"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/suhas-BPY11p11.jpg",
+            "type": "image"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/root-lQGglv2t.css",
+            "type": "stylesheet"
+          },
+          {
+            "url": "https://fonts.googleapis.com/css2",
+            "type": "stylesheet"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/manifest-10b5ae2c.js",
+            "type": "script"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/entry.client-j8TK5Dre.js",
+            "type": "script"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/jsx-runtime-DZ7Lf66K.js",
+            "type": "script"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/index-CxpeHdp4.js",
+            "type": "script"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/root-DhLKKQEc.js",
+            "type": "script"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+            "type": "script"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/AdPlaceholder-Bm3GwyRn.js",
+            "type": "script"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/provider-C0vB4Qjy.js",
+            "type": "script"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+            "type": "script"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/about-C8h_Bmd2.js",
+            "type": "script"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/seo-CNhlrUU0.js",
+            "type": "script"
+          },
+          {
+            "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+            "type": "font"
+          }
+        ]
+      },
+      "network_accepted": {
+        "requests": [
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/",
+            "type": "document",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+            "type": "image",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/manifest-10b5ae2c.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/entry.client-j8TK5Dre.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/jsx-runtime-DZ7Lf66K.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/index-CxpeHdp4.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/root-DhLKKQEc.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/AdPlaceholder-Bm3GwyRn.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/provider-C0vB4Qjy.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/home-DNW0mNex.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/savedState-CDk6u79P.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/Assumptions-CLwoOUYf.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/SeoSupport-DpZfaJ3k.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/HydrationSafeControls-DmeKg_5I.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/root-lQGglv2t.css",
+            "type": "stylesheet",
+            "method": "GET"
+          },
+          {
+            "url": "https://fonts.googleapis.com/css2",
+            "type": "stylesheet",
+            "method": "GET"
+          },
+          {
+            "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+            "type": "font",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/",
+            "type": "document",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+            "type": "image",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/manifest-10b5ae2c.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/entry.client-j8TK5Dre.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/jsx-runtime-DZ7Lf66K.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/index-CxpeHdp4.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/root-DhLKKQEc.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/AdPlaceholder-Bm3GwyRn.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/provider-C0vB4Qjy.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/home-DNW0mNex.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/savedState-CDk6u79P.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/Assumptions-CLwoOUYf.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/SeoSupport-DpZfaJ3k.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/HydrationSafeControls-DmeKg_5I.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/root-lQGglv2t.css",
+            "type": "stylesheet",
+            "method": "GET"
+          },
+          {
+            "url": "https://fonts.googleapis.com/css2",
+            "type": "stylesheet",
+            "method": "GET"
+          },
+          {
+            "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+            "type": "font",
+            "method": "GET"
+          }
+        ],
+        "responses": [
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/index-CxpeHdp4.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/AdPlaceholder-Bm3GwyRn.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+            "status": 200
+          },
+          {
+            "url": "https://fonts.googleapis.com/css2",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/savedState-CDk6u79P.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/root-DhLKKQEc.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/root-lQGglv2t.css",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/SeoSupport-DpZfaJ3k.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/Assumptions-CLwoOUYf.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/manifest-10b5ae2c.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/HydrationSafeControls-DmeKg_5I.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/home-DNW0mNex.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/jsx-runtime-DZ7Lf66K.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/provider-C0vB4Qjy.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/entry.client-j8TK5Dre.js",
+            "status": 200
+          },
+          {
+            "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/manifest-10b5ae2c.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/entry.client-j8TK5Dre.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/jsx-runtime-DZ7Lf66K.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/index-CxpeHdp4.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/root-DhLKKQEc.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/AdPlaceholder-Bm3GwyRn.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/provider-C0vB4Qjy.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/home-DNW0mNex.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/savedState-CDk6u79P.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/Assumptions-CLwoOUYf.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/SeoSupport-DpZfaJ3k.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/HydrationSafeControls-DmeKg_5I.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/root-lQGglv2t.css",
+            "status": 200
+          },
+          {
+            "url": "https://fonts.googleapis.com/css2",
+            "status": 200
+          },
+          {
+            "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+            "status": 304
+          }
+        ],
+        "failures": [],
+        "errors": [],
+        "prohibited": [],
+        "windowMs": 3500
+      },
+      "network_rejected": {
+        "requests": [
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/",
+            "type": "document",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+            "type": "image",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/manifest-10b5ae2c.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/entry.client-j8TK5Dre.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/jsx-runtime-DZ7Lf66K.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/index-CxpeHdp4.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/root-DhLKKQEc.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/AdPlaceholder-Bm3GwyRn.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/provider-C0vB4Qjy.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/home-DNW0mNex.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/savedState-CDk6u79P.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/Assumptions-CLwoOUYf.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/SeoSupport-DpZfaJ3k.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/HydrationSafeControls-DmeKg_5I.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/root-lQGglv2t.css",
+            "type": "stylesheet",
+            "method": "GET"
+          },
+          {
+            "url": "https://fonts.googleapis.com/css2",
+            "type": "stylesheet",
+            "method": "GET"
+          },
+          {
+            "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+            "type": "font",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/",
+            "type": "document",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+            "type": "image",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/manifest-10b5ae2c.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/entry.client-j8TK5Dre.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/jsx-runtime-DZ7Lf66K.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/index-CxpeHdp4.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/root-DhLKKQEc.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/AdPlaceholder-Bm3GwyRn.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/provider-C0vB4Qjy.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/home-DNW0mNex.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/savedState-CDk6u79P.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/Assumptions-CLwoOUYf.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/SeoSupport-DpZfaJ3k.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/HydrationSafeControls-DmeKg_5I.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/root-lQGglv2t.css",
+            "type": "stylesheet",
+            "method": "GET"
+          },
+          {
+            "url": "https://fonts.googleapis.com/css2",
+            "type": "stylesheet",
+            "method": "GET"
+          },
+          {
+            "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+            "type": "font",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/",
+            "type": "document",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+            "type": "image",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/manifest-10b5ae2c.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/entry.client-j8TK5Dre.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/jsx-runtime-DZ7Lf66K.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/index-CxpeHdp4.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/root-DhLKKQEc.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/AdPlaceholder-Bm3GwyRn.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/provider-C0vB4Qjy.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/home-DNW0mNex.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/savedState-CDk6u79P.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/Assumptions-CLwoOUYf.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/SeoSupport-DpZfaJ3k.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/HydrationSafeControls-DmeKg_5I.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+            "type": "script",
+            "method": "GET"
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/root-lQGglv2t.css",
+            "type": "stylesheet",
+            "method": "GET"
+          },
+          {
+            "url": "https://fonts.googleapis.com/css2",
+            "type": "stylesheet",
+            "method": "GET"
+          },
+          {
+            "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+            "type": "font",
+            "method": "GET"
+          },
+          {
+            "url": "https://fonts.googleapis.com/css2",
+            "type": "xhr",
+            "method": "GET"
+          }
+        ],
+        "responses": [
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/Assumptions-CLwoOUYf.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/savedState-CDk6u79P.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/home-DNW0mNex.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/provider-C0vB4Qjy.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/manifest-10b5ae2c.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/root-lQGglv2t.css",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/index-CxpeHdp4.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/HydrationSafeControls-DmeKg_5I.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/root-DhLKKQEc.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/AdPlaceholder-Bm3GwyRn.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/SeoSupport-DpZfaJ3k.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/jsx-runtime-DZ7Lf66K.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/entry.client-j8TK5Dre.js",
+            "status": 200
+          },
+          {
+            "url": "https://fonts.googleapis.com/css2",
+            "status": 200
+          },
+          {
+            "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/manifest-10b5ae2c.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/entry.client-j8TK5Dre.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/jsx-runtime-DZ7Lf66K.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/index-CxpeHdp4.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/root-DhLKKQEc.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/AdPlaceholder-Bm3GwyRn.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/provider-C0vB4Qjy.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/home-DNW0mNex.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/savedState-CDk6u79P.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/Assumptions-CLwoOUYf.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/SeoSupport-DpZfaJ3k.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/HydrationSafeControls-DmeKg_5I.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/root-lQGglv2t.css",
+            "status": 200
+          },
+          {
+            "url": "https://fonts.googleapis.com/css2",
+            "status": 200
+          },
+          {
+            "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+            "status": 304
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/manifest-10b5ae2c.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/entry.client-j8TK5Dre.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/jsx-runtime-DZ7Lf66K.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/index-CxpeHdp4.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/root-DhLKKQEc.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/AdPlaceholder-Bm3GwyRn.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/provider-C0vB4Qjy.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/home-DNW0mNex.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/savedState-CDk6u79P.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/Assumptions-CLwoOUYf.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/SeoSupport-DpZfaJ3k.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/HydrationSafeControls-DmeKg_5I.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/assets/root-lQGglv2t.css",
+            "status": 200
+          },
+          {
+            "url": "https://fonts.googleapis.com/css2",
+            "status": 200
+          },
+          {
+            "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+            "status": 200
+          },
+          {
+            "url": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+            "status": 304
+          },
+          {
+            "url": "https://fonts.googleapis.com/css2",
+            "status": 200
+          }
+        ],
+        "failures": [],
+        "errors": [],
+        "prohibited": [],
+        "windowMs": 3500
+      },
+      "responsive": [
+        {
+          "viewport": 360,
+          "page": 360
+        },
+        {
+          "viewport": 390,
+          "page": 390
+        },
+        {
+          "viewport": 768,
+          "page": 768
+        },
+        {
+          "viewport": 1280,
+          "page": 1280
+        },
+        {
+          "viewport": 1440,
+          "page": 1440
+        }
+      ],
+      "liveRegions": [
+        "Monthly rent$2,172.62Hourly rent$2.98Daily rent$71.43Weekly rent$500.00Every 2 weeks rent$1,000.00Every 4 weeks (28 days) rent$2,000.00Annual rent$26,071.434-week vs monthlyMonthly minus 4-week = $172.62Difference ≈ 8.63%A 4-week rent period is 28 days. A true average month is about 30.42 days, so the monthly equivalent is different."
+      ],
+      "axe": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "nodes": 7
+          }
+        ],
+        "passes": 28
+      },
+      "focus": [
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "RentConverter home",
+          "outline": "none",
+          "outlineColor": "rgb(16, 16, 16)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Rent Converter",
+          "outline": "none",
+          "outlineColor": "rgb(2, 74, 112)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Weekly to Monthly",
+          "outline": "none",
+          "outlineColor": "rgb(49, 65, 88)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Affordability",
+          "outline": "none",
+          "outlineColor": "rgb(49, 65, 88)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Rent Increase",
+          "outline": "none",
+          "outlineColor": "rgb(49, 65, 88)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Split Rent",
+          "outline": "none",
+          "outlineColor": "rgb(49, 65, 88)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "BUTTON",
+          "type": "button",
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "More",
+          "outline": "none",
+          "outlineColor": "rgb(49, 65, 88)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "BUTTON",
+          "type": "button",
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": true,
+          "text": "Print / Save PDF",
+          "outline": "none",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "0px",
+          "shadow": "rgb(56, 189, 248) 0px 0px 0px 2px, rgb(255, 255, 255) 0px 0px 0px 4px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "INPUT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "rent-amount",
+          "inMain": true,
+          "text": "",
+          "outline": "solid",
+          "outlineColor": "rgb(3, 88, 137)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "SELECT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": true,
+          "text": "Currency",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "SELECT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": true,
+          "text": "From period",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "SELECT",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": true,
+          "text": "To period",
+          "outline": "solid",
+          "outlineColor": "rgb(2, 6, 23)",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "BUTTON",
+          "type": "button",
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": true,
+          "text": "Assumptions: 365-day year, 28-day 4-week period▾",
+          "outline": "none",
+          "outlineColor": "rgb(16, 16, 16)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.951 0.026 236.824) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": true,
+          "text": "Weekly to monthly",
+          "outline": "none",
+          "outlineColor": "rgb(0, 89, 138)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0 0 0 / 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": true,
+          "text": "4-week rent",
+          "outline": "none",
+          "outlineColor": "rgb(0, 89, 138)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0 0 0 / 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": true,
+          "text": "Rent per paycheck",
+          "outline": "none",
+          "outlineColor": "rgb(0, 89, 138)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0 0 0 / 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": true,
+          "text": "Affordability",
+          "outline": "none",
+          "outlineColor": "rgb(0, 89, 138)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0 0 0 / 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": true,
+          "text": "Weekly to monthly",
+          "outline": "none",
+          "outlineColor": "rgb(0, 89, 138)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0 0 0 / 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": true,
+          "text": "Rent per paycheck",
+          "outline": "none",
+          "outlineColor": "rgb(0, 89, 138)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0 0 0 / 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": true,
+          "text": "Rent increase",
+          "outline": "none",
+          "outlineColor": "rgb(0, 89, 138)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0 0 0 / 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "SUMMARY",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": true,
+          "text": "What does this rent converter calculate?▾",
+          "outline": "none",
+          "outlineColor": "rgb(7, 89, 133)",
+          "outlineWidth": "0px",
+          "shadow": "rgb(56, 189, 248) 0px 0px 0px 2px, rgb(248, 250, 252) 0px 0px 0px 4px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "SUMMARY",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": true,
+          "text": "How do you convert weekly rent to monthly rent?▾",
+          "outline": "none",
+          "outlineColor": "rgb(7, 89, 133)",
+          "outlineWidth": "0px",
+          "shadow": "rgb(56, 189, 248) 0px 0px 0px 2px, rgb(248, 250, 252) 0px 0px 0px 4px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "SUMMARY",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": true,
+          "text": "Why is every-4-weeks rent different from monthly rent?▾",
+          "outline": "none",
+          "outlineColor": "rgb(7, 89, 133)",
+          "outlineWidth": "0px",
+          "shadow": "rgb(56, 189, 248) 0px 0px 0px 2px, rgb(248, 250, 252) 0px 0px 0px 4px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "SUMMARY",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": true,
+          "text": "Does this include utilities, parking, fees, or deposits?▾",
+          "outline": "none",
+          "outlineColor": "rgb(7, 89, 133)",
+          "outlineWidth": "0px",
+          "shadow": "rgb(56, 189, 248) 0px 0px 0px 2px, rgb(248, 250, 252) 0px 0px 0px 4px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "SUMMARY",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": true,
+          "text": "Does the calculator preserve decimals?▾",
+          "outline": "none",
+          "outlineColor": "rgb(7, 89, 133)",
+          "outlineWidth": "0px",
+          "shadow": "rgb(56, 189, 248) 0px 0px 0px 2px, rgb(248, 250, 252) 0px 0px 0px 4px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "SUMMARY",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": true,
+          "text": "Can I save or share the result?▾",
+          "outline": "none",
+          "outlineColor": "rgb(7, 89, 133)",
+          "outlineWidth": "0px",
+          "shadow": "rgb(56, 189, 248) 0px 0px 0px 2px, rgb(248, 250, 252) 0px 0px 0px 4px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Monthly to weekly rent converterTurn a monthly rent budget into a 7-day wee",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Weekly to monthly rent converterAnnualize weekly rent over 365 days and com",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Weekly to annual rent converterConvert weekly rent into a 365-day yearly to",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Weekly to biweekly rent converterConvert weekly rent into a 14-day biweekly",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Biweekly to weekly rent converterTurn a 14-day rent amount into a weekly eq",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Biweekly to monthly rent converterConvert a 14-day rent amount into true ca",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Biweekly to annual rent converterAnnualize biweekly rent from a 14-day cycl",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Monthly to annual rent converterMultiply monthly rent across 12 calendar mo",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Annual to monthly rent converterSplit annual rent into a calendar-month amo",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Monthly to daily rent converterConvert monthly rent into a daily rate using",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Daily to monthly rent converterTurn a daily rent or nightly rate into a cal",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Monthly to hourly rent converterBreak monthly rent into hourly and daily eq",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Hourly to monthly rent converterConvert an hourly rent amount into daily, m",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Hourly to annual rent converterAnnualize hourly rent over 24 hours and 365 ",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Annual to hourly rent converterBreak annual rent into hourly, daily, weekly",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Annual to weekly rent converterConvert yearly rent into a 7-day weekly equi",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Annual to biweekly rent converterConvert annual rent into a 14-day biweekly",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Monthly to biweekly rent converterConvert monthly rent into a 14-day biweek",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "PW to PCM calculatorConvert PW rent into a per-calendar-month equivalent us",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "PCM to PW calculatorConvert PCM rent into an average weekly equivalent usin",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "What does PCM mean in rent?Learn what PCM means in rent listings, how it di",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "What does PW mean in rent?PW means per week in rent listings. Learn how wee",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Rent per day calculatorFind the daily rent behind a weekly, monthly, 4-week",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Rent per week calculatorConvert rent into a weekly amount using a 365-day d",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Rent paid every 4 weeks calculatorCompare 28-day rent cycles with calendar ",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Rent per paycheck calculatorPlan rent around biweekly, semi-monthly, weekly",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Prorated rent calculatorEstimate partial-period rent for a move-in, move-ou",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "How much rent can I afford calculatorEstimate rent targets from income, mon",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Rent as percentage of income calculatorNormalize rent and income periods, t",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Rent after tax income calculatorCompare rent with after-tax income instead ",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Rent vs take-home pay calculatorCheck how much of take-home pay is left aft",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Income required for rent calculatorCalculate required income or reverse the",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Rent Budget CalculatorCompare planned monthly rent with annual gross income",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Hourly Pay to Rent CalculatorConvert hourly pay and weekly hours into estim",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Salary to Rent CalculatorEnter annual gross salary to compare monthly rent ",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Rent increase calculatorCalculate new rent, monthly change, and yearly impa",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Rent increase percentage calculatorCalculate the percent change between old",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Compound Rent Increase CalculatorCalculate rent after repeated annual perce",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Rent split calculatorSplit rent and optional shared monthly costs equally a",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Split Rent Based on Income CalculatorSplit rent and optional shared monthly",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Rent Split Percentage CalculatorSplit rent and optional shared monthly cost",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Weekly to monthly rent AustraliaConvert Australian weekly rent into a calen",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Weekly to Fortnightly Rent AustraliaConvert weekly rent to fortnightly rent",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        },
+        {
+          "tag": "A",
+          "type": null,
+          "focus": true,
+          "focusWithin": true,
+          "id": "",
+          "inMain": false,
+          "text": "Fortnightly to Monthly Rent AustraliaConvert fortnightly rent to true month",
+          "outline": "none",
+          "outlineColor": "rgb(29, 41, 61)",
+          "outlineWidth": "0px",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(255, 255, 255) 0px 0px 0px 2px, oklch(0.746 0.16 232.661) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "nativeDatePicker": false
+        }
+      ],
+      "printText": "Rent conversion calculator\n\nRent Converter Calculator\n\nConvert an entered rent amount between weekly, monthly, 4-week, biweekly, daily, hourly, and annual periods using one consistent annual basis.\n\nRent amount\nUSD\nCAD\nEUR\nGBP\nAUD\nNZD\nJPY\nCNY\nHKD\nSGD\nINR\nKRW\nCHF\nSEK\nNOK\nDKK\nMXN\nBRL\nFrom\nHourly\nDaily\nWeekly\nEvery 2 weeks\nEvery 4 weeks (28 days)\nMonthly\nAnnual\nTo\nHourly\nDaily\nWeekly\nEvery 2 weeks\nEvery 4 weeks (28 days)\nMonthly\nAnnual\nMonthly rent\n$2,172.62\nHourly rent\n$2.98\nDaily rent\n$71.43\nWeekly rent\n$500.00\nEvery 2 weeks rent\n$1,000.00\nEvery 4 weeks (28 days) rent\n$2,000.00\nAnnual rent\n$26,071.43\n4-week vs monthly\nMonthly minus 4-week = $172.62\nDifference ≈ 8.63%\n\nA 4-week rent period is 28 days. A true average month is about 30.42 days, so the monthly equivalent is different.\n\nAssumptions: 365-day year, 28-day 4-week period\n▾\nFrequently Asked Questions\nWhat does this rent converter calculate?\n▾\nHow do you convert weekly rent to monthly rent?\n▾\nWhy is every-4-weeks rent different from monthly rent?\n▾\nDoes this include utilities, parking, fees, or deposits?\n▾\nDoes the calculator preserve decimals?\n▾\nCan I save or share the result?\n▾\nRentConverter.com\nFast, private rent calculators\nAbout\nMethodology\nContact\nSitemap\nPrivacy Policy\nTerms of Service\nCookies\n\n(c) 2026 RentConverter.com. Rent conversion and renter tools.\n\nTools on this site are for informational, budgeting, and comparison purposes only. Always confirm payment schedules and lease terms in your rental agreement. This website does not provide financial, legal, or tax advice.",
+      "printAds": 0
+    }
+  ],
+  "finished": "2026-11-13T23:58:17.508Z"
+}

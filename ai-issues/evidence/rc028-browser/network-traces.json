@@ -1,0 +1,4992 @@
+[
+  {
+    "id": "urgent",
+    "sha": "b69768dc8c8c66342786ba9f39eb958676637b80",
+    "consent": "accepted",
+    "requests": [
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/",
+        "type": "document",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "type": "image",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/manifest-933386ec.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/root-BtXZR5ru.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/home-Yh_RqrLb.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/Assumptions-jBvp51Rn.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/SeoSupport-BLNcYP0O.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/root-lQGglv2t.css",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "type": "font",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/",
+        "type": "document",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "type": "image",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/manifest-933386ec.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/root-BtXZR5ru.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/home-Yh_RqrLb.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/Assumptions-jBvp51Rn.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/SeoSupport-BLNcYP0O.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/root-lQGglv2t.css",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "type": "font",
+        "method": "GET"
+      }
+    ],
+    "responses": [
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/Assumptions-jBvp51Rn.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/home-Yh_RqrLb.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/SeoSupport-BLNcYP0O.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/root-BtXZR5ru.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/manifest-933386ec.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/root-lQGglv2t.css",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/manifest-933386ec.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/root-BtXZR5ru.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/home-Yh_RqrLb.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/Assumptions-jBvp51Rn.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/SeoSupport-BLNcYP0O.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/root-lQGglv2t.css",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "status": 304
+      }
+    ],
+    "failures": [],
+    "errors": [],
+    "prohibited": [],
+    "windowMs": 3500
+  },
+  {
+    "id": "urgent",
+    "sha": "b69768dc8c8c66342786ba9f39eb958676637b80",
+    "consent": "rejected",
+    "requests": [
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/",
+        "type": "document",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "type": "image",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/manifest-933386ec.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/root-BtXZR5ru.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/home-Yh_RqrLb.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/Assumptions-jBvp51Rn.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/SeoSupport-BLNcYP0O.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/root-lQGglv2t.css",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "type": "font",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/",
+        "type": "document",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "type": "image",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/manifest-933386ec.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/root-BtXZR5ru.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/home-Yh_RqrLb.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/Assumptions-jBvp51Rn.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/SeoSupport-BLNcYP0O.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/root-lQGglv2t.css",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "type": "font",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/",
+        "type": "document",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "type": "image",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/manifest-933386ec.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/root-BtXZR5ru.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/home-Yh_RqrLb.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/Assumptions-jBvp51Rn.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/SeoSupport-BLNcYP0O.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/root-lQGglv2t.css",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "type": "font",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "type": "xhr",
+        "method": "GET"
+      }
+    ],
+    "responses": [
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/root-lQGglv2t.css",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/SeoSupport-BLNcYP0O.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/root-BtXZR5ru.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/home-Yh_RqrLb.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/Assumptions-jBvp51Rn.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/manifest-933386ec.js",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/manifest-933386ec.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/root-BtXZR5ru.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/home-Yh_RqrLb.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/Assumptions-jBvp51Rn.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/SeoSupport-BLNcYP0O.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/root-lQGglv2t.css",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "status": 304
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/manifest-933386ec.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/root-BtXZR5ru.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/home-Yh_RqrLb.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/Assumptions-jBvp51Rn.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/SeoSupport-BLNcYP0O.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/assets/root-lQGglv2t.css",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "status": 200
+      },
+      {
+        "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "status": 304
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "status": 200
+      }
+    ],
+    "failures": [],
+    "errors": [],
+    "prohibited": [],
+    "windowMs": 3500
+  },
+  {
+    "id": "w01",
+    "sha": "e2a62955a58d30be90a646fd99a253ca2b30bde9",
+    "consent": "accepted",
+    "requests": [
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/",
+        "type": "document",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "type": "image",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/manifest-33f9d195.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/root-B1aIplpT.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/home-CfZegAzN.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/Assumptions-jBvp51Rn.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/SeoSupport-BLNcYP0O.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/rentMath-B6ajsmEz.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/root-BCcQPzm1.css",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "type": "font",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/",
+        "type": "document",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "type": "image",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/manifest-33f9d195.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/root-B1aIplpT.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/home-CfZegAzN.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/Assumptions-jBvp51Rn.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/SeoSupport-BLNcYP0O.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/rentMath-B6ajsmEz.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/root-BCcQPzm1.css",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "type": "font",
+        "method": "GET"
+      }
+    ],
+    "responses": [
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/root-BCcQPzm1.css",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/manifest-33f9d195.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/root-B1aIplpT.js",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/SeoSupport-BLNcYP0O.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/Assumptions-jBvp51Rn.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/rentMath-B6ajsmEz.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/home-CfZegAzN.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/manifest-33f9d195.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/root-B1aIplpT.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/home-CfZegAzN.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/Assumptions-jBvp51Rn.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/SeoSupport-BLNcYP0O.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/rentMath-B6ajsmEz.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/root-BCcQPzm1.css",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "status": 304
+      }
+    ],
+    "failures": [],
+    "errors": [],
+    "prohibited": [],
+    "windowMs": 3500
+  },
+  {
+    "id": "w01",
+    "sha": "e2a62955a58d30be90a646fd99a253ca2b30bde9",
+    "consent": "rejected",
+    "requests": [
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/",
+        "type": "document",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "type": "image",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/manifest-33f9d195.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/root-B1aIplpT.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/home-CfZegAzN.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/Assumptions-jBvp51Rn.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/SeoSupport-BLNcYP0O.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/rentMath-B6ajsmEz.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/root-BCcQPzm1.css",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "type": "font",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/",
+        "type": "document",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "type": "image",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/manifest-33f9d195.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/root-B1aIplpT.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/home-CfZegAzN.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/Assumptions-jBvp51Rn.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/SeoSupport-BLNcYP0O.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/rentMath-B6ajsmEz.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/root-BCcQPzm1.css",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "type": "font",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/",
+        "type": "document",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "type": "image",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/manifest-33f9d195.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/root-B1aIplpT.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/home-CfZegAzN.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/Assumptions-jBvp51Rn.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/SeoSupport-BLNcYP0O.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/rentMath-B6ajsmEz.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/root-BCcQPzm1.css",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "type": "font",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "type": "xhr",
+        "method": "GET"
+      }
+    ],
+    "responses": [
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/manifest-33f9d195.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/root-B1aIplpT.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/Assumptions-jBvp51Rn.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/SeoSupport-BLNcYP0O.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/root-BCcQPzm1.css",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/home-CfZegAzN.js",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/rentMath-B6ajsmEz.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/manifest-33f9d195.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/root-B1aIplpT.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/home-CfZegAzN.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/Assumptions-jBvp51Rn.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/SeoSupport-BLNcYP0O.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/rentMath-B6ajsmEz.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/root-BCcQPzm1.css",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "status": 304
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/manifest-33f9d195.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/root-B1aIplpT.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/home-CfZegAzN.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/Assumptions-jBvp51Rn.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/SeoSupport-BLNcYP0O.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/rentMath-B6ajsmEz.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/assets/root-BCcQPzm1.css",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "status": 304
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "status": 200
+      }
+    ],
+    "failures": [],
+    "errors": [],
+    "prohibited": [],
+    "windowMs": 3500
+  },
+  {
+    "id": "w02",
+    "sha": "68bfad21aa48fb1425ac1a3ef695a37efc910d7c",
+    "consent": "accepted",
+    "requests": [
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/rent-budget-calculator",
+        "type": "document",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "type": "image",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/manifest-3f1774e1.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/root-w4NTQOkm.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/rent-budget-calculator-Cv1kAzMY.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/GeneratedPages-DWrCfLNQ.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/seo-DCv1-6yg.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/rentMath-B6ajsmEz.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/calendarDate-BdYtSwVE.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/root-awRa9JgG.css",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "type": "font",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/rent-budget-calculator",
+        "type": "document",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "type": "image",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/manifest-3f1774e1.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/root-w4NTQOkm.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/rent-budget-calculator-Cv1kAzMY.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/GeneratedPages-DWrCfLNQ.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/seo-DCv1-6yg.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/rentMath-B6ajsmEz.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/calendarDate-BdYtSwVE.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/root-awRa9JgG.css",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "type": "font",
+        "method": "GET"
+      }
+    ],
+    "responses": [
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/rent-budget-calculator",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/calendarDate-BdYtSwVE.js",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/rentMath-B6ajsmEz.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/manifest-3f1774e1.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/GeneratedPages-DWrCfLNQ.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/root-awRa9JgG.css",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/seo-DCv1-6yg.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/rent-budget-calculator-Cv1kAzMY.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/root-w4NTQOkm.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/rent-budget-calculator",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/manifest-3f1774e1.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/root-w4NTQOkm.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/rent-budget-calculator-Cv1kAzMY.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/GeneratedPages-DWrCfLNQ.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/seo-DCv1-6yg.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/rentMath-B6ajsmEz.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/calendarDate-BdYtSwVE.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/root-awRa9JgG.css",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "status": 304
+      }
+    ],
+    "failures": [],
+    "errors": [],
+    "prohibited": [],
+    "windowMs": 3500
+  },
+  {
+    "id": "w02",
+    "sha": "68bfad21aa48fb1425ac1a3ef695a37efc910d7c",
+    "consent": "rejected",
+    "requests": [
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/rent-budget-calculator",
+        "type": "document",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "type": "image",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/manifest-3f1774e1.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/root-w4NTQOkm.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/rent-budget-calculator-Cv1kAzMY.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/GeneratedPages-DWrCfLNQ.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/seo-DCv1-6yg.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/rentMath-B6ajsmEz.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/calendarDate-BdYtSwVE.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/root-awRa9JgG.css",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "type": "font",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/rent-budget-calculator",
+        "type": "document",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "type": "image",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/manifest-3f1774e1.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/root-w4NTQOkm.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/rent-budget-calculator-Cv1kAzMY.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/GeneratedPages-DWrCfLNQ.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/seo-DCv1-6yg.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/rentMath-B6ajsmEz.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/calendarDate-BdYtSwVE.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/root-awRa9JgG.css",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "type": "font",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/rent-budget-calculator",
+        "type": "document",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "type": "image",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/manifest-3f1774e1.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/root-w4NTQOkm.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/rent-budget-calculator-Cv1kAzMY.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/GeneratedPages-DWrCfLNQ.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/seo-DCv1-6yg.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/rentMath-B6ajsmEz.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/calendarDate-BdYtSwVE.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/root-awRa9JgG.css",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "type": "font",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "type": "xhr",
+        "method": "GET"
+      }
+    ],
+    "responses": [
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/rent-budget-calculator",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/manifest-3f1774e1.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/root-awRa9JgG.css",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/root-w4NTQOkm.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/calendarDate-BdYtSwVE.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/seo-DCv1-6yg.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/rentMath-B6ajsmEz.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/rent-budget-calculator-Cv1kAzMY.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/GeneratedPages-DWrCfLNQ.js",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/rent-budget-calculator",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/manifest-3f1774e1.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/root-w4NTQOkm.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/rent-budget-calculator-Cv1kAzMY.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/GeneratedPages-DWrCfLNQ.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/seo-DCv1-6yg.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/rentMath-B6ajsmEz.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/calendarDate-BdYtSwVE.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/root-awRa9JgG.css",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "status": 304
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/rent-budget-calculator",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/manifest-3f1774e1.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/root-w4NTQOkm.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/rent-budget-calculator-Cv1kAzMY.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/GeneratedPages-DWrCfLNQ.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/seo-DCv1-6yg.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/rentMath-B6ajsmEz.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/calendarDate-BdYtSwVE.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/assets/root-awRa9JgG.css",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "status": 200
+      },
+      {
+        "url": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "status": 304
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "status": 200
+      }
+    ],
+    "failures": [],
+    "errors": [],
+    "prohibited": [],
+    "windowMs": 3500
+  },
+  {
+    "id": "w03",
+    "sha": "5af2d234cd9a06b938c01271c2a6b740afd150e5",
+    "consent": "accepted",
+    "requests": [
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/rent-per-paycheck-calculator",
+        "type": "document",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "type": "image",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/manifest-7801ac22.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/root-Nwwkw-tz.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/rent-per-paycheck-calculator-Dec_6HJ0.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/Assumptions-jBvp51Rn.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/SeoSupport-BLNcYP0O.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/calendarDate-t5y7BZpT.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/rentMath-C2XUnBk_.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/root-Bzp7HRWA.css",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "type": "font",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/rent-per-paycheck-calculator",
+        "type": "document",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "type": "image",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/manifest-7801ac22.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/root-Nwwkw-tz.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/rent-per-paycheck-calculator-Dec_6HJ0.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/Assumptions-jBvp51Rn.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/SeoSupport-BLNcYP0O.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/calendarDate-t5y7BZpT.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/rentMath-C2XUnBk_.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/root-Bzp7HRWA.css",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "type": "font",
+        "method": "GET"
+      }
+    ],
+    "responses": [
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/rent-per-paycheck-calculator",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/root-Bzp7HRWA.css",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/manifest-7801ac22.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/Assumptions-jBvp51Rn.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/rent-per-paycheck-calculator-Dec_6HJ0.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/calendarDate-t5y7BZpT.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/rentMath-C2XUnBk_.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/SeoSupport-BLNcYP0O.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/root-Nwwkw-tz.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/rent-per-paycheck-calculator",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/manifest-7801ac22.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/root-Nwwkw-tz.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/rent-per-paycheck-calculator-Dec_6HJ0.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/Assumptions-jBvp51Rn.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/SeoSupport-BLNcYP0O.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/calendarDate-t5y7BZpT.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/rentMath-C2XUnBk_.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/root-Bzp7HRWA.css",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "status": 304
+      }
+    ],
+    "failures": [],
+    "errors": [],
+    "prohibited": [],
+    "windowMs": 3500
+  },
+  {
+    "id": "w03",
+    "sha": "5af2d234cd9a06b938c01271c2a6b740afd150e5",
+    "consent": "rejected",
+    "requests": [
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/rent-per-paycheck-calculator",
+        "type": "document",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "type": "image",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/manifest-7801ac22.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/root-Nwwkw-tz.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/rent-per-paycheck-calculator-Dec_6HJ0.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/Assumptions-jBvp51Rn.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/SeoSupport-BLNcYP0O.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/calendarDate-t5y7BZpT.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/rentMath-C2XUnBk_.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/root-Bzp7HRWA.css",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "type": "font",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/rent-per-paycheck-calculator",
+        "type": "document",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "type": "image",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/manifest-7801ac22.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/root-Nwwkw-tz.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/rent-per-paycheck-calculator-Dec_6HJ0.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/Assumptions-jBvp51Rn.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/SeoSupport-BLNcYP0O.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/calendarDate-t5y7BZpT.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/rentMath-C2XUnBk_.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/root-Bzp7HRWA.css",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "type": "font",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/rent-per-paycheck-calculator",
+        "type": "document",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "type": "image",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/manifest-7801ac22.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/root-Nwwkw-tz.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/rent-per-paycheck-calculator-Dec_6HJ0.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/Assumptions-jBvp51Rn.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/SeoSupport-BLNcYP0O.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/calendarDate-t5y7BZpT.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/rentMath-C2XUnBk_.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/root-Bzp7HRWA.css",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "type": "font",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "type": "xhr",
+        "method": "GET"
+      }
+    ],
+    "responses": [
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/rent-per-paycheck-calculator",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/manifest-7801ac22.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/root-Nwwkw-tz.js",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/root-Bzp7HRWA.css",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/rent-per-paycheck-calculator-Dec_6HJ0.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/Assumptions-jBvp51Rn.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/calendarDate-t5y7BZpT.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/rentMath-C2XUnBk_.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/SeoSupport-BLNcYP0O.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/rent-per-paycheck-calculator",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/manifest-7801ac22.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/root-Nwwkw-tz.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/rent-per-paycheck-calculator-Dec_6HJ0.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/Assumptions-jBvp51Rn.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/SeoSupport-BLNcYP0O.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/calendarDate-t5y7BZpT.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/rentMath-C2XUnBk_.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/root-Bzp7HRWA.css",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "status": 304
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/rent-per-paycheck-calculator",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/manifest-7801ac22.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/root-Nwwkw-tz.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/rent-per-paycheck-calculator-Dec_6HJ0.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/Assumptions-jBvp51Rn.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/SeoSupport-BLNcYP0O.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/calendarDate-t5y7BZpT.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/rentMath-C2XUnBk_.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/assets/root-Bzp7HRWA.css",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "status": 200
+      },
+      {
+        "url": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "status": 304
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "status": 200
+      }
+    ],
+    "failures": [],
+    "errors": [],
+    "prohibited": [],
+    "windowMs": 3500
+  },
+  {
+    "id": "w04",
+    "sha": "2483d5fbde07f5ec0ab74596e252dfa5075e9123",
+    "consent": "accepted",
+    "requests": [
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/rent-schedule-calculator",
+        "type": "document",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "type": "image",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/manifest-25e1e700.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/root-Bc6VEwlp.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/rent-schedule-calculator-RjJKJdjc.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/GeneratedPages-CV3cxtiQ.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/seo-DCv1-6yg.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/calendarDate-9Fn9-EZV.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/rentMath-C2XUnBk_.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/root-COFE9Tqf.css",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "type": "font",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/rent-schedule-calculator",
+        "type": "document",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "type": "image",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/manifest-25e1e700.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/root-Bc6VEwlp.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/rent-schedule-calculator-RjJKJdjc.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/GeneratedPages-CV3cxtiQ.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/seo-DCv1-6yg.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/calendarDate-9Fn9-EZV.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/rentMath-C2XUnBk_.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/root-COFE9Tqf.css",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "type": "font",
+        "method": "GET"
+      }
+    ],
+    "responses": [
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/rent-schedule-calculator",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/root-COFE9Tqf.css",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/manifest-25e1e700.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/rent-schedule-calculator-RjJKJdjc.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/root-Bc6VEwlp.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/seo-DCv1-6yg.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/rentMath-C2XUnBk_.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/calendarDate-9Fn9-EZV.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/GeneratedPages-CV3cxtiQ.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/rent-schedule-calculator",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/manifest-25e1e700.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/root-Bc6VEwlp.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/rent-schedule-calculator-RjJKJdjc.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/GeneratedPages-CV3cxtiQ.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/seo-DCv1-6yg.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/calendarDate-9Fn9-EZV.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/rentMath-C2XUnBk_.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/root-COFE9Tqf.css",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "status": 304
+      }
+    ],
+    "failures": [],
+    "errors": [],
+    "prohibited": [],
+    "windowMs": 3500
+  },
+  {
+    "id": "w04",
+    "sha": "2483d5fbde07f5ec0ab74596e252dfa5075e9123",
+    "consent": "rejected",
+    "requests": [
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/rent-schedule-calculator",
+        "type": "document",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "type": "image",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/manifest-25e1e700.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/root-Bc6VEwlp.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/rent-schedule-calculator-RjJKJdjc.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/GeneratedPages-CV3cxtiQ.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/seo-DCv1-6yg.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/calendarDate-9Fn9-EZV.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/rentMath-C2XUnBk_.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/root-COFE9Tqf.css",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "type": "font",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/rent-schedule-calculator",
+        "type": "document",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "type": "image",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/manifest-25e1e700.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/root-Bc6VEwlp.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/rent-schedule-calculator-RjJKJdjc.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/GeneratedPages-CV3cxtiQ.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/seo-DCv1-6yg.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/calendarDate-9Fn9-EZV.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/rentMath-C2XUnBk_.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/root-COFE9Tqf.css",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "type": "font",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/rent-schedule-calculator",
+        "type": "document",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "type": "image",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/manifest-25e1e700.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/root-Bc6VEwlp.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/rent-schedule-calculator-RjJKJdjc.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/GeneratedPages-CV3cxtiQ.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/seo-DCv1-6yg.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/calendarDate-9Fn9-EZV.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/rentMath-C2XUnBk_.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "type": "script",
+        "method": "GET"
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/root-COFE9Tqf.css",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "type": "stylesheet",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "type": "font",
+        "method": "GET"
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "type": "xhr",
+        "method": "GET"
+      }
+    ],
+    "responses": [
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/rent-schedule-calculator",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/root-COFE9Tqf.css",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/rentMath-C2XUnBk_.js",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/calendarDate-9Fn9-EZV.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/manifest-25e1e700.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/root-Bc6VEwlp.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/seo-DCv1-6yg.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/rent-schedule-calculator-RjJKJdjc.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/GeneratedPages-CV3cxtiQ.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/rent-schedule-calculator",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/manifest-25e1e700.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/root-Bc6VEwlp.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/rent-schedule-calculator-RjJKJdjc.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/GeneratedPages-CV3cxtiQ.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/seo-DCv1-6yg.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/calendarDate-9Fn9-EZV.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/rentMath-C2XUnBk_.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/root-COFE9Tqf.css",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "status": 304
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/rent-schedule-calculator",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/manifest-25e1e700.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/entry.client-Dr1imlm8.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/jsx-runtime-bjJNJxSx.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/index-CnyZowJt.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/root-Bc6VEwlp.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/routeRegistry-CenmAW4F.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/AdPlaceholder-DhuwzeXG.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/provider-BqKiVXoy.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/rent-schedule-calculator-RjJKJdjc.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/GeneratedPages-CV3cxtiQ.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/seo-DCv1-6yg.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/calendarDate-9Fn9-EZV.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/HydrationSafeControls-Bh4F622x.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/rentMath-C2XUnBk_.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/generatedTools-PyDEqOxm.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/savedState-Fqricvai.js",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/assets/root-COFE9Tqf.css",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "status": 200
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "status": 200
+      },
+      {
+        "url": "https://6af71cc278ec6b9561a53817--rent-converter.netlify.app/images/rent-converter-logo-final_icon_compressed.jpg",
+        "status": 304
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2",
+        "status": 200
+      }
+    ],
+    "failures": [],
+    "errors": [],
+    "prohibited": [],
+    "windowMs": 3500
+  }
+]

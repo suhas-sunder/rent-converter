@@ -1,0 +1,30 @@
+[
+  {
+    "focus": true,
+    "focusVisible": true,
+    "focusWithin": true,
+    "outline": "rgb(3, 105, 161) solid 2px",
+    "shadow": "none"
+  },
+  {
+    "focus": true,
+    "focusVisible": true,
+    "focusWithin": true,
+    "outline": "rgb(3, 105, 161) solid 2px",
+    "shadow": "none"
+  },
+  {
+    "focus": true,
+    "focusVisible": true,
+    "focusWithin": true,
+    "outline": "rgb(3, 105, 161) solid 2px",
+    "shadow": "none"
+  },
+  {
+    "focus": false,
+    "focusVisible": false,
+    "focusWithin": true,
+    "outline": "rgb(2, 6, 23) none 0px",
+    "shadow": "none"
+  }
+]

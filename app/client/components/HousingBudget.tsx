@@ -1,4 +1,5 @@
 import { useState } from "react";
+import HydrationSafeControls from "~/client/components/HydrationSafeControls";
 import {
   calculateHousingBudget,
   HOUSING_FREQUENCIES,
@@ -75,6 +76,7 @@ export default function HousingBudget() {
       <div className="mt-6">
         <p className="mb-5 text-sm leading-relaxed text-slate-700">This is a separate budget from the gross-income comparison above. Enter your own after-tax income and costs; values are not copied between the tools. Use one currency throughout.</p>
         <noscript><p className="mb-4 rounded-xl bg-sky-50 p-4">Enable JavaScript for this interactive budget. To calculate manually, normalize each housing bill to a monthly amount, add them, then subtract that total, other commitments and savings from monthly take-home income.</p></noscript>
+        <HydrationSafeControls label="Take-home housing budget">
         <div className="grid gap-5 sm:grid-cols-2">
           <BudgetField field="income" label="Monthly take-home income" value={input.income} onChange={value => update("income", value)} error={touched.has("income") ? errors.income : undefined} helper="Income available after tax and payroll deductions. Enter 0 if there is no income." />
           <div>
@@ -134,6 +136,7 @@ export default function HousingBudget() {
           <button type="button" onClick={() => window.print()} className="cursor-pointer rounded-xl bg-slate-100 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-sky-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2">Print budget / Save PDF</button>
           <p className="text-sm text-slate-600">Valid entries save on this device when browser storage is available.</p>
         </div>
+        </HydrationSafeControls>
       </div>
     </details>
   </section>;
