@@ -1,6 +1,6 @@
-# W15 â€” One-time move-in worksheet beside the recurring budget
+# W15 — One-time move-in worksheet beside the recurring budget
 
-Status: implemented and locally validated; HOLD publication. Branch `codex/w15-move-in-worksheet`, independent base `ea76372657068902c21e013eb8be9515212140e8`. Review date: November 13, 2026. Final exact branch SHA and any immutable hosted preview are recorded by the integration ledger. W05â€“W08 are not implemented; this candidate does not complete their acceptance. No production publication is authorized.
+Status: implemented and locally validated; HOLD publication. Branch `codex/w15-move-in-worksheet`, independent base `ea76372657068902c21e013eb8be9515212140e8`. Review date: November 13, 2026. Final exact branch SHA and any immutable hosted preview are recorded by the integration ledger. W05–W08 are not implemented; this candidate does not complete their acceptance. No production publication is authorized.
 
 ## User task and scope
 
@@ -23,7 +23,7 @@ Reference review: [Fannie Mae, Costs of Renting](https://yourhome.fanniemae.com/
 - Clean `npm ci`, typecheck, production build, all 195 tests, redirect/breadcrumb validators and local release HTTP audit passed. Retained 60 canonical routes, 112 redirects, 215 JSON-LD scripts and 59 valid breadcrumb lists. npm audit reports zero vulnerabilities.
 - New nine-test `scripts/move-in-worksheet.test.mjs`: zero/default totals, partial-month replacement and exact reconciliation, no first rent, leap February, preserved decimal precision/category rounding, large exact amounts, malformed/negative/empty/over-limit money, invalid day counts, and real CSV values/method/CRLF.
 - Actual Chromium: 360, 390, 768, 1280, 1440 widths without page overflow; valid complex scenario, negative-deposit error then zero-deposit correction; keyboard tab flow; JS-off controls disabled and manual explanation; accepted/rejected-consent sanitized request traces with no analytics/ad providers or page errors. Axe zero violations and zero incomplete results for the exercised route state.
-- Native 200% browser zoom verified through a disposable Chrome extension, not CSS zoom: 1440 physical pixels â†’ 720 CSS pixels; 720 â†’ 360, devicePixelRatio 2, no page overflow. CDP captures reviewed. Small inline recurring amounts now stay together; very large amounts can wrap without omission.
+- Native 200% browser zoom verified through a disposable Chrome extension, not CSS zoom: 1440 physical pixels → 720 CSS pixels; 720 → 360, devicePixelRatio 2, no page overflow. CDP captures reviewed. Small inline recurring amounts now stay together; very large amounts can wrap without omission.
 - Actual CSV download was independently checked for 3,265.52 total, 1,064.52 partial rent and 1,500.00 separate recurring amount. Actual Chromium PDF was extracted and rendered. An initial print showed duplicated input fields; the repaired form is hidden in print and item rows resist splitting. Final three-page PDF has no out-of-bounds words or ad placeholders; result rows remain intact on page 2 and recurring/methodology on page 3. Final rendered evidence is in the package evidence directory. Native OS print dialogs and screen-reader speech remain manual boundaries.
 - Parent's independent source review found no arithmetic blocker; requested final link cursor/focus styling, repaired. Final integration browser verification of the exact candidate SHA remains required.
 
@@ -33,6 +33,6 @@ Curated local evidence: `ai-issues/evidence/w15-move-in`. Browser scripts and ra
 
 New `MoveInWorksheet.tsx`, `moveInWorksheet.js`, regression tests and route attachment. Test script registers the additional suite. No shared generated page template change. No route, canonical, robots, sitemap, redirect, FAQ, ad lifecycle or existing storage change. The only added internal link uses existing `/prorated-rent-calculator` for other bases.
 
-This monthly-rent worksheet does not infer the number of charged days, refund eligibility, legal charges or dates. Its actual-days method requires 28â€“31 days in the entered rent month and charged days within that month. Other proration bases require the separate calculator and agreement check. No automatic persistence is promised; download or print preserves the result.
+This monthly-rent worksheet does not infer the number of charged days, refund eligibility, legal charges or dates. Its actual-days method requires 28–31 days in the entered rent month and charged days within that month. Other proration bases require the separate calculator and agreement check. No automatic persistence is promised; download or print preserves the result.
 
-Rollback the W15-only commit from its staging dependency, preserving W02. Never revert the complete W01â€“W04 aggregate or merge this development baseline into main. No push or production deployment performed by this worker.
+Rollback the W15-only commit from its staging dependency, preserving W02. Never revert the complete W01–W04 aggregate or merge this development baseline into main. No push or production deployment performed by this worker.
