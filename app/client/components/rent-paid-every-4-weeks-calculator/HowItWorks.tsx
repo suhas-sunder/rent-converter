@@ -1,18 +1,20 @@
 import { SeoHowItWorks } from "~/client/components/layout/SeoSupport";
+import { fourWeekExample } from "~/client/data/verifiedPeriodExamples";
+import { formatMoney } from "~/client/utils/rentMath";
 
 type HowItWorksProps = Record<string, unknown>;
 
 const howItWorks = {
   title: "Rent paid every 4 weeks",
-  intro: "A 4-week rent cycle creates 13 payments per year, not 12. That is why a 28-day payment can feel monthly but still convert to a different average monthly cost.",
+  intro: "A 4-week payment covers 28 days. Thirteen of those periods cover 364 days, while this calculator compares rent over 365 days. Neither figure tells you the exact number of payment dates in your agreement.",
   steps: [
     {
       title: "A 28-day payment is not a calendar month",
       body: "Every 4 weeks is exactly 28 days. A calendar month averages about 30.42 days, so the monthly equivalent is higher than the 4-week payment."
     },
     {
-      title: "The annual count changes the comparison",
-      body: "A 4-week schedule has 13 payments per year. Monthly rent has 12 payments per year. That one extra payment is the reason comparisons can feel surprising."
+      title: "A rate equivalent is different from a payment count",
+      body: "A 365-day equivalent uses 365 ÷ 28 periods, about 13.04. You cannot make a fraction of a scheduled payment: count actual dates separately. Depending on the first date and the calendar-year boundaries, 13 or 14 payment dates can fall in a year."
     },
     {
       title: "Due dates can drift through the month",
@@ -22,7 +24,7 @@ const howItWorks = {
   examples: [
     {
       title: "$2,000 every 4 weeks",
-      body: "$2,000 every 28 days is $26,000 per year, or about $2,166.67 per month on average."
+      body: `${formatMoney(fourWeekExample.payment, "USD")} every 28 days is ${formatMoney(fourWeekExample.annual, "USD")} per 365-day comparison year, or ${formatMoney(fourWeekExample.monthly, "USD")} per average month. Thirteen payments total ${formatMoney(fourWeekExample.thirteenPayments, "USD")} and cover ${fourWeekExample.daysCovered} days.`
     },
     {
       title: "Monthly budget mismatch",
@@ -34,7 +36,7 @@ const howItWorks = {
     }
   ],
   notes: [
-    "Use this for 4 weekly to monthly calculator, 28 day billing cycle calculator, and rent paid every 4 weeks searches.",
+    "Use the average monthly equivalent to compare listings or plan a budget. Use a dated schedule to count the payments that actually fall within your lease.",
     "If rent is weekly, use weekly to monthly. If rent is due on a fixed calendar date, use the due date calculator."
   ],
   relatedLinks: [
@@ -43,8 +45,8 @@ const howItWorks = {
       label: "Weekly to monthly"
     },
     {
-      to: "/pw-to-pcm-calculator",
-      label: "PW to PCM"
+      to: "/rent-schedule-calculator",
+      label: "Count payment periods within your lease"
     },
     {
       to: "/methodology",
