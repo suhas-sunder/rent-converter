@@ -1,0 +1,90 @@
+{
+  "week": "w15",
+  "origin": "http://127.0.0.1:3115",
+  "views": [
+    {
+      "width": 360,
+      "scroll": 360
+    },
+    {
+      "width": 390,
+      "scroll": 390
+    },
+    {
+      "width": 768,
+      "scroll": 768
+    },
+    {
+      "width": 1280,
+      "scroll": 1280
+    },
+    {
+      "width": 1440,
+      "scroll": 1440
+    }
+  ],
+  "networks": [
+    {
+      "consent": "accepted",
+      "requests": [
+        "http://127.0.0.1:3115/rent-budget-calculator",
+        "http://127.0.0.1:3115/images/rent-converter-logo-final_icon_compressed.jpg",
+        "http://127.0.0.1:3115/assets/manifest-0874cb4f.js",
+        "http://127.0.0.1:3115/assets/entry.client-j8TK5Dre.js",
+        "http://127.0.0.1:3115/assets/jsx-runtime-DZ7Lf66K.js",
+        "http://127.0.0.1:3115/assets/index-CxpeHdp4.js",
+        "http://127.0.0.1:3115/assets/root-DwIZhZ46.js",
+        "http://127.0.0.1:3115/assets/routeRegistry-CenmAW4F.js",
+        "http://127.0.0.1:3115/assets/AdPlaceholder-Bm3GwyRn.js",
+        "http://127.0.0.1:3115/assets/provider-C0vB4Qjy.js",
+        "http://127.0.0.1:3115/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "http://127.0.0.1:3115/assets/rent-budget-calculator-D-xGI1Cx.js",
+        "http://127.0.0.1:3115/assets/GeneratedPages-hh-ij0Y9.js",
+        "http://127.0.0.1:3115/assets/seo-CNhlrUU0.js",
+        "http://127.0.0.1:3115/assets/HydrationSafeControls-DmeKg_5I.js",
+        "http://127.0.0.1:3115/assets/generatedTools-PyDEqOxm.js",
+        "http://127.0.0.1:3115/assets/rentMath-C2XUnBk_.js",
+        "http://127.0.0.1:3115/assets/savedState-CDk6u79P.js",
+        "http://127.0.0.1:3115/assets/calendarDate-ByROZ-gq.js",
+        "http://127.0.0.1:3115/assets/root-DT1bru7Z.css",
+        "https://fonts.googleapis.com/css2",
+        "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2"
+      ],
+      "errors": []
+    },
+    {
+      "consent": "rejected",
+      "requests": [
+        "http://127.0.0.1:3115/rent-budget-calculator",
+        "http://127.0.0.1:3115/images/rent-converter-logo-final_icon_compressed.jpg",
+        "http://127.0.0.1:3115/assets/manifest-0874cb4f.js",
+        "http://127.0.0.1:3115/assets/entry.client-j8TK5Dre.js",
+        "http://127.0.0.1:3115/assets/jsx-runtime-DZ7Lf66K.js",
+        "http://127.0.0.1:3115/assets/index-CxpeHdp4.js",
+        "http://127.0.0.1:3115/assets/root-DwIZhZ46.js",
+        "http://127.0.0.1:3115/assets/routeRegistry-CenmAW4F.js",
+        "http://127.0.0.1:3115/assets/AdPlaceholder-Bm3GwyRn.js",
+        "http://127.0.0.1:3115/assets/provider-C0vB4Qjy.js",
+        "http://127.0.0.1:3115/assets/generatedRouteConfigs-lDEfWfpo.js",
+        "http://127.0.0.1:3115/assets/rent-budget-calculator-D-xGI1Cx.js",
+        "http://127.0.0.1:3115/assets/GeneratedPages-hh-ij0Y9.js",
+        "http://127.0.0.1:3115/assets/seo-CNhlrUU0.js",
+        "http://127.0.0.1:3115/assets/HydrationSafeControls-DmeKg_5I.js",
+        "http://127.0.0.1:3115/assets/generatedTools-PyDEqOxm.js",
+        "http://127.0.0.1:3115/assets/rentMath-C2XUnBk_.js",
+        "http://127.0.0.1:3115/assets/savedState-CDk6u79P.js",
+        "http://127.0.0.1:3115/assets/calendarDate-ByROZ-gq.js",
+        "http://127.0.0.1:3115/assets/root-DT1bru7Z.css",
+        "https://fonts.googleapis.com/css2",
+        "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+        "https://fonts.googleapis.com/css2"
+      ],
+      "errors": []
+    }
+  ],
+  "axe": {
+    "violations": [],
+    "incomplete": []
+  },
+  "nojs": true
+}
