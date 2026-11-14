@@ -2,6 +2,7 @@ import { useEffect, useId, useMemo, useState } from "react";
 import { Link } from "react-router";
 import RentScheduleExport from "./RentScheduleExport";
 import LeaseBoundaryCheck from "./LeaseBoundaryCheck";
+import { projectContractualDates } from "~/client/utils/contractualSchedule.js";
 import HydrationSafeControls from "~/client/components/HydrationSafeControls";
 import {
   dailyToMonthlyCents,
@@ -1714,6 +1715,8 @@ export function DateToolPage({ config }: { config: DateToolConfig }) {
   const [rent, setRent] = useState("2000");
   const [currency, setCurrency] = useState<Currency>("USD");
   const [frequency, setFrequency] = useState<ScheduleFrequency>("monthly");
+  const [useDueDate, setUseDueDate] = useState(false);
+  const [firstDueDate, setFirstDueDate] = useState("");
 
   useEffect(() => {
     setStart(currentCalendarDateString());
@@ -1729,12 +1732,16 @@ export function DateToolPage({ config }: { config: DateToolConfig }) {
   const scheduleCalculation = config.mode === "schedule" && startParsed.ok && termParsed.ok
     ? { ...generateLeasePaymentSchedule(startParsed.date, termParsed.value, frequency), start: startParsed.date, term: termParsed.value }
     : null;
+  const dueProjection = config.mode === "schedule" && useDueDate && scheduleCalculation
+    ? projectContractualDates({ firstDueDate, count: scheduleCalculation.payments.length, frequency })
+    : null;
   const rows = scheduleCalculation && rentParsed.ok
     ? [
-        ["Payment", "Payment date", "Amount"],
+        ["Payment", "Period start", ...(useDueDate ? ["Planned due date"] : []), "Amount"],
         ...scheduleCalculation.payments.map((payment, index) => [
           String(index + 1),
           formatCalendarDate(payment),
+          ...(useDueDate && dueProjection?.ok ? [dueProjection.dates![index]] : []),
           formatMoney(rentParsed.cents, currency),
         ]),
       ]
@@ -1744,6 +1751,7 @@ export function DateToolPage({ config }: { config: DateToolConfig }) {
     !termParsed.ok ? termParsed.error : null,
     dateCalculation && dateCalculation.date.year > 9999 ? "Choose a start date and term that end no later than the year 9999." : null,
     config.mode === "schedule" && !rentParsed.ok ? rentParsed.error : null,
+    dueProjection && !dueProjection.ok ? dueProjection.error : null,
   ].filter((error): error is string => Boolean(error));
   const schemas = makePageSchemas({ ...config, calculator: true, faq: config.faq });
   return (
@@ -1751,7 +1759,7 @@ export function DateToolPage({ config }: { config: DateToolConfig }) {
       <ToolCard eyebrow={config.eyebrow} h1={config.h1} lead={config.lead} onPrint={() => window.print()}>
         <div className="mt-6 grid gap-4 lg:grid-cols-12">
           <div className="lg:col-span-4">
-            <TextInput id={`${config.mode}-start-date`} type="date" label={config.mode === "schedule" ? "Lease start and first payment date" : "Lease start date"} value={start} onChange={setStart} inputMode="text" error={browserDateReady && !startParsed.ok ? startParsed.error : undefined} />
+            <TextInput id={`${config.mode}-start-date`} type="date" label={config.mode === "schedule" ? "Lease start / first period start" : "Lease start date"} value={start} onChange={setStart} inputMode="text" error={browserDateReady && !startParsed.ok ? startParsed.error : undefined} />
           </div>
           <div className="lg:col-span-3">
             <TextInput id={`${config.mode}-term-months`} label="Term in calendar months" value={months} onChange={setMonths} inputMode="numeric" helper="Enter a whole number from 1 through 120. Enter 12 for a 12-month lease." error={!termParsed.ok ? termParsed.error : undefined} />
@@ -1769,15 +1777,24 @@ export function DateToolPage({ config }: { config: DateToolConfig }) {
                   <option value="every-4-weeks">Every 4 weeks (28 days)</option>
                 </select>
               </div>
+              <div className="lg:col-span-8 rounded-xl bg-slate-50 p-4 rc-no-print">
+                <label className="flex cursor-pointer items-start gap-3 font-semibold text-sky-900">
+                  <input type="checkbox" checked={useDueDate} onChange={event => setUseDueDate(event.target.checked)} className="mt-1 h-5 w-5 shrink-0 cursor-pointer accent-sky-800 focus-visible:outline-2 focus-visible:outline-sky-700" />
+                  Use a due-date anchor from my agreement
+                </label>
+                <p className="mt-2 text-sm text-slate-700">Optional: enter the due date associated with the first period. Later due dates repeat at the selected frequency from this separate anchor; they are projections to check against your agreement.</p>
+                {useDueDate && <div className="mt-3"><TextInput id="schedule-first-due-date" type="date" label="First due date from your agreement" value={firstDueDate} onChange={setFirstDueDate} inputMode="text" helper="May fall before the first period starts. Monthly dates retain this day number, clamping to month-end when needed." error={dueProjection && !dueProjection.ok ? dueProjection.error : undefined} /></div>}
+              </div>
             </>
           ) : null}
         </div>
         {!browserDateReady ? null : errors.length ? <InvalidDateResults errors={errors} /> : config.mode === "schedule" && scheduleCalculation && rentParsed.ok ? (
+          <div className="print:break-inside-avoid">
           <ResultPanel
             label="Generated payment schedule"
             tableLabel="Rent payment schedule; scroll horizontally to view all columns"
             value={`${scheduleCalculation.payments.length} ${scheduleCalculation.payments.length === 1 ? "payment" : "payments"}`}
-            detail="Payment dates are period starts. The schedule excludes every date on or after the calculated lease end."
+            detail={useDueDate ? `Period starts remain lease-bounded; planned due dates repeat from your entered anchor ${firstDueDate}. Due dates may fall outside the lease period and are not independently verified contractual deadlines. No weekend, bank-holiday, grace-period or final partial-payment adjustment is made.` : "Payment dates are period starts. The schedule excludes every date on or after the calculated lease end. No weekend, bank-holiday, grace-period or final partial-payment adjustment is made."}
             cards={[
               { label: "Lease start", value: formatCalendarDate(scheduleCalculation.start) },
               { label: "Calculated lease end", value: formatCalendarDate(scheduleCalculation.leaseEnd.date) },
@@ -1786,6 +1803,7 @@ export function DateToolPage({ config }: { config: DateToolConfig }) {
             ]}
             tableRows={rows}
           />
+          </div>
         ) : dateCalculation && startParsed.ok && termParsed.ok ? (
           <ResultPanel
             label="Calculated lease end"
@@ -1809,6 +1827,7 @@ export function DateToolPage({ config }: { config: DateToolConfig }) {
         frequency,
         rentCents: rentParsed.cents,
         currency,
+        ...(useDueDate && dueProjection?.ok ? { dueDates: dueProjection.dates } : {}),
       } : null} />}
       </ToolCard>
       <ContentBlocks sections={dateSections(config)} examples={dateExamples(config)} />
