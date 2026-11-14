@@ -1,0 +1,33 @@
+[
+  {
+    "file": "worksheet.pdf",
+    "pages": [
+      {
+        "page": 1,
+        "characters": 1192,
+        "image": "worksheet-page-1.png",
+        "out_of_bounds_words": []
+      },
+      {
+        "page": 2,
+        "characters": 1922,
+        "image": "worksheet-page-2.png",
+        "out_of_bounds_words": []
+      },
+      {
+        "page": 3,
+        "characters": 663,
+        "image": "worksheet-page-3.png",
+        "out_of_bounds_words": []
+      },
+      {
+        "page": 4,
+        "characters": 709,
+        "image": "worksheet-page-4.png",
+        "out_of_bounds_words": []
+      }
+    ],
+    "missing": [],
+    "ad_placeholder": false
+  }
+]

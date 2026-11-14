@@ -1,0 +1,30 @@
+[
+  {
+    "week": "w11",
+    "width": 1440,
+    "innerWidth": 720,
+    "devicePixelRatio": 2,
+    "scrollWidth": 720
+  },
+  {
+    "week": "w11",
+    "width": 720,
+    "innerWidth": 360,
+    "devicePixelRatio": 2,
+    "scrollWidth": 360
+  },
+  {
+    "week": "w15",
+    "width": 1440,
+    "innerWidth": 720,
+    "devicePixelRatio": 2,
+    "scrollWidth": 720
+  },
+  {
+    "week": "w15",
+    "width": 720,
+    "innerWidth": 360,
+    "devicePixelRatio": 2,
+    "scrollWidth": 360
+  }
+]

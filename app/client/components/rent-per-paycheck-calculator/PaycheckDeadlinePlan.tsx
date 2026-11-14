@@ -3,9 +3,11 @@ import { calculatePaycheckDeadline } from "~/client/utils/paycheckDeadline.js";
 import type { PayFrequency } from "~/client/utils/paycheckDeadline.js";
 import { parseMoneyToCents } from "~/client/utils/rentMath";
 import { parseWholeNumber } from "~/client/utils/calendarDate.js";
+import { checkPaycheckAverage } from "~/client/utils/paycheckAverageCheck.js";
 
 type Props = {
   monthlyRentCents?: bigint;
+  averageReserveCents?: bigint;
   frequency: PayFrequency;
   currency: string;
   formatMoney: (cents: bigint) => string;
@@ -18,7 +20,7 @@ const frequencyLabels: Record<PayFrequency, string> = {
 const fieldClass = "w-full min-w-0 rounded-xl bg-slate-100 px-3 py-2 text-base text-slate-950 outline-none transition hover:bg-sky-50 focus:bg-white focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2";
 const labelClass = "mb-2 block text-sm font-semibold text-slate-700";
 
-export default function PaycheckDeadlinePlan({ monthlyRentCents, frequency, currency, formatMoney }: Props) {
+export default function PaycheckDeadlinePlan({ monthlyRentCents, averageReserveCents, frequency, currency, formatMoney }: Props) {
   const [hydrated, setHydrated] = useState(false);
   const [rentOverride, setRentOverride] = useState<string | null>(null);
   const [saved, setSaved] = useState("0");
@@ -46,6 +48,9 @@ export default function PaycheckDeadlinePlan({ monthlyRentCents, frequency, curr
       secondPayDay: parsedSecondDay.ok ? parsedSecondDay.value : undefined,
     })
     : { ok: false as const, error: !parsedRent.ok ? parsedRent.error : !parsedSaved.ok ? parsedSaved.error : "Check the amounts." };
+  const averageCheck = result.ok && parsedRent.ok && parsedSaved.ok && averageReserveCents !== undefined
+    ? checkPaycheckAverage({ rentCents: parsedRent.cents, savedCents: parsedSaved.cents, reserveCents: averageReserveCents, paydayCount: result.rows.length })
+    : null;
 
   return (
     <details className="mt-6 rounded-2xl bg-slate-50 p-4 sm:p-5">
@@ -108,6 +113,14 @@ export default function PaycheckDeadlinePlan({ monthlyRentCents, frequency, curr
             {result.rows.length > 0 && result.remainingCents > 0n && <p className="mt-1 text-sm text-slate-700">Reserve the amounts below from each paycheck. This assumes each paycheck can cover its reserve; income and other bills are not assessed.</p>}
             {result.excessCents > 0n && <p className="mt-1 text-sm text-slate-700">{formatMoney(result.excessCents)} of the amount saved is above this payment.</p>}
           </div>
+          {averageCheck?.ok && averageReserveCents !== undefined && <section className="mt-3 rounded-xl bg-white p-4" aria-label="Annual average deadline check">
+            <h3 className="font-semibold text-sky-900">Would the annual average cover this bill?</h3>
+            <p className="mt-2 text-sm text-slate-700">Saving {formatMoney(averageReserveCents)} on each of these {result.rows.length} actual payday{result.rows.length === 1 ? "" : "s"} adds {formatMoney(averageCheck.newSavingsCents)}. Including your existing savings, you would have {formatMoney(averageCheck.availableCents)} by {dueDate}.</p>
+            <p className={`mt-2 font-semibold ${averageCheck.shortfallCents > 0n ? "text-amber-900" : "text-sky-900"}`}>
+              {averageCheck.shortfallCents > 0n ? `${formatMoney(averageCheck.shortfallCents)} short of this rent payment.` : averageCheck.surplusCents > 0n ? `${formatMoney(averageCheck.surplusCents)} left after this rent payment.` : "The average saving amount covers this payment exactly."}
+            </p>
+            <p className="mt-2 text-xs text-slate-700">This check repeats the displayed, cent-rounded annual-average amount from the calculator above. It does not count future paychecks after the deadline or other bills. Changing the actual bill here does not change that annual average.</p>
+          </section>}
           {result.rows.length > 0 && <div role="region" aria-label="Paycheck reserve schedule" tabIndex={0} className="mt-3 overflow-x-auto rounded-xl bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-sky-500">
             <table className="w-full text-left text-sm">
               <caption className="px-3 py-2 text-left text-sm font-semibold text-sky-900">Reserve schedule for rent due {dueDate}</caption>
@@ -120,6 +133,8 @@ export default function PaycheckDeadlinePlan({ monthlyRentCents, frequency, curr
       <p className="mt-3 text-xs leading-relaxed text-slate-700">
         Monthly pay repeats the day of your next payday. Semimonthly pay uses the two days entered. A day missing from a shorter month moves to month-end; coincident dates count once. Weekly and biweekly pay repeat every 7 and 14 days. Weekends, bank holidays and deposit delays are not adjusted. Check your employer’s schedule. Extra cents go to the earliest paydays so the reserves add up exactly. This plan stays in this tab and is included when you print with this section open.
       </p>
+      <p className="mt-3 text-xs leading-relaxed text-slate-700">Biweekly means every 14 days; semimonthly means two dates each month. The annual comparison uses 26 and 24 paychecks respectively, while this plan counts the entered dates. Some calendar years contain 27 biweekly paydays. Four-week rent covers 28 days, not a calendar month. Currency changes labels only, not exchange rates. This is a planning estimate, not financial advice.</p>
+      <p className="mt-2 text-xs text-slate-700">Sources checked November 13, 2026: <a className="cursor-pointer text-sky-800 underline hover:text-sky-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600" href="https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/payroll/payroll-deductions-contributions/income-tax/increasing-income-tax-deductions.html">CRA common and uncommon pay-period counts</a>; <a className="cursor-pointer text-sky-800 underline hover:text-sky-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600" href="https://www.consumerfinance.gov/archive/blog/budget-help-manage-your-monthly-expenses-bill-calendar/">CFPB bill-calendar guidance</a>. These sources explain timing; they do not verify your employer’s dates or lease obligations.</p>
     </details>
   );
 }
