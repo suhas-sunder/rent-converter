@@ -73,7 +73,7 @@ export function buildRentCalendar(input) {
     previous = value;
     const eventDate = input.dueDates?.[index] ?? value;
     const parsedEvent = parseCalendarDate(eventDate, "Planned due date");
-    if (!parsedEvent.ok || eventDate <= previousDue || eventDate === "9999-12-31") return { ok: false, error: "Calendar dates must be real, ordered and unique, ending no later than 9999-12-30." };
+    if (!parsedEvent.ok || eventDate !== formatCalendarDate(parsedEvent.date) || eventDate <= previousDue || eventDate === "9999-12-31") return { ok: false, error: "Calendar dates must be real, ordered and unique, ending no later than 9999-12-30." };
     previousDue = eventDate;
     const nextDate = formatCalendarDate(addCalendarDays(parsedEvent.date, 1));
     const dateToken = eventDate.replace(/-/g, "");

@@ -39,7 +39,7 @@ test('default W04 identities remain unchanged and due-date identities are distin
   assert.deepEqual(uids(due),uids(buildRentCalendar({...input,dueDates,generatedAt:'2026-11-14T00:00:00Z'})));
 });
 test('calendar validation rejects bad due-date counts, duplicates, order and property injection', () => {
-  for(const dueDates of [[],['2028-01-01'],['2028-01-01','2028-01-01','2028-01-02'],['2028-01-02','2028-01-01','2028-01-03'],['2028-01-01\r\nVALARM','2028-01-02','2028-01-03'],['2028-01-01','2028-01-02','9999-12-31']]) assert.equal(buildRentCalendar({...input,dueDates}).ok,false);
+  for(const dueDates of [[],['2028-01-01'],['2028-01-01','2028-01-01','2028-01-02'],['2028-01-02','2028-01-01','2028-01-03'],['2028-01-01\r\nVALARM','2028-01-02','2028-01-03'],['2028-01-01','2028-01-02','9999-12-31'],[' 2028-01-01','2028-01-02','2028-01-03'],['2028-01-01 ','2028-01-02','2028-01-03']]) assert.equal(buildRentCalendar({...input,dueDates}).ok,false);
 });
 test('large amounts keep exact cents in due-date exports', () => {
   assert.match(unfold(buildRentCalendar({...input,dueDates:input.paymentDates,rentCents:900719925474099199n}).contents),/USD 9007199254740991.99/);
