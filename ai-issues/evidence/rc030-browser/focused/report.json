@@ -1,0 +1,57 @@
+{
+  "checks": [
+    {
+      "id": "w09-delayed-hydration",
+      "pass": true
+    },
+    {
+      "id": "w10-delayed-hydration",
+      "pass": true
+    },
+    {
+      "id": "w11-delayed-hydration",
+      "pass": true
+    },
+    {
+      "id": "w12-delayed-hydration",
+      "pass": true
+    },
+    {
+      "id": "w13-delayed-hydration",
+      "pass": true
+    },
+    {
+      "id": "w14-delayed-hydration",
+      "pass": true
+    },
+    {
+      "id": "w15-delayed-hydration",
+      "pass": true
+    },
+    {
+      "id": "w16-delayed-hydration",
+      "pass": true
+    },
+    {
+      "id": "w10-edge",
+      "pass": true
+    },
+    {
+      "id": "w12-edge",
+      "pass": true
+    },
+    {
+      "id": "w16-edge",
+      "pass": true
+    },
+    {
+      "id": "w11-storage-denied",
+      "pass": true
+    },
+    {
+      "id": "w15-storage-denied",
+      "pass": true
+    }
+  ],
+  "sourceSha": "d10791aa6379bd455f7e74bab6d072f1f2973f1a"
+}

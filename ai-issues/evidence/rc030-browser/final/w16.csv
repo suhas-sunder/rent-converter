@@ -1,0 +1,6 @@
+Hypothetical monthly payments; first increase after 12 payments; annual step rounded to cents
+Currency,USD,Primary annual percent,10,Comparison annual percent,0
+Payment year,Primary monthly rent,Comparison monthly rent,Primary annual payments,Comparison annual payments,Primary minus comparison
+1,2000.00,2000.00,24000.00,24000.00,0.00
+2,2200.00,2000.00,26400.00,24000.00,2400.00
+Total,,,50400.00,48000.00,2400.00

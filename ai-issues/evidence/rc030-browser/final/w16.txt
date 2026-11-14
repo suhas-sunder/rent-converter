@@ -1,0 +1,51 @@
+Rent growth calculator Print / Save PDF
+Compound Rent Increase Calculator
+Model annual percentage escalation with repeated compounding and see
+starting rent, each yearly result, final rent, and total increase.
+Starting monthly rent
+2000
+Annual percentage increase
+10
+Number of years
+2
+Enter a whole number from 1 through 100.
+Currency
+USD
+Final rent after annual compounding
+$2,420.00
+Applies the entered percentage once per year for 2 years. The table does not calculate
+cumulative rent paid.
+Starting monthly rent Annual percentage increase
+$2,000.00 10.00%
+Total increase amount Total percentage increase
+$420.00 21.00%
+Year Monthly rent Annualized rent
+0 $2,000.00 $24,000.00
+1 $2,200.00 $26,400.00
+2 $2,420.00 $29,040.00
+Compare the total cost over these years
+Hypothetical monthly-payment scenarios, not legally permitted rates. Year 1 has 12
+payments at the starting rent. The first increase happens after one full year; the final rent
+above starts after this payment horizon.
+Comparison annual increase (%)
+0
+Use 0 to compare with rent staying unchanged. Enter 0–100%, up to four decimal places.
+Total at 10% Total at 0% Primary minus
+comparison over 2
+$50,400.00 $48,000.00
+years
+$2,400.00
+After 2 annual changes: $2,420.00 per month at 10%, versus $2,000.00 at 0%. The first
+figure is an average weekly equivalent of $556.93 (monthly × 84 ÷ 365), not a weekly bill.
+Payments within the horizon — first year uses starting rent
+Payment Monthly at Monthly at Annual difference (primary minus
+year 10% 0% comparison)
+1 $2,000.00 $2,000.00 $0.00
+2 $2,200.00 $2,000.00 $2,400.00
+Each annual change rounds the new monthly rent to cents before the next change. Totals sum 12
+payments at each of those monthly amounts. No fees, utilities, partial years or irregular increases are
+included. Currency changes the label, not the exchange rate. This is not legal or financial advice.
+Check the new rent against your housing budget
+Frequently Asked Questions
+How is the multi-year rent calculated? v
+What schedules are not supported? v

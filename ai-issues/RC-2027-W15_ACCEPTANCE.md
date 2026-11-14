@@ -36,3 +36,7 @@ New `MoveInWorksheet.tsx`, `moveInWorksheet.js`, regression tests and route atta
 This monthly-rent worksheet does not infer the number of charged days, refund eligibility, legal charges or dates. Its actual-days method requires 28–31 days in the entered rent month and charged days within that month. Other proration bases require the separate calculator and agreement check. No automatic persistence is promised; download or print preserves the result.
 
 Rollback the W15-only commit from its staging dependency, preserving W02. Never revert the complete W01–W04 aggregate or merge this development baseline into main. No push or production deployment performed by this worker.
+
+## Integration followthrough (review assembly only)
+
+See [RC-030 final acceptance](RC-030_INTEGRATION_ACCEPTANCE.md) for the exact final feature head, assembled-source identity, repaired findings and final local browser/PDF/download evidence. That report supersedes pending-local-integration notes above, but does not close immutable-hosted-preview or W05–W08 publication dependencies. This package remains HOLD for publication.

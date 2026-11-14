@@ -1,0 +1,234 @@
+[
+  {
+    "id": "w12",
+    "error": "locator.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('textbox', { name: 'Rent amount', exact: true })\u001b[22m\n"
+  },
+  {
+    "id": "w16",
+    "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/compound-rent-increase-calculator",
+    "title": "Compound Rent Increase Calculator | Multi-Year Rent Growth",
+    "text": "RentConverter.com\nFast, private rent calculators\n\nRent growth calculator\n\nCompound Rent Increase Calculator\n\nModel annual percentage escalation with repeated compounding and see starting rent, each yearly result, final rent, and total increase.\n\nPrint / Save PDF\nStarting monthly rent\nAnnual percentage increase\nNumber of years\n\nEnter a whole number from 1 through 100.\n\nCurrency\nUSD\nCAD\nEUR\nGBP\nAUD\nNZD\nJPY\nCNY\nHKD\nSGD\nINR\nKRW\nCHF\nSEK\nNOK\nDKK\nMXN\nBRL\nFinal rent after annual compounding\n$2,420.00\n\nApplies the entered percentage once per year for 2 years. The table does not calculate cumulative rent paid.\n\nStarting monthly rent\n$2,000.00\nAnnual percentage increase\n10.00%\nTotal increase amount\n$420.00\nTotal percentage increase\n21.00%\nYear\tMonthly rent\tAnnualized rent\n0\t$2,000.00\t$24,000.00\n1\t$2,200.00\t$26,400.00\n2\t$2,420.00\t$29,040.00\nHow this calculator works\n\nThe calculator applies the entered annual percentage to the prior year’s rent for the whole-number term entered and shows each year’s resulting monthly rent. This repeated compounding is sometimes called annual rent escalation.\n\nWhen to use this page\n\nUse it to test one repeated annual percentage scenario and inspect the year-by-year rent. It does not calculate cumulative rent paid.\n\nWhat this result does not include\n\nThis is arithmetic only. It does not decide whether a rent increase is allowed, whether notice is valid, whether a unit is exempt, whether local caps apply, or whether fees and utilities can change separately.\n\nCheck whether the amount is a fixed increase, percentage increase, CPI-linked increase, or scheduled escalation.\nConfirm whether the rent amount excludes separate fees, utilities, parking, or service charges.\nVerify current official rules before using the result in a dispute or notice response.\nHow to read the result\n\nThe final rent and total increase use repeated annual compounding. The table shows the monthly rent after each yearly step.\n\nBefore acting on an increase\n\nUse the calculator to check the arithmetic, then compare the result with the lease clause or rent notice. A correct percentage calculation does not prove that the increase is permitted or that every required notice step was followed.\n\nWorked examples\nAnnual percentage escalation\n\nSome leases describe repeated percentage increases as rent escalation. Each year applies the entered rate to the prior year’s rent, so the fifth-year rent is higher than one flat increase on the starting rent.\n\nScope of the schedule\n\nUse the year-by-year rows to inspect starting rent, final rent, and total increase. The calculator does not model fixed-dollar, irregular, or custom annual schedules, interpret lease clauses, or calculate cumulative rent paid.\n\nThis page estimates rent math only. Local rules, notice requirements, lease terms, and allowable increases can change, so check the official tenancy authority for your location.\nRelated calculators and guides\nRent increase calculator\nCalculate a simple rent increase.\nRent increase percentage\nFind the percent change between old and new rent.\nCompound rent increase\nModel repeated annual increases.\nFrequently Asked Questions\nHow is the multi-year rent calculated?\nv\nWhat schedules are not supported?\nv\nAnalytics preferences\n\nOptional PostHog analytics helps measure page traffic. It stays off unless you accept, and rejecting it does not affect any calculator.\n\nNo analytics preference has been saved. Analytics is off.\n\nAccept analytics\nReject optional analytics\nManage preferenc",
+    "inputs": [
+      {
+        "tag": "BUTTON",
+        "label": "Open menu",
+        "id": "",
+        "text": ""
+      },
+      {
+        "tag": "BUTTON",
+        "label": null,
+        "id": "",
+        "text": "More "
+      },
+      {
+        "tag": "BUTTON",
+        "label": null,
+        "id": "",
+        "text": "Print / Save PDF"
+      },
+      {
+        "tag": "INPUT",
+        "label": null,
+        "id": "compound-starting-rent",
+        "text": ""
+      },
+      {
+        "tag": "INPUT",
+        "label": null,
+        "id": "compound-rate",
+        "text": ""
+      },
+      {
+        "tag": "INPUT",
+        "label": null,
+        "id": "compound-years",
+        "text": ""
+      },
+      {
+        "tag": "SELECT",
+        "label": null,
+        "id": "",
+        "text": "USDCADEURGBPAUDNZDJPYCNYHKDSGDINRKRWCHFSEKNOKDKKMXNBRL"
+      },
+      {
+        "tag": "BUTTON",
+        "label": null,
+        "id": "",
+        "text": "Accept analytics"
+      },
+      {
+        "tag": "BUTTON",
+        "label": null,
+        "id": "",
+        "text": "Reject optional analytics"
+      },
+      {
+        "tag": "BUTTON",
+        "label": null,
+        "id": "",
+        "text": "Manage preferences"
+      },
+      {
+        "tag": "BUTTON",
+        "label": null,
+        "id": "",
+        "text": "Analytics preferences"
+      }
+    ]
+  },
+  {
+    "id": "competitor-increase",
+    "url": "https://calculator.academy/compound-rent-calculator/",
+    "title": "Compound Rent Calculator (Rent Increase & Projection)",
+    "text": "Skip to content\n Explore\nHome\nPersonal Finance\nRent and Affordability\nCompound Rent Calculator\nCompound Rent Calculator\nBy: Patrick Myers\nLast Updated: October 16, 2026\n\nCalculate compound rent increases: enter the starting rent, annual increase % and years to see the future rent, total rent paid and a year-by-year table.\n\nCustomize or create a new calculator\n⌃\nShare\nSolve for\nFuture rent after annual changes\nStarting rent\nAnnual increase (%) from two rents\nTime to a target rent\nStarting rent ($ per period)\n?\nmonth\nweek\nyear\nAnnual change (%)\n?\nNumber of years / annual changes\nCalculate\nReset\nReady when you are\n\nEnter your values, then select Calculate.\n\nAll Rent Calculators\nAll Personal Finance Calculators\nRent Increase Calculator\nCPI Rent Calculator\nRent Escalation Calculator\nTotal Rent Calculator\nRent Price Difference Calculator\nCompound Rent Formula\n\nThe following formula is used to calculate Compound Rent:\n\nCR = MR × (1 + (r / 100))t\nWhere CR is the Compound Rent ($)\nMR is the starting rent ($)\nr is the annual increase rate (%/year)\nt is the total number of years\n\nThis formula follows the same mathematical structure as compound interest. Each year, the increase is applied not just to the original rent, but to the already-increased rent from the prior year, producing an exponential growth curve rather than a straight line.\n\nWhat is Compound Rent?\n\nCompound rent refers to applying each percentage change to the already changed rent. With a $1,500/month starting rent and 3% annual changes, the first change adds $45. After ten changes, rent is $2,015.87/month; the tenth change itself adds about $58.71 to the $1,957.16 rent after nine changes.\n\nThe concept appears in both residential and commercial leasing. In residential markets, landlords commonly raise rent by a fixed percentage annually, which compounds whether or not the lease explicitly uses that term. In commercial real estate, compound rent escalation clauses are written directly into multi-year leases, often tied to a fixed rate (typically 2% to 3%) or to the Consumer Price Index (CPI).\n\nCompound vs. Simple Rent Increases\n\nA simple (or linear) rent increase adds the same fixed dollar amount each year. A compound rent increase applies a percentage to the current rent, so the dollar amount of the increase grows over time. The difference is small in the first few years, but it accelerates significantly over longer lease terms.\n\nConsider a $1,500/month starting rent with a 3% annual rate. After ten changes, simple escalation adding $45 each year reaches $1,950/month; compound escalation reaches $2,015.87. With starting rent paid during Year 1 and the first change after one year, ten years of payments total $206,349.83 with compounding and $204,300 with simple escalation: a $2,049.83 difference. Over twenty years, that difference is $21,066.74.\n\nHow Rent Compounds Over Time: Reference Data\n\nThe table below shows how a $1,500/month rent compounds over 5, 10, 15, and 20 years at several common annual increase rates. All values represent the monthly rent at the end of the given period.\n\nAnnual Rate\tYear 5\tYear 10\tYear 15\tYear 20\n2%\t$1,656\t$1,828\t$2,019\t$2,229\n3%\t$1,739\t$2,016\t$2,337\t$2,709\n4%\t$1,825\t$2,220\t$2,701\t$3,287\n5%\t$1,914\t$2,443\t$3,118\t$3,980\n7%\t$2,104\t$2,951\t$4,139\t$5,805\n\nAt a hypothetical 5% annual compound rate, rent becomes about 2.65 times the starting rent after twenty changes. At 7%, it becomes about 3.87 times the starting rent. These constant rates are scenarios, not f",
+    "inputs": [
+      {
+        "tag": "BUTTON",
+        "label": null,
+        "id": "",
+        "text": "\n\t\t\t\t\t\tExplore\t\t\t\t\t"
+      },
+      {
+        "tag": "BUTTON",
+        "label": "Search",
+        "id": "",
+        "text": "\n\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\n\t\t\t"
+      },
+      {
+        "tag": "INPUT",
+        "label": "Search",
+        "id": "",
+        "text": ""
+      },
+      {
+        "tag": "BUTTON",
+        "label": "Clear",
+        "id": "",
+        "text": "\n\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\n\t\t\t"
+      },
+      {
+        "tag": "BUTTON",
+        "label": "Open search",
+        "id": "",
+        "text": "\n\t\t\t\n\t\t\t\t\n\t\t\t\t\n\t\t\t\n\t\t\t\n\t\t"
+      },
+      {
+        "tag": "BUTTON",
+        "label": "Toggle custom calculator options",
+        "id": "",
+        "text": "Customize or create a new calculator⌃"
+      },
+      {
+        "tag": "BUTTON",
+        "label": "Share calculator",
+        "id": "",
+        "text": "Share"
+      },
+      {
+        "tag": "BUTTON",
+        "label": null,
+        "id": "",
+        "text": "Share Calculator"
+      },
+      {
+        "tag": "INPUT",
+        "label": null,
+        "id": "",
+        "text": ""
+      },
+      {
+        "tag": "SELECT",
+        "label": null,
+        "id": "ca3697-mode",
+        "text": "Future rent after annual changesStarting rentAnnual increase"
+      },
+      {
+        "tag": "INPUT",
+        "label": null,
+        "id": "ca3697-start",
+        "text": ""
+      },
+      {
+        "tag": "SELECT",
+        "label": "Starting rent ($ per period) unit",
+        "id": "ca3697-start-unit",
+        "text": "monthweekyear"
+      },
+      {
+        "tag": "INPUT",
+        "label": null,
+        "id": "ca3697-rate",
+        "text": ""
+      },
+      {
+        "tag": "INPUT",
+        "label": null,
+        "id": "ca3697-years",
+        "text": ""
+      },
+      {
+        "tag": "BUTTON",
+        "label": null,
+        "id": "ca3697-calculate",
+        "text": "Calculate"
+      },
+      {
+        "tag": "BUTTON",
+        "label": null,
+        "id": "ca3697-reset",
+        "text": "Reset"
+      },
+      {
+        "tag": "BUTTON",
+        "label": null,
+        "id": "",
+        "text": "\n\t\t\t\t\t\t\t\t\t\t\t\tClose\n\t\t\t\t\t"
+      },
+      {
+        "tag": "BUTTON",
+        "label": "Search",
+        "id": "",
+        "text": "\n\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\n\t\t\t"
+      },
+      {
+        "tag": "INPUT",
+        "label": "Search",
+        "id": "",
+        "text": ""
+      },
+      {
+        "tag": "BUTTON",
+        "label": "Clear",
+        "id": "",
+        "text": "\n\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\n\t\t\t"
+      },
+      {
+        "tag": "BUTTON",
+        "label": "Close search",
+        "id": "",
+        "text": "\n\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\n\t\t\t"
+      }
+    ]
+  },
+  {
+    "id": "competitor-period",
+    "url": "https://www.augustapp.com/calculators/rent-payment-term-calculator",
+    "title": "Weekly to Monthly Rent Calculator UK | August",
+    "text": "Weekly to Monthly Rent Calculator UK\n\n4.5 star rating\n\nWeekly to Monthly Rent Calculator UK\n\nConvert rent between weekly, fortnightly, four-weekly, monthly and quarterly. Uses accurate annualised formulas, not the ×4.33 shortcut. \n\nFree, no sign-up.\n\nTry August for Free\n\nLandlords, check out the rent payment term numbers  before you commit\nWhat this weekly to monthly rent calculator does\n\nThe way rent is scheduled matters. It changes cashflow, arrears risk, admin effort and even how tenants perceive affordability. The August Rent Payment Term Calculator converts rent between terms (weekly ⇄ four-weekly ⇄ monthly ⇄ quarterly), aligns to due dates, and shows any pro-rata needed when you change term part-way through a tenancy. Ready to try August?\n\nWhy weekly rent is not just multiplied by 4\n\nMost tools just multiply by 4.33 and call it done. Ours is accurate and transparent:\n\nConvert rent precisely - weekly ↔ monthly, four-weekly ↔ monthly, monthly ↔ quarterly. It also include quarterly, semi-annually and annually.\n\nChoose a policy - exact calendar-month method or annualised method for consistency (explained below).\n\nAlign to a specific due date (e.g., move weekly rent to the 1st of each month) and compute the short or long first period automatically.\n\nGenerate a clean breakdown (formulas, daily rate if pro-rata applies).\n\nHow to convert weekly rent to monthly UK\n\nTo compare like-for-like you must annualise, then re-express:\n\nWeekly → Monthly: Monthly = Weekly × 52 ÷ 12 (not Weekly × 4.33 rounded by hand).\n\nFour-weekly → Monthly: Monthly = Four-weekly × 13 ÷ 12.\n\nMonthly → Weekly: Weekly = Monthly × 12 ÷ 52.\n\nMonthly → Four-weekly: Four-weekly = Monthly × 12 ÷ 13.\n\nMonthly ↔ Quarterly: multiply or divide by 3 (calendar-month basis).\n\nThis keeps totals equal over a full year, so tenant affordability and landlord cash flow are compared fairly.\n\nQuick reference: common weekly to monthly rent conversions\n\nWeekly rent (PW)\n\nMonthly equivalent (PCM)\n\n£100\n\n£433\n\n£125\n\n£542\n\n£150\n\n£650\n\n£175\n\n£758\n\n£200\n\n£867\n\n£225\n\n£975\n\n£250\n\n£1,083\n\n£275\n\n£1,192\n\n£300\n\n£1,300\n\n£350\n\n£1,517\n\n£400\n\n£1,733\n\n£450\n\n£1,950\n\n£500\n\n£2,167\n\nAll figures calculated using the correct formula: Weekly × 52 ÷ 12. Figures rounded to the nearest pound. If you are planning a rent increase alongside a payment schedule change, the rent increase calculator shows the correct Section 13 notice date and new monthly figure in one step.\n\nExact month vs annualised: which method to use\n\nBoth are used in UK lettings. Pick one and apply it consistently (ideally state it in your AST/terms).\n\nExact calendar months\nYou treat “per calendar month” as literal months. This is the plain reading most agents use.\n\nPros: Matches real-world months (28–31 days) and how rent is usually charged.\n\nCons: When converting to weekly/four-weekly you still need the annualisation step above for fairness.\n\nAnnualised consistency\nYou convert everything via annual totals first (e.g., weekly × 52 = annual, then ÷ 12 for monthly).\n\nPros: Perfectly comparable across terms and over a year; ideal for affordability and portfolio modelling.\n\nCons: Month-to-month day counts still vary; use pro-rata when aligning dates mid-cycle.\n\nThe calculator shows both figures where relevant and documents which policy you used.\n\nWorked examples: weekly, four-weekly and monthly conversions\n\nExample A — Weekly to monthly (no date change)\n\nWeekly rent: £300\n\nMonthly equivalent (annualised): £300 × 52 ÷ 12 = £1,300.00\nTenant pays £1,300 pe",
+    "inputs": [
+      {
+        "tag": "BUTTON",
+        "label": "Cookie Trigger",
+        "id": "",
+        "text": "Cookie Settings"
+      },
+      {
+        "tag": "INPUT",
+        "label": null,
+        "id": "__framer-cookie-component-button-dismiss",
+        "text": ""
+      }
+    ]
+  }
+]

@@ -42,3 +42,7 @@ The full suite now passes 194 tests (19 targeted paycheck tests). Typecheck and 
 Changed: `PaycheckDeadlinePlan.tsx`, its route adapter, new `paycheckAverageCheck.js`, test registration and acceptance evidence. No FAQ, ad lifecycle, canonical, sitemap, robots, redirect, protected converter default or external account changes. The main risk is confusing a saving model with actual income availability; the visible check states that other bills and ability to fund each reserve are excluded.
 
 Rollback the W11-only commit from its staging dependency, preserving W03. Do not revert all accepted W01–W04 work or merge this aggregate baseline to main. No main push or production deployment performed by this worker.
+
+## Integration followthrough (review assembly only)
+
+See [RC-030 final acceptance](RC-030_INTEGRATION_ACCEPTANCE.md) for the exact final feature head, assembled-source identity, repaired findings and final local browser/PDF/download evidence. That report supersedes pending-local-integration notes above, but does not close immutable-hosted-preview or W05–W08 publication dependencies. This package remains HOLD for publication.

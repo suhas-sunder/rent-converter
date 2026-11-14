@@ -1,0 +1,13 @@
+import { chromium } from '../../scripts/browser-qa/node_modules/playwright/index.mjs';
+import fs from 'node:fs/promises';
+import { setup } from '../../scripts/browser-qa/rc030-fixtures.mjs';
+const browser=await chromium.launch();const page=await browser.newPage({viewport:{width:390,height:900}});
+await page.goto('http://127.0.0.1:3049/compound-rent-increase-calculator',{waitUntil:'networkidle'});
+await page.getByRole('button',{name:'Reject optional analytics',exact:true}).click();await setup(page,'w16');
+const region=page.getByRole('region',{name:'Annual payment comparison',exact:true});
+await region.evaluate(e=>{e.scrollIntoView({block:'center'});e.scrollLeft=0;});await region.focus();
+await page.screenshot({path:'artifacts/rc030-final-contrast/w16-table-left.png'});
+for(let i=0;i<15;i++)await page.keyboard.press('ArrowRight');await page.waitForTimeout(500);
+await page.screenshot({path:'artifacts/rc030-final-contrast/w16-table-right.png'});
+const result=await region.evaluate(e=>({clientWidth:e.clientWidth,scrollWidth:e.scrollWidth,scrollLeft:e.scrollLeft,focused:document.activeElement===e}));
+await fs.writeFile('artifacts/rc030-final-contrast/table-review.json',JSON.stringify(result,null,2));console.log(result);await browser.close();

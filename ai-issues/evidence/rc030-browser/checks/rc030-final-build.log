@@ -1,0 +1,196 @@
+
+> prebuild
+> node scripts/generate-netlify-redirects.mjs
+
+Generated 112 static Netlify redirects.
+
+> build
+> react-router build
+
+vite v6.4.6 building for production...
+transforming...
+✓ 274 modules transformed.
+rendering chunks...
+computing gzip size...
+build/client/.vite/manifest.json                                                   35.75 kB │ gzip:  3.02 kB
+build/client/assets/suhas-BPY11p11.jpg                                             51.01 kB
+build/client/assets/root-DI5vCsru.css                                              56.27 kB │ gzip: 10.45 kB
+build/client/assets/HydrationSafeControls-DmeKg_5I.js                               0.26 kB │ gzip:  0.23 kB
+build/client/assets/pcm-to-pw-calculator-Bn_3OBHr.js                                0.50 kB │ gzip:  0.34 kB
+build/client/assets/pw-to-pcm-calculator-C6swDz19.js                                0.50 kB │ gzip:  0.34 kB
+build/client/assets/lease-date-calculator-BHxHyGCT.js                               0.50 kB │ gzip:  0.33 kB
+build/client/assets/what-does-pw-mean-rent-CU9k8nse.js                              0.50 kB │ gzip:  0.33 kB
+build/client/assets/hourly-pay-to-rent-calculator-VDF4IB1D.js                       0.50 kB │ gzip:  0.34 kB
+build/client/assets/is-rent-due-on-the-first-D2W8XmBU.js                            0.50 kB │ gzip:  0.33 kB
+build/client/assets/rent-schedule-calculator-CBzh4423.js                            0.50 kB │ gzip:  0.34 kB
+build/client/assets/salary-to-rent-calculator-BlugYrur.js                           0.50 kB │ gzip:  0.34 kB
+build/client/assets/rent-split-percentage-calculator-RfP_LT71.js                    0.51 kB │ gzip:  0.34 kB
+build/client/assets/split-rent-based-on-income-calculator-DyURbEof.js               0.51 kB │ gzip:  0.34 kB
+build/client/assets/compound-rent-increase-calculator-CDVFfJlH.js                   0.51 kB │ gzip:  0.34 kB
+build/client/assets/prorated-rent-calculator-australia-BuvCeNxx.js                  0.51 kB │ gzip:  0.34 kB
+build/client/assets/weekly-to-fortnightly-rent-australia-9HUpPeXW.js                0.52 kB │ gzip:  0.35 kB
+build/client/assets/fortnightly-to-monthly-rent-australia-BJy1FJcV.js               0.52 kB │ gzip:  0.34 kB
+build/client/assets/is-rent-paid-for-the-current-month-or-next-month-BGqPZh92.js    0.53 kB │ gzip:  0.35 kB
+build/client/assets/verifiedPeriodExamples-_xAH3P4L.js                              0.77 kB │ gzip:  0.35 kB
+build/client/assets/FourWeekVsMonthly-foUv7B45.js                                   0.91 kB │ gzip:  0.45 kB
+build/client/assets/Assumptions-CLwoOUYf.js                                         1.10 kB │ gzip:  0.61 kB
+build/client/assets/AdPlaceholder-Bm3GwyRn.js                                       1.84 kB │ gzip:  0.68 kB
+build/client/assets/seo-CNhlrUU0.js                                                 2.05 kB │ gzip:  0.90 kB
+build/client/assets/housingBudget-DT1NIp7z.js                                       2.40 kB │ gzip:  1.23 kB
+build/client/assets/savedState-I43WIDKy.js                                          2.41 kB │ gzip:  0.96 kB
+build/client/assets/rentMath-D3WxLAET.js                                            2.98 kB │ gzip:  1.41 kB
+build/client/assets/sitemap-YOxuMDpf.js                                             3.40 kB │ gzip:  1.41 kB
+build/client/assets/calendarDate-CFXhdlUe.js                                        3.59 kB │ gzip:  1.54 kB
+build/client/assets/index-CxpeHdp4.js                                               3.92 kB │ gzip:  1.53 kB
+build/client/assets/SeoSupport-DpZfaJ3k.js                                          4.09 kB │ gzip:  1.26 kB
+build/client/assets/contact-v57eudkJ.js                                             5.24 kB │ gzip:  1.66 kB
+build/client/assets/about-C8h_Bmd2.js                                               5.52 kB │ gzip:  1.93 kB
+build/client/assets/what-does-pcm-mean-rent-C2Crc7iE.js                             5.70 kB │ gzip:  2.31 kB
+build/client/assets/generatedIncome-D5MFsZyX.js                                     6.05 kB │ gzip:  2.28 kB
+build/client/assets/cookies-BYd7OJuF.js                                             6.40 kB │ gzip:  1.99 kB
+build/client/assets/terms-of-service-5YYx8YrW.js                                    6.95 kB │ gzip:  2.69 kB
+build/client/assets/privacy-policy-D0LC12CN.js                                      7.68 kB │ gzip:  2.93 kB
+build/client/assets/provider-C0vB4Qjy.js                                            7.69 kB │ gzip:  2.99 kB
+build/client/assets/rent-in-advance-australia-ykvRyCTp.js                           7.70 kB │ gzip:  2.89 kB
+build/client/assets/methodology-PYZj2Yyk.js                                         8.32 kB │ gzip:  3.05 kB
+build/client/assets/prorated-rent-calculator-CGQamMya.js                           13.62 kB │ gzip:  3.90 kB
+build/client/assets/biweekly-to-weekly-rent-converter-DG5FGZHz.js                  19.16 kB │ gzip:  6.78 kB
+build/client/assets/routeRegistry-C34-mqvG.js                                      19.80 kB │ gzip:  4.21 kB
+build/client/assets/annual-to-monthly-rent-converter-bBndcH_D.js                   19.81 kB │ gzip:  6.99 kB
+build/client/assets/rent-budget-calculator-a30AUT6c.js                             20.28 kB │ gzip:  6.56 kB
+build/client/assets/daily-to-monthly-rent-converter-Dw06-6PV.js                    20.42 kB │ gzip:  7.12 kB
+build/client/assets/monthly-to-weekly-rent-converter-BSzKPX68.js                   20.53 kB │ gzip:  7.05 kB
+build/client/assets/weekly-to-monthly-rent-australia-dpU1Q4Va.js                   20.61 kB │ gzip:  6.93 kB
+build/client/assets/root-BDN_LNKT.js                                               20.81 kB │ gzip:  5.94 kB
+build/client/assets/annual-to-weekly-rent-converter--6R3yC2N.js                    20.82 kB │ gzip:  7.08 kB
+build/client/assets/monthly-to-hourly-rent-converter-CJB8n4jB.js                   20.83 kB │ gzip:  7.09 kB
+build/client/assets/hourly-to-monthly-rent-converter-Bs5Nok7X.js                   20.84 kB │ gzip:  7.17 kB
+build/client/assets/weekly-to-annual-rent-converter-CRmH48RI.js                    20.99 kB │ gzip:  7.12 kB
+build/client/assets/how-much-rent-can-i-afford-calculator-DrxlyP74.js              21.07 kB │ gzip:  7.28 kB
+build/client/assets/biweekly-to-annual-rent-converter-FfZbSqd6.js                  21.18 kB │ gzip:  7.25 kB
+build/client/assets/annual-to-biweekly-rent-converter-CinE-tn4.js                  21.62 kB │ gzip:  7.47 kB
+build/client/assets/biweekly-to-monthly-rent-converter-CbkFoPZ9.js                 21.68 kB │ gzip:  7.29 kB
+build/client/assets/monthly-to-daily-rent-converter-3IrPBkTG.js                    21.68 kB │ gzip:  7.08 kB
+build/client/assets/monthly-to-annual-rent-converter-CrDictmz.js                   21.72 kB │ gzip:  7.17 kB
+build/client/assets/weekly-to-biweekly-rent-converter-wbJFOZqY.js                  21.87 kB │ gzip:  7.29 kB
+build/client/assets/monthly-to-biweekly-rent-converter-TOCXUHsW.js                 22.35 kB │ gzip:  7.07 kB
+build/client/assets/weekly-to-monthly-rent-converter-CAv15Z1t.js                   22.42 kB │ gzip:  7.65 kB
+build/client/assets/rent-per-week-calculator-NNgCAg2A.js                           23.99 kB │ gzip:  7.30 kB
+build/client/assets/rent-per-day-calculator-BkyEx0X3.js                            24.07 kB │ gzip:  7.67 kB
+build/client/assets/hourly-to-annual-rent-converter-CzhBmt1o.js                    24.25 kB │ gzip:  7.79 kB
+build/client/assets/income-required-for-rent-calculator-CIUeZ8RD.js                24.78 kB │ gzip:  7.31 kB
+build/client/assets/annual-to-hourly-rent-converter-CBuQOSDP.js                    26.29 kB │ gzip:  8.25 kB
+build/client/assets/rent-as-percentage-of-income-calculator-B7qqZRYS.js            26.37 kB │ gzip:  7.65 kB
+build/client/assets/rent-vs-take-home-pay-calculator-BhZiF-K6.js                   26.86 kB │ gzip:  7.82 kB
+build/client/assets/rent-split-calculator-ySrB2Lo7.js                              27.32 kB │ gzip:  8.02 kB
+build/client/assets/rent-paid-every-4-weeks-calculator-DAD1oMmb.js                 27.43 kB │ gzip:  8.37 kB
+build/client/assets/rent-increase-percentage-calculator-CYQPNkVA.js                28.11 kB │ gzip:  8.08 kB
+build/client/assets/rent-after-tax-income-calculator-Bx1qMOWR.js                   30.35 kB │ gzip:  8.41 kB
+build/client/assets/rent-due-date-calculator-MOw9x43T.js                           32.53 kB │ gzip:  9.05 kB
+build/client/assets/rent-increase-calculator-4idfDGbU.js                           33.25 kB │ gzip:  9.41 kB
+build/client/assets/home-CgDDWWqq.js                                               38.54 kB │ gzip: 12.58 kB
+build/client/assets/generatedRouteConfigs-BFPVNtka.js                              39.04 kB │ gzip: 10.98 kB
+build/client/assets/rent-vs-buy-calculator-C5VktCbC.js                             40.45 kB │ gzip: 10.14 kB
+build/client/assets/rent-per-paycheck-calculator-B8ATmgUP.js                       41.17 kB │ gzip: 11.85 kB
+build/client/assets/GeneratedPages-CqeqC05C.js                                     76.25 kB │ gzip: 21.21 kB
+build/client/assets/jsx-runtime-DZ7Lf66K.js                                       131.68 kB │ gzip: 44.45 kB
+build/client/assets/entry.client-j8TK5Dre.js                                      187.13 kB │ gzip: 59.13 kB
+build/client/assets/module-eLgXoDMu.js                                            230.41 kB │ gzip: 76.32 kB
+✓ built in 23.40s
+  ⚠️  Future Flag Warning: Route middleware support is changing in React Router v8.
+     You can use the `future.v8_middleware` flag to opt in early.
+     -> https://reactrouter.com/v7/upgrading/future#futurev8_middleware
+  ⚠️  Future Flag Warning: Route module splitting behavior is changing in React Router v8.
+     You can use the `future.v8_splitRouteModules` flag to opt in early.
+     -> https://reactrouter.com/v7/upgrading/future#futurev8_splitroutemodules
+  ⚠️  Future Flag Warning: Vite Environment API usage is changing in React Router v8.
+     You can use the `future.v8_viteEnvironmentApi` flag to opt in early.
+     -> https://reactrouter.com/v7/upgrading/future#futurev8_viteenvironmentapi
+  ⚠️  Future Flag Warning: Request handling behavior is changing in React Router v8.
+     You can use the `future.v8_passThroughRequests` flag to opt in early.
+     -> https://reactrouter.com/v7/upgrading/future#futurev8_passthroughrequests
+  ⚠️  Future Flag Warning: Data request URL formats are changing in React Router v8.
+     You can use the `future.v8_trailingSlashAwareDataRequests` flag to opt in early.
+     -> https://reactrouter.com/v7/upgrading/future#futurev8_trailingslashawaredatarequests
+vite v6.4.6 building SSR bundle for production...
+transforming...
+✓ 178 modules transformed.
+rendering chunks...
+build/server/.vite/manifest.json                   0.42 kB
+build/server/assets/suhas-BPY11p11.jpg            51.01 kB
+build/server/assets/server-build-DI5vCsru.css     56.27 kB
+build/server/index.js                          1,913.57 kB
+
+✓ 2 assets cleaned from React Router server build.
+build\client\assets\suhas-BPY11p11.jpg
+build\server\assets\server-build-DI5vCsru.css
+
+Prerender (html): / -> build\client\index.html
+Prerender (html): /about -> build\client\about\index.html
+Prerender (html): /annual-to-biweekly-rent-converter -> build\client\annual-to-biweekly-rent-converter\index.html
+Prerender (html): /annual-to-hourly-rent-converter -> build\client\annual-to-hourly-rent-converter\index.html
+Prerender (html): /annual-to-monthly-rent-converter -> build\client\annual-to-monthly-rent-converter\index.html
+Prerender (html): /annual-to-weekly-rent-converter -> build\client\annual-to-weekly-rent-converter\index.html
+Prerender (html): /biweekly-to-annual-rent-converter -> build\client\biweekly-to-annual-rent-converter\index.html
+Prerender (html): /biweekly-to-monthly-rent-converter -> build\client\biweekly-to-monthly-rent-converter\index.html
+Prerender (html): /biweekly-to-weekly-rent-converter -> build\client\biweekly-to-weekly-rent-converter\index.html
+Prerender (html): /compound-rent-increase-calculator -> build\client\compound-rent-increase-calculator\index.html
+Prerender (html): /contact -> build\client\contact\index.html
+Prerender (html): /cookies -> build\client\cookies\index.html
+Prerender (html): /daily-to-monthly-rent-converter -> build\client\daily-to-monthly-rent-converter\index.html
+Prerender (html): /fortnightly-to-monthly-rent-australia -> build\client\fortnightly-to-monthly-rent-australia\index.html
+Prerender (html): /hourly-pay-to-rent-calculator -> build\client\hourly-pay-to-rent-calculator\index.html
+Prerender (html): /hourly-to-annual-rent-converter -> build\client\hourly-to-annual-rent-converter\index.html
+Prerender (html): /hourly-to-monthly-rent-converter -> build\client\hourly-to-monthly-rent-converter\index.html
+Prerender (html): /how-much-rent-can-i-afford-calculator -> build\client\how-much-rent-can-i-afford-calculator\index.html
+Prerender (html): /income-required-for-rent-calculator -> build\client\income-required-for-rent-calculator\index.html
+Prerender (html): /is-rent-due-on-the-first -> build\client\is-rent-due-on-the-first\index.html
+Prerender (html): /is-rent-paid-for-the-current-month-or-next-month -> build\client\is-rent-paid-for-the-current-month-or-next-month\index.html
+Prerender (html): /lease-date-calculator -> build\client\lease-date-calculator\index.html
+Prerender (html): /methodology -> build\client\methodology\index.html
+Prerender (html): /monthly-to-annual-rent-converter -> build\client\monthly-to-annual-rent-converter\index.html
+Prerender (html): /monthly-to-biweekly-rent-converter -> build\client\monthly-to-biweekly-rent-converter\index.html
+Prerender (html): /monthly-to-daily-rent-converter -> build\client\monthly-to-daily-rent-converter\index.html
+Prerender (html): /monthly-to-hourly-rent-converter -> build\client\monthly-to-hourly-rent-converter\index.html
+Prerender (html): /monthly-to-weekly-rent-converter -> build\client\monthly-to-weekly-rent-converter\index.html
+Prerender (html): /pcm-to-pw-calculator -> build\client\pcm-to-pw-calculator\index.html
+Prerender (html): /privacy-policy -> build\client\privacy-policy\index.html
+Prerender (html): /prorated-rent-calculator -> build\client\prorated-rent-calculator\index.html
+Prerender (html): /prorated-rent-calculator-australia -> build\client\prorated-rent-calculator-australia\index.html
+Prerender (html): /pw-to-pcm-calculator -> build\client\pw-to-pcm-calculator\index.html
+Prerender (html): /rent-after-tax-income-calculator -> build\client\rent-after-tax-income-calculator\index.html
+Prerender (html): /rent-as-percentage-of-income-calculator -> build\client\rent-as-percentage-of-income-calculator\index.html
+Prerender (html): /rent-budget-calculator -> build\client\rent-budget-calculator\index.html
+Prerender (html): /rent-due-date-calculator -> build\client\rent-due-date-calculator\index.html
+Prerender (html): /rent-in-advance-australia -> build\client\rent-in-advance-australia\index.html
+Prerender (html): /rent-increase-calculator -> build\client\rent-increase-calculator\index.html
+Prerender (html): /rent-increase-percentage-calculator -> build\client\rent-increase-percentage-calculator\index.html
+Prerender (html): /rent-paid-every-4-weeks-calculator -> build\client\rent-paid-every-4-weeks-calculator\index.html
+Prerender (html): /rent-per-day-calculator -> build\client\rent-per-day-calculator\index.html
+Prerender (html): /rent-per-paycheck-calculator -> build\client\rent-per-paycheck-calculator\index.html
+Prerender (html): /rent-per-week-calculator -> build\client\rent-per-week-calculator\index.html
+Prerender (html): /rent-schedule-calculator -> build\client\rent-schedule-calculator\index.html
+Prerender (html): /rent-split-calculator -> build\client\rent-split-calculator\index.html
+Prerender (html): /rent-split-percentage-calculator -> build\client\rent-split-percentage-calculator\index.html
+Prerender (html): /rent-vs-buy-calculator -> build\client\rent-vs-buy-calculator\index.html
+Prerender (html): /rent-vs-take-home-pay-calculator -> build\client\rent-vs-take-home-pay-calculator\index.html
+Prerender (html): /salary-to-rent-calculator -> build\client\salary-to-rent-calculator\index.html
+Prerender (html): /sitemap -> build\client\sitemap\index.html
+Prerender (html): /split-rent-based-on-income-calculator -> build\client\split-rent-based-on-income-calculator\index.html
+Prerender (html): /terms-of-service -> build\client\terms-of-service\index.html
+Prerender (html): /weekly-to-annual-rent-converter -> build\client\weekly-to-annual-rent-converter\index.html
+Prerender (html): /weekly-to-biweekly-rent-converter -> build\client\weekly-to-biweekly-rent-converter\index.html
+Prerender (html): /weekly-to-fortnightly-rent-australia -> build\client\weekly-to-fortnightly-rent-australia\index.html
+Prerender (html): /weekly-to-monthly-rent-australia -> build\client\weekly-to-monthly-rent-australia\index.html
+Prerender (html): /weekly-to-monthly-rent-converter -> build\client\weekly-to-monthly-rent-converter\index.html
+Prerender (html): /what-does-pcm-mean-rent -> build\client\what-does-pcm-mean-rent\index.html
+Prerender (html): /what-does-pw-mean-rent -> build\client\what-does-pw-mean-rent\index.html
+Prerender (html): SPA Fallback -> build\client\__spa-fallback.html
+Removing the server build in E:\PROJECTS-and-WORK\work-projects\all_projects\rent-converter-wave3\build\server due to ssr:false
+✓ built in 11.62s
+
+> postbuild
+> node scripts/prepare-netlify-static-output.mjs && node scripts/static-build-audit.mjs
+
+Prepared 60 flat canonical HTML documents for Netlify and removed the unused SPA fallback.
+Static build audit passed: 60 prerendered pages, 112 redirects, a real 404 page, and no runtime server bundle.

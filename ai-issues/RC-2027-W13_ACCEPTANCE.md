@@ -42,3 +42,7 @@ Independent review by the cashflow implementation agent reproduced the 360px lea
 No immutable deploy or production readiness claimed. Native OS print, screen-reader speech and interpretation of a real contract are not certified. Root's final integration report owns hosted/network/native-zoom/independent acceptance and exact release identities. No routes, schema, FAQ copy, ad lifecycle, analytics consent or protected converter formulas changed. Existing schedule boundaries are deliberately preserved.
 
 Rollback: omit/revert this package's component/helper, two-line generated-page wiring, registered test and acceptance evidence; do not revert shared accepted W01–W04 or security prerequisites. Revalidate against then-current main before any owner-approved release.
+
+## Integration followthrough (review assembly only)
+
+See [RC-030 final acceptance](RC-030_INTEGRATION_ACCEPTANCE.md) for the exact final feature head, assembled-source identity, repaired findings and final local browser/PDF/download evidence. That report supersedes pending-local-integration notes above, but does not close immutable-hosted-preview or W05–W08 publication dependencies. This package remains HOLD for publication.

@@ -1,0 +1,146 @@
+{
+  "checkedAt": {
+    "current_time": "2026-11-14 04:17:30 UTC"
+  },
+  "pullRequests": [
+    {
+      "number": 10,
+      "draft": true,
+      "merged": false,
+      "base": "codex/rc028-browser-acceptance",
+      "head": "codex/w09-uk-conventions",
+      "sha": "32d974fd3e37d1b3345c8f67891b75293798e32d"
+    },
+    {
+      "number": 11,
+      "draft": true,
+      "merged": false,
+      "base": "codex/rc028-browser-acceptance",
+      "head": "codex/w10-au-payment-plan",
+      "sha": "c3425d2f076b3c5b278142fc92c48f7a33a28e46"
+    },
+    {
+      "number": 12,
+      "draft": true,
+      "merged": false,
+      "base": "codex/rc028-browser-acceptance",
+      "head": "codex/w11-payday-comparison",
+      "sha": "7065e31a8026bb8fb2e282064ec11897c840eb52"
+    },
+    {
+      "number": 13,
+      "draft": true,
+      "merged": false,
+      "base": "codex/rc028-browser-acceptance",
+      "head": "codex/w12-methodology",
+      "sha": "6e01d8b07a499df98794ab0196cb630fc2663a8f"
+    },
+    {
+      "number": 14,
+      "draft": true,
+      "merged": false,
+      "base": "codex/rc028-browser-acceptance",
+      "head": "codex/w13-lease-boundaries",
+      "sha": "5b959460764ddddf37c8fb01e537e9e8ed22eb81"
+    },
+    {
+      "number": 15,
+      "draft": true,
+      "merged": false,
+      "base": "codex/rc028-browser-acceptance",
+      "head": "codex/w14-contractual-dates",
+      "sha": "875c1b4645637fadfaba2e5b1e33f95b6c87fad8"
+    },
+    {
+      "number": 16,
+      "draft": true,
+      "merged": false,
+      "base": "codex/rc028-browser-acceptance",
+      "head": "codex/w15-move-in-worksheet",
+      "sha": "1c5ee1f0fecc23700d8860eeef6ae1b389026313"
+    },
+    {
+      "number": 17,
+      "draft": true,
+      "merged": false,
+      "base": "codex/rc028-browser-acceptance",
+      "head": "codex/w16-increase-scenarios",
+      "sha": "c1da4e3540c905c46744f23154c47d011d73cecb"
+    }
+  ],
+  "netlify": {
+    "siteId": "496cf76e-f5ec-4810-824e-723ef0f8b6e9",
+    "deployId": null,
+    "deploys": [
+      {
+        "id": "6af7cf3732f86674c11de851",
+        "name": "rent-converter",
+        "state": "ready",
+        "title": "Plan next RentConverter build waves: W05–W16 quality-first Codex execution",
+        "branch": "planning/2026-11-rc27-next-waves",
+        "context": "deploy-preview",
+        "createdAt": "2026-11-14T03:02:15.919Z",
+        "error": "",
+        "adminUrl": "https://app.netlify.com/sites/496cf76e-f5ec-4810-824e-723ef0f8b6e9/deploys/6af7cf3732f86674c11de851",
+        "deployUrl": "https://6af7cf3732f86674c11de851--rent-converter.netlify.app/"
+      },
+      {
+        "id": "6af7a3c1af5d128563435779",
+        "name": "rent-converter",
+        "state": "ready",
+        "title": "Patch compatible dependencies and document security applicability",
+        "branch": "codex/rc028-security-maintenance",
+        "context": "deploy-preview",
+        "createdAt": "2026-11-13T23:56:49.764Z",
+        "error": "",
+        "adminUrl": "https://app.netlify.com/sites/496cf76e-f5ec-4810-824e-723ef0f8b6e9/deploys/6af7a3c1af5d128563435779",
+        "deployUrl": "https://6af7a3c1af5d128563435779--rent-converter.netlify.app/"
+      },
+      {
+        "id": "6af71d435cdb0c47031df3bd",
+        "name": "rent-converter",
+        "state": "ready",
+        "title": "W02: plan housing costs against take-home income",
+        "branch": "release/2027-W02-housing-budget",
+        "context": "deploy-preview",
+        "createdAt": "2026-11-13T14:22:59.775Z",
+        "error": "",
+        "adminUrl": "https://app.netlify.com/sites/496cf76e-f5ec-4810-824e-723ef0f8b6e9/deploys/6af71d435cdb0c47031df3bd",
+        "deployUrl": "https://6af71d435cdb0c47031df3bd--rent-converter.netlify.app/"
+      },
+      {
+        "id": "6af71ce2cd9d315c99efdcdc",
+        "name": "rent-converter",
+        "state": "ready",
+        "title": "W03: plan rent savings before an actual due date",
+        "branch": "release/2027-W03-paycheck-deadline",
+        "context": "deploy-preview",
+        "createdAt": "2026-11-13T14:21:22.306Z",
+        "error": "",
+        "adminUrl": "https://app.netlify.com/sites/496cf76e-f5ec-4810-824e-723ef0f8b6e9/deploys/6af71ce2cd9d315c99efdcdc",
+        "deployUrl": "https://6af71ce2cd9d315c99efdcdc--rent-converter.netlify.app/"
+      },
+      {
+        "id": "6af71cdb73b3fcc994c158f0",
+        "name": "rent-converter",
+        "state": "ready",
+        "title": "W01: compare rental listings with recurring housing costs",
+        "branch": "release/2027-W01-listing-comparison",
+        "context": "deploy-preview",
+        "createdAt": "2026-11-13T14:21:15.958Z",
+        "error": "",
+        "adminUrl": "https://app.netlify.com/sites/496cf76e-f5ec-4810-824e-723ef0f8b6e9/deploys/6af71cdb73b3fcc994c158f0",
+        "deployUrl": "https://6af71cdb73b3fcc994c158f0--rent-converter.netlify.app/"
+      }
+    ],
+    "filters": {
+      "status": null
+    },
+    "project": {
+      "name": "rent-converter",
+      "teamName": "Suhas Sunder",
+      "teamUrl": "https://app.netlify.com/teams/suhas-sunder/overview"
+    },
+    "hasActiveDeploys": false
+  }
+}

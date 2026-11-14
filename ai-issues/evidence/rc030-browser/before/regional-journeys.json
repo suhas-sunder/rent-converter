@@ -1,0 +1,13 @@
+[
+  {
+    "site": "ReportMyRent",
+    "input": "GBP500PW",
+    "result": "GBP2166.67PCM",
+    "workflow": "Enter amount, selectweekly, convert; no52/365comparison visible"
+  },
+  {
+    "site": "CAV",
+    "input": "AUD500weekly",
+    "body": "Rent calculator\nThe Weekly\nDaily\nWeekly\nFortnightly\nCalendar monthly\n6 monthly\nYearly\n \n\nrent is \n$\n\n• $  71.43\n• $  500.00\n• $  1000.00\n• $  2172.62\n• $  13035.71\n• $  26071.43\n\nNote:"
+  }
+]

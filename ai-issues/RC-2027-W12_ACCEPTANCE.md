@@ -30,3 +30,7 @@ Before publication, leave this draft unmerged to roll back. After a future owner
 ## Final mobile accessibility followup
 
 A supplemental 390px axe scan found the existing supporting schedule table lacked an explicit keyboard focus target. Added a named region, tab stop and visible focus ring without changing table data, formulas or layout. Final integration acceptance includes a focused ArrowRight/Tab exit test and mobile axe scan. The earlier desktop-only axe result did not cover this narrow-width condition.
+
+## Integration followthrough (review assembly only)
+
+See [RC-030 final acceptance](RC-030_INTEGRATION_ACCEPTANCE.md) for the exact final feature head, assembled-source identity, repaired findings and final local browser/PDF/download evidence. That report supersedes pending-local-integration notes above, but does not close immutable-hosted-preview or W05–W08 publication dependencies. This package remains HOLD for publication.

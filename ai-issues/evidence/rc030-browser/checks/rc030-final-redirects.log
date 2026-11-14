@@ -1,0 +1,5 @@
+
+> validate:redirects
+> node scripts/generate-netlify-redirects.mjs --check
+
+Verified 112 static Netlify redirects.

@@ -1,0 +1,5189 @@
+{
+  "recorded": "2026-11-14T04:17:52.639Z",
+  "method": "Canvas resolves CSS color to sRGB; alpha composite ancestor solid backgrounds over white; WCAG relative luminance. Complex backgrounds require separate visual review.",
+  "reviews": [
+    {
+      "id": "w09",
+      "sha": "d10791aa6379bd455f7e74bab6d072f1f2973f1a",
+      "violations": 0,
+      "nodes": [
+        {
+          "id": "color-contrast",
+          "target": ".text-left > .group-hover\\:text-sky-800.text-base.tracking-tight",
+          "summary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element",
+          "style": {
+            "text": "RentConverter.com",
+            "foreground": "oklch(0.129 0.042 264.695)",
+            "background": "rgba(0, 0, 0, 0)",
+            "fontSize": "16px",
+            "parentBackground": "rgba(0, 0, 0, 0)",
+            "backgroundAncestors": [
+              "oklab(0.999994 0.0000455678 0.0000200868 / 0.95)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)"
+            ]
+          },
+          "measured": {
+            "text": "RentConverter.com",
+            "cssForeground": "oklch(0.129 0.042 264.695)",
+            "foregroundRGBA": [
+              2,
+              6,
+              24,
+              255
+            ],
+            "effectiveBackgroundRGBA": [
+              254.23529411764707,
+              254.69411764705885,
+              255,
+              255
+            ],
+            "renderedForegroundRGBA": [
+              2,
+              6,
+              24,
+              255
+            ],
+            "ratio": 20.091796191460464,
+            "fontSize": "16px",
+            "fontWeight": "700",
+            "backgroundChain": [
+              {
+                "tag": "HTML",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "BODY",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "HEADER",
+                "id": "",
+                "color": "oklab(0.999994 0.0000455678 0.0000200868 / 0.95)",
+                "rgba": [
+                  255,
+                  255,
+                  255,
+                  242
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              }
+            ],
+            "requiresComplexCompositing": false
+          },
+          "screenshot": "w09-1.png",
+          "exposedScreenshot": "w09-1-exposed.png"
+        },
+        {
+          "id": "color-contrast",
+          "target": ".text-left > .group-hover\\:text-sky-800.text-base.tracking-tight > .text-sky-700",
+          "summary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element",
+          "style": {
+            "text": ".com",
+            "foreground": "oklch(0.5 0.134 242.749)",
+            "background": "rgba(0, 0, 0, 0)",
+            "fontSize": "16px",
+            "parentBackground": "rgba(0, 0, 0, 0)",
+            "backgroundAncestors": [
+              "oklab(0.999994 0.0000455678 0.0000200868 / 0.95)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)"
+            ]
+          },
+          "measured": {
+            "text": ".com",
+            "cssForeground": "oklch(0.5 0.134 242.749)",
+            "foregroundRGBA": [
+              0,
+              105,
+              168,
+              255
+            ],
+            "effectiveBackgroundRGBA": [
+              254.23529411764707,
+              254.69411764705885,
+              255,
+              255
+            ],
+            "renderedForegroundRGBA": [
+              0,
+              105,
+              168,
+              255
+            ],
+            "ratio": 5.837059093153491,
+            "fontSize": "16px",
+            "fontWeight": "700",
+            "backgroundChain": [
+              {
+                "tag": "HTML",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "BODY",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "HEADER",
+                "id": "",
+                "color": "oklab(0.999994 0.0000455678 0.0000200868 / 0.95)",
+                "rgba": [
+                  255,
+                  255,
+                  255,
+                  242
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SPAN",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              }
+            ],
+            "requiresComplexCompositing": false
+          },
+          "screenshot": "w09-2.png",
+          "exposedScreenshot": "w09-2-exposed.png"
+        }
+      ]
+    },
+    {
+      "id": "w10",
+      "sha": "d10791aa6379bd455f7e74bab6d072f1f2973f1a",
+      "violations": 0,
+      "nodes": []
+    },
+    {
+      "id": "w11",
+      "sha": "d10791aa6379bd455f7e74bab6d072f1f2973f1a",
+      "violations": 0,
+      "nodes": [
+        {
+          "id": "color-contrast",
+          "target": ".ml-2",
+          "summary": "Fix any of the following:\n  Element content contains only non-text characters",
+          "style": {
+            "text": "▾",
+            "foreground": "oklch(0.372 0.044 257.287)",
+            "background": "rgba(0, 0, 0, 0)",
+            "fontSize": "12px",
+            "parentBackground": "rgba(0, 0, 0, 0)",
+            "backgroundAncestors": [
+              "oklch(0.951 0.026 236.824)",
+              "rgb(255, 255, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)"
+            ]
+          },
+          "measured": {
+            "text": "▾",
+            "cssForeground": "oklch(0.372 0.044 257.287)",
+            "foregroundRGBA": [
+              49,
+              65,
+              88,
+              255
+            ],
+            "effectiveBackgroundRGBA": [
+              223,
+              242,
+              254,
+              255
+            ],
+            "renderedForegroundRGBA": [
+              49,
+              65,
+              88,
+              255
+            ],
+            "ratio": 9.010328954381139,
+            "fontSize": "12px",
+            "fontWeight": "400",
+            "backgroundChain": [
+              {
+                "tag": "HTML",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "BODY",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "MAIN",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SECTION",
+                "id": "converter",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "FIELDSET",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgb(255, 255, 255)",
+                "rgba": [
+                  255,
+                  255,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "oklch(0.951 0.026 236.824)",
+                "rgba": [
+                  223,
+                  242,
+                  254,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "BUTTON",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SPAN",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              }
+            ],
+            "requiresComplexCompositing": false
+          },
+          "screenshot": "w11-1.png",
+          "exposedScreenshot": "w11-1-exposed.png"
+        },
+        {
+          "id": "color-contrast",
+          "target": ".py-4:nth-child(1) > .list-none.rounded.hover\\:text-sky-900 > .ml-4.group-open\\:rotate-180.transition-transform",
+          "summary": "Fix any of the following:\n  Element content contains only non-text characters",
+          "style": {
+            "text": "▾",
+            "foreground": "rgb(71, 85, 105)",
+            "background": "rgba(0, 0, 0, 0)",
+            "fontSize": "18px",
+            "parentBackground": "rgba(0, 0, 0, 0)",
+            "backgroundAncestors": [
+              "rgb(248, 250, 252)",
+              "rgb(255, 255, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)"
+            ]
+          },
+          "measured": {
+            "text": "▾",
+            "cssForeground": "rgb(71, 85, 105)",
+            "foregroundRGBA": [
+              71,
+              85,
+              105,
+              255
+            ],
+            "effectiveBackgroundRGBA": [
+              248,
+              250,
+              252,
+              255
+            ],
+            "renderedForegroundRGBA": [
+              71,
+              85,
+              105,
+              255
+            ],
+            "ratio": 7.242510935504382,
+            "fontSize": "18px",
+            "fontWeight": "700",
+            "backgroundChain": [
+              {
+                "tag": "HTML",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "BODY",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "MAIN",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SECTION",
+                "id": "faq",
+                "color": "rgb(255, 255, 255)",
+                "rgba": [
+                  255,
+                  255,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DETAILS",
+                "id": "",
+                "color": "rgb(248, 250, 252)",
+                "rgba": [
+                  248,
+                  250,
+                  252,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SUMMARY",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SPAN",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              }
+            ],
+            "requiresComplexCompositing": false
+          },
+          "screenshot": "w11-2.png",
+          "exposedScreenshot": "w11-2-exposed.png"
+        },
+        {
+          "id": "color-contrast",
+          "target": ".py-4:nth-child(2) > .list-none.rounded.hover\\:text-sky-900 > .ml-4.group-open\\:rotate-180.transition-transform",
+          "summary": "Fix any of the following:\n  Element content contains only non-text characters",
+          "style": {
+            "text": "▾",
+            "foreground": "rgb(71, 85, 105)",
+            "background": "rgba(0, 0, 0, 0)",
+            "fontSize": "18px",
+            "parentBackground": "rgba(0, 0, 0, 0)",
+            "backgroundAncestors": [
+              "rgb(248, 250, 252)",
+              "rgb(255, 255, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)"
+            ]
+          },
+          "measured": {
+            "text": "▾",
+            "cssForeground": "rgb(71, 85, 105)",
+            "foregroundRGBA": [
+              71,
+              85,
+              105,
+              255
+            ],
+            "effectiveBackgroundRGBA": [
+              248,
+              250,
+              252,
+              255
+            ],
+            "renderedForegroundRGBA": [
+              71,
+              85,
+              105,
+              255
+            ],
+            "ratio": 7.242510935504382,
+            "fontSize": "18px",
+            "fontWeight": "700",
+            "backgroundChain": [
+              {
+                "tag": "HTML",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "BODY",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "MAIN",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SECTION",
+                "id": "faq",
+                "color": "rgb(255, 255, 255)",
+                "rgba": [
+                  255,
+                  255,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DETAILS",
+                "id": "",
+                "color": "rgb(248, 250, 252)",
+                "rgba": [
+                  248,
+                  250,
+                  252,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SUMMARY",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SPAN",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              }
+            ],
+            "requiresComplexCompositing": false
+          },
+          "screenshot": "w11-3.png",
+          "exposedScreenshot": "w11-3-exposed.png"
+        },
+        {
+          "id": "color-contrast",
+          "target": ".py-4:nth-child(3) > .list-none.rounded.hover\\:text-sky-900 > .ml-4.group-open\\:rotate-180.transition-transform",
+          "summary": "Fix any of the following:\n  Element content contains only non-text characters",
+          "style": {
+            "text": "▾",
+            "foreground": "rgb(71, 85, 105)",
+            "background": "rgba(0, 0, 0, 0)",
+            "fontSize": "18px",
+            "parentBackground": "rgba(0, 0, 0, 0)",
+            "backgroundAncestors": [
+              "rgb(248, 250, 252)",
+              "rgb(255, 255, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)"
+            ]
+          },
+          "measured": {
+            "text": "▾",
+            "cssForeground": "rgb(71, 85, 105)",
+            "foregroundRGBA": [
+              71,
+              85,
+              105,
+              255
+            ],
+            "effectiveBackgroundRGBA": [
+              248,
+              250,
+              252,
+              255
+            ],
+            "renderedForegroundRGBA": [
+              71,
+              85,
+              105,
+              255
+            ],
+            "ratio": 7.242510935504382,
+            "fontSize": "18px",
+            "fontWeight": "700",
+            "backgroundChain": [
+              {
+                "tag": "HTML",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "BODY",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "MAIN",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SECTION",
+                "id": "faq",
+                "color": "rgb(255, 255, 255)",
+                "rgba": [
+                  255,
+                  255,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DETAILS",
+                "id": "",
+                "color": "rgb(248, 250, 252)",
+                "rgba": [
+                  248,
+                  250,
+                  252,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SUMMARY",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SPAN",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              }
+            ],
+            "requiresComplexCompositing": false
+          },
+          "screenshot": "w11-4.png",
+          "exposedScreenshot": "w11-4-exposed.png"
+        },
+        {
+          "id": "color-contrast",
+          "target": ".py-4:nth-child(4) > .list-none.rounded.hover\\:text-sky-900 > .ml-4.group-open\\:rotate-180.transition-transform",
+          "summary": "Fix any of the following:\n  Element content contains only non-text characters",
+          "style": {
+            "text": "▾",
+            "foreground": "rgb(71, 85, 105)",
+            "background": "rgba(0, 0, 0, 0)",
+            "fontSize": "18px",
+            "parentBackground": "rgba(0, 0, 0, 0)",
+            "backgroundAncestors": [
+              "rgb(248, 250, 252)",
+              "rgb(255, 255, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)"
+            ]
+          },
+          "measured": {
+            "text": "▾",
+            "cssForeground": "rgb(71, 85, 105)",
+            "foregroundRGBA": [
+              71,
+              85,
+              105,
+              255
+            ],
+            "effectiveBackgroundRGBA": [
+              248,
+              250,
+              252,
+              255
+            ],
+            "renderedForegroundRGBA": [
+              71,
+              85,
+              105,
+              255
+            ],
+            "ratio": 7.242510935504382,
+            "fontSize": "18px",
+            "fontWeight": "700",
+            "backgroundChain": [
+              {
+                "tag": "HTML",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "BODY",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "MAIN",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SECTION",
+                "id": "faq",
+                "color": "rgb(255, 255, 255)",
+                "rgba": [
+                  255,
+                  255,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DETAILS",
+                "id": "",
+                "color": "rgb(248, 250, 252)",
+                "rgba": [
+                  248,
+                  250,
+                  252,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SUMMARY",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SPAN",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              }
+            ],
+            "requiresComplexCompositing": false
+          },
+          "screenshot": "w11-5.png",
+          "exposedScreenshot": "w11-5-exposed.png"
+        },
+        {
+          "id": "color-contrast",
+          "target": ".py-4:nth-child(5) > .list-none.rounded.hover\\:text-sky-900 > .ml-4.group-open\\:rotate-180.transition-transform",
+          "summary": "Fix any of the following:\n  Element content contains only non-text characters",
+          "style": {
+            "text": "▾",
+            "foreground": "rgb(71, 85, 105)",
+            "background": "rgba(0, 0, 0, 0)",
+            "fontSize": "18px",
+            "parentBackground": "rgba(0, 0, 0, 0)",
+            "backgroundAncestors": [
+              "rgb(248, 250, 252)",
+              "rgb(255, 255, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)"
+            ]
+          },
+          "measured": {
+            "text": "▾",
+            "cssForeground": "rgb(71, 85, 105)",
+            "foregroundRGBA": [
+              71,
+              85,
+              105,
+              255
+            ],
+            "effectiveBackgroundRGBA": [
+              248,
+              250,
+              252,
+              255
+            ],
+            "renderedForegroundRGBA": [
+              71,
+              85,
+              105,
+              255
+            ],
+            "ratio": 7.242510935504382,
+            "fontSize": "18px",
+            "fontWeight": "700",
+            "backgroundChain": [
+              {
+                "tag": "HTML",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "BODY",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "MAIN",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SECTION",
+                "id": "faq",
+                "color": "rgb(255, 255, 255)",
+                "rgba": [
+                  255,
+                  255,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DETAILS",
+                "id": "",
+                "color": "rgb(248, 250, 252)",
+                "rgba": [
+                  248,
+                  250,
+                  252,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SUMMARY",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SPAN",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              }
+            ],
+            "requiresComplexCompositing": false
+          },
+          "screenshot": "w11-6.png",
+          "exposedScreenshot": "w11-6-exposed.png"
+        },
+        {
+          "id": "color-contrast",
+          "target": ".py-4:nth-child(6) > .list-none.rounded.hover\\:text-sky-900 > .ml-4.group-open\\:rotate-180.transition-transform",
+          "summary": "Fix any of the following:\n  Element content contains only non-text characters",
+          "style": {
+            "text": "▾",
+            "foreground": "rgb(71, 85, 105)",
+            "background": "rgba(0, 0, 0, 0)",
+            "fontSize": "18px",
+            "parentBackground": "rgba(0, 0, 0, 0)",
+            "backgroundAncestors": [
+              "rgb(248, 250, 252)",
+              "rgb(255, 255, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)"
+            ]
+          },
+          "measured": {
+            "text": "▾",
+            "cssForeground": "rgb(71, 85, 105)",
+            "foregroundRGBA": [
+              71,
+              85,
+              105,
+              255
+            ],
+            "effectiveBackgroundRGBA": [
+              248,
+              250,
+              252,
+              255
+            ],
+            "renderedForegroundRGBA": [
+              71,
+              85,
+              105,
+              255
+            ],
+            "ratio": 7.242510935504382,
+            "fontSize": "18px",
+            "fontWeight": "700",
+            "backgroundChain": [
+              {
+                "tag": "HTML",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "BODY",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "MAIN",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SECTION",
+                "id": "faq",
+                "color": "rgb(255, 255, 255)",
+                "rgba": [
+                  255,
+                  255,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DETAILS",
+                "id": "",
+                "color": "rgb(248, 250, 252)",
+                "rgba": [
+                  248,
+                  250,
+                  252,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SUMMARY",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SPAN",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              }
+            ],
+            "requiresComplexCompositing": false
+          },
+          "screenshot": "w11-7.png",
+          "exposedScreenshot": "w11-7-exposed.png"
+        }
+      ]
+    },
+    {
+      "id": "w12",
+      "sha": "d10791aa6379bd455f7e74bab6d072f1f2973f1a",
+      "violations": 0,
+      "nodes": [
+        {
+          "id": "color-contrast",
+          "target": ".leading-tight.text-left > .group-hover\\:text-sky-800.text-base.tracking-tight",
+          "summary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element",
+          "style": {
+            "text": "RentConverter.com",
+            "foreground": "oklch(0.129 0.042 264.695)",
+            "background": "rgba(0, 0, 0, 0)",
+            "fontSize": "16px",
+            "parentBackground": "rgba(0, 0, 0, 0)",
+            "backgroundAncestors": [
+              "oklab(0.999994 0.0000455678 0.0000200868 / 0.95)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)"
+            ]
+          },
+          "measured": {
+            "text": "RentConverter.com",
+            "cssForeground": "oklch(0.129 0.042 264.695)",
+            "foregroundRGBA": [
+              2,
+              6,
+              24,
+              255
+            ],
+            "effectiveBackgroundRGBA": [
+              254.23529411764707,
+              254.69411764705885,
+              255,
+              255
+            ],
+            "renderedForegroundRGBA": [
+              2,
+              6,
+              24,
+              255
+            ],
+            "ratio": 20.091796191460464,
+            "fontSize": "16px",
+            "fontWeight": "700",
+            "backgroundChain": [
+              {
+                "tag": "HTML",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "BODY",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "HEADER",
+                "id": "",
+                "color": "oklab(0.999994 0.0000455678 0.0000200868 / 0.95)",
+                "rgba": [
+                  255,
+                  255,
+                  255,
+                  242
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              }
+            ],
+            "requiresComplexCompositing": false
+          },
+          "screenshot": "w12-1.png",
+          "exposedScreenshot": "w12-1-exposed.png"
+        },
+        {
+          "id": "color-contrast",
+          "target": ".leading-tight.text-left > .group-hover\\:text-sky-800.text-base.tracking-tight > .text-sky-700",
+          "summary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element",
+          "style": {
+            "text": ".com",
+            "foreground": "oklch(0.5 0.134 242.749)",
+            "background": "rgba(0, 0, 0, 0)",
+            "fontSize": "16px",
+            "parentBackground": "rgba(0, 0, 0, 0)",
+            "backgroundAncestors": [
+              "oklab(0.999994 0.0000455678 0.0000200868 / 0.95)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)"
+            ]
+          },
+          "measured": {
+            "text": ".com",
+            "cssForeground": "oklch(0.5 0.134 242.749)",
+            "foregroundRGBA": [
+              0,
+              105,
+              168,
+              255
+            ],
+            "effectiveBackgroundRGBA": [
+              254.23529411764707,
+              254.69411764705885,
+              255,
+              255
+            ],
+            "renderedForegroundRGBA": [
+              0,
+              105,
+              168,
+              255
+            ],
+            "ratio": 5.837059093153491,
+            "fontSize": "16px",
+            "fontWeight": "700",
+            "backgroundChain": [
+              {
+                "tag": "HTML",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "BODY",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "HEADER",
+                "id": "",
+                "color": "oklab(0.999994 0.0000455678 0.0000200868 / 0.95)",
+                "rgba": [
+                  255,
+                  255,
+                  255,
+                  242
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SPAN",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              }
+            ],
+            "requiresComplexCompositing": false
+          },
+          "screenshot": "w12-2.png",
+          "exposedScreenshot": "w12-2-exposed.png"
+        },
+        {
+          "id": "color-contrast",
+          "target": ".ml-2",
+          "summary": "Fix any of the following:\n  Element content contains only non-text characters",
+          "style": {
+            "text": "▾",
+            "foreground": "oklch(0.372 0.044 257.287)",
+            "background": "rgba(0, 0, 0, 0)",
+            "fontSize": "12px",
+            "parentBackground": "rgba(0, 0, 0, 0)",
+            "backgroundAncestors": [
+              "oklch(0.951 0.026 236.824)",
+              "rgb(255, 255, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)"
+            ]
+          },
+          "measured": {
+            "text": "▾",
+            "cssForeground": "oklch(0.372 0.044 257.287)",
+            "foregroundRGBA": [
+              49,
+              65,
+              88,
+              255
+            ],
+            "effectiveBackgroundRGBA": [
+              223,
+              242,
+              254,
+              255
+            ],
+            "renderedForegroundRGBA": [
+              49,
+              65,
+              88,
+              255
+            ],
+            "ratio": 9.010328954381139,
+            "fontSize": "12px",
+            "fontWeight": "400",
+            "backgroundChain": [
+              {
+                "tag": "HTML",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "BODY",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "MAIN",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SECTION",
+                "id": "converter",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "FIELDSET",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgb(255, 255, 255)",
+                "rgba": [
+                  255,
+                  255,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "oklch(0.951 0.026 236.824)",
+                "rgba": [
+                  223,
+                  242,
+                  254,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "BUTTON",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SPAN",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              }
+            ],
+            "requiresComplexCompositing": false
+          },
+          "screenshot": "w12-3.png",
+          "exposedScreenshot": "w12-3-exposed.png"
+        },
+        {
+          "id": "color-contrast",
+          "target": ".mb-3",
+          "summary": "Fix any of the following:\n  Element's background color could not be determined because it is overlapped by another element",
+          "style": {
+            "text": "Annual payment counts for common rent schedules",
+            "foreground": "oklch(0.443 0.11 240.79)",
+            "background": "rgba(0, 0, 0, 0)",
+            "fontSize": "24px",
+            "parentBackground": "rgba(0, 0, 0, 0)",
+            "backgroundAncestors": [
+              "rgb(255, 255, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)"
+            ]
+          },
+          "measured": {
+            "text": "Annual payment counts for common rent schedules",
+            "cssForeground": "oklch(0.443 0.11 240.79)",
+            "foregroundRGBA": [
+              0,
+              89,
+              138,
+              255
+            ],
+            "effectiveBackgroundRGBA": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "renderedForegroundRGBA": [
+              0,
+              89,
+              138,
+              255
+            ],
+            "ratio": 7.510871898389826,
+            "fontSize": "24px",
+            "fontWeight": "800",
+            "backgroundChain": [
+              {
+                "tag": "HTML",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "BODY",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "MAIN",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SECTION",
+                "id": "payment-counts",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgb(255, 255, 255)",
+                "rgba": [
+                  255,
+                  255,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "H2",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              }
+            ],
+            "requiresComplexCompositing": false
+          },
+          "screenshot": "w12-4.png",
+          "exposedScreenshot": "w12-4-exposed.png"
+        },
+        {
+          "id": "color-contrast",
+          "target": ".mb-5",
+          "summary": "Fix any of the following:\n  Element's background color could not be determined because it is overlapped by another element",
+          "style": {
+            "text": "A 4-week schedule repeats every 28 days. Calendar months are not 28 days, so monthly rent and 4-week rent do not line up exactly. The table shows the difference between common schedule counts.",
+            "foreground": "oklch(0.372 0.044 257.287)",
+            "background": "rgba(0, 0, 0, 0)",
+            "fontSize": "15px",
+            "parentBackground": "rgba(0, 0, 0, 0)",
+            "backgroundAncestors": [
+              "rgb(255, 255, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)"
+            ]
+          },
+          "measured": {
+            "text": "A 4-week schedule repeats every 28 days. Calendar months are not 28 days, so monthly rent and 4-week rent do not line up exactly. The table shows the difference between common schedule counts.",
+            "cssForeground": "oklch(0.372 0.044 257.287)",
+            "foregroundRGBA": [
+              49,
+              65,
+              88,
+              255
+            ],
+            "effectiveBackgroundRGBA": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "renderedForegroundRGBA": [
+              49,
+              65,
+              88,
+              255
+            ],
+            "ratio": 10.356927400589216,
+            "fontSize": "15px",
+            "fontWeight": "400",
+            "backgroundChain": [
+              {
+                "tag": "HTML",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "BODY",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "MAIN",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SECTION",
+                "id": "payment-counts",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgb(255, 255, 255)",
+                "rgba": [
+                  255,
+                  255,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "P",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              }
+            ],
+            "requiresComplexCompositing": false
+          },
+          "screenshot": "w12-5.png",
+          "exposedScreenshot": "w12-5-exposed.png"
+        },
+        {
+          "id": "color-contrast",
+          "target": ".list-disc > li:nth-child(2)",
+          "summary": "Fix any of the following:\n  Element's background color could not be determined because it is overlapped by another element",
+          "style": {
+            "text": "13 payments is a 52-week framing. A 365-day year is slightly longer than 52 weeks.",
+            "foreground": "oklch(0.372 0.044 257.287)",
+            "background": "rgba(0, 0, 0, 0)",
+            "fontSize": "15px",
+            "parentBackground": "rgba(0, 0, 0, 0)",
+            "backgroundAncestors": [
+              "oklab(0.984 -0.00113071 -0.00277876 / 0.8)",
+              "rgb(255, 255, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)"
+            ]
+          },
+          "measured": {
+            "text": "13 payments is a 52-week framing. A 365-day year is slightly longer than 52 weeks.",
+            "cssForeground": "oklch(0.372 0.044 257.287)",
+            "foregroundRGBA": [
+              49,
+              65,
+              88,
+              255
+            ],
+            "effectiveBackgroundRGBA": [
+              249.39999999999998,
+              251,
+              252.60000000000002,
+              255
+            ],
+            "renderedForegroundRGBA": [
+              49,
+              65,
+              88,
+              255
+            ],
+            "ratio": 9.989410537295345,
+            "fontSize": "15px",
+            "fontWeight": "400",
+            "backgroundChain": [
+              {
+                "tag": "HTML",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "BODY",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "MAIN",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SECTION",
+                "id": "payment-counts",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgb(255, 255, 255)",
+                "rgba": [
+                  255,
+                  255,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "oklab(0.984 -0.00113071 -0.00277876 / 0.8)",
+                "rgba": [
+                  248,
+                  250,
+                  252,
+                  204
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "UL",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "LI",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              }
+            ],
+            "requiresComplexCompositing": false
+          },
+          "screenshot": "w12-6.png",
+          "exposedScreenshot": "w12-6-exposed.png"
+        },
+        {
+          "id": "color-contrast",
+          "target": "li:nth-child(2) > strong",
+          "summary": "Fix any of the following:\n  Element's background color could not be determined because it is overlapped by another element",
+          "style": {
+            "text": "13 payments is a 52-week framing.",
+            "foreground": "rgb(2, 6, 23)",
+            "background": "rgba(0, 0, 0, 0)",
+            "fontSize": "15px",
+            "parentBackground": "rgba(0, 0, 0, 0)",
+            "backgroundAncestors": [
+              "oklab(0.984 -0.00113071 -0.00277876 / 0.8)",
+              "rgb(255, 255, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)"
+            ]
+          },
+          "measured": {
+            "text": "13 payments is a 52-week framing.",
+            "cssForeground": "rgb(2, 6, 23)",
+            "foregroundRGBA": [
+              2,
+              6,
+              23,
+              255
+            ],
+            "effectiveBackgroundRGBA": [
+              249.39999999999998,
+              251,
+              252.60000000000002,
+              255
+            ],
+            "renderedForegroundRGBA": [
+              2,
+              6,
+              23,
+              255
+            ],
+            "ratio": 19.457007611646254,
+            "fontSize": "15px",
+            "fontWeight": "700",
+            "backgroundChain": [
+              {
+                "tag": "HTML",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "BODY",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "MAIN",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SECTION",
+                "id": "payment-counts",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgb(255, 255, 255)",
+                "rgba": [
+                  255,
+                  255,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "oklab(0.984 -0.00113071 -0.00277876 / 0.8)",
+                "rgba": [
+                  248,
+                  250,
+                  252,
+                  204
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "UL",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "LI",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "STRONG",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              }
+            ],
+            "requiresComplexCompositing": false
+          },
+          "screenshot": "w12-7.png",
+          "exposedScreenshot": "w12-7-exposed.png"
+        },
+        {
+          "id": "color-contrast",
+          "target": ".list-disc > li:nth-child(3)",
+          "summary": "Fix any of the following:\n  Element's background color could not be determined because it is overlapped by another element",
+          "style": {
+            "text": "Monthly rent is calendar-based. It does not have one fixed day length.",
+            "foreground": "oklch(0.372 0.044 257.287)",
+            "background": "rgba(0, 0, 0, 0)",
+            "fontSize": "15px",
+            "parentBackground": "rgba(0, 0, 0, 0)",
+            "backgroundAncestors": [
+              "oklab(0.984 -0.00113071 -0.00277876 / 0.8)",
+              "rgb(255, 255, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)"
+            ]
+          },
+          "measured": {
+            "text": "Monthly rent is calendar-based. It does not have one fixed day length.",
+            "cssForeground": "oklch(0.372 0.044 257.287)",
+            "foregroundRGBA": [
+              49,
+              65,
+              88,
+              255
+            ],
+            "effectiveBackgroundRGBA": [
+              249.39999999999998,
+              251,
+              252.60000000000002,
+              255
+            ],
+            "renderedForegroundRGBA": [
+              49,
+              65,
+              88,
+              255
+            ],
+            "ratio": 9.989410537295345,
+            "fontSize": "15px",
+            "fontWeight": "400",
+            "backgroundChain": [
+              {
+                "tag": "HTML",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "BODY",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "MAIN",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SECTION",
+                "id": "payment-counts",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgb(255, 255, 255)",
+                "rgba": [
+                  255,
+                  255,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "oklab(0.984 -0.00113071 -0.00277876 / 0.8)",
+                "rgba": [
+                  248,
+                  250,
+                  252,
+                  204
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "UL",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "LI",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              }
+            ],
+            "requiresComplexCompositing": false
+          },
+          "screenshot": "w12-8.png",
+          "exposedScreenshot": "w12-8-exposed.png"
+        },
+        {
+          "id": "color-contrast",
+          "target": "li:nth-child(3) > strong",
+          "summary": "Fix any of the following:\n  Element's background color could not be determined because it is overlapped by another element",
+          "style": {
+            "text": "Monthly rent is calendar-based.",
+            "foreground": "rgb(2, 6, 23)",
+            "background": "rgba(0, 0, 0, 0)",
+            "fontSize": "15px",
+            "parentBackground": "rgba(0, 0, 0, 0)",
+            "backgroundAncestors": [
+              "oklab(0.984 -0.00113071 -0.00277876 / 0.8)",
+              "rgb(255, 255, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)"
+            ]
+          },
+          "measured": {
+            "text": "Monthly rent is calendar-based.",
+            "cssForeground": "rgb(2, 6, 23)",
+            "foregroundRGBA": [
+              2,
+              6,
+              23,
+              255
+            ],
+            "effectiveBackgroundRGBA": [
+              249.39999999999998,
+              251,
+              252.60000000000002,
+              255
+            ],
+            "renderedForegroundRGBA": [
+              2,
+              6,
+              23,
+              255
+            ],
+            "ratio": 19.457007611646254,
+            "fontSize": "15px",
+            "fontWeight": "700",
+            "backgroundChain": [
+              {
+                "tag": "HTML",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "BODY",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "MAIN",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SECTION",
+                "id": "payment-counts",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgb(255, 255, 255)",
+                "rgba": [
+                  255,
+                  255,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "oklab(0.984 -0.00113071 -0.00277876 / 0.8)",
+                "rgba": [
+                  248,
+                  250,
+                  252,
+                  204
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "UL",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "LI",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "STRONG",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              }
+            ],
+            "requiresComplexCompositing": false
+          },
+          "screenshot": "w12-9.png",
+          "exposedScreenshot": "w12-9-exposed.png"
+        },
+        {
+          "id": "color-contrast",
+          "target": ".uppercase",
+          "summary": "Fix any of the following:\n  Element's background color could not be determined because it is overlapped by another element",
+          "style": {
+            "text": "How this calculator works",
+            "foreground": "oklch(0.372 0.044 257.287)",
+            "background": "rgba(0, 0, 0, 0)",
+            "fontSize": "14px",
+            "parentBackground": "rgba(0, 0, 0, 0)",
+            "backgroundAncestors": [
+              "rgb(255, 255, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)"
+            ]
+          },
+          "measured": {
+            "text": "How this calculator works",
+            "cssForeground": "oklch(0.372 0.044 257.287)",
+            "foregroundRGBA": [
+              49,
+              65,
+              88,
+              255
+            ],
+            "effectiveBackgroundRGBA": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "renderedForegroundRGBA": [
+              49,
+              65,
+              88,
+              255
+            ],
+            "ratio": 10.356927400589216,
+            "fontSize": "14px",
+            "fontWeight": "600",
+            "backgroundChain": [
+              {
+                "tag": "HTML",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "BODY",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "MAIN",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SECTION",
+                "id": "how-it-works",
+                "color": "rgb(255, 255, 255)",
+                "rgba": [
+                  255,
+                  255,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "H2",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SPAN",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              }
+            ],
+            "requiresComplexCompositing": false
+          },
+          "screenshot": "w12-10.png",
+          "exposedScreenshot": "w12-10-exposed.png"
+        },
+        {
+          "id": "color-contrast",
+          "target": "details:nth-child(1) > summary > .ml-4.group-open\\:rotate-180.transition-transform",
+          "summary": "Fix any of the following:\n  Element content contains only non-text characters",
+          "style": {
+            "text": "▾",
+            "foreground": "rgb(71, 85, 105)",
+            "background": "rgba(0, 0, 0, 0)",
+            "fontSize": "18px",
+            "parentBackground": "rgba(0, 0, 0, 0)",
+            "backgroundAncestors": [
+              "rgb(248, 250, 252)",
+              "rgb(255, 255, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)"
+            ]
+          },
+          "measured": {
+            "text": "▾",
+            "cssForeground": "rgb(71, 85, 105)",
+            "foregroundRGBA": [
+              71,
+              85,
+              105,
+              255
+            ],
+            "effectiveBackgroundRGBA": [
+              248,
+              250,
+              252,
+              255
+            ],
+            "renderedForegroundRGBA": [
+              71,
+              85,
+              105,
+              255
+            ],
+            "ratio": 7.242510935504382,
+            "fontSize": "18px",
+            "fontWeight": "700",
+            "backgroundChain": [
+              {
+                "tag": "HTML",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "BODY",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "MAIN",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SECTION",
+                "id": "faq",
+                "color": "rgb(255, 255, 255)",
+                "rgba": [
+                  255,
+                  255,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DETAILS",
+                "id": "",
+                "color": "rgb(248, 250, 252)",
+                "rgba": [
+                  248,
+                  250,
+                  252,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SUMMARY",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SPAN",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              }
+            ],
+            "requiresComplexCompositing": false
+          },
+          "screenshot": "w12-11.png",
+          "exposedScreenshot": "w12-11-exposed.png"
+        },
+        {
+          "id": "color-contrast",
+          "target": "details:nth-child(2) > summary > .ml-4.group-open\\:rotate-180.transition-transform",
+          "summary": "Fix any of the following:\n  Element content contains only non-text characters",
+          "style": {
+            "text": "▾",
+            "foreground": "rgb(71, 85, 105)",
+            "background": "rgba(0, 0, 0, 0)",
+            "fontSize": "18px",
+            "parentBackground": "rgba(0, 0, 0, 0)",
+            "backgroundAncestors": [
+              "rgb(248, 250, 252)",
+              "rgb(255, 255, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)"
+            ]
+          },
+          "measured": {
+            "text": "▾",
+            "cssForeground": "rgb(71, 85, 105)",
+            "foregroundRGBA": [
+              71,
+              85,
+              105,
+              255
+            ],
+            "effectiveBackgroundRGBA": [
+              248,
+              250,
+              252,
+              255
+            ],
+            "renderedForegroundRGBA": [
+              71,
+              85,
+              105,
+              255
+            ],
+            "ratio": 7.242510935504382,
+            "fontSize": "18px",
+            "fontWeight": "700",
+            "backgroundChain": [
+              {
+                "tag": "HTML",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "BODY",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "MAIN",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SECTION",
+                "id": "faq",
+                "color": "rgb(255, 255, 255)",
+                "rgba": [
+                  255,
+                  255,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DETAILS",
+                "id": "",
+                "color": "rgb(248, 250, 252)",
+                "rgba": [
+                  248,
+                  250,
+                  252,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SUMMARY",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SPAN",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              }
+            ],
+            "requiresComplexCompositing": false
+          },
+          "screenshot": "w12-12.png",
+          "exposedScreenshot": "w12-12-exposed.png"
+        },
+        {
+          "id": "color-contrast",
+          "target": "details:nth-child(3) > summary > .ml-4.group-open\\:rotate-180.transition-transform",
+          "summary": "Fix any of the following:\n  Element content contains only non-text characters",
+          "style": {
+            "text": "▾",
+            "foreground": "rgb(71, 85, 105)",
+            "background": "rgba(0, 0, 0, 0)",
+            "fontSize": "18px",
+            "parentBackground": "rgba(0, 0, 0, 0)",
+            "backgroundAncestors": [
+              "rgb(248, 250, 252)",
+              "rgb(255, 255, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)"
+            ]
+          },
+          "measured": {
+            "text": "▾",
+            "cssForeground": "rgb(71, 85, 105)",
+            "foregroundRGBA": [
+              71,
+              85,
+              105,
+              255
+            ],
+            "effectiveBackgroundRGBA": [
+              248,
+              250,
+              252,
+              255
+            ],
+            "renderedForegroundRGBA": [
+              71,
+              85,
+              105,
+              255
+            ],
+            "ratio": 7.242510935504382,
+            "fontSize": "18px",
+            "fontWeight": "700",
+            "backgroundChain": [
+              {
+                "tag": "HTML",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "BODY",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "MAIN",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SECTION",
+                "id": "faq",
+                "color": "rgb(255, 255, 255)",
+                "rgba": [
+                  255,
+                  255,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DETAILS",
+                "id": "",
+                "color": "rgb(248, 250, 252)",
+                "rgba": [
+                  248,
+                  250,
+                  252,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SUMMARY",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SPAN",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              }
+            ],
+            "requiresComplexCompositing": false
+          },
+          "screenshot": "w12-13.png",
+          "exposedScreenshot": "w12-13-exposed.png"
+        },
+        {
+          "id": "color-contrast",
+          "target": "details:nth-child(4) > summary > .ml-4.group-open\\:rotate-180.transition-transform",
+          "summary": "Fix any of the following:\n  Element content contains only non-text characters",
+          "style": {
+            "text": "▾",
+            "foreground": "rgb(71, 85, 105)",
+            "background": "rgba(0, 0, 0, 0)",
+            "fontSize": "18px",
+            "parentBackground": "rgba(0, 0, 0, 0)",
+            "backgroundAncestors": [
+              "rgb(248, 250, 252)",
+              "rgb(255, 255, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)"
+            ]
+          },
+          "measured": {
+            "text": "▾",
+            "cssForeground": "rgb(71, 85, 105)",
+            "foregroundRGBA": [
+              71,
+              85,
+              105,
+              255
+            ],
+            "effectiveBackgroundRGBA": [
+              248,
+              250,
+              252,
+              255
+            ],
+            "renderedForegroundRGBA": [
+              71,
+              85,
+              105,
+              255
+            ],
+            "ratio": 7.242510935504382,
+            "fontSize": "18px",
+            "fontWeight": "700",
+            "backgroundChain": [
+              {
+                "tag": "HTML",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "BODY",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "MAIN",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SECTION",
+                "id": "faq",
+                "color": "rgb(255, 255, 255)",
+                "rgba": [
+                  255,
+                  255,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DETAILS",
+                "id": "",
+                "color": "rgb(248, 250, 252)",
+                "rgba": [
+                  248,
+                  250,
+                  252,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SUMMARY",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SPAN",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              }
+            ],
+            "requiresComplexCompositing": false
+          },
+          "screenshot": "w12-14.png",
+          "exposedScreenshot": "w12-14-exposed.png"
+        },
+        {
+          "id": "color-contrast",
+          "target": "details:nth-child(5) > summary > .ml-4.group-open\\:rotate-180.transition-transform",
+          "summary": "Fix any of the following:\n  Element content contains only non-text characters",
+          "style": {
+            "text": "▾",
+            "foreground": "rgb(71, 85, 105)",
+            "background": "rgba(0, 0, 0, 0)",
+            "fontSize": "18px",
+            "parentBackground": "rgba(0, 0, 0, 0)",
+            "backgroundAncestors": [
+              "rgb(248, 250, 252)",
+              "rgb(255, 255, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)"
+            ]
+          },
+          "measured": {
+            "text": "▾",
+            "cssForeground": "rgb(71, 85, 105)",
+            "foregroundRGBA": [
+              71,
+              85,
+              105,
+              255
+            ],
+            "effectiveBackgroundRGBA": [
+              248,
+              250,
+              252,
+              255
+            ],
+            "renderedForegroundRGBA": [
+              71,
+              85,
+              105,
+              255
+            ],
+            "ratio": 7.242510935504382,
+            "fontSize": "18px",
+            "fontWeight": "700",
+            "backgroundChain": [
+              {
+                "tag": "HTML",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "BODY",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "MAIN",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SECTION",
+                "id": "faq",
+                "color": "rgb(255, 255, 255)",
+                "rgba": [
+                  255,
+                  255,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DETAILS",
+                "id": "",
+                "color": "rgb(248, 250, 252)",
+                "rgba": [
+                  248,
+                  250,
+                  252,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SUMMARY",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SPAN",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              }
+            ],
+            "requiresComplexCompositing": false
+          },
+          "screenshot": "w12-15.png",
+          "exposedScreenshot": "w12-15-exposed.png"
+        },
+        {
+          "id": "color-contrast",
+          "target": "details:nth-child(6) > summary > .ml-4.group-open\\:rotate-180.transition-transform",
+          "summary": "Fix any of the following:\n  Element content contains only non-text characters",
+          "style": {
+            "text": "▾",
+            "foreground": "rgb(71, 85, 105)",
+            "background": "rgba(0, 0, 0, 0)",
+            "fontSize": "18px",
+            "parentBackground": "rgba(0, 0, 0, 0)",
+            "backgroundAncestors": [
+              "rgb(248, 250, 252)",
+              "rgb(255, 255, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)"
+            ]
+          },
+          "measured": {
+            "text": "▾",
+            "cssForeground": "rgb(71, 85, 105)",
+            "foregroundRGBA": [
+              71,
+              85,
+              105,
+              255
+            ],
+            "effectiveBackgroundRGBA": [
+              248,
+              250,
+              252,
+              255
+            ],
+            "renderedForegroundRGBA": [
+              71,
+              85,
+              105,
+              255
+            ],
+            "ratio": 7.242510935504382,
+            "fontSize": "18px",
+            "fontWeight": "700",
+            "backgroundChain": [
+              {
+                "tag": "HTML",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "BODY",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "MAIN",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SECTION",
+                "id": "faq",
+                "color": "rgb(255, 255, 255)",
+                "rgba": [
+                  255,
+                  255,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DETAILS",
+                "id": "",
+                "color": "rgb(248, 250, 252)",
+                "rgba": [
+                  248,
+                  250,
+                  252,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SUMMARY",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SPAN",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              }
+            ],
+            "requiresComplexCompositing": false
+          },
+          "screenshot": "w12-16.png",
+          "exposedScreenshot": "w12-16-exposed.png"
+        },
+        {
+          "id": "color-contrast",
+          "target": "details:nth-child(7) > summary > .ml-4.group-open\\:rotate-180.transition-transform",
+          "summary": "Fix any of the following:\n  Element content contains only non-text characters",
+          "style": {
+            "text": "▾",
+            "foreground": "rgb(71, 85, 105)",
+            "background": "rgba(0, 0, 0, 0)",
+            "fontSize": "18px",
+            "parentBackground": "rgba(0, 0, 0, 0)",
+            "backgroundAncestors": [
+              "rgb(248, 250, 252)",
+              "rgb(255, 255, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)"
+            ]
+          },
+          "measured": {
+            "text": "▾",
+            "cssForeground": "rgb(71, 85, 105)",
+            "foregroundRGBA": [
+              71,
+              85,
+              105,
+              255
+            ],
+            "effectiveBackgroundRGBA": [
+              248,
+              250,
+              252,
+              255
+            ],
+            "renderedForegroundRGBA": [
+              71,
+              85,
+              105,
+              255
+            ],
+            "ratio": 7.242510935504382,
+            "fontSize": "18px",
+            "fontWeight": "700",
+            "backgroundChain": [
+              {
+                "tag": "HTML",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "BODY",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "MAIN",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SECTION",
+                "id": "faq",
+                "color": "rgb(255, 255, 255)",
+                "rgba": [
+                  255,
+                  255,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DETAILS",
+                "id": "",
+                "color": "rgb(248, 250, 252)",
+                "rgba": [
+                  248,
+                  250,
+                  252,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SUMMARY",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SPAN",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              }
+            ],
+            "requiresComplexCompositing": false
+          },
+          "screenshot": "w12-17.png",
+          "exposedScreenshot": "w12-17-exposed.png"
+        }
+      ]
+    },
+    {
+      "id": "w13",
+      "sha": "d10791aa6379bd455f7e74bab6d072f1f2973f1a",
+      "violations": 0,
+      "nodes": []
+    },
+    {
+      "id": "w14",
+      "sha": "d10791aa6379bd455f7e74bab6d072f1f2973f1a",
+      "violations": 0,
+      "nodes": []
+    },
+    {
+      "id": "w15",
+      "sha": "d10791aa6379bd455f7e74bab6d072f1f2973f1a",
+      "violations": 0,
+      "nodes": []
+    },
+    {
+      "id": "w16",
+      "sha": "d10791aa6379bd455f7e74bab6d072f1f2973f1a",
+      "violations": 0,
+      "nodes": [
+        {
+          "id": "color-contrast",
+          "target": ".leading-tight > .group-hover\\:text-sky-800.text-base.tracking-tight",
+          "summary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element",
+          "style": {
+            "text": "RentConverter.com",
+            "foreground": "oklch(0.129 0.042 264.695)",
+            "background": "rgba(0, 0, 0, 0)",
+            "fontSize": "16px",
+            "parentBackground": "rgba(0, 0, 0, 0)",
+            "backgroundAncestors": [
+              "oklab(0.999994 0.0000455678 0.0000200868 / 0.95)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)"
+            ]
+          },
+          "measured": {
+            "text": "RentConverter.com",
+            "cssForeground": "oklch(0.129 0.042 264.695)",
+            "foregroundRGBA": [
+              2,
+              6,
+              24,
+              255
+            ],
+            "effectiveBackgroundRGBA": [
+              254.23529411764707,
+              254.69411764705885,
+              255,
+              255
+            ],
+            "renderedForegroundRGBA": [
+              2,
+              6,
+              24,
+              255
+            ],
+            "ratio": 20.091796191460464,
+            "fontSize": "16px",
+            "fontWeight": "700",
+            "backgroundChain": [
+              {
+                "tag": "HTML",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "BODY",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "HEADER",
+                "id": "",
+                "color": "oklab(0.999994 0.0000455678 0.0000200868 / 0.95)",
+                "rgba": [
+                  255,
+                  255,
+                  255,
+                  242
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              }
+            ],
+            "requiresComplexCompositing": false
+          },
+          "screenshot": "w16-1.png",
+          "exposedScreenshot": "w16-1-exposed.png"
+        },
+        {
+          "id": "color-contrast",
+          "target": ".leading-tight > .group-hover\\:text-sky-800.text-base.tracking-tight > .text-sky-700",
+          "summary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element",
+          "style": {
+            "text": ".com",
+            "foreground": "oklch(0.5 0.134 242.749)",
+            "background": "rgba(0, 0, 0, 0)",
+            "fontSize": "16px",
+            "parentBackground": "rgba(0, 0, 0, 0)",
+            "backgroundAncestors": [
+              "oklab(0.999994 0.0000455678 0.0000200868 / 0.95)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)"
+            ]
+          },
+          "measured": {
+            "text": ".com",
+            "cssForeground": "oklch(0.5 0.134 242.749)",
+            "foregroundRGBA": [
+              0,
+              105,
+              168,
+              255
+            ],
+            "effectiveBackgroundRGBA": [
+              254.23529411764707,
+              254.69411764705885,
+              255,
+              255
+            ],
+            "renderedForegroundRGBA": [
+              0,
+              105,
+              168,
+              255
+            ],
+            "ratio": 5.837059093153491,
+            "fontSize": "16px",
+            "fontWeight": "700",
+            "backgroundChain": [
+              {
+                "tag": "HTML",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "BODY",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "HEADER",
+                "id": "",
+                "color": "oklab(0.999994 0.0000455678 0.0000200868 / 0.95)",
+                "rgba": [
+                  255,
+                  255,
+                  255,
+                  242
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SPAN",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              }
+            ],
+            "requiresComplexCompositing": false
+          },
+          "screenshot": "w16-2.png",
+          "exposedScreenshot": "w16-2-exposed.png"
+        },
+        {
+          "id": "color-contrast",
+          "target": "caption",
+          "summary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element",
+          "style": {
+            "text": "Payments within the horizon — first year uses starting rent",
+            "foreground": "oklch(0.391 0.09 240.876)",
+            "background": "rgba(0, 0, 0, 0)",
+            "fontSize": "14px",
+            "parentBackground": "rgba(0, 0, 0, 0)",
+            "backgroundAncestors": [
+              "rgb(255, 255, 255)",
+              "rgb(255, 255, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)"
+            ]
+          },
+          "measured": {
+            "text": "Payments within the horizon — first year uses starting rent",
+            "cssForeground": "oklch(0.391 0.09 240.876)",
+            "foregroundRGBA": [
+              2,
+              74,
+              112,
+              255
+            ],
+            "effectiveBackgroundRGBA": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "renderedForegroundRGBA": [
+              2,
+              74,
+              112,
+              255
+            ],
+            "ratio": 9.47626337861654,
+            "fontSize": "14px",
+            "fontWeight": "600",
+            "backgroundChain": [
+              {
+                "tag": "HTML",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "BODY",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "MAIN",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SECTION",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "FIELDSET",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgb(255, 255, 255)",
+                "rgba": [
+                  255,
+                  255,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DETAILS",
+                "id": "increase-cost-comparison",
+                "color": "rgb(255, 255, 255)",
+                "rgba": [
+                  255,
+                  255,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "TABLE",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "CAPTION",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              }
+            ],
+            "requiresComplexCompositing": false
+          },
+          "screenshot": "w16-3.png",
+          "exposedScreenshot": "w16-3-exposed.png"
+        },
+        {
+          "id": "color-contrast",
+          "target": "th[scope=\"col\"]:nth-child(4)",
+          "summary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element",
+          "style": {
+            "text": "Annual difference (primary minus comparison)",
+            "foreground": "oklch(0.372 0.044 257.287)",
+            "background": "rgba(0, 0, 0, 0)",
+            "fontSize": "14px",
+            "parentBackground": "rgba(0, 0, 0, 0)",
+            "backgroundAncestors": [
+              "rgb(255, 255, 255)",
+              "rgb(255, 255, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)"
+            ]
+          },
+          "measured": {
+            "text": "Annual difference (primary minus comparison)",
+            "cssForeground": "oklch(0.372 0.044 257.287)",
+            "foregroundRGBA": [
+              49,
+              65,
+              88,
+              255
+            ],
+            "effectiveBackgroundRGBA": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "renderedForegroundRGBA": [
+              49,
+              65,
+              88,
+              255
+            ],
+            "ratio": 10.356927400589216,
+            "fontSize": "14px",
+            "fontWeight": "700",
+            "backgroundChain": [
+              {
+                "tag": "HTML",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "BODY",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "MAIN",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SECTION",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "FIELDSET",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgb(255, 255, 255)",
+                "rgba": [
+                  255,
+                  255,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DETAILS",
+                "id": "increase-cost-comparison",
+                "color": "rgb(255, 255, 255)",
+                "rgba": [
+                  255,
+                  255,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "TABLE",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "THEAD",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "TR",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "TH",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              }
+            ],
+            "requiresComplexCompositing": false
+          },
+          "screenshot": "w16-4.png",
+          "exposedScreenshot": "w16-4-exposed.png"
+        },
+        {
+          "id": "color-contrast",
+          "target": ".odd\\:bg-sky-50.print\\:break-inside-avoid:nth-child(2) > .whitespace-nowrap.print\\:whitespace-normal.print\\:break-all:nth-child(4)",
+          "summary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element",
+          "style": {
+            "text": "$2,400.00",
+            "foreground": "oklch(0.372 0.044 257.287)",
+            "background": "rgba(0, 0, 0, 0)",
+            "fontSize": "14px",
+            "parentBackground": "rgba(0, 0, 0, 0)",
+            "backgroundAncestors": [
+              "rgb(255, 255, 255)",
+              "rgb(255, 255, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)",
+              "rgb(240, 249, 255)"
+            ]
+          },
+          "measured": {
+            "text": "$2,400.00",
+            "cssForeground": "oklch(0.372 0.044 257.287)",
+            "foregroundRGBA": [
+              49,
+              65,
+              88,
+              255
+            ],
+            "effectiveBackgroundRGBA": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "renderedForegroundRGBA": [
+              49,
+              65,
+              88,
+              255
+            ],
+            "ratio": 10.356927400589216,
+            "fontSize": "14px",
+            "fontWeight": "400",
+            "backgroundChain": [
+              {
+                "tag": "HTML",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "BODY",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "MAIN",
+                "id": "",
+                "color": "rgb(240, 249, 255)",
+                "rgba": [
+                  240,
+                  249,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "SECTION",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "FIELDSET",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgb(255, 255, 255)",
+                "rgba": [
+                  255,
+                  255,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DETAILS",
+                "id": "increase-cost-comparison",
+                "color": "rgb(255, 255, 255)",
+                "rgba": [
+                  255,
+                  255,
+                  255,
+                  255
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "DIV",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "TABLE",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "TBODY",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "TR",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              },
+              {
+                "tag": "TD",
+                "id": "",
+                "color": "rgba(0, 0, 0, 0)",
+                "rgba": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "image": "none",
+                "opacity": "1"
+              }
+            ],
+            "requiresComplexCompositing": false
+          },
+          "screenshot": "w16-5.png",
+          "exposedScreenshot": "w16-5-exposed.png"
+        }
+      ]
+    }
+  ]
+}

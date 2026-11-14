@@ -1,0 +1,37 @@
+Lease date calculator Print / Save PDF
+Lease Date Calculator
+Enter a lease start date and a whole-number term in calendar months to
+calculate the matching lease end date.
+Lease start date
+01/31/2028
+Term in calendar months
+1
+Enter a whole number from 1 through 120. Enter 12 for a 12-month lease.
+Calculated lease end
+February 29, 2028
+The original start day does not exist in the target month, so the result uses that month’s
+final calendar day. The written agreement controls the contractual end date.
+Lease start Term
+2028-01-31 1 month
+Calculated end Month-end handling
+2028-02-29 Clamped to the target
+month’s final day
+Check an agreed end date and final-month rent
+Enter the final day you expect to occupy the property. This checks the date against the calculated end
+above and estimates the final calendar month using actual days. It does not establish a right to end a
+tenancy or change your agreement.
+The first and last occupied days both count. Currency labels the amount; no exchange conversion is
+applied. Nothing is saved.
+21 occupied days, including 2028-01-31 and 2028-02-20.
+Your entered last day is 9 days earlier than the displayed calculated date (2028-02-29). Confirm any
+difference with the agreement; this comparison does not resolve it.
+Final calendar-month estimate: $1,241.38 USD
+$1,800.00 monthly rent × 20 occupied days ÷ 29 calendar days. Charged dates: 2028-02-01 through
+2028-02-20, inclusive.
+Rounded once to the nearest cent. This is only the final calendar month, not the whole lease total. A 30-
+day, weekly, or other contractual proration basis can give a different amount. No deposits, fees, notice
+periods or legal entitlements are calculated.
+Frequently Asked Questions
+How does the calculator handle month-end starts? v
+Can I calculate a 12-month lease? v
+Does this determine the legal lease end date? v

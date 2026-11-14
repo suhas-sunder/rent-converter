@@ -1,5 +1,11 @@
 # RC-RELEASE-LEDGER — Canonical release state
 
+## RC-030 continuation — W09–W16 implemented, HOLD for publication
+
+The eight scoped features are implemented in draft PRs [#10](https://github.com/suhas-sunder/rent-converter/pull/10) through [#17](https://github.com/suhas-sunder/rent-converter/pull/17), all targeting staging. **None is authorized for production.** W05–W08 are not implemented/accepted, and immutable W09–W16 Netlify previews remain blocked by CLI authentication and the existing staging-preview configuration. Local acceptance does not close either release dependency.
+
+[RC-030 integration acceptance](RC-030_INTEGRATION_ACCEPTANCE.md) is the current source of truth for W09–W16 exact heads, independent reviews, local browser/PDF/download evidence, limitations and rollback. The separate `codex/rc030-integration` branch is review-only; never merge the combined weeks into main. Earlier urgent/security/W01–W04 recommendations below remain scoped to their RC-028 evidence and are not expanded by this continuation.
+
 **Last reviewed: November 13, 2026, RC-028 acceptance closure.** All candidates remain draft and unmerged. The following recommendations supersede earlier HOLD notes for the old SHAs. Owner approval has not been given and no production publication is authorized by this document.
 
 ## Current exact candidates
@@ -51,7 +57,7 @@ Final remote main remains `50c4647e5a61f05e1aeb4db04f4918bbfb6c1c5a`; Netlify cu
 
 ## Planning and prior business evidence
 
-PLAN-2026-11 remains documented at `d1825c9cfdc523c72bd6eb4177fe2e6451bcb7b5`. W05–W52 remain roadmap only; no empty branch factory or fabricated shipped status.
+PLAN-2026-11 remains documented at `d1825c9cfdc523c72bd6eb4177fe2e6451bcb7b5`. W05–W08 and W17–W52 remain unimplemented roadmap work. W09–W16 now have actual scoped implementations on HOLD, as recorded above; no empty branch factory or fabricated shipped status.
 
 AdSense screenshot dated 2026-11-01 reported Needs attention / Low value content and ads.txt Not found. This is not proof of a search manual penalty. The live HTTPS endpoint already returns the correct seller record; no ads.txt change was justified. Account refresh timing was not changed. Current ad code contains static reserves, not a filled-ad lifecycle whose suppression can be certified.
 

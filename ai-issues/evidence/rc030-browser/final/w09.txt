@@ -1,0 +1,36 @@
+Rent glossary
+What Does PCM Mean in Rent?
+PCM means per calendar month. A rent listing of GBP 1,200 PCM means GBP 1,200 for one
+calendar month, not one 4-week period.
+PCM means per calendar month
+Per calendar month rent uses calendar months, which vary from 28 to 31 days. It is
+different from weekly rent and from an every-4-weeks cycle, which repeats every 28 days.
+365-day comparison: weekly rent x 365 / 7 / 12
+PCM describes a rent period. It does not interpret lease terms, fees, included costs, or legal obligations.
+Convert PW to PCM Convert PCM to PW
+Compare weekly and PCM conventions
+PW (per week) and PCW (per calendar week) both describe a seven-day week here. PCM means
+per calendar month. Check which conversion your agreement uses: a 52-week budget and a
+365-day equivalent give slightly different answers.
+Rent amount (GBP) The amount is quoted
+500 Per week (PW / PCW)
+52−week budget 365−day equivalent
+£2,166.67 £2,172.62
+per calendar month per calendar month
+Weekly amount × 52 ÷ 12 Weekly amount × 365 ÷ 84
+£5.95 per calendar month difference between the displayed estimates.
+Four weeks would be £2,000.00 for 28 days. That is a different payment period from PCM.
+Both directions use matching fractions; reversing a rounded display may differ by a few pence. Calculations
+retain decimal precision until display rounding. A 52-week budget covers 364 days; the daily-rate model
+spreads 365 days over 12 months, including in leap years. Neither counts the actual payments in a particular
+year, nor determines what your contract requires. GBP is a currency label, with no exchange conversion.
+Source checked 13 November 2026: DWP’s rented-housing guide uses weekly × 52 ÷ 12 for Universal Credit.
+That benefit calculation does not prescribe every private agreement. The 365-day figure is RentConverter’s
+stated comparison model, not a UK legal rule. This comparison is not legal or financial advice.
+Use the standard 365-day PW-to-PCM converter
+Written and maintained by Suhas Sunder · Creator of RentConverter · Calculation methodology
+Frequently Asked Questions
+Is PCM the same as monthly rent? v
+Is PCM every 4 weeks? v
+How do I compare PCM with PW? v
+Does PCM define the lease terms or included costs? v

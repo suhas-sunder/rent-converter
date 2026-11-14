@@ -28,3 +28,7 @@ Local raw QA is in rent-converter-w09/artifacts/regional-before and regional-aft
 
 Open /what-does-pcm-mean-rent. Compare default 500; select PCM and enter 2172.62; then enter 1e3. Use the contextual link to protected 365-day calculator. Review GBP labels,52/365interpretation,28-day distinction,print and mobile. Revert this package's scoped commit from an assembled nonproduction branch to remove the comparison and glossary corrections; no saved data migration or redirects need rollback. Original checkout and prior release branches remain untouched.
 Independent reviewer confirmation: 7,996 rational forward/reverse oracle outputs passed across 1,999 cent amounts. Actual reverse and invalid-input browser cases passed; DWP citation independently checked. No remaining blocking finding.
+
+## Integration followthrough (review assembly only)
+
+See [RC-030 final acceptance](RC-030_INTEGRATION_ACCEPTANCE.md) for the exact final feature head, assembled-source identity, repaired findings and final local browser/PDF/download evidence. That report supersedes pending-local-integration notes above, but does not close immutable-hosted-preview or W05–W08 publication dependencies. This package remains HOLD for publication.

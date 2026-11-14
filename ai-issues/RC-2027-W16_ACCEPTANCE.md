@@ -28,3 +28,7 @@ Source files: increaseComparison helper, IncreaseCostComparison component, compo
 W05–W08 have no accepted implementation; hosted preview and publication remain HOLD. The current branch is scoped against the accepted W01–W04 development assembly, not directly ready to merge into production. Long horizons can create long PDFs; CSV retains complete exact values. Native print dialogs and actual screen-reader speech are not certified. Assumes complete years of monthly payments, no partial-year or irregular-rate cashflows.
 
 Rollback before publication: leave draft unmerged. A later approved release must be independently assembled against current main and revalidated; rollback by a reviewed scoped revert, preserving earlier features and dependency fixes. No main push,merge,productiondeploy,paidservice orAdSense change.
+
+## Integration followthrough (review assembly only)
+
+See [RC-030 final acceptance](RC-030_INTEGRATION_ACCEPTANCE.md) for the exact final feature head, assembled-source identity, repaired findings and final local browser/PDF/download evidence. That report supersedes pending-local-integration notes above, but does not close immutable-hosted-preview or W05–W08 publication dependencies. This package remains HOLD for publication.

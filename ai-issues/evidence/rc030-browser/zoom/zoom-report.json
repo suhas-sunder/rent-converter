@@ -1,0 +1,463 @@
+{
+  "started": "2026-11-14T04:15:16.017Z",
+  "method": "Actual chrome.tabs.setZoom(2) in a fresh, disposable Chromium profile with a local QA-only extension",
+  "candidates": [
+    {
+      "id": "w09",
+      "sha": "d10791aa6379bd455f7e74bab6d072f1f2973f1a",
+      "featureSha": "32d974fd3e37d1b3345c8f67891b75293798e32d",
+      "branch": "codex/w09-uk-conventions",
+      "origin": "http://127.0.0.1:3049",
+      "path": "/what-does-pcm-mean-rent",
+      "views": [
+        {
+          "physicalViewport": 1440,
+          "innerWidth": 720,
+          "devicePixelRatio": 2,
+          "scrollWidth": 720,
+          "sm": true,
+          "cssZoom": "1",
+          "clippedMoney": [],
+          "captureMetrics": {
+            "content": {
+              "x": 0,
+              "y": 0,
+              "width": 1440,
+              "height": 9978
+            },
+            "cssContent": {
+              "x": 0,
+              "y": 0,
+              "width": 720,
+              "height": 4989
+            }
+          }
+        },
+        {
+          "physicalViewport": 720,
+          "innerWidth": 360,
+          "devicePixelRatio": 2,
+          "scrollWidth": 360,
+          "sm": false,
+          "cssZoom": "1",
+          "clippedMoney": [],
+          "captureMetrics": {
+            "content": {
+              "x": 0,
+              "y": 0,
+              "width": 720,
+              "height": 15274
+            },
+            "cssContent": {
+              "x": 0,
+              "y": 0,
+              "width": 360,
+              "height": 7637
+            }
+          }
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "w10",
+      "sha": "d10791aa6379bd455f7e74bab6d072f1f2973f1a",
+      "featureSha": "c3425d2f076b3c5b278142fc92c48f7a33a28e46",
+      "branch": "codex/w10-au-payment-plan",
+      "origin": "http://127.0.0.1:3049",
+      "path": "/rent-in-advance-australia",
+      "views": [
+        {
+          "physicalViewport": 1440,
+          "innerWidth": 720,
+          "devicePixelRatio": 2,
+          "scrollWidth": 720,
+          "sm": true,
+          "cssZoom": "1",
+          "clippedMoney": [],
+          "captureMetrics": {
+            "content": {
+              "x": 0,
+              "y": 0,
+              "width": 1440,
+              "height": 9705
+            },
+            "cssContent": {
+              "x": 0,
+              "y": 0,
+              "width": 720,
+              "height": 4852
+            }
+          }
+        },
+        {
+          "physicalViewport": 720,
+          "innerWidth": 360,
+          "devicePixelRatio": 2,
+          "scrollWidth": 360,
+          "sm": false,
+          "cssZoom": "1",
+          "clippedMoney": [],
+          "captureMetrics": {
+            "content": {
+              "x": 0,
+              "y": 0,
+              "width": 720,
+              "height": 14721
+            },
+            "cssContent": {
+              "x": 0,
+              "y": 0,
+              "width": 360,
+              "height": 7360
+            }
+          }
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "w11",
+      "sha": "d10791aa6379bd455f7e74bab6d072f1f2973f1a",
+      "featureSha": "7065e31a8026bb8fb2e282064ec11897c840eb52",
+      "branch": "codex/w11-payday-comparison",
+      "origin": "http://127.0.0.1:3049",
+      "path": "/rent-per-paycheck-calculator",
+      "views": [
+        {
+          "physicalViewport": 1440,
+          "innerWidth": 720,
+          "devicePixelRatio": 2,
+          "scrollWidth": 720,
+          "sm": true,
+          "cssZoom": "1",
+          "clippedMoney": [],
+          "captureMetrics": {
+            "content": {
+              "x": 0,
+              "y": 0,
+              "width": 1440,
+              "height": 12387
+            },
+            "cssContent": {
+              "x": 0,
+              "y": 0,
+              "width": 720,
+              "height": 6193
+            }
+          }
+        },
+        {
+          "physicalViewport": 720,
+          "innerWidth": 360,
+          "devicePixelRatio": 2,
+          "scrollWidth": 360,
+          "sm": false,
+          "cssZoom": "1",
+          "clippedMoney": [],
+          "captureMetrics": {
+            "content": {
+              "x": 0,
+              "y": 0,
+              "width": 720,
+              "height": 18572
+            },
+            "cssContent": {
+              "x": 0,
+              "y": 0,
+              "width": 360,
+              "height": 9286
+            }
+          }
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "w12",
+      "sha": "d10791aa6379bd455f7e74bab6d072f1f2973f1a",
+      "featureSha": "6e01d8b07a499df98794ab0196cb630fc2663a8f",
+      "branch": "codex/w12-methodology",
+      "origin": "http://127.0.0.1:3049",
+      "path": "/rent-paid-every-4-weeks-calculator",
+      "views": [
+        {
+          "physicalViewport": 1440,
+          "innerWidth": 720,
+          "devicePixelRatio": 2,
+          "scrollWidth": 720,
+          "sm": true,
+          "cssZoom": "1",
+          "clippedMoney": [],
+          "captureMetrics": {
+            "content": {
+              "x": 0,
+              "y": 0,
+              "width": 1440,
+              "height": 10172
+            },
+            "cssContent": {
+              "x": 0,
+              "y": 0,
+              "width": 720,
+              "height": 5086
+            }
+          }
+        },
+        {
+          "physicalViewport": 720,
+          "innerWidth": 360,
+          "devicePixelRatio": 2,
+          "scrollWidth": 360,
+          "sm": false,
+          "cssZoom": "1",
+          "clippedMoney": [],
+          "captureMetrics": {
+            "content": {
+              "x": 0,
+              "y": 0,
+              "width": 720,
+              "height": 14259
+            },
+            "cssContent": {
+              "x": 0,
+              "y": 0,
+              "width": 360,
+              "height": 7129
+            }
+          }
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "w13",
+      "sha": "d10791aa6379bd455f7e74bab6d072f1f2973f1a",
+      "featureSha": "5b959460764ddddf37c8fb01e537e9e8ed22eb81",
+      "branch": "codex/w13-lease-boundaries",
+      "origin": "http://127.0.0.1:3049",
+      "path": "/lease-date-calculator",
+      "views": [
+        {
+          "physicalViewport": 1440,
+          "innerWidth": 720,
+          "devicePixelRatio": 2,
+          "scrollWidth": 720,
+          "sm": true,
+          "cssZoom": "1",
+          "clippedMoney": [],
+          "captureMetrics": {
+            "content": {
+              "x": 0,
+              "y": 0,
+              "width": 1440,
+              "height": 6596
+            },
+            "cssContent": {
+              "x": 0,
+              "y": 0,
+              "width": 720,
+              "height": 3298
+            }
+          }
+        },
+        {
+          "physicalViewport": 720,
+          "innerWidth": 360,
+          "devicePixelRatio": 2,
+          "scrollWidth": 360,
+          "sm": false,
+          "cssZoom": "1",
+          "clippedMoney": [],
+          "captureMetrics": {
+            "content": {
+              "x": 0,
+              "y": 0,
+              "width": 720,
+              "height": 9757
+            },
+            "cssContent": {
+              "x": 0,
+              "y": 0,
+              "width": 360,
+              "height": 4878
+            }
+          }
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "w14",
+      "sha": "d10791aa6379bd455f7e74bab6d072f1f2973f1a",
+      "featureSha": "875c1b4645637fadfaba2e5b1e33f95b6c87fad8",
+      "branch": "codex/w14-contractual-dates",
+      "origin": "http://127.0.0.1:3049",
+      "path": "/rent-schedule-calculator",
+      "views": [
+        {
+          "physicalViewport": 1440,
+          "innerWidth": 720,
+          "devicePixelRatio": 2,
+          "scrollWidth": 720,
+          "sm": true,
+          "cssZoom": "1",
+          "clippedMoney": [],
+          "captureMetrics": {
+            "content": {
+              "x": 0,
+              "y": 0,
+              "width": 1440,
+              "height": 6969
+            },
+            "cssContent": {
+              "x": 0,
+              "y": 0,
+              "width": 720,
+              "height": 3484
+            }
+          }
+        },
+        {
+          "physicalViewport": 720,
+          "innerWidth": 360,
+          "devicePixelRatio": 2,
+          "scrollWidth": 360,
+          "sm": false,
+          "cssZoom": "1",
+          "clippedMoney": [],
+          "captureMetrics": {
+            "content": {
+              "x": 0,
+              "y": 0,
+              "width": 720,
+              "height": 9689
+            },
+            "cssContent": {
+              "x": 0,
+              "y": 0,
+              "width": 360,
+              "height": 4844
+            }
+          }
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "w15",
+      "sha": "d10791aa6379bd455f7e74bab6d072f1f2973f1a",
+      "featureSha": "1c5ee1f0fecc23700d8860eeef6ae1b389026313",
+      "branch": "codex/w15-move-in-worksheet",
+      "origin": "http://127.0.0.1:3049",
+      "path": "/rent-budget-calculator",
+      "views": [
+        {
+          "physicalViewport": 1440,
+          "innerWidth": 720,
+          "devicePixelRatio": 2,
+          "scrollWidth": 720,
+          "sm": true,
+          "cssZoom": "1",
+          "clippedMoney": [],
+          "captureMetrics": {
+            "content": {
+              "x": 0,
+              "y": 0,
+              "width": 1440,
+              "height": 11517
+            },
+            "cssContent": {
+              "x": 0,
+              "y": 0,
+              "width": 720,
+              "height": 5758
+            }
+          }
+        },
+        {
+          "physicalViewport": 720,
+          "innerWidth": 360,
+          "devicePixelRatio": 2,
+          "scrollWidth": 360,
+          "sm": false,
+          "cssZoom": "1",
+          "clippedMoney": [],
+          "captureMetrics": {
+            "content": {
+              "x": 0,
+              "y": 0,
+              "width": 720,
+              "height": 17351
+            },
+            "cssContent": {
+              "x": 0,
+              "y": 0,
+              "width": 360,
+              "height": 8675
+            }
+          }
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "w16",
+      "sha": "d10791aa6379bd455f7e74bab6d072f1f2973f1a",
+      "featureSha": "c1da4e3540c905c46744f23154c47d011d73cecb",
+      "branch": "codex/w16-increase-scenarios",
+      "origin": "http://127.0.0.1:3049",
+      "path": "/compound-rent-increase-calculator",
+      "views": [
+        {
+          "physicalViewport": 1440,
+          "innerWidth": 720,
+          "devicePixelRatio": 2,
+          "scrollWidth": 720,
+          "sm": true,
+          "cssZoom": "1",
+          "clippedMoney": [],
+          "captureMetrics": {
+            "content": {
+              "x": 0,
+              "y": 0,
+              "width": 1440,
+              "height": 9855
+            },
+            "cssContent": {
+              "x": 0,
+              "y": 0,
+              "width": 720,
+              "height": 4927
+            }
+          }
+        },
+        {
+          "physicalViewport": 720,
+          "innerWidth": 360,
+          "devicePixelRatio": 2,
+          "scrollWidth": 360,
+          "sm": false,
+          "cssZoom": "1",
+          "clippedMoney": [],
+          "captureMetrics": {
+            "content": {
+              "x": 0,
+              "y": 0,
+              "width": 720,
+              "height": 14156
+            },
+            "cssContent": {
+              "x": 0,
+              "y": 0,
+              "width": 360,
+              "height": 7078
+            }
+          }
+        }
+      ],
+      "pass": true
+    }
+  ],
+  "finished": "2026-11-14T04:15:51.222Z"
+}

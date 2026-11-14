@@ -32,3 +32,7 @@ Open /rent-in-advance-australia. Enter 500 weekly, 2 advance weeks and 2000 bond
 
 Revert this package's scoped commit from an assembled nonproduction branch to remove the optional coverage checker. No data migration, URL or redirect rollback is needed. Original checkout and prior candidates were preserved.
 Independent browser retest closed the parser blocker: 1.234 / seven days / payment 1234 matches; 1.2345 / seven days / payment 1.23 matches; the four-leap-day 285.71 case still matches. Source boundaries and mobile usefulness passed independent review.
+
+## Integration followthrough (review assembly only)
+
+See [RC-030 final acceptance](RC-030_INTEGRATION_ACCEPTANCE.md) for the exact final feature head, assembled-source identity, repaired findings and final local browser/PDF/download evidence. That report supersedes pending-local-integration notes above, but does not close immutable-hosted-preview or W05–W08 publication dependencies. This package remains HOLD for publication.
