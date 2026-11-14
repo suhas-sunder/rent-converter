@@ -940,14 +940,14 @@ function infoSections(config: InfoPageConfig) {
       },
       {
         title: "How to use the term in a listing",
-        body: "Translate the listing term into the period you budget with, then compare like with like. A PCM amount fits monthly bills, a PW amount fits weekly listings, and a 4-weekly amount should be checked separately because it creates 13 payment periods per year.",
+        body: "Translate the listing term into the period you budget with, then compare like with like. A PCM amount fits monthly bills, a PW amount fits weekly listings, and a 4-weekly amount should be checked separately: thirteen 28-day periods cover 364 days, not twelve calendar months.",
       },
     ],
     config.sections,
   );
 }
 
-export function InfoPage({ config }: { config: InfoPageConfig }) {
+export function InfoPage({ config, children }: { config: InfoPageConfig; children?: React.ReactNode }) {
   const schemas = makePageSchemas({ ...config, faq: config.faq });
   if (config.authorAttribution) {
     schemas.push({
@@ -1000,6 +1000,8 @@ export function InfoPage({ config }: { config: InfoPageConfig }) {
           </div>
         </div>
       </ToolCard>
+
+      {children}
 
       {config.authorAttribution ? (
         <section className="bg-white px-6 pb-2">
