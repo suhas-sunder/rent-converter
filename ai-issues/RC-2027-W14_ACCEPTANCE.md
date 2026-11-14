@@ -31,6 +31,8 @@ Comparator visited in Chromium: [Timeanddate date addition](https://www.timeandd
 
 ## Remaining boundaries and rollback
 
+Independent review by the cashflow implementation agent used the 360px due-anchor workflow, blank and maximum-year errors, and unchecking to restore defaults. The reviewer downloaded both modes and independently verified CRLF, 75-byte limits, three all-day events, next-day DTEND, exact amounts, distinct mode UIDs and expected titles. No arithmetic/export blocker was found. This remains file validation, not an external-calendar import certification.
+
 No disposable external calendar-import environment is configured. File correctness and title inspection do not certify import behavior in Outlook/Google/Apple Calendar; this manual compatibility boundary remains. Native OS print and actual screen-reader speech remain manual. Root owns final independent, network, native-zoom and immutable-host acceptance. W05–W08 dependency remains a release hold.
 
 Rollback this feature's helper, generated-page option, optional exporter extension and tests. Preserve the original W04 exporter and urgent/security prerequisites. No current route, alias, canonical, schema, FAQ or advertising behavior changes. Revalidate against then-current main and obtain the owner's release decision; do not merge this staging branch directly to production.
