@@ -1005,6 +1005,7 @@ export default function RentPerPaycheck() {
           </div>
 
           <PaycheckDeadlinePlan
+            averageReserveCents={computed.ok ? mulDivRound(computed.perPaycheckScaled, 100n, SCALE) : undefined}
             monthlyRentCents={computed.ok && rentPeriod === "monthly" ? mulDivRound(computed.amountScaled, 100n, SCALE) : undefined}
             frequency={payFreq}
             currency={currency}
@@ -1013,11 +1014,14 @@ export default function RentPerPaycheck() {
 
           <section className="mt-8 rc-print-block">
             <h3 className="text-center sm:text-left text-2xl font-semibold mb-3 text-sky-800">
-              Annual payment counts
+              Annual comparison factors
             </h3>
             <p className="text-center sm:text-left text-slate-700 mb-4 leading-relaxed">
-              Rent and pay schedules often use different cycles. These are the
-              yearly counts used for comparison.
+              Rent rows use period equivalents: 12 calendar months, or a 365-day
+              year divided by 28 days or 7 days. Pay rows use fixed annual budget
+              assumptions of 52, 26, 24 or 12 paychecks. Neither set counts actual
+              dated payments. Use the date-based plan above to count paydays
+              before your rent deadline.
             </p>
 
             <div className="rounded-[1.75rem] bg-white overflow-hidden">
@@ -1027,7 +1031,7 @@ export default function RentPerPaycheck() {
                     <th className="text-left px-4 py-2 font-semibold">Type</th>
                     <th className="text-left px-4 py-2 font-semibold">Cycle</th>
                     <th className="text-right px-4 py-2 font-semibold">
-                      Payments per year
+                      Factor used
                     </th>
                   </tr>
                 </thead>
@@ -1049,7 +1053,7 @@ export default function RentPerPaycheck() {
                     <td className="px-4 py-2 text-right font-semibold text-slate-950 tabular-nums whitespace-nowrap">
                       {computed.ok
                         ? computed.annualCounts.rentPayments.every_4_weeks
-                        : 13}
+                        : "13.04"}
                     </td>
                   </tr>
                   <tr className="odd:bg-white even:bg-slate-50/50">
@@ -1058,7 +1062,7 @@ export default function RentPerPaycheck() {
                     <td className="px-4 py-2 text-right font-semibold text-slate-950 tabular-nums whitespace-nowrap">
                       {computed.ok
                         ? computed.annualCounts.rentPayments.weekly
-                        : 52}
+                        : "52.14"}
                     </td>
                   </tr>
                   <tr className="odd:bg-white even:bg-slate-50/50">
