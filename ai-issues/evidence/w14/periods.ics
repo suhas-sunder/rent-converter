@@ -1,0 +1,53 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//RentConverter.com//Rent payment schedule//EN
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+UID:rent-2028-01-31-2028-04-30-monthly-USD-180025-20280131@rentconverter.co
+ m
+DTSTAMP:20261114T034130Z
+DTSTART;VALUE=DATE:20280131
+DTEND;VALUE=DATE:20280201
+SUMMARY:Rent payment period starts: USD 1800.25
+DESCRIPTION:Rent payment: USD 1800.25.\nPayment frequency: monthly.\nLease 
+ start: 2028-01-31. Calculated lease end: 2028-04-30.\nThis schedule exclud
+ es dates on or after 2028-04-30. Payment dates are period starts\, not leg
+ al due-date determinations.\nNo weekend\, holiday\, grace-period or partia
+ l-payment adjustments. Confirm the dates and amount against your lease.\nE
+ xported from RentConverter.com. This file is not a calendar subscription\;
+  future changes are not synced.
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:rent-2028-01-31-2028-04-30-monthly-USD-180025-20280229@rentconverter.co
+ m
+DTSTAMP:20261114T034130Z
+DTSTART;VALUE=DATE:20280229
+DTEND;VALUE=DATE:20280301
+SUMMARY:Rent payment period starts: USD 1800.25
+DESCRIPTION:Rent payment: USD 1800.25.\nPayment frequency: monthly.\nLease 
+ start: 2028-01-31. Calculated lease end: 2028-04-30.\nThis schedule exclud
+ es dates on or after 2028-04-30. Payment dates are period starts\, not leg
+ al due-date determinations.\nNo weekend\, holiday\, grace-period or partia
+ l-payment adjustments. Confirm the dates and amount against your lease.\nE
+ xported from RentConverter.com. This file is not a calendar subscription\;
+  future changes are not synced.
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:rent-2028-01-31-2028-04-30-monthly-USD-180025-20280331@rentconverter.co
+ m
+DTSTAMP:20261114T034130Z
+DTSTART;VALUE=DATE:20280331
+DTEND;VALUE=DATE:20280401
+SUMMARY:Rent payment period starts: USD 1800.25
+DESCRIPTION:Rent payment: USD 1800.25.\nPayment frequency: monthly.\nLease 
+ start: 2028-01-31. Calculated lease end: 2028-04-30.\nThis schedule exclud
+ es dates on or after 2028-04-30. Payment dates are period starts\, not leg
+ al due-date determinations.\nNo weekend\, holiday\, grace-period or partia
+ l-payment adjustments. Confirm the dates and amount against your lease.\nE
+ xported from RentConverter.com. This file is not a calendar subscription\;
+  future changes are not synced.
+TRANSP:TRANSPARENT
+END:VEVENT
+END:VCALENDAR
