@@ -108,7 +108,7 @@ test("year 9999 boundary blocks an out-of-range result and export while retainin
     const calculation = calculateLeaseEnd(startParsed.date, months);
     const errors = vm.runInNewContext(`${compiled}\nerrors`, {
       startParsed, termParsed: { ok: true, value: months }, dateCalculation: calculation,
-      config: { mode: "schedule" }, rentParsed: { ok: true, cents: 10000n },
+      config: { mode: "schedule" }, rentParsed: { ok: true, cents: 10000n }, dueProjection: null,
     });
     assert.equal(errors.length === 0, valid, `${start} + ${months} months`);
     const schedule = generateLeasePaymentSchedule(startParsed.date, months, "monthly");
