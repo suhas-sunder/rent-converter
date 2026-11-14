@@ -221,7 +221,7 @@ async function paycheckCase(page, candidate) {
 
 async function calendarKeyboardCase(page, candidate) {
   await open(page, candidate); await page.setViewportSize({ width: 360, height: 900 });
-  await page.getByLabel('Lease start and first payment date', { exact: true }).fill('2028-01-31');
+  await page.locator('#schedule-start-date').fill('2028-01-31');
   await page.getByLabel('Term in calendar months', { exact: true }).fill('3');
   await page.getByLabel('Rent per payment', { exact: true }).fill('9007199254740991.99');
   const region = page.getByRole('region', { name: 'Rent payment schedule; scroll horizontally to view all columns', exact: true });
@@ -230,6 +230,11 @@ async function calendarKeyboardCase(page, candidate) {
   // Reach the region by actual Tab navigation from the preceding select.
   await page.getByLabel('Payment frequency', { exact: true }).focus();
   await page.keyboard.press('Tab');
+  const dueOption = page.getByLabel('Use a due-date anchor from my agreement', {exact:true});
+  if (await dueOption.count()) {
+    assert.equal(await dueOption.evaluate(e => document.activeElement === e), true, 'W14 due option is keyboard reachable before the table');
+    await page.keyboard.press('Tab');
+  }
   assert.equal(await region.evaluate(e => document.activeElement === e), true);
   const focus = await region.evaluate(e => ({ visible: e.matches(':focus-visible'), outline: getComputedStyle(e).outlineStyle, shadow: getComputedStyle(e).boxShadow }));
   assert.equal(focus.visible, true);

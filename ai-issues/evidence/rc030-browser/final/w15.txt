@@ -1,0 +1,52 @@
+Rent budget calculator Print / Save PDF
+Rent Budget Calculator
+Compare planned rent with gross monthly income and one aggregate non-
+rent expense amount, then review common income-based reference rules.
+Annual gross income
+60000
+Planned monthly rent
+1500
+Monthly non-rent expenses
+900
+Enter one aggregate amount. You can include debt, utilities, savings, or other non-rent costs here.
+Currency
+USD
+Planned rent as a percentage of monthly gross income
+30.00%
+The remaining amount subtracts the visible planned rent and aggregate non-rent
+expenses. The reference amounts are based only on gross income.
+Monthly gross income Remaining after planned rent and non-rent
+expenses
+$5,000.00
+$2,600.00
+30% income-based reference amount 40% income-based reference amount
+$1,500.00 $2,000.00
+3x income-requirement comparison
+amount
+$1,666.67
+Check your take-home housing budget
+Add bills with different payment periods and see what remains after other commitments and savings.
+Plan your one-time move-in costs
+Add first rent, prepaid last rent, deposits and setup costs without mixing them into your monthly budget.
+Use quoted amounts from your agreement and service providers. Optional items start at zero. This separate
+worksheet does not copy values from the budgets above or determine which charges are lawful or required.
+Total one-time cash to plan for
+$3,265.52
+Combined estimate, not a statement that all items are due on the same date.
+First rent — partial month $1,064.52
+Last month prepaid $1,500.00
+Refundable deposit or bond $500.00
+Optional one-time fees $40.25
+Utility setup costs $60.75
+Moving and other setup costs $100.00
+Recurring monthly rent, separate: $1,500.00. This is not added again to the one-time total. Utilities and
+other recurring costs belong in the housing budget above.
+Monthly rent × 22 days charged ÷ 31 days in the rent month. The partial payment replaces the full first month.
+Each item is rounded to cents once; the total is the exact sum of those displayed items.
+The worksheet stays in this tab; it is not saved. Deposits are cash needed upfront even when potentially refundable. Do not enter
+the same charge under two categories. No deposit cap, fee requirement, legal due date or future refund is assumed. This is
+arithmetic, not legal or financial advice. For partial rent under a different basis, use the prorated rent calculator and check the
+agreement.
+Frequently Asked Questions
+What belongs in non-rent expenses? v
+Do expenses change the 30%, 40%, or 3x amounts? v

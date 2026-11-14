@@ -1,0 +1,271 @@
+[
+  {
+    "id": "pcm",
+    "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/what-does-pcm-mean-rent",
+    "inputs": [
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": "button",
+        "text": ""
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": "button",
+        "text": "More "
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": "button",
+        "text": "Accept analytics"
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": "button",
+        "text": "Reject optional analytics"
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": "button",
+        "text": "Manage preferences"
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": "button",
+        "text": "Analytics preferences"
+      }
+    ],
+    "text": "RentConverter.com\nFast, private rent calculators\n\nRent glossary\n\nWhat Does PCM Mean in Rent?\n\nPCM means per calendar month. A rent listing of GBP 1,200 PCM means GBP 1,200 for one calendar month, not one 4-week period.\n\nPCM means per calendar month\n\nPer calendar month rent uses calendar months, which vary from 28 to 31 days. It is different from weekly rent and from an every-4-weeks cycle, which repeats every 28 days.\n\nweekly rent to PCM = weekly rent x 365 / 7 / 12\n\nPCM describes a rent period. It does not interpret lease terms, fees, included costs, or legal obligations.\n\nConvert PW to PCM\nConvert PCM to PW\n\nWritten and maintained by Suhas Sunder · Creator of RentConverter · Calculation methodology\n\nRent listing terms compared\nPCM\nPer calendar month\nUsually 12 fixed monthly rent payments per year.\nPW\nPer week\nWeekly rent. Convert by annualizing, then dividing by 12 for PCM.\nPCW\nPer calendar week\nOften used like PW in rental listings.\nPA\nPer annum\nAnnual rent for a full year.\nEvery 4 weeks\n28-day rent cycle\nA 28-day cycle is shorter than an average calendar month.\nHow this page works\n\nThis page defines PCM as per calendar month, then shows why PCM should not be confused with weekly rent or every-4-weeks rent.\n\nWhen to use this page\n\nUse it when a listing says PCM and you need to compare the calendar-month amount with weekly or every-4-weeks rent.\n\nWhat this page does not include\n\nPW and PCM describe rent periods only. This guide does not interpret lease terms, fees, included costs, or legal obligations.\n\nUse PW-to-PCM conversion for rent amount comparison.\nUse PCM-to-PW conversion for an average weekly equivalent.\nUse the 4-week comparison only when the listing is actually collected every 28 days.\nHow to use the term in a listing\n\nTranslate the listing term into the period you budget with, then compare like with like. A PCM amount fits monthly bills, a PW amount fits weekly listings, and a 4-weekly amount should be checked separately because it creates 13 payment periods per year.\n\nCalendar month vs 4 weeks\n\nA calendar month is not the same length as 4 weeks. Four weeks is always 28 days, while calendar months run from 28 to 31 days. Over a year, PCM means 12 monthly payments, while a repeating 28-day cycle falls on a different rhythm.\n\nPW compared with PCM\n\nPW means per week and PCM means per calendar month. Multiplying PW by 4 gives only a 28-day amount. Annualizing the weekly rent and dividing by 12 gives the average PCM comparison.\n\nWhich calculator to use\n\nUse the PW-to-PCM calculator when the listing is weekly and the budget is monthly. Use the PCM-to-PW calculator when a monthly amount needs an average weekly equivalent.\n\nWorked examples\nGBP 1,200 PCM listing\n\nGBP 1,200 PCM means GBP 1,200 per calendar month. It does not mean GBP 1,200 every 4 weeks unless the lease says payments are on a 28-day cycle.\n\nWeekly listing comparison\n\nA place listed weekly should be annualized first, then divided by 12. That gives a cleaner comparison with a PCM listing.\n\nRelated calculators and guides\nPW to PCM calculator\nConvert weekly rent into per-calendar-month rent.\nPCM to PW calculator\nTurn monthly rent into a weekly equivalent.\nPCM meaning\nUnderstand per calendar month rent.\nPW meaning\nUnderstand weekly rent listings.\nWeekly to monthly converter\nCompare weekly rent with a monthly budget.\n4-week rent calculator\nCompare 28-day rent cycles with calendar months.\nFrequently Asked Questions\nIs PCM the same as monthly rent?\nv\nIs PCM every 4 weeks?\nv\nHow do I compare PCM with PW?\nv\nDoes PCM define the lease terms or included costs?\nv\nAnalytics preferences\n\nOptional PostHog analytics helps measure page traffic. It stays off unless you accept, and rejecting it does not affect any calculator.\n\nNo analytics preference has been saved. Analytics is off.\n\nAccept analytics\nReject optional analytics\nManage preferences\nRentConverter.com\nFast, private rent calculators\nAbout\nMethodology\nContact\nSitemap\nPrivacy Policy\nTerms of Service\nCookies\nAnalytics preferences\n\n(c) 2026 RentConverter.com. Rent conversion and renter tools.\n\nTools on this site are for informational, budgeting, and comparison purposes only. Always confirm payment schedules and lease terms in your rental agreement. This website does not provide financial, legal, or tax advice."
+  },
+  {
+    "id": "advance",
+    "url": "https://6af71c5e4823f67fc16818e6--rent-converter.netlify.app/rent-in-advance-australia",
+    "inputs": [
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": "button",
+        "text": ""
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": "button",
+        "text": "More "
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": "button",
+        "text": "Print / Save PDF"
+      },
+      {
+        "tag": "INPUT",
+        "id": "australia-weekly-rent",
+        "type": "text",
+        "text": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "INPUT",
+        "id": "australia-advance-weeks",
+        "type": "text",
+        "text": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "INPUT",
+        "id": "australia-bond-amount",
+        "type": "text",
+        "text": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": "button",
+        "text": "Accept analytics"
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": "button",
+        "text": "Reject optional analytics"
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": "button",
+        "text": "Manage preferences"
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": "button",
+        "text": "Analytics preferences"
+      }
+    ],
+    "text": "RentConverter.com\nFast, private rent calculators\n\nAustralia move-in arithmetic\n\nRent in Advance and Bond Calculator Australia\n\nEstimate rent in advance, a bond amount, and the combined upfront total from the amounts you enter.\n\nPrint / Save PDF\nWeekly rent\nWeeks of rent paid in advance\n\nEnter the number stated in the agreement or request; no legal default is supplied.\n\nBond amount (AUD)\n\nEnter 0 intentionally to calculate without a bond.\n\nEstimated upfront total\nA$3,000.00\n\nEstimate based on the amounts you enter. Check your agreement and the rules for your state or territory.\n\nRent in advance\nA$1,000.00\nBond entered by you\nA$2,000.00\nEntered amount\tAUD value\nWeekly rent\tA$500.00\nRent in advance (2 weeks)\tA$1,000.00\nBond entered by you\tA$2,000.00\nEstimated upfront total\tA$3,000.00\nHow this calculator works\n\nThe calculator multiplies weekly rent by the number of advance-rent weeks entered, then adds the bond amount entered by the user. Both results are rounded and displayed in Australian dollars.\n\nWhen to use this page\n\nUse it to check the arithmetic for amounts stated in a proposed agreement or move-in request. It does not determine what may be requested.\n\nAustralian move-in context\n\nAustralian listings commonly quote weekly rent. Keeping the calculated advance-rent amount separate from the entered bond makes the combined estimate easier to check.\n\nWhat to check before paying\n\nCheck the written agreement and the rules for the state or territory where the property is located. Confirm the amounts and what period the advance rent covers.\n\nWhat this result does not include\n\nThis arithmetic estimate does not decide legal limits, bond handling, agreement terms, or whether an entered amount is permitted. It excludes moving costs, utilities, application costs, and other charges.\n\nHow the estimate is calculated\n\nRent in advance equals weekly rent multiplied by the entered number of weeks. The upfront total equals that rent-in-advance amount plus the bond amount entered by the user.\n\nUse the entered amounts\n\nThe calculator does not supply a legal default for advance weeks or bond. Check the written agreement and the rules for the state or territory where the property is located.\n\nWorked examples\nEntered amounts example\n\nAt $500 weekly rent, 2 entered advance weeks produce $1,000 rent in advance. With a user-entered $1,500 bond, the displayed upfront total is $2,500.\n\nOfficial state and territory rental resources\n\nCheck the authority for the state or territory where the property is located. These links provide official information; RentConverter does not summarize or apply their legal rules.\n\nNew South Wales renting information\nConsumer Affairs Victoria renting information\nQueensland Residential Tenancies Authority\nSouth Australia renting and letting information\nWestern Australia Consumer Protection renting information\nTasmania Consumer, Building and Occupational Services renting information\nAustralian Capital Territory renting and occupancy laws\nNorthern Territory Consumer Affairs residential tenancies\nAustralian rental rules vary by state and territory. Use this as a budgeting estimate and check your lease or state tenancy authority for exact requirements.\nRelated calculators and guides\nWeekly to monthly Australia\nCompare Australian weekly listings with monthly budgets.\nWeekly to fortnightly\nConvert weekly rent into fortnightly rent.\nFortnightly to monthly\nConvert fortnightly rent into calendar monthly rent.\nProrated rent Australia\nEstimate partial rent for a move-in or move-out.\nFrequently Asked Questions\nDoes the calculator choose a legal bond or advance-rent amount?\nv\nCan I enter a zero bond?\nv\nWhat is included in the upfront total?\nv\nAnalytics preferences\n\nOptional PostHog analytics helps measure page traffic. It stays off unless you accept, and rejecting it does not affect any calculator.\n\nNo analytics preference has been saved. Analytics is off.\n\nAccept analytics\nReject optional analytics\nManage preferences\nRentConverter.com\nFast, private rent calculators\nAbout\nMethodology\nContact\nSitemap\nPrivacy Policy\nTerms of Service\nCookies\nAnalytics preferences\n\n(c) 2026 RentConverter.com. Rent conversion and renter tools.\n\nTools on this site are for informational, budgeting, and comparison purposes only. Always confirm payment schedules and lease terms in your rental agreement. This website does not provide financial, legal, or tax advice."
+  },
+  {
+    "id": "cav",
+    "url": "https://www.consumer.vic.gov.au/housing/renting/rent-bond-bills-and-condition-reports/rent/rent-calculator",
+    "inputs": [
+      {
+        "tag": "BUTTON",
+        "id": "ct_close",
+        "type": "button",
+        "text": "Close"
+      },
+      {
+        "tag": "INPUT",
+        "id": "__VIEWSTATE",
+        "type": "hidden",
+        "text": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "INPUT",
+        "id": "__VIEWSTATEGENERATOR",
+        "type": "hidden",
+        "text": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "INPUT",
+        "id": "__EVENTVALIDATION",
+        "type": "hidden",
+        "text": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "INPUT",
+        "id": "cav-header-search",
+        "type": "text",
+        "text": "",
+        "placeholder": "Search..."
+      },
+      {
+        "tag": "INPUT",
+        "id": "bgresponse",
+        "type": "hidden",
+        "text": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "INPUT",
+        "id": "",
+        "type": "submit",
+        "text": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "BUTTON",
+        "id": "global-search-button-desktop",
+        "type": "button",
+        "text": "\n                   View and refine  results for ''\n        "
+      },
+      {
+        "tag": "BUTTON",
+        "id": "global-search-button-mobile",
+        "type": "button",
+        "text": "\n                  View  results\n                "
+      },
+      {
+        "tag": "INPUT",
+        "id": "tab-articles",
+        "type": "radio",
+        "text": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": "submit",
+        "text": "Daily"
+      },
+      {
+        "tag": "INPUT",
+        "id": "rent-calculator-input",
+        "type": "text",
+        "text": "",
+        "placeholder": "0.00"
+      },
+      {
+        "tag": "INPUT",
+        "id": "helpful_yes",
+        "type": "radio",
+        "text": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "INPUT",
+        "id": "helpful_no",
+        "type": "radio",
+        "text": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "INPUT",
+        "id": "txt_GUID",
+        "type": "hidden",
+        "text": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "INPUT",
+        "id": "txt_Url",
+        "type": "hidden",
+        "text": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "INPUT",
+        "id": "txt_KnowledgebasePage",
+        "type": "hidden",
+        "text": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "INPUT",
+        "id": "txt_IsMobile",
+        "type": "hidden",
+        "text": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "INPUT",
+        "id": "txt_requestUrl",
+        "type": "hidden",
+        "text": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "INPUT",
+        "id": "DenyRobs",
+        "type": "text",
+        "text": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "INPUT",
+        "id": "btn_submit",
+        "type": "submit",
+        "text": "",
+        "placeholder": ""
+      }
+    ],
+    "text": "The State election will be held on Saturday 28 November 2026. During the caretaker period (starting 6 pm on Tuesday 3 November 2026) content will only be added to this website in line with the caretaker conventions.\n\nClose\nSkip to content\nSkip to main navigation\nSkip to footer\nimportant:\nNew changes to the rental laws are now in effect. Read about the changes.\n×\nDismiss\nMenu\nSearch\nLanguages myCAV\n\nBreadcrumbs\n\n< Back to Rent\nRent calculator\nSkip listen and sharing tools\nListen\nShare \nPrint\nEmail\nFacebook\n\nOur rent calculator works out rent per day, week, fortnight, calendar month, 6-month period or year. It can help you work out if you can afford rent over time, and the rent you will owe if you move out part-way through a rent payment period.\n\nSelect the rent payment period and type in how much rent you pay for that period. The calculator will show how much the rent is for each of the other time periods.\n\nRent calculator\nThe Daily\nDaily\nWeekly\nFortnightly\nCalendar monthly\n6 monthly\nYearly\n \n\nrent is \n$\n\n• $  0.00\n• $  0.00\n• $  0.00\n• $  0.00\n• $  0.00\n• $  0.00\n\nNote: The calendar monthly amount is calculated as 365 divided by 12 times the daily rent amount, rather than 4 times the weekly amount. Calculations are based on 365-day years, not leap years.\n\nDisclaimer: This is a tool for your information. We took all reasonable care in preparing and designing this calculator, but we cannot provide any assurance that the calculations will suit or can be applied to your situation.\n\nRent increases\n\nA rental provider (landlord) can increase the rent for their property, but there are rules they must follow. You can read more about:\n\nthe rules for rent increases\nhow renters can challenge a rent increase if they think it is too high.\nRelated links\nRent payments and rent in advance\nRent increases\nApplying for a property\nRenewing a rental agreement\nRent increases: what are the rules?\n\nLast updated: 5 June 2024\n\nFeedback\nWas this page helpful?\nYes\nNo\nBack To Top\nFooter\nAbout us\nContact us\nResources and tools\nLike us on Facebook\nFollow us on Instagram\nWatch our videos on YouTube\nSubscribe to our newsletter\nStay informed with RSS\n\nWe acknowledge the Traditional Owners of the lands, seas and skies. We pay our respects to their Elders past and present, and to future generations who will continue to care for Country.\n\nVictoria State Government\nPrivacy statement\nDisclaimer\nCopyright\nAccessibility\nSite map\n\n© State Government of Victoria (Consumer Affairs Victoria)"
+  },
+  {
+    "id": "clearscore",
+    "url": "https://www.clearscore.com/learn/managing-money/weekly-to-monthly-rent-calculator-uk",
+    "inputs": [],
+    "text": "Press & Hold to confirm you are\na human (and not a bot).\nReference ID 7ef815e0-dfdb-11f1-82d5-5577a3b5a347"
+  }
+]

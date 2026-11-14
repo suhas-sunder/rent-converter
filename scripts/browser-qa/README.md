@@ -94,3 +94,5 @@ Automated axe checks cannot certify accessibility. DOM focus indicators, keyboar
 ## Guarded maintenance candidate
 
 `security-candidate.json` records final PR #7 after the urgent prerequisite. It uses the `urgent` fixture ID because maintenance introduces no weekly feature. Run each runner with `QA_CANDIDATES=security-candidate.json` and separate output directories. The recorded exact SHA must still match Netlify before accepting consent. Its nine browser gates, two storage cases, native zoom and valid/invalid PDFs are additional maintenance evidence, not duplicate weekly features.
+
+W09–W16 assembly checks: [RC-030 harness](rc030-README.md).

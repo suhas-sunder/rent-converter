@@ -1,0 +1,16 @@
+
+> validate:breadcrumbs
+> node scripts/validate-breadcrumb-schema.mjs
+
+{
+  "summary": {
+    "routeEntriesChecked": 60,
+    "rendered200RoutesChecked": 60,
+    "redirectsSkipped": 0,
+    "jsonLdScriptsParsed": 215,
+    "breadcrumbListObjectsFound": 59,
+    "invalidBreadcrumbListObjectsFound": 0,
+    "totalFailures": 0
+  },
+  "failures": []
+}

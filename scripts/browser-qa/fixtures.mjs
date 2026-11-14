@@ -24,7 +24,7 @@ export async function setup(page, id) {
     assert.match(await text(page), /1,500\.00 still needed across 2 paydays/);
   }
   if (id === 'w04') {
-    await page.getByLabel('Lease start and first payment date',{exact:true}).fill('2028-01-31');
+    await page.locator('#schedule-start-date').fill('2028-01-31');
     await page.getByLabel('Term in calendar months',{exact:true}).fill('3');
     await page.getByLabel('Rent per payment',{exact:true}).fill('1800.25');
     await page.getByRole('button',{name:'Download calendar (.ics)',exact:true}).waitFor();

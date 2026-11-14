@@ -111,7 +111,7 @@ export const infoPageConfigs: Record<string, InfoPageConfig> = {
     lead: "PCM means per calendar month. A rent listing of GBP 1,200 PCM means GBP 1,200 for one calendar month, not one 4-week period.",
     answerTitle: "PCM means per calendar month",
     answer: "Per calendar month rent uses calendar months, which vary from 28 to 31 days. It is different from weekly rent and from an every-4-weeks cycle, which repeats every 28 days.",
-    formula: "weekly rent to PCM = weekly rent x 365 / 7 / 12",
+    formula: "365-day comparison: weekly rent x 365 / 7 / 12",
     caveat: "PCM describes a rent period. It does not interpret lease terms, fees, included costs, or legal obligations.",
     tableTitle: "Rent listing terms compared",
     tableRows: glossaryRows,
@@ -159,7 +159,7 @@ export const infoPageConfigs: Record<string, InfoPageConfig> = {
     tableRows: [
       { term: "PW", meaning: "Per week", note: "A weekly amount that should be annualized for monthly comparison." },
       { term: "PCM", meaning: "Per calendar month", note: "A monthly amount usually paid 12 times per year." },
-      { term: "Every 4 weeks", meaning: "28-day cycle", note: "Not the same as PCM because there are 13 cycles in a year." },
+      { term: "Every 4 weeks", meaning: "28-day cycle", note: "Thirteen 28-day periods cover 364 days, not twelve calendar months." },
     ],
     ctaLinks: [link("/pw-to-pcm-calculator", "PW to PCM calculator")],
     sections: [
@@ -611,14 +611,14 @@ export const incomeToolConfigs: Record<string, IncomeToolConfig> = {
 function increaseDefaultExamples(): IncreaseToolConfig["examples"] {
   return [
     { title: "Annual percentage escalation", body: "Some leases describe repeated percentage increases as rent escalation. Each year applies the entered rate to the prior year’s rent, so the fifth-year rent is higher than one flat increase on the starting rent." },
-    { title: "Scope of the schedule", body: "Use the year-by-year rows to inspect starting rent, final rent, and total increase. The calculator does not model fixed-dollar, irregular, or custom annual schedules, interpret lease clauses, or calculate cumulative rent paid." },
+    { title: "Scope of the schedule", body: "Use the year-by-year rows to inspect starting rent, final rent, and total increase. Open the cost comparison for total monthly payments within the chosen horizon. The calculator does not model fixed-dollar, irregular, or custom annual schedules, or interpret lease clauses." },
   ];
 }
 
 function increaseConfig(input: Omit<IncreaseToolConfig, "faq" | "examples"> & Partial<Pick<IncreaseToolConfig, "faq" | "examples">>): IncreaseToolConfig {
   const defaultFaq = [
     { q: "How is the multi-year rent calculated?", a: "The entered annual percentage is applied to the prior year’s rent once per year for the whole-number term entered. This repeated compounding is sometimes described as annual rent escalation." },
-    { q: "What schedules are not supported?", a: "The calculator does not model fixed-dollar, irregular, or custom year-by-year percentages, interpret lease clauses, decide enforceability, or calculate cumulative rent paid." },
+    { q: "What schedules are not supported?", a: "The calculator does not model fixed-dollar, irregular, or custom year-by-year percentages, interpret lease clauses, or decide enforceability. The optional cost comparison assumes twelve monthly payments per year, with the first increase after the first year." },
   ];
   return {
     faq: input.faq ?? defaultFaq,

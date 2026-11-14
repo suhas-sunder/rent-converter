@@ -1,0 +1,98 @@
+Paycheck rent tool
+Rent Per Paycheck Calculator
+Calculate how much rent to set aside from each paycheck based on your rent period and pay
+frequency. Compare rent against biweekly, semi-monthly, weekly, or monthly pay.
+Rent amount Rent is listed as Pay frequency
+2,000 USD Monthly (ave Biweekly paycheck (e
+Enter the rent amount for the selected period.
+Choose a visible currency; USD and CAD are both
+supported.
+Rent to set aside per paycheck
+$923.08
+Based on annual rent divided by 26 paychecks per year.
+Weekly paycheck Biweekly paycheck
+$461.54 $923.08
+Semimonthly paycheck Monthly paycheck
+$1,000.00 $2,000.00
+Monthly rent amount 4-week rent amount Annual rent
+$2,000.00 $1,841.10 $24,000.00
+Plan for your next rent due date
+The annual average above may not cover your next bill in time. Enter your actual dates to divide the
+amount still needed across the paydays before rent is due.
+Using biweekly (every 14 days) pay selected above. All amounts are in USD.
+Actual rent payment due (USD) Already saved for this payment (USD)
+2000.00 500
+Enter the bill due on your chosen date, including any
+amount you need to add. A weekly rent equivalent is not a
+monthly bill.
+Next payday Rent due date
+01/08/2027 02/01/2027
+Count a payday on the due date — only if the money is available before rent must be paid.
+$1,500.00 still needed across 2 paydays.
+Reserve the amounts below from each paycheck. This assumes each paycheck can cover its reserve;
+income and other bills are not assessed.
+Would the annual average cover this bill?
+Saving $923.08 on each of these 2 actual paydays adds $1,846.16. Including your existing savings,
+you would have $2,346.16 by 2027-02-01.
+$346.16 left after this rent payment.
+This check repeats the displayed, cent-rounded annual-average amount from the calculator above. It does not
+count future paychecks after the deadline or other bills. Changing the actual bill here does not change that annual
+average.
+Reserve schedule for rent due 2027-02-01
+Payday Set aside Saved total
+2027-01-08 $750.00 $1,250.00
+2027-01-22 $750.00 $2,000.00
+Monthly pay repeats the day of your next payday. Semimonthly pay uses the two days entered. A day missing from a
+shorter month moves to month-end; coincident dates count once. Weekly and biweekly pay repeat every 7 and 14 days.
+Weekends, bank holidays and deposit delays are not adjusted. Check your employer’s schedule. Extra cents go to the
+earliest paydays so the reserves add up exactly. This plan stays in this tab and is included when you print with this section
+open.
+Biweekly means every 14 days; semimonthly means two dates each month. The annual comparison uses 26 and 24
+paychecks respectively, while this plan counts the entered dates. Some calendar years contain 27 biweekly paydays. Four-
+week rent covers 28 days, not a calendar month. Currency changes labels only, not exchange rates. This is a planning
+estimate, not financial advice.
+Sources checked November 13, 2026: CRA common and uncommon pay-period counts; CFPB bill-calendar guidance.
+These sources explain timing; they do not verify your employer’s dates or lease obligations.
+Annual comparison factors
+Rent rows use period equivalents: 12 calendar months, or a 365-day year divided by 28 days or 7
+days. Pay rows use fixed annual budget assumptions of 52, 26, 24 or 12 paychecks. Neither set
+counts actual dated payments. Use the date-based plan above to count paydays before your
+rent deadline.
+Type Cycle Factor used
+Rent Monthly 12
+Rent Every 4 weeks (28 days) 13.04
+Rent Weekly 52.14
+Pay Weekly paycheck 52
+Pay Biweekly paycheck 26
+Pay Semimonthly paycheck 24
+Pay Monthly paycheck 12
+Rent period breakdown for the entered amount
+This shows the entered rent amount across common rent periods using the same annual basis.
+Hourly Daily
+$2.74 $65.75
+Weekly 2 weeks
+$460.27 $920.55
+4 weeks (28 days) Monthly (average)
+$1,841.10 $2,000.00
+Annual
+$24,000.00
+Assumptions: 365-day year, 28-day 4-week period ▾
+Frequently Asked Questions
+▾
+How do I calculate rent per paycheck?
+▾
+Why does semimonthly rent per paycheck differ from biweekly?
+▾
+Can I use this if rent is monthly but I am paid biweekly?
+▾
+How does this handle rent paid every 4 weeks?
+▾
+Does this tell me whether rent is affordable?
+▾
+What assumptions does this calculator use?
+RentConverter.com About Methodology Contact Sitemap Privacy Policy
+Fast, private rent
+calculators Terms of Service Cookies
+(c) 2026 RentConverter.com. Rent conversion and renter tools.
+Tools on this site are for informational, budgeting, and comparison purposes only. Always confirm payment schedules
+and lease terms in your rental agreement. This website does not provide financial, legal, or tax advice.

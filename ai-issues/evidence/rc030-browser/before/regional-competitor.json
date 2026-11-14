@@ -1,0 +1,101 @@
+[
+  {
+    "id": "uk",
+    "url": "https://reportmyrent.co.uk/tools/rent-calculator",
+    "inputs": [
+      {
+        "id": "rent",
+        "type": "text",
+        "tag": "INPUT"
+      },
+      {
+        "id": "",
+        "type": "radio",
+        "tag": "INPUT"
+      },
+      {
+        "id": "",
+        "type": "radio",
+        "tag": "INPUT"
+      },
+      {
+        "id": "",
+        "type": "radio",
+        "tag": "INPUT"
+      },
+      {
+        "id": "",
+        "type": "radio",
+        "tag": "INPUT"
+      },
+      {
+        "id": "",
+        "type": "radio",
+        "tag": "INPUT"
+      },
+      {
+        "id": "",
+        "type": "radio",
+        "tag": "INPUT"
+      },
+      {
+        "id": "guide-rent",
+        "type": "text",
+        "tag": "INPUT"
+      },
+      {
+        "id": "guide-end-rent",
+        "type": "text",
+        "tag": "INPUT"
+      }
+    ],
+    "text": "Skip to content\nreport my rent\nHow it works\nPrice\nQuestions\nLog in\nReport my rent\nHome\nGuides\nHow to rent\nRent calculator\nRent calculator\n\nBy Sam Kane · Last checked 29 October 2026\n\nThis rent calculator converts a rent between weekly (pw), monthly (pcm), every four weeks and yearly. Adverts and tenancy agreements do not all use the same period, so the same home can look cheaper or dearer than it is. Enter your rent, choose the period it is for, and click “Convert my rent” to see every other figure. If you share the home, you can split the rent and see your own share.\n\nConvert your rent in three steps.\n\n1. Enter your rent\n\nThe amount from your advert or tenancy agreement.\n\n£\n2. Choose what period this rent is for\nEach week (pw)\nEach month (pcm)\nEvery 4 weeks\nEach year\n3. Choose if you split the rent\nNo, I pay it all\nYes, equally\nConvert my rent\nHow the rent calculator works\n\nThe calculator turns the rent into a yearly figure first, then divides it:\n\nFrom\tTo get the yearly rent\nPer week (pw)\tMultiply by 52\nEvery 4 weeks\tMultiply by 13\nPer calendar month (pcm)\tMultiply by 12\n\nThen it divides the yearly rent by 52 for a week, 13 for four weeks, 12 for a month and 365 for a day.\n\nExample: £250 pw × 52 = £13,000 a year. £13,000 ÷ 12 = £1,083.33 pcm. If you multiply £250 by 4, you get £1,000, which is £83.33 a month too low. Our guide to what pcm means explains why in more detail.\n\nMonthly rent and four-weekly rent are not the same\n\nSome landlords, councils and housing associations charge rent every 4 weeks, not every month. A year has 13 four-week periods, so you make 13 payments, not 12.\n\nExample: £1,000 every 4 weeks is £13,000 a year. That is £1,083.33 a month, not £1,000. If you budget by the month, use the monthly figure from the calculator.\n\nSplitting the rent\n\nIf you share a home, choose “Yes, equally” and enter how many people pay. The calculator shows the rent for the whole home and each person’s equal share.\n\nStudent adverts often show rent “pppw”, which means per person per week. That figure is already one person’s share. Enter it as a weekly rent and choose “No, I pay it all” to see your own monthly cost.\n\nAn equal split is the simplest choice, but it is not the only one. Some housemates pay more for a larger room. Agree the split in writing before you move in. If you have a joint tenancy, each person can be responsible for the whole rent if someone else does not pay.\n\nPaying rent on time? Let it count.\n\nYour rent can show on your credit file at Experian, Equifax and TransUnion. You pay it exactly as you do now.\n\nYour rent\n£\na month\nReport my rent\n\nRent for part of a month\n\nThe “per day” figure is the yearly rent divided by 365. You may need it when a tenancy starts or ends part of the way through a rent period. Your tenancy agreement may set its own way to work out rent for part of a period, so check it first. If there is a difference, the agreement applies.\n\nWhy the weekly figure matters\n\nIn England, deposits are set in weeks of rent. A holding deposit can be no more than 1 week’s rent. A tenancy deposit can be no more than 5 weeks’ rent when the yearly rent is under £50,000. Use the weekly figure from the calculator to check that you are not asked for too much.\n\nThe monthly figure helps you set a budget. Our rent affordability calculator shows what rent is comfortable on your pay.\n\nWhile you rent, your rent can also work for you. Rent reporting can add your rent payments to your Experian, Equifax and TransUnion credit files.\n\nCommon questions\nHow do I convert pw to pcm?\n\nMultiply the weekly rent by 52, then divide by 12. For example, £200 pw is £866.67 pcm.\n\nHow do I convert pcm to pw?\n\nMultiply the monthly rent by 12, then divide by 52. For example, £1,200 pcm is £276.92 pw.\n\nWhy is weekly rent times 4 wrong?\n\nA month is about 4.33 weeks, not 4. Times 4 leaves out about 4 weeks of rent each year.\n\nHow much is rent every 4 weeks in a month?\n\nMultiply the four-weekly rent by 13, then divide by 12. For example, £1,000 every 4 weeks is £1,083.33 a month.\n\nHow do I work out my share of the rent?\n\nDivide the rent for the whole home by the number of people who pay. The calculator does this for you when you choose “Yes, equally”.\n\nDoes the calculator save what I type?\n\nNo. The calculator works in your browser. We do not save or send the rent you enter.\n\nSources\nGOV.UK, Assured periodic tenancies: rent in advance and deposits\nGOV.UK, Tenant Fees Act 2019: guidance for tenants\nMore on how to rent\nPro rata rent calculator\nRent affordability calculator\nWhat documents do you need to rent a house?\nRenting terms explained: a glossary for UK tenants\nHMO meaning: what is a house in multiple occupation?\nHolding deposits: how much, when you get it back, and when you don't\nHow to rent: a step-by-step guide for England\nJoint tenancy: what it means when you rent together\nCan you negotiate rent? How to ask for a lower rent\nPCM meaning: what pcm means in rent\nRight to rent checks: what to show your landlord, and how to get a share code\nTenancy agreements: what yours must say, and what to check\nTenancy deposit schemes: how protection works and how to get your deposit back\n\nYou already do the hard part.\n\nYou pay your rent every month. From now on, your credit file can show it.\n\nYour rent\n£\na month\nReport my rent\n\nreport my rent\n\nGet credit for the rent you already pay.\n\nReport My Rent\nHow it works\nPrice\nQuestions\nPartners\nPartner login\nOur manifesto\nLog in\nHelp\nHelp centre\nContact us\nLegal\nTerms\nPrivacy notice\nCookies\nGuides\nRent reporting\nRenting and your credit\nThe Renters' Rights Act\nMoney and rent\nCalculators\nGlossary\nCompare rent reporting services\nAll guides\n\nReport My Rent is a trading name of Wollit Ltd (Wollit), a company registered in England and Wales, company number 10687003. Wollit is registered with the Information Commissioner's Office, registration number ZA554988. Registered office: 35 Ballards Lane, London N3 1XW.\n\nReport My Rent (Wollit Ltd) is acting as an agent of TrueLayer, who is providing the regulated Account Information Service and is Authorised and Regulated by the Financial Conduct Authority under the Payment Services Regulations 2017 and Electronic Money Regulations 2011 (Firm Reference Number: 901096).\n\nReport My Rent reports the rent payments we see in your bank account to Experian, through the Experian Rental Exchange, and to Equifax and TransUnion. You can stop at any time by cancelling your plan. Read our Privacy notice. Lenders make their own decisions, and we cannot promise a higher credit score or an approval. You must be 18 or over to use Report My Rent. Terms apply.\n\n© 2026 Wollit Ltd. All rights reserved."
+  },
+  {
+    "id": "cav",
+    "url": "https://www.consumer.vic.gov.au/housing/renting/rent-bond-bills-and-condition-reports/rent/rent-calculator",
+    "inputs": [
+      {
+        "id": "cav-header-search",
+        "type": "text",
+        "tag": "INPUT"
+      },
+      {
+        "id": "",
+        "type": "submit",
+        "tag": "INPUT"
+      },
+      {
+        "id": "tab-articles",
+        "type": "radio",
+        "tag": "INPUT"
+      },
+      {
+        "id": "rent-calculator-input",
+        "type": "text",
+        "tag": "INPUT"
+      },
+      {
+        "id": "helpful_yes",
+        "type": "radio",
+        "tag": "INPUT"
+      },
+      {
+        "id": "helpful_no",
+        "type": "radio",
+        "tag": "INPUT"
+      },
+      {
+        "id": "DenyRobs",
+        "type": "text",
+        "tag": "INPUT"
+      },
+      {
+        "id": "btn_submit",
+        "type": "submit",
+        "tag": "INPUT"
+      }
+    ],
+    "text": "The State election will be held on Saturday 28 November 2026. During the caretaker period (starting 6 pm on Tuesday 3 November 2026) content will only be added to this website in line with the caretaker conventions.\n\nClose\nSkip to content\nSkip to main navigation\nSkip to footer\nimportant:\nNew changes to the rental laws are now in effect. Read about the changes.\n×\nDismiss\nMenu \nSearch\n\t\n Languages myCAV\n\nBreadcrumbs\n\nConsumer Affairs Victoria\nHousing\nRenting\nRent, bond, bills and condition reports\nRent\nRent calculator\nSkip listen and sharing tools\nListen\nShare this page \nPrint\n \nEmail\n \nFacebook\n\nOur rent calculator works out rent per day, week, fortnight, calendar month, 6-month period or year. It can help you work out if you can afford rent over time, and the rent you will owe if you move out part-way through a rent payment period.\n\nSelect the rent payment period and type in how much rent you pay for that period. The calculator will show how much the rent is for each of the other time periods.\n\nRent calculator\nThe Weekly\nDaily\nWeekly\nFortnightly\nCalendar monthly\n6 monthly\nYearly\n \n\nrent is \n$\n\n• $  0.00\n• $  0.00\n• $  0.00\n• $  0.00\n• $  0.00\n• $  0.00\n\nNote: The calendar monthly amount is calculated as 365 divided by 12 times the daily rent amount, rather than 4 times the weekly amount. Calculations are based on 365-day years, not leap years.\n\nDisclaimer: This is a tool for your information. We took all reasonable care in preparing and designing this calculator, but we cannot provide any assurance that the calculations will suit or can be applied to your situation.\n\nRent increases\n\nA rental provider (landlord) can increase the rent for their property, but there are rules they must follow. You can read more about:\n\nthe rules for rent increases\nhow renters can challenge a rent increase if they think it is too high.\nRelated links\nRent payments and rent in advance\nRent increases\nApplying for a property\nRenewing a rental agreement\nRent increases: what are the rules?\n\nLast updated: 5 June 2024\n\nFeedback\nWas this page helpful?\nYes\nNo\nBack To Top\nFooter\nAbout us\nServices and feedback\nStrategy and performance\nAnnual Report\nLeadership and organisational structure\nRegulatory and compliance approach and priorities\nCareers\nContact us\n\nHow to contact us or another organisation to understand your rights and responsibilities, report an issue, make a media enquiry or give feedback.\n\nResources and tools\nAdvice in a disaster\nConsumers with a disability\nInternational students\nYarrka Barring Resources for First Nations people\nLegislation\nStay informed\nLike us on Facebook\nFollow us on Instagram\nWatch our videos on YouTube\nSubscribe to our newsletter\nStay informed with RSS\n\nWe acknowledge the Traditional Owners of the lands, seas and skies. We pay our respects to their Elders past and present, and to future generations who will continue to care for Country.\n\nPrivacy statement Disclaimer Copyright Accessibility Site map\n\n© State Government of Victoria (Consumer Affairs Victoria)\n\nVictoria State Government"
+  }
+]

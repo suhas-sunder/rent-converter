@@ -1,0 +1,52 @@
+Australia move-in arithmetic Print / Save PDF
+Rent in Advance and Bond Calculator
+Australia
+Estimate rent in advance, a bond amount, and the combined upfront total
+from the amounts you enter.
+Weekly rent
+500
+Weeks of rent paid in advance
+Enter the number stated in the agreement or request; no legal default is supplied.
+Enter advance-rent weeks.
+Bond amount (AUD)
+Enter 0 intentionally to calculate without a bond.
+Enter bond amount.
+Enter valid weekly rent, advance-rent weeks, and bond amount to calculate the estimate.
+Check the rent covered by a payment
+Use the weekly rent entered above to check a dated rent payment. Enter only the rent portion: a
+bond is separate security and is not credited as rent here. This check uses weekly rent ÷ 7 for
+each covered day; use it only if that matches your agreement or receipt.
+First covered day Last covered day (included) Rent payment excluding
+bond (AUD)
+02/28/2028 03/02/2028
+285.71
+4 covered days: 2028−02−28 through 2028−03−02
+Weekly rent used: A$500.00.
+0 full weeks and 4 days, including both dates.
+Calculated rent for these dates Rent payment entered
+A$285.71 A$285.71
+The entered payment matches this calculated period.
+At the same weekly rate: a fortnight (14 days) is A$1,000.00; the 365-day average calendar-
+month equivalent is A$2,172.62. Neither sets your next contractual payment date.
+Dates count actual calendar days, including 29 February. The weekly amount uses the same parsing and cent
+rounding as the estimate above. The daily charge is not rounded before calculating the covered period total.
+The monthly comparison always uses weekly × 365 ÷ 84. No fees, prior credits, rent changes or bond
+deductions are included. This is an arithmetic check, not a legal rent ledger, demand for payment, or finding of
+arrears. AUD labels amounts; no currency exchange takes place.
+Sources checked 13 November 2026: Consumer Affairs Victoria’s calculator explains its 365-day monthly
+comparison. NSW Fair Trading lists rental bond and rent in advance separately. Those sources do not establish
+a universal Australian payment rule. Check your state or territory and agreement; this is not legal advice.
+Compare a different rent period or proration basis
+Official state and territory rental resources
+Check the authority for the state or territory where the property is located. These links provide official
+information; RentConverter does not summarize or apply their legal rules.
+New South Wales renting information Consumer Affairs Victoria renting information
+Queensland Residential Tenancies Authority South Australia renting and letting information
+Western Australia Consumer Protection renting Tasmania Consumer, Building and Occupational
+information Services renting information
+Australian Capital Territory renting and occupancy Northern Territory Consumer Affairs residential
+laws tenancies
+Frequently Asked Questions
+Does the calculator choose a legal bond or advance-rent amount? v
+Can I enter a zero bond? v
+What is included in the upfront total? v

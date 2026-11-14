@@ -1,0 +1,34 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+export const expected={w09:'2,172.62',w10:'285.71',w11:'153.84',w12:'2,172.62',w13:'1,241.38',w14:'2028-03-30',w15:'3,265.52',w16:'50,400.00'};
+const body=p=>p.locator('body').innerText();
+const summaries={w10:'#australia-coverage',w11:'#paycheck-deadline-plan',w13:'#lease-boundary-check',w15:'#move-in-worksheet',w16:'#increase-cost-comparison'};
+export async function openOptional(page,id){
+  if(id==='w11'){const summary=page.getByText('Plan for your next rent due date',{exact:true});if(await summary.count() && !await summary.evaluate(e=>e.closest('details').open)) await summary.click();return;}
+  if(id==='w15'){const summary=page.getByText('Plan your one-time move-in costs',{exact:true});if(await summary.count() && !await summary.evaluate(e=>e.closest('details').open)) await summary.click();return;}
+  const selector=summaries[id];if(selector && await page.locator(selector).count() && !await page.locator(selector).evaluate(e=>(e.matches('details')?e:e.querySelector('details')).open))await page.locator(selector+' summary').first().click();
+}
+const fill=async(p,values)=>{for(const [selector,value] of Object.entries(values))await p.locator(selector).fill(value);};
+export async function setup(page,id){
+  await openOptional(page,id);
+  if(id==='w09') {await page.locator('#convention-direction').selectOption('weekly');await page.locator('#convention-amount').fill('500');assert.match(await body(page),/2,166\.67/);assert.match(await body(page),/5\.95/);}
+  if(id==='w10'){await fill(page,{'#australia-weekly-rent':'500','#coverage-first':'2028-02-28','#coverage-last':'2028-03-02','#coverage-payment':'285.71'});await page.getByRole('button',{name:'Check payment coverage',exact:true}).click();assert.match(await body(page),/285\.71/);}
+  if(id==='w11'){await fill(page,{'#deadline-saved':'0','#deadline-next-payday':'2027-01-08','#deadline-due-date':'2027-02-01'});await page.getByRole('button',{name:'Calculate deadline plan',exact:true}).click();assert.match(await body(page),/1,846\.16/);assert.match(await body(page),/153\.84/);}
+  if(id==='w12'){await page.locator('#rc-4w-amount').fill('2000');assert.match(await body(page),/26,071\.43/);assert.match(await body(page),/364 days/);}
+  if(id==='w13'){await fill(page,{'#lease-start-date':'2028-01-31','#lease-term-months':'1','#lease-check-last-day':'2028-02-20','#lease-check-rent':'1800'});assert.match(await body(page),/1,241\.38/);}
+  if(id==='w14'){await fill(page,{'#schedule-start-date':'2028-01-31','#schedule-term-months':'3','#schedule-rent':'1800.25'});await page.getByLabel('Use a due-date anchor from my agreement',{exact:true}).check();await page.locator('#schedule-first-due-date').fill('2028-01-30');assert.match(await body(page),/2028-03-30/);}
+  if(id==='w15'){await fill(page,{'#move-in-monthlyRent':'1500'});await page.locator('#move-in-firstRent').selectOption('partial');await fill(page,{'#move-in-chargedDays':'22','#move-in-periodDays':'31','#move-in-lastRent':'1500','#move-in-deposit':'500','#move-in-fees':'40.25','#move-in-utilities':'60.75','#move-in-moving':'100'});await page.getByRole('button',{name:'Calculate move-in costs',exact:true}).click();assert.match(await body(page),/3,265\.52/);}
+  if(id==='w16'){await fill(page,{'#compound-starting-rent':'2000','#compound-rate':'10','#compound-years':'2','#comparison-increase-rate':'0'});assert.match(await body(page),/50,400\.00/);assert.match(await body(page),/48,000\.00/);}
+}
+async function download(page,name,destination){const pending=page.waitForEvent('download');await page.getByRole('button',{name,exact:true}).click();await(await pending).saveAs(destination);return fs.readFile(destination,'utf8');}
+export async function errorsAndExport(page,id,out){
+  if(id==='w09'){await page.locator('#convention-amount').fill('2172.62');await page.locator('#convention-direction').selectOption('monthly');assert.match(await page.locator('#rent-conventions').innerText(),/500\.00/);await page.locator('#convention-amount').fill('1e3');assert.ok(await page.locator('#convention-error').isVisible());}
+  if(id==='w10'){await page.locator('#coverage-last').fill('2028-02-27');await page.getByRole('button',{name:'Check payment coverage',exact:true}).click();assert.ok(await page.locator('#coverage-last-error').isVisible());assert.equal(await page.getByText('Calculated rent for these dates',{exact:true}).count(),0);}
+  if(id==='w11'){await page.locator('#deadline-next-payday').fill('2027-02-05');await page.getByRole('button',{name:'Calculate deadline plan',exact:true}).click();assert.match(await page.getByRole('region',{name:'Annual average deadline check',exact:true}).innerText(),/2,000\.00/);}
+  if(id==='w12'){await page.getByRole('link',{name:'Count payment periods within your lease',exact:true}).click();await page.waitForURL('**/rent-schedule-calculator');assert.match(page.url(),/\/rent-schedule-calculator$/);await page.goto(new URL('/methodology',page.url()).href);await page.getByRole('link',{name:/weekly monthly:/}).click();await page.waitForURL('**/weekly-to-monthly-rent-converter');assert.match(page.url(),/\/weekly-to-monthly-rent-converter$/);}
+  if(id==='w13'){await page.locator('#lease-check-last-day').fill('2028-01-01');assert.match(await page.locator('#lease-check-status').innerText(),/cannot be before/);assert.doesNotMatch(await page.locator('#lease-check-status').innerText(),/1,241\.38/);}
+  if(id==='w14'){const content=await download(page,'Download calendar (.ics)',path.join(out,id+'.ics'));assert.match(content.replace(/\r\n[ \t]/g,''),/SUMMARY:Rent due \(entered schedule\): USD 1800\.25/);assert.equal((content.match(/BEGIN:VEVENT/g)||[]).length,3);await page.getByLabel('Use a due-date anchor from my agreement',{exact:true}).uncheck();const original=await download(page,'Download calendar (.ics)',path.join(out,id+'-periods.ics'));assert.match(original.replace(/\r\n[ \t]/g,''),/SUMMARY:Rent payment period starts: USD 1800\.25/);}
+  if(id==='w15'){const content=await download(page,'Download move-in CSV',path.join(out,id+'.csv'));assert.match(content,/3265\.52/);await page.locator('#move-in-deposit').fill('-1');await page.getByRole('button',{name:'Calculate move-in costs',exact:true}).click();assert.equal(await page.getByText('Total one-time cash to plan for',{exact:true}).count(),0);assert.ok(await page.getByRole('alert').count());}
+  if(id==='w16'){const content=await download(page,'Download scenario CSV',path.join(out,id+'.csv'));assert.match(content,/Total,,,50400\.00,48000\.00,2400\.00/);await page.locator('#comparison-increase-rate').fill('1e3');assert.equal(await page.getByRole('region',{name:'Annual payment comparison',exact:true}).count(),0);assert.equal(await page.locator('#comparison-increase-rate').getAttribute('aria-invalid'),'true');}
+}

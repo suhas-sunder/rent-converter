@@ -4,6 +4,7 @@ import type { Route } from "./+types/rent-paid-every-4-weeks-calculator";
 import Assumptions from "~/client/components/layout/Assumptions";
 import HowItWorks from "~/client/components/rent-paid-every-4-weeks-calculator/HowItWorks";
 import ToolFit from "~/client/components/rent-paid-every-4-weeks-calculator/ToolFit";
+import HydrationSafeControls from "~/client/components/HydrationSafeControls";
 
 function safeToFixed(n: number, digits: number): string {
   if (!Number.isFinite(n)) return "-";
@@ -668,6 +669,7 @@ export default function RentPaidEvery4Weeks() {
       />
 
       <section id="converter" className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+        <HydrationSafeControls label="Four-week rent calculator">
         <div className="overflow-hidden rounded-[1.75rem] bg-white px-5 pb-6 sm:px-8">
           <div className="pt-5 sm:pt-6">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -745,7 +747,7 @@ export default function RentPaidEvery4Weeks() {
                     }
                   }}
                   placeholder="e.g. 650 or 650.00"
-                  className={`w-full rounded-xl bg-slate-100 px-4 py-2.5 text-lg text-slate-950 placeholder:text-slate-700 outline-none transition focus:ring-2 focus:ring-sky-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 ${
+                  className={`w-full cursor-pointer hover:bg-sky-50 rounded-xl bg-slate-100 px-4 py-2.5 text-lg text-slate-950 placeholder:text-slate-700 outline-none transition focus:ring-2 focus:ring-sky-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 ${
                     parsed.ok
                       ? "focus:bg-white"
                       : "border-rose-300 focus:border-rose-500"
@@ -950,6 +952,7 @@ export default function RentPaidEvery4Weeks() {
           <Assumptions />
 
         </div>
+        </HydrationSafeControls>
       </section>
 
       <section
@@ -978,7 +981,7 @@ export default function RentPaidEvery4Weeks() {
                 The table shows the difference between common schedule counts.
               </p>
 
-              <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
+              <div role="region" aria-label="Rent schedule comparison" tabIndex={0} className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-600 focus-visible:ring-offset-2">
                 <table className="min-w-full bg-white">
                   <thead className="bg-sky-50/70">
                     <tr>

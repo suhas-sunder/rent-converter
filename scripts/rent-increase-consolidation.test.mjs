@@ -202,7 +202,11 @@ test("retained content covers forward, reverse, CPI-scenario, and compound scope
   assert.match(configsSource, /prior year’s rent/);
   assert.match(configsSource, /starting rent, final rent, and total increase/);
   assert.match(configsSource, /fixed-dollar, irregular, or custom annual schedules/);
-  assert.match(configsSource, /calculate cumulative rent paid/);
+  // W16 adds an explicitly bounded monthly-payment comparison. Keep the
+  // limitation for irregular schedules, but do not retain a now-false claim.
+  assert.match(configsSource, /total monthly payments within the chosen horizon/);
+  assert.match(configsSource, /first increase after the first year/);
+  assert.match(generatedPagesSource, /IncreaseCostComparison rent=\{result.startingRent\}/);
 });
 
 test("retired generated modes, configs, and custom support components are removed", () => {

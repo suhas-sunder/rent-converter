@@ -1,5 +1,7 @@
 import { Link } from "react-router";
 import { JsonLd, buildMeta, makePageSchemas } from "~/client/utils/seo";
+import { verifiedPeriodExamples } from "~/client/data/verifiedPeriodExamples";
+import { formatMoney } from "~/client/utils/rentMath";
 
 const config = {
   path: "/methodology",
@@ -87,6 +89,21 @@ export default function MethodologyPage() {
             </div>
           </div>
 
+          <section className="mt-9" aria-labelledby="comparison-examples">
+            <h2 id="comparison-examples" className="text-2xl font-bold text-sky-800">Check a period comparison</h2>
+            <p className="mt-3 leading-7">These USD examples use the same conversion helpers as the generated tools. The currency labels do not apply an exchange rate. Open a calculator to check your own amount.</p>
+            <ul className="mt-4 space-y-3">
+              {verifiedPeriodExamples.map((example) => (
+                <li key={example.id}>
+                  <Link to={example.route} className="cursor-pointer font-semibold text-sky-800 underline underline-offset-2 hover:text-sky-950 focus-visible:outline-2">
+                    {example.id.replaceAll("-", " ")}: {formatMoney(example.input, "USD")} → {formatMoney(example.result, "USD")}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-4 leading-7">A 52-week budget covers 364 days: 52 weekly, 26 fortnightly or 13 four-week periods. It differs from a 365-day rate equivalent. Dividing a yearly total by 12 gives an average month, not the number of days or bills in a particular month.</p>
+            <p className="mt-3 leading-7">For money needed before an actual bill, use the <Link to="/rent-per-paycheck-calculator" className="cursor-pointer font-semibold text-sky-800 underline hover:text-sky-950 focus-visible:outline-2">paycheck deadline planner</Link>. For the rest of your housing costs, use the <Link to="/rent-budget-calculator" className="cursor-pointer font-semibold text-sky-800 underline hover:text-sky-950 focus-visible:outline-2">housing budget</Link>.</p>
+          </section>
           <div className="mt-9 space-y-8">
             {sections.map((section) => (
               <section key={section.title}>

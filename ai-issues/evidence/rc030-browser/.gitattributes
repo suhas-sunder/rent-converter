@@ -1,0 +1,3 @@
+* -text whitespace=cr-at-eol
+*.ics -diff
+*.log whitespace=cr-at-eol,-blank-at-eof

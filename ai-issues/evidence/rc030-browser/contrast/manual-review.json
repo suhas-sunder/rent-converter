@@ -1,0 +1,31 @@
+{
+  "sourceSha": "d10791aa6379bd455f7e74bab6d072f1f2973f1a",
+  "viewport": "390x900",
+  "result": "PASS for the 31 axe incomplete color-contrast nodes reviewed; not a whole-site accessibility certification",
+  "counts": {"w09": 2, "w10": 0, "w11": 7, "w12": 17, "w13": 0, "w14": 0, "w15": 0, "w16": 5},
+  "glyphContrast": [
+    {"nodes": "W11/W12 assumptions arrow", "foregroundRGB": [49,65,88], "backgroundRGB": [223,242,254], "ratio": 9.01},
+    {"nodes": "W11/W12 FAQ arrows", "foregroundRGB": [71,85,105], "backgroundRGB": [248,250,252], "ratio": 7.24}
+  ],
+  "otherContrast": {
+    "minimumRatio": 5.837,
+    "minimumNode": "header .com",
+    "minimumForegroundRGB": [0,105,168],
+    "minimumEffectiveBackgroundRGB": [254.235,254.694,255],
+    "w12BodyAndHeadingRange": [7.51,19.46],
+    "w16TableRange": [9.48,10.36]
+  },
+  "visualReview": [
+    "All 15 FAQ/assumption glyph parent captures reviewed; disclosure arrows remain visible alongside their accessible summary labels.",
+    "W12 heading and explanatory copy are readable in target-centered exposed captures. Sticky header overlap in an automatically scrolled parent capture does not persist after positioning the text in the viewport.",
+    "W16 final column header and $2,400.00 are readable after horizontal keyboard scrolling. The caption is wider than the narrow viewport: its beginning is visible at the left and its ending at the right.",
+    "Actual W16 keyboard scroll changed scrollLeft from 0 to 194px, with focus retained on the named region; left and right viewport captures recorded.",
+    "Reviewed rc030-final-v2/w12-page-2.png and w12-screen-390.png. No visual regression from the explicit focusable region; the table still requires horizontal scrolling on mobile. FAQ/footer PDF page is complete."
+  ],
+  "acceptedLimitations": [
+    "Horizontal tables display portions of their content until scrolled; this is intentional and now explicitly keyboard accessible.",
+    "Color calculation uses browser-resolved solid CSS backgrounds. Anti-aliased edge pixels are not treated as the foreground color.",
+    "OS print dialog, assistive-technology speech, and Safari runtime were not independently exercised in this review."
+  ],
+  "applicationEdits": false
+}

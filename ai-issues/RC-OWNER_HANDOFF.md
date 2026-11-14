@@ -1,4 +1,8 @@
-# RentConverter owner handoff — RC-028 acceptance complete
+# RentConverter owner handoff — RC-030 continuation
+
+**W09–W16 are implemented in eight draft PRs, all HOLD for publication.** Read the [current RC-030 handoff and ten-minute review](RC-030_INTEGRATION_ACCEPTANCE.md) for exact branches, tests, evidence, user workflows and limits. W05–W08 are not implemented/accepted, and no immutable hosted W09–W16 preview is available. These dependencies must be closed before proposing weekly publication. Main, production, AdSense and the weekly schedule remain unchanged. The combined integration branch is for review only.
+
+The following RC-028 handoff remains the historical acceptance record for urgent/security/W01–W04; it does not claim that W09–W16 have hosted acceptance.
 
 **Recommend approving urgent PR #2 first.** The five existing implementations now pass the requested scoped browser acceptance after genuine fallback, keyboard-focus, contrast, print and calendar-wording repairs. Every release is still a draft; main and production are unchanged.
 
