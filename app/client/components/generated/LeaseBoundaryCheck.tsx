@@ -22,10 +22,10 @@ export default function LeaseBoundaryCheck({ start, calculatedEnd }: { start: st
     <p className="mt-3 text-sm text-slate-600" id="lease-check-help">The first and last occupied days both count. Currency labels the amount; no exchange conversion is applied. Nothing is saved.</p>
     <div id="lease-check-status" role="status" aria-live="polite" className="mt-4 text-sm text-slate-800">
       {error ? <p className="text-rose-900">{error}</p> : result?.ok && parsedRent.ok ? <>
-        <p className="font-semibold text-sky-900">{result.occupiedDays} occupied days, including {start} and {lastDay}.</p>
+        <p className="font-semibold text-sky-900">{result.occupiedDays} occupied {result.occupiedDays === 1 ? "day" : "days"}, including {start} and {lastDay}.</p>
         <p className="mt-2">{result.differenceDays === 0 ? "Your entered last day matches the displayed calculated date." : `Your entered last day is ${Math.abs(result.differenceDays!)} day${Math.abs(result.differenceDays!) === 1 ? "" : "s"} ${result.differenceDays! > 0 ? "later" : "earlier"} than the displayed calculated date (${calculatedEnd}).`} Confirm any difference with the agreement; this comparison does not resolve it.</p>
         <p className="mt-3 text-xl font-bold text-sky-900 break-words">Final calendar-month estimate: {formatMoney(result.finalMonthCents!, currency)} {currency}</p>
-        <p className="mt-2">{formatMoney(parsedRent.cents, currency)} monthly rent × {result.chargedDays} occupied days ÷ {result.monthDays} calendar days. Charged dates: {result.chargedStart} through {result.chargedEnd}, inclusive.</p>
+        <p className="mt-2">{formatMoney(parsedRent.cents, currency)} monthly rent × {result.chargedDays} occupied {result.chargedDays === 1 ? "day" : "days"} ÷ {result.monthDays} calendar days. Charged dates: {result.chargedStart} through {result.chargedEnd}, inclusive.</p>
         <p className="mt-2">Rounded once to the nearest cent. This is only the final calendar month, not the whole lease total. A 30-day, weekly, or other contractual proration basis can give a different amount. No deposits, fees, notice periods or legal entitlements are calculated.</p>
       </> : <p>Enter your last occupied day to check the boundary.</p>}
     </div>

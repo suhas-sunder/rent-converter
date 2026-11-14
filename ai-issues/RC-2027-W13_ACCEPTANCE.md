@@ -37,6 +37,8 @@ Official-source review: current [GOV.UK tenancy guidance](https://www.gov.uk/ass
 
 ## Limits and release instructions
 
+Independent review by the cashflow implementation agent reproduced the 360px leap-month scenario, reversed-date error and single-day leap-day estimate. No arithmetic blocker was found. The reviewer identified singular “1 occupied days” wording, repaired to “1 occupied day” in both the count and formula. This review is engineering acceptance, not independent legal review.
+
 No immutable deploy or production readiness claimed. Native OS print, screen-reader speech and interpretation of a real contract are not certified. Root's final integration report owns hosted/network/native-zoom/independent acceptance and exact release identities. No routes, schema, FAQ copy, ad lifecycle, analytics consent or protected converter formulas changed. Existing schedule boundaries are deliberately preserved.
 
 Rollback: omit/revert this package's component/helper, two-line generated-page wiring, registered test and acceptance evidence; do not revert shared accepted W01–W04 or security prerequisites. Revalidate against then-current main before any owner-approved release.
