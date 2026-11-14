@@ -111,7 +111,7 @@ export const infoPageConfigs: Record<string, InfoPageConfig> = {
     lead: "PCM means per calendar month. A rent listing of GBP 1,200 PCM means GBP 1,200 for one calendar month, not one 4-week period.",
     answerTitle: "PCM means per calendar month",
     answer: "Per calendar month rent uses calendar months, which vary from 28 to 31 days. It is different from weekly rent and from an every-4-weeks cycle, which repeats every 28 days.",
-    formula: "weekly rent to PCM = weekly rent x 365 / 7 / 12",
+    formula: "365-day comparison: weekly rent x 365 / 7 / 12",
     caveat: "PCM describes a rent period. It does not interpret lease terms, fees, included costs, or legal obligations.",
     tableTitle: "Rent listing terms compared",
     tableRows: glossaryRows,
@@ -159,7 +159,7 @@ export const infoPageConfigs: Record<string, InfoPageConfig> = {
     tableRows: [
       { term: "PW", meaning: "Per week", note: "A weekly amount that should be annualized for monthly comparison." },
       { term: "PCM", meaning: "Per calendar month", note: "A monthly amount usually paid 12 times per year." },
-      { term: "Every 4 weeks", meaning: "28-day cycle", note: "Not the same as PCM because there are 13 cycles in a year." },
+      { term: "Every 4 weeks", meaning: "28-day cycle", note: "Thirteen 28-day periods cover 364 days, not twelve calendar months." },
     ],
     ctaLinks: [link("/pw-to-pcm-calculator", "PW to PCM calculator")],
     sections: [
