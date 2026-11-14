@@ -1005,6 +1005,7 @@ export default function RentPerPaycheck() {
           </div>
 
           <PaycheckDeadlinePlan
+            averageReserveCents={computed.ok ? mulDivRound(computed.perPaycheckScaled, 100n, SCALE) : undefined}
             monthlyRentCents={computed.ok && rentPeriod === "monthly" ? mulDivRound(computed.amountScaled, 100n, SCALE) : undefined}
             frequency={payFreq}
             currency={currency}
