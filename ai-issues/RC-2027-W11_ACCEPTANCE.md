@@ -20,8 +20,8 @@ Primary sources checked November 13, 2026: [CRA common and uncommon pay periods]
 
 ## Validation and review
 
-- Clean `npm ci`, typecheck, production build, all 192 tests, redirect/breadcrumb checks, release HTTP audit passed. Build retained 60 canonical routes and 112 redirects; 215 JSON-LD scripts and 59 valid breadcrumb lists. npm audit: zero vulnerabilities.
-- New six-test suite `scripts/paycheck-average-check.test.mjs`: actual two-deposit gap; semimonthly leap-month cover; zero paydays; a 27-biweekly-payday year; large exact cents/surplus; invalid inputs. Existing W03 tests retain month-end, date-only, same-day, horizon and reconciliation coverage.
+- Clean `npm ci`, typecheck, production build, all 194 tests, redirect/breadcrumb checks, release HTTP audit passed. Build retained 60 canonical routes and 112 redirects; 215 JSON-LD scripts and 59 valid breadcrumb lists. npm audit: zero vulnerabilities.
+- New eight-test suite `scripts/paycheck-average-check.test.mjs`: actual two-deposit gap; semimonthly leap-month cover; zero paydays; a 27-biweekly-payday year; large exact cents/surplus; invalid inputs; rendered annual-factor wording and consistent factors during invalid input. Existing W03 tests retain month-end, date-only, same-day, horizon and reconciliation coverage.
 - Local Chromium browser: 360, 390, 768, 1280, 1440 widths with no page overflow; actual gap/no-payday interactions; keyboard focus transfer; JS-disabled inputs disabled; accepted/rejected-consent request traces with no analytics/ad providers or page errors; axe zero violations. Existing color-contrast incomplete results are not automatically counted as passes; their prior manual review remains applicable and integration review repeats them.
 - Actual native 200% zoom via disposable Chrome extension: 1440 physical pixels → 720 CSS pixels and 720 → 360, devicePixelRatio 2, no horizontal page overflow. CDP full-page captures visually reviewed; ordinary money and wording remain visible. Very tall capture can repeat sticky navigation below the footer, an existing capture artifact.
 - Actual Chromium PDF extracted/rendered: four nonblank pages; no out-of-bounds text or ad placeholders. Reviewed result page shows 923.08, 1,846.16, 153.84, dates and both 1,000 reserves. PDF includes existing surrounding content; native OS printing and actual screen-reader speech are not certified.
@@ -29,8 +29,16 @@ Primary sources checked November 13, 2026: [CRA common and uncommon pay periods]
 
 Curated local evidence: `ai-issues/evidence/w11-cashflow`. Local development URLs are not immutable hosted acceptance. The parent integration harness provides reproducible final validation and exact identities.
 
+## Independent PDF finding: factors are not payment counts
+
+A later independent PDF review caught a misleading inherited annual table: it labeled fractional 13.04 and 52.14 rent equivalents as annual payment counts. This was a clarity blocker for W11. The route now calls the section **Annual comparison factors** and the value column **Factor used**. Its visible explanation separates the 365-day rent-period equivalents (and 12 calendar months) from fixed annual paycheck-budget assumptions; neither represents actual dated payment occurrences. The actual date planner remains the way to count eligible paydays.
+
+The invalid-money fallback also formerly switched the rent factors to 13 and 52, contradicting the valid 365-day model. It now retains 13.04 and 52.14. No conversion formula, paycheck divisor, default, FAQ, canonical or saved-state behavior changed. Two regression tests render the actual route table in valid and invalid states and check the labels and all factors against 365/28 and 365/7 rounded for display.
+
+The full suite now passes 194 tests (19 targeted paycheck tests). Typecheck and the production build were rerun for this source correction. Earlier local browser/PDF artifacts in this package predate this table correction; the parent integration acceptance must recapture the final exact source SHA before release approval.
+
 ## Files, risk and rollback
 
 Changed: `PaycheckDeadlinePlan.tsx`, its route adapter, new `paycheckAverageCheck.js`, test registration and acceptance evidence. No FAQ, ad lifecycle, canonical, sitemap, robots, redirect, protected converter default or external account changes. The main risk is confusing a saving model with actual income availability; the visible check states that other bills and ability to fund each reserve are excluded.
 
-Rollback the W11-only commit from its staging dependency, preserving W03. Do not revert all accepted W01–W04 work or merge this aggregate baseline to main. No push or production deployment performed by this worker.
+Rollback the W11-only commit from its staging dependency, preserving W03. Do not revert all accepted W01–W04 work or merge this aggregate baseline to main. No main push or production deployment performed by this worker.
